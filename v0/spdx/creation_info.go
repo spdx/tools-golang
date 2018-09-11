@@ -34,11 +34,14 @@ type CreationInfo2_1 struct {
 	// Cardinality: optional, one
 	LicenseListVersion string
 
-	// 2.8: Creators: may have keys for Person, Organization and/or Tool
+	// 2.8: Creators: may have multiple keys for Person, Organization
+	//      and/or Tool
 	// Cardinality: mandatory, one or many
-	Creators map[string]string
+	CreatorPersons       []string
+	CreatorOrganizations []string
+	CreatorTools         []string
 
-	// 2.9: Created: data format ​YYYY­MM­DDThh:mm:ssZ
+	// 2.9: Created: data format YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: mandatory, one
 	Created string
 
