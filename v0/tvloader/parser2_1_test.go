@@ -28,7 +28,7 @@ func TestParser2_1HasDocumentAfterCallToParseFirstTag(t *testing.T) {
 	}
 }
 
-// ===== Parser state change tests =====
+// ===== Parser start state change tests =====
 func TestParser2_1StartMovesToCreationInfoStateAfterParsingFirstTag(t *testing.T) {
 	parser := tvParser2_1{}
 	err := parser.parsePair2_1("SPDXVersion", "b")
@@ -40,6 +40,7 @@ func TestParser2_1StartMovesToCreationInfoStateAfterParsingFirstTag(t *testing.T
 	}
 }
 
+// ===== Parser creation info state change tests =====
 func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
@@ -90,6 +91,29 @@ func TestParser2_1CIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 	}
 }
 
+func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-else")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+
+	err = parser.parsePair2_1("RelationshipComment", "blah")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+}
+
 // ===== Helper function tests =====
 
 func TestCanExtractSubvalues(t *testing.T) {
@@ -136,7 +160,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// SPDX Version
 	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.SPDXVersion != "SPDX-2.1" {
 		t.Errorf("got %v for SPDXVersion", parser.doc.CreationInfo.SPDXVersion)
@@ -145,7 +169,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Data License
 	err = parser.parsePairFromCreationInfo2_1("DataLicense", "CC0-1.0")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.DataLicense != "CC0-1.0" {
 		t.Errorf("got %v for DataLicense", parser.doc.CreationInfo.DataLicense)
@@ -154,7 +178,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// SPDX Identifier
 	err = parser.parsePairFromCreationInfo2_1("SPDXID", "SPDXRef-DOCUMENT")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.SPDXIdentifier != "SPDXRef-DOCUMENT" {
 		t.Errorf("got %v for SPDXIdentifier", parser.doc.CreationInfo.SPDXIdentifier)
@@ -163,7 +187,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Document Name
 	err = parser.parsePairFromCreationInfo2_1("DocumentName", "xyz-2.1.5")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.DocumentName != "xyz-2.1.5" {
 		t.Errorf("got %v for DocumentName", parser.doc.CreationInfo.DocumentName)
@@ -172,7 +196,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Document Namespace
 	err = parser.parsePairFromCreationInfo2_1("DocumentNamespace", "http://example.com/xyz-2.1.5.spdx")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.DocumentNamespace != "http://example.com/xyz-2.1.5.spdx" {
 		t.Errorf("got %v for DocumentNamespace", parser.doc.CreationInfo.DocumentNamespace)
@@ -185,11 +209,11 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	}
 	err = parser.parsePairFromCreationInfo2_1("ExternalDocumentRef", refs[0])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	err = parser.parsePairFromCreationInfo2_1("ExternalDocumentRef", refs[1])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if len(parser.doc.CreationInfo.ExternalDocumentReferences) != 2 ||
 		parser.doc.CreationInfo.ExternalDocumentReferences[0] != refs[0] ||
@@ -200,7 +224,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// License List Version
 	err = parser.parsePairFromCreationInfo2_1("LicenseListVersion", "2.2")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.LicenseListVersion != "2.2" {
 		t.Errorf("got %v for LicenseListVersion", parser.doc.CreationInfo.LicenseListVersion)
@@ -213,11 +237,11 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refPersons[0])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refPersons[1])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if len(parser.doc.CreationInfo.CreatorPersons) != 2 ||
 		parser.doc.CreationInfo.CreatorPersons[0] != "Person A" ||
@@ -232,11 +256,11 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refOrgs[0])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refOrgs[1])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if len(parser.doc.CreationInfo.CreatorOrganizations) != 2 ||
 		parser.doc.CreationInfo.CreatorOrganizations[0] != "Organization A" ||
@@ -251,11 +275,11 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refTools[0])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	err = parser.parsePairFromCreationInfo2_1("Creator", refTools[1])
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if len(parser.doc.CreationInfo.CreatorTools) != 2 ||
 		parser.doc.CreationInfo.CreatorTools[0] != "Tool A" ||
@@ -266,7 +290,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Created date
 	err = parser.parsePairFromCreationInfo2_1("Created", "2018-09-10T11:46:00Z")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.Created != "2018-09-10T11:46:00Z" {
 		t.Errorf("got %v for Created", parser.doc.CreationInfo.Created)
@@ -275,7 +299,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Creator Comment
 	err = parser.parsePairFromCreationInfo2_1("CreatorComment", "Blah whatever")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.CreatorComment != "Blah whatever" {
 		t.Errorf("got %v for CreatorComment", parser.doc.CreationInfo.CreatorComment)
@@ -284,7 +308,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// Document Comment
 	err = parser.parsePairFromCreationInfo2_1("DocumentComment", "Blah whatever")
 	if err != nil {
-		t.Errorf("nil returned")
+		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.doc.CreationInfo.DocumentComment != "Blah whatever" {
 		t.Errorf("got %v for DocumentComment", parser.doc.CreationInfo.DocumentComment)
@@ -330,5 +354,148 @@ func TestParser2_1CIUnknownTagFails(t *testing.T) {
 	err := parser.parsePairFromCreationInfo2_1("blah", "something")
 	if err == nil {
 		t.Errorf("expected error from parsing unknown tag")
+	}
+}
+
+func TestParser2_1CICreatesRelationship(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-whatever")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.rln == nil {
+		t.Fatalf("parser didn't create and point to Relationship struct")
+	}
+	if parser.rln != parser.doc.Relationships[0] {
+		t.Errorf("pointer to new Relationship doesn't match idx 0 for doc.Relationships[]")
+	}
+}
+
+// ===== Relationship section tests =====
+func TestParser2_1FailsIfRelationshipNotSet(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePairForRelationship2_1("Relationship", "something DESCRIBES something-else")
+	if err == nil {
+		t.Errorf("expected error when calling parsePairFromRelationship2_1 without setting rln pointer")
+	}
+}
+
+func TestParser2_1FailsIRelationshipCommentWithoutRelationship(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("RelationshipComment", "comment whatever")
+	if err == nil {
+		t.Errorf("expected error when calling parsePair2_1 for RelationshipComment without Relationship first")
+	}
+}
+
+func TestParser2_1CanParseRelationshipTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// Relationship
+	err := parser.parsePair2_1("Relationship", "something DESCRIBES something-else")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.rln.RefA != "something" {
+		t.Errorf("got %v for first part of Relationship, expected something", parser.rln.RefA)
+	}
+	if parser.rln.RefB != "something-else" {
+		t.Errorf("got %v for second part of Relationship, expected something-else", parser.rln.RefB)
+	}
+	if parser.rln.Relationship != "DESCRIBES" {
+		t.Errorf("got %v for Relationship type, expected DESCRIBES", parser.rln.Relationship)
+	}
+
+	// Relationship Comment
+	cmt := "this is a comment"
+	err = parser.parsePair2_1("RelationshipComment", cmt)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.rln.RelationshipComment != cmt {
+		t.Errorf("got %v for first part of Relationship, expected %v", parser.rln.RelationshipComment, cmt)
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsNoValueFail(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// no items
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "")
+	if err == nil {
+		t.Errorf("expected error for empty items in relationship, got nil")
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsOneValueFail(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// one item
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "DESCRIBES")
+	if err == nil {
+		t.Errorf("expected error for only one item in relationship, got nil")
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsTwoValuesFail(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// two items
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "SPDXRef-DOCUMENT DESCRIBES")
+	if err == nil {
+		t.Errorf("expected error for only two items in relationship, got nil")
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsThreeValuesSucceed(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// three items but with interspersed additional whitespace
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "  SPDXRef-DOCUMENT \t   DESCRIBES  something-else    ")
+	if err != nil {
+		t.Errorf("expected pass for three items in relationship w/ extra whitespace, got: %v", err)
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsFourValuesFail(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// four items
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "a DESCRIBES b c")
+	if err == nil {
+		t.Errorf("expected error for more than three items in relationship, got nil")
 	}
 }

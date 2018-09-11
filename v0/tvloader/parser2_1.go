@@ -175,10 +175,17 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 	case "LicenseID":
 		parser.st = psOtherLicense2_1
 		return parser.parsePairFromOtherLicense2_1(tag, value)
+	// for relationship tags, pass along but don't change state
+	case "Relationship":
+		parser.rln = &spdx.Relationship2_1{}
+		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
+		return parser.parsePairForRelationship2_1(tag, value)
+	case "RelationshipComment":
+		return parser.parsePairForRelationship2_1(tag, value)
 	default:
 		return fmt.Errorf("received unknown tag %v in CreationInfo section", tag)
 	}
-	// FIXME check for tags that add relationship / annotation, keeping state
+	// FIXME check for tags that add annotation, keeping state
 
 	return nil
 }
@@ -193,4 +200,40 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 
 func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string) error {
 	return nil
+}
+
+func (parser *tvParser2_1) parsePairForRelationship2_1(tag string, value string) error {
+	if parser.rln == nil {
+		return fmt.Errorf("no relationship struct created in parser rln pointer")
+	}
+
+	if tag == "Relationship" {
+		// parse the value to see if it's a valid relationship format
+		sp := strings.SplitN(value, " ", -1)
+
+		// filter out any purely-whitespace items
+		var rp []string
+		for _, v := range sp {
+			v = strings.TrimSpace(v)
+			if v != "" {
+				rp = append(rp, v)
+			}
+		}
+
+		if len(rp) != 3 {
+			return fmt.Errorf("invalid relationship format for %s", value)
+		}
+
+		parser.rln.RefA = strings.TrimSpace(rp[0])
+		parser.rln.Relationship = strings.TrimSpace(rp[1])
+		parser.rln.RefB = strings.TrimSpace(rp[2])
+		return nil
+	}
+
+	if tag == "RelationshipComment" {
+		parser.rln.RelationshipComment = value
+		return nil
+	}
+
+	return fmt.Errorf("received unknown tag %v in Relationship section", tag)
 }
