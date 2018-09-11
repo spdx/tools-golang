@@ -7,3 +7,7 @@ Although the spec may not make this explicit, it appears that this is the intend
 format. Unless it comes first, the parser will not be able to confirm what version
 of the SPDX spec is being used. And, "SPDXID:" tags are used for not just the
 Document Creation Info section but also for others (e.g. Packages, Files).
+
+* Relationship sections will begin with the "Relationship" tag.
+
+* Annotation sections will begin with the "Annotator" tag.

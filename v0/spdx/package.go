@@ -8,7 +8,7 @@ type Package2_1 struct {
 	// NOT PART OF SPEC
 	// flag: does this "package" contain files that were in fact "unpackaged",
 	// e.g. included directly in the Document without being in a Package?
-	_isUnpackaged bool
+	IsUnpackaged bool
 
 	// 3.1: Package Name
 	// Cardinality: mandatory, one

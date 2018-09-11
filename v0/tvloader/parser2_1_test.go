@@ -28,16 +28,69 @@ func TestParser2_1HasDocumentAfterCallToParseFirstTag(t *testing.T) {
 	}
 }
 
-func TestParser2_1MovesToCreationInfoStateAfterParsingFirstTag(t *testing.T) {
+// ===== Parser state change tests =====
+func TestParser2_1StartMovesToCreationInfoStateAfterParsingFirstTag(t *testing.T) {
 	parser := tvParser2_1{}
-	err := parser.parsePairFromStart2_1("a", "b")
+	err := parser.parsePair2_1("SPDXVersion", "b")
 	if err != nil {
-		t.Errorf("got error when calling parsePairFromStart2_1: %v", err)
+		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
 	if parser.st != psCreationInfo2_1 {
-		t.Errorf("parser is in state %v after parsing first pair", parser.st)
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
 	}
 }
+
+func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("PackageName", "testPkg")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psPackage2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psPackage2_1)
+	}
+}
+
+func TestParser2_1CIMovesToFileAfterParsingFileNameTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("FileName", "testFile")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should be correct
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+	// and current package should be an "unpackaged" placeholder
+	if parser.pkg == nil {
+		t.Fatalf("parser didn't create placeholder package")
+	}
+	if !parser.pkg.IsUnpackaged {
+		t.Errorf("placeholder package is not set as unpackaged")
+	}
+}
+
+func TestParser2_1CIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("LicenseID", "LicenseRef-TestLic")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+}
+
+// ===== Helper function tests =====
 
 func TestCanExtractSubvalues(t *testing.T) {
 	subkey, subvalue, err := extractSubs("SHA1: abc123")
@@ -265,5 +318,17 @@ func TestParser2_1CreatorTagWithMultipleColonsPasses(t *testing.T) {
 	err := parser.parsePairFromCreationInfo2_1("Creator", "Tool: tool1:2:3")
 	if err != nil {
 		t.Errorf("unexpected error from parsing valid Creator format")
+	}
+}
+
+func TestParser2_1CIUnknownTagFails(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePairFromCreationInfo2_1("blah", "something")
+	if err == nil {
+		t.Errorf("expected error from parsing unknown tag")
 	}
 }

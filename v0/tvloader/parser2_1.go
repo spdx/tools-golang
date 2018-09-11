@@ -125,8 +125,6 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 
 	ci := parser.doc.CreationInfo
 	switch tag {
-	// FIXME check for tags that go on to next section and change state
-	// FIXME check for tags that add relationship / annotation, keeping state
 	case "SPDXVersion":
 		ci.SPDXVersion = value
 	case "DataLicense":
@@ -162,8 +160,37 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 		ci.CreatorComment = value
 	case "DocumentComment":
 		ci.DocumentComment = value
-	}
-	// FIXME complete and add default
 
+	// tag for going on to package section
+	case "PackageName":
+		parser.st = psPackage2_1
+		return parser.parsePairFromPackage2_1(tag, value)
+	// tag for going on to _unpackaged_ file section
+	case "FileName":
+		// create an "unpackaged" Package structure
+		parser.st = psFile2_1
+		parser.pkg = &spdx.Package2_1{IsUnpackaged: true}
+		return parser.parsePairFromFile2_1(tag, value)
+	// tag for going on to other license section
+	case "LicenseID":
+		parser.st = psOtherLicense2_1
+		return parser.parsePairFromOtherLicense2_1(tag, value)
+	default:
+		return fmt.Errorf("received unknown tag %v in CreationInfo section", tag)
+	}
+	// FIXME check for tags that add relationship / annotation, keeping state
+
+	return nil
+}
+
+func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) error {
+	return nil
+}
+
+func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error {
+	return nil
+}
+
+func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string) error {
 	return nil
 }
