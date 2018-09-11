@@ -39,20 +39,6 @@ func TestParser2_1MovesToCreationInfoStateAfterParsingFirstTag(t *testing.T) {
 	}
 }
 
-func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
-	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
-		st:  psCreationInfo2_1,
-	}
-	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
-	if err != nil {
-		t.Errorf("got error when calling parsePairFromCreationInfo2_1: %v", err)
-	}
-	if parser.doc.CreationInfo == nil {
-		t.Errorf("doc.CreationInfo is still nil after parsing first pair")
-	}
-}
-
 func TestCanExtractSubvalues(t *testing.T) {
 	subkey, subvalue, err := extractSubs("SHA1: abc123")
 	if err != nil {
@@ -71,10 +57,20 @@ func TestReturnsErrorForInvalidSubvalueFormat(t *testing.T) {
 	if err == nil {
 		t.Errorf("expected error when calling extractSubs for invalid format (0 colons), got nil")
 	}
+}
 
-	_, _, err = extractSubs("MD5: 12390834: other")
-	if err == nil {
-		t.Errorf("expected error when calling extractSubs for invalid format (>1 colon), got nil")
+// ===== Creation Info section tests =====
+func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
+	if err != nil {
+		t.Errorf("got error when calling parsePairFromCreationInfo2_1: %v", err)
+	}
+	if parser.doc.CreationInfo == nil {
+		t.Errorf("doc.CreationInfo is still nil after parsing first pair")
 	}
 }
 
@@ -232,7 +228,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 		t.Errorf("got %v for CreatorComment", parser.doc.CreationInfo.CreatorComment)
 	}
 
-	// Document COmment
+	// Document Comment
 	err = parser.parsePairFromCreationInfo2_1("DocumentComment", "Blah whatever")
 	if err != nil {
 		t.Errorf("nil returned")
@@ -241,4 +237,33 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 		t.Errorf("got %v for DocumentComment", parser.doc.CreationInfo.DocumentComment)
 	}
 
+}
+
+func TestParser2_1InvalidCreatorTagsFail(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePairFromCreationInfo2_1("Creator", "blah: somebody")
+	if err == nil {
+		t.Errorf("expected error from parsing invalid Creator format, got nil")
+	}
+
+	err = parser.parsePairFromCreationInfo2_1("Creator", "Tool with no colons")
+	if err == nil {
+		t.Errorf("expected error from parsing invalid Creator format, got nil")
+	}
+}
+
+func TestParser2_1CreatorTagWithMultipleColonsPasses(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePairFromCreationInfo2_1("Creator", "Tool: tool1:2:3")
+	if err != nil {
+		t.Errorf("unexpected error from parsing valid Creator format")
+	}
 }

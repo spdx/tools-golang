@@ -68,12 +68,6 @@ func extractSubs(value string) (string, string, error) {
 	subkey := strings.TrimSpace(sp[0])
 	subvalue := strings.TrimSpace(sp[1])
 
-	// fail if there's another colon in the subvalue
-	colon := strings.SplitN(subvalue, ":", 2)
-	if len(colon) != 1 {
-		return "", "", fmt.Errorf("invalid subvalue format for %s (>1 colon found)", value)
-	}
-
 	return subkey, subvalue, nil
 }
 
@@ -159,6 +153,8 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 			ci.CreatorOrganizations = append(ci.CreatorOrganizations, subvalue)
 		case "Tool":
 			ci.CreatorTools = append(ci.CreatorTools, subvalue)
+		default:
+			return fmt.Errorf("unrecognized Creator type %v", subkey)
 		}
 	case "Created":
 		ci.Created = value
