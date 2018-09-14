@@ -13,8 +13,8 @@ func (parser *tvParser2_1) parsePair2_1(tag string, value string) error {
 		return parser.parsePairFromStart2_1(tag, value)
 	case psCreationInfo2_1:
 		return parser.parsePairFromCreationInfo2_1(tag, value)
-	// case psPackage2_1:
-	// 	return parser.parsePairFromPackage2_1(tag, value)
+	case psPackage2_1:
+		return parser.parsePairFromPackage2_1(tag, value)
 	// case psFile2_1:
 	// 	return parser.parsePairFromFile2_1(tag, value)
 	// case psSnippet2_1:
@@ -46,10 +46,6 @@ func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error
 
 	// and ask Creation Info subfunc to parse
 	return parser.parsePairFromCreationInfo2_1(tag, value)
-}
-
-func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) error {
-	return nil
 }
 
 func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error {

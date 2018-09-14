@@ -13,12 +13,36 @@ func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
 	}
-	err := parser.parsePair2_1("PackageName", "testPkg")
+	pkgName := "testPkg"
+	err := parser.parsePair2_1("PackageName", pkgName)
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
+	// state should be correct
 	if parser.st != psPackage2_1 {
 		t.Errorf("parser is in state %v, expected %v", parser.st, psPackage2_1)
+	}
+	// and a package should be created
+	if parser.pkg == nil {
+		t.Fatalf("parser didn't create new package")
+	}
+	// and the package name should be as expected
+	if parser.pkg.PackageName != pkgName {
+		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
+	}
+	// and the package should _not_ be an "unpackaged" placeholder
+	if parser.pkg.IsUnpackaged == true {
+		t.Errorf("package incorrectly has IsUnpackaged flag set")
+	}
+	// and the package should be in the SPDX Document's slice of packages
+	flagFound := false
+	for _, p := range parser.doc.Packages {
+		if p == parser.pkg {
+			flagFound = true
+		}
+	}
+	if flagFound == false {
+		t.Errorf("package isn't in the SPDX Document's slice of packages")
 	}
 }
 
@@ -41,6 +65,16 @@ func TestParser2_1CIMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	}
 	if !parser.pkg.IsUnpackaged {
 		t.Errorf("placeholder package is not set as unpackaged")
+	}
+	// and the package should be in the SPDX Document's slice of packages
+	flagFound := false
+	for _, p := range parser.doc.Packages {
+		if p == parser.pkg {
+			flagFound = true
+		}
+	}
+	if flagFound == false {
+		t.Errorf("package isn't in the SPDX Document's slice of packages")
 	}
 }
 
