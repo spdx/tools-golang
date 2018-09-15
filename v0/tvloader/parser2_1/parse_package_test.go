@@ -636,6 +636,26 @@ func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
 	}
 }
 
+func TestParser2_1PackageCreatesRelationshipInPackage(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{PackageName: "p1", IsUnpackaged: false},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-whatever")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.rln == nil {
+		t.Fatalf("parser didn't create and point to Relationship struct")
+	}
+	if parser.rln != parser.pkg.Relationships[0] {
+		t.Errorf("pointer to new Relationship doesn't match idx 0 for pkg.Relationships[]")
+	}
+}
+
 // ===== Helper function tests =====
 
 func TestCanCheckAndExtractExcludesFilenameAndCode(t *testing.T) {

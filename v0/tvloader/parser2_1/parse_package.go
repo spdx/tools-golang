@@ -142,6 +142,13 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		parser.pkgExtRef.ExternalRefComment = value
 		// now, expire pkgExtRef anyway because it can have at most one comment
 		parser.pkgExtRef = nil
+	// for relationship tags, pass along but don't change state
+	case "Relationship":
+		parser.rln = &spdx.Relationship2_1{}
+		parser.pkg.Relationships = append(parser.pkg.Relationships, parser.rln)
+		return parser.parsePairForRelationship2_1(tag, value)
+	case "RelationshipComment":
+		return parser.parsePairForRelationship2_1(tag, value)
 	}
 
 	return nil
