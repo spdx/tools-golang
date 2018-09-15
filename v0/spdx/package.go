@@ -26,13 +26,19 @@ type Package2_1 struct {
 	// Cardinality: optional, one
 	PackageFileName string
 
-	// 3.5: Package Supplier
+	// 3.5: Package Supplier: may have single result for either Person or Organization,
+	//                        or NOASSERTION
 	// Cardinality: optional, one
-	PackageSupplier string
+	PackageSupplierPerson       string
+	PackageSupplierOrganization string
+	PackageSupplierNOASSERTION  bool
 
-	// 3.6: Package Originator
+	// 3.6: Package Originator: may have single result for either Person or Organization,
+	//                          or NOASSERTION
 	// Cardinality: optional, one
-	PackageOriginator string
+	PackageOriginatorPerson       string
+	PackageOriginatorOrganization string
+	PackageOriginatorNOASSERTION  bool
 
 	// 3.7: Package Download Location
 	// Cardinality: mandatory, one
@@ -41,6 +47,8 @@ type Package2_1 struct {
 	// 3.8: FilesAnalyzed
 	// Cardinality: optional, one; default value is "true" if omitted
 	FilesAnalyzed bool
+	// NOT PART OF SPEC: did FilesAnalyzed tag appear?
+	IsFilesAnalyzedTagPresent bool
 
 	// 3.9: Package Verification Code
 	// Cardinality: mandatory, one if filesAnalyzed is true / omitted;

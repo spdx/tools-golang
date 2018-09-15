@@ -59,14 +59,22 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 	// tag for going on to package section
 	case "PackageName":
 		parser.st = psPackage2_1
-		parser.pkg = &spdx.Package2_1{IsUnpackaged: false}
+		parser.pkg = &spdx.Package2_1{
+			IsUnpackaged:              false,
+			FilesAnalyzed:             true,
+			IsFilesAnalyzedTagPresent: false,
+		}
 		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 		return parser.parsePairFromPackage2_1(tag, value)
 	// tag for going on to _unpackaged_ file section
 	case "FileName":
 		// create an "unpackaged" Package structure
 		parser.st = psFile2_1
-		parser.pkg = &spdx.Package2_1{IsUnpackaged: true}
+		parser.pkg = &spdx.Package2_1{
+			IsUnpackaged:              true,
+			FilesAnalyzed:             true,
+			IsFilesAnalyzedTagPresent: false,
+		}
 		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 		return parser.parsePairFromFile2_1(tag, value)
 	// tag for going on to other license section

@@ -34,6 +34,13 @@ func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 	if parser.pkg.IsUnpackaged == true {
 		t.Errorf("package incorrectly has IsUnpackaged flag set")
 	}
+	// and the package should default to true for FilesAnalyzed
+	if parser.pkg.FilesAnalyzed != true {
+		t.Errorf("expected FilesAnalyzed to default to true, got false")
+	}
+	if parser.pkg.IsFilesAnalyzedTagPresent != false {
+		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
+	}
 	// and the package should be in the SPDX Document's slice of packages
 	flagFound := false
 	for _, p := range parser.doc.Packages {
@@ -65,6 +72,13 @@ func TestParser2_1CIMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	}
 	if !parser.pkg.IsUnpackaged {
 		t.Errorf("placeholder package is not set as unpackaged")
+	}
+	// and the package should default to true for FilesAnalyzed
+	if parser.pkg.FilesAnalyzed != true {
+		t.Errorf("expected FilesAnalyzed to default to true, got false")
+	}
+	if parser.pkg.IsFilesAnalyzedTagPresent != false {
+		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
 	}
 	// and the package should be in the SPDX Document's slice of packages
 	flagFound := false
