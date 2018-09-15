@@ -61,7 +61,9 @@ type Package2_1 struct {
 
 	// 3.10: Package Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: optional, one or many
-	PackageChecksum map[string]string
+	PackageChecksumSHA1   string
+	PackageChecksumSHA256 string
+	PackageChecksumMD5    string
 
 	// 3.11: Package Home Page
 	// Cardinality: optional, one
@@ -106,7 +108,7 @@ type Package2_1 struct {
 
 	// 3.21: Package External Reference
 	// Cardinality: optional, one or many
-	PackageExternalReferences []PackageExternalReference2_1
+	PackageExternalReferences []*PackageExternalReference2_1
 
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference

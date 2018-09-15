@@ -215,6 +215,224 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 
 	// Package Verification Code
 	// SKIP -- separate tests for "excludes", or not, below
+
+	// Package Checksums
+	codeSha1 := "85ed0817af83a24ad8da68c2b5094de69833983c"
+	sumSha1 := "SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c"
+	codeSha256 := "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
+	sumSha256 := "SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
+	codeMd5 := "624c1abb3664f4b35547e7c73864ad24"
+	sumMd5 := "MD5: 624c1abb3664f4b35547e7c73864ad24"
+	err = parser.parsePairFromPackage2_1("PackageChecksum", sumSha1)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePairFromPackage2_1("PackageChecksum", sumSha256)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePairFromPackage2_1("PackageChecksum", sumMd5)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageChecksumSHA1 != codeSha1 {
+		t.Errorf("expected %s for PackageChecksumSHA1, got %s", codeSha1, parser.pkg.PackageChecksumSHA1)
+	}
+	if parser.pkg.PackageChecksumSHA256 != codeSha256 {
+		t.Errorf("expected %s for PackageChecksumSHA256, got %s", codeSha256, parser.pkg.PackageChecksumSHA256)
+	}
+	if parser.pkg.PackageChecksumMD5 != codeMd5 {
+		t.Errorf("expected %s for PackageChecksumMD5, got %s", codeMd5, parser.pkg.PackageChecksumMD5)
+	}
+
+	// Package Home Page
+	err = parser.parsePairFromPackage2_1("PackageHomePage", "https://example.com/whatever2")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageHomePage != "https://example.com/whatever2" {
+		t.Errorf("got %v for PackageHomePage", parser.pkg.PackageHomePage)
+	}
+
+	// Package Source Info
+	err = parser.parsePairFromPackage2_1("PackageSourceInfo", "random comment")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageSourceInfo != "random comment" {
+		t.Errorf("got %v for PackageSourceInfo", parser.pkg.PackageSourceInfo)
+	}
+
+	// Package License Concluded
+	err = parser.parsePairFromPackage2_1("PackageLicenseConcluded", "Apache-2.0 OR GPL-2.0-or-later")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageLicenseConcluded != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("got %v for PackageLicenseConcluded", parser.pkg.PackageLicenseConcluded)
+	}
+
+	// All Licenses Info From Files
+	lics := []string{
+		"Apache-2.0",
+		"GPL-2.0-or-later",
+		"CC0-1.0",
+	}
+	for _, lic := range lics {
+		err = parser.parsePairFromPackage2_1("PackageLicenseInfoFromFiles", lic)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, licWant := range lics {
+		flagFound := false
+		for _, licCheck := range parser.pkg.PackageLicenseInfoFromFiles {
+			if licWant == licCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in PackageLicenseInfoFromFiles", licWant)
+		}
+	}
+	if len(lics) != len(parser.pkg.PackageLicenseInfoFromFiles) {
+		t.Errorf("expected %d licenses in PackageLicenseInfoFromFiles, got %d", len(lics),
+			len(parser.pkg.PackageLicenseInfoFromFiles))
+	}
+
+	// Package License Declared
+	err = parser.parsePairFromPackage2_1("PackageLicenseDeclared", "Apache-2.0 OR GPL-2.0-or-later")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageLicenseDeclared != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("got %v for PackageLicenseDeclared", parser.pkg.PackageLicenseDeclared)
+	}
+
+	// Package License Comments
+	err = parser.parsePairFromPackage2_1("PackageLicenseComments", "this is a license comment")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageLicenseComments != "this is a license comment" {
+		t.Errorf("got %v for PackageLicenseComments", parser.pkg.PackageLicenseComments)
+	}
+
+	// Package Copyright Text
+	err = parser.parsePairFromPackage2_1("PackageCopyrightText", "Copyright (c) me myself and i")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageCopyrightText != "Copyright (c) me myself and i" {
+		t.Errorf("got %v for PackageCopyrightText", parser.pkg.PackageCopyrightText)
+	}
+
+	// Package Summary
+	err = parser.parsePairFromPackage2_1("PackageSummary", "i wrote this package")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageSummary != "i wrote this package" {
+		t.Errorf("got %v for PackageSummary", parser.pkg.PackageSummary)
+	}
+
+	// Package Description
+	err = parser.parsePairFromPackage2_1("PackageDescription", "i wrote this package a lot")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageDescription != "i wrote this package a lot" {
+		t.Errorf("got %v for PackageDescription", parser.pkg.PackageDescription)
+	}
+
+	// Package Comment
+	err = parser.parsePairFromPackage2_1("PackageComment", "i scanned this package")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.PackageComment != "i scanned this package" {
+		t.Errorf("got %v for PackageComment", parser.pkg.PackageComment)
+	}
+
+	// Package External References and Comments
+	ref1 := "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+	ref1Category := "SECURITY"
+	ref1Type := "cpe23Type"
+	ref1Locator := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+	ref1Comment := "this is comment #1"
+	ref2 := "OTHER LocationRef-acmeforge acmecorp/acmenator/4.1.3alpha"
+	ref2Category := "OTHER"
+	ref2Type := "LocationRef-acmeforge"
+	ref2Locator := "acmecorp/acmenator/4.1.3alpha"
+	ref2Comment := "this is comment #2"
+	err = parser.parsePairFromPackage2_1("ExternalRef", ref1)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if len(parser.pkg.PackageExternalReferences) != 1 {
+		t.Errorf("expected 1 external reference, got %d", len(parser.pkg.PackageExternalReferences))
+	}
+	if parser.pkgExtRef == nil {
+		t.Errorf("expected non-nil pkgExtRef, got nil")
+	}
+	if parser.pkg.PackageExternalReferences[0] == nil {
+		t.Errorf("expected non-nil PackageExternalReferences[0], got nil")
+	}
+	if parser.pkgExtRef != parser.pkg.PackageExternalReferences[0] {
+		t.Errorf("expected pkgExtRef to match PackageExternalReferences[0], got no match")
+	}
+	err = parser.parsePairFromPackage2_1("ExternalRefComment", ref1Comment)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePairFromPackage2_1("ExternalRef", ref2)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if len(parser.pkg.PackageExternalReferences) != 2 {
+		t.Errorf("expected 2 external references, got %d", len(parser.pkg.PackageExternalReferences))
+	}
+	if parser.pkgExtRef == nil {
+		t.Errorf("expected non-nil pkgExtRef, got nil")
+	}
+	if parser.pkg.PackageExternalReferences[1] == nil {
+		t.Errorf("expected non-nil PackageExternalReferences[1], got nil")
+	}
+	if parser.pkgExtRef != parser.pkg.PackageExternalReferences[1] {
+		t.Errorf("expected pkgExtRef to match PackageExternalReferences[1], got no match")
+	}
+	err = parser.parsePairFromPackage2_1("ExternalRefComment", ref2Comment)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// finally, check these values
+	gotRef1 := parser.pkg.PackageExternalReferences[0]
+	if gotRef1.Category != ref1Category {
+		t.Errorf("expected ref1 category to be %s, got %s", gotRef1.Category, ref1Category)
+	}
+	if gotRef1.RefType != ref1Type {
+		t.Errorf("expected ref1 type to be %s, got %s", gotRef1.RefType, ref1Type)
+	}
+	if gotRef1.Locator != ref1Locator {
+		t.Errorf("expected ref1 locator to be %s, got %s", gotRef1.Locator, ref1Locator)
+	}
+	if gotRef1.ExternalRefComment != ref1Comment {
+		t.Errorf("expected ref1 comment to be %s, got %s", gotRef1.ExternalRefComment, ref1Comment)
+	}
+	gotRef2 := parser.pkg.PackageExternalReferences[1]
+	if gotRef2.Category != ref2Category {
+		t.Errorf("expected ref2 category to be %s, got %s", gotRef2.Category, ref2Category)
+	}
+	if gotRef2.RefType != ref2Type {
+		t.Errorf("expected ref2 type to be %s, got %s", gotRef2.RefType, ref2Type)
+	}
+	if gotRef2.Locator != ref2Locator {
+		t.Errorf("expected ref2 locator to be %s, got %s", gotRef2.Locator, ref2Locator)
+	}
+	if gotRef2.ExternalRefComment != ref2Comment {
+		t.Errorf("expected ref2 comment to be %s, got %s", gotRef2.ExternalRefComment, ref2Comment)
+	}
+
 }
 
 func TestParser2_1CanParsePackageSupplierPersonTag(t *testing.T) {
@@ -373,6 +591,51 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithoutExcludes(t *testing.T
 
 }
 
+func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{PackageName: "p1", IsUnpackaged: false},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+
+	ref1 := "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+	err := parser.parsePairFromPackage2_1("ExternalRef", ref1)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkgExtRef == nil {
+		t.Errorf("expected non-nil external reference pointer, got nil")
+	}
+
+	// now, a comment; pointer should go away
+	err = parser.parsePairFromPackage2_1("ExternalRefComment", "whatever")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkgExtRef != nil {
+		t.Errorf("expected nil external reference pointer, got non-nil")
+	}
+
+	ref2 := "Other LocationRef-something https://example.com/whatever"
+	err = parser.parsePairFromPackage2_1("ExternalRef", ref2)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkgExtRef == nil {
+		t.Errorf("expected non-nil external reference pointer, got nil")
+	}
+
+	// and some other random tag makes the pointer go away too
+	err = parser.parsePairFromPackage2_1("PackageSummary", "whatever")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkgExtRef != nil {
+		t.Errorf("expected nil external reference pointer, got non-nil")
+	}
+}
+
 // ===== Helper function tests =====
 
 func TestCanCheckAndExtractExcludesFilenameAndCode(t *testing.T) {
@@ -386,5 +649,47 @@ func TestCanCheckAndExtractExcludesFilenameAndCode(t *testing.T) {
 	}
 	if gotFileName != fileName {
 		t.Errorf("got %v for gotFileName", gotFileName)
+	}
+}
+
+func TestCanExtractPackageExternalReference(t *testing.T) {
+	ref1 := "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+	category := "SECURITY"
+	refType := "cpe23Type"
+	location := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+
+	gotCategory, gotRefType, gotLocation, err := extractPackageExternalReference(ref1)
+	if err != nil {
+		t.Errorf("got non-nil error: %v", err)
+	}
+	if gotCategory != category {
+		t.Errorf("expected category %s, got %s", category, gotCategory)
+	}
+	if gotRefType != refType {
+		t.Errorf("expected refType %s, got %s", refType, gotRefType)
+	}
+	if gotLocation != location {
+		t.Errorf("expected location %s, got %s", location, gotLocation)
+	}
+}
+
+func TestCanExtractPackageExternalReferenceWithExtraWhitespace(t *testing.T) {
+	ref1 := "  SECURITY    \t cpe23Type   cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:* \t "
+	category := "SECURITY"
+	refType := "cpe23Type"
+	location := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+
+	gotCategory, gotRefType, gotLocation, err := extractPackageExternalReference(ref1)
+	if err != nil {
+		t.Errorf("got non-nil error: %v", err)
+	}
+	if gotCategory != category {
+		t.Errorf("expected category %s, got %s", category, gotCategory)
+	}
+	if gotRefType != refType {
+		t.Errorf("expected refType %s, got %s", refType, gotRefType)
+	}
+	if gotLocation != location {
+		t.Errorf("expected location %s, got %s", location, gotLocation)
 	}
 }

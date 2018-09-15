@@ -14,13 +14,14 @@ type tvParser2_1 struct {
 	st tvParserState2_1
 
 	// current SPDX item being filled in, if any
-	pkg      *spdx.Package2_1
-	file     *spdx.File2_1
-	snippet  *spdx.Snippet2_1
-	otherLic *spdx.OtherLicense2_1
-	rln      *spdx.Relationship2_1
-	ann      *spdx.Annotation2_1
-	rev      *spdx.Review2_1
+	pkg       *spdx.Package2_1
+	pkgExtRef *spdx.PackageExternalReference2_1
+	file      *spdx.File2_1
+	snippet   *spdx.Snippet2_1
+	otherLic  *spdx.OtherLicense2_1
+	rln       *spdx.Relationship2_1
+	ann       *spdx.Annotation2_1
+	rev       *spdx.Review2_1
 	// don't need creation info pointer b/c only one,
 	// and we can get to it via doc.CreationInfo
 }

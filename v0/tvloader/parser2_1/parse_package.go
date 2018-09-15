@@ -10,6 +10,12 @@ import (
 )
 
 func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) error {
+	// expire pkgExtRef for anything other than a comment
+	// (we'll actually handle the comment further below)
+	if tag != "ExternalRefComment" {
+		parser.pkgExtRef = nil
+	}
+
 	switch tag {
 	case "PackageName":
 		// if package already has a name, create and go on to a new package
@@ -84,6 +90,58 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		code, excludesFileName := extractCodeAndExcludes(value)
 		parser.pkg.PackageVerificationCode = code
 		parser.pkg.PackageVerificationCodeExcludedFile = excludesFileName
+	case "PackageChecksum":
+		subkey, subvalue, err := extractSubs(value)
+		if err != nil {
+			return err
+		}
+		switch subkey {
+		case "SHA1":
+			parser.pkg.PackageChecksumSHA1 = subvalue
+		case "SHA256":
+			parser.pkg.PackageChecksumSHA256 = subvalue
+		case "MD5":
+			parser.pkg.PackageChecksumMD5 = subvalue
+		default:
+			return fmt.Errorf("got unknown checksum type %s", subkey)
+		}
+	case "PackageHomePage":
+		parser.pkg.PackageHomePage = value
+	case "PackageSourceInfo":
+		parser.pkg.PackageSourceInfo = value
+	case "PackageLicenseConcluded":
+		parser.pkg.PackageLicenseConcluded = value
+	case "PackageLicenseInfoFromFiles":
+		parser.pkg.PackageLicenseInfoFromFiles = append(parser.pkg.PackageLicenseInfoFromFiles, value)
+	case "PackageLicenseDeclared":
+		parser.pkg.PackageLicenseDeclared = value
+	case "PackageLicenseComments":
+		parser.pkg.PackageLicenseComments = value
+	case "PackageCopyrightText":
+		parser.pkg.PackageCopyrightText = value
+	case "PackageSummary":
+		parser.pkg.PackageSummary = value
+	case "PackageDescription":
+		parser.pkg.PackageDescription = value
+	case "PackageComment":
+		parser.pkg.PackageComment = value
+	case "ExternalRef":
+		parser.pkgExtRef = &spdx.PackageExternalReference2_1{}
+		parser.pkg.PackageExternalReferences = append(parser.pkg.PackageExternalReferences, parser.pkgExtRef)
+		category, refType, locator, err := extractPackageExternalReference(value)
+		if err != nil {
+			return err
+		}
+		parser.pkgExtRef.Category = category
+		parser.pkgExtRef.RefType = refType
+		parser.pkgExtRef.Locator = locator
+	case "ExternalRefComment":
+		if parser.pkgExtRef == nil {
+			return fmt.Errorf("no current ExternalRef found")
+		}
+		parser.pkgExtRef.ExternalRefComment = value
+		// now, expire pkgExtRef anyway because it can have at most one comment
+		parser.pkgExtRef = nil
 	}
 
 	return nil
@@ -106,4 +164,21 @@ func extractCodeAndExcludes(value string) (string, string) {
 	parsedSp := strings.SplitN(sp[1], ")", 2)
 	fileName := strings.TrimSpace(parsedSp[0])
 	return code, fileName
+}
+
+func extractPackageExternalReference(value string) (string, string, string, error) {
+	sp := strings.Split(value, " ")
+	// remove any that are just whitespace
+	keepSp := []string{}
+	for _, s := range sp {
+		ss := strings.TrimSpace(s)
+		if ss != "" {
+			keepSp = append(keepSp, ss)
+		}
+	}
+	// now, should have 3 items and should be able to map them
+	if len(keepSp) != 3 {
+		return "", "", "", fmt.Errorf("expected 3 elements, got %d", len(keepSp))
+	}
+	return keepSp[0], keepSp[1], keepSp[2], nil
 }

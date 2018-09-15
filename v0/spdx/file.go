@@ -19,7 +19,9 @@ type File2_1 struct {
 
 	// 4.4: File Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: mandatory, one SHA1, others may be optionally provided
-	FileChecksum map[string]string
+	FileChecksumSHA1   string
+	FileChecksumSHA256 string
+	FileChecksumMD5    string
 
 	// 4.5: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
