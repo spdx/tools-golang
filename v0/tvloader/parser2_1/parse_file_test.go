@@ -486,3 +486,63 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	}
 
 }
+
+func TestParser2_1FileCreatesRelationshipInFile(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-whatever")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.rln == nil {
+		t.Fatalf("parser didn't create and point to Relationship struct")
+	}
+	if parser.rln != parser.file.Relationships[0] {
+		t.Errorf("pointer to new Relationship doesn't match idx 0 for file.Relationships[]")
+	}
+}
+
+func TestParser2_1FileCreatesAnnotationInFile(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.ann == nil {
+		t.Fatalf("parser didn't create and point to Annotation struct")
+	}
+	if parser.ann != parser.file.Annotations[0] {
+		t.Errorf("pointer to new Annotation doesn't match idx 0 for file.Annotations[]")
+	}
+}
+
+func TestParser2_1FileUnknownTagFails(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePairFromFile2_1("blah", "something")
+	if err == nil {
+		t.Errorf("expected error from parsing unknown tag")
+	}
+}
