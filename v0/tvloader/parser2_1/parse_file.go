@@ -15,6 +15,11 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 		parser.file = &spdx.File2_1{}
 		parser.pkg.Files = append(parser.pkg.Files, parser.file)
 		parser.file.FileName = value
+	// tag for creating new package section and going back to parsing Package
+	case "PackageName":
+		parser.st = psPackage2_1
+		parser.file = nil
+		return parser.parsePairFromPackage2_1(tag, value)
 	// tag for going on to snippet section
 	case "SnippetSPDXID":
 		parser.st = psSnippet2_1

@@ -62,6 +62,84 @@ func TestParser2_1FileStartsNewFileAfterParsingFileNameTag(t *testing.T) {
 	}
 }
 
+func TestParser2_1FileStartsNewPackageAfterParsingPackageNameTag(t *testing.T) {
+	// create the first file and package
+	p1Name := "package1"
+	f1Name := "f1.txt"
+
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: p1Name},
+		file: &spdx.File2_1{FileName: f1Name},
+	}
+	p1 := parser.pkg
+	f1 := parser.file
+	parser.doc.Packages = append(parser.doc.Packages, p1)
+	parser.pkg.Files = append(parser.pkg.Files, f1)
+
+	// now add a new package
+	p2Name := "package2"
+	err := parser.parsePair2_1("PackageName", p2Name)
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should go back to Package
+	if parser.st != psPackage2_1 {
+		t.Errorf("expected state to be %v, got %v", psPackage2_1, parser.st)
+	}
+	// and a package should be created
+	if parser.pkg == nil {
+		t.Fatalf("parser didn't create new pkg")
+	}
+	// and the package name should be as expected
+	if parser.pkg.PackageName != p2Name {
+		t.Errorf("expected package name %s, got %s", p2Name, parser.pkg.PackageName)
+	}
+	// and the package should default to true for FilesAnalyzed
+	if parser.pkg.FilesAnalyzed != true {
+		t.Errorf("expected FilesAnalyzed to default to true, got false")
+	}
+	if parser.pkg.IsFilesAnalyzedTagPresent != false {
+		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
+	}
+	// and the package should _not_ be an "unpackaged" placeholder
+	if parser.pkg.IsUnpackaged == true {
+		t.Errorf("package incorrectly has IsUnpackaged flag set")
+	}
+	// and the Document's Packages should be of size 2 and have these two
+	if parser.doc.Packages[0] != p1 {
+		t.Errorf("Expected package %v in Packages[0], got %v", p1, parser.doc.Packages[0])
+	}
+	if parser.doc.Packages[0].PackageName != p1Name {
+		t.Errorf("expected package name %s in Packages[0], got %s", p1Name, parser.doc.Packages[0].PackageName)
+	}
+	if parser.doc.Packages[1] != parser.pkg {
+		t.Errorf("Expected package %v in Packages[1], got %v", parser.pkg, parser.doc.Packages[1])
+	}
+	if parser.doc.Packages[1].PackageName != p2Name {
+		t.Errorf("expected package name %s in Packages[1], got %s", p2Name, parser.doc.Packages[1].PackageName)
+	}
+	// and the first Package's Files should be of size 1 and have f1 only
+	if len(parser.doc.Packages[0].Files) != 1 {
+		t.Errorf("Expected 1 file in Packages[0].Files, got %d", len(parser.doc.Packages[0].Files))
+	}
+	if parser.doc.Packages[0].Files[0] != f1 {
+		t.Errorf("Expected file %v in Files[0], got %v", f1, parser.doc.Packages[0].Files[0])
+	}
+	if parser.doc.Packages[0].Files[0].FileName != f1Name {
+		t.Errorf("expected file name %s in Files[0], got %s", f1Name, parser.doc.Packages[0].Files[0].FileName)
+	}
+	// and the second Package should have no files
+	if len(parser.doc.Packages[1].Files) != 0 {
+		t.Errorf("Expected no files in Packages[1].Files, got %d", len(parser.doc.Packages[1].Files))
+	}
+	// and the current file should be nil
+	if parser.file != nil {
+		t.Errorf("Expected nil for parser.file, got %v", parser.file)
+	}
+}
+
 func TestParser2_1FileMovesToSnippetAfterParsingSnippetSPDXIDTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{},
