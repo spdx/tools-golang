@@ -129,6 +129,53 @@ func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
 	}
 }
 
+func TestParser2_1CIStaysAfterParsingAnnotationTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationDate", "2018-09-15T00:36:00Z")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationType", "REVIEW")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+
+	err = parser.parsePair2_1("SPDXREF", "SPDXRef-45")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationComment", "i guess i had something to say about this spdx file")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psCreationInfo2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
+	}
+}
+
 // ===== Creation Info section tests =====
 func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
 	parser := tvParser2_1{
@@ -365,5 +412,23 @@ func TestParser2_1CICreatesRelationship(t *testing.T) {
 	}
 	if parser.rln != parser.doc.Relationships[0] {
 		t.Errorf("pointer to new Relationship doesn't match idx 0 for doc.Relationships[]")
+	}
+}
+
+func TestParser2_1CICreatesAnnotation(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.ann == nil {
+		t.Fatalf("parser didn't create and point to Annotation struct")
+	}
+	if parser.ann != parser.doc.Annotations[0] {
+		t.Errorf("pointer to new Annotation doesn't match idx 0 for doc.Annotations[]")
 	}
 }

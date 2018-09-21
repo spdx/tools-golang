@@ -89,10 +89,22 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 		return parser.parsePairForRelationship2_1(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_1(tag, value)
+	// for annotation tags, pass along but don't change state
+	case "Annotator":
+		parser.ann = &spdx.Annotation2_1{}
+		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationDate":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationType":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "SPDXREF":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationComment":
+		return parser.parsePairForAnnotation2_1(tag, value)
 	default:
 		return fmt.Errorf("received unknown tag %v in CreationInfo section", tag)
 	}
-	// FIXME check for tags that add annotation, keeping state
 
 	return nil
 }

@@ -19,7 +19,7 @@ func TestParser2_1FailsIfRelationshipNotSet(t *testing.T) {
 	}
 }
 
-func TestParser2_1FailsIRelationshipCommentWithoutRelationship(t *testing.T) {
+func TestParser2_1FailsIfRelationshipCommentWithoutRelationship(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
@@ -58,7 +58,7 @@ func TestParser2_1CanParseRelationshipTags(t *testing.T) {
 		t.Errorf("expected nil error, got %v", err)
 	}
 	if parser.rln.RelationshipComment != cmt {
-		t.Errorf("got %v for first part of Relationship, expected %v", parser.rln.RelationshipComment, cmt)
+		t.Errorf("got %v for RelationshipComment, expected %v", parser.rln.RelationshipComment, cmt)
 	}
 }
 

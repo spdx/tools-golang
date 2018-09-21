@@ -149,6 +149,21 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		return parser.parsePairForRelationship2_1(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_1(tag, value)
+	// for annotation tags, pass along but don't change state
+	case "Annotator":
+		parser.ann = &spdx.Annotation2_1{}
+		parser.pkg.Annotations = append(parser.pkg.Annotations, parser.ann)
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationDate":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationType":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "SPDXREF":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationComment":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	default:
+		return fmt.Errorf("received unknown tag %v in Package section", tag)
 	}
 
 	return nil
