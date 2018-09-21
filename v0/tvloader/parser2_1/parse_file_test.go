@@ -1,0 +1,488 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+package tvloader
+
+import (
+	"testing"
+
+	"github.com/swinslow/spdx-go/v0/spdx"
+)
+
+// ===== Parser file section state change tests =====
+func TestParser2_1FileStartsNewFileAfterParsingFileNameTag(t *testing.T) {
+	// create the first file
+	fileOldName := "f1.txt"
+
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: fileOldName},
+	}
+	fileOld := parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, fileOld)
+	// the Package's Files should have this one only
+	if parser.pkg.Files[0] != fileOld {
+		t.Errorf("Expected file %v in Files[0], got %v", fileOld, parser.pkg.Files[0])
+	}
+	if parser.pkg.Files[0].FileName != fileOldName {
+		t.Errorf("expected file name %s in Files[0], got %s", fileOldName, parser.pkg.Files[0].FileName)
+	}
+
+	// now add a new file
+	fileName := "f2.txt"
+	err := parser.parsePair2_1("FileName", fileName)
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should be correct
+	if parser.st != psFile2_1 {
+		t.Errorf("expected state to be %v, got %v", psFile2_1, parser.st)
+	}
+	// and a file should be created
+	if parser.file == nil {
+		t.Fatalf("parser didn't create new file")
+	}
+	// and the file name should be as expected
+	if parser.file.FileName != fileName {
+		t.Errorf("expected file name %s, got %s", fileName, parser.file.FileName)
+	}
+	// and the Package's Files should be of size 2 and have these two
+	if parser.pkg.Files[0] != fileOld {
+		t.Errorf("Expected file %v in Files[0], got %v", fileOld, parser.pkg.Files[0])
+	}
+	if parser.pkg.Files[0].FileName != fileOldName {
+		t.Errorf("expected file name %s in Files[0], got %s", fileOldName, parser.pkg.Files[0].FileName)
+	}
+	if parser.pkg.Files[1] != parser.file {
+		t.Errorf("Expected file %v in Files[1], got %v", parser.file, parser.pkg.Files[1])
+	}
+	if parser.pkg.Files[1].FileName != fileName {
+		t.Errorf("expected file name %s in Files[1], got %s", fileName, parser.pkg.Files[1].FileName)
+	}
+}
+
+func TestParser2_1FileMovesToSnippetAfterParsingSnippetSPDXIDTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+	fileCurrent := parser.file
+
+	err := parser.parsePair2_1("SnippetSPDXID", "SPDXRef-Test1")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should be correct
+	if parser.st != psSnippet2_1 {
+		t.Errorf("expected state to be %v, got %v", psSnippet2_1, parser.st)
+	}
+	// and current file should remain what it was
+	if parser.file != fileCurrent {
+		t.Fatalf("expected file to remain %v, got %v", fileCurrent, parser.file)
+	}
+}
+
+func TestParser2_1FileMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("LicenseID", "LicenseRef-TestLic")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("expected state to be %v, got %v", psOtherLicense2_1, parser.st)
+	}
+}
+
+func TestParser2_1FileStaysAfterParsingRelationshipTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-else")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should remain unchanged
+	if parser.st != psFile2_1 {
+		t.Errorf("expected state to be %v, got %v", psFile2_1, parser.st)
+	}
+
+	err = parser.parsePair2_1("RelationshipComment", "blah")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should still remain unchanged
+	if parser.st != psFile2_1 {
+		t.Errorf("expected state to be %v, got %v", psFile2_1, parser.st)
+	}
+}
+
+func TestParser2_1FileStaysAfterParsingAnnotationTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationDate", "2018-09-15T00:36:00Z")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationType", "REVIEW")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+
+	err = parser.parsePair2_1("SPDXREF", "SPDXRef-45")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationComment", "i guess i had something to say about this particular file")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psFile2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
+	}
+}
+
+// ===== File data section tests =====
+func TestParser2_1CanParseFileTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	// File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileName != "f1.txt" {
+		t.Errorf("got %v for FileName", parser.file.FileName)
+	}
+
+	// File SPDX Identifier
+	err = parser.parsePairFromFile2_1("SPDXID", "SPDXRef-f1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileSPDXIdentifier != "SPDXRef-f1" {
+		t.Errorf("got %v for FileSPDXIdentifier", parser.file.FileSPDXIdentifier)
+	}
+
+	// File Type
+	fileTypes := []string{
+		"TEXT",
+		"DOCUMENTATION",
+	}
+	for _, ty := range fileTypes {
+		err = parser.parsePairFromFile2_1("FileType", ty)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, typeWant := range fileTypes {
+		flagFound := false
+		for _, typeCheck := range parser.file.FileType {
+			if typeWant == typeCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in FileType", typeWant)
+		}
+	}
+	if len(fileTypes) != len(parser.file.FileType) {
+		t.Errorf("expected %d types in FileType, got %d", len(fileTypes),
+			len(parser.file.FileType))
+	}
+
+	// File Checksums
+	codeSha1 := "85ed0817af83a24ad8da68c2b5094de69833983c"
+	sumSha1 := "SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c"
+	codeSha256 := "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
+	sumSha256 := "SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
+	codeMd5 := "624c1abb3664f4b35547e7c73864ad24"
+	sumMd5 := "MD5: 624c1abb3664f4b35547e7c73864ad24"
+	err = parser.parsePairFromFile2_1("FileChecksum", sumSha1)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePairFromFile2_1("FileChecksum", sumSha256)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePairFromFile2_1("FileChecksum", sumMd5)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileChecksumSHA1 != codeSha1 {
+		t.Errorf("expected %s for FileChecksumSHA1, got %s", codeSha1, parser.file.FileChecksumSHA1)
+	}
+	if parser.file.FileChecksumSHA256 != codeSha256 {
+		t.Errorf("expected %s for FileChecksumSHA256, got %s", codeSha256, parser.file.FileChecksumSHA256)
+	}
+	if parser.file.FileChecksumMD5 != codeMd5 {
+		t.Errorf("expected %s for FileChecksumMD5, got %s", codeMd5, parser.file.FileChecksumMD5)
+	}
+
+	// Concluded License
+	err = parser.parsePairFromFile2_1("LicenseConcluded", "Apache-2.0 OR GPL-2.0-or-later")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.LicenseConcluded != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("got %v for LicenseConcluded", parser.file.LicenseConcluded)
+	}
+
+	// License Information in File
+	lics := []string{
+		"Apache-2.0",
+		"GPL-2.0-or-later",
+		"CC0-1.0",
+	}
+	for _, lic := range lics {
+		err = parser.parsePairFromFile2_1("LicenseInfoInFile", lic)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, licWant := range lics {
+		flagFound := false
+		for _, licCheck := range parser.file.LicenseInfoInFile {
+			if licWant == licCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in LicenseInfoInFile", licWant)
+		}
+	}
+	if len(lics) != len(parser.file.LicenseInfoInFile) {
+		t.Errorf("expected %d licenses in LicenseInfoInFile, got %d", len(lics),
+			len(parser.file.LicenseInfoInFile))
+	}
+
+	// Comments on License
+	err = parser.parsePairFromFile2_1("LicenseComments", "this is a comment")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.LicenseComments != "this is a comment" {
+		t.Errorf("got %v for LicenseComments", parser.file.LicenseComments)
+	}
+
+	// Copyright Text
+	err = parser.parsePairFromFile2_1("FileCopyrightText", "copyright (c) me")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileCopyrightText != "copyright (c) me" {
+		t.Errorf("got %v for FileCopyrightText", parser.file.FileCopyrightText)
+	}
+
+	// Artifact of Project Name
+	prjNames := []string{
+		"project1",
+		"project2",
+		"project3",
+		"project4",
+	}
+	for _, pn := range prjNames {
+		err = parser.parsePairFromFile2_1("ArtifactOfProjectName", pn)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, pnWant := range prjNames {
+		flagFound := false
+		for _, pnCheck := range parser.file.ArtifactOfProjectName {
+			if pnWant == pnCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in ArtifactOfProjectName", pnWant)
+		}
+	}
+	if len(prjNames) != len(parser.file.ArtifactOfProjectName) {
+		t.Errorf("expected %d types in ArtifactOfProjectName, got %d", len(prjNames),
+			len(parser.file.ArtifactOfProjectName))
+	}
+
+	// Artifact of Project Home Page
+	prjPages := []string{
+		"http://example.com/1/",
+		"http://example.com/2/",
+		"http://example.com/3/",
+	}
+	for _, pg := range prjPages {
+		err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", pg)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, pgWant := range prjPages {
+		flagFound := false
+		for _, pgCheck := range parser.file.ArtifactOfProjectHomePage {
+			if pgWant == pgCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in ArtifactOfProjectHomePage", pgWant)
+		}
+	}
+	if len(prjPages) != len(parser.file.ArtifactOfProjectHomePage) {
+		t.Errorf("expected %d types in ArtifactOfProjectHomePage, got %d", len(prjPages),
+			len(parser.file.ArtifactOfProjectHomePage))
+	}
+
+	// Artifact of Project URI
+	prjURIs := []string{
+		"http://example.com/1/uri.whatever",
+		"http://example.com/2/uri.whatever",
+		"http://example.com/3/uri.whatever",
+		"http://example.com/4/uri.whatever",
+		"http://example.com/5/uri.whatever",
+	}
+	for _, pu := range prjURIs {
+		err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", pu)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, puWant := range prjURIs {
+		flagFound := false
+		for _, puCheck := range parser.file.ArtifactOfProjectURI {
+			if puWant == puCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in ArtifactOfProjectURI", puWant)
+		}
+	}
+	if len(prjURIs) != len(parser.file.ArtifactOfProjectURI) {
+		t.Errorf("expected %d types in ArtifactOfProjectURI, got %d", len(prjURIs),
+			len(parser.file.ArtifactOfProjectURI))
+	}
+
+	// File Comment
+	err = parser.parsePairFromFile2_1("FileComment", "this is a comment")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileComment != "this is a comment" {
+		t.Errorf("got %v for FileComment", parser.file.FileComment)
+	}
+
+	// File Notice
+	err = parser.parsePairFromFile2_1("FileNotice", "this is a Notice")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.file.FileNotice != "this is a Notice" {
+		t.Errorf("got %v for FileNotice", parser.file.FileNotice)
+	}
+
+	// File Contributor
+	contribs := []string{
+		"John Doe jdoe@example.com",
+		"EvilCorp",
+	}
+	for _, contrib := range contribs {
+		err = parser.parsePairFromFile2_1("FileContributor", contrib)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, contribWant := range contribs {
+		flagFound := false
+		for _, contribCheck := range parser.file.FileContributor {
+			if contribWant == contribCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in FileContributor", contribWant)
+		}
+	}
+	if len(contribs) != len(parser.file.FileContributor) {
+		t.Errorf("expected %d contribenses in FileContributor, got %d", len(contribs),
+			len(parser.file.FileContributor))
+	}
+
+	// File Dependencies
+	deps := []string{
+		"f-1.txt",
+		"g.txt",
+	}
+	for _, dep := range deps {
+		err = parser.parsePairFromFile2_1("FileDependency", dep)
+		if err != nil {
+			t.Errorf("expected nil error, got %v", err)
+		}
+	}
+	for _, depWant := range deps {
+		flagFound := false
+		for _, depCheck := range parser.file.FileDependencies {
+			if depWant == depCheck {
+				flagFound = true
+			}
+		}
+		if flagFound == false {
+			t.Errorf("didn't find %s in FileDependency", depWant)
+		}
+	}
+	if len(deps) != len(parser.file.FileDependencies) {
+		t.Errorf("expected %d depenses in FileDependency, got %d", len(deps),
+			len(parser.file.FileDependencies))
+	}
+
+}

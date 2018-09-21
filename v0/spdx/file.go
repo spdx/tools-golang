@@ -47,7 +47,7 @@ type File2_1 struct {
 	// DEPRECATED in version 2.1 of spec
 	// 4.10: Artifact of Project Homepage: URL or "UNKNOWN"
 	// Cardinality: optional, one or many
-	ArtifactOfProjectHomepage []string
+	ArtifactOfProjectHomePage []string
 
 	// DEPRECATED in version 2.1 of spec
 	// 4.11: Artifact of Project Uniform Resource Identifier

@@ -126,7 +126,7 @@ func TestParser2_1PackageStaysAfterParsingRelationshipTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
-	// state should remain unchanges
+	// state should remain unchanged
 	if parser.st != psPackage2_1 {
 		t.Errorf("expected state to be %v, got %v", psPackage2_1, parser.st)
 	}
@@ -135,7 +135,7 @@ func TestParser2_1PackageStaysAfterParsingRelationshipTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
-	// state should still remain unchanges
+	// state should still remain unchanged
 	if parser.st != psPackage2_1 {
 		t.Errorf("expected state to be %v, got %v", psPackage2_1, parser.st)
 	}
@@ -181,7 +181,7 @@ func TestParser2_1PackageStaysAfterParsingAnnotationTags(t *testing.T) {
 		t.Errorf("parser is in state %v, expected %v", parser.st, psPackage2_1)
 	}
 
-	err = parser.parsePair2_1("AnnotationComment", "i guess i had something to say about this spdx file")
+	err = parser.parsePair2_1("AnnotationComment", "i guess i had something to say about this package")
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
