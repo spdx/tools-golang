@@ -162,6 +162,10 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		return parser.parsePairForAnnotation2_1(tag, value)
 	case "AnnotationComment":
 		return parser.parsePairForAnnotation2_1(tag, value)
+	// tag for going on to review section (DEPRECATED)
+	case "Reviewer":
+		parser.st = psReview2_1
+		return parser.parsePairFromReview2_1(tag, value)
 	default:
 		return fmt.Errorf("received unknown tag %v in Package section", tag)
 	}

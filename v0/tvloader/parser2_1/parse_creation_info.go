@@ -82,6 +82,10 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 	case "LicenseID":
 		parser.st = psOtherLicense2_1
 		return parser.parsePairFromOtherLicense2_1(tag, value)
+	// tag for going on to review section (DEPRECATED)
+	case "Reviewer":
+		parser.st = psReview2_1
+		return parser.parsePairFromReview2_1(tag, value)
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_1{}

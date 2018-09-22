@@ -23,6 +23,10 @@ func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string
 		parser.otherLic.LicenseCrossReferences = append(parser.otherLic.LicenseCrossReferences, value)
 	case "LicenseComment":
 		parser.otherLic.LicenseComment = value
+	// tag for going on to review section (DEPRECATED)
+	case "Reviewer":
+		parser.st = psReview2_1
+		return parser.parsePairFromReview2_1(tag, value)
 	default:
 		return fmt.Errorf("received unknown tag %v in OtherLicense section", tag)
 	}

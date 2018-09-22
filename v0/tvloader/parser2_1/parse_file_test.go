@@ -184,6 +184,25 @@ func TestParser2_1FileMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 	}
 }
 
+func TestParser2_1FileMovesToReviewAfterParsingReviewerTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psFile2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+
+	err := parser.parsePair2_1("Reviewer", "Person: John Doe")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psReview2_1 {
+		t.Errorf("expected state to be %v, got %v", psReview2_1, parser.st)
+	}
+}
+
 func TestParser2_1FileStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{},

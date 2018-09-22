@@ -106,6 +106,20 @@ func TestParser2_1CIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 	}
 }
 
+func TestParser2_1CIMovesToReviewAfterParsingReviewerTag(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("Reviewer", "Person: John Doe")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psReview2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psReview2_1)
+	}
+}
+
 func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
