@@ -267,10 +267,9 @@ func TestParser2_1FileStaysAfterParsingAnnotationTags(t *testing.T) {
 // ===== File data section tests =====
 func TestParser2_1CanParseFileTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{},
-		st:   psFile2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test"},
-		file: &spdx.File2_1{},
+		doc: &spdx.Document2_1{},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 	parser.pkg.Files = append(parser.pkg.Files, parser.file)

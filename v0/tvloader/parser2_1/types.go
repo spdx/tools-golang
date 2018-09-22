@@ -48,9 +48,9 @@ const (
 	// in other license section
 	psOtherLicense2_1
 
+	// in review section
+	psReview2_1
+
 	// at end of document
 	psEnd2_1
-
-	// error has been encountered
-	psError2_1
 )

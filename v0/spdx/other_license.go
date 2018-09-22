@@ -22,7 +22,7 @@ type OtherLicense2_1 struct {
 	LicenseName string
 
 	// 6.4: License Cross Reference
-	// Cardinality: conditional (optiona, one or many) if license
+	// Cardinality: conditional (optional, one or many) if license
 	//              is not on SPDX License List
 	LicenseCrossReferences []string
 

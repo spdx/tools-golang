@@ -21,12 +21,12 @@ func (parser *tvParser2_1) parsePair2_1(tag string, value string) error {
 		return parser.parsePairFromFile2_1(tag, value)
 	// case psSnippet2_1:
 	// 	return parser.parsePairFromSnippet2_1(tag, value)
-	// case psOtherLicense2_1:
-	// 	return parser.parsePairFromOtherLicense2_1(tag, value)
+	case psOtherLicense2_1:
+		return parser.parsePairFromOtherLicense2_1(tag, value)
+	// case psReview2_1:
+	// 	return parser.parsePairFromReview2_1(tag, value)
 	case psEnd2_1:
 		return fmt.Errorf("Already in parser end state when parsing (%s, %s)", tag, value)
-	case psError2_1:
-		return fmt.Errorf("In parser error state when parsing (%s, %s)", tag, value)
 	default:
 		return fmt.Errorf("Parser state %v not recognized when parsing (%s, %s)", parser.st, tag, value)
 	}
@@ -51,9 +51,5 @@ func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error
 }
 
 func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) error {
-	return nil
-}
-
-func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string) error {
 	return nil
 }
