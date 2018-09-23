@@ -7,7 +7,22 @@ import (
 	"fmt"
 
 	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/swinslow/spdx-go/v0/tvloader/reader"
 )
+
+// ParseTagValues takes a list of (tag, value) pairs, parses it and returns
+// a pointer to a parsed SPDX Document.
+func ParseTagValues(tvs []reader.TagValuePair) (*spdx.Document2_1, error) {
+	parser := tvParser2_1{}
+	for _, tv := range tvs {
+		err := parser.parsePair2_1(tv.Tag, tv.Value)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return parser.doc, nil
+}
 
 func (parser *tvParser2_1) parsePair2_1(tag string, value string) error {
 	switch parser.st {

@@ -3,8 +3,40 @@ package parser2v1
 
 import (
 	"testing"
+
+	"github.com/swinslow/spdx-go/v0/tvloader/reader"
 )
 
+// ===== Parser exported entry point tests =====
+func TestParser2_1CanParseTagValues(t *testing.T) {
+	var tvPairs []reader.TagValuePair
+
+	// create some pairs
+	tvPair1 := reader.TagValuePair{Tag: "SPDXVersion", Value: "SPDX-2.1"}
+	tvPairs = append(tvPairs, tvPair1)
+	tvPair2 := reader.TagValuePair{Tag: "DataLicense", Value: "CC0-1.0"}
+	tvPairs = append(tvPairs, tvPair2)
+	tvPair3 := reader.TagValuePair{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"}
+	tvPairs = append(tvPairs, tvPair3)
+
+	// now parse them
+	doc, err := ParseTagValues(tvPairs)
+	if err != nil {
+		t.Errorf("got error when calling ParseTagValues: %v", err)
+	}
+	if doc.CreationInfo.SPDXVersion != "SPDX-2.1" {
+		t.Errorf("expected SPDXVersion to be SPDX-2.1, got %v", doc.CreationInfo.SPDXVersion)
+	}
+	if doc.CreationInfo.DataLicense != "CC0-1.0" {
+		t.Errorf("expected DataLicense to be CC0-1.0, got %v", doc.CreationInfo.DataLicense)
+	}
+	if doc.CreationInfo.SPDXIdentifier != "SPDXRef-DOCUMENT" {
+		t.Errorf("expected SPDXIdentifier to be SPDXRef-DOCUMENT, got %v", doc.CreationInfo.SPDXIdentifier)
+	}
+
+}
+
+// ===== Parser initialization tests =====
 func TestParser2_1InitCreatesResetStatus(t *testing.T) {
 	parser := tvParser2_1{}
 	if parser.st != psStart2_1 {
