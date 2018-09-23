@@ -1,7 +1,7 @@
-// Package tvloader contains functions to read, load and parse
+// Package parser2v1 contains functions to read, load and parse
 // SPDX tag-value files.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
-package tvloader
+package parser2v1
 
 import (
 	"fmt"
