@@ -1,7 +1,62 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package reader
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
+
+func TestCanReadTagValues(t *testing.T) {
+	sText := `
+Tag1: Value1
+Tag2:    Value2
+
+Tag3: <text>line 1
+   line 2</text>
+# Comment
+Tag4: Value4
+Tag5: Value 5
+`
+	sReader := strings.NewReader(sText)
+
+	tvPairList, err := ReadTagValues(sReader)
+	if err != nil {
+		t.Errorf("got error when calling ReadTagValues: %v", err)
+	}
+	if len(tvPairList) != 5 {
+		t.Fatalf("expected len(tvPairList) to be 5, got %d", len(tvPairList))
+	}
+	if tvPairList[0].Tag != "Tag1" {
+		t.Errorf("expected tvPairList[0].Tag to be Tag1, got %s", tvPairList[0].Tag)
+	}
+	if tvPairList[0].Value != "Value1" {
+		t.Errorf("expected tvPairList[0].Value to be Value1, got %s", tvPairList[0].Value)
+	}
+	if tvPairList[1].Tag != "Tag2" {
+		t.Errorf("expected tvPairList[1].Tag to be Tag2, got %s", tvPairList[1].Tag)
+	}
+	if tvPairList[1].Value != "Value2" {
+		t.Errorf("expected tvPairList[1].Value to be Value2, got %s", tvPairList[1].Value)
+	}
+	if tvPairList[2].Tag != "Tag3" {
+		t.Errorf("expected tvPairList[2].Tag to be Tag3, got %s", tvPairList[2].Tag)
+	}
+	if tvPairList[2].Value != "line 1\n   line 2" {
+		t.Errorf("expected tvPairList[2].Value to be line 1\n   line 2, got %s", tvPairList[2].Value)
+	}
+	if tvPairList[3].Tag != "Tag4" {
+		t.Errorf("expected tvPairList[3].Tag to be Tag4, got %s", tvPairList[3].Tag)
+	}
+	if tvPairList[3].Value != "Value4" {
+		t.Errorf("expected tvPairList[3].Value to be Value4, got %s", tvPairList[3].Value)
+	}
+	if tvPairList[4].Tag != "Tag5" {
+		t.Errorf("expected tvPairList[4].Tag to be Tag5, got %s", tvPairList[4].Tag)
+	}
+	if tvPairList[4].Value != "Value 5" {
+		t.Errorf("expected tvPairList[4].Value to be Value 5, got %s", tvPairList[4].Value)
+	}
+}
 
 func TestCanGetTVListWithFinalize(t *testing.T) {
 	reader := &tvReader{}

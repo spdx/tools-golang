@@ -3,10 +3,51 @@
 package reader
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
 )
+
+// TagValuePair is a convenience struct for a (tag, value) string pair.
+type TagValuePair struct {
+	Tag   string
+	Value string
+}
+
+// ReadTagValues takes an io.Reader, scans it line by line and returns
+// a slice of {string, string} structs in the form {tag, value}.
+func ReadTagValues(content io.Reader) ([]TagValuePair, error) {
+	r := &tvReader{}
+
+	scanner := bufio.NewScanner(content)
+	for scanner.Scan() {
+		// read each line, one by one
+		err := r.readNextLine(scanner.Text())
+		if err != nil {
+			return nil, err
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	// finalize and make sure all is well
+	tvList, err := r.finalize()
+	if err != nil {
+		return nil, err
+	}
+
+	// convert internal format to exported TagValueList
+	var exportedTVList []TagValuePair
+	for _, tv := range tvList {
+		tvPair := TagValuePair{Tag: tv.tag, Value: tv.value}
+		exportedTVList = append(exportedTVList, tvPair)
+	}
+
+	return exportedTVList, nil
+}
 
 type tagvalue struct {
 	tag   string
