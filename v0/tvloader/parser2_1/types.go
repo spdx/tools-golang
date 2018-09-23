@@ -50,7 +50,4 @@ const (
 
 	// in review section
 	psReview2_1
-
-	// at end of document
-	psEnd2_1
 )
