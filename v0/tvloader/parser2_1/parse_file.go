@@ -28,7 +28,7 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "LicenseID":
 		parser.st = psOtherLicense2_1
 		return parser.parsePairFromOtherLicense2_1(tag, value)
-	// tags for package data
+	// tags for file data
 	case "SPDXID":
 		parser.file.FileSPDXIdentifier = value
 	case "FileType":
