@@ -4,12 +4,25 @@
 package tvloader
 
 import (
+	"io"
+
+	"github.com/swinslow/spdx-go/v0/spdx"
 	"github.com/swinslow/spdx-go/v0/tvloader/parser2v1"
 	"github.com/swinslow/spdx-go/v0/tvloader/reader"
 )
 
-type TVLoader struct {
-	version   string
-	reader    *reader.tvReader
-	parser2_1 *parser2v1.parser2_1
+// Load2_1 takes an io.Reader and returns a fully-parsed SPDX Document
+// (version 2.1) if parseable, or error if any error is encountered.
+func Load2_1(content io.Reader) (*spdx.Document2_1, error) {
+	tvPairs, err := reader.ReadTagValues(content)
+	if err != nil {
+		return nil, err
+	}
+
+	doc, err := parser2v1.ParseTagValues(tvPairs)
+	if err != nil {
+		return nil, err
+	}
+
+	return doc, nil
 }
