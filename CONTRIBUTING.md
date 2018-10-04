@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Contributing
 
-All contributions should include a "Signed-off-by" line in the commit message.
+All contributions must include a "Signed-off-by" line in the commit message.
 
 This indicates that the contribution is made pursuant to the [Developer Certificate of Origin (DCO)](https://developercertificate.org/), a copy of which is included below.
 
