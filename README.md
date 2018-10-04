@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/swinslow/spdx-go.svg?branch=master)](https://travis-ci.org/swinslow/spdx-go)
+
 SPDX-License-Identifier: CC-BY-4.0
 
 # spdx-go
