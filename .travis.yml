@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
+language: go
+
+go:
+  - "1.10"
+
+script: go test -v ./...
