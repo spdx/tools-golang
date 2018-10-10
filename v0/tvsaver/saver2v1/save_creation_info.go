@@ -50,6 +50,7 @@ func renderCreationInfo2_1(ci *spdx.CreationInfo2_1, w io.Writer) error {
 		fmt.Fprintf(w, "DocumentComment: %s\n", textify(ci.DocumentComment))
 	}
 
+	// add blank newline b/c end of a main section
 	fmt.Fprintf(w, "\n")
 
 	return nil

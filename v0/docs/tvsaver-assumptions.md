@@ -8,3 +8,7 @@ Document Creation Info
   set to the empty string, they will be omitted. Thus, an invalid Creation Info
   section (e.g. one that doesn't include a correct SPDXVersion field) will
   result in outputting an invalid Creation Info section.
+
+Relationship
+------------
+* Same comment as above re: optional fields, for RelationshipComment.

@@ -10,7 +10,7 @@ import (
 )
 
 // ===== Creation Info section Saver tests =====
-func TestSaver2_1SavesText(t *testing.T) {
+func TestSaver2_1CISavesText(t *testing.T) {
 	ci := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
@@ -76,7 +76,7 @@ DocumentComment: this is a document comment
 	}
 }
 
-func TestSaver2_1OmitsOptionalFieldsIfEmpty(t *testing.T) {
+func TestSaver2_1CIOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	// --- need at least one creator; do first for Persons ---
 	ci1 := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
