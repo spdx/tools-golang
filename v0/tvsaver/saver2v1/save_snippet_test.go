@@ -9,7 +9,7 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-// ===== Creation Info section Saver tests =====
+// ===== Snippet section Saver tests =====
 func TestSaver2_1SnippetSavesText(t *testing.T) {
 	sn := &spdx.Snippet2_1{
 		SnippetSPDXIdentifier:         "SPDXRef-Snippet17",

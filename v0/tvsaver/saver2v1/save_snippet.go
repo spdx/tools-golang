@@ -29,13 +29,13 @@ func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
 		fmt.Fprintf(w, "LicenseInfoInSnippet: %s\n", s)
 	}
 	if sn.SnippetLicenseComments != "" {
-		fmt.Fprintf(w, "SnippetLicenseComments: %s\n", sn.SnippetLicenseComments)
+		fmt.Fprintf(w, "SnippetLicenseComments: %s\n", textify(sn.SnippetLicenseComments))
 	}
 	if sn.SnippetCopyrightText != "" {
 		fmt.Fprintf(w, "SnippetCopyrightText: %s\n", sn.SnippetCopyrightText)
 	}
 	if sn.SnippetComment != "" {
-		fmt.Fprintf(w, "SnippetComment: %s\n", sn.SnippetComment)
+		fmt.Fprintf(w, "SnippetComment: %s\n", textify(sn.SnippetComment))
 	}
 	if sn.SnippetName != "" {
 		fmt.Fprintf(w, "SnippetName: %s\n", sn.SnippetName)
