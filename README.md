@@ -18,6 +18,7 @@ spdx-go provides the following packages:
 
 * *v0/spdx* - in-memory data model for the sections of an SPDX document
 * *v0/tvloader* - tag-value file loader
+* *v0/tvsaver* - tag-value file saver
 
 ## What it doesn't do
 
@@ -25,7 +26,6 @@ spdx-go doesn't currently do any of the following:
 
 * work with files under any version of the SPDX spec *other than* v2.1
 * work with RDF files
-* output RDF or tag-value files
 * convert between RDF and tag-value files, or between different versions
 * enable applications to interact with SPDX files without needing to care
   (too much) about the particular SPDX file version
