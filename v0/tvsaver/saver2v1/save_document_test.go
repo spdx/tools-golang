@@ -324,7 +324,7 @@ ReviewComment: I have reviewed this SPDX document and it is awesome
 
 	// render as buffer of bytes
 	var got bytes.Buffer
-	err := renderDocument2_1(doc, &got)
+	err := RenderDocument2_1(doc, &got)
 	if err != nil {
 		t.Errorf("Expected nil error, got %v", err)
 	}
@@ -341,7 +341,7 @@ func TestSaver2_1DocumentReturnsErrorIfNilCreationInfo(t *testing.T) {
 	doc := &spdx.Document2_1{}
 
 	var got bytes.Buffer
-	err := renderDocument2_1(doc, &got)
+	err := RenderDocument2_1(doc, &got)
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}

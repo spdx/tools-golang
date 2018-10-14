@@ -11,7 +11,7 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-func renderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
+func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 	if doc.CreationInfo == nil {
 		return fmt.Errorf("Document had nil CreationInfo section")
 	}
