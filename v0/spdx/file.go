@@ -73,10 +73,4 @@ type File2_1 struct {
 
 	// Snippets contained in this File
 	Snippets []*Snippet2_1
-
-	// Relationships applicable to this File
-	Relationships []*Relationship2_1
-
-	// Annotations applicable to this File
-	Annotations []*Annotation2_1
 }

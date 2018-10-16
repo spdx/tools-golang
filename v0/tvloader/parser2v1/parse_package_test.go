@@ -702,7 +702,7 @@ func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
 	}
 }
 
-func TestParser2_1PackageCreatesRelationshipInPackage(t *testing.T) {
+func TestParser2_1PackageCreatesRelationshipInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
 		st:  psPackage2_1,
@@ -717,12 +717,12 @@ func TestParser2_1PackageCreatesRelationshipInPackage(t *testing.T) {
 	if parser.rln == nil {
 		t.Fatalf("parser didn't create and point to Relationship struct")
 	}
-	if parser.rln != parser.pkg.Relationships[0] {
-		t.Errorf("pointer to new Relationship doesn't match idx 0 for pkg.Relationships[]")
+	if parser.rln != parser.doc.Relationships[0] {
+		t.Errorf("pointer to new Relationship doesn't match idx 0 for doc.Relationships[]")
 	}
 }
 
-func TestParser2_1PackageCreatesAnnotationInPackage(t *testing.T) {
+func TestParser2_1PackageCreatesAnnotationInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
 		st:  psPackage2_1,
@@ -737,8 +737,8 @@ func TestParser2_1PackageCreatesAnnotationInPackage(t *testing.T) {
 	if parser.ann == nil {
 		t.Fatalf("parser didn't create and point to Annotation struct")
 	}
-	if parser.ann != parser.pkg.Annotations[0] {
-		t.Errorf("pointer to new Annotation doesn't match idx 0 for pkg.Annotations[]")
+	if parser.ann != parser.doc.Annotations[0] {
+		t.Errorf("pointer to new Annotation doesn't match idx 0 for doc.Annotations[]")
 	}
 }
 

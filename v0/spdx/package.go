@@ -116,12 +116,6 @@ type Package2_1 struct {
 
 	// Files contained in this Package
 	Files []*File2_1
-
-	// Relationships applicable to this Package
-	Relationships []*Relationship2_1
-
-	// Annotations applicable to this Package
-	Annotations []*Annotation2_1
 }
 
 // PackageExternalReference2_1 is an External Reference to additional info
