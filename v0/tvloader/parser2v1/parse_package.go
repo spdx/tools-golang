@@ -145,14 +145,14 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_1{}
-		parser.pkg.Relationships = append(parser.pkg.Relationships, parser.rln)
+		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
 		return parser.parsePairForRelationship2_1(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_1(tag, value)
 	// for annotation tags, pass along but don't change state
 	case "Annotator":
 		parser.ann = &spdx.Annotation2_1{}
-		parser.pkg.Annotations = append(parser.pkg.Annotations, parser.ann)
+		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
 		return parser.parsePairForAnnotation2_1(tag, value)
 	case "AnnotationDate":
 		return parser.parsePairForAnnotation2_1(tag, value)
