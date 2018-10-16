@@ -583,7 +583,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 
 }
 
-func TestParser2_1FileCreatesRelationshipInFile(t *testing.T) {
+func TestParser2_1FileCreatesRelationshipInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{},
 		st:   psFile2_1,
@@ -600,12 +600,12 @@ func TestParser2_1FileCreatesRelationshipInFile(t *testing.T) {
 	if parser.rln == nil {
 		t.Fatalf("parser didn't create and point to Relationship struct")
 	}
-	if parser.rln != parser.file.Relationships[0] {
-		t.Errorf("pointer to new Relationship doesn't match idx 0 for file.Relationships[]")
+	if parser.rln != parser.doc.Relationships[0] {
+		t.Errorf("pointer to new Relationship doesn't match idx 0 for doc.Relationships[]")
 	}
 }
 
-func TestParser2_1FileCreatesAnnotationInFile(t *testing.T) {
+func TestParser2_1FileCreatesAnnotationInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{},
 		st:   psFile2_1,
@@ -622,8 +622,8 @@ func TestParser2_1FileCreatesAnnotationInFile(t *testing.T) {
 	if parser.ann == nil {
 		t.Fatalf("parser didn't create and point to Annotation struct")
 	}
-	if parser.ann != parser.file.Annotations[0] {
-		t.Errorf("pointer to new Annotation doesn't match idx 0 for file.Annotations[]")
+	if parser.ann != parser.doc.Annotations[0] {
+		t.Errorf("pointer to new Annotation doesn't match idx 0 for doc.Annotations[]")
 	}
 }
 
