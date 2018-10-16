@@ -46,10 +46,4 @@ type Snippet2_1 struct {
 	// 5.10: Snippet Name
 	// Cardinality: optional, one
 	SnippetName string
-
-	// Relationships applicable to this Snippet
-	Relationships []*Relationship2_1
-
-	// Annotations applicable to this Snippet
-	Annotations []*Annotation2_1
 }

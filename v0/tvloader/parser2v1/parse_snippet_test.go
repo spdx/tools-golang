@@ -276,12 +276,12 @@ func TestParser2_1SnippetStaysAfterParsingRelationshipTags(t *testing.T) {
 	if parser.st != psSnippet2_1 {
 		t.Errorf("expected state to be %v, got %v", psSnippet2_1, parser.st)
 	}
-	// and the relationship should be in the Snippet's Relationships
-	if len(parser.snippet.Relationships) != 1 {
-		t.Fatalf("expected snippet.Relationships to have len 1, got %d", len(parser.snippet.Relationships))
+	// and the relationship should be in the Document's Relationships
+	if len(parser.doc.Relationships) != 1 {
+		t.Fatalf("expected doc.Relationships to have len 1, got %d", len(parser.doc.Relationships))
 	}
-	if parser.snippet.Relationships[0].RefA != "blah" {
-		t.Errorf("expected RefA to be %s, got %s", "blah", parser.snippet.Relationships[0].RefA)
+	if parser.doc.Relationships[0].RefA != "blah" {
+		t.Errorf("expected RefA to be %s, got %s", "blah", parser.doc.Relationships[0].RefA)
 	}
 
 	err = parser.parsePair2_1("RelationshipComment", "blah")
@@ -346,12 +346,12 @@ func TestParser2_1SnippetStaysAfterParsingAnnotationTags(t *testing.T) {
 		t.Errorf("parser is in state %v, expected %v", parser.st, psSnippet2_1)
 	}
 
-	// and the annotation should be in the Snippet's Annotations
-	if len(parser.snippet.Annotations) != 1 {
-		t.Fatalf("expected snippet.Annotations to have len 1, got %d", len(parser.snippet.Annotations))
+	// and the annotation should be in the Document's Annotations
+	if len(parser.doc.Annotations) != 1 {
+		t.Fatalf("expected doc.Annotations to have len 1, got %d", len(parser.doc.Annotations))
 	}
-	if parser.snippet.Annotations[0].Annotator != "John Doe ()" {
-		t.Errorf("expected Annotator to be %s, got %s", "John Doe ()", parser.snippet.Annotations[0].Annotator)
+	if parser.doc.Annotations[0].Annotator != "John Doe ()" {
+		t.Errorf("expected Annotator to be %s, got %s", "John Doe ()", parser.doc.Annotations[0].Annotator)
 	}
 }
 
