@@ -58,8 +58,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(doc.CreationInfo.CreatorTools) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorTools))
 	}
-	if doc.CreationInfo.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/docbuilder" {
-		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/docbuilder", doc.CreationInfo.CreatorTools[0])
+	if doc.CreationInfo.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/builder" {
+		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/builder", doc.CreationInfo.CreatorTools[0])
 	}
 	if doc.CreationInfo.Created != "2018-10-19T04:38:00Z" {
 		t.Errorf("expected %s, got %s", "2018-10-19T04:38:00Z", doc.CreationInfo.Created)
