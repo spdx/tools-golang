@@ -2,7 +2,10 @@
 
 package builder
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 // ===== Docbuilder top-level main test =====
 func TestBuild2_1CreatesDocument(t *testing.T) {
@@ -15,6 +18,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 		TestValues:      make(map[string]string),
 	}
 	config.TestValues["Created"] = "2018-10-19T04:38:00Z"
+
+	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
 	doc, err := Build2_1(dirRoot, "project1", config)
 	if err != nil {
@@ -40,8 +45,9 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if doc.CreationInfo.DocumentName != "project1" {
 		t.Errorf("expected %s, got %s", "project1", doc.CreationInfo.DocumentName)
 	}
-	if doc.CreationInfo.DocumentNamespace != "https://github.com/swinslow/spdx-docs/spdx-go/testdata-project1-VERIFICATION_CODE" {
-		t.Errorf("expected %s, got %s", "https://github.com/swinslow/spdx-docs/spdx-go/testdata-project1-VERIFICATION_CODE", doc.CreationInfo.DocumentNamespace)
+	wantNamespace := fmt.Sprintf("https://github.com/swinslow/spdx-docs/spdx-go/testdata-project1-%s", wantVerificationCode)
+	if doc.CreationInfo.DocumentNamespace != wantNamespace {
+		t.Errorf("expected %s, got %s", wantNamespace, doc.CreationInfo.DocumentNamespace)
 	}
 	if len(doc.CreationInfo.CreatorPersons) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorPersons))
@@ -82,8 +88,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
-	if pkg.PackageVerificationCode != "VERIFICATION_CODE" {
-		t.Errorf("expected %v, got %v", "VERIFICATION_CODE", pkg.PackageVerificationCode)
+	if pkg.PackageVerificationCode != wantVerificationCode {
+		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
 	}
 	if pkg.PackageLicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageLicenseConcluded)
