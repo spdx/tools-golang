@@ -3,6 +3,11 @@
 package builder2v1
 
 import (
+	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -27,4 +32,28 @@ func getAllFilePaths(dirRoot string) ([]string, error) {
 	})
 
 	return *paths, err
+}
+
+func getHashesForFilePath(p string) (string, string, string, error) {
+	f, err := os.Open(p)
+	if err != nil {
+		return "", "", "", err
+	}
+	defer f.Close()
+
+	var ssha1, ssha256, smd5 string
+	hSHA1 := sha1.New()
+	hSHA256 := sha256.New()
+	hMD5 := md5.New()
+	hMulti := io.MultiWriter(hSHA1, hSHA256, hMD5)
+
+	if _, err := io.Copy(hMulti, f); err != nil {
+		f.Close()
+		return "", "", "", err
+	}
+	ssha1 = fmt.Sprintf("%x", hSHA1.Sum(nil))
+	ssha256 = fmt.Sprintf("%x", hSHA256.Sum(nil))
+	smd5 = fmt.Sprintf("%x", hMD5.Sum(nil))
+
+	return ssha1, ssha256, smd5, nil
 }

@@ -51,3 +51,33 @@ func TestBuilder2_1GetAllFilePathsFailsForNonExistentDirectory(t *testing.T) {
 
 // FIXME add test to make sure we get an error for a directory without
 // FIXME appropriate permissions to read its (sub)contents
+
+func TestBuilder2_1GetsHashesForFilePath(t *testing.T) {
+	f := "../../testdata/project1/file1.testdata.txt"
+
+	ssha1, ssha256, smd5, err := getHashesForFilePath(f)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if ssha1 != "024f870eb6323f532515f7a09d5646a97083b819" {
+		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", ssha1)
+	}
+	if ssha256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
+		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", ssha256)
+	}
+	if smd5 != "37c8208479dfe42d2bb29debd6e32d4a" {
+		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", smd5)
+	}
+}
+
+func TestBuilder2_1GetsErrorWhenRequestingHashesForInvalidFilePath(t *testing.T) {
+	f := "./does/not/exist"
+
+	_, _, _, err := getHashesForFilePath(f)
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+// FIXME add test to make sure we get an error for hashes for a file without
+// FIXME appropriate permissions to read its contents
