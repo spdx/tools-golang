@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// ===== Docbuilder top-level main test =====
+// ===== Builder top-level Document test =====
 func TestBuild2_1CreatesDocument(t *testing.T) {
 	dirRoot := "../testdata/project1/"
 
@@ -21,7 +21,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 
 	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
-	doc, err := Build2_1(dirRoot, "project1", config)
+	doc, err := Build2_1("project1", dirRoot, config)
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -210,7 +210,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file4.FileName != "folder1/file4.testdata.txt" {
+	if file4.FileName != "/folder1/file4.testdata.txt" {
 		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
 	}
 	if file4.FileSPDXIdentifier != "SPDXRef-File3" {

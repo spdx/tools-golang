@@ -5,6 +5,7 @@
 package builder
 
 import (
+	"github.com/swinslow/spdx-go/v0/builder/builder2v1"
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
@@ -33,9 +34,32 @@ type Config2_1 struct {
 
 // Build2_1 creates an SPDX Document (version 2.1), returning that document or
 // error if any is encountered. Arguments:
-//   - dirRoot: path to directory to be analyzed
 //   - packageName: name of package / directory
+//   - dirRoot: path to directory to be analyzed
 //   - config: Config object
-func Build2_1(dirRoot string, packageName string, config *Config2_1) (*spdx.Document2_1, error) {
-	return nil, nil
+func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Document2_1, error) {
+	// build Package section first -- will include Files and make the
+	// package verification code available
+	pkg, err := builder2v1.BuildPackageSection2_1(packageName, dirRoot)
+	if err != nil {
+		return nil, err
+	}
+
+	ci, err := builder2v1.BuildCreationInfoSection2_1(packageName, pkg.PackageVerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
+	if err != nil {
+		return nil, err
+	}
+
+	rln, err := builder2v1.BuildRelationshipSection2_1(packageName)
+	if err != nil {
+		return nil, err
+	}
+
+	doc := &spdx.Document2_1{
+		CreationInfo:  ci,
+		Packages:      []*spdx.Package2_1{pkg},
+		Relationships: []*spdx.Relationship2_1{rln},
+	}
+
+	return doc, nil
 }
