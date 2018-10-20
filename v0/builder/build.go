@@ -1,4 +1,4 @@
-// Package docbuilder is used to create spdx-go data structures for a given
+// Package builder is used to create spdx-go data structures for a given
 // directory path's contents, with hashes, etc. filled in and with empty
 // license data.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
