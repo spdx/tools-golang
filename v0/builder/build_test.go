@@ -106,7 +106,9 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 		t.Fatalf("expected %d, got %d", 5, len(pkg.Files))
 	}
 
-	// files should be in alphabetical order: emptyfile, file1-3, folder/file4
+	// files should be in alphabetical order:
+	// emptyfile, file1, file3, folder/file4, lastfile
+
 	// check emptyfile.testdata.txt
 	fileEmpty := pkg.Files[0]
 	if fileEmpty == nil {
@@ -167,46 +169,16 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
 	}
 
-	// check file2.testdata.txt
-	file2 := pkg.Files[2]
-	if file2 == nil {
-		t.Fatalf("expected non-nil file, got nil")
-	}
-	if file2.FileName != "/file2.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file2.testdata.txt", file2.FileName)
-	}
-	if file2.FileSPDXIdentifier != "SPDXRef-File2" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File2", file2.FileSPDXIdentifier)
-	}
-	if file2.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
-		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", file2.FileChecksumSHA1)
-	}
-	if file2.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
-		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", file2.FileChecksumSHA256)
-	}
-	if file2.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
-		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", file2.FileChecksumMD5)
-	}
-	if file2.LicenseConcluded != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file2.LicenseConcluded)
-	}
-	if len(file2.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file2.LicenseInfoInFile))
-	}
-	if file2.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file2.FileCopyrightText)
-	}
-
 	// check file3.testdata.txt
-	file3 := pkg.Files[3]
+	file3 := pkg.Files[2]
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file3.FileName != "/file3.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
 	}
-	if file3.FileSPDXIdentifier != "SPDXRef-File3" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File3", file3.FileSPDXIdentifier)
+	if file3.FileSPDXIdentifier != "SPDXRef-File2" {
+		t.Errorf("expected %v, got %v", "SPDXRef-File2", file3.FileSPDXIdentifier)
 	}
 	if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
 		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
@@ -228,15 +200,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check folder1/file4.testdata.txt
-	file4 := pkg.Files[4]
+	file4 := pkg.Files[3]
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file4.FileName != "folder1/file4.testdata.txt" {
 		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
 	}
-	if file4.FileSPDXIdentifier != "SPDXRef-File4" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File4", file4.FileSPDXIdentifier)
+	if file4.FileSPDXIdentifier != "SPDXRef-File3" {
+		t.Errorf("expected %v, got %v", "SPDXRef-File3", file4.FileSPDXIdentifier)
 	}
 	if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
 		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
@@ -255,6 +227,36 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 	if file4.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.FileCopyrightText)
+	}
+
+	// check lastfile.testdata.txt
+	lastfile := pkg.Files[4]
+	if lastfile == nil {
+		t.Fatalf("expected non-nil file, got nil")
+	}
+	if lastfile.FileName != "/lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
+	}
+	if lastfile.FileSPDXIdentifier != "SPDXRef-File4" {
+		t.Errorf("expected %v, got %v", "SPDXRef-File4", lastfile.FileSPDXIdentifier)
+	}
+	if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
+		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
+	}
+	if lastfile.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
+		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.FileChecksumSHA256)
+	}
+	if lastfile.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
+		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.FileChecksumMD5)
+	}
+	if lastfile.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
+	}
+	if len(lastfile.LicenseInfoInFile) != 0 {
+		t.Errorf("expected %v, got %v", 0, len(lastfile.LicenseInfoInFile))
+	}
+	if lastfile.FileCopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.FileCopyrightText)
 	}
 
 	// check Relationship section -- should be a relationship for doc DESCRIBES pkg

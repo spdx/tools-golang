@@ -29,14 +29,14 @@ func TestBuilder2_1CanGetSliceOfFolderContents(t *testing.T) {
 	if filePaths[1] != "/file1.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file1.testdata.txt", filePaths[1])
 	}
-	if filePaths[2] != "/file2.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file2.testdata.txt", filePaths[2])
+	if filePaths[2] != "/file3.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file3.testdata.txt", filePaths[2])
 	}
-	if filePaths[3] != "/file3.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file3.testdata.txt", filePaths[3])
+	if filePaths[3] != "/folder1/file4.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/folder1/file4.testdata.txt", filePaths[3])
 	}
-	if filePaths[4] != "/folder1/file4.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/folder1/file4.testdata.txt", filePaths[4])
+	if filePaths[4] != "/lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", filePaths[4])
 	}
 }
 
