@@ -19,6 +19,7 @@ spdx-go provides the following packages:
 * *v0/spdx* - in-memory data model for the sections of an SPDX document
 * *v0/tvloader* - tag-value file loader
 * *v0/tvsaver* - tag-value file saver
+* *v0/builder* - builds "empty" SPDX document (with hashes) for directory contents
 
 ## What it doesn't do
 
