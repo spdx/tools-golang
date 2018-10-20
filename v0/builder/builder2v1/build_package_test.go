@@ -13,7 +13,7 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 
 	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
-	pkg, err := buildPackageSection2_1(packageName, dirRoot)
+	pkg, err := BuildPackageSection2_1(packageName, dirRoot)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}

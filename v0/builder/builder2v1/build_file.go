@@ -9,7 +9,12 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-func buildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.File2_1, error) {
+// BuildFileSection2_1 creates an SPDX File (version 2.1), returning that
+// file or error if any is encountered. Arguments:
+//   - filePath: path to file, relative to prefix
+//   - prefix: relative directory for filePath
+//   - fileNumber: integer index (unique within package) to use in identifier
+func BuildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.File2_1, error) {
 	// build the full file path
 	p := filepath.Join(prefix, filePath)
 

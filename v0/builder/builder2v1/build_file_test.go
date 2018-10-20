@@ -12,7 +12,7 @@ func TestBuilder2_1CanBuildFileSection(t *testing.T) {
 	prefix := "../../testdata/project1/"
 	fileNumber := 17
 
-	file1, err := buildFileSection2_1(filePath, prefix, fileNumber)
+	file1, err := BuildFileSection2_1(filePath, prefix, fileNumber)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -52,7 +52,7 @@ func TestBuilder2_1BuildFileSectionFailsForInvalidFilePath(t *testing.T) {
 	prefix := "oops/wrong/path"
 	fileNumber := 11
 
-	_, err := buildFileSection2_1(filePath, prefix, fileNumber)
+	_, err := BuildFileSection2_1(filePath, prefix, fileNumber)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}

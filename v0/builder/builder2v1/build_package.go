@@ -8,7 +8,11 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-func buildPackageSection2_1(packageName string, dirRoot string) (*spdx.Package2_1, error) {
+// BuildPackageSection2_1 creates an SPDX Package (version 2.1), returning
+// that package or error if any is encountered. Arguments:
+//   - packageName: name of package / directory
+//   - dirRoot: path to directory to be analyzed
+func BuildPackageSection2_1(packageName string, dirRoot string) (*spdx.Package2_1, error) {
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
 	filepaths, err := getAllFilePaths(dirRoot)
@@ -19,7 +23,7 @@ func buildPackageSection2_1(packageName string, dirRoot string) (*spdx.Package2_
 	files := []*spdx.File2_1{}
 	fileNumber := 0
 	for _, fp := range filepaths {
-		newFile, err := buildFileSection2_1(fp, dirRoot, fileNumber)
+		newFile, err := BuildFileSection2_1(fp, dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}

@@ -21,7 +21,7 @@ func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := buildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -66,7 +66,7 @@ func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
 }
 
 func TestBuilder2_1BuildCreationInfoSectionFailsWithNilConfig(t *testing.T) {
-	_, err := buildCreationInfoSection2_1(nil, "hi", "code")
+	_, err := BuildCreationInfoSection2_1(nil, "hi", "code")
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
@@ -83,7 +83,7 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorPerson(t *testing.T) {
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := buildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -119,7 +119,7 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorTool(t *testing.T) {
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := buildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -155,7 +155,7 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithInvalidPerson(t *testing.T) {
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := buildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}

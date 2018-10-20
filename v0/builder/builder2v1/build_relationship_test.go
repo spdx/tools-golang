@@ -10,7 +10,7 @@ import (
 func TestBuilder2_1CanBuildRelationshipSection(t *testing.T) {
 	packageName := "project17"
 
-	rln, err := buildRelationshipSection2_1(packageName)
+	rln, err := BuildRelationshipSection2_1(packageName)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}

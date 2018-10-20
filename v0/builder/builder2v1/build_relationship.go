@@ -8,7 +8,11 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-func buildRelationshipSection2_1(packageName string) (*spdx.Relationship2_1, error) {
+// BuildRelationshipSection2_1 creates an SPDX Relationship (version 2.1)
+// solely for the document "DESCRIBES" package relationship, returning that
+// relationship or error if any is encountered. Arguments:
+//   - packageName: name of package / directory
+func BuildRelationshipSection2_1(packageName string) (*spdx.Relationship2_1, error) {
 	rln := &spdx.Relationship2_1{
 		RefA:         "SPDXRef-DOCUMENT",
 		RefB:         fmt.Sprintf("SPDXRef-Package-%s", packageName),

@@ -10,7 +10,12 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-func buildCreationInfoSection2_1(config *builder.Config2_1, packageName string, code string) (*spdx.CreationInfo2_1, error) {
+// BuildCreationInfoSection2_1 creates an SPDX Package (version 2.1), returning that
+// package or error if any is encountered. Arguments:
+//   - config: Config object
+//   - packageName: name of package / directory
+//   - code: verification code from Package
+func BuildCreationInfoSection2_1(config *builder.Config2_1, packageName string, code string) (*spdx.CreationInfo2_1, error) {
 	if config == nil {
 		return nil, fmt.Errorf("got nil config")
 	}
