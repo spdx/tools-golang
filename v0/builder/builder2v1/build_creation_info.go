@@ -6,20 +6,18 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/swinslow/spdx-go/v0/builder"
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
 // BuildCreationInfoSection2_1 creates an SPDX Package (version 2.1), returning that
 // package or error if any is encountered. Arguments:
-//   - config: Config object
 //   - packageName: name of package / directory
 //   - code: verification code from Package
-func BuildCreationInfoSection2_1(config *builder.Config2_1, packageName string, code string) (*spdx.CreationInfo2_1, error) {
-	if config == nil {
-		return nil, fmt.Errorf("got nil config")
-	}
-
+//   - namespacePrefix: prefix for DocumentNamespace (packageName and code will be added)
+//   - creatorType: one of Person, Organization or Tool
+//   - creator: creator string
+//   - testValues: for testing only; call with nil when using in production
+func BuildCreationInfoSection2_1(packageName string, code string, namespacePrefix string, creatorType string, creator string, testValues map[string]string) (*spdx.CreationInfo2_1, error) {
 	// build creator slices
 	cPersons := []string{}
 	cOrganizations := []string{}
@@ -27,20 +25,20 @@ func BuildCreationInfoSection2_1(config *builder.Config2_1, packageName string, 
 	// add builder as a tool
 	cTools = append(cTools, "github.com/swinslow/spdx-go/v0/builder")
 
-	switch config.CreatorType {
+	switch creatorType {
 	case "Person":
-		cPersons = append(cPersons, config.Creator)
+		cPersons = append(cPersons, creator)
 	case "Organization":
-		cOrganizations = append(cOrganizations, config.Creator)
+		cOrganizations = append(cOrganizations, creator)
 	case "Tool":
-		cTools = append(cTools, config.Creator)
+		cTools = append(cTools, creator)
 	default:
-		cPersons = append(cPersons, config.Creator)
+		cPersons = append(cPersons, creator)
 	}
 
 	// use test Created time if passing test values
 	created := time.Now().Format("2006-01-02T15:04:05Z")
-	if testVal := config.TestValues["Created"]; testVal != "" {
+	if testVal := testValues["Created"]; testVal != "" {
 		created = testVal
 	}
 
@@ -49,7 +47,7 @@ func BuildCreationInfoSection2_1(config *builder.Config2_1, packageName string, 
 		DataLicense:          "CC0-1.0",
 		SPDXIdentifier:       "SPDXRef-DOCUMENT",
 		DocumentName:         packageName,
-		DocumentNamespace:    fmt.Sprintf("%s%s-%s", config.NamespacePrefix, packageName, code),
+		DocumentNamespace:    fmt.Sprintf("%s%s-%s", namespacePrefix, packageName, code),
 		CreatorPersons:       cPersons,
 		CreatorOrganizations: cOrganizations,
 		CreatorTools:         cTools,

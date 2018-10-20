@@ -5,23 +5,20 @@ package builder2v1
 import (
 	"fmt"
 	"testing"
-
-	"github.com/swinslow/spdx-go/v0/builder"
 )
 
 // ===== CreationInfo section builder tests =====
 func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
-	config := &builder.Config2_1{
-		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-",
-		CreatorType:     "Organization",
-		Creator:         "Jane Doe LLC",
-		TestValues:      make(map[string]string),
-	}
-	config.TestValues["Created"] = "2018-10-20T16:48:00Z"
+
+	namespacePrefix := "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-"
+	creatorType := "Organization"
+	creator := "Jane Doe LLC"
+	testValues := make(map[string]string)
+	testValues["Created"] = "2018-10-20T16:48:00Z"
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(packageName, verificationCode, namespacePrefix, creatorType, creator, testValues)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -65,25 +62,16 @@ func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
 	}
 }
 
-func TestBuilder2_1BuildCreationInfoSectionFailsWithNilConfig(t *testing.T) {
-	_, err := BuildCreationInfoSection2_1(nil, "hi", "code")
-	if err == nil {
-		t.Fatalf("expected non-nil error, got nil")
-	}
-}
-
 func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorPerson(t *testing.T) {
-	config := &builder.Config2_1{
-		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-",
-		CreatorType:     "Person",
-		Creator:         "John Doe",
-		TestValues:      make(map[string]string),
-	}
-	config.TestValues["Created"] = "2018-10-20T16:48:00Z"
+	namespacePrefix := "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-"
+	creatorType := "Person"
+	creator := "John Doe"
+	testValues := make(map[string]string)
+	testValues["Created"] = "2018-10-20T16:48:00Z"
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(packageName, verificationCode, namespacePrefix, creatorType, creator, testValues)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -109,17 +97,15 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorPerson(t *testing.T) {
 }
 
 func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorTool(t *testing.T) {
-	config := &builder.Config2_1{
-		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-",
-		CreatorType:     "Tool",
-		Creator:         "some-other-tool-2.1",
-		TestValues:      make(map[string]string),
-	}
-	config.TestValues["Created"] = "2018-10-20T16:48:00Z"
+	namespacePrefix := "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-"
+	creatorType := "Tool"
+	creator := "some-other-tool-2.1"
+	testValues := make(map[string]string)
+	testValues["Created"] = "2018-10-20T16:48:00Z"
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(packageName, verificationCode, namespacePrefix, creatorType, creator, testValues)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -145,17 +131,15 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorTool(t *testing.T) {
 }
 
 func TestBuilder2_1CanBuildCreationInfoSectionWithInvalidPerson(t *testing.T) {
-	config := &builder.Config2_1{
-		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-",
-		CreatorType:     "Whatever",
-		Creator:         "John Doe",
-		TestValues:      make(map[string]string),
-	}
-	config.TestValues["Created"] = "2018-10-20T16:48:00Z"
+	namespacePrefix := "https://github.com/swinslow/spdx-docs/spdx-go/testdata-whatever-"
+	creatorType := "Whatever"
+	creator := "John Doe"
+	testValues := make(map[string]string)
+	testValues["Created"] = "2018-10-20T16:48:00Z"
 	packageName := "project1"
 	verificationCode := "TESTCODE"
 
-	ci, err := BuildCreationInfoSection2_1(config, packageName, verificationCode)
+	ci, err := BuildCreationInfoSection2_1(packageName, verificationCode, namespacePrefix, creatorType, creator, testValues)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
