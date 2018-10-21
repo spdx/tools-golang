@@ -85,7 +85,6 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		} else if value == "true" {
 			parser.pkg.FilesAnalyzed = true
 		}
-		parser.pkg.PackageDownloadLocation = value
 	case "PackageVerificationCode":
 		code, excludesFileName := extractCodeAndExcludes(value)
 		parser.pkg.PackageVerificationCode = code
