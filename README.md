@@ -20,6 +20,7 @@ spdx-go provides the following packages:
 * *v0/tvloader* - tag-value file loader
 * *v0/tvsaver* - tag-value file saver
 * *v0/builder* - builds "empty" SPDX document (with hashes) for directory contents
+* *v0/idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
 
 ## What it doesn't do
 
