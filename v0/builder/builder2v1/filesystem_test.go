@@ -14,10 +14,11 @@ func TestBuilder2_1CanGetSliceOfFolderContents(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected filePaths, got error: %v", err)
 	}
-
 	if filePaths == nil {
 		t.Fatalf("expected non-nil filePaths, got nil")
 	}
+	// should only be 5 files
+	// symbolic link in project1/symbolic-link should be ignored
 	if len(filePaths) != 5 {
 		t.Fatalf("expected %v, got %v", 5, len(filePaths))
 	}
