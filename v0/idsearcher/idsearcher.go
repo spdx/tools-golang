@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -53,10 +54,10 @@ func BuildIDsDocument(packageName string, dirRoot string, namespacePrefix string
 	licsForPackage := map[string]int{}
 	for _, f := range pkg.Files {
 		fPath := filepath.Join(dirRoot, f.FileName)
-		ids, err := searchFileIDs(fPath)
-		if err != nil {
-			return nil, fmt.Errorf("error searching file %s: %v", fPath, err)
-		}
+		ids, _ := searchFileIDs(fPath)
+		// FIXME for now, proceed onwards with whatever IDs we obtained.
+		// FIXME instead of ignoring the error, should probably either log it,
+		// FIXME and/or enable the caller to configure what should happen.
 
 		// separate out for this file's licenses
 		licsForFile := map[string]int{}
@@ -119,20 +120,23 @@ func searchFileIDs(filePath string) ([]string, error) {
 	scanner := bufio.NewScanner(f)
 
 	for scanner.Scan() {
-		//
 		if strings.Contains(scanner.Text(), "SPDX-License-Identifier:") {
 			strs := strings.SplitAfterN(scanner.Text(), "SPDX-License-Identifier:", 2)
 			// stop before trailing */ if it is present
 			lidToExtract := strs[1]
 			lidToExtract = strings.Split(lidToExtract, "*/")[0]
 			lid := strings.TrimSpace(lidToExtract)
+			lid = stripTrash(lid)
 			idsMap[lid] = 1
 		}
 	}
 
-	if err = scanner.Err(); err != nil {
-		return nil, err
-	}
+	// FIXME for now, ignore scanner errors because we want to return whatever
+	// FIXME IDs were in fact found. should probably be changed to either
+	// FIXME log the error, and/or be configurable for what should happen.
+	// if err = scanner.Err(); err != nil {
+	// 	return nil, err
+	// }
 
 	// now, convert map to string
 	for lid := range idsMap {
@@ -143,6 +147,11 @@ func searchFileIDs(filePath string) ([]string, error) {
 	sort.Strings(ids)
 
 	return ids, nil
+}
+
+func stripTrash(lid string) string {
+	re := regexp.MustCompile(`[^\w\s\d.\-()]+`)
+	return re.ReplaceAllString(lid, "")
 }
 
 func makeElement(lic string) string {

@@ -267,6 +267,22 @@ func TestCannotFindShortFormIDWhenAbsent(t *testing.T) {
 	}
 }
 
+func TestCanExcludeTrashCharactersFromID(t *testing.T) {
+	lid := "Apac\",he-2.0"
+	want := "Apache-2.0"
+	got := stripTrash(lid)
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	lid = "Apache-2.0"
+	want = "Apache-2.0"
+	got = stripTrash(lid)
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+}
+
 func TestSearchFileIDsFailsWithInvalidFilePath(t *testing.T) {
 	filePath := "./oops/nm/invalid"
 
