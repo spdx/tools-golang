@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-func getAllFilePaths(dirRoot string) ([]string, error) {
+func getAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 	// paths is a _pointer_ to a slice -- not just a slice.
 	// this is so that it can be appropriately modified by append
 	// in the sub-function.
@@ -33,8 +33,15 @@ func getAllFilePaths(dirRoot string) ([]string, error) {
 			return nil
 		}
 
+		shortPath := strings.TrimPrefix(path, prefix)
+
+		// don't include path if it should be ignored
+		if pathsIgnored != nil && shouldIgnore(shortPath, pathsIgnored) {
+			return nil
+		}
+
 		// if we got here, record the path
-		*paths = append(*paths, strings.TrimPrefix(path, prefix))
+		*paths = append(*paths, shortPath)
 		return nil
 	})
 
@@ -63,4 +70,46 @@ func getHashesForFilePath(p string) (string, string, string, error) {
 	smd5 = fmt.Sprintf("%x", hMD5.Sum(nil))
 
 	return ssha1, ssha256, smd5, nil
+}
+
+func shouldIgnore(fileName string, pathsIgnored []string) bool {
+	fDirs, fFile := filepath.Split(fileName)
+
+	for _, pattern := range pathsIgnored {
+		// split into dir(s) and filename
+		patternDirs, patternFile := filepath.Split(pattern)
+		patternDirStars := strings.HasPrefix(patternDirs, "**")
+		if patternDirStars {
+			patternDirs = patternDirs[2:]
+		}
+
+		// case 1: specific file
+		if !patternDirStars && patternDirs == fDirs && patternFile != "" && patternFile == fFile {
+			return true
+		}
+
+		// case 2: all files in specific directory
+		if !patternDirStars && strings.HasPrefix(fDirs, patternDirs) && patternFile == "" {
+			return true
+		}
+
+		// case 3: specific file in any dir
+		if patternDirStars && patternDirs == "/" && patternFile != "" && patternFile == fFile {
+			return true
+		}
+
+		// case 4: specific file in any matching subdir
+		if patternDirStars && strings.Contains(fDirs, patternDirs) && patternFile != "" && patternFile == fFile {
+			return true
+		}
+
+		// case 5: any file in any matching subdir
+		if patternDirStars && strings.Contains(fDirs, patternDirs) && patternFile == "" {
+			return true
+		}
+
+	}
+
+	// if no match, don't ignore
+	return false
 }

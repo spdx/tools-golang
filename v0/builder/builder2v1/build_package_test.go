@@ -13,7 +13,7 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 
 	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
-	pkg, err := BuildPackageSection2_1(packageName, dirRoot)
+	pkg, err := BuildPackageSection2_1(packageName, dirRoot, nil)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -89,5 +89,58 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
+	}
+}
+
+func TestBuilder2_1CanIgnoreFiles(t *testing.T) {
+	packageName := "project3"
+	dirRoot := "../../testdata/project3/"
+	pathsIgnored := []string{
+		"**/ignoredir/",
+		"/excludedir/",
+		"**/ignorefile.txt",
+		"/alsoEXCLUDEthis.txt",
+	}
+	pkg, err := BuildPackageSection2_1(packageName, dirRoot, pathsIgnored)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	// make sure we got the right files
+	if pkg.Files == nil {
+		t.Fatalf("expected non-nil pkg.Files, got nil")
+	}
+	if len(pkg.Files) != 5 {
+		t.Fatalf("expected %d, got %d", 5, len(pkg.Files))
+	}
+
+	want := "/dontscan.txt"
+	got := pkg.Files[0].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/keep/keep.txt"
+	got = pkg.Files[1].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/keep.txt"
+	got = pkg.Files[2].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/subdir/keep/dontscan.txt"
+	got = pkg.Files[3].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/subdir/keep/keep.txt"
+	got = pkg.Files[4].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
 	}
 }
