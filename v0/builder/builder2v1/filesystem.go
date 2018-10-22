@@ -24,10 +24,17 @@ func getAllFilePaths(dirRoot string) ([]string, error) {
 		if err != nil {
 			return err
 		}
-		// only include path if it's not a directory
-		if !fi.IsDir() {
-			*paths = append(*paths, strings.TrimPrefix(path, prefix))
+		// don't include path if it's a directory
+		if fi.IsDir() {
+			return nil
 		}
+		// don't include path if it's a symbolic link
+		if fi.Mode()&os.ModeSymlink == os.ModeSymlink {
+			return nil
+		}
+
+		// if we got here, record the path
+		*paths = append(*paths, strings.TrimPrefix(path, prefix))
 		return nil
 	})
 
