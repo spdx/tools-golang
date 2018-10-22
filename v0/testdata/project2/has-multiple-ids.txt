@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: (MIT AND BSD-3-Clause) OR ISC
+
+hey look it's a short-form ID
+
+// SPDX-License-Identifier: BSD-2-Clause
+
+well there's another one, I guess it applies to this content?
+
+// SPDX-License-Identifier: CC0-1.0
+
+and another one
