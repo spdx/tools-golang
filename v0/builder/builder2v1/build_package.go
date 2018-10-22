@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/swinslow/spdx-go/v0/utils"
 )
 
 // BuildPackageSection2_1 creates an SPDX Package (version 2.1), returning
@@ -16,7 +17,7 @@ import (
 func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []string) (*spdx.Package2_1, error) {
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
-	filepaths, err := getAllFilePaths(dirRoot, pathsIgnore)
+	filepaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
 	if err != nil {
 		return nil, err
 	}

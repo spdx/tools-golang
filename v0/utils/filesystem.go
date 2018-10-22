@@ -1,6 +1,7 @@
+// Package utils contains various utility functions to support the
+// main spdx-go packages.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
-
-package builder2v1
+package utils
 
 import (
 	"crypto/md5"
@@ -13,7 +14,10 @@ import (
 	"strings"
 )
 
-func getAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
+// GetAllFilePaths takes a path to a directory (including an optional slice of
+// path patterns to ignore), and returns a slice of relative paths to all files
+// in that directory and its subdirectories (excluding those that are ignored).
+func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 	// paths is a _pointer_ to a slice -- not just a slice.
 	// this is so that it can be appropriately modified by append
 	// in the sub-function.
@@ -36,7 +40,7 @@ func getAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 		shortPath := strings.TrimPrefix(path, prefix)
 
 		// don't include path if it should be ignored
-		if pathsIgnored != nil && shouldIgnore(shortPath, pathsIgnored) {
+		if pathsIgnored != nil && ShouldIgnore(shortPath, pathsIgnored) {
 			return nil
 		}
 
@@ -48,7 +52,9 @@ func getAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 	return *paths, err
 }
 
-func getHashesForFilePath(p string) (string, string, string, error) {
+// GetHashesForFilePath takes a path to a file on disk, and returns
+// SHA1, SHA256 and MD5 hashes for that file as strings.
+func GetHashesForFilePath(p string) (string, string, string, error) {
 	f, err := os.Open(p)
 	if err != nil {
 		return "", "", "", err
@@ -72,7 +78,10 @@ func getHashesForFilePath(p string) (string, string, string, error) {
 	return ssha1, ssha256, smd5, nil
 }
 
-func shouldIgnore(fileName string, pathsIgnored []string) bool {
+// ShouldIgnore compares a file path to a slice of file path patterns,
+// and determines whether that file should be ignored because it matches
+// any of those patterns.
+func ShouldIgnore(fileName string, pathsIgnored []string) bool {
 	fDirs, fFile := filepath.Split(fileName)
 
 	for _, pattern := range pathsIgnored {

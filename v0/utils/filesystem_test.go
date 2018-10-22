@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package builder2v1
+package utils
 
 import (
 	"testing"
 )
 
 // ===== Filesystem and hash functionality tests =====
-func TestBuilder2_1CanGetSliceOfFolderContents(t *testing.T) {
-	dirRoot := "../../testdata/project1/"
+func TestFilesystemCanGetSliceOfFolderContents(t *testing.T) {
+	dirRoot := "../testdata/project1/"
 
-	filePaths, err := getAllFilePaths(dirRoot, nil)
+	filePaths, err := GetAllFilePaths(dirRoot, nil)
 	if err != nil {
 		t.Fatalf("expected filePaths, got error: %v", err)
 	}
@@ -41,17 +41,17 @@ func TestBuilder2_1CanGetSliceOfFolderContents(t *testing.T) {
 	}
 }
 
-func TestBuilder2_1GetAllFilePathsFailsForNonExistentDirectory(t *testing.T) {
+func TestFilesystemGetAllFilePathsFailsForNonExistentDirectory(t *testing.T) {
 	dirRoot := "./does/not/exist/"
 
-	_, err := getAllFilePaths(dirRoot, nil)
+	_, err := GetAllFilePaths(dirRoot, nil)
 	if err == nil {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
 
-func TestBuilder2_1CanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
-	dirRoot := "../../testdata/project3/"
+func TestFilesystemCanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
+	dirRoot := "../testdata/project3/"
 	pathsIgnored := []string{
 		"**/ignoredir/",
 		"/excludedir/",
@@ -59,7 +59,7 @@ func TestBuilder2_1CanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
 		"/alsoEXCLUDEthis.txt",
 	}
 
-	filePaths, err := getAllFilePaths(dirRoot, pathsIgnored)
+	filePaths, err := GetAllFilePaths(dirRoot, pathsIgnored)
 	if err != nil {
 		t.Fatalf("expected filePaths, got error: %v", err)
 	}
@@ -94,10 +94,10 @@ func TestBuilder2_1CanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
 // FIXME add test to make sure we get an error for a directory without
 // FIXME appropriate permissions to read its (sub)contents
 
-func TestBuilder2_1GetsHashesForFilePath(t *testing.T) {
-	f := "../../testdata/project1/file1.testdata.txt"
+func TestFilesystemGetsHashesForFilePath(t *testing.T) {
+	f := "../testdata/project1/file1.testdata.txt"
 
-	ssha1, ssha256, smd5, err := getHashesForFilePath(f)
+	ssha1, ssha256, smd5, err := GetHashesForFilePath(f)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -112,10 +112,10 @@ func TestBuilder2_1GetsHashesForFilePath(t *testing.T) {
 	}
 }
 
-func TestBuilder2_1GetsErrorWhenRequestingHashesForInvalidFilePath(t *testing.T) {
+func TestFilesystemGetsErrorWhenRequestingHashesForInvalidFilePath(t *testing.T) {
 	f := "./does/not/exist"
 
-	_, _, _, err := getHashesForFilePath(f)
+	_, _, _, err := GetHashesForFilePath(f)
 	if err == nil {
 		t.Errorf("expected non-nil error, got nil")
 	}
@@ -124,102 +124,102 @@ func TestBuilder2_1GetsErrorWhenRequestingHashesForInvalidFilePath(t *testing.T)
 // FIXME add test to make sure we get an error for hashes for a file without
 // FIXME appropriate permissions to read its contents
 
-func TestBuilder2_1ExcludesForIgnoredPaths(t *testing.T) {
+func TestFilesystemExcludesForIgnoredPaths(t *testing.T) {
 	// one specific file
 	pathsIgnored := []string{"/file.txt"}
 	fileName := "/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/fileNope.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
 	// two specific files
 	pathsIgnored = []string{"/file.txt", "/file2.txt"}
 	fileName = "/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/fileNope.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/file2.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
 	// one specific file in specific subdirectory
 	pathsIgnored = []string{"/subdir/file.txt"}
 	fileName = "/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/file.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/something/subdir/file.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
 	// one specific file in any directory
 	pathsIgnored = []string{"**/file.txt"}
 	fileName = "/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/something/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/something/fileNope.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
 	// all files in one specific subdirectory (and its subdirectories)
 	pathsIgnored = []string{"/subdir/"}
 	fileName = "/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/file.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/subdir/sub2/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/nope/subdir/file.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
 	// all files in subdirectory with this name, wherever it appears
 	pathsIgnored = []string{"**/subdir/"}
 	fileName = "/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/file.txt"
-	if shouldIgnore(fileName, pathsIgnored) {
+	if ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/subdir/sub2/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 	fileName = "/nope/subdir/file.txt"
-	if !shouldIgnore(fileName, pathsIgnored) {
+	if !ShouldIgnore(fileName, pathsIgnored) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
