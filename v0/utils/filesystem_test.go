@@ -8,7 +8,7 @@ import (
 
 // ===== Filesystem and hash functionality tests =====
 func TestFilesystemCanGetSliceOfFolderContents(t *testing.T) {
-	dirRoot := "../testdata/project1/"
+	dirRoot := "../../testdata/project1/"
 
 	filePaths, err := GetAllFilePaths(dirRoot, nil)
 	if err != nil {
@@ -51,7 +51,7 @@ func TestFilesystemGetAllFilePathsFailsForNonExistentDirectory(t *testing.T) {
 }
 
 func TestFilesystemCanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
-	dirRoot := "../testdata/project3/"
+	dirRoot := "../../testdata/project3/"
 	pathsIgnored := []string{
 		"**/ignoredir/",
 		"/excludedir/",
@@ -95,7 +95,7 @@ func TestFilesystemCanIgnoreFilesWhenGettingFilePaths(t *testing.T) {
 // FIXME appropriate permissions to read its (sub)contents
 
 func TestFilesystemGetsHashesForFilePath(t *testing.T) {
-	f := "../testdata/project1/file1.testdata.txt"
+	f := "../../testdata/project1/file1.testdata.txt"
 
 	ssha1, ssha256, smd5, err := GetHashesForFilePath(f)
 	if err != nil {

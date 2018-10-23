@@ -9,7 +9,7 @@ import (
 // ===== Searcher top-level function tests =====
 func TestSearcherCanFillInIDs(t *testing.T) {
 	packageName := "project2"
-	dirRoot := "../testdata/project2/"
+	dirRoot := "../../testdata/project2/"
 	config := &Config{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 	}
@@ -172,7 +172,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 
 func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	packageName := "project3"
-	dirRoot := "../testdata/project3/"
+	dirRoot := "../../testdata/project3/"
 	config := &Config{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 		BuilderPathsIgnored: []string{
@@ -289,7 +289,7 @@ func TestSearcherFailsWithInvalidPath(t *testing.T) {
 
 // ===== Searcher utility tests =====
 func TestCanFindShortFormIDWhenPresent(t *testing.T) {
-	filePath := "../testdata/project2/has-id.txt"
+	filePath := "../../testdata/project2/has-id.txt"
 
 	ids, err := searchFileIDs(filePath)
 	if err != nil {
@@ -306,7 +306,7 @@ func TestCanFindShortFormIDWhenPresent(t *testing.T) {
 }
 
 func TestCanFindMultipleShortFormIDsWhenPresent(t *testing.T) {
-	filePath := "../testdata/project2/has-multiple-ids.txt"
+	filePath := "../../testdata/project2/has-multiple-ids.txt"
 
 	ids, err := searchFileIDs(filePath)
 	if err != nil {
@@ -329,7 +329,7 @@ func TestCanFindMultipleShortFormIDsWhenPresent(t *testing.T) {
 }
 
 func TestCanCollapseDuplicateShortFormIDsWhenPresent(t *testing.T) {
-	filePath := "../testdata/project2/has-duplicate-ids.txt"
+	filePath := "../../testdata/project2/has-duplicate-ids.txt"
 
 	ids, err := searchFileIDs(filePath)
 	if err != nil {
@@ -346,7 +346,7 @@ func TestCanCollapseDuplicateShortFormIDsWhenPresent(t *testing.T) {
 }
 
 func TestCanStripTrailingStarSlash(t *testing.T) {
-	filePath := "../testdata/project2/folder/has-trailing-comment-marker.c"
+	filePath := "../../testdata/project2/folder/has-trailing-comment-marker.c"
 
 	ids, err := searchFileIDs(filePath)
 	if err != nil {
@@ -363,7 +363,7 @@ func TestCanStripTrailingStarSlash(t *testing.T) {
 }
 
 func TestCannotFindShortFormIDWhenAbsent(t *testing.T) {
-	filePath := "../testdata/project2/no-id.txt"
+	filePath := "../../testdata/project2/no-id.txt"
 
 	ids, err := searchFileIDs(filePath)
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 // ===== Package section builder tests =====
 func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	packageName := "project1"
-	dirRoot := "../../testdata/project1/"
+	dirRoot := "../../../testdata/project1/"
 
 	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
@@ -94,7 +94,7 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 
 func TestBuilder2_1CanIgnoreFiles(t *testing.T) {
 	packageName := "project3"
-	dirRoot := "../../testdata/project3/"
+	dirRoot := "../../../testdata/project3/"
 	pathsIgnored := []string{
 		"**/ignoredir/",
 		"/excludedir/",

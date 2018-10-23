@@ -9,7 +9,7 @@ import (
 // ===== File section builder tests =====
 func TestBuilder2_1CanBuildFileSection(t *testing.T) {
 	filePath := "/file1.testdata.txt"
-	prefix := "../../testdata/project1/"
+	prefix := "../../../testdata/project1/"
 	fileNumber := 17
 
 	file1, err := BuildFileSection2_1(filePath, prefix, fileNumber)

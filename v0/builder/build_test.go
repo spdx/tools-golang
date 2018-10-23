@@ -9,7 +9,7 @@ import (
 
 // ===== Builder top-level Document test =====
 func TestBuild2_1CreatesDocument(t *testing.T) {
-	dirRoot := "../testdata/project1/"
+	dirRoot := "../../testdata/project1/"
 
 	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
@@ -300,7 +300,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 }
 
 func TestBuild2_1CanIgnoreFiles(t *testing.T) {
-	dirRoot := "../testdata/project3/"
+	dirRoot := "../../testdata/project3/"
 
 	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
