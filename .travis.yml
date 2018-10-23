@@ -1,8 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 language: go
-
+sudo: false
 go:
   - "1.10"
 
-script: go test -v ./...
+before_install:
+  - go get github.com/mattn/goveralls
+
+script:
+  - go test -coverprofile=spdx-go.cov ./...
+  - $GOPATH/bin/goveralls -coverprofile=spdx-go.cov -service=travis-ci
