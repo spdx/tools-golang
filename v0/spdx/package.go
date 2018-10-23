@@ -2,13 +2,6 @@
 
 package spdx
 
-import (
-	"crypto/sha1"
-	"fmt"
-	"sort"
-	"strings"
-)
-
 // Package2_1 is a Package section of an SPDX Document for version 2.1 of the spec.
 type Package2_1 struct {
 
@@ -143,34 +136,4 @@ type PackageExternalReference2_1 struct {
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
 	ExternalRefComment string
-}
-
-// GetVerificationCode2_1 takes a slice of files and an optional filename
-// for an "excludes" file, and returns a Package Verification Code calculated
-// according to SPDX spec version 2.1, section 3.9.4.
-func GetVerificationCode2_1(files []*File2_1, excludeFile string) (string, error) {
-	// create slice of strings - unsorted SHA1s for all files
-	shas := []string{}
-	for i, f := range files {
-		if f == nil {
-			return "", fmt.Errorf("got nil file in index %d", i)
-		}
-		if f.FileName != excludeFile {
-			shas = append(shas, f.FileChecksumSHA1)
-		}
-	}
-
-	// sort the strings
-	sort.Strings(shas)
-
-	// concatenate them into one string, with no trailing separators
-	shasConcat := strings.Join(shas, "")
-
-	// and get its SHA1 value
-	hsha1 := sha1.New()
-	hsha1.Write([]byte(shasConcat))
-	bs := hsha1.Sum(nil)
-	code := fmt.Sprintf("%x", bs)
-
-	return code, nil
 }

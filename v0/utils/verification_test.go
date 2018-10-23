@@ -1,31 +1,34 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package spdx
+package utils
 
 import (
 	"testing"
+
+	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-// ===== Utility functions =====
+// ===== Verification code functionality tests =====
+
 func TestPackage2_1CanGetVerificationCode(t *testing.T) {
-	files := []*File2_1{
-		&File2_1{
+	files := []*spdx.File2_1{
+		&spdx.File2_1{
 			FileName:         "file2.txt",
 			FileChecksumSHA1: "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file1.txt",
 			FileChecksumSHA1: "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file3.txt",
 			FileChecksumSHA1: "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file5.txt",
 			FileChecksumSHA1: "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file4.txt",
 			FileChecksumSHA1: "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
@@ -44,24 +47,24 @@ func TestPackage2_1CanGetVerificationCode(t *testing.T) {
 }
 
 func TestPackage2_1CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
-	files := []*File2_1{
-		&File2_1{
+	files := []*spdx.File2_1{
+		&spdx.File2_1{
 			FileName:         "file1.txt",
 			FileChecksumSHA1: "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file2.txt",
 			FileChecksumSHA1: "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "thisfile.spdx",
 			FileChecksumSHA1: "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file3.txt",
 			FileChecksumSHA1: "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file4.txt",
 			FileChecksumSHA1: "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
@@ -80,13 +83,13 @@ func TestPackage2_1CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 }
 
 func TestPackage2_1GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
-	files := []*File2_1{
-		&File2_1{
+	files := []*spdx.File2_1{
+		&spdx.File2_1{
 			FileName:         "file2.txt",
 			FileChecksumSHA1: "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		nil,
-		&File2_1{
+		&spdx.File2_1{
 			FileName:         "file3.txt",
 			FileChecksumSHA1: "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
