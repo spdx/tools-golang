@@ -9,7 +9,7 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-// Config2_1 is a collection of configuration settings for docbuilder
+// Config2_1 is a collection of configuration settings for builder
 // (for version 2.1 SPDX Documents). A few mandatory fields are set here
 // so that they can be repeatedly reused in multiple calls to Build2_1.
 type Config2_1 struct {
@@ -35,7 +35,7 @@ type Config2_1 struct {
 
 	// TestValues is used to pass fixed values for testing purposes
 	// only, and should be set to nil for production use. It is only
-	// exported so that it will be accessible within docbuilder2v1.
+	// exported so that it will be accessible within builder2v1.
 	TestValues map[string]string
 }
 

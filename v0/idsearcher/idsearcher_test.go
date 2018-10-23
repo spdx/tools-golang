@@ -10,9 +10,11 @@ import (
 func TestSearcherCanFillInIDs(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "../testdata/project2/"
-	namespacePrefix := "https://github.com/swinslow/spdx-docs/spdx-go/testdata-"
+	config := &Config{
+		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
+	}
 
-	doc, err := BuildIDsDocument(packageName, dirRoot, namespacePrefix)
+	doc, err := BuildIDsDocument(packageName, dirRoot, config)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -168,12 +170,118 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 
 }
 
+func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
+	packageName := "project3"
+	dirRoot := "../testdata/project3/"
+	config := &Config{
+		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
+		BuilderPathsIgnored: []string{
+			"**/ignoredir/",
+			"/excludedir/",
+			"**/ignorefile.txt",
+			"/alsoEXCLUDEthis.txt",
+		},
+		SearcherPathsIgnored: []string{
+			"**/dontscan.txt",
+		},
+	}
+
+	doc, err := BuildIDsDocument(packageName, dirRoot, config)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if doc == nil {
+		t.Fatalf("expected non-nil Document, got nil")
+	}
+
+	// not checking all contents of doc, see builder tests for those
+
+	// get the package and its files, checking licenses for each, and
+	// confirming NOASSERTION for those that are skipped
+	pkg := doc.Packages[0]
+	if len(pkg.Files) != 5 {
+		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
+	}
+
+	f := pkg.Files[0]
+	if f.FileName != "/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[1]
+	if f.FileName != "/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[2]
+	if f.FileName != "/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[3]
+	if f.FileName != "/subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[4]
+	if f.FileName != "/subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseConcluded)
+	}
+}
+
 func TestSearcherFailsWithInvalidPath(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "./oops/invalid"
-	namespacePrefix := "whatever"
+	config := &Config{
+		NamespacePrefix: "whatever",
+	}
 
-	_, err := BuildIDsDocument(packageName, dirRoot, namespacePrefix)
+	_, err := BuildIDsDocument(packageName, dirRoot, config)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
