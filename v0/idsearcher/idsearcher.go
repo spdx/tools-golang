@@ -150,9 +150,15 @@ func searchFileIDs(filePath string) ([]string, error) {
 
 	scanner := bufio.NewScanner(f)
 
+	// build the scan string this way, so that we can run idsearcher on itself
+	// without picking up these lines as IDs...
+	tag1 := "SPDX-License-"
+	tag2 := "Identifier:"
+	tag := tag1 + tag2
+
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "SPDX-License-Identifier:") {
-			strs := strings.SplitAfterN(scanner.Text(), "SPDX-License-Identifier:", 2)
+		if strings.Contains(scanner.Text(), tag) {
+			strs := strings.SplitAfterN(scanner.Text(), tag, 2)
 			// stop before trailing */ if it is present
 			lidToExtract := strs[1]
 			lidToExtract = strings.Split(lidToExtract, "*/")[0]
