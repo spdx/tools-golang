@@ -11,6 +11,10 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
+// RenderDocument2_1 is the main entry point to take an SPDX in-memory
+// Document (version 2.1), and render it to the received io.Writer.
+// It is only exported in order to be available to the tvsaver package,
+// and typically does not need to be called by client code.
 func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 	if doc.CreationInfo == nil {
 		return fmt.Errorf("Document had nil CreationInfo section")

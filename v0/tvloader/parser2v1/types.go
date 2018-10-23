@@ -17,6 +17,7 @@ type tvParser2_1 struct {
 	pkg       *spdx.Package2_1
 	pkgExtRef *spdx.PackageExternalReference2_1
 	file      *spdx.File2_1
+	fileAOP   *spdx.ArtifactOfProject2_1
 	snippet   *spdx.Snippet2_1
 	otherLic  *spdx.OtherLicense2_1
 	rln       *spdx.Relationship2_1

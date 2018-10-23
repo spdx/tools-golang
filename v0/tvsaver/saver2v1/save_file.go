@@ -40,18 +40,14 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 	if f.FileCopyrightText != "" {
 		fmt.Fprintf(w, "FileCopyrightText: %s\n", f.FileCopyrightText)
 	}
-	// FIXME THIS IS NOT COMPLIANT WITH SPEC
-	// needs to be restructured so that ArtifactOfProjectHomePage and
-	// ArtifactOfProjectUI are associated with a particular
-	// ArtifactOfProjectName, and are rendered interleaved with it
-	for _, s := range f.ArtifactOfProjectName {
-		fmt.Fprintf(w, "ArtifactOfProjectName: %s\n", s)
-	}
-	for _, s := range f.ArtifactOfProjectHomePage {
-		fmt.Fprintf(w, "ArtifactOfProjectHomePage: %s\n", s)
-	}
-	for _, s := range f.ArtifactOfProjectURI {
-		fmt.Fprintf(w, "ArtifactOfProjectURI: %s\n", s)
+	for _, aop := range f.ArtifactOfProjects {
+		fmt.Fprintf(w, "ArtifactOfProjectName: %s\n", aop.Name)
+		if aop.HomePage != "" {
+			fmt.Fprintf(w, "ArtifactOfProjectHomePage: %s\n", aop.HomePage)
+		}
+		if aop.URI != "" {
+			fmt.Fprintf(w, "ArtifactOfProjectURI: %s\n", aop.URI)
+		}
 	}
 	if f.FileComment != "" {
 		fmt.Fprintf(w, "FileComment: %s\n", f.FileComment)

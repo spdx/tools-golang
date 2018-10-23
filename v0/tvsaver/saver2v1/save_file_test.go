@@ -28,20 +28,23 @@ func TestSaver2_1FileSavesText(t *testing.T) {
 		},
 		LicenseComments:   "this is a license comment(s)",
 		FileCopyrightText: "Copyright (c) Jane Doe",
-		ArtifactOfProjectName: []string{
-			"project1",
-			"project2",
-			"project3",
-			"project4",
-		},
-		ArtifactOfProjectHomePage: []string{
-			"http://example.com/1/",
-			"http://example.com/2/",
-			"http://example.com/3/",
-		},
-		ArtifactOfProjectURI: []string{
-			"http://example.com/1/uri.whatever",
-			"http://example.com/2/uri.whatever",
+		ArtifactOfProjects: []*spdx.ArtifactOfProject2_1{
+			&spdx.ArtifactOfProject2_1{
+				Name:     "project1",
+				HomePage: "http://example.com/1/",
+				URI:      "http://example.com/1/uri.whatever",
+			},
+			&spdx.ArtifactOfProject2_1{
+				Name: "project2",
+			},
+			&spdx.ArtifactOfProject2_1{
+				Name:     "project3",
+				HomePage: "http://example.com/3/",
+			},
+			&spdx.ArtifactOfProject2_1{
+				Name: "project4",
+				URI:  "http://example.com/4/uri.whatever",
+			},
 		},
 		FileComment: "this is a file comment",
 		FileNotice:  "This file may be used under either Apache-2.0 or Apache-1.1.",
@@ -69,14 +72,13 @@ LicenseInfoInFile: Apache-1.1
 LicenseComments: this is a license comment(s)
 FileCopyrightText: Copyright (c) Jane Doe
 ArtifactOfProjectName: project1
+ArtifactOfProjectHomePage: http://example.com/1/
+ArtifactOfProjectURI: http://example.com/1/uri.whatever
 ArtifactOfProjectName: project2
 ArtifactOfProjectName: project3
-ArtifactOfProjectName: project4
-ArtifactOfProjectHomePage: http://example.com/1/
-ArtifactOfProjectHomePage: http://example.com/2/
 ArtifactOfProjectHomePage: http://example.com/3/
-ArtifactOfProjectURI: http://example.com/1/uri.whatever
-ArtifactOfProjectURI: http://example.com/2/uri.whatever
+ArtifactOfProjectName: project4
+ArtifactOfProjectURI: http://example.com/4/uri.whatever
 FileComment: this is a file comment
 FileNotice: This file may be used under either Apache-2.0 or Apache-1.1.
 FileContributor: John Doe jdoe@example.com

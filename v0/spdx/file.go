@@ -40,19 +40,9 @@ type File2_1 struct {
 	FileCopyrightText string
 
 	// DEPRECATED in version 2.1 of spec
-	// 4.9: Artifact of Project Name
+	// 4.9-4.11: Artifact of Project variables (defined below)
 	// Cardinality: optional, one or many
-	ArtifactOfProjectName []string
-
-	// DEPRECATED in version 2.1 of spec
-	// 4.10: Artifact of Project Homepage: URL or "UNKNOWN"
-	// Cardinality: optional, one or many
-	ArtifactOfProjectHomePage []string
-
-	// DEPRECATED in version 2.1 of spec
-	// 4.11: Artifact of Project Uniform Resource Identifier
-	// Cardinality: optional, one or many
-	ArtifactOfProjectURI []string
+	ArtifactOfProjects []*ArtifactOfProject2_1
 
 	// 4.12: File Comment
 	// Cardinality: optional, one
@@ -73,4 +63,24 @@ type File2_1 struct {
 
 	// Snippets contained in this File
 	Snippets []*Snippet2_1
+}
+
+// ArtifactOfProject2_1 is a DEPRECATED collection of data regarding
+// a Package, as defined in sections 4.9-4.11 in version 2.1 of the spec.
+type ArtifactOfProject2_1 struct {
+
+	// DEPRECATED in version 2.1 of spec
+	// 4.9: Artifact of Project Name
+	// Cardinality: conditional, required if present, one per AOP
+	Name string
+
+	// DEPRECATED in version 2.1 of spec
+	// 4.10: Artifact of Project Homepage: URL or "UNKNOWN"
+	// Cardinality: optional, one per AOP
+	HomePage string
+
+	// DEPRECATED in version 2.1 of spec
+	// 4.11: Artifact of Project Uniform Resource Identifier
+	// Cardinality: optional, one per AOP
+	URI string
 }

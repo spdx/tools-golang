@@ -9,6 +9,12 @@ import (
 )
 
 func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error {
+	// expire fileAOP for anything other than an AOPHomePage or AOPURI
+	// (we'll actually handle the HomePage and URI further below)
+	if tag != "ArtifactOfProjectHomePage" && tag != "ArtifactOfProjectURI" {
+		parser.fileAOP = nil
+	}
+
 	switch tag {
 	// tag for creating new file section
 	case "FileName":
@@ -57,11 +63,19 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "FileCopyrightText":
 		parser.file.FileCopyrightText = value
 	case "ArtifactOfProjectName":
-		parser.file.ArtifactOfProjectName = append(parser.file.ArtifactOfProjectName, value)
+		parser.fileAOP = &spdx.ArtifactOfProject2_1{}
+		parser.file.ArtifactOfProjects = append(parser.file.ArtifactOfProjects, parser.fileAOP)
+		parser.fileAOP.Name = value
 	case "ArtifactOfProjectHomePage":
-		parser.file.ArtifactOfProjectHomePage = append(parser.file.ArtifactOfProjectHomePage, value)
+		if parser.fileAOP == nil {
+			return fmt.Errorf("no current ArtifactOfProject found")
+		}
+		parser.fileAOP.HomePage = value
 	case "ArtifactOfProjectURI":
-		parser.file.ArtifactOfProjectURI = append(parser.file.ArtifactOfProjectURI, value)
+		if parser.fileAOP == nil {
+			return fmt.Errorf("no current ArtifactOfProject found")
+		}
+		parser.fileAOP.URI = value
 	case "FileComment":
 		parser.file.FileComment = value
 	case "FileNotice":
