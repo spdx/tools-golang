@@ -298,3 +298,60 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 }
+
+func TestBuild2_1CanIgnoreFiles(t *testing.T) {
+	dirRoot := "../testdata/project3/"
+
+	config := &Config2_1{
+		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
+		CreatorType:     "Person",
+		Creator:         "John Doe",
+		PathsIgnored: []string{
+			"**/ignoredir/",
+			"/excludedir/",
+			"**/ignorefile.txt",
+			"/alsoEXCLUDEthis.txt",
+		},
+		TestValues: make(map[string]string),
+	}
+	config.TestValues["Created"] = "2018-10-19T04:38:00Z"
+
+	doc, err := Build2_1("project1", dirRoot, config)
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	pkg := doc.Packages[0]
+	if len(pkg.Files) != 5 {
+		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
+	}
+
+	want := "/dontscan.txt"
+	got := pkg.Files[0].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/keep/keep.txt"
+	got = pkg.Files[1].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/keep.txt"
+	got = pkg.Files[2].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/subdir/keep/dontscan.txt"
+	got = pkg.Files[3].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+
+	want = "/subdir/keep/keep.txt"
+	got = pkg.Files[4].FileName
+	if want != got {
+		t.Errorf("expected %v, got %v", want, got)
+	}
+}

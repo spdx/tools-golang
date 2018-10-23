@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/swinslow/spdx-go/v0/utils"
 )
 
 // BuildFileSection2_1 creates an SPDX File (version 2.1), returning that
@@ -19,7 +20,7 @@ func BuildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.
 	p := filepath.Join(prefix, filePath)
 
 	// make sure we can get the file and its hashes
-	ssha1, ssha256, smd5, err := getHashesForFilePath(p)
+	ssha1, ssha256, smd5, err := utils.GetHashesForFilePath(p)
 	if err != nil {
 		return nil, err
 	}

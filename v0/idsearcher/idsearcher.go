@@ -14,9 +14,32 @@ import (
 	"strings"
 
 	"github.com/swinslow/spdx-go/v0/builder"
-
 	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/swinslow/spdx-go/v0/utils"
 )
+
+// Config is a collection of configuration settings for docbuilder
+// (for version 2.1 SPDX Documents). A few mandatory fields are set here
+// so that they can be repeatedly reused in multiple calls to Build2_1.
+type Config struct {
+	// NamespacePrefix should be a URI representing a prefix for the
+	// namespace with which the SPDX Document will be associated.
+	// It will be used in the DocumentNamespace field in the CreationInfo
+	// section, followed by the per-Document package name and a random UUID.
+	NamespacePrefix string
+
+	// BuilderPathsIgnored lists certain paths to be omitted from the built
+	// document. Each string should be a path, relative to the package's
+	// dirRoot, to a specific file or (for all files in a directory) ending
+	// in a slash. Prefix the string with "**" to omit all instances of that
+	// file / directory, regardless of where it is in the file tree.
+	BuilderPathsIgnored []string
+
+	// SearcherPathsIgnored lists certain paths that should not be searched
+	// by idsearcher, even if those paths have Files present. It uses the
+	// same format as BuilderPathsIgnored.
+	SearcherPathsIgnored []string
+}
 
 // BuildIDsDocument creates an SPDX Document (version 2.1) and searches for
 // short-form IDs in each file, filling in license fields as appropriate. It
@@ -25,14 +48,15 @@ import (
 //   - dirRoot: path to directory to be analyzed
 //   - namespacePrefix: URI representing a prefix for the
 //     namespace with which the SPDX Document will be associated
-func BuildIDsDocument(packageName string, dirRoot string, namespacePrefix string) (*spdx.Document2_1, error) {
+func BuildIDsDocument(packageName string, dirRoot string, idconfig *Config) (*spdx.Document2_1, error) {
 	// first, build the Document using builder
-	config := &builder.Config2_1{
-		NamespacePrefix: namespacePrefix,
+	bconfig := &builder.Config2_1{
+		NamespacePrefix: idconfig.NamespacePrefix,
 		CreatorType:     "Tool",
 		Creator:         "github.com/swinslow/spdx-go/v0/idsearcher",
+		PathsIgnored:    idconfig.BuilderPathsIgnored,
 	}
-	doc, err := builder.Build2_1(packageName, dirRoot, config)
+	doc, err := builder.Build2_1(packageName, dirRoot, bconfig)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +77,17 @@ func BuildIDsDocument(packageName string, dirRoot string, namespacePrefix string
 	}
 	licsForPackage := map[string]int{}
 	for _, f := range pkg.Files {
+		// start by initializing / clearing values
+		f.LicenseInfoInFile = []string{"NOASSERTION"}
+		f.LicenseConcluded = "NOASSERTION"
+
+		// check whether the searcher should ignore this file
+		if utils.ShouldIgnore(f.FileName, idconfig.SearcherPathsIgnored) {
+			continue
+		}
+
 		fPath := filepath.Join(dirRoot, f.FileName)
+		// FIXME this is not preferable -- ignoring error
 		ids, _ := searchFileIDs(fPath)
 		// FIXME for now, proceed onwards with whatever IDs we obtained.
 		// FIXME instead of ignoring the error, should probably either log it,
@@ -74,10 +108,7 @@ func BuildIDsDocument(packageName string, dirRoot string, namespacePrefix string
 		}
 
 		// OK -- now we can fill in the file's details, or NOASSERTION if none
-		if len(licsForFile) == 0 {
-			f.LicenseInfoInFile = []string{"NOASSERTION"}
-			f.LicenseConcluded = "NOASSERTION"
-		} else {
+		if len(licsForFile) > 0 {
 			f.LicenseInfoInFile = []string{}
 			for lic := range licsForFile {
 				f.LicenseInfoInFile = append(f.LicenseInfoInFile, lic)
@@ -119,9 +150,15 @@ func searchFileIDs(filePath string) ([]string, error) {
 
 	scanner := bufio.NewScanner(f)
 
+	// build the scan string this way, so that we can run idsearcher on itself
+	// without picking up these lines as IDs...
+	tag1 := "SPDX-License-"
+	tag2 := "Identifier:"
+	tag := tag1 + tag2
+
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), "SPDX-License-Identifier:") {
-			strs := strings.SplitAfterN(scanner.Text(), "SPDX-License-Identifier:", 2)
+		if strings.Contains(scanner.Text(), tag) {
+			strs := strings.SplitAfterN(scanner.Text(), tag, 2)
 			// stop before trailing */ if it is present
 			lidToExtract := strs[1]
 			lidToExtract = strings.Split(lidToExtract, "*/")[0]

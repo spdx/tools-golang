@@ -9,7 +9,7 @@ import (
 	"github.com/swinslow/spdx-go/v0/spdx"
 )
 
-// Config2_1 is a collection of configuration settings for docbuilder
+// Config2_1 is a collection of configuration settings for builder
 // (for version 2.1 SPDX Documents). A few mandatory fields are set here
 // so that they can be repeatedly reused in multiple calls to Build2_1.
 type Config2_1 struct {
@@ -26,9 +26,16 @@ type Config2_1 struct {
 	// Creator will be filled in for the given CreatorType.
 	Creator string
 
+	// PathsIgnored lists certain paths to be omitted from the built document.
+	// Each string should be a path, relative to the package's dirRoot,
+	// to a specific file or (for all files in a directory) ending in a slash.
+	// Prefix the string with "**" to omit all instances of that file /
+	// directory, regardless of where it is in the file tree.
+	PathsIgnored []string
+
 	// TestValues is used to pass fixed values for testing purposes
 	// only, and should be set to nil for production use. It is only
-	// exported so that it will be accessible within docbuilder2v1.
+	// exported so that it will be accessible within builder2v1.
 	TestValues map[string]string
 }
 
@@ -40,7 +47,7 @@ type Config2_1 struct {
 func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Document2_1, error) {
 	// build Package section first -- will include Files and make the
 	// package verification code available
-	pkg, err := builder2v1.BuildPackageSection2_1(packageName, dirRoot)
+	pkg, err := builder2v1.BuildPackageSection2_1(packageName, dirRoot, config.PathsIgnored)
 	if err != nil {
 		return nil, err
 	}
