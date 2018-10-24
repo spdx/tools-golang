@@ -204,19 +204,18 @@ func getIndividualLicenses(lic string) []string {
 	lic = strings.Replace(lic, "(", " ", -1)
 	lic = strings.Replace(lic, ")", " ", -1)
 
-	// also replace combination words with spaces
-	lic = strings.Replace(lic, " AND ", " ", -1)
-	lic = strings.Replace(lic, " OR ", " ", -1)
-	lic = strings.Replace(lic, " WITH ", " ", -1)
-
 	// now, split by spaces, trim, and add to slice
 	licElements := strings.Split(lic, " ")
 	lics := []string{}
 	for _, elt := range licElements {
 		elt := strings.TrimSpace(elt)
-		if elt != "" {
-			lics = append(lics, elt)
+		// don't add if empty or if case-insensitive operator
+		if elt == "" || strings.EqualFold(elt, "AND") ||
+			strings.EqualFold(elt, "OR") || strings.EqualFold(elt, "WITH") {
+			continue
 		}
+
+		lics = append(lics, elt)
 	}
 
 	// sort before returning
