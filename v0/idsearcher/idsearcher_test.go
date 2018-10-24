@@ -515,3 +515,57 @@ func TestCanGetIndividualLicenses(t *testing.T) {
 		t.Errorf("expected %v, got %v", "MIT", lics[3])
 	}
 }
+
+func TestCanGetIndividualLicensesIgnoringOperatorCase(t *testing.T) {
+	// two-license combo with lowercase 'and'
+	lic := "ISC and BSD-3-Clause"
+	lics := getIndividualLicenses(lic)
+	if lics == nil {
+		t.Fatalf("expected non-nil lics, got nil")
+	}
+	// should be sorted alphabetically; 'and' should not appear
+	if len(lics) != 2 {
+		t.Fatalf("expected lics to have len 2, got %d", len(lics))
+	}
+	if lics[0] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", lics[0])
+	}
+	if lics[1] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", lics[1])
+	}
+
+	// two-license combo with lowercase 'or'
+	lic = "ISC or BSD-3-Clause"
+	lics = getIndividualLicenses(lic)
+	if lics == nil {
+		t.Fatalf("expected non-nil lics, got nil")
+	}
+	// should be sorted alphabetically; 'or' should not appear
+	if len(lics) != 2 {
+		t.Fatalf("expected lics to have len 2, got %d", len(lics))
+	}
+	if lics[0] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", lics[0])
+	}
+	if lics[1] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", lics[1])
+	}
+
+	// two-license combo with lowercase 'with'
+	lic = "GPL-2.0-only with Classpath-exception-2.0"
+	lics = getIndividualLicenses(lic)
+	if lics == nil {
+		t.Fatalf("expected non-nil lics, got nil")
+	}
+	// should be sorted alphabetically; 'with' should not appear
+	if len(lics) != 2 {
+		t.Fatalf("expected lics to have len 2, got %d", len(lics))
+	}
+	if lics[0] != "Classpath-exception-2.0" {
+		t.Errorf("expected %v, got %v", "Classpath-exception-2.0", lics[0])
+	}
+	if lics[1] != "GPL-2.0-only" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-only", lics[1])
+	}
+
+}

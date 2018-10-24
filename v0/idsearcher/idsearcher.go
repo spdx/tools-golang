@@ -214,9 +214,13 @@ func getIndividualLicenses(lic string) []string {
 	lics := []string{}
 	for _, elt := range licElements {
 		elt := strings.TrimSpace(elt)
-		if elt != "" {
-			lics = append(lics, elt)
+		// don't add if empty or if case-insensitive operator
+		if elt == "" || strings.EqualFold(elt, "AND") ||
+			strings.EqualFold(elt, "OR") || strings.EqualFold(elt, "WITH") {
+			continue
 		}
+
+		lics = append(lics, elt)
 	}
 
 	// sort before returning
