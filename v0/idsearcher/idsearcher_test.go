@@ -112,8 +112,9 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 	if fileMultipleIDs.LicenseInfoInFile[1] != "BSD-3-Clause" {
 		t.Errorf("expected %v, got %v", "BSD-3-Clause", fileMultipleIDs.LicenseInfoInFile[1])
 	}
-	if fileMultipleIDs.LicenseInfoInFile[2] != "CC0-1.0" {
-		t.Errorf("expected %v, got %v", "CC0-1.0", fileMultipleIDs.LicenseInfoInFile[2])
+	// here, DO NOT keep the +
+	if fileMultipleIDs.LicenseInfoInFile[2] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", fileMultipleIDs.LicenseInfoInFile[2])
 	}
 	if fileMultipleIDs.LicenseInfoInFile[3] != "ISC" {
 		t.Errorf("expected %v, got %v", "ISC", fileMultipleIDs.LicenseInfoInFile[3])
@@ -121,8 +122,8 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 	if fileMultipleIDs.LicenseInfoInFile[4] != "MIT" {
 		t.Errorf("expected %v, got %v", "MIT", fileMultipleIDs.LicenseInfoInFile[4])
 	}
-	if fileMultipleIDs.LicenseConcluded != "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND CC0-1.0" {
-		t.Errorf("expected %v, got %v", "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND CC0-1.0", fileMultipleIDs.LicenseConcluded)
+	if fileMultipleIDs.LicenseConcluded != "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND EPL-1.0+" {
+		t.Errorf("expected %v, got %v", "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND EPL-1.0+", fileMultipleIDs.LicenseConcluded)
 	}
 
 	fileNoID := pkg.Files[5]
@@ -155,8 +156,9 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 	if pkg.PackageLicenseInfoFromFiles[2] != "BSD-3-Clause" {
 		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.PackageLicenseInfoFromFiles[2])
 	}
-	if pkg.PackageLicenseInfoFromFiles[3] != "CC0-1.0" {
-		t.Errorf("expected %v, got %v", "CC0-1.0", pkg.PackageLicenseInfoFromFiles[3])
+	// here, DO NOT keep the +
+	if pkg.PackageLicenseInfoFromFiles[3] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.PackageLicenseInfoFromFiles[3])
 	}
 	if pkg.PackageLicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
 		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.PackageLicenseInfoFromFiles[4])
@@ -323,8 +325,8 @@ func TestCanFindMultipleShortFormIDsWhenPresent(t *testing.T) {
 	if ids[1] != "BSD-2-Clause" {
 		t.Errorf("expected %v, got %v", "BSD-2-Clause", ids[1])
 	}
-	if ids[2] != "CC0-1.0" {
-		t.Errorf("expected %v, got %v", "CC0-1.0", ids[2])
+	if ids[2] != "EPL-1.0+" {
+		t.Errorf("expected %v, got %v", "EPL-1.0+", ids[2])
 	}
 }
 
@@ -494,7 +496,7 @@ func TestCanGetIndividualLicenses(t *testing.T) {
 	}
 
 	// multi-license combo with nested parens
-	lic = "GPL-2.0-only AND ((CC0-1.0 AND BSD-4-Clause) OR MIT)"
+	lic = "GPL-2.0-only AND ((EPL-1.0 AND BSD-4-Clause) OR MIT)"
 	lics = getIndividualLicenses(lic)
 	if lics == nil {
 		t.Fatalf("expected non-nil lics, got nil")
@@ -505,8 +507,8 @@ func TestCanGetIndividualLicenses(t *testing.T) {
 	if lics[0] != "BSD-4-Clause" {
 		t.Errorf("expected %v, got %v", "BSD-4-Clause", lics[0])
 	}
-	if lics[1] != "CC0-1.0" {
-		t.Errorf("expected %v, got %v", "CC0-1.0", lics[1])
+	if lics[1] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", lics[1])
 	}
 	if lics[2] != "GPL-2.0-only" {
 		t.Errorf("expected %v, got %v", "GPL-2.0-only", lics[2])
