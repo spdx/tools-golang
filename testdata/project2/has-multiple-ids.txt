@@ -6,6 +6,6 @@ hey look it's a short-form ID
 
 well there's another one, I guess it applies to this content?
 
-// SPDX-License-Identifier: CC0-1.0
+// SPDX-License-Identifier: EPL-1.0+
 
-and another one
+and another one, with a + this time

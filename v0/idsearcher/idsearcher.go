@@ -187,7 +187,7 @@ func searchFileIDs(filePath string) ([]string, error) {
 }
 
 func stripTrash(lid string) string {
-	re := regexp.MustCompile(`[^\w\s\d.\-()]+`)
+	re := regexp.MustCompile(`[^\w\s\d.\-\+()]+`)
 	return re.ReplaceAllString(lid, "")
 }
 
@@ -200,9 +200,10 @@ func makeElement(lic string) string {
 }
 
 func getIndividualLicenses(lic string) []string {
-	// replace parens with spaces
+	// replace parens and '+' with spaces
 	lic = strings.Replace(lic, "(", " ", -1)
 	lic = strings.Replace(lic, ")", " ", -1)
+	lic = strings.Replace(lic, "+", " ", -1)
 
 	// now, split by spaces, trim, and add to slice
 	licElements := strings.Split(lic, " ")
