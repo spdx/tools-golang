@@ -8,7 +8,7 @@ SPDX-License-Identifier: CC-BY-4.0
 spdx-go is a collection of Go packages intended to make it easier for Go
 programs to work with [SPDX®](https://spdx.org/) files.
 
-This software is in an extremely pre-alpha state (hence the "v0/" directory).
+This software is in an early state, and its API may change significantly (hence the "v0/" directory).
 
 ## What it does
 
