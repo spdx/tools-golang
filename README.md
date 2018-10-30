@@ -25,6 +25,8 @@ spdx-go provides the following packages:
 * *v0/reporter* - generates basic license count report from SPDX document
 * *v0/utils* - various utility functions that support the other spdx-go packages
 
+Examples for how to use these packages can be found in the `examples/` directory.
+
 ## What it doesn't do
 
 spdx-go doesn't currently do any of the following:
