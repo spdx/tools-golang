@@ -42,3 +42,14 @@ Package and File license fields; and saving the resulting document to disk.
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 generating a basic report listing counts of the concluded licenses for its
 files, and printing the report to standard output.
+
+## 6-licensediff
+
+*licensediff*, *tvloader*
+
+This example demonstrates loading two SPDX tag-value files from disk into
+memory, and generating a diff of the concluded licenses for Files in the
+first-listed Packages in each document.
+
+This is generally only useful when run with two SPDX documents that describe
+licenses for subsequent versions of the same set of files.
