@@ -22,6 +22,7 @@ spdx-go provides the following packages:
 * *v0/tvsaver* - tag-value file saver
 * *v0/builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *v0/idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
+* *v0/licensediff* - compares concluded licenses between files in two packages
 * *v0/reporter* - generates basic license count report from SPDX document
 * *v0/utils* - various utility functions that support the other spdx-go packages
 
