@@ -1,0 +1,8 @@
+this file actually contains some code talking about IDs, and should be ignored
+
+if file.contains("SPDX-License-Identifier: GPL-2.0") {
+    // do something...
+
+}
+
+We don't want to pick up that line as the short-form ID for this file.

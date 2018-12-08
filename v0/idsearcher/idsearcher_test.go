@@ -364,6 +364,36 @@ func TestCanStripTrailingStarSlash(t *testing.T) {
 	}
 }
 
+func TestCanIgnoreShortFormIDWhenTooManyPrefixChars(t *testing.T) {
+	filePath := "../../testdata/project4/has-id-to-ignore.txt"
+
+	ids, err := searchFileIDs(filePath)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	if len(ids) != 0 {
+		t.Fatalf("expected len 0, got %d", len(ids))
+	}
+}
+
+func TestCanPickJustTheRightID(t *testing.T) {
+	filePath := "../../testdata/project4/has-mix-of-ids.txt"
+
+	ids, err := searchFileIDs(filePath)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	if len(ids) != 1 {
+		t.Fatalf("expected len 1, got %d", len(ids))
+	}
+
+	if ids[0] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", ids[0])
+	}
+}
+
 func TestCannotFindShortFormIDWhenAbsent(t *testing.T) {
 	filePath := "../../testdata/project2/no-id.txt"
 
