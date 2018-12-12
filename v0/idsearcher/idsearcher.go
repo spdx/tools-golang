@@ -150,15 +150,18 @@ func searchFileIDs(filePath string) ([]string, error) {
 
 	scanner := bufio.NewScanner(f)
 
-	// build the scan string this way, so that we can run idsearcher on itself
-	// without picking up these lines as IDs...
-	tag1 := "SPDX-License-"
-	tag2 := "Identifier:"
-	tag := tag1 + tag2
-
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), tag) {
-			strs := strings.SplitAfterN(scanner.Text(), tag, 2)
+		if strings.Contains(scanner.Text(), "SPDX-License-Identifier:") {
+			strs := strings.SplitN(scanner.Text(), "SPDX-License-Identifier:", 2)
+
+			// if prefixed by more than n characters, it's probably not a
+			// short-form ID; it's probably code to detect short-form IDs.
+			// Like this function itself, for example  =)
+			prefix := stripTrash(strs[0])
+			if len(prefix) > 5 {
+				continue
+			}
+
 			// stop before trailing */ if it is present
 			lidToExtract := strs[1]
 			lidToExtract = strings.Split(lidToExtract, "*/")[0]
