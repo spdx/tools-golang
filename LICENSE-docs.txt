@@ -1,4 +1,4 @@
-The spdx-go documentation is provided under the Creative Commons Attribution
+The tools-golang documentation is provided under the Creative Commons Attribution
 4.0 International license (CC-BY-4.0), a copy of which is provided below.
 
 Attribution 4.0 International

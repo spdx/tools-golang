@@ -1,12 +1,12 @@
-// Package builder is used to create spdx-go data structures for a given
+// Package builder is used to create tools-golang data structures for a given
 // directory path's contents, with hashes, etc. filled in and with empty
 // license data.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package builder
 
 import (
-	"github.com/swinslow/spdx-go/v0/builder/builder2v1"
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/builder/builder2v1"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // Config2_1 is a collection of configuration settings for builder

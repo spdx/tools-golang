@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // RenderDocument2_1 is the main entry point to take an SPDX in-memory

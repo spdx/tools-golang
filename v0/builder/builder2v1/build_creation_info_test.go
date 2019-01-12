@@ -54,8 +54,8 @@ func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
 	if len(ci.CreatorTools) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(ci.CreatorTools))
 	}
-	if ci.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/builder" {
-		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/builder", ci.CreatorTools[0])
+	if ci.CreatorTools[0] != "github.com/spdx/tools-golang/v0/builder" {
+		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/v0/builder", ci.CreatorTools[0])
 	}
 	if ci.Created != "2018-10-20T16:48:00Z" {
 		t.Errorf("expected %s, got %s", "2018-10-20T16:48:00Z", ci.Created)
@@ -91,8 +91,8 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorPerson(t *testing.T) {
 	if len(ci.CreatorTools) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(ci.CreatorTools))
 	}
-	if ci.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/builder" {
-		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/builder", ci.CreatorTools[0])
+	if ci.CreatorTools[0] != "github.com/spdx/tools-golang/v0/builder" {
+		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/v0/builder", ci.CreatorTools[0])
 	}
 }
 
@@ -122,8 +122,8 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithCreatorTool(t *testing.T) {
 	if len(ci.CreatorTools) != 2 {
 		t.Fatalf("expected %d, got %d", 2, len(ci.CreatorTools))
 	}
-	if ci.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/builder" {
-		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/builder", ci.CreatorTools[0])
+	if ci.CreatorTools[0] != "github.com/spdx/tools-golang/v0/builder" {
+		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/v0/builder", ci.CreatorTools[0])
 	}
 	if ci.CreatorTools[1] != "some-other-tool-2.1" {
 		t.Errorf("expected %s, got %s", "some-other-tool-2.1", ci.CreatorTools[1])
@@ -159,7 +159,7 @@ func TestBuilder2_1CanBuildCreationInfoSectionWithInvalidPerson(t *testing.T) {
 	if len(ci.CreatorTools) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(ci.CreatorTools))
 	}
-	if ci.CreatorTools[0] != "github.com/swinslow/spdx-go/v0/builder" {
-		t.Errorf("expected %s, got %s", "github.com/swinslow/spdx-go/v0/builder", ci.CreatorTools[0])
+	if ci.CreatorTools[0] != "github.com/spdx/tools-golang/v0/builder" {
+		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/v0/builder", ci.CreatorTools[0])
 	}
 }

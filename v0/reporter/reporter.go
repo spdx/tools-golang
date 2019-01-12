@@ -10,7 +10,7 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // Generate takes a Package whose Files have been analyzed and an

@@ -5,8 +5,8 @@ package builder2v1
 import (
 	"fmt"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
-	"github.com/swinslow/spdx-go/v0/utils"
+	"github.com/spdx/tools-golang/v0/spdx"
+	"github.com/spdx/tools-golang/v0/utils"
 )
 
 // BuildPackageSection2_1 creates an SPDX Package (version 2.1), returning

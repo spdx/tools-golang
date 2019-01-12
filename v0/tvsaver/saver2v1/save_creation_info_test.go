@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // ===== Creation Info section Saver tests =====

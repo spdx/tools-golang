@@ -4,7 +4,7 @@ package parser2v1
 import (
 	"testing"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // ===== Parser creation info state change tests =====

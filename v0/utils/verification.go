@@ -1,5 +1,5 @@
 // Package utils contains various utility functions to support the
-// main spdx-go packages.
+// main tools-golang packages.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package utils
 
@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // GetVerificationCode2_1 takes a slice of files and an optional filename

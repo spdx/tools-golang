@@ -1,4 +1,4 @@
-The spdx-go source code is provided and may be used, at your option,
+The tools-golang source code is provided and may be used, at your option,
 under either:
 * Apache License, version 2.0 (Apache-2.0), OR
 * GNU General Public License, version 2.0 or later (GPL-2.0-or-later).
