@@ -1,14 +1,14 @@
 // Package tvloader is used to load and parse SPDX tag-value documents
-// into spdx-go data structures.
+// into tools-golang data structures.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package tvloader
 
 import (
 	"io"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
-	"github.com/swinslow/spdx-go/v0/tvloader/parser2v1"
-	"github.com/swinslow/spdx-go/v0/tvloader/reader"
+	"github.com/spdx/tools-golang/v0/spdx"
+	"github.com/spdx/tools-golang/v0/tvloader/parser2v1"
+	"github.com/spdx/tools-golang/v0/tvloader/reader"
 )
 
 // Load2_1 takes an io.Reader and returns a fully-parsed SPDX Document

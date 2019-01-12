@@ -13,9 +13,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/swinslow/spdx-go/v0/builder"
-	"github.com/swinslow/spdx-go/v0/spdx"
-	"github.com/swinslow/spdx-go/v0/utils"
+	"github.com/spdx/tools-golang/v0/builder"
+	"github.com/spdx/tools-golang/v0/spdx"
+	"github.com/spdx/tools-golang/v0/utils"
 )
 
 // Config is a collection of configuration settings for docbuilder
@@ -53,7 +53,7 @@ func BuildIDsDocument(packageName string, dirRoot string, idconfig *Config) (*sp
 	bconfig := &builder.Config2_1{
 		NamespacePrefix: idconfig.NamespacePrefix,
 		CreatorType:     "Tool",
-		Creator:         "github.com/swinslow/spdx-go/v0/idsearcher",
+		Creator:         "github.com/spdx/tools-golang/v0/idsearcher",
 		PathsIgnored:    idconfig.BuilderPathsIgnored,
 	}
 	doc, err := builder.Build2_1(packageName, dirRoot, bconfig)

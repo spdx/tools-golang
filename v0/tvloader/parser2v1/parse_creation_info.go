@@ -5,7 +5,7 @@ package parser2v1
 import (
 	"fmt"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string) error {

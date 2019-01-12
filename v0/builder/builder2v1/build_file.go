@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
-	"github.com/swinslow/spdx-go/v0/utils"
+	"github.com/spdx/tools-golang/v0/spdx"
+	"github.com/spdx/tools-golang/v0/utils"
 )
 
 // BuildFileSection2_1 creates an SPDX File (version 2.1), returning that

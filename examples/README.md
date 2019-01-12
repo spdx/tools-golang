@@ -1,8 +1,9 @@
 SPDX-License-Identifier: CC-BY-4.0
 
-# spdx-go Examples
+# tools-golang Examples
 
-The `examples/` directory contains examples for how to use the various spdx-go sub-packages.
+The `examples/` directory contains examples for how to use the various
+tools-golang sub-packages.
 
 ## 1-load/
 

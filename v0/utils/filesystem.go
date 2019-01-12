@@ -1,5 +1,5 @@
 // Package utils contains various utility functions to support the
-// main spdx-go packages.
+// main tools-golang packages.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package utils
 

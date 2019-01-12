@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 func renderRelationship2_1(rln *spdx.Relationship2_1, w io.Writer) error {

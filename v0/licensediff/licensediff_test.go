@@ -5,7 +5,7 @@ package licensediff
 import (
 	"testing"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 // ===== License diff top-level function tests =====

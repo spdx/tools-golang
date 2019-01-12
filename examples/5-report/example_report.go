@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/swinslow/spdx-go/v0/reporter"
-	"github.com/swinslow/spdx-go/v0/tvloader"
+	"github.com/spdx/tools-golang/v0/reporter"
+	"github.com/spdx/tools-golang/v0/tvloader"
 )
 
 func main() {

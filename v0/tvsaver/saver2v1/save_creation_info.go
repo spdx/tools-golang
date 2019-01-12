@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/swinslow/spdx-go/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 )
 
 func renderCreationInfo2_1(ci *spdx.CreationInfo2_1, w io.Writer) error {
