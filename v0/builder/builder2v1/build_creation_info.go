@@ -37,7 +37,9 @@ func BuildCreationInfoSection2_1(packageName string, code string, namespacePrefi
 	}
 
 	// use test Created time if passing test values
-	created := time.Now().Format("2006-01-02T15:04:05Z")
+	location, _ := time.LoadLocation("UTC")
+	locationTime := time.Now().In(location)
+	created := locationTime.Format("2006-01-02T15:04:05Z")
 	if testVal := testValues["Created"]; testVal != "" {
 		created = testVal
 	}
