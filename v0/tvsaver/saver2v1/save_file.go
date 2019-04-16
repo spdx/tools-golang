@@ -38,7 +38,7 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 		fmt.Fprintf(w, "LicenseComments: %s\n", f.LicenseComments)
 	}
 	if f.FileCopyrightText != "" {
-		fmt.Fprintf(w, "FileCopyrightText: %s\n", f.FileCopyrightText)
+		fmt.Fprintf(w, "FileCopyrightText: %s\n", textify(f.FileCopyrightText))
 	}
 	for _, aop := range f.ArtifactOfProjects {
 		fmt.Fprintf(w, "ArtifactOfProjectName: %s\n", aop.Name)
