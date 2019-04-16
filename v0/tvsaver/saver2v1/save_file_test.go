@@ -209,3 +209,41 @@ FileCopyrightText: Copyright (c) Jane Doe
 		t.Errorf("Expected %v, got %v", want.String(), got.String())
 	}
 }
+
+func TestSaver2_1FileWrapsCopyrightMultiLine(t *testing.T) {
+	f := &spdx.File2_1{
+		FileName:           "/tmp/whatever.txt",
+		FileSPDXIdentifier: "SPDXRef-File123",
+		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded:   "Apache-2.0",
+		LicenseInfoInFile: []string{
+			"Apache-2.0",
+		},
+		FileCopyrightText: `Copyright (c) Jane Doe
+Copyright (c) John Doe`,
+	}
+
+	// what we want to get, as a buffer of bytes
+	want := bytes.NewBufferString(`FileName: /tmp/whatever.txt
+SPDXID: SPDXRef-File123
+FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+LicenseConcluded: Apache-2.0
+LicenseInfoInFile: Apache-2.0
+FileCopyrightText: <text>Copyright (c) Jane Doe
+Copyright (c) John Doe</text>
+
+`)
+
+	// render as buffer of bytes
+	var got bytes.Buffer
+	err := renderFile2_1(f, &got)
+	if err != nil {
+		t.Errorf("Expected nil error, got %v", err)
+	}
+
+	// check that they match
+	c := bytes.Compare(want.Bytes(), got.Bytes())
+	if c != 0 {
+		t.Errorf("Expected %v, got %v", want.String(), got.String())
+	}
+}
