@@ -107,6 +107,112 @@ func TestParser2_1OLMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 		t.Errorf("expected state to be %v, got %v", psReview2_1, parser.st)
 	}
 }
+
+func TestParser2_1OtherLicenseStaysAfterParsingRelationshipTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psOtherLicense2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+		otherLic: &spdx.OtherLicense2_1{
+			LicenseIdentifier: "LicenseRef-whatever",
+			LicenseName:       "the whatever license",
+		},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-else")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should remain unchanged
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("expected state to be %v, got %v", psOtherLicense2_1, parser.st)
+	}
+	// and the relationship should be in the Document's Relationships
+	if len(parser.doc.Relationships) != 1 {
+		t.Fatalf("expected doc.Relationships to have len 1, got %d", len(parser.doc.Relationships))
+	}
+	if parser.doc.Relationships[0].RefA != "blah" {
+		t.Errorf("expected RefA to be %s, got %s", "blah", parser.doc.Relationships[0].RefA)
+	}
+
+	err = parser.parsePair2_1("RelationshipComment", "blah")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	// state should still remain unchanged
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("expected state to be %v, got %v", psOtherLicense2_1, parser.st)
+	}
+}
+
+func TestParser2_1OtherLicenseStaysAfterParsingAnnotationTags(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psOtherLicense2_1,
+		pkg:  &spdx.Package2_1{PackageName: "test"},
+		file: &spdx.File2_1{FileName: "f1.txt"},
+		otherLic: &spdx.OtherLicense2_1{
+			LicenseIdentifier: "LicenseRef-whatever",
+			LicenseName:       "the whatever license",
+		},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationDate", "2018-09-15T00:36:00Z")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationType", "REVIEW")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+
+	err = parser.parsePair2_1("SPDXREF", "SPDXRef-45")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+
+	err = parser.parsePair2_1("AnnotationComment", "i guess i had something to say about this particular file")
+	if err != nil {
+		t.Errorf("got error when calling parsePair2_1: %v", err)
+	}
+	if parser.st != psOtherLicense2_1 {
+		t.Errorf("parser is in state %v, expected %v", parser.st, psOtherLicense2_1)
+	}
+
+	// and the annotation should be in the Document's Annotations
+	if len(parser.doc.Annotations) != 1 {
+		t.Fatalf("expected doc.Annotations to have len 1, got %d", len(parser.doc.Annotations))
+	}
+	if parser.doc.Annotations[0].Annotator != "John Doe ()" {
+		t.Errorf("expected Annotator to be %s, got %s", "John Doe ()", parser.doc.Annotations[0].Annotator)
+	}
+}
+
 func TestParser2_1OLFailsAfterParsingOtherSectionTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{},
@@ -132,15 +238,6 @@ func TestParser2_1OLFailsAfterParsingOtherSectionTags(t *testing.T) {
 		t.Errorf("expected error when calling parsePair2_1, got nil")
 	}
 	err = parser.parsePair2_1("FileName", "whatever")
-	if err == nil {
-		t.Errorf("expected error when calling parsePair2_1, got nil")
-	}
-	// also can't do relationships or annotations
-	err = parser.parsePair2_1("Relationship", "LicenseRef-Lic11 DESCRIBES SPDXRef-17")
-	if err == nil {
-		t.Errorf("expected error when calling parsePair2_1, got nil")
-	}
-	err = parser.parsePair2_1("Annotator", "steve")
 	if err == nil {
 		t.Errorf("expected error when calling parsePair2_1, got nil")
 	}

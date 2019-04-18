@@ -23,6 +23,26 @@ func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string
 		parser.otherLic.LicenseCrossReferences = append(parser.otherLic.LicenseCrossReferences, value)
 	case "LicenseComment":
 		parser.otherLic.LicenseComment = value
+	// for relationship tags, pass along but don't change state
+	case "Relationship":
+		parser.rln = &spdx.Relationship2_1{}
+		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
+		return parser.parsePairForRelationship2_1(tag, value)
+	case "RelationshipComment":
+		return parser.parsePairForRelationship2_1(tag, value)
+	// for annotation tags, pass along but don't change state
+	case "Annotator":
+		parser.ann = &spdx.Annotation2_1{}
+		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationDate":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationType":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "SPDXREF":
+		return parser.parsePairForAnnotation2_1(tag, value)
+	case "AnnotationComment":
+		return parser.parsePairForAnnotation2_1(tag, value)
 	// tag for going on to review section (DEPRECATED)
 	case "Reviewer":
 		parser.st = psReview2_1
