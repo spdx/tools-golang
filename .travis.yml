@@ -2,6 +2,10 @@
 
 language: go
 sudo: false
+addons:
+  apt:
+    packages:
+      - libraptor2-dev
 go:
   - "1.10"
 
