@@ -1,9 +1,10 @@
-package rdfparser
+package rdfloader
 
 import (
 	"fmt"
 	"os"
-	"ug/understanding-goraptor/rdf2v1"
+
+	"github.com/spdx/tools-golang/v0/rdfloader/rdf2v1"
 )
 
 func Reader2_1() (rdf2v1.Document, rdf2v1.Snippet, error) {
