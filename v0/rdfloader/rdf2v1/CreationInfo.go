@@ -1,7 +1,7 @@
 package rdf2v1
 
 import (
-	"spdx/tools-golang/v0/spdx"
+	"github.com/spdx/tools-golang/v0/spdx"
 
 	"github.com/deltamobile/goraptor"
 )
