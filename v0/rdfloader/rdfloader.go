@@ -7,7 +7,7 @@ import (
 	"github.com/spdx/tools-golang/v0/rdfloader/rdf2v1"
 )
 
-func Reader2_1() (rdf2v1.Document, rdf2v1.Snippet, error) {
+func Reader2_1() (*rdf2v1.Document, *rdf2v1.Snippet, error) {
 
 	args := os.Args
 	if len(args) != 2 {
@@ -22,14 +22,10 @@ func Reader2_1() (rdf2v1.Document, rdf2v1.Snippet, error) {
 
 	input := args[1]
 	spdxdoc, sp, err = Parse(input)
-
-	_, _ = spdxdoc, sp
-	// var doc2v1 *spdx.Document2_1
-	// doc2v1 = TransferDocument(spdxdoc, sp)
 	if err != nil {
 		fmt.Errorf("Parsing Error")
 	}
-	return *spdxdoc, *sp, err
+	return spdxdoc, sp, err
 }
 
 func Parse(input string) (*rdf2v1.Document, *rdf2v1.Snippet, error) {
