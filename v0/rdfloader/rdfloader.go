@@ -2,34 +2,23 @@ package rdfloader
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/spdx/tools-golang/v0/spdx"
 
 	"github.com/spdx/tools-golang/v0/rdfloader/rdf2v1"
 )
 
-func Reader2_1() (rdf2v1.Document, rdf2v1.Snippet, error) {
+func Reader2_1(input string) *spdx.Document2_1 {
 
-	args := os.Args
-	if len(args) != 2 {
-		fmt.Errorf("Usage: %v <spdx-file-in>\n", args[0])
-		fmt.Errorf("  Load SPDX 2.1 RDF file <spdx-file-in>, and\n")
-		fmt.Errorf("  print its contents.\n")
-
-	}
-	var spdxdoc *rdf2v1.Document
-	var sp *rdf2v1.Snippet
-	var err error
-
-	input := args[1]
-	spdxdoc, sp, err = Parse(input)
-
-	_, _ = spdxdoc, sp
-	// var doc2v1 *spdx.Document2_1
-	// doc2v1 = TransferDocument(spdxdoc, sp)
+	spdxdoc, sp, err := Parse(input)
 	if err != nil {
 		fmt.Errorf("Parsing Error")
 	}
-	return *spdxdoc, *sp, err
+	doc2v1 := rdf2v1.TransferDocument(spdxdoc, sp)
+	if doc2v1 == nil {
+		fmt.Errorf("Translation Error")
+	}
+	return doc2v1
 }
 
 func Parse(input string) (*rdf2v1.Document, *rdf2v1.Snippet, error) {
