@@ -11,14 +11,14 @@ type Review struct {
 }
 
 func (p *Parser) requestReview(node goraptor.Term) (*Review, error) {
-	obj, err := p.requestElementType(node, typeReview)
+	obj, err := p.requestElementType(node, TypeReview)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*Review), err
 }
 func (p *Parser) MapReview(rev *Review) *builder {
-	builder := &builder{t: typeReview, ptr: rev}
+	builder := &builder{t: TypeReview, ptr: rev}
 	builder.updaters = map[string]updater{
 		"rdfs:comment": update(&rev.ReviewComment),
 		"reviewDate":   update(&rev.ReviewDate),
