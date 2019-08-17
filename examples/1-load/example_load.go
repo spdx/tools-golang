@@ -53,6 +53,9 @@ func main() {
 	fmt.Printf("==============\n")
 	fmt.Printf("%#v\n\n", doc.CreationInfo)
 
+	fmt.Printf("==============\n")
+	fmt.Printf("Packages:\n")
+	fmt.Printf("==============\n")
 	// check whether the SPDX file has at least one package
 	if doc.Packages == nil || len(doc.Packages) < 1 {
 		fmt.Printf("No packages found in SPDX document\n")
