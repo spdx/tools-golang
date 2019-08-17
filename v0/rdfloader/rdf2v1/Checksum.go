@@ -13,7 +13,7 @@ type Checksum struct {
 }
 
 func (p *Parser) requestChecksum(node goraptor.Term) (*Checksum, error) {
-	obj, err := p.requestElementType(node, typeChecksum)
+	obj, err := p.requestElementType(node, TypeChecksum)
 	if err != nil {
 		return nil, err
 	}
@@ -21,12 +21,12 @@ func (p *Parser) requestChecksum(node goraptor.Term) (*Checksum, error) {
 }
 
 func (p *Parser) MapChecksum(cksum *Checksum) *builder {
-	builder := &builder{t: typeChecksum, ptr: cksum}
+	builder := &builder{t: TypeChecksum, ptr: cksum}
 	key := false
 	builder.updaters = map[string]updater{
 		"algorithm": func(obj goraptor.Term) error {
 			if key {
-				return fmt.Errorf("Algorithm defined already.")
+				return fmt.Errorf("Algorithm set already.")
 			}
 			algostr := termStr(obj)
 			cksum.Algorithm.Val = ExtractChecksumAlgo(algostr)
@@ -44,11 +44,17 @@ func ExtractChecksumAlgo(str string) string {
 	return str
 }
 
-// Takes in the checksum, compares it's algo with a string, if matches returns the algo
-func AlgoIdentifier(cksum *Checksum, t string) string {
+func InsertChecksumAlgo(str string) string {
+	str = strings.ToLower(str)
+	str = "http://spdx.org/rdf/terms#checksumAlgorithm_" + str
+	return str
+}
+
+// Takes in the checksum, compares it's algo with a string, if matches returns the Value
+func AlgoValue(cksum *Checksum, t string) string {
 	algo := ExtractChecksumAlgo(cksum.Algorithm.Val)
 	if strings.Contains(algo, t) {
-		return t
+		return cksum.ChecksumValue.Val
 	}
 	return ""
 }

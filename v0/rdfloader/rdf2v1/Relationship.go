@@ -8,7 +8,7 @@ type Relationship struct {
 	RelationshipType    ValueStr
 	Package             []*Package
 	File                []*File
-	relatedSpdxElement  ValueStr
+	RelatedSpdxElement  ValueStr
 	SpdxElement         *SpdxElement
 	RelationshipComment ValueStr
 }
@@ -17,14 +17,14 @@ type SpdxElement struct {
 }
 
 func (p *Parser) requestRelationship(node goraptor.Term) (*Relationship, error) {
-	obj, err := p.requestElementType(node, typeRelationship)
+	obj, err := p.requestElementType(node, TypeRelationship)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*Relationship), err
 }
 func (p *Parser) requestSpdxElement(node goraptor.Term) (*SpdxElement, error) {
-	obj, err := p.requestElementType(node, typeSpdxElement)
+	obj, err := p.requestElementType(node, TypeSpdxElement)
 	if err != nil {
 		return nil, err
 	}
@@ -32,14 +32,14 @@ func (p *Parser) requestSpdxElement(node goraptor.Term) (*SpdxElement, error) {
 }
 
 func (p *Parser) MapRelationship(rel *Relationship) *builder {
-	builder := &builder{t: typeRelationship, ptr: rel}
+	builder := &builder{t: TypeRelationship, ptr: rel}
 	builder.updaters = map[string]updater{
 		"relationshipType": update(&rel.RelationshipType),
 		"rdfs:comment":     update(&rel.RelationshipComment),
 		"relatedSpdxElement": func(obj goraptor.Term) error {
 			_, ok := builder.updaters["http://spdx.org/rdf/terms#relatedSpdxElement"]
 			if ok {
-				builder.updaters = map[string]updater{"relatedSpdxElement": update(&rel.relatedSpdxElement)}
+				builder.updaters = map[string]updater{"relatedSpdxElement": update(&rel.RelatedSpdxElement)}
 				return nil
 			}
 			pkg, err := p.requestPackage(obj)
@@ -52,6 +52,7 @@ func (p *Parser) MapRelationship(rel *Relationship) *builder {
 					rel.SpdxElement = se
 					return err
 				}
+
 			}
 			return nil
 		},
@@ -60,7 +61,7 @@ func (p *Parser) MapRelationship(rel *Relationship) *builder {
 }
 
 func (p *Parser) MapSpdxElement(se *SpdxElement) *builder {
-	builder := &builder{t: typeSpdxElement, ptr: se}
+	builder := &builder{t: TypeSpdxElement, ptr: se}
 	builder.updaters = map[string]updater{}
 	return builder
 }
