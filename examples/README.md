@@ -61,3 +61,10 @@ licenses for subsequent versions of the same set of files.
 
 This example demonstrates loading an SPDX Rdf file from disk into memory,
 and printing some of its contents to standard output.
+
+## 8-load-save-Rdf/
+
+*rdfloader*, *rdfsaver*
+
+This example demonstrates loading an SPDX RDF file from disk into memory,
+and re-saving it to a different file on disk.

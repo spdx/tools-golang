@@ -40,10 +40,12 @@ func (f *Formatter) Relationship(rel *rdf2v1.Relationship) (id goraptor.Term, er
 		}
 	}
 
+	if err = f.Packages(id, "relatedSpdxElement", rel.Package); err != nil {
+		return
+	}
 	if err = f.Files(id, "relatedSpdxElement", rel.File); err != nil {
-		if err = f.Packages(id, "relatedSpdxElement", rel.Package); err != nil {
-			return
-		}
+		return
+
 	}
 
 	return id, err

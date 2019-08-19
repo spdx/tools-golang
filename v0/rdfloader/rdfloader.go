@@ -14,11 +14,20 @@ func Reader2_1(input string) *spdx.Document2_1 {
 	if err != nil {
 		fmt.Errorf("Parsing Error")
 	}
-	doc2v1 := rdf2v1.TransferDocument(spdxdoc, sp)
-	if doc2v1 == nil {
-		fmt.Errorf("Translation Error")
+	if sp != nil {
+		doc2v1 := rdf2v1.TransferDocument(spdxdoc, sp)
+		if doc2v1 == nil {
+			fmt.Errorf("Translation Error")
+		}
+		return doc2v1
+	} else {
+		doc2v1 := rdf2v1.TransferDocumentWithoutSnippets(spdxdoc)
+		if doc2v1 == nil {
+			fmt.Errorf("Translation Error")
+		}
+		return doc2v1
 	}
-	return doc2v1
+	return nil
 }
 
 func Parse(input string) (*rdf2v1.Document, *rdf2v1.Snippet, error) {

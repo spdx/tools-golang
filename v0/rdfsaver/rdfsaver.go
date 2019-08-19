@@ -1,16 +1,23 @@
 package rdfsaver
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/v0/rdfsaver/rdfsaver2v1"
+	"github.com/spdx/tools-golang/v0/spdx"
 
 	"github.com/spdx/tools-golang/v0/rdfloader/rdf2v1"
+	"github.com/spdx/tools-golang/v0/rdfloader/rdfsaver2v1"
 )
 
-func Saver2_1(spdxdoc *rdf2v1.Document, sp *rdf2v1.Snippet) error {
+func Saver2_1(doc2v1 *spdx.Document2_1) error {
 
+	newdoc2v1 := rdf2v1.CollectDocument(doc2v1)
+	newsn2v1 := rdf2v1.CollectSnippets(doc2v1)
 	output := os.Stdout
-	err := rdfsaver2v1.Write(output, spdxdoc, sp)
-	return err
+	errdoc := rdfsaver2v1.WriteDocument(output, newdoc2v1, newsn2v1)
+	if errdoc != nil {
+		fmt.Errorf("Parsing Error")
+	}
+	return errdoc
 }
