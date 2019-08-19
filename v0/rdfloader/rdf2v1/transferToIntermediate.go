@@ -114,21 +114,23 @@ func collectDocAnnotation(doc2v1 *spdx.Document2_1) []*Annotation {
 	return arrAnn
 }
 
-func collectFileAnnotation(doc2v1 *spdx.Document2_1) []*Annotation {
+func collectFileAnnotation(doc2v1 *spdx.Document2_1, f *spdx.File2_1) []*Annotation {
 	var arrAnn []*Annotation
 	for _, pkg := range doc2v1.Packages {
 		for _, file := range pkg.Files {
-			for _, an := range doc2v1.Annotations {
-				if an.AnnotationSPDXIdentifier == file.FileSPDXIdentifier {
-					stdAnn := Annotation{
-						Annotator:                Str(an.AnnotatorType + an.Annotator),
-						AnnotationType:           Str(an.AnnotationType),
-						AnnotationDate:           Str(an.AnnotationDate),
-						AnnotationComment:        Str(an.AnnotationComment),
-						AnnotationSPDXIdentifier: Str(an.AnnotationSPDXIdentifier),
+			if file != nil {
+				for _, an := range doc2v1.Annotations {
+					if an.AnnotationSPDXIdentifier == f.FileSPDXIdentifier {
+						stdAnn := Annotation{
+							Annotator:                Str(an.AnnotatorType + an.Annotator),
+							AnnotationType:           Str(an.AnnotationType),
+							AnnotationDate:           Str(an.AnnotationDate),
+							AnnotationComment:        Str(an.AnnotationComment),
+							AnnotationSPDXIdentifier: Str(an.AnnotationSPDXIdentifier),
+						}
+						pointer := &stdAnn
+						arrAnn = append(arrAnn, pointer)
 					}
-					pointer := &stdAnn
-					arrAnn = append(arrAnn, pointer)
 				}
 			}
 		}
@@ -173,86 +175,85 @@ func collectReview(doc2v1 *spdx.Document2_1) []*Review {
 	return arrRev
 }
 
+//
 func collectRelationships(doc2v1 *spdx.Document2_1) []*Relationship {
 	var arrRel []*Relationship
 	for _, a := range doc2v1.Relationships {
+
 		if a != nil {
 			stdRel := Relationship{
 				RelationshipType:    Str(a.Relationship),
 				RelationshipComment: Str(a.RelationshipComment),
-				Package:             collectPackages(doc2v1),
+				Package:             collectPackagesfromRelationship(a, doc2v1),
 			}
 			pointer := &stdRel
 			arrRel = append(arrRel, pointer)
 		}
+
 	}
 
 	return arrRel
 }
 
-func collectFilesfromPackages(doc2v1 *spdx.Document2_1) []*File {
+func collectFilesfromPackages(pkg *spdx.Package2_1, doc2v1 *spdx.Document2_1) []*File {
 	var arrFile []*File
-	for _, a := range doc2v1.Packages {
-		if a != nil {
-			if a.Files != nil {
-				for _, b := range a.Files {
-					if b != nil {
-						stdFile := File{
-
-							FileName:            Str(b.FileName),
-							FileSPDXIdentifier:  Str(b.FileSPDXIdentifier),
-							FileType:            ValueStrList(b.FileType),
-							FileChecksum:        collectFileChecksum(b),
-							LicenseInfoInFile:   ValueStrList(b.LicenseInfoInFile),
-							FileLicenseComments: Str(b.LicenseComments),
-							FileCopyrightText:   Str(b.FileCopyrightText),
-							Project:             collectArtifactOfProject(doc2v1),
-							FileComment:         Str(b.FileComment),
-							FileNoticeText:      Str(b.FileNotice),
-							FileContributor:     ValueStrList(b.FileContributor),
-							Annotation:          collectFileAnnotation(doc2v1),
-						}
-						pointer := &stdFile
-						arrFile = append(arrFile, pointer)
-					}
+	if pkg != nil {
+		for _, b := range pkg.Files {
+			if b != nil {
+				stdFile := File{
+					FileName:            Str(b.FileName),
+					FileSPDXIdentifier:  Str(b.FileSPDXIdentifier),
+					FileType:            ValueStrList(b.FileType),
+					FileChecksum:        collectFileChecksum(b),
+					LicenseInfoInFile:   ValueStrList(b.LicenseInfoInFile),
+					FileLicenseComments: Str(b.LicenseComments),
+					FileCopyrightText:   Str(b.FileCopyrightText),
+					Project:             collectArtifactOfProject(b),
+					FileComment:         Str(b.FileComment),
+					FileNoticeText:      Str(b.FileNotice),
+					FileContributor:     ValueStrList(b.FileContributor),
+					Annotation:          collectFileAnnotation(doc2v1, b),
 				}
+				pointer := &stdFile
+				arrFile = append(arrFile, pointer)
 			}
 		}
 	}
 	return arrFile
 }
 
-func collectPackages(doc2v1 *spdx.Document2_1) []*Package {
+func collectPackagesfromRelationship(rel *spdx.Relationship2_1, doc2v1 *spdx.Document2_1) []*Package {
 	var arrPkg []*Package
 	for _, a := range doc2v1.Packages {
 		if a != nil {
-			stdPkg := Package{
-				PackageName:                 Str(a.PackageName),
-				PackageVersionInfo:          Str(a.PackageVersion),
-				PackageFileName:             Str(a.PackageFileName),
-				PackageSPDXIdentifier:       Str(a.PackageSPDXIdentifier),
-				PackageDownloadLocation:     Str(a.PackageDownloadLocation),
-				PackageVerificationCode:     collectVerificationCode(a), //passing specific package
-				PackageComment:              Str(a.PackageComment),
-				PackageChecksum:             collectPackageChecksum(a),
-				PackageLicenseComments:      Str(a.PackageLicenseComments),
-				PackageLicenseInfoFromFiles: ValueStrList(a.PackageLicenseInfoFromFiles),
-				PackageLicenseDeclared:      Str(a.PackageLicenseDeclared),
-				PackageCopyrightText:        Str(a.PackageCopyrightText),
-				PackageHomepage:             Str(a.PackageHomePage),
-				PackageSupplier:             Str(InsertSupplier(a)),
-				PackageExternalRef:          collectPkgExternalRef(a),
-				PackageOriginator:           Str(InsertOriginator(a)),
-				PackageSourceInfo:           Str(a.PackageSummary),
-				FilesAnalyzed:               Str(strconv.FormatBool(a.FilesAnalyzed)),
-				PackageSummary:              Str(a.PackageSummary),
-				PackageDescription:          Str(a.PackageDescription),
-				Annotation:                  collectPackageAnnotation(doc2v1),
-				File:                        collectFilesfromPackages(doc2v1),
+			if a.PackageSPDXIdentifier == rel.RefB {
+				stdPkg := Package{
+					PackageName:                 Str(a.PackageName),
+					PackageVersionInfo:          Str(a.PackageVersion),
+					PackageFileName:             Str(a.PackageFileName),
+					PackageSPDXIdentifier:       Str(a.PackageSPDXIdentifier),
+					PackageDownloadLocation:     Str(a.PackageDownloadLocation),
+					PackageVerificationCode:     collectVerificationCode(a),
+					PackageComment:              Str(a.PackageComment),
+					PackageChecksum:             collectPackageChecksum(a),
+					PackageLicenseComments:      Str(a.PackageLicenseComments),
+					PackageLicenseInfoFromFiles: ValueStrList(a.PackageLicenseInfoFromFiles),
+					PackageLicenseDeclared:      Str(a.PackageLicenseDeclared),
+					PackageCopyrightText:        Str(a.PackageCopyrightText),
+					PackageHomepage:             Str(a.PackageHomePage),
+					PackageSupplier:             Str(InsertSupplier(a)),
+					PackageExternalRef:          collectPkgExternalRef(a),
+					PackageOriginator:           Str(InsertOriginator(a)),
+					PackageSourceInfo:           Str(a.PackageSummary),
+					FilesAnalyzed:               Str(strconv.FormatBool(a.FilesAnalyzed)),
+					PackageSummary:              Str(a.PackageSummary),
+					PackageDescription:          Str(a.PackageDescription),
+					Annotation:                  collectPackageAnnotation(doc2v1),
+					File:                        collectFilesfromPackages(a, doc2v1),
+				}
+				pointer := &stdPkg
+				arrPkg = append(arrPkg, pointer)
 			}
-
-			pointer := &stdPkg
-			arrPkg = append(arrPkg, pointer)
 		}
 	}
 	return arrPkg
@@ -276,27 +277,17 @@ func collectExtractedLicInfo(doc2v1 *spdx.Document2_1) []*ExtractedLicensingInfo
 	return arrEl
 }
 
-func collectArtifactOfProject(doc2v1 *spdx.Document2_1) []*Project {
+func collectArtifactOfProject(a *spdx.File2_1) []*Project {
 	var arrp []*Project
-	for _, a := range doc2v1.Packages {
-		if a != nil {
-			if a.Files != nil {
-				for _, b := range a.Files {
-					if b != nil {
-						for _, c := range b.ArtifactOfProjects {
-							stdp := Project{
-								Name:     Str(c.Name),
-								HomePage: Str(c.HomePage),
-							}
 
-							pointer := &stdp
-							arrp = append(arrp, pointer)
-						}
-					}
-
-				}
-			}
+	for _, c := range a.ArtifactOfProjects {
+		stdp := Project{
+			Name:     Str(c.Name),
+			HomePage: Str(c.HomePage),
 		}
+
+		pointer := &stdp
+		arrp = append(arrp, pointer)
 	}
 
 	return arrp
