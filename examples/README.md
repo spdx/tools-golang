@@ -54,3 +54,10 @@ first-listed Packages in each document.
 
 This is generally only useful when run with two SPDX documents that describe
 licenses for subsequent versions of the same set of files.
+
+## 7-load-Rdf
+
+*rdfloader*, *spdx*
+
+This example demonstrates loading an SPDX Rdf file from disk into memory,
+and printing some of its contents to standard output.

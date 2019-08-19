@@ -16,7 +16,7 @@ type CreationInfo struct {
 
 func (p *Parser) requestCreationInfo(node goraptor.Term) (*CreationInfo, error) {
 
-	obj, err := p.requestElementType(node, typeCreationInfo)
+	obj, err := p.requestElementType(node, TypeCreationInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (p *Parser) requestCreationInfo(node goraptor.Term) (*CreationInfo, error) 
 }
 
 func (p *Parser) MapCreationInfo(ci *CreationInfo) *builder {
-	builder := &builder{t: typeCreationInfo, ptr: ci}
+	builder := &builder{t: TypeCreationInfo, ptr: ci}
 	builder.updaters = map[string]updater{
 		"licenseListVersion": update(&ci.LicenseListVersion),
 		"creator":            updateList(&ci.Creator),

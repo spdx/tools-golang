@@ -2,38 +2,50 @@ package rdf2v1
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/deltamobile/goraptor"
 )
 
 var (
-	URInsType = uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+	URInsType = Uri("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
-	typeDocument                = prefix("SpdxDocument")
-	typeCreationInfo            = prefix("CreationInfo")
-	typeExtractedLicensingInfo  = prefix("ExtractedLicensingInfo")
-	typeRelationship            = prefix("Relationship")
-	typePackage                 = prefix("Package")
-	typePackageVerificationCode = prefix("PackageVerificationCode")
-	typeChecksum                = prefix("Checksum")
-	typeDisjunctiveLicenseSet   = prefix("DisjunctiveLicenseSet")
-	typeConjunctiveLicenseSet   = prefix("ConjunctiveLicenseSet")
-	typeFile                    = prefix("File")
-	typeSpdxElement             = prefix("SpdxElement")
-	typeSnippet                 = prefix("Snippet")
-	typeLicenseConcluded        = prefix("licenseConcluded")
-	typeReview                  = prefix("Review")
-	typeAnnotation              = prefix("Annotation")
-	typeLicense                 = prefix("License")
-	typeExternalDocumentRef     = prefix("ExternalDocumentRef")
-	typeExternalRef             = prefix("ExternalRef")
-	typeProject                 = prefix("doap:Project")
-	typeReferenceType           = prefix("ReferenceType")
-	typeSnippetStartEndPointer  = prefix("j.0:StartEndPointer")
-	typeByteOffsetPointer       = prefix("j.0:ByteOffsetPointer")
-	typeLineCharPointer         = prefix("j.0:LineCharPointer")
+	TypeDocument                = Prefix("SpdxDocument")
+	TypeCreationInfo            = Prefix("CreationInfo")
+	TypeExtractedLicensingInfo  = Prefix("ExtractedLicensingInfo")
+	TypeRelationship            = Prefix("Relationship")
+	TypePackage                 = Prefix("Package")
+	TypePackageVerificationCode = Prefix("PackageVerificationCode")
+	TypeChecksum                = Prefix("Checksum")
+	TypeDisjunctiveLicenseSet   = Prefix("DisjunctiveLicenseSet")
+	TypeConjunctiveLicenseSet   = Prefix("ConjunctiveLicenseSet")
+	TypeFile                    = Prefix("File")
+	TypeSpdxElement             = Prefix("SpdxElement")
+	TypeSnippet                 = Prefix("Snippet")
+	TypeLicenseConcluded        = Prefix("licenseConcluded")
+	TypeReview                  = Prefix("Review")
+	TypeAnnotation              = Prefix("Annotation")
+	TypeLicense                 = Prefix("License")
+	TypeExternalDocumentRef     = Prefix("ExternalDocumentRef")
+	TypeExternalRef             = Prefix("ExternalRef")
+	TypeProject                 = Prefix("doap:Project")
+	TypeReferenceType           = Prefix("ReferenceType")
+	TypeSnippetStartEndPointer  = Prefix("j.0:StartEndPointer")
+	TypeByteOffsetPointer       = Prefix("j.0:ByteOffsetPointer")
+	TypeLineCharPointer         = Prefix("j.0:LineCharPointer")
 )
-var DocumentNamespace ValueStr
+var (
+	DocumentNamespace     ValueStr
+	SPDXID                ValueStr
+	SPDXIDFile            ValueStr
+	SPDXIDSnippet         ValueStr
+	SPDXIDPackage         ValueStr
+	SPDXIDLicense         ValueStr
+	SPDXIDCLicense        ValueStr
+	ProjectURI            ValueStr
+	RelatedSPDXElementID  ValueStr
+	RelatedSPDXElementKey bool
+)
 
 // Parser Struct and associated methods
 type Parser struct {
@@ -76,13 +88,20 @@ func (p *Parser) Free() {
 	p.Doc = nil
 }
 
-// Process parsed goraptor statements
 func (p *Parser) ProcessTriple(stm *goraptor.Statement) error {
 	node := termStr(stm.Subject)
 	ns, id, _ := ExtractNs(node)
 	if id == "SPDXRef-DOCUMENT" {
+		SPDXID = Str(id)
 		if DocumentNamespace.Val == "" {
 			DocumentNamespace = Str(ns)
+		}
+	}
+
+	if ExtractId(termStr(stm.Predicate)) == "member" {
+		SPDXIDCLicense = Str(ExtractId(termStr(stm.Object)))
+		if SPDXIDLicense == Str("") {
+			SPDXIDCLicense = Str(strings.Replace(termStr(stm.Object), "http://spdx.org/licenses/", "", 1))
 		}
 	}
 
@@ -101,20 +120,32 @@ func (p *Parser) ProcessTriple(stm *goraptor.Statement) error {
 	if _, ok := p.Buffer[node]; !ok {
 		p.Buffer[node] = make([]*goraptor.Statement, 0)
 	}
-
 	p.Buffer[node] = append(p.Buffer[node], stm)
 	return nil
 }
 
-// checks compatiblity of terms, returns builder by type, runs buffer
 func (p *Parser) setNodeType(node, t goraptor.Term) (interface{}, error) {
 	nodeStr := termStr(node)
 	builder, ok := p.Index[nodeStr]
+	if ExtractId(termStr(t)) == "File" {
+		SPDXIDFile = Str(ExtractId(termStr(node)))
+	}
+	if ExtractId(termStr(t)) == "Package" {
+		SPDXIDPackage = Str(ExtractId(termStr(node)))
+	}
+	if ExtractId(termStr(t)) == "Snippet" {
+		SPDXIDSnippet = Str(ExtractId(termStr(node)))
+	}
+	if ExtractId(termStr(t)) == "License" {
+		SPDXIDLicense = Str(ExtractId(termStr(node)))
+	}
+	if ExtractId(termStr(t)) == "Project" {
+		ProjectURI = Str(termStr(node))
+	}
 
 	if ok {
 		if !checkRaptorTypes(builder.t, t) && builder.checkPredicate("ns:type") {
-
-			if err := builder.apply(uri("ns:type"), t); err != nil {
+			if err := builder.apply(Uri("ns:type"), t); err != nil {
 				return nil, err
 			}
 			return builder.ptr, nil
@@ -128,72 +159,72 @@ func (p *Parser) setNodeType(node, t goraptor.Term) (interface{}, error) {
 	// new builder by type
 	switch {
 	// t is goraptor Object
-	case t.Equals(typeDocument):
+	case t.Equals(TypeDocument):
 		p.Doc = new(Document)
 		builder = p.MapDocument(p.Doc)
 
-	case t.Equals(typeCreationInfo):
+	case t.Equals(TypeCreationInfo):
 		builder = p.MapCreationInfo(new(CreationInfo))
 
-	case t.Equals(typeExtractedLicensingInfo):
+	case t.Equals(TypeExtractedLicensingInfo):
 		builder = p.MapExtractedLicensingInfo(new(ExtractedLicensingInfo))
 
-	case t.Equals(typeRelationship):
+	case t.Equals(TypeRelationship):
 		builder = p.MapRelationship(new(Relationship))
 
-	case t.Equals(typePackage):
+	case t.Equals(TypePackage):
 		builder = p.MapPackage(new(Package))
 
-	case t.Equals(typePackageVerificationCode):
+	case t.Equals(TypePackageVerificationCode):
 		builder = p.MapPackageVerificationCode(new(PackageVerificationCode))
 
-	case t.Equals(typeChecksum):
+	case t.Equals(TypeChecksum):
 		builder = p.MapChecksum(new(Checksum))
 
-	case t.Equals(typeDisjunctiveLicenseSet):
+	case t.Equals(TypeDisjunctiveLicenseSet):
 		builder = p.MapDisjunctiveLicenseSet(new(DisjunctiveLicenseSet))
 
-	case t.Equals(typeFile):
+	case t.Equals(TypeFile):
 		builder = p.MapFile(new(File))
 
-	case t.Equals(typeReview):
+	case t.Equals(TypeReview):
 		builder = p.MapReview(new(Review))
 
-	case t.Equals(typeLicense):
+	case t.Equals(TypeLicense):
 		builder = p.MapLicense(new(License))
 
-	case t.Equals(typeAnnotation):
+	case t.Equals(TypeAnnotation):
 		builder = p.MapAnnotation(new(Annotation))
 
-	case t.Equals(typeExternalRef):
+	case t.Equals(TypeExternalRef):
 		builder = p.MapExternalRef(new(ExternalRef))
 
-	case t.Equals(typeReferenceType):
+	case t.Equals(TypeReferenceType):
 		builder = p.MapReferenceType(new(ReferenceType))
 
-	case t.Equals(typeExternalDocumentRef):
+	case t.Equals(TypeExternalDocumentRef):
 		builder = p.MapExternalDocumentRef(new(ExternalDocumentRef))
 
-	case t.Equals(typeProject):
+	case t.Equals(TypeProject):
 		builder = p.MapProject(new(Project))
 
-	case t.Equals(typeSnippet):
+	case t.Equals(TypeSnippet):
 		p.Snip = new(Snippet)
 		builder = p.MapSnippet(p.Snip)
 
-	case t.Equals(typeSpdxElement):
+	case t.Equals(TypeSpdxElement):
 		builder = p.MapSpdxElement(new(SpdxElement))
 
-	case t.Equals(typeConjunctiveLicenseSet):
+	case t.Equals(TypeConjunctiveLicenseSet):
 		builder = p.MapConjunctiveLicenseSet(new(ConjunctiveLicenseSet))
 
-	case t.Equals(typeSnippetStartEndPointer):
+	case t.Equals(TypeSnippetStartEndPointer):
 		builder = p.MapSnippetStartEndPointer(new(SnippetStartEndPointer))
 
-	case t.Equals(typeLineCharPointer):
+	case t.Equals(TypeLineCharPointer):
 		builder = p.MapLineCharPointer(new(LineCharPointer))
 
-	case t.Equals(typeByteOffsetPointer):
+	case t.Equals(TypeByteOffsetPointer):
 		builder = p.MapByteOffsetPointer(new(ByteOffsetPointer))
 	default:
 		return nil, fmt.Errorf("New Builder: Types does not match.")
@@ -201,7 +232,6 @@ func (p *Parser) setNodeType(node, t goraptor.Term) (interface{}, error) {
 
 	p.Index[nodeStr] = builder
 
-	// run buffer
 	buf := p.Buffer[nodeStr]
 	for _, stm := range buf {
 		if err := builder.apply(stm.Predicate, stm.Object); err != nil {
@@ -213,7 +243,6 @@ func (p *Parser) setNodeType(node, t goraptor.Term) (interface{}, error) {
 	return builder.ptr, nil
 }
 
-// compares goraptor terms
 func checkRaptorTypes(found goraptor.Term, need ...goraptor.Term) bool {
 	for _, b := range need {
 		if found == b || found.Equals(b) {
@@ -223,7 +252,6 @@ func checkRaptorTypes(found goraptor.Term, need ...goraptor.Term) bool {
 	return false
 }
 
-// check compatiblity of goraptor term with input
 func checkCompatibleTypes(input, required goraptor.Term) bool {
 	if checkRaptorTypes(input, required) {
 		return true
@@ -250,7 +278,7 @@ type builder struct {
 }
 
 func (b *builder) apply(pred, obj goraptor.Term) error {
-	property := shortPrefix(pred)
+	property := ShortPrefix(pred)
 	f, ok := b.updaters[property]
 
 	if !ok {

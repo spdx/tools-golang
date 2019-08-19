@@ -5,38 +5,41 @@ import (
 )
 
 type File struct {
-	FileName               ValueStr
-	FileChecksum           *Checksum
-	LicenseInfoInFile      []ValueStr
-	FileCopyrightText      ValueStr
-	ExtractedLicensingInfo *ExtractedLicensingInfo
-	DisjunctiveLicenseSet  *DisjunctiveLicenseSet
-	ConjunctiveLicenseSet  *ConjunctiveLicenseSet
-	FileContributor        []ValueStr
-	FileComment            ValueStr
-	FileLicenseComments    ValueStr
-	FileType               []ValueStr
-	FileNoticeText         ValueStr
-	Annotation             []*Annotation
-	Project                []*Project
-	SnippetLicense         *License
-	FileDependency         *File
-	FileRelationship       *Relationship
+	FileName                  ValueStr
+	FileSPDXIdentifier        ValueStr
+	FileChecksum              *Checksum
+	LicenseInfoInFile         []ValueStr
+	FileCopyrightText         ValueStr
+	ExtractedLicensingInfo    *ExtractedLicensingInfo
+	DisjunctiveLicenseSet     *DisjunctiveLicenseSet
+	ConjunctiveLicenseSet     *ConjunctiveLicenseSet
+	FileContributor           []ValueStr
+	FileComment               ValueStr
+	FileLicenseComments       ValueStr
+	FileType                  []ValueStr
+	FileNoticeText            ValueStr
+	Annotation                []*Annotation
+	Project                   []*Project
+	SnippetLicense            *License
+	FileDependency            []*File
+	FileRelationship          *Relationship
+	FileLicenseSPDXIdentifier ValueStr
 }
 type Project struct {
-	Homepage ValueStr
+	HomePage ValueStr
 	Name     ValueStr
+	URI      ValueStr
 }
 
 func (p *Parser) requestFile(node goraptor.Term) (*File, error) {
-	obj, err := p.requestElementType(node, typeFile)
+	obj, err := p.requestElementType(node, TypeFile)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*File), err
 }
 func (p *Parser) requestFileChecksum(node goraptor.Term) (*Checksum, error) {
-	obj, err := p.requestElementType(node, typeChecksum)
+	obj, err := p.requestElementType(node, TypeChecksum)
 	if err != nil {
 		return nil, err
 	}
@@ -44,14 +47,16 @@ func (p *Parser) requestFileChecksum(node goraptor.Term) (*Checksum, error) {
 }
 
 func (p *Parser) requestProject(node goraptor.Term) (*Project, error) {
-	obj, err := p.requestElementType(node, typeProject)
+	obj, err := p.requestElementType(node, TypeProject)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*Project), err
 }
 func (p *Parser) MapFile(file *File) *builder {
-	builder := &builder{t: typeFile, ptr: file}
+	builder := &builder{t: TypeFile, ptr: file}
+	file.FileSPDXIdentifier = SPDXIDFile
+	file.FileLicenseSPDXIdentifier = SPDXIDLicense
 	builder.updaters = map[string]updater{
 		"fileName": update(&file.FileName),
 		"checksum": func(obj goraptor.Term) error {
@@ -94,8 +99,8 @@ func (p *Parser) MapFile(file *File) *builder {
 			return err
 		},
 		"fileDependency": func(obj goraptor.Term) error {
-			file, err := p.requestFile(obj)
-			file.FileDependency = file
+			f, err := p.requestFile(obj)
+			file.FileDependency = append(file.FileDependency, f)
 			return err
 		},
 		"relationship": func(obj goraptor.Term) error {
@@ -108,9 +113,10 @@ func (p *Parser) MapFile(file *File) *builder {
 }
 
 func (p *Parser) MapProject(pro *Project) *builder {
-	builder := &builder{t: typeProject, ptr: pro}
+	builder := &builder{t: TypeProject, ptr: pro}
+	pro.URI = ProjectURI
 	builder.updaters = map[string]updater{
-		"doap:homepage": update(&pro.Homepage),
+		"doap:homepage": update(&pro.HomePage),
 		"doap:name":     update(&pro.Name),
 	}
 	return builder

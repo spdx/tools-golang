@@ -8,27 +8,28 @@ import (
 )
 
 const (
-	baseUri    = "http://spdx.org/rdf/terms#"
-	licenseUri = "http://spdx.org/licenses/"
+	BaseUri    = "http://spdx.org/rdf/terms#"
+	LicenseUri = "http://spdx.org/licenses/"
 )
 
 var rdfPrefixes = map[string]string{
+	"ns:":   "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
 	"rdf:":  "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
 	"doap:": "http://usefulinc.com/ns/doap#",
 	"rdfs:": "http://www.w3.org/2000/01/rdf-schema#",
 	"j.0:":  "http://www.w3.org/2009/pointers#",
-	"":      baseUri,
+	"":      BaseUri,
 }
 
 // simple key value pair struct
-type pair struct {
+type Pair struct {
 	key, val string
 }
 
 // Converts typeX to its full URI accorinding to rdfPrefixes,
 // if no : is found in the string it'll assume it as "spdx:" and expand to baseUri
-func prefix(k string) *goraptor.Uri {
-	var pref string = ""
+func Prefix(k string) *goraptor.Uri {
+	var pref string = BaseUri
 	rest := k
 	if i := strings.Index(k, ":"); i >= 0 {
 		pref = k[:i+1]
@@ -42,7 +43,7 @@ func prefix(k string) *goraptor.Uri {
 }
 
 // Change the RDF prefixes to their short forms.
-func shortPrefix(t goraptor.Term) string {
+func ShortPrefix(t goraptor.Term) string {
 	str := termStr(t)
 	for short, long := range rdfPrefixes {
 		if strings.HasPrefix(str, long) {
@@ -69,21 +70,20 @@ func termStr(term goraptor.Term) string {
 
 // Uri, Literal and Blank are goraptors named types
 // Return *goraptor.Uri
-func uri(uri string) *goraptor.Uri {
+func Uri(uri string) *goraptor.Uri {
 	return (*goraptor.Uri)(&uri)
 }
 
 // Return *goraptor.Literal
-func literal(lit string) *goraptor.Literal {
+func Literal(lit string) *goraptor.Literal {
 	return &goraptor.Literal{Value: lit}
 }
 
 // Return *goraptor.Blank from string
-func blank(b string) *goraptor.Blank {
+func Blank(b string) *goraptor.Blank {
 	return (*goraptor.Blank)(&b)
 }
 
-// helper functions
 func extractSubs(value string) (string, string, error) {
 	// parse the value to see if it's a valid subvalue format
 	sp := strings.SplitN(value, ":", 2)
@@ -148,6 +148,13 @@ func ExtractId(value string) string {
 	return s[1]
 }
 
+func ExtractRelType(value string) string {
+	s := strings.SplitN(value, "_", 2)
+	if len(s) == 1 {
+		return ""
+	}
+	return s[1]
+}
 func InsertId(value string) ValueStr {
 	s := value + "#SPDXRef-DOCUMENT"
 	vs := Str(s)
