@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver
 
 import (
@@ -15,7 +17,9 @@ func Saver2_1(doc2v1 *spdx.Document2_1) error {
 	newdoc2v1 := rdf2v1.CollectDocument(doc2v1)
 	newsn2v1 := rdf2v1.CollectSnippets(doc2v1)
 	output := os.Stdout
-	errdoc := rdfsaver2v1.WriteDocument(output, newdoc2v1, newsn2v1)
+
+	errdoc := rdfsaver2v1.Write(output, newdoc2v1, newsn2v1)
+
 	if errdoc != nil {
 		fmt.Errorf("Parsing Error")
 	}

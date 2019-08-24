@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -55,17 +57,20 @@ func (f *Formatter) Package(pkg *rdf2v1.Package) (id goraptor.Term, err error) {
 	if err = f.Annotations(id, "annotation", pkg.Annotation); err != nil {
 		return
 	}
+
 	if err = f.Files(id, "hasFile", pkg.File); err != nil {
-		return
+		return id, err
 	}
 
-	if pkg.PackageExternalRef != nil {
-		pkgErId, err := f.ExternalRef(pkg.PackageExternalRef)
-		if err != nil {
-			return id, err
-		}
-		if err = f.addTerm(id, "externalRef", pkgErId); err != nil {
-			return id, err
+	for _, per := range pkg.PackageExternalRef {
+		if pkg.PackageExternalRef != nil {
+			pkgErId, err := f.ExternalRef(per)
+			if err != nil {
+				return id, err
+			}
+			if err = f.addTerm(id, "externalRef", pkgErId); err != nil {
+				return id, err
+			}
 		}
 	}
 

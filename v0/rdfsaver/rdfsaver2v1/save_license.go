@@ -1,8 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
-	"fmt"
-
 	"github.com/spdx/tools-golang/v0/rdfloader/rdf2v1"
 
 	"github.com/deltamobile/goraptor"
@@ -65,7 +65,6 @@ func (f *Formatter) DisjunctiveLicenseSet(dls *rdf2v1.DisjunctiveLicenseSet) (id
 
 	for _, mem := range dls.Member {
 		if err = f.addLiteral(id, "member", mem.Val); err != nil {
-			fmt.Println("\n\n\nERR\n\n\n") //check
 			return
 		}
 	}

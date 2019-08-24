@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -45,7 +47,6 @@ func (f *Formatter) Relationship(rel *rdf2v1.Relationship) (id goraptor.Term, er
 	}
 	if err = f.Files(id, "relatedSpdxElement", rel.File); err != nil {
 		return
-
 	}
 
 	return id, err

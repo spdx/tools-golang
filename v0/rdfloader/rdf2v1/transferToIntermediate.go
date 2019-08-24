@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -40,13 +42,17 @@ func collectCreationInfo(doc2v1 *spdx.Document2_1) *CreationInfo {
 }
 
 func collectExternalDocumentRef(doc2v1 *spdx.Document2_1) *ExternalDocumentRef {
-	stdEdr := ExternalDocumentRef{
+	
+  if doc2v1.CreationInfo.ExternalDocumentReferences != nil {
+		stdEdr := ExternalDocumentRef{
 
-		ExternalDocumentId: Str(doc2v1.CreationInfo.ExternalDocumentReferences[0]),
-		SPDXDocument:       Str(doc2v1.CreationInfo.ExternalDocumentReferences[1]),
-		Checksum:           collectDocChecksum(doc2v1),
+			ExternalDocumentId: Str(doc2v1.CreationInfo.ExternalDocumentReferences[0]),
+			SPDXDocument:       Str(doc2v1.CreationInfo.ExternalDocumentReferences[1]),
+			Checksum:           collectDocChecksum(doc2v1),
+		}
+		return &stdEdr
 	}
-	return &stdEdr
+	return nil
 }
 
 func collectLicense(doc2v1 *spdx.Document2_1) *License {
@@ -175,7 +181,6 @@ func collectReview(doc2v1 *spdx.Document2_1) []*Review {
 	return arrRev
 }
 
-//
 func collectRelationships(doc2v1 *spdx.Document2_1) []*Relationship {
 	var arrRel []*Relationship
 	for _, a := range doc2v1.Relationships {

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -124,6 +126,11 @@ func (p *Parser) MapPackage(pkg *Package) *builder {
 		"copyrightText":        update(&pkg.PackageCopyrightText),
 		"hasFile": func(obj goraptor.Term) error {
 			file, err := p.requestFile(obj)
+
+			// Relates File to Package
+			if file != nil {
+				PackagetoFile[SPDXIDPackage] = append(PackagetoFile[SPDXIDPackage], file)
+			}
 			if err != nil {
 				return err
 			}
@@ -150,6 +157,9 @@ func (p *Parser) MapPackage(pkg *Package) *builder {
 		"annotation": func(obj goraptor.Term) error {
 			an, err := p.requestAnnotation(obj)
 			pkg.Annotation = append(pkg.Annotation, an)
+			if an != nil {
+				PackagetoAnno[SPDXIDPackage] = append(PackagetoAnno[SPDXIDPackage], an)
+			}
 			return err
 		},
 		"rdfs:comment": update(&pkg.PackageComment)}

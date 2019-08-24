@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -35,16 +37,27 @@ var (
 	TypeLineCharPointer         = Prefix("j.0:LineCharPointer")
 )
 var (
-	DocumentNamespace     ValueStr
-	SPDXID                ValueStr
-	SPDXIDFile            ValueStr
-	SPDXIDSnippet         ValueStr
-	SPDXIDPackage         ValueStr
-	SPDXIDLicense         ValueStr
-	SPDXIDCLicense        ValueStr
-	ProjectURI            ValueStr
-	RelatedSPDXElementID  ValueStr
-	RelatedSPDXElementKey bool
+	DocumentNamespace  ValueStr
+	ProjectURI         ValueStr
+	SPDXID             ValueStr
+	SPDXIDFile         ValueStr
+	SPDXIDRelationship ValueStr
+	SPDXIDSnippet      ValueStr
+	SPDXIDPackage      ValueStr
+	SPDXIDLicense      ValueStr
+	SPDXIDCLicense     ValueStr
+)
+
+var (
+	counter       int
+	PackagetoFile = make(map[ValueStr][]*File)
+	ReltoPackage  = make(map[ValueStr][]*Package)
+	ReltoFile     = make(map[ValueStr][]*File)
+	DoctoRel      = make(map[ValueStr][]*Relationship)
+	SniptoFile    = make(map[ValueStr]*File)
+	DoctoAnno     = make(map[ValueStr][]*Annotation)
+	FiletoAnno    = make(map[ValueStr][]*Annotation)
+	PackagetoAnno = make(map[ValueStr][]*Annotation)
 )
 
 // Parser Struct and associated methods
@@ -103,6 +116,10 @@ func (p *Parser) ProcessTriple(stm *goraptor.Statement) error {
 		if SPDXIDLicense == Str("") {
 			SPDXIDCLicense = Str(strings.Replace(termStr(stm.Object), "http://spdx.org/licenses/", "", 1))
 		}
+	}
+	if ExtractId(termStr(stm.Predicate)) == "relationshipType" {
+		SPDXIDRelationship = Str(strings.Replace(termStr(stm.Object), "http://spdx.org/rdf/terms#relationshipType_", "", 1))
+		counter++
 	}
 
 	if stm.Predicate.Equals(URInsType) {
