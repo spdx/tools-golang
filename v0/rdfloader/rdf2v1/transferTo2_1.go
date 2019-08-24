@@ -1,6 +1,10 @@
 package rdf2v1
 
-import "github.com/spdx/tools-golang/v0/spdx"
+import (
+	"strconv"
+
+	"github.com/spdx/tools-golang/v0/spdx"
+)
 
 func TransferDocument(spdxdoc *Document, sp *Snippet) *spdx.Document2_1 {
 
@@ -27,7 +31,7 @@ func transferCreationInfo(spdxdoc *Document) *spdx.CreationInfo2_1 {
 	stdCi := spdx.CreationInfo2_1{
 
 		SPDXVersion:                spdxdoc.SPDXVersion.Val,
-		DataLicense:                spdxdoc.License.LicenseSPDXIdentifier.Val,
+		DataLicense:                spdxdoc.License.LicenseId.Val,
 		SPDXIdentifier:             spdxdoc.SPDXID.Val,
 		DocumentName:               spdxdoc.DocumentName.Val,
 		DocumentNamespace:          spdxdoc.DocumentNamespace.Val,
@@ -71,21 +75,25 @@ func transferPackages(spdxdoc *Document, sp *Snippet) []*spdx.Package2_1 {
 							IsFilesAnalyzedTagPresent:           b.PackageName.Val == "",
 							PackageVerificationCode:             b.PackageVerificationCode.PackageVerificationCode.Val,
 							PackageVerificationCodeExcludedFile: b.PackageVerificationCode.PackageVerificationCodeExcludedFile.Val,
-							PackageChecksumSHA1:                 AlgoValue(b.PackageChecksum, "SHA1"),
-							PackageChecksumSHA256:               AlgoValue(b.PackageChecksum, "SHA256"),
-							PackageChecksumMD5:                  AlgoValue(b.PackageChecksum, "MD5"),
-							PackageHomePage:                     b.PackageHomepage.Val,
-							PackageSourceInfo:                   b.PackageSourceInfo.Val,
-							PackageLicenseConcluded:             PackageLicenseConcluded(b),
-							PackageLicenseInfoFromFiles:         ValueList(b.PackageLicenseInfoFromFiles),
-							PackageLicenseDeclared:              b.PackageLicenseDeclared.Val,
-							PackageLicenseComments:              b.PackageLicenseComments.Val,
-							PackageCopyrightText:                b.PackageCopyrightText.Val,
-							PackageSummary:                      b.PackageSummary.Val,
-							PackageDescription:                  b.PackageDescription.Val,
-							PackageComment:                      b.PackageComment.Val,
-							PackageExternalReferences:           transferPkgExternalRef(b),
-							Files:                               transferFile(spdxdoc, sp),
+
+							PackageChecksumSHA1:   AlgoValue(b.PackageChecksum, "SHA1"),
+							PackageChecksumSHA256: AlgoValue(b.PackageChecksum, "SHA256"),
+							PackageChecksumMD5:    AlgoValue(b.PackageChecksum, "MD5"),
+
+							PackageHomePage:   b.PackageHomepage.Val,
+							PackageSourceInfo: b.PackageSourceInfo.Val,
+
+							PackageLicenseConcluded:     PackageLicenseConcluded(b),
+							PackageLicenseInfoFromFiles: ValueList(b.PackageLicenseInfoFromFiles),
+							PackageLicenseDeclared:      b.PackageLicenseDeclared.Val,
+							PackageLicenseComments:      b.PackageLicenseComments.Val,
+
+							PackageCopyrightText:      b.PackageCopyrightText.Val,
+							PackageSummary:            b.PackageSummary.Val,
+							PackageDescription:        b.PackageDescription.Val,
+							PackageComment:            b.PackageComment.Val,
+							PackageExternalReferences: transferPkgExternalRef(b),
+							Files:                     transferFilefromPackages(b, sp),
 						}
 
 						pointer := &stdPkg
@@ -136,6 +144,7 @@ func transferRelationships(spdxdoc *Document) []*spdx.Relationship2_1 {
 
 func transferAnnotation(spdxdoc *Document) []*spdx.Annotation2_1 {
 	var arrAnn []*spdx.Annotation2_1
+	// Annotations from Document
 	for _, an := range spdxdoc.Annotation {
 		stdAnn := spdx.Annotation2_1{
 			Annotator:                ExtractKeyValue(an.Annotator.Val, "subvalue"),
@@ -148,7 +157,7 @@ func transferAnnotation(spdxdoc *Document) []*spdx.Annotation2_1 {
 		pointer := &stdAnn
 		arrAnn = append(arrAnn, pointer)
 	}
-
+	// Annotations from Packages
 	for _, a := range spdxdoc.Relationship {
 		if a != nil {
 			if a.Package != nil {
@@ -173,6 +182,36 @@ func transferAnnotation(spdxdoc *Document) []*spdx.Annotation2_1 {
 		}
 
 	}
+	// Annotations from Files in Packages
+	for _, a := range spdxdoc.Relationship {
+		if a != nil {
+			if a.Package != nil {
+				for _, b := range a.Package {
+					if b != nil {
+						for _, c := range b.File {
+							if c != nil {
+								for _, an := range b.Annotation {
+
+									stdAnn := spdx.Annotation2_1{
+										Annotator:                ExtractKeyValue(an.Annotator.Val, "subvalue"),
+										AnnotatorType:            ExtractKeyValue(an.Annotator.Val, "subkey"),
+										AnnotationType:           an.AnnotationType.Val,
+										AnnotationDate:           an.AnnotationDate.Val,
+										AnnotationComment:        an.AnnotationComment.Val,
+										AnnotationSPDXIdentifier: b.PackageSPDXIdentifier.Val,
+									}
+									pointer := &stdAnn
+									arrAnn = append(arrAnn, pointer)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+	// Annotations from Files in Relationship
 	for _, a := range spdxdoc.Relationship {
 		if a != nil {
 			if a.File != nil {
@@ -218,7 +257,7 @@ func transferReview(spdxdoc *Document) []*spdx.Review2_1 {
 	return arrRev
 }
 
-func transferFile(spdxdoc *Document, sp *Snippet) []*spdx.File2_1 {
+func transferFilefromRel(spdxdoc *Document, sp *Snippet) []*spdx.File2_1 {
 	var arrFile []*spdx.File2_1
 	var dependencyList []ValueStr
 	for _, a := range spdxdoc.Relationship {
@@ -243,7 +282,7 @@ func transferFile(spdxdoc *Document, sp *Snippet) []*spdx.File2_1 {
 							LicenseInfoInFile:  ValueList(b.LicenseInfoInFile),
 							LicenseComments:    b.FileLicenseComments.Val,
 							FileCopyrightText:  b.FileCopyrightText.Val,
-							ArtifactOfProjects: transferArtifactOfProject(spdxdoc),
+							ArtifactOfProjects: transferArtifactOfProject(b),
 							FileComment:        b.FileComment.Val,
 							FileNotice:         b.FileNoticeText.Val,
 							FileContributor:    ValueList(b.FileContributor),
@@ -260,28 +299,84 @@ func transferFile(spdxdoc *Document, sp *Snippet) []*spdx.File2_1 {
 	return arrFile
 }
 
-func transferArtifactOfProject(spdxdoc *Document) []*spdx.ArtifactOfProject2_1 {
-	var arrAop []*spdx.ArtifactOfProject2_1
-	for _, a := range spdxdoc.Relationship {
-		if a != nil {
-			if a.File != nil {
-				for _, b := range a.File {
-					if b != nil {
-						for _, c := range b.Project {
-							stdAop := spdx.ArtifactOfProject2_1{
-								Name:     c.Name.Val,
-								HomePage: c.HomePage.Val,
-								URI:      c.URI.Val,
-							}
-
-							pointer := &stdAop
-							arrAop = append(arrAop, pointer)
-						}
-					}
-
+func transferFilefromPackages(pkg *Package, sp *Snippet) []*spdx.File2_1 {
+	var arrFile []*spdx.File2_1
+	var dependencyList []ValueStr
+	for _, b := range pkg.File {
+		if b != nil {
+			for _, c := range b.FileDependency {
+				if c != nil {
+					dependencyList = append(dependencyList, c.FileName)
 				}
 			}
+			stdFile := spdx.File2_1{
+
+				FileName:           b.FileName.Val,
+				FileSPDXIdentifier: b.FileSPDXIdentifier.Val,
+				FileType:           ValueList(b.FileType),
+				FileChecksumSHA1:   AlgoValue(b.FileChecksum, "SHA1"),
+				FileChecksumSHA256: AlgoValue(b.FileChecksum, "SHA256"),
+				FileChecksumMD5:    AlgoValue(b.FileChecksum, "MD5"),
+				LicenseConcluded:   FileLicenseConcluded(b),
+				LicenseInfoInFile:  ValueList(b.LicenseInfoInFile),
+				LicenseComments:    b.FileLicenseComments.Val,
+				FileCopyrightText:  b.FileCopyrightText.Val,
+				ArtifactOfProjects: transferArtifactOfProject(b),
+				FileComment:        b.FileComment.Val,
+				FileNotice:         b.FileNoticeText.Val,
+				FileContributor:    ValueList(b.FileContributor),
+				FileDependencies:   ValueList(dependencyList),
+				Snippets:           transferSnippets(sp),
+			}
+			pointer := &stdFile
+			arrFile = append(arrFile, pointer)
 		}
+	}
+
+	return arrFile
+}
+
+func transferFilefromSnippets(sp *Snippet) *spdx.File2_1 {
+	var dependencyList []ValueStr
+
+	if sp.SnippetFromFile != nil {
+		dependencyList = append(dependencyList, sp.SnippetFromFile.FileName)
+	}
+
+	stdFile := spdx.File2_1{
+
+		FileName:           sp.SnippetFromFile.FileName.Val,
+		FileSPDXIdentifier: sp.SnippetFromFile.FileSPDXIdentifier.Val,
+		FileType:           ValueList(sp.SnippetFromFile.FileType),
+		FileChecksumSHA1:   AlgoValue(sp.SnippetFromFile.FileChecksum, "SHA1"),
+		FileChecksumSHA256: AlgoValue(sp.SnippetFromFile.FileChecksum, "SHA256"),
+		FileChecksumMD5:    AlgoValue(sp.SnippetFromFile.FileChecksum, "MD5"),
+		LicenseConcluded:   FileLicenseConcluded(sp.SnippetFromFile),
+		LicenseInfoInFile:  ValueList(sp.SnippetFromFile.LicenseInfoInFile),
+		LicenseComments:    sp.SnippetFromFile.FileLicenseComments.Val,
+		FileCopyrightText:  sp.SnippetFromFile.FileCopyrightText.Val,
+		ArtifactOfProjects: transferArtifactOfProject(sp.SnippetFromFile),
+		FileComment:        sp.SnippetFromFile.FileComment.Val,
+		FileNotice:         sp.SnippetFromFile.FileNoticeText.Val,
+		FileContributor:    ValueList(sp.SnippetFromFile.FileContributor),
+		FileDependencies:   ValueList(dependencyList),
+		Snippets:           transferSnippets(sp),
+	}
+
+	return &stdFile
+}
+
+func transferArtifactOfProject(file *File) []*spdx.ArtifactOfProject2_1 {
+	var arrAop []*spdx.ArtifactOfProject2_1
+	for _, c := range file.Project {
+		stdAop := spdx.ArtifactOfProject2_1{
+			Name:     c.Name.Val,
+			HomePage: c.HomePage.Val,
+			URI:      c.URI.Val,
+		}
+
+		pointer := &stdAop
+		arrAop = append(arrAop, pointer)
 	}
 
 	return arrAop
@@ -291,16 +386,20 @@ func transferSnippets(sp *Snippet) []*spdx.Snippet2_1 {
 	var arrSn []*spdx.Snippet2_1
 	if sp != nil {
 		stdSn := spdx.Snippet2_1{
-			SnippetLicenseComments:  sp.SnippetLicenseComments.Val,
-			SnippetCopyrightText:    sp.SnippetCopyrightText.Val,
-			SnippetLicenseConcluded: sp.SnippetLicenseConcluded.Val,
-			SnippetComment:          sp.SnippetComment.Val,
-			LicenseInfoInSnippet:    ValueList(sp.LicenseInfoInSnippet),
+			SnippetSPDXIdentifier:         sp.SnippetSPDXIdentifier.Val,
+			SnippetFromFileSPDXIdentifier: sp.SnippetFromFile.FileSPDXIdentifier.Val,
+			SnippetName:                   sp.SnippetName.Val,
+			SnippetLicenseComments:        sp.SnippetLicenseComments.Val,
+			SnippetCopyrightText:          sp.SnippetCopyrightText.Val,
+			SnippetLicenseConcluded:       sp.SnippetLicenseConcluded.Val,
+			SnippetComment:                sp.SnippetComment.Val,
+			LicenseInfoInSnippet:          ValueList(sp.LicenseInfoInSnippet),
 		}
 		pointer := &stdSn
 		arrSn = append(arrSn, pointer)
+		return arrSn
 	}
-	return arrSn
+	return nil
 }
 
 func transferPkgExternalRef(pkg *Package) []*spdx.PackageExternalReference2_1 {
@@ -322,7 +421,6 @@ func transferPkgExternalRef(pkg *Package) []*spdx.PackageExternalReference2_1 {
 	return arrPer
 }
 
-// helper functions
 func FileLicenseConcluded(file *File) string {
 	var lc string
 	if file.DisjunctiveLicenseSet != nil {
@@ -419,13 +517,13 @@ func RelationshipRef(rel *Relationship) string {
 
 func PkgChecksumAlgo(pkg2_1 *spdx.Package2_1) string {
 	if pkg2_1.PackageChecksumSHA1 != "" {
-		return InsertChecksumAlgo("SHA1")
+		return "SHA1"
 	}
 	if pkg2_1.PackageChecksumSHA256 != "" {
-		return InsertChecksumAlgo("SHA256")
+		return "SHA256"
 	}
 	if pkg2_1.PackageChecksumMD5 != "" {
-		return InsertChecksumAlgo("MD5")
+		return "MD5"
 	}
 	return ""
 }
@@ -445,13 +543,13 @@ func PkgChecksumValue(pkg2_1 *spdx.Package2_1) string {
 
 func FileChecksumAlgo(File2_1 *spdx.File2_1) string {
 	if File2_1.FileChecksumSHA1 != "" {
-		return InsertChecksumAlgo("SHA1")
+		return "SHA1"
 	}
 	if File2_1.FileChecksumSHA256 != "" {
-		return InsertChecksumAlgo("SHA256")
+		return "SHA256"
 	}
 	if File2_1.FileChecksumMD5 != "" {
-		return InsertChecksumAlgo("MD5")
+		return "MD5"
 	}
 	return ""
 }
@@ -467,4 +565,9 @@ func FileChecksumValue(File2_1 *spdx.File2_1) string {
 		return File2_1.FileChecksumMD5
 	}
 	return ""
+}
+
+func convertPointertoInt(str string) int {
+	value, _ := strconv.Atoi(str)
+	return value
 }
