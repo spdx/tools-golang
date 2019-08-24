@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -83,6 +85,9 @@ func (p *Parser) MapDocument(doc *Document) *builder {
 				return err
 			}
 			doc.Relationship = append(doc.Relationship, rel)
+			if rel != nil {
+				DoctoRel[SPDXID] = append(DoctoRel[SPDXID], rel)
+			}
 			return nil
 		},
 		"annotation": func(obj goraptor.Term) error {
@@ -91,6 +96,9 @@ func (p *Parser) MapDocument(doc *Document) *builder {
 				return err
 			}
 			doc.Annotation = append(doc.Annotation, an)
+			if an != nil {
+				DoctoAnno[SPDXID] = append(DoctoAnno[SPDXID], an)
+			}
 			return err
 		},
 		"externalDocumentRef": func(obj goraptor.Term) error {

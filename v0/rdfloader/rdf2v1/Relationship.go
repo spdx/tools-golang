@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -44,9 +46,17 @@ func (p *Parser) MapRelationship(rel *Relationship) *builder {
 			}
 			pkg, err := p.requestPackage(obj)
 			rel.Package = append(rel.Package, pkg)
+
+			// Relates Relationship to Package
+			if pkg != nil {
+				ReltoPackage[SPDXIDRelationship] = append(ReltoPackage[SPDXIDRelationship], pkg)
+			}
 			if err != nil {
 				file, err := p.requestFile(obj)
 				rel.File = append(rel.File, file)
+				if file != nil {
+					ReltoFile[SPDXIDRelationship] = append(ReltoFile[SPDXIDRelationship], file)
+				}
 				if err != nil {
 					se, err := p.requestSpdxElement(obj)
 					rel.SpdxElement = se

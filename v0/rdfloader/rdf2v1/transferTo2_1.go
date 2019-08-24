@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -20,14 +22,30 @@ func TransferDocument(spdxdoc *Document, sp *Snippet) *spdx.Document2_1 {
 	return &stdDoc
 }
 
+func TransferDocumentWithoutSnippets(spdxdoc *Document) *spdx.Document2_1 {
+
+	stdDoc := spdx.Document2_1{
+
+		CreationInfo:  transferCreationInfo(spdxdoc),
+		Packages:      transferPackagesWithoutSnippets(spdxdoc),
+		OtherLicenses: transferOtherLicenses(spdxdoc),
+		Relationships: transferRelationships(spdxdoc),
+		Annotations:   transferAnnotation(spdxdoc),
+		Reviews:       transferReview(spdxdoc),
+	}
+	return &stdDoc
+
+}
+
 func transferCreationInfo(spdxdoc *Document) *spdx.CreationInfo2_1 {
 
 	var listExtDocRef []string
-	listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.ExternalDocumentId.Val)
-	listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.SPDXDocument.Val)
-	listExtDocRef = append(listExtDocRef, ExtractChecksumAlgo(spdxdoc.ExternalDocumentRef.Checksum.Algorithm.Val))
-	listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.Checksum.ChecksumValue.Val)
-
+	if spdxdoc.ExternalDocumentRef != nil {
+		listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.ExternalDocumentId.Val)
+		listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.SPDXDocument.Val)
+		listExtDocRef = append(listExtDocRef, ExtractChecksumAlgo(spdxdoc.ExternalDocumentRef.Checksum.Algorithm.Val))
+		listExtDocRef = append(listExtDocRef, spdxdoc.ExternalDocumentRef.Checksum.ChecksumValue.Val)
+	}
 	stdCi := spdx.CreationInfo2_1{
 
 		SPDXVersion:                spdxdoc.SPDXVersion.Val,
@@ -94,6 +112,65 @@ func transferPackages(spdxdoc *Document, sp *Snippet) []*spdx.Package2_1 {
 							PackageComment:            b.PackageComment.Val,
 							PackageExternalReferences: transferPkgExternalRef(b),
 							Files:                     transferFilefromPackages(b, sp),
+						}
+
+						pointer := &stdPkg
+						arrPkg = append(arrPkg, pointer)
+					}
+				}
+			}
+		}
+	}
+	return arrPkg
+}
+
+func transferPackagesWithoutSnippets(spdxdoc *Document) []*spdx.Package2_1 {
+	var arrPkg []*spdx.Package2_1
+	for _, a := range spdxdoc.Relationship {
+		if a != nil {
+			if a.Package != nil {
+				for _, b := range a.Package {
+
+					if b != nil {
+						stdPkg := spdx.Package2_1{
+							IsUnpackaged:          b.PackageName.Val == "",
+							PackageName:           b.PackageName.Val,
+							PackageSPDXIdentifier: b.PackageSPDXIdentifier.Val,
+							PackageVersion:        b.PackageVersionInfo.Val,
+							PackageFileName:       b.PackageFileName.Val,
+
+							PackageSupplierPerson:       ExtractValueType(b.PackageSupplier.Val, "Person"),
+							PackageSupplierOrganization: ExtractValueType(b.PackageSupplier.Val, "Organization"),
+							PackageSupplierNOASSERTION:  b.PackageSupplier.Val == "NOASSERTION",
+
+							PackageOriginatorPerson:       ExtractValueType(b.PackageOriginator.Val, "Person"),
+							PackageOriginatorOrganization: ExtractValueType(b.PackageOriginator.Val, "Organization"),
+							PackageOriginatorNOASSERTION:  b.PackageOriginator.Val == "NOASSERTION",
+
+							PackageDownloadLocation:             b.PackageDownloadLocation.Val,
+							FilesAnalyzed:                       !(b.PackageName.Val == ""),
+							IsFilesAnalyzedTagPresent:           b.PackageName.Val == "",
+							PackageVerificationCode:             b.PackageVerificationCode.PackageVerificationCode.Val,
+							PackageVerificationCodeExcludedFile: b.PackageVerificationCode.PackageVerificationCodeExcludedFile.Val,
+
+							PackageChecksumSHA1:   AlgoValue(b.PackageChecksum, "SHA1"),
+							PackageChecksumSHA256: AlgoValue(b.PackageChecksum, "SHA256"),
+							PackageChecksumMD5:    AlgoValue(b.PackageChecksum, "MD5"),
+
+							PackageHomePage:   b.PackageHomepage.Val,
+							PackageSourceInfo: b.PackageSourceInfo.Val,
+
+							PackageLicenseConcluded:     PackageLicenseConcluded(b),
+							PackageLicenseInfoFromFiles: ValueList(b.PackageLicenseInfoFromFiles),
+							PackageLicenseDeclared:      b.PackageLicenseDeclared.Val,
+							PackageLicenseComments:      b.PackageLicenseComments.Val,
+
+							PackageCopyrightText:      b.PackageCopyrightText.Val,
+							PackageSummary:            b.PackageSummary.Val,
+							PackageDescription:        b.PackageDescription.Val,
+							PackageComment:            b.PackageComment.Val,
+							PackageExternalReferences: transferPkgExternalRef(b),
+							Files:                     transferFilefromPackagesWithoutSnippets(b),
 						}
 
 						pointer := &stdPkg
@@ -333,6 +410,41 @@ func transferFilefromPackages(pkg *Package, sp *Snippet) []*spdx.File2_1 {
 		}
 	}
 
+	return arrFile
+}
+
+func transferFilefromPackagesWithoutSnippets(pkg *Package) []*spdx.File2_1 {
+	var arrFile []*spdx.File2_1
+	var dependencyList []ValueStr
+	for _, b := range pkg.File {
+		if b != nil {
+			for _, c := range b.FileDependency {
+				if c != nil {
+					dependencyList = append(dependencyList, c.FileName)
+				}
+			}
+			stdFile := spdx.File2_1{
+
+				FileName:           b.FileName.Val,
+				FileSPDXIdentifier: b.FileSPDXIdentifier.Val,
+				FileType:           ValueList(b.FileType),
+				FileChecksumSHA1:   AlgoValue(b.FileChecksum, "SHA1"),
+				FileChecksumSHA256: AlgoValue(b.FileChecksum, "SHA256"),
+				FileChecksumMD5:    AlgoValue(b.FileChecksum, "MD5"),
+				LicenseConcluded:   FileLicenseConcluded(b),
+				LicenseInfoInFile:  ValueList(b.LicenseInfoInFile),
+				LicenseComments:    b.FileLicenseComments.Val,
+				FileCopyrightText:  b.FileCopyrightText.Val,
+				ArtifactOfProjects: transferArtifactOfProject(b),
+				FileComment:        b.FileComment.Val,
+				FileNotice:         b.FileNoticeText.Val,
+				FileContributor:    ValueList(b.FileContributor),
+				FileDependencies:   ValueList(dependencyList),
+			}
+			pointer := &stdFile
+			arrFile = append(arrFile, pointer)
+		}
+	}
 	return arrFile
 }
 
