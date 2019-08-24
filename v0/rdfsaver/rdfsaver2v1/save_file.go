@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -84,7 +86,6 @@ func (f *Formatter) File(file *rdf2v1.File) (id goraptor.Term, err error) {
 		}
 	}
 
-	//checkaftersnippets
 	if file.SnippetLicense != nil {
 		filelicId, err := f.License(file.SnippetLicense)
 		if err != nil {
@@ -101,16 +102,17 @@ func (f *Formatter) File(file *rdf2v1.File) (id goraptor.Term, err error) {
 
 		}
 	}
-	if file.FileDependency != nil {
-		fdId, err := f.File(file.FileDependency)
-		if err != nil {
-			return id, err
-		}
-		if err = f.addTerm(id, "fileDependency", fdId); err != nil {
-			return id, err
+	for _, dep := range file.FileDependency {
+		if file.FileDependency != nil {
+			fdId, err := f.File(file.FileDependency)
+			if err != nil {
+				return id, err
+			}
+			if err = f.addTerm(id, "fileDependency", fdId); err != nil {
+				return id, err
+			}
 		}
 	}
-
 	if file.FileRelationship != nil {
 		frId, err := f.Relationship(file.FileRelationship)
 		if err != nil {

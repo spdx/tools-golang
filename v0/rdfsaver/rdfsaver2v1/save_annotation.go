@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -11,7 +13,6 @@ func (f *Formatter) Annotation(an *rdf2v1.Annotation) (id goraptor.Term, err err
 	if err = f.setNodeType(id, rdf2v1.TypeAnnotation); err != nil {
 		return
 	}
-	// Type 1: add Pairs
 	err = f.addPairs(id,
 		Pair{"annotationDate", an.AnnotationDate.Val},
 		Pair{"rdfs:comment", an.AnnotationComment.Val},
@@ -20,7 +21,7 @@ func (f *Formatter) Annotation(an *rdf2v1.Annotation) (id goraptor.Term, err err
 	if err != nil {
 		return
 	}
-	// Type 2: add Pairs with Prefix
+
 	if an.AnnotationType.Val != "" {
 		if err = f.addTerm(id, "annotationType", rdf2v1.Prefix(an.AnnotationType.Val)); err != nil {
 			return

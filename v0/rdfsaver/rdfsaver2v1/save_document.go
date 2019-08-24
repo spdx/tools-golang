@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -10,12 +12,10 @@ import (
 
 func (f *Formatter) Document(doc *rdf2v1.Document) (docId goraptor.Term, err error) {
 
-	// _docId := goraptor.Blank("doc")
 	if doc == nil {
 		return nil, errors.New("Nil document.")
 	}
 
-	// docId = &_docId
 	docId = rdf2v1.Blank("doc")
 
 	if err = f.setNodeType(docId, rdf2v1.TypeDocument); err != nil {
@@ -80,29 +80,30 @@ func (f *Formatter) Document(doc *rdf2v1.Document) (docId goraptor.Term, err err
 }
 func (f *Formatter) ExternalDocumentRef(edr *rdf2v1.ExternalDocumentRef) (id goraptor.Term, err error) {
 	id = f.NodeId("edr")
+	if edr != nil {
 
-	if err = f.setNodeType(id, rdf2v1.TypeExternalDocumentRef); err != nil {
-		return
-	}
+		if err = f.setNodeType(id, rdf2v1.TypeExternalDocumentRef); err != nil {
+			return
+		}
 
-	err = f.addPairs(id,
-		Pair{"externalDocumentId", edr.ExternalDocumentId.Val},
-		Pair{"spdxDocument", edr.SPDXDocument.Val},
-	)
+		err = f.addPairs(id,
+			Pair{"externalDocumentId", edr.ExternalDocumentId.Val},
+			Pair{"spdxDocument", edr.SPDXDocument.Val},
+		)
 
-	if err != nil {
-		return
-	}
-
-	if edr.Checksum != nil {
-		cksumId, err := f.Checksum(edr.Checksum)
 		if err != nil {
-			return id, err
+			return
 		}
-		if err = f.addTerm(id, "checksum", cksumId); err != nil {
-			return id, err
+
+		if edr.Checksum != nil {
+			cksumId, err := f.Checksum(edr.Checksum)
+			if err != nil {
+				return id, err
+			}
+			if err = f.addTerm(id, "checksum", cksumId); err != nil {
+				return id, err
+			}
 		}
 	}
-
 	return id, nil
 }

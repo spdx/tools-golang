@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -25,6 +27,7 @@ func (p *Parser) requestCreationInfo(node goraptor.Term) (*CreationInfo, error) 
 
 func (p *Parser) MapCreationInfo(ci *CreationInfo) *builder {
 	builder := &builder{t: TypeCreationInfo, ptr: ci}
+	ci.SPDXIdentifier = SPDXID
 	builder.updaters = map[string]updater{
 		"licenseListVersion": update(&ci.LicenseListVersion),
 		"creator":            updateList(&ci.Creator),

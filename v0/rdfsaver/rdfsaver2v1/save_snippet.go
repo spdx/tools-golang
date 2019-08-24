@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -14,7 +16,6 @@ func (f *Formatter) Snippet(snip *rdf2v1.Snippet) (snipId goraptor.Term, err err
 		return nil, errors.New("Nil Snippet.")
 	}
 
-	// docId = &_docId
 	snipId = rdf2v1.Blank("snip")
 
 	if err = f.setNodeType(snipId, rdf2v1.TypeSnippet); err != nil {

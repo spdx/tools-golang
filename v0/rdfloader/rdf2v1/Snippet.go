@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdf2v1
 
 import (
@@ -78,6 +80,9 @@ func (p *Parser) MapSnippet(s *Snippet) *builder {
 		"snippetFromFile": func(obj goraptor.Term) error {
 			file, err := p.requestFile(obj)
 			s.SnippetFromFile = file
+			if file != nil {
+				SniptoFile[SPDXIDSnippet] = file
+			}
 			return err
 		},
 		"licenseInfoInSnippet": updateList(&s.LicenseInfoInSnippet),

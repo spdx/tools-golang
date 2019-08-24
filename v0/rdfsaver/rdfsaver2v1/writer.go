@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
 package rdfsaver2v1
 
 import (
@@ -11,12 +13,10 @@ import (
 
 func Write(output *os.File, doc *rdf2v1.Document, sn *rdf2v1.Snippet) error {
 	f := NewFormatter(output, "rdfxml-abbrev")
-	// _, docerr := f.Document(doc)
-	// if docerr != nil {
-	// 	return nil
-	// }
-	_, snippet := f.Snippet(sn)
-	if snippet != nil {
+	_, snippeterr := f.Snippet(sn)
+	_ = snippeterr
+	_, docerr := f.Document(doc)
+	if docerr != nil {
 		return nil
 	}
 	f.Close()
@@ -29,6 +29,7 @@ type Formatter struct {
 	nodeIds    map[string]int
 	fileIds    map[string]goraptor.Term
 }
+
 type Pair struct {
 	key, val string
 }
@@ -78,6 +79,7 @@ func (f *Formatter) add(to, key, value goraptor.Term) error {
 		Object:    value,
 	})
 }
+
 func (f *Formatter) addTerm(to goraptor.Term, key string, value goraptor.Term) error {
 	return f.add(to, rdf2v1.Prefix(key), value)
 }
@@ -88,6 +90,7 @@ func (f *Formatter) addLiteral(to goraptor.Term, key, value string) error {
 	}
 	return f.add(to, rdf2v1.Prefix(key), &goraptor.Literal{Value: value})
 }
+
 func (f *Formatter) addPairs(to goraptor.Term, Pairs ...Pair) error {
 	for _, p := range Pairs {
 		if err := f.addLiteral(to, p.key, p.val); err != nil {
