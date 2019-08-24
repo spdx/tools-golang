@@ -6,14 +6,14 @@ import (
 
 type ExtractedLicensingInfo struct {
 	LicenseIdentifier ValueStr
-	LicenseName       []ValueStr
+	LicenseName       ValueStr
 	ExtractedText     ValueStr
 	LicenseComment    ValueStr
 	LicenseSeeAlso    []ValueStr
 }
 
 func (p *Parser) requestExtractedLicensingInfo(node goraptor.Term) (*ExtractedLicensingInfo, error) {
-	obj, err := p.requestElementType(node, typeExtractedLicensingInfo)
+	obj, err := p.requestElementType(node, TypeExtractedLicensingInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -21,10 +21,10 @@ func (p *Parser) requestExtractedLicensingInfo(node goraptor.Term) (*ExtractedLi
 }
 
 func (p *Parser) MapExtractedLicensingInfo(lic *ExtractedLicensingInfo) *builder {
-	builder := &builder{t: typeExtractedLicensingInfo, ptr: lic}
+	builder := &builder{t: TypeExtractedLicensingInfo, ptr: lic}
 	builder.updaters = map[string]updater{
 		"licenseId":     update(&lic.LicenseIdentifier),
-		"name":          updateList(&lic.LicenseName),
+		"name":          update(&lic.LicenseName),
 		"extractedText": update(&lic.ExtractedText),
 		"rdfs:comment":  update(&lic.LicenseComment),
 		"rdfs:seeAlso":  updateList(&lic.LicenseSeeAlso),

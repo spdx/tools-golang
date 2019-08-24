@@ -5,66 +5,75 @@ import (
 )
 
 type Package struct {
-	PackageName                 ValueStr
-	PackageVersionInfo          ValueStr
-	PackageFileName             ValueStr
-	PackageDownloadLocation     ValueStr
-	PackageVerificationCode     *PackageVerificationCode
-	PackageComment              ValueStr
-	PackageChecksum             *Checksum
-	PackageLicense              *License
-	PackageLicenseComments      ValueStr
-	DisjunctiveLicenseSet       *DisjunctiveLicenseSet
-	ConjunctiveLicenseSet       *ConjunctiveLicenseSet
-	PackageLicenseInfoFromFiles []ValueStr
-	PackageLicenseDeclared      ValueStr
-	PackageCopyrightText        ValueStr
-	File                        []*File
-	PackageRelationship         *Relationship
-	PackageHomepage             ValueStr
-	PackageSupplier             ValueStr
-	PackageExternalRef          *ExternalRef
-	PackageOriginator           ValueStr
-	PackageSourceInfo           ValueStr
-	FilesAnalyzed               ValueStr
-	PackageSummary              ValueStr
-	PackageDescription          ValueStr
-	Annotation                  []*Annotation
+	PackageName                  ValueStr
+	PackageVersionInfo           ValueStr
+	PackageFileName              ValueStr
+	PackageSPDXIdentifier        ValueStr
+	PackageDownloadLocation      ValueStr
+	PackageVerificationCode      *PackageVerificationCode
+	PackageComment               ValueStr
+	PackageChecksum              *Checksum
+	PackageLicense               *License
+	PackageLicenseComments       ValueStr
+	DisjunctiveLicenseSet        *DisjunctiveLicenseSet
+	ConjunctiveLicenseSet        *ConjunctiveLicenseSet
+	PackageLicenseInfoFromFiles  []ValueStr
+	PackageLicenseDeclared       ValueStr
+	PackageCopyrightText         ValueStr
+	File                         []*File
+	PackageRelationship          *Relationship
+	PackageHomepage              ValueStr
+	PackageSupplier              ValueStr
+	PackageExternalRef           []*ExternalRef
+	PackageOriginator            ValueStr
+	PackageSourceInfo            ValueStr
+	FilesAnalyzed                ValueStr
+	PackageSummary               ValueStr
+	PackageDescription           ValueStr
+	Annotation                   []*Annotation
+	PackageLicenseSPDXIdentifier ValueStr
 }
 type PackageVerificationCode struct {
 	PackageVerificationCode             ValueStr
 	PackageVerificationCodeExcludedFile ValueStr
 }
-type PackageRelationship struct {
-	Relationshiptype   ValueStr
-	relatedSpdxElement ValueStr
+type ExternalRef struct {
+	ReferenceLocator  ValueStr
+	ReferenceType     *ReferenceType
+	ReferenceCategory ValueStr
+	ReferenceComment  ValueStr
+}
+type ReferenceType struct {
+	ReferenceType ValueStr
 }
 
 func (p *Parser) requestPackage(node goraptor.Term) (*Package, error) {
-	obj, err := p.requestElementType(node, typePackage)
+	obj, err := p.requestElementType(node, TypePackage)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*Package), err
 }
-func (p *Parser) requestPackageRelationship(node goraptor.Term) (*PackageRelationship, error) {
-	obj, err := p.requestElementType(node, typeRelationship)
-	if err != nil {
-		return nil, err
-	}
-	return obj.(*PackageRelationship), err
-}
 
 func (p *Parser) requestPackageVerificationCode(node goraptor.Term) (*PackageVerificationCode, error) {
-	obj, err := p.requestElementType(node, typePackageVerificationCode)
+	obj, err := p.requestElementType(node, TypePackageVerificationCode)
 	if err != nil {
 		return nil, err
 	}
 	return obj.(*PackageVerificationCode), err
 }
 
+func (p *Parser) requestExternalRef(node goraptor.Term) (*ExternalRef, error) {
+	obj, err := p.requestElementType(node, TypeExternalRef)
+	if err != nil {
+		return nil, err
+	}
+	return obj.(*ExternalRef), err
+}
 func (p *Parser) MapPackage(pkg *Package) *builder {
-	builder := &builder{t: typePackage, ptr: pkg}
+	builder := &builder{t: TypePackage, ptr: pkg}
+	pkg.PackageSPDXIdentifier = SPDXIDPackage
+	pkg.PackageLicenseSPDXIdentifier = SPDXIDLicense
 	builder.updaters = map[string]updater{
 		"name":             update(&pkg.PackageName),
 		"versionInfo":      update(&pkg.PackageVersionInfo),
@@ -82,15 +91,35 @@ func (p *Parser) MapPackage(pkg *Package) *builder {
 		},
 		"licenseComments": update(&pkg.PackageLicenseComments),
 		"licenseConcluded": func(obj goraptor.Term) error {
-			pkgdls, _ := p.requestDisjunctiveLicenseSet(obj)
+			pkgdls, err := p.requestDisjunctiveLicenseSet(obj)
 			pkg.DisjunctiveLicenseSet = pkgdls
-			pkglic, _ := p.requestLicense(obj)
-			pkg.PackageLicense = pkglic
-			pkgcls, _ := p.requestConjunctiveLicenseSet(obj)
-			pkg.ConjunctiveLicenseSet = pkgcls
+			if err != nil {
+				pkglic, err := p.requestLicense(obj)
+				pkg.PackageLicense = pkglic
+				if err != nil {
+					pkgcls, err := p.requestConjunctiveLicenseSet(obj)
+					pkg.ConjunctiveLicenseSet = pkgcls
+					return err
+				}
+			}
 			return nil
 		},
-		"licenseDeclared":      update(&pkg.PackageLicenseDeclared),
+		"licenseDeclared": func(obj goraptor.Term) error {
+			_, ok := builder.updaters["http://spdx.org/rdf/terms#licenseDeclared"]
+			if ok {
+				builder.updaters = map[string]updater{"licenseDeclared": update(&pkg.PackageLicenseDeclared)}
+			}
+			pkgdls, _ := p.requestDisjunctiveLicenseSet(obj)
+			pkg.DisjunctiveLicenseSet = pkgdls
+
+			pkglic, _ := p.requestLicense(obj)
+			pkg.PackageLicense = pkglic
+
+			pkgcls, _ := p.requestConjunctiveLicenseSet(obj)
+			pkg.ConjunctiveLicenseSet = pkgcls
+
+			return nil
+		},
 		"licenseInfoFromFiles": updateList(&pkg.PackageLicenseInfoFromFiles),
 		"copyrightText":        update(&pkg.PackageCopyrightText),
 		"hasFile": func(obj goraptor.Term) error {
@@ -110,7 +139,7 @@ func (p *Parser) MapPackage(pkg *Package) *builder {
 		"supplier":      update(&pkg.PackageSupplier),
 		"externalRef": func(obj goraptor.Term) error {
 			er, err := p.requestExternalRef(obj)
-			pkg.PackageExternalRef = er
+			pkg.PackageExternalRef = append(pkg.PackageExternalRef, er)
 			return err
 		},
 		"originator":    update(&pkg.PackageOriginator),
@@ -127,20 +156,26 @@ func (p *Parser) MapPackage(pkg *Package) *builder {
 	return builder
 }
 
-func (p *Parser) MapPackageRelationship(pkgrel *PackageRelationship) *builder {
-	builder := &builder{t: typePackageVerificationCode, ptr: pkgrel}
+func (p *Parser) MapPackageVerificationCode(pkgvc *PackageVerificationCode) *builder {
+	builder := &builder{t: TypePackageVerificationCode, ptr: pkgvc}
 	builder.updaters = map[string]updater{
-		"relationshipType":   update(&pkgrel.Relationshiptype),
-		"relatedSpdxElement": update(&pkgrel.Relationshiptype),
+		"packageVerificationCodeValue":        update(&pkgvc.PackageVerificationCode),
+		"packageVerificationCodeExcludedFile": update(&pkgvc.PackageVerificationCodeExcludedFile),
 	}
 	return builder
 }
 
-func (p *Parser) MapPackageVerificationCode(pkgvc *PackageVerificationCode) *builder {
-	builder := &builder{t: typePackageVerificationCode, ptr: pkgvc}
+func (p *Parser) MapExternalRef(er *ExternalRef) *builder {
+	builder := &builder{t: TypeExternalRef, ptr: er}
 	builder.updaters = map[string]updater{
-		"packageVerificationCodeValue":        update(&pkgvc.PackageVerificationCode),
-		"packageVerificationCodeExcludedFile": update(&pkgvc.PackageVerificationCodeExcludedFile),
+		"referenceLocator":  update(&er.ReferenceLocator),
+		"referenceCategory": update(&er.ReferenceCategory),
+		"rdfs:comment":      update(&er.ReferenceComment),
+		"referenceType": func(obj goraptor.Term) error {
+			rt, err := p.requestReferenceType(obj)
+			er.ReferenceType = rt
+			return err
+		},
 	}
 	return builder
 }
