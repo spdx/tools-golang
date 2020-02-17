@@ -12,8 +12,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/v0/builder"
-	"github.com/spdx/tools-golang/v0/tvsaver"
+	"github.com/spdx/tools-golang/builder"
+	"github.com/spdx/tools-golang/tvsaver"
 )
 
 func main() {
@@ -56,7 +56,7 @@ func main() {
 
 		// note that builder will also add the following, in addition to the
 		// Creator defined above:
-		// Creator: Tool: github.com/spdx/tools-golang/v0/builder
+		// Creator: Tool: github.com/spdx/tools-golang/builder
 
 		// Finally, you can define one or more paths that should be ignored
 		// when walking through the directory. This is intended to omit files

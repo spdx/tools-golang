@@ -6,8 +6,7 @@
 tools-golang is a collection of Go packages intended to make it easier for
 Go programs to work with [SPDX®](https://spdx.org/) files.
 
-This software is in an early state, and its API may change significantly
-(hence the "v0/" directory).
+This software is in an early state, and its API may change significantly.
 
 ## What it does
 
@@ -16,14 +15,14 @@ SPDX specification, available at: https://spdx.org/specifications
 
 tools-golang provides the following packages:
 
-* *v0/spdx* - in-memory data model for the sections of an SPDX document
-* *v0/tvloader* - tag-value file loader
-* *v0/tvsaver* - tag-value file saver
-* *v0/builder* - builds "empty" SPDX document (with hashes) for directory contents
-* *v0/idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
-* *v0/licensediff* - compares concluded licenses between files in two packages
-* *v0/reporter* - generates basic license count report from SPDX document
-* *v0/utils* - various utility functions that support the other tools-golang packages
+* *spdx* - in-memory data model for the sections of an SPDX document
+* *tvloader* - tag-value file loader
+* *tvsaver* - tag-value file saver
+* *builder* - builds "empty" SPDX document (with hashes) for directory contents
+* *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
+* *licensediff* - compares concluded licenses between files in two packages
+* *reporter* - generates basic license count report from SPDX document
+* *utils* - various utility functions that support the other tools-golang packages
 
 Examples for how to use these packages can be found in the `examples/`
 directory.

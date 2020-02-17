@@ -12,7 +12,7 @@ Since this library is intended to be relied upon by other tools to work with SPD
 
 PRs with new code should include corresponding test files, and should continue to pass existing tests. Unit tests for `foo.go` should be placed in `foo_test.go`. Test data files and folders should be placed in the top-level `testdata/` folder.
 
-To run the test suite, from the top-level directory run: `go test ./v0/...`
+To run the test suite, from the top-level directory run: `go test ./...`
 
 ## License information
 

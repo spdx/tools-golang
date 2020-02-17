@@ -14,9 +14,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/v0/idsearcher"
+	"github.com/spdx/tools-golang/idsearcher"
 
-	"github.com/spdx/tools-golang/v0/tvsaver"
+	"github.com/spdx/tools-golang/tvsaver"
 )
 
 func main() {
@@ -52,8 +52,8 @@ func main() {
 		// CreatorType and Creator, from builder.Config2_1, are not needed for
 		// idsearcher.Config. Because it is automated and doesn't assume
 		// further review, the following two Creator fields are filled in:
-		// Creator: Tool: github.com/spdx/tools-golang/v0/builder
-		// Creator: Tool: github.com/spdx/tools-golang/v0/idsearcher
+		// Creator: Tool: github.com/spdx/tools-golang/builder
+		// Creator: Tool: github.com/spdx/tools-golang/idsearcher
 
 		// You can define one or more paths that should be ignored
 		// when walking through the directory. This is intended to omit files

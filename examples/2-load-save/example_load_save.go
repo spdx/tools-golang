@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/v0/tvloader"
-	"github.com/spdx/tools-golang/v0/tvsaver"
+	"github.com/spdx/tools-golang/tvloader"
+	"github.com/spdx/tools-golang/tvsaver"
 )
 
 func main() {
