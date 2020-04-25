@@ -15,3 +15,16 @@ type Document2_1 struct {
 	// DEPRECATED in version 2.0 of spec
 	Reviews []*Review2_1
 }
+
+// Document2_2 is an SPDX Document for version 2.2 of the spec.
+// See https://spdx.github.io/spdx-spec/v2-draft/ (DRAFT)
+type Document2_2 struct {
+	CreationInfo  *CreationInfo2_2
+	Packages      []*Package2_2
+	OtherLicenses []*OtherLicense2_2
+	Relationships []*Relationship2_2
+	Annotations   []*Annotation2_2
+
+	// DEPRECATED in version 2.0 of spec
+	Reviews []*Review2_2
+}
