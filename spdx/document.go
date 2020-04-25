@@ -7,7 +7,7 @@ package spdx
 // See https://spdx.org/sites/cpstandard/files/pages/files/spdxversion2.1.pdf
 type Document2_1 struct {
 	CreationInfo  *CreationInfo2_1
-	Packages      []*Package2_1
+	Packages      map[ElementID]*Package2_1
 	OtherLicenses []*OtherLicense2_1
 	Relationships []*Relationship2_1
 	Annotations   []*Annotation2_1

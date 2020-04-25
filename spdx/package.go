@@ -16,7 +16,7 @@ type Package2_1 struct {
 
 	// 3.2: Package SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	PackageSPDXIdentifier string
+	PackageSPDXIdentifier ElementID
 
 	// 3.3: Package Version
 	// Cardinality: optional, one
@@ -115,7 +115,7 @@ type Package2_1 struct {
 	// contained within PackageExternalReference2_1 struct, if present
 
 	// Files contained in this Package
-	Files []*File2_1
+	Files map[ElementID]*File2_1
 }
 
 // PackageExternalReference2_1 is an External Reference to additional info

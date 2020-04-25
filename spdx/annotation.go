@@ -21,7 +21,7 @@ type Annotation2_1 struct {
 
 	// 8.4: SPDX Identifier Reference
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationSPDXIdentifier string
+	AnnotationSPDXIdentifier DocElementID
 
 	// 8.5: Annotation Comment
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
