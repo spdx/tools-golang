@@ -30,10 +30,6 @@ func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 	if parser.pkg.PackageName != pkgName {
 		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
 	}
-	// and the package should _not_ be an "unpackaged" placeholder
-	if parser.pkg.IsUnpackaged == true {
-		t.Errorf("package incorrectly has IsUnpackaged flag set")
-	}
 	// and the package should default to true for FilesAnalyzed
 	if parser.pkg.FilesAnalyzed != true {
 		t.Errorf("expected FilesAnalyzed to default to true, got false")
@@ -41,19 +37,14 @@ func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 	if parser.pkg.IsFilesAnalyzedTagPresent != false {
 		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
 	}
-	// and the package should be in the SPDX Document's slice of packages
-	flagFound := false
-	for _, p := range parser.doc.Packages {
-		if p == parser.pkg {
-			flagFound = true
-		}
-	}
-	if flagFound == false {
-		t.Errorf("package isn't in the SPDX Document's slice of packages")
+	// and the package should NOT be in the SPDX Document's map of packages,
+	// because it doesn't have an SPDX identifier yet
+	if len(parser.doc.Packages) != 0 {
+		t.Errorf("expected 0 packages, got %d", len(parser.doc.Packages))
 	}
 }
 
-func TestParser2_1CIMovesToFileAfterParsingFileNameTag(t *testing.T) {
+func TestParser2_1CIMovesToFileAfterParsingFileNameTagWithNoPackages(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
@@ -66,29 +57,10 @@ func TestParser2_1CIMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	if parser.st != psFile2_1 {
 		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
 	}
-	// and current package should be an "unpackaged" placeholder
-	if parser.pkg == nil {
-		t.Fatalf("parser didn't create placeholder package")
-	}
-	if !parser.pkg.IsUnpackaged {
-		t.Errorf("placeholder package is not set as unpackaged")
-	}
-	// and the package should default to true for FilesAnalyzed
-	if parser.pkg.FilesAnalyzed != true {
-		t.Errorf("expected FilesAnalyzed to default to true, got false")
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != false {
-		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
-	}
-	// and the package should be in the SPDX Document's slice of packages
-	flagFound := false
-	for _, p := range parser.doc.Packages {
-		if p == parser.pkg {
-			flagFound = true
-		}
-	}
-	if flagFound == false {
-		t.Errorf("package isn't in the SPDX Document's slice of packages")
+	// and current package should be nil, meaning Files are placed in the
+	// UnpackagedFiles map instead of in a Package
+	if parser.pkg != nil {
+		t.Fatalf("expected pkg to be nil, got non-nil pkg")
 	}
 }
 
@@ -126,7 +98,7 @@ func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
 		st:  psCreationInfo2_1,
 	}
 
-	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-else")
+	err := parser.parsePair2_1("Relationship", "SPDXRef-blah CONTAINS SPDXRef-blah-else")
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}
@@ -417,7 +389,7 @@ func TestParser2_1CICreatesRelationship(t *testing.T) {
 		st:  psCreationInfo2_1,
 	}
 
-	err := parser.parsePair2_1("Relationship", "blah CONTAINS blah-whatever")
+	err := parser.parsePair2_1("Relationship", "SPDXRef-blah CONTAINS SPDXRef-blah-whatever")
 	if err != nil {
 		t.Errorf("got error when calling parsePair2_1: %v", err)
 	}

@@ -13,7 +13,7 @@ func TestParser2_1FailsIfRelationshipNotSet(t *testing.T) {
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
 	}
-	err := parser.parsePairForRelationship2_1("Relationship", "something DESCRIBES something-else")
+	err := parser.parsePairForRelationship2_1("Relationship", "SPDXRef-A CONTAINS SPDXRef-B")
 	if err == nil {
 		t.Errorf("expected error when calling parsePairFromRelationship2_1 without setting rln pointer")
 	}
@@ -37,18 +37,18 @@ func TestParser2_1CanParseRelationshipTags(t *testing.T) {
 	}
 
 	// Relationship
-	err := parser.parsePair2_1("Relationship", "something DESCRIBES something-else")
+	err := parser.parsePair2_1("Relationship", "SPDXRef-something CONTAINS DocumentRef-otherdoc:SPDXRef-something-else")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.rln.RefA != "something" {
+	if parser.rln.RefA.DocumentRefID != "" || parser.rln.RefA.ElementRefID != "something" {
 		t.Errorf("got %v for first part of Relationship, expected something", parser.rln.RefA)
 	}
-	if parser.rln.RefB != "something-else" {
-		t.Errorf("got %v for second part of Relationship, expected something-else", parser.rln.RefB)
+	if parser.rln.RefB.DocumentRefID != "otherdoc" || parser.rln.RefB.ElementRefID != "something-else" {
+		t.Errorf("got %v for second part of Relationship, expected otherdoc:something-else", parser.rln.RefB)
 	}
-	if parser.rln.Relationship != "DESCRIBES" {
-		t.Errorf("got %v for Relationship type, expected DESCRIBES", parser.rln.Relationship)
+	if parser.rln.Relationship != "CONTAINS" {
+		t.Errorf("got %v for Relationship type, expected CONTAINS", parser.rln.Relationship)
 	}
 
 	// Relationship Comment
@@ -112,7 +112,7 @@ func TestParser2_1InvalidRelationshipTagsThreeValuesSucceed(t *testing.T) {
 
 	// three items but with interspersed additional whitespace
 	parser.rln = nil
-	err := parser.parsePair2_1("Relationship", "  SPDXRef-DOCUMENT \t   DESCRIBES  something-else    ")
+	err := parser.parsePair2_1("Relationship", "  SPDXRef-DOCUMENT \t   DESCRIBES  SPDXRef-something-else    ")
 	if err != nil {
 		t.Errorf("expected pass for three items in relationship w/ extra whitespace, got: %v", err)
 	}
@@ -126,8 +126,28 @@ func TestParser2_1InvalidRelationshipTagsFourValuesFail(t *testing.T) {
 
 	// four items
 	parser.rln = nil
-	err := parser.parsePair2_1("Relationship", "a DESCRIBES b c")
+	err := parser.parsePair2_1("Relationship", "SPDXRef-a DESCRIBES SPDXRef-b SPDXRef-c")
 	if err == nil {
 		t.Errorf("expected error for more than three items in relationship, got nil")
+	}
+}
+
+func TestParser2_1InvalidRelationshipTagsInvalidRefIDs(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// four items
+	parser.rln = nil
+	err := parser.parsePair2_1("Relationship", "SPDXRef-a DESCRIBES b")
+	if err == nil {
+		t.Errorf("expected error for missing SPDXRef- prefix, got nil")
+	}
+
+	parser.rln = nil
+	err = parser.parsePair2_1("Relationship", "a DESCRIBES SPDXRef-b")
+	if err == nil {
+		t.Errorf("expected error for missing SPDXRef- prefix, got nil")
 	}
 }

@@ -40,7 +40,6 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 	}
 
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:                        false,
 		PackageName:                         "p1",
 		PackageSPDXIdentifier:               "SPDXRef-p1",
 		PackageVersion:                      "0.1.0",
@@ -129,7 +128,6 @@ func TestSaver2_1PackageSavesTextCombo2(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:                  false,
 		PackageName:                   "p1",
 		PackageSPDXIdentifier:         "SPDXRef-p1",
 		PackageVersion:                "0.1.0",
@@ -207,7 +205,6 @@ func TestSaver2_1PackageSavesTextCombo3(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:                 false,
 		PackageName:                  "p1",
 		PackageSPDXIdentifier:        "SPDXRef-p1",
 		PackageVersion:               "0.1.0",
@@ -281,7 +278,6 @@ PackageComment: this is a comment comment
 
 func TestSaver2_1PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     "SPDXRef-p1",
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
@@ -346,7 +342,6 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 	}
 
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     "SPDXRef-p1",
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
@@ -428,12 +423,9 @@ func TestSaver2_1PackageSavesUnpackagedFilesIfPresent(t *testing.T) {
 		FileCopyrightText:  "Copyright (c) John Doe",
 	}
 
-	pkg := &spdx.Package2_1{
-		IsUnpackaged: true,
-		Files: []*spdx.File2_1{
-			f1,
-			f2,
-		},
+	unFiles := map[spdx.ElementID]*spdx.File2_1{
+		"File1231": f1,
+		"File1232": f2,
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -455,29 +447,11 @@ FileCopyrightText: Copyright (c) John Doe
 
 	// render as buffer of bytes
 	var got bytes.Buffer
-	err := renderPackage2_1(pkg, &got)
-	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
-	}
-
-	// check that they match
-	c := bytes.Compare(want.Bytes(), got.Bytes())
-	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
-	}
-}
-
-func TestSaver2_1PackageSavesNothingIfUnpackagedAndNoFilesPresent(t *testing.T) {
-	pkg := &spdx.Package2_1{IsUnpackaged: true}
-
-	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString("")
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	err := renderPackage2_1(pkg, &got)
-	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+	for fi := unFiles {
+		err := renderFile2_1(fi, &got)
+		if err != nil {
+			t.Errorf("Expected nil error, got %v", err)
+		}
 	}
 
 	// check that they match

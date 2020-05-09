@@ -118,7 +118,6 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     "SPDXRef-p1",
 		PackageDownloadLocation:   "NOASSERTION",
@@ -141,7 +140,6 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p2",
 		PackageSPDXIdentifier:     "SPDXRef-p2",
 		PackageDownloadLocation:   "NOASSERTION",
@@ -359,7 +357,6 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     "SPDXRef-p1",
 		PackageDownloadLocation:   "NOASSERTION",
@@ -382,7 +379,6 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p2",
 		PackageSPDXIdentifier:     "SPDXRef-p2",
 		PackageDownloadLocation:   "NOASSERTION",

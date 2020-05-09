@@ -41,7 +41,6 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 
 	// now build the package section
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:                false,
 		PackageName:                 packageName,
 		PackageSPDXIdentifier:       fmt.Sprintf("SPDXRef-Package-%s", packageName),
 		PackageDownloadLocation:     "NOASSERTION",

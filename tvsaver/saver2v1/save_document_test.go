@@ -25,7 +25,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		Created: "2018-10-10T06:20:00Z",
 	}
 
-	// Package 1: unpackaged files
+	// unpackaged files
 	f1 := &spdx.File2_1{
 		FileName:           "/tmp/whatever1.txt",
 		FileSPDXIdentifier: "SPDXRef-File1231",
@@ -44,15 +44,12 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		FileCopyrightText:  "Copyright (c) John Doe",
 	}
 
-	pkgUn := &spdx.Package2_1{
-		IsUnpackaged: true,
-		Files: []*spdx.File2_1{
-			f1,
-			f2,
-		},
+	unFiles := map[spdx.ElementID]*spdx.File2_1{
+		"File1231": f1,
+		"File1232": f2,
 	}
 
-	// Package 2: packaged files with snippets
+	// Package 1: packaged files with snippets
 	sn1 := &spdx.Snippet2_1{
 		SnippetSPDXIdentifier:         "SPDXRef-Snippet19",
 		SnippetFromFileSPDXIdentifier: "SPDXRef-FileHasSnippets",
@@ -82,9 +79,9 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 			"WTFPL",
 		},
 		FileCopyrightText: "Copyright (c) Jane Doe",
-		Snippets: []*spdx.Snippet2_1{
-			sn1,
-			sn2,
+		Snippets: map[spdx.ElementID]*spdx.Snippet2_1{
+			"Snippet19": sn1,
+			"Snippet20": sn2,
 		},
 	}
 
@@ -98,7 +95,6 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	}
 
 	pkgWith := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     "SPDXRef-p1",
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
@@ -114,9 +110,9 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		},
 		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
 		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		Files: []*spdx.File2_1{
-			f3,
-			f4,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			"FileHasSnippets": f3,
+			"FileAnother":     f4,
 		},
 	}
 
@@ -189,10 +185,10 @@ blah blah blah blah`,
 	// now, build the document
 	doc := &spdx.Document2_1{
 		CreationInfo: ci,
-		Packages: []*spdx.Package2_1{
-			pkgUn,
+		Packages: map[spdx.ElementID]*spdx.Package2_1{
 			pkgWith,
 		},
+		UnpackagedFiles: unFiles,
 		OtherLicenses: []*spdx.OtherLicense2_1{
 			ol1,
 			ol2,

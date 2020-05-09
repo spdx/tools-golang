@@ -21,9 +21,6 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	if pkg == nil {
 		t.Fatalf("expected non-nil Package, got nil")
 	}
-	if pkg.IsUnpackaged {
-		t.Errorf("expected %v, got %v", false, pkg.IsUnpackaged)
-	}
 	if pkg.PackageName != "project1" {
 		t.Errorf("expected %v, got %v", "project1", pkg.PackageName)
 	}

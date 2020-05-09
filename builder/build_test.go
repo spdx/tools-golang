@@ -73,9 +73,6 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 		t.Fatalf("expected %d, got %d", 1, len(doc.Packages))
 	}
 	pkg := doc.Packages[0]
-	if pkg.IsUnpackaged {
-		t.Errorf("expected %v, got %v", false, pkg.IsUnpackaged)
-	}
 	if pkg.PackageName != "project1" {
 		t.Errorf("expected %v, got %v", "project1", pkg.PackageName)
 	}

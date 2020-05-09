@@ -19,13 +19,11 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 	switch tag {
 	case "PackageName":
 		// if package already has a name, create and go on to a new package
-		if parser.pkg.PackageName != "" || parser.pkg.IsUnpackaged == true {
+		if parser.pkg == nil || parser.pkg.PackageName != "" {
 			parser.pkg = &spdx.Package2_1{
-				IsUnpackaged:              false,
 				FilesAnalyzed:             true,
 				IsFilesAnalyzedTagPresent: false,
 			}
-			parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 		}
 		parser.pkg.PackageName = value
 	// tag for going on to file section
@@ -37,7 +35,15 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		parser.st = psOtherLicense2_1
 		return parser.parsePairFromOtherLicense2_1(tag, value)
 	case "SPDXID":
-		parser.pkg.PackageSPDXIdentifier = value
+		eID, err := extractElementID(value)
+		if err != nil {
+			return err
+		}
+		parser.pkg.PackageSPDXIdentifier = eID
+		if parser.doc.Packages == nil {
+			parser.doc.Packages = map[spdx.ElementID]*spdx.Package2_1{}
+		}
+		parser.doc.Packages[eID] = parser.pkg
 	case "PackageVersion":
 		parser.pkg.PackageVersion = value
 	case "PackageFileName":

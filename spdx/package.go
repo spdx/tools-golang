@@ -5,11 +5,6 @@ package spdx
 // Package2_1 is a Package section of an SPDX Document for version 2.1 of the spec.
 type Package2_1 struct {
 
-	// NOT PART OF SPEC
-	// flag: does this "package" contain files that were in fact "unpackaged",
-	// e.g. included directly in the Document without being in a Package?
-	IsUnpackaged bool
-
 	// 3.1: Package Name
 	// Cardinality: mandatory, one
 	PackageName string

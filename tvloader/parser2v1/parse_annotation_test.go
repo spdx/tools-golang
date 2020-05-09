@@ -86,8 +86,9 @@ func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.AnnotationSPDXIdentifier != ref {
-		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.AnnotationSPDXIdentifier, ref)
+	deID := parser.ann.AnnotationSPDXIdentifier
+	if deID.DocumentRefID != "" || deID.ElementRefID != "30" {
+		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.AnnotationSPDXIdentifier, "30")
 	}
 
 	// Annotation Comment

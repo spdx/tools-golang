@@ -22,12 +22,15 @@ func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 
 	renderCreationInfo2_1(doc.CreationInfo, w)
 
-	for _, pkg := range doc.Packages {
-		if pkg.IsUnpackaged == true {
-			fmt.Fprintf(w, "##### Unpackaged files\n\n")
-		} else {
-			fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
+	if len(doc.UnpackagedFiles) > 0 {
+		fmt.Fprintf(w, "##### Unpackaged files\n\n")
+		for _, fi := range doc.UnpackagedFiles {
+			renderFile2_1(fi, w)
 		}
+	}
+
+	for _, pkg := range doc.Packages {
+		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
 		renderPackage2_1(pkg, w)
 	}
 
