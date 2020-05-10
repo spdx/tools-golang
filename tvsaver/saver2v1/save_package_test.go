@@ -41,7 +41,7 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 
 	pkg := &spdx.Package2_1{
 		PackageName:                         "p1",
-		PackageSPDXIdentifier:               "SPDXRef-p1",
+		PackageSPDXIdentifier:               spdx.ElementID("p1"),
 		PackageVersion:                      "0.1.0",
 		PackageFileName:                     "p1-0.1.0-master.tar.gz",
 		PackageSupplierOrganization:         "John Doe, Inc.",
@@ -129,7 +129,7 @@ func TestSaver2_1PackageSavesTextCombo2(t *testing.T) {
 
 	pkg := &spdx.Package2_1{
 		PackageName:                   "p1",
-		PackageSPDXIdentifier:         "SPDXRef-p1",
+		PackageSPDXIdentifier:         spdx.ElementID("p1"),
 		PackageVersion:                "0.1.0",
 		PackageFileName:               "p1-0.1.0-master.tar.gz",
 		PackageSupplierNOASSERTION:    true,
@@ -206,7 +206,7 @@ func TestSaver2_1PackageSavesTextCombo3(t *testing.T) {
 
 	pkg := &spdx.Package2_1{
 		PackageName:                  "p1",
-		PackageSPDXIdentifier:        "SPDXRef-p1",
+		PackageSPDXIdentifier:        spdx.ElementID("p1"),
 		PackageVersion:               "0.1.0",
 		PackageFileName:              "p1-0.1.0-master.tar.gz",
 		PackageSupplierPerson:        "John Doe",
@@ -279,7 +279,7 @@ PackageComment: this is a comment comment
 func TestSaver2_1PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	pkg := &spdx.Package2_1{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     "SPDXRef-p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
@@ -325,7 +325,7 @@ PackageCopyrightText: Copyright (c) John Doe, Inc.
 func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 	f1 := &spdx.File2_1{
 		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: "SPDXRef-File1231",
+		FileSPDXIdentifier: spdx.ElementID("File1231"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
 		LicenseConcluded:   "Apache-2.0",
 		LicenseInfoInFile:  []string{"Apache-2.0"},
@@ -334,7 +334,7 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 
 	f2 := &spdx.File2_1{
 		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: "SPDXRef-File1232",
+		FileSPDXIdentifier: spdx.ElementID("File1232"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
 		LicenseConcluded:   "MIT",
 		LicenseInfoInFile:  []string{"MIT"},
@@ -343,7 +343,7 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 
 	pkg := &spdx.Package2_1{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     "SPDXRef-p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
@@ -359,9 +359,9 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 		},
 		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
 		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		Files: []*spdx.File2_1{
-			f1,
-			f2,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			spdx.ElementID("File1231"): f1,
+			spdx.ElementID("File1232"): f2,
 		},
 	}
 
@@ -395,63 +395,6 @@ FileCopyrightText: Copyright (c) John Doe
 	err := renderPackage2_1(pkg, &got)
 	if err != nil {
 		t.Errorf("Expected nil error, got %v", err)
-	}
-
-	// check that they match
-	c := bytes.Compare(want.Bytes(), got.Bytes())
-	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
-	}
-}
-
-func TestSaver2_1PackageSavesUnpackagedFilesIfPresent(t *testing.T) {
-	f1 := &spdx.File2_1{
-		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: "SPDXRef-File1231",
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile:  []string{"Apache-2.0"},
-		FileCopyrightText:  "Copyright (c) Jane Doe",
-	}
-
-	f2 := &spdx.File2_1{
-		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: "SPDXRef-File1232",
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
-		LicenseConcluded:   "MIT",
-		LicenseInfoInFile:  []string{"MIT"},
-		FileCopyrightText:  "Copyright (c) John Doe",
-	}
-
-	unFiles := map[spdx.ElementID]*spdx.File2_1{
-		"File1231": f1,
-		"File1232": f2,
-	}
-
-	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`FileName: /tmp/whatever1.txt
-SPDXID: SPDXRef-File1231
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-LicenseConcluded: Apache-2.0
-LicenseInfoInFile: Apache-2.0
-FileCopyrightText: Copyright (c) Jane Doe
-
-FileName: /tmp/whatever2.txt
-SPDXID: SPDXRef-File1232
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
-LicenseConcluded: MIT
-LicenseInfoInFile: MIT
-FileCopyrightText: Copyright (c) John Doe
-
-`)
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	for fi := unFiles {
-		err := renderFile2_1(fi, &got)
-		if err != nil {
-			t.Errorf("Expected nil error, got %v", err)
-		}
 	}
 
 	// check that they match

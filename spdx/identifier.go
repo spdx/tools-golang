@@ -24,3 +24,31 @@ type DocElementID struct {
 }
 
 // TODO: add equivalents for LicenseRef- identifiers
+
+// MakeDocElementID takes strings (without prefixes) for the DocumentRef-
+// and SPDXRef- identifiers, and returns a DocElementID. An empty string
+// should be used for the DocumentRef- portion if it is referring to the
+// present document.
+func MakeDocElementID(docRef string, eltRef string) DocElementID {
+	return DocElementID{
+		DocumentRefID: docRef,
+		ElementRefID:  ElementID(eltRef),
+	}
+}
+
+// RenderElementID takes an ElementID and returns the string equivalent,
+// with the SPDXRef- prefix reinserted.
+func RenderElementID(eID ElementID) string {
+	return "SPDXRef-" + string(eID)
+}
+
+// RenderDocElementID takes a DocElementID and returns the string equivalent,
+// with the SPDXRef- prefix (and, if applicable, the DocumentRef- prefix)
+// reinserted.
+func RenderDocElementID(deID DocElementID) string {
+	prefix := ""
+	if deID.DocumentRefID != "" {
+		prefix = "DocumentRef-" + deID.DocumentRefID + ":"
+	}
+	return prefix + "SPDXRef-" + string(deID.ElementRefID)
+}

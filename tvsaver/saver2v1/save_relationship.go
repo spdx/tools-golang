@@ -10,8 +10,10 @@ import (
 )
 
 func renderRelationship2_1(rln *spdx.Relationship2_1, w io.Writer) error {
-	if rln.RefA != "" && rln.RefB != "" && rln.Relationship != "" {
-		fmt.Fprintf(w, "Relationship: %s %s %s\n", rln.RefA, rln.Relationship, rln.RefB)
+	rlnAStr := spdx.RenderDocElementID(rln.RefA)
+	rlnBStr := spdx.RenderDocElementID(rln.RefB)
+	if rlnAStr != "SPDXRef-" && rlnBStr != "SPDXRef-" && rln.Relationship != "" {
+		fmt.Fprintf(w, "Relationship: %s %s %s\n", rlnAStr, rln.Relationship, rlnBStr)
 	}
 	if rln.RelationshipComment != "" {
 		fmt.Fprintf(w, "RelationshipComment: %s\n", rln.RelationshipComment)

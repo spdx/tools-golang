@@ -16,7 +16,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	ci := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    "SPDXRef-DOCUMENT",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
 		DocumentName:      "spdx-go-0.0.1.abcdef",
 		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
 		CreatorPersons: []string{
@@ -28,7 +28,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	// unpackaged files
 	f1 := &spdx.File2_1{
 		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: "SPDXRef-File1231",
+		FileSPDXIdentifier: spdx.ElementID("File1231"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
 		LicenseConcluded:   "Apache-2.0",
 		LicenseInfoInFile:  []string{"Apache-2.0"},
@@ -37,7 +37,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	f2 := &spdx.File2_1{
 		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: "SPDXRef-File1232",
+		FileSPDXIdentifier: spdx.ElementID("File1232"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
 		LicenseConcluded:   "MIT",
 		LicenseInfoInFile:  []string{"MIT"},
@@ -45,14 +45,14 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	}
 
 	unFiles := map[spdx.ElementID]*spdx.File2_1{
-		"File1231": f1,
-		"File1232": f2,
+		spdx.ElementID("File1231"): f1,
+		spdx.ElementID("File1232"): f2,
 	}
 
 	// Package 1: packaged files with snippets
 	sn1 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "SPDXRef-Snippet19",
-		SnippetFromFileSPDXIdentifier: "SPDXRef-FileHasSnippets",
+		SnippetSPDXIdentifier:         "Snippet19",
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "FileHasSnippets"),
 		SnippetByteRangeStart:         17,
 		SnippetByteRangeEnd:           209,
 		SnippetLicenseConcluded:       "GPL-2.0-or-later",
@@ -60,8 +60,8 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	}
 
 	sn2 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "SPDXRef-Snippet20",
-		SnippetFromFileSPDXIdentifier: "SPDXRef-FileHasSnippets",
+		SnippetSPDXIdentifier:         "Snippet20",
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "FileHasSnippets"),
 		SnippetByteRangeStart:         268,
 		SnippetByteRangeEnd:           309,
 		SnippetLicenseConcluded:       "WTFPL",
@@ -70,7 +70,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	f3 := &spdx.File2_1{
 		FileName:           "/tmp/file-with-snippets.txt",
-		FileSPDXIdentifier: "SPDXRef-FileHasSnippets",
+		FileSPDXIdentifier: spdx.ElementID("FileHasSnippets"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983e",
 		LicenseConcluded:   "GPL-2.0-or-later AND WTFPL",
 		LicenseInfoInFile: []string{
@@ -80,14 +80,14 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		},
 		FileCopyrightText: "Copyright (c) Jane Doe",
 		Snippets: map[spdx.ElementID]*spdx.Snippet2_1{
-			"Snippet19": sn1,
-			"Snippet20": sn2,
+			spdx.ElementID("Snippet19"): sn1,
+			spdx.ElementID("Snippet20"): sn2,
 		},
 	}
 
 	f4 := &spdx.File2_1{
 		FileName:           "/tmp/another-file.txt",
-		FileSPDXIdentifier: "SPDXRef-FileAnother",
+		FileSPDXIdentifier: spdx.ElementID("FileAnother"),
 		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983f",
 		LicenseConcluded:   "BSD-3-Clause",
 		LicenseInfoInFile:  []string{"BSD-3-Clause"},
@@ -96,7 +96,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	pkgWith := &spdx.Package2_1{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     "SPDXRef-p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
@@ -111,8 +111,8 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
 		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
 		Files: map[spdx.ElementID]*spdx.File2_1{
-			"FileHasSnippets": f3,
-			"FileAnother":     f4,
+			spdx.ElementID("FileHasSnippets"): f3,
+			spdx.ElementID("FileAnother"):     f4,
 		},
 	}
 
@@ -133,20 +133,20 @@ blah blah blah blah`,
 
 	// Relationships
 	rln1 := &spdx.Relationship2_1{
-		RefA:         "SPDXRef-DOCUMENT",
-		RefB:         "SPDXRef-p1",
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "p1"),
 		Relationship: "DESCRIBES",
 	}
 
 	rln2 := &spdx.Relationship2_1{
-		RefA:         "SPDXRef-DOCUMENT",
-		RefB:         "SPDXRef-File1231",
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "File1231"),
 		Relationship: "DESCRIBES",
 	}
 
 	rln3 := &spdx.Relationship2_1{
-		RefA:         "SPDXRef-DOCUMENT",
-		RefB:         "SPDXRef-File1232",
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "File1232"),
 		Relationship: "DESCRIBES",
 	}
 
@@ -156,7 +156,7 @@ blah blah blah blah`,
 		AnnotatorType:            "Person",
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: "SPDXRef-DOCUMENT",
+		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 
@@ -165,7 +165,7 @@ blah blah blah blah`,
 		AnnotatorType:            "Organization",
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: "SPDXRef-p1",
+		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "p1"),
 		AnnotationComment:        "This is an annotation about Package p1",
 	}
 
@@ -186,7 +186,7 @@ blah blah blah blah`,
 	doc := &spdx.Document2_1{
 		CreationInfo: ci,
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			pkgWith,
+			spdx.ElementID("p1"): pkgWith,
 		},
 		UnpackagedFiles: unFiles,
 		OtherLicenses: []*spdx.OtherLicense2_1{
@@ -247,6 +247,13 @@ PackageLicenseInfoFromFiles: BSD-3-Clause
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageCopyrightText: Copyright (c) John Doe, Inc.
 
+FileName: /tmp/another-file.txt
+SPDXID: SPDXRef-FileAnother
+FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983f
+LicenseConcluded: BSD-3-Clause
+LicenseInfoInFile: BSD-3-Clause
+FileCopyrightText: Copyright (c) Jane Doe LLC
+
 FileName: /tmp/file-with-snippets.txt
 SPDXID: SPDXRef-FileHasSnippets
 FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983e
@@ -267,13 +274,6 @@ SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
 SnippetByteRange: 268:309
 SnippetLicenseConcluded: WTFPL
 SnippetCopyrightText: NOASSERTION
-
-FileName: /tmp/another-file.txt
-SPDXID: SPDXRef-FileAnother
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983f
-LicenseConcluded: BSD-3-Clause
-LicenseInfoInFile: BSD-3-Clause
-FileCopyrightText: Copyright (c) Jane Doe LLC
 
 ##### Other Licenses
 

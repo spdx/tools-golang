@@ -12,8 +12,8 @@ import (
 // ===== Snippet section Saver tests =====
 func TestSaver2_1SnippetSavesText(t *testing.T) {
 	sn := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "SPDXRef-Snippet17",
-		SnippetFromFileSPDXIdentifier: "SPDXRef-File292",
+		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
 		SnippetByteRangeStart:         17,
 		SnippetByteRangeEnd:           209,
 		SnippetLineRangeStart:         3,
@@ -60,8 +60,8 @@ SnippetName: from John's program
 
 func TestSaver2_1SnippetOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	sn := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "SPDXRef-Snippet17",
-		SnippetFromFileSPDXIdentifier: "SPDXRef-File292",
+		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
 		SnippetByteRangeStart:         17,
 		SnippetByteRangeEnd:           209,
 		SnippetLicenseConcluded:       "GPL-2.0-or-later",

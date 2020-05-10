@@ -11,10 +11,11 @@ import (
 
 func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
 	if sn.SnippetSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SnippetSPDXIdentifier: %s\n", sn.SnippetSPDXIdentifier)
+		fmt.Fprintf(w, "SnippetSPDXIdentifier: %s\n", spdx.RenderElementID(sn.SnippetSPDXIdentifier))
 	}
-	if sn.SnippetFromFileSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", sn.SnippetFromFileSPDXIdentifier)
+	snFromFileIDStr := spdx.RenderDocElementID(sn.SnippetFromFileSPDXIdentifier)
+	if snFromFileIDStr != "" {
+		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", snFromFileIDStr)
 	}
 	if sn.SnippetByteRangeStart != 0 && sn.SnippetByteRangeEnd != 0 {
 		fmt.Fprintf(w, "SnippetByteRange: %d:%d\n", sn.SnippetByteRangeStart, sn.SnippetByteRangeEnd)

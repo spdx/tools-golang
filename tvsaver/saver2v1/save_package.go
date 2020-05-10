@@ -5,6 +5,7 @@ package saver2v1
 import (
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -14,7 +15,7 @@ func renderPackage2_1(pkg *spdx.Package2_1, w io.Writer) error {
 		fmt.Fprintf(w, "PackageName: %s\n", pkg.PackageName)
 	}
 	if pkg.PackageSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", pkg.PackageSPDXIdentifier)
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(pkg.PackageSPDXIdentifier))
 	}
 	if pkg.PackageVersion != "" {
 		fmt.Fprintf(w, "PackageVersion: %s\n", pkg.PackageVersion)
@@ -108,8 +109,15 @@ func renderPackage2_1(pkg *spdx.Package2_1, w io.Writer) error {
 	fmt.Fprintf(w, "\n")
 
 	// also render any files for this package
-	for _, f := range pkg.Files {
-		renderFile2_1(f, w)
+	// get slice of File identifiers so we can sort them
+	fileKeys := []string{}
+	for k := range pkg.Files {
+		fileKeys = append(fileKeys, string(k))
+	}
+	sort.Strings(fileKeys)
+	for _, fiID := range fileKeys {
+		fi := pkg.Files[spdx.ElementID(fiID)]
+		renderFile2_1(fi, w)
 	}
 
 	return nil

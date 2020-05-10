@@ -7,6 +7,7 @@ package saver2v1
 import (
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -24,12 +25,26 @@ func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 
 	if len(doc.UnpackagedFiles) > 0 {
 		fmt.Fprintf(w, "##### Unpackaged files\n\n")
-		for _, fi := range doc.UnpackagedFiles {
+		// get slice of identifiers so we can sort them
+		unpackagedFileKeys := []string{}
+		for k := range doc.UnpackagedFiles {
+			unpackagedFileKeys = append(unpackagedFileKeys, string(k))
+		}
+		sort.Strings(unpackagedFileKeys)
+		for _, fiID := range unpackagedFileKeys {
+			fi := doc.UnpackagedFiles[spdx.ElementID(fiID)]
 			renderFile2_1(fi, w)
 		}
 	}
 
-	for _, pkg := range doc.Packages {
+	// get slice of Package identifiers so we can sort them
+	packageKeys := []string{}
+	for k := range doc.Packages {
+		packageKeys = append(packageKeys, string(k))
+	}
+	sort.Strings(packageKeys)
+	for _, pkgID := range packageKeys {
+		pkg := doc.Packages[spdx.ElementID(pkgID)]
 		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
 		renderPackage2_1(pkg, w)
 	}
