@@ -14,8 +14,8 @@ import (
 //   - packageName: name of package / directory
 func BuildRelationshipSection2_1(packageName string) (*spdx.Relationship2_1, error) {
 	rln := &spdx.Relationship2_1{
-		RefA:         "SPDXRef-DOCUMENT",
-		RefB:         fmt.Sprintf("SPDXRef-Package-%s", packageName),
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", fmt.Sprintf("Package-%s", packageName)),
 		Relationship: "DESCRIBES",
 	}
 

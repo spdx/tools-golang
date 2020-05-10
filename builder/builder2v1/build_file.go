@@ -26,12 +26,12 @@ func BuildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.
 	}
 
 	// build the identifier
-	i := fmt.Sprintf("SPDXRef-File%d", fileNumber)
+	i := fmt.Sprintf("File%d", fileNumber)
 
 	// now build the File section
 	f := &spdx.File2_1{
 		FileName:           filePath,
-		FileSPDXIdentifier: i,
+		FileSPDXIdentifier: spdx.ElementID(i),
 		FileChecksumSHA1:   ssha1,
 		FileChecksumSHA256: ssha256,
 		FileChecksumMD5:    smd5,

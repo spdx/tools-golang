@@ -5,6 +5,8 @@ package builder2v1
 import (
 	"fmt"
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx"
 )
 
 // ===== CreationInfo section builder tests =====
@@ -32,8 +34,8 @@ func TestBuilder2_1CanBuildCreationInfoSection(t *testing.T) {
 	if ci.DataLicense != "CC0-1.0" {
 		t.Errorf("expected %s, got %s", "CC0-1.0", ci.DataLicense)
 	}
-	if ci.SPDXIdentifier != "SPDXRef-DOCUMENT" {
-		t.Errorf("expected %s, got %s", "SPDXRef-DOCUMENT", ci.SPDXIdentifier)
+	if ci.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
+		t.Errorf("expected %s, got %v", "DOCUMENT", ci.SPDXIdentifier)
 	}
 	if ci.DocumentName != "project1" {
 		t.Errorf("expected %s, got %s", "project1", ci.DocumentName)

@@ -5,6 +5,8 @@ package builder
 import (
 	"fmt"
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx"
 )
 
 // ===== Builder top-level Document test =====
@@ -39,8 +41,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if doc.CreationInfo.DataLicense != "CC0-1.0" {
 		t.Errorf("expected %s, got %s", "CC0-1.0", doc.CreationInfo.DataLicense)
 	}
-	if doc.CreationInfo.SPDXIdentifier != "SPDXRef-DOCUMENT" {
-		t.Errorf("expected %s, got %s", "SPDXRef-DOCUMENT", doc.CreationInfo.SPDXIdentifier)
+	if doc.CreationInfo.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
+		t.Errorf("expected %s, got %v", "DOCUMENT", doc.CreationInfo.SPDXIdentifier)
 	}
 	if doc.CreationInfo.DocumentName != "project1" {
 		t.Errorf("expected %s, got %s", "project1", doc.CreationInfo.DocumentName)
@@ -72,12 +74,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(doc.Packages) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(doc.Packages))
 	}
-	pkg := doc.Packages[0]
+	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
 	if pkg.PackageName != "project1" {
 		t.Errorf("expected %v, got %v", "project1", pkg.PackageName)
 	}
-	if pkg.PackageSPDXIdentifier != "SPDXRef-Package-project1" {
-		t.Errorf("expected %v, got %v", "SPDXRef-Package-project1", pkg.PackageSPDXIdentifier)
+	if pkg.PackageSPDXIdentifier != spdx.ElementID("Package-project1") {
+		t.Errorf("expected %v, got %v", "Package-project1", pkg.PackageSPDXIdentifier)
 	}
 	if pkg.PackageDownloadLocation != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
@@ -109,19 +114,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 		t.Fatalf("expected %d, got %d", 5, len(pkg.Files))
 	}
 
-	// files should be in alphabetical order:
+	// files should be in order of identifier, which is numeric,
+	// created based on alphabetical order of files:
 	// emptyfile, file1, file3, folder/file4, lastfile
 
 	// check emptyfile.testdata.txt
-	fileEmpty := pkg.Files[0]
+	fileEmpty := pkg.Files[spdx.ElementID("File0")]
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
 	}
-	if fileEmpty.FileSPDXIdentifier != "SPDXRef-File0" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File0", fileEmpty.FileSPDXIdentifier)
+	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
+		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
 	}
 	if fileEmpty.FileChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
 		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.FileChecksumSHA1)
@@ -143,15 +149,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check file1.testdata.txt
-	file1 := pkg.Files[1]
+	file1 := pkg.Files[spdx.ElementID("File1")]
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file1.FileName != "/file1.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
 	}
-	if file1.FileSPDXIdentifier != "SPDXRef-File1" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File1", file1.FileSPDXIdentifier)
+	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
+		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
 	}
 	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
 		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
@@ -173,15 +179,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check file3.testdata.txt
-	file3 := pkg.Files[2]
+	file3 := pkg.Files[spdx.ElementID("File2")]
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file3.FileName != "/file3.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
 	}
-	if file3.FileSPDXIdentifier != "SPDXRef-File2" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File2", file3.FileSPDXIdentifier)
+	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
+		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
 	}
 	if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
 		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
@@ -203,15 +209,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check folder1/file4.testdata.txt
-	file4 := pkg.Files[3]
+	file4 := pkg.Files[spdx.ElementID("File3")]
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file4.FileName != "/folder1/file4.testdata.txt" {
 		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
 	}
-	if file4.FileSPDXIdentifier != "SPDXRef-File3" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File3", file4.FileSPDXIdentifier)
+	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
+		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
 	}
 	if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
 		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
@@ -233,15 +239,15 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check lastfile.testdata.txt
-	lastfile := pkg.Files[4]
+	lastfile := pkg.Files[spdx.ElementID("File4")]
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if lastfile.FileName != "/lastfile.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
 	}
-	if lastfile.FileSPDXIdentifier != "SPDXRef-File4" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File4", lastfile.FileSPDXIdentifier)
+	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
+		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
 	}
 	if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
 		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
@@ -273,11 +279,11 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if rln == nil {
 		t.Fatalf("expected non-nil Relationship, got nil")
 	}
-	if rln.RefA != "SPDXRef-DOCUMENT" {
-		t.Errorf("expected %v, got %v", "SPDXRef-DOCUMENT", rln.RefA)
+	if rln.RefA != spdx.MakeDocElementID("", "DOCUMENT") {
+		t.Errorf("expected %v, got %v", "DOCUMENT", rln.RefA)
 	}
-	if rln.RefB != "SPDXRef-Package-project1" {
-		t.Errorf("expected %v, got %v", "SPDXRef-Package-project1", rln.RefB)
+	if rln.RefB != spdx.MakeDocElementID("", "Package-project1") {
+		t.Errorf("expected %v, got %v", "Package-project1", rln.RefB)
 	}
 	if rln.Relationship != "DESCRIBES" {
 		t.Errorf("expected %v, got %v", "DESCRIBES", rln.Relationship)
@@ -317,37 +323,40 @@ func TestBuild2_1CanIgnoreFiles(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	pkg := doc.Packages[0]
+	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
 	if len(pkg.Files) != 5 {
 		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
 	}
 
 	want := "/dontscan.txt"
-	got := pkg.Files[0].FileName
+	got := pkg.Files[spdx.ElementID("File0")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep/keep.txt"
-	got = pkg.Files[1].FileName
+	got = pkg.Files[spdx.ElementID("File1")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep.txt"
-	got = pkg.Files[2].FileName
+	got = pkg.Files[spdx.ElementID("File2")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/dontscan.txt"
-	got = pkg.Files[3].FileName
+	got = pkg.Files[spdx.ElementID("File3")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/keep.txt"
-	got = pkg.Files[4].FileName
+	got = pkg.Files[spdx.ElementID("File4")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
