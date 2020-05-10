@@ -64,14 +64,17 @@ func BuildIDsDocument(packageName string, dirRoot string, idconfig *Config) (*sp
 		return nil, fmt.Errorf("builder returned nil Document")
 	}
 	if doc.Packages == nil {
-		return nil, fmt.Errorf("builder returned nil Package")
+		return nil, fmt.Errorf("builder returned nil Packages map")
 	}
 	if len(doc.Packages) != 1 {
 		return nil, fmt.Errorf("builder returned %d Packages", len(doc.Packages))
 	}
 
 	// now, walk through each file and find its licenses (if any)
-	pkg := doc.Packages[0]
+	pkg := doc.Packages[spdx.ElementID("Package-"+packageName)]
+	if pkg == nil {
+		return nil, fmt.Errorf("builder returned nil Package")
+	}
 	if pkg.Files == nil {
 		return nil, fmt.Errorf("builder returned nil Files in Package")
 	}
