@@ -69,3 +69,12 @@ func TestParser2_1StartMovesToCreationInfoStateAfterParsingFirstTag(t *testing.T
 		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
 	}
 }
+
+func TestParser2_1StartFailsToParseIfInInvalidState(t *testing.T) {
+	parser := tvParser2_1{st: psReview2_1}
+	err := parser.parsePairFromStart2_1("SPDXVersion", "SPDX-2.1")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+

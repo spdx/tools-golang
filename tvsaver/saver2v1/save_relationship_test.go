@@ -12,8 +12,8 @@ import (
 // ===== Relationship section Saver tests =====
 func TestSaver2_1RelationshipSavesText(t *testing.T) {
 	rln := &spdx.Relationship2_1{
-		RefA:                "SPDXRef-DOCUMENT",
-		RefB:                "SPDXRef-2",
+		RefA:                spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:                spdx.MakeDocElementID("", "2"),
 		Relationship:        "DESCRIBES",
 		RelationshipComment: "this is a comment",
 	}
@@ -40,8 +40,8 @@ RelationshipComment: this is a comment
 
 func TestSaver2_1RelationshipOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	rln := &spdx.Relationship2_1{
-		RefA:         "SPDXRef-DOCUMENT",
-		RefB:         "SPDXRef-2",
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "2"),
 		Relationship: "DESCRIBES",
 	}
 

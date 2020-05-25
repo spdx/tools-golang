@@ -5,6 +5,7 @@ package saver2v1
 import (
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -14,7 +15,7 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 		fmt.Fprintf(w, "FileName: %s\n", f.FileName)
 	}
 	if f.FileSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", f.FileSPDXIdentifier)
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.FileSPDXIdentifier))
 	}
 	for _, s := range f.FileType {
 		fmt.Fprintf(w, "FileType: %s\n", s)
@@ -65,7 +66,14 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 	fmt.Fprintf(w, "\n")
 
 	// also render any snippets for this file
-	for _, s := range f.Snippets {
+	// get slice of Snippet identifiers so we can sort them
+	snippetKeys := []string{}
+	for k := range f.Snippets {
+		snippetKeys = append(snippetKeys, string(k))
+	}
+	sort.Strings(snippetKeys)
+	for _, sID := range snippetKeys {
+		s := f.Snippets[spdx.ElementID(sID)]
 		renderSnippet2_1(s, w)
 	}
 

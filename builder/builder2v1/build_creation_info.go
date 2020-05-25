@@ -47,7 +47,7 @@ func BuildCreationInfoSection2_1(packageName string, code string, namespacePrefi
 	ci := &spdx.CreationInfo2_1{
 		SPDXVersion:          "SPDX-2.1",
 		DataLicense:          "CC0-1.0",
-		SPDXIdentifier:       "SPDXRef-DOCUMENT",
+		SPDXIdentifier:       spdx.ElementID("DOCUMENT"),
 		DocumentName:         packageName,
 		DocumentNamespace:    fmt.Sprintf("%s%s-%s", namespacePrefix, packageName, code),
 		CreatorPersons:       cPersons,

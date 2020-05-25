@@ -26,7 +26,7 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 	case "DataLicense":
 		ci.DataLicense = value
 	case "SPDXID":
-		ci.SPDXIdentifier = value
+		ci.SPDXIdentifier = spdx.ElementID(value)
 	case "DocumentName":
 		ci.DocumentName = value
 	case "DocumentNamespace":
@@ -61,22 +61,15 @@ func (parser *tvParser2_1) parsePairFromCreationInfo2_1(tag string, value string
 	case "PackageName":
 		parser.st = psPackage2_1
 		parser.pkg = &spdx.Package2_1{
-			IsUnpackaged:              false,
 			FilesAnalyzed:             true,
 			IsFilesAnalyzedTagPresent: false,
 		}
-		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 		return parser.parsePairFromPackage2_1(tag, value)
 	// tag for going on to _unpackaged_ file section
 	case "FileName":
-		// create an "unpackaged" Package structure
+		// leave pkg as nil, so that packages will be placed in UnpackagedFiles
 		parser.st = psFile2_1
-		parser.pkg = &spdx.Package2_1{
-			IsUnpackaged:              true,
-			FilesAnalyzed:             true,
-			IsFilesAnalyzedTagPresent: false,
-		}
-		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+		parser.pkg = nil
 		return parser.parsePairFromFile2_1(tag, value)
 	// tag for going on to other license section
 	case "LicenseID":

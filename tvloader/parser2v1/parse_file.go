@@ -19,7 +19,6 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	// tag for creating new file section
 	case "FileName":
 		parser.file = &spdx.File2_1{}
-		parser.pkg.Files = append(parser.pkg.Files, parser.file)
 		parser.file.FileName = value
 	// tag for creating new package section and going back to parsing Package
 	case "PackageName":
@@ -36,7 +35,22 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 		return parser.parsePairFromOtherLicense2_1(tag, value)
 	// tags for file data
 	case "SPDXID":
-		parser.file.FileSPDXIdentifier = value
+		eID, err := extractElementID(value)
+		if err != nil {
+			return err
+		}
+		parser.file.FileSPDXIdentifier = eID
+		if parser.pkg == nil {
+			if parser.doc.UnpackagedFiles == nil {
+				parser.doc.UnpackagedFiles = map[spdx.ElementID]*spdx.File2_1{}
+			}
+			parser.doc.UnpackagedFiles[eID] = parser.file
+		} else {
+			if parser.pkg.Files == nil {
+				parser.pkg.Files = map[spdx.ElementID]*spdx.File2_1{}
+			}
+			parser.pkg.Files[eID] = parser.file
+		}
 	case "FileType":
 		parser.file.FileType = append(parser.file.FileType, value)
 	case "FileChecksum":

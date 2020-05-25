@@ -14,8 +14,18 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 	// tag for creating new snippet section
 	case "SnippetSPDXID":
 		parser.snippet = &spdx.Snippet2_1{}
-		parser.file.Snippets = append(parser.file.Snippets, parser.snippet)
-		parser.snippet.SnippetSPDXIdentifier = value
+		eID, err := extractElementID(value)
+		if err != nil {
+			return err
+		}
+		// FIXME: how should we handle where not associated with current file?
+		if parser.file != nil {
+			if parser.file.Snippets == nil {
+				parser.file.Snippets = map[spdx.ElementID]*spdx.Snippet2_1{}
+			}
+			parser.file.Snippets[eID] = parser.snippet
+		}
+		parser.snippet.SnippetSPDXIdentifier = eID
 	// tag for creating new file section and going back to parsing File
 	case "FileName":
 		parser.st = psFile2_1
@@ -33,7 +43,11 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		return parser.parsePairFromOtherLicense2_1(tag, value)
 	// tags for snippet data
 	case "SnippetFromFileSPDXID":
-		parser.snippet.SnippetFromFileSPDXIdentifier = value
+		deID, err := extractDocElementID(value)
+		if err != nil {
+			return err
+		}
+		parser.snippet.SnippetFromFileSPDXIdentifier = deID
 	case "SnippetByteRange":
 		byteStart, byteEnd, err := extractSubs(value)
 		if err != nil {

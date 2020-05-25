@@ -28,7 +28,11 @@ func (parser *tvParser2_1) parsePairForAnnotation2_1(tag string, value string) e
 	case "AnnotationType":
 		parser.ann.AnnotationType = value
 	case "SPDXREF":
-		parser.ann.AnnotationSPDXIdentifier = value
+		deID, err := extractDocElementID(value)
+		if err != nil {
+			return err
+		}
+		parser.ann.AnnotationSPDXIdentifier = deID
 	case "AnnotationComment":
 		parser.ann.AnnotationComment = value
 	default:

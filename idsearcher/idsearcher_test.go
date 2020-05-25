@@ -4,6 +4,8 @@ package idsearcher
 
 import (
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx"
 )
 
 // ===== Searcher top-level function tests =====
@@ -31,7 +33,10 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 	if len(doc.Packages) != 1 {
 		t.Fatalf("expected Packages len to be 1, got %d", len(doc.Packages))
 	}
-	pkg := doc.Packages[0]
+	pkg := doc.Packages[spdx.ElementID("Package-project2")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
 
 	if pkg.Files == nil {
 		t.Fatalf("expected non-nil Files, got nil")
@@ -40,7 +45,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Fatalf("expected Files len to be 6, got %d", len(pkg.Files))
 	}
 
-	fileInFolder := pkg.Files[0]
+	fileInFolder := pkg.Files[spdx.ElementID("File0")]
 	if fileInFolder.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -54,7 +59,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Errorf("expected %v, got %v", "MIT", fileInFolder.LicenseConcluded)
 	}
 
-	fileTrailingComment := pkg.Files[1]
+	fileTrailingComment := pkg.Files[spdx.ElementID("File1")]
 	if fileTrailingComment.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -68,7 +73,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", fileTrailingComment.LicenseConcluded)
 	}
 
-	fileHasDuplicateID := pkg.Files[2]
+	fileHasDuplicateID := pkg.Files[spdx.ElementID("File2")]
 	if fileHasDuplicateID.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -82,7 +87,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Errorf("expected %v, got %v", "MIT", fileHasDuplicateID.LicenseConcluded)
 	}
 
-	fileHasID := pkg.Files[3]
+	fileHasID := pkg.Files[spdx.ElementID("File3")]
 	if fileHasID.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -99,7 +104,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Errorf("expected %v, got %v", "Apache-2.0 OR GPL-2.0-or-later", fileHasID.LicenseConcluded)
 	}
 
-	fileMultipleIDs := pkg.Files[4]
+	fileMultipleIDs := pkg.Files[spdx.ElementID("File4")]
 	if fileMultipleIDs.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -126,7 +131,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 		t.Errorf("expected %v, got %v", "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND EPL-1.0+", fileMultipleIDs.LicenseConcluded)
 	}
 
-	fileNoID := pkg.Files[5]
+	fileNoID := pkg.Files[spdx.ElementID("File5")]
 	if fileNoID.LicenseInfoInFile == nil {
 		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
 	}
@@ -200,12 +205,15 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 
 	// get the package and its files, checking licenses for each, and
 	// confirming NOASSERTION for those that are skipped
-	pkg := doc.Packages[0]
+	pkg := doc.Packages[spdx.ElementID("Package-project3")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
 	if len(pkg.Files) != 5 {
 		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
 	}
 
-	f := pkg.Files[0]
+	f := pkg.Files[spdx.ElementID("File0")]
 	if f.FileName != "/dontscan.txt" {
 		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
 	}
@@ -219,7 +227,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
 	}
 
-	f = pkg.Files[1]
+	f = pkg.Files[spdx.ElementID("File1")]
 	if f.FileName != "/keep/keep.txt" {
 		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
 	}
@@ -233,7 +241,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		t.Errorf("expected %s, got %s", "MIT", f.LicenseConcluded)
 	}
 
-	f = pkg.Files[2]
+	f = pkg.Files[spdx.ElementID("File2")]
 	if f.FileName != "/keep.txt" {
 		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
 	}
@@ -247,7 +255,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
 	}
 
-	f = pkg.Files[3]
+	f = pkg.Files[spdx.ElementID("File3")]
 	if f.FileName != "/subdir/keep/dontscan.txt" {
 		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
 	}
@@ -261,7 +269,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
 	}
 
-	f = pkg.Files[4]
+	f = pkg.Files[spdx.ElementID("File4")]
 	if f.FileName != "/subdir/keep/keep.txt" {
 		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
 	}

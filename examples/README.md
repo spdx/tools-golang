@@ -49,8 +49,9 @@ files, and printing the report to standard output.
 *licensediff*, *tvloader*
 
 This example demonstrates loading two SPDX tag-value files from disk into
-memory, and generating a diff of the concluded licenses for Files in the
-first-listed Packages in each document.
+memory, and generating a diff of the concluded licenses for Files in Packages
+with matching IDs in each document.
 
 This is generally only useful when run with two SPDX documents that describe
-licenses for subsequent versions of the same set of files.
+licenses for subsequent versions of the same set of files, AND if they have
+the same identifier in both documents.

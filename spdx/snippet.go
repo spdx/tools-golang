@@ -7,11 +7,11 @@ type Snippet2_1 struct {
 
 	// 5.1: Snippet SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	SnippetSPDXIdentifier string
+	SnippetSPDXIdentifier ElementID
 
 	// 5.2: Snippet from File SPDX Identifier
 	// Cardinality: mandatory, one
-	SnippetFromFileSPDXIdentifier string
+	SnippetFromFileSPDXIdentifier DocElementID
 
 	// 5.3: Snippet Byte Range: [start byte]:[end byte]
 	// Cardinality: mandatory, one

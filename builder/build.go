@@ -64,7 +64,7 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 
 	doc := &spdx.Document2_1{
 		CreationInfo:  ci,
-		Packages:      []*spdx.Package2_1{pkg},
+		Packages:      map[spdx.ElementID]*spdx.Package2_1{pkg.PackageSPDXIdentifier: pkg},
 		Relationships: []*spdx.Relationship2_1{rln},
 	}
 

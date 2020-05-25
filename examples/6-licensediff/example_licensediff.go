@@ -3,10 +3,11 @@
 // Example for: *licensediff*, *tvloader*
 
 // This example demonstrates loading two SPDX tag-value files from disk into
-// memory, and generating a diff of the concluded licenses for Files in the
-// first-listed Packages in each document.
+// memory, and generating a diff of the concluded licenses for Files in
+// Packages with matching IDs in each document.
 // This is generally only useful when run with two SPDX documents that
-// describe licenses for subsequent versions of the same set of files.
+// describe licenses for subsequent versions of the same set of files, AND if
+// they have the same identifier in both documents.
 
 package main
 
@@ -15,6 +16,7 @@ import (
 	"os"
 
 	"github.com/spdx/tools-golang/licensediff"
+	"github.com/spdx/tools-golang/spdxlib"
 	"github.com/spdx/tools-golang/tvloader"
 )
 
@@ -44,9 +46,10 @@ func main() {
 		fmt.Printf("Error while parsing %v: %v", filenameFirst, err)
 		return
 	}
-	// make sure it has at least one Package
-	if len(docFirst.Packages) < 1 {
-		fmt.Printf("Error, no packages found in SPDX file %s\n", filenameFirst)
+	// check whether the SPDX file has at least one package that it describes
+	pkgIDsFirst, err := spdxlib.GetDescribedPackageIDs2_1(docFirst)
+	if err != nil {
+		fmt.Printf("Unable to get describe packages from first SPDX document: %v\n", err)
 		return
 	}
 
@@ -68,39 +71,67 @@ func main() {
 		fmt.Printf("Error while parsing %v: %v", filenameSecond, err)
 		return
 	}
-	// make sure it has at least one Package
-	if len(docSecond.Packages) < 1 {
-		fmt.Printf("Error, no packages found in SPDX file %s\n", filenameSecond)
+	// check whether the SPDX file has at least one package that it describes
+	pkgIDsSecond, err := spdxlib.GetDescribedPackageIDs2_1(docSecond)
+	if err != nil {
+		fmt.Printf("Unable to get describe packages from second SPDX document: %v\n", err)
 		return
 	}
 
 	// if we got here, the file is now loaded into memory.
 	fmt.Printf("Successfully loaded second SPDX file %s\n\n", filenameSecond)
 
-	// extract the first-listed package from each Document.
-	// (there could be more than one Package within a Document. For
-	// purposes of this example, we'll just look at the first one.)
-	// we've already confirmed above that each has at least one Package.
-	p1 := docFirst.Packages[0]
-	p2 := docSecond.Packages[0]
+	// compare the described packages from each Document, by SPDX ID
+	// go through the first set first, report if they aren't in the second set
+	for _, pkgID := range pkgIDsFirst {
+		fmt.Printf("================================\n")
+		p1, okFirst := docFirst.Packages[pkgID]
+		if !okFirst {
+			fmt.Printf("Package %s has described relationship in first document but ID not found\n", string(pkgID))
+			continue
+		}
+		fmt.Printf("Package %s (%s)\n", string(pkgID), p1.PackageName)
+		p2, okSecond := docSecond.Packages[pkgID]
+		if !okSecond {
+			fmt.Printf("  Found in first document, not found in second\n")
+			continue
+		}
 
-	// now, run a diff between the two
-	pairs, err := licensediff.MakePairs(p1, p2)
-	if err != nil {
-		fmt.Printf("Error generating licensediff pairs: %v\n", err)
-		return
+		// now, run a diff between the two
+		pairs, err := licensediff.MakePairs(p1, p2)
+		if err != nil {
+			fmt.Printf("  Error generating licensediff pairs: %v\n", err)
+			continue
+		}
+
+		// take the pairs and turn them into a more structured results set
+		resultSet, err := licensediff.MakeResults(pairs)
+		if err != nil {
+			fmt.Printf("  Error generating licensediff results set: %v\n", err)
+			continue
+		}
+
+		// print some information about the results
+		fmt.Printf("  Files in first only: %d\n", len(resultSet.InFirstOnly))
+		fmt.Printf("  Files in second only: %d\n", len(resultSet.InSecondOnly))
+		fmt.Printf("  Files in both with different licenses: %d\n", len(resultSet.InBothChanged))
+		fmt.Printf("  Files in both with same licenses: %d\n", len(resultSet.InBothSame))
 	}
 
-	// take the pairs and turn them into a more structured results set
-	resultSet, err := licensediff.MakeResults(pairs)
-	if err != nil {
-		fmt.Printf("Error generating licensediff results set: %v\n", err)
-		return
+	// now report if there are any package IDs in the second set that aren't
+	// in the first
+	for _, pkgID := range pkgIDsSecond {
+		p2, okSecond := docSecond.Packages[pkgID]
+		if !okSecond {
+			fmt.Printf("================================\n")
+			fmt.Printf("Package %s has described relationship in second document but ID not found\n", string(pkgID))
+			continue
+		}
+		_, okFirst := docFirst.Packages[pkgID]
+		if !okFirst {
+			fmt.Printf("================================\n")
+			fmt.Printf("Package %s (%s)\n", string(pkgID), p2.PackageName)
+			fmt.Printf("  Found in second document, not found in first\n")
+		}
 	}
-
-	// print some information about the results
-	fmt.Printf("Files in first only: %d\n", len(resultSet.InFirstOnly))
-	fmt.Printf("Files in second only: %d\n", len(resultSet.InSecondOnly))
-	fmt.Printf("Files in both with different licenses: %d\n", len(resultSet.InBothChanged))
-	fmt.Printf("Files in both with same licenses: %d\n", len(resultSet.InBothSame))
 }

@@ -22,14 +22,14 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		return nil, err
 	}
 
-	files := []*spdx.File2_1{}
+	files := map[spdx.ElementID]*spdx.File2_1{}
 	fileNumber := 0
 	for _, fp := range filepaths {
 		newFile, err := BuildFileSection2_1(fp, dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}
-		files = append(files, newFile)
+		files[newFile.FileSPDXIdentifier] = newFile
 		fileNumber++
 	}
 
@@ -41,9 +41,8 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 
 	// now build the package section
 	pkg := &spdx.Package2_1{
-		IsUnpackaged:                false,
 		PackageName:                 packageName,
-		PackageSPDXIdentifier:       fmt.Sprintf("SPDXRef-Package-%s", packageName),
+		PackageSPDXIdentifier:       spdx.ElementID(fmt.Sprintf("Package-%s", packageName)),
 		PackageDownloadLocation:     "NOASSERTION",
 		FilesAnalyzed:               true,
 		IsFilesAnalyzedTagPresent:   true,

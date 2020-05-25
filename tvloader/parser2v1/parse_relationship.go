@@ -29,9 +29,17 @@ func (parser *tvParser2_1) parsePairForRelationship2_1(tag string, value string)
 			return fmt.Errorf("invalid relationship format for %s", value)
 		}
 
-		parser.rln.RefA = strings.TrimSpace(rp[0])
+		aID, err := extractDocElementID(strings.TrimSpace(rp[0]))
+		if err != nil {
+			return err
+		}
+		parser.rln.RefA = aID
 		parser.rln.Relationship = strings.TrimSpace(rp[1])
-		parser.rln.RefB = strings.TrimSpace(rp[2])
+		bID, err := extractDocElementID(strings.TrimSpace(rp[2]))
+		if err != nil {
+			return err
+		}
+		parser.rln.RefB = bID
 		return nil
 	}
 
