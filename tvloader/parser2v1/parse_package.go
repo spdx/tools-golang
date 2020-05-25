@@ -80,7 +80,7 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 		case "Organization":
 			parser.pkg.PackageOriginatorOrganization = subvalue
 		default:
-			return fmt.Errorf("unrecognized PackageSupplier type %v", subkey)
+			return fmt.Errorf("unrecognized PackageOriginator type %v", subkey)
 		}
 	case "PackageDownloadLocation":
 		parser.pkg.PackageDownloadLocation = value

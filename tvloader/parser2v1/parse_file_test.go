@@ -784,3 +784,105 @@ func TestFileAOPPointerChangesAfterTags(t *testing.T) {
 		t.Errorf("expected nil AOP pointer, got %v", parser.fileAOP)
 	}
 }
+
+func TestParser2_1FailsIfInvalidSPDXIDInFileSection(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+	}
+	parser.doc.Packages["test"] = parser.pkg
+
+	// start with File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid SPDX Identifier
+	err = parser.parsePairFromFile2_1("SPDXID", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfInvalidChecksumFormatInFileSection(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+	}
+	parser.doc.Packages["test"] = parser.pkg
+
+	// start with File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid format for checksum line, missing colon
+	err = parser.parsePairFromFile2_1("FileChecksum", "SHA1 85ed0817af83a24ad8da68c2b5094de69833983c")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfUnknownChecksumTypeInFileSection(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+	}
+	parser.doc.Packages["test"] = parser.pkg
+
+	// start with File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// unknown checksum type
+	err = parser.parsePairFromFile2_1("FileChecksum", "Special: 85ed0817af83a24ad8da68c2b5094de69833983c")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfArtifactHomePageBeforeArtifactName(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+	}
+	parser.doc.Packages["test"] = parser.pkg
+
+	// start with File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// artifact home page appears before artifact name
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfArtifactURIBeforeArtifactName(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psFile2_1,
+		pkg: &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+	}
+	parser.doc.Packages["test"] = parser.pkg
+
+	// start with File Name
+	err := parser.parsePairFromFile2_1("FileName", "f1.txt")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// artifact home page appears before artifact name
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "https://example.com")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+

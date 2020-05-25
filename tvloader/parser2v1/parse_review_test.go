@@ -362,6 +362,34 @@ func TestParser2_1CanParseReviewerToolTag(t *testing.T) {
 	}
 }
 
+func TestParser2_1FailsIfReviewerInvalidFormat(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:   psReview2_1,
+		rev: &spdx.Review2_1{},
+	}
+	parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
+
+	err := parser.parsePairFromReview2_1("Reviewer", "oops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfReviewerUnknownType(t *testing.T) {
+	parser := tvParser2_1{
+		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:   psReview2_1,
+		rev: &spdx.Review2_1{},
+	}
+	parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
+
+	err := parser.parsePairFromReview2_1("Reviewer", "whoops: John Doe")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
 func TestParser2_1ReviewUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
@@ -384,3 +412,5 @@ func TestParser2_1ReviewUnknownTagFails(t *testing.T) {
 		t.Errorf("expected error from parsing unknown tag")
 	}
 }
+
+

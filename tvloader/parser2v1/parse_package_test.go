@@ -808,6 +808,202 @@ func TestParser2_1PackageUnknownTagFails(t *testing.T) {
 	}
 }
 
+func TestParser2_1FailsIfInvalidSPDXIDInPackageSection(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid ID format
+	err = parser.parsePairFromPackage2_1("SPDXID", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfInvalidPackageSupplierFormat(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid supplier format
+	err = parser.parsePairFromPackage2_1("PackageSupplier", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfUnknownPackageSupplierType(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid supplier type
+	err = parser.parsePairFromPackage2_1("PackageSupplier", "whoops: John Doe")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfInvalidPackageOriginatorFormat(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid originator format
+	err = parser.parsePairFromPackage2_1("PackageOriginator", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfUnknownPackageOriginatorType(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid originator type
+	err = parser.parsePairFromPackage2_1("PackageOriginator", "whoops: John Doe")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1SetsFilesAnalyzedTagsCorrectly(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// set tag
+	err = parser.parsePairFromPackage2_1("FilesAnalyzed", "true")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	if parser.pkg.FilesAnalyzed != true {
+		t.Errorf("expected %v, got %v", true, parser.pkg.FilesAnalyzed)
+	}
+	if parser.pkg.IsFilesAnalyzedTagPresent != true {
+		t.Errorf("expected %v, got %v", true, parser.pkg.IsFilesAnalyzedTagPresent)
+	}
+}
+
+func TestParser2_1FailsIfInvalidPackageChecksumFormat(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid checksum format
+	err = parser.parsePairFromPackage2_1("PackageChecksum", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfInvalidPackageChecksumType(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid checksum type
+	err = parser.parsePairFromPackage2_1("PackageChecksum", "whoops: blah")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfInvalidExternalRefFormat(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid external ref format
+	err = parser.parsePairFromPackage2_1("ExternalRef", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfExternalRefCommentBeforeExternalRef(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{},
+	}
+
+	// start with Package Name
+	err := parser.parsePairFromPackage2_1("PackageName", "p1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// external ref comment before external ref
+	err = parser.parsePairFromPackage2_1("ExternalRefComment", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
 // ===== Helper function tests =====
 
 func TestCanCheckAndExtractExcludesFilenameAndCode(t *testing.T) {
@@ -865,3 +1061,11 @@ func TestCanExtractPackageExternalReferenceWithExtraWhitespace(t *testing.T) {
 		t.Errorf("expected location %s, got %s", location, gotLocation)
 	}
 }
+
+func TestFailsPackageExternalRefWithInvalidFormat(t *testing.T) {
+	_, _, _, err := extractPackageExternalReference("whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+

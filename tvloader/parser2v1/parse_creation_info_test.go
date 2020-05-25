@@ -162,6 +162,17 @@ func TestParser2_1CIStaysAfterParsingAnnotationTags(t *testing.T) {
 	}
 }
 
+func TestParser2_1FailsParsingCreationInfoWithInvalidState(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psPackage2_1,
+	}
+	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
 // ===== Creation Info section tests =====
 func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
 	parser := tvParser2_1{

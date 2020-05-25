@@ -483,3 +483,107 @@ func TestParser2_1SnippetUnknownTagFails(t *testing.T) {
 		t.Errorf("expected error from parsing unknown tag")
 	}
 }
+
+func TestParser2_1FailsForInvalidSnippetSPDXID(t *testing.T) {
+	parser := tvParser2_1{
+		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:      psSnippet2_1,
+		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{},
+	}
+	parser.doc.Packages["package1"] = parser.pkg
+	parser.pkg.Files["f1"] = parser.file
+
+	// invalid Snippet SPDX Identifier
+	err := parser.parsePairFromSnippet2_1("SnippetSPDXID", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsForInvalidSnippetFromFileSPDXID(t *testing.T) {
+	parser := tvParser2_1{
+		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:      psSnippet2_1,
+		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{},
+	}
+	parser.doc.Packages["package1"] = parser.pkg
+	parser.pkg.Files["f1"] = parser.file
+
+	// start with Snippet SPDX Identifier
+	err := parser.parsePairFromSnippet2_1("SnippetSPDXID", "SPDXRef-s1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid From File identifier
+	err = parser.parsePairFromSnippet2_1("SnippetFromFileSPDXID", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsForInvalidSnippetByteValues(t *testing.T) {
+	parser := tvParser2_1{
+		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:      psSnippet2_1,
+		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{},
+	}
+	parser.doc.Packages["package1"] = parser.pkg
+	parser.pkg.Files["f1"] = parser.file
+
+	// start with Snippet SPDX Identifier
+	err := parser.parsePairFromSnippet2_1("SnippetSPDXID", "SPDXRef-s1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid byte formats and values
+	err = parser.parsePairFromSnippet2_1("SnippetByteRange", "200 210")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+	err = parser.parsePairFromSnippet2_1("SnippetByteRange", "a:210")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+	err = parser.parsePairFromSnippet2_1("SnippetByteRange", "200:a")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsForInvalidSnippetLineValues(t *testing.T) {
+	parser := tvParser2_1{
+		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:      psSnippet2_1,
+		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{},
+	}
+	parser.doc.Packages["package1"] = parser.pkg
+	parser.pkg.Files["f1"] = parser.file
+
+	// start with Snippet SPDX Identifier
+	err := parser.parsePairFromSnippet2_1("SnippetSPDXID", "SPDXRef-s1")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid byte formats and values
+	err = parser.parsePairFromSnippet2_1("SnippetLineRange", "200 210")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+	err = parser.parsePairFromSnippet2_1("SnippetLineRange", "a:210")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+	err = parser.parsePairFromSnippet2_1("SnippetLineRange", "200:a")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+

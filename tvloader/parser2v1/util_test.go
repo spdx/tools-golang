@@ -38,6 +38,7 @@ func TestCanExtractDocumentAndElementRefsFromID(t *testing.T) {
 	helperForExtractDocElementID(t, "a:SPDXRef-file1", true, "", "")
 	helperForExtractDocElementID(t, "file1", true, "", "")
 	helperForExtractDocElementID(t, "SPDXRef-", true, "", "")
+	helperForExtractDocElementID(t, "SPDXRef-file1:", true, "", "")
 	// test with invalid ID in another document
 	helperForExtractDocElementID(t, "DocumentRef-doc2", true, "", "")
 	helperForExtractDocElementID(t, "DocumentRef-doc2:", true, "", "")
@@ -45,6 +46,8 @@ func TestCanExtractDocumentAndElementRefsFromID(t *testing.T) {
 	helperForExtractDocElementID(t, "DocumentRef-doc2:a", true, "", "")
 	helperForExtractDocElementID(t, "DocumentRef-:", true, "", "")
 	helperForExtractDocElementID(t, "DocumentRef-:SPDXRef-file1", true, "", "")
+	// test with invalid formats
+	helperForExtractDocElementID(t, "DocumentRef-doc2:SPDXRef-file1:file2", true, "", "")
 }
 
 func helperForExtractDocElementID(t *testing.T, tst string, wantErr bool, wantDoc string, wantElt string) {
@@ -80,6 +83,7 @@ func TestCanExtractElementRefsOnlyFromID(t *testing.T) {
 	helperForExtractElementID(t, "a:SPDXRef-file1", true, "")
 	helperForExtractElementID(t, "file1", true, "")
 	helperForExtractElementID(t, "SPDXRef-", true, "")
+	helperForExtractElementID(t, "SPDXRef-file1:", true, "")
 	// test with invalid ID in another document
 	helperForExtractElementID(t, "DocumentRef-doc2", true, "")
 	helperForExtractElementID(t, "DocumentRef-doc2:", true, "")

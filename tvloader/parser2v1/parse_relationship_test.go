@@ -151,3 +151,21 @@ func TestParser2_1InvalidRelationshipTagsInvalidRefIDs(t *testing.T) {
 		t.Errorf("expected error for missing SPDXRef- prefix, got nil")
 	}
 }
+
+func TestParser2_1FailsToParseUnknownTagInRelationshipSection(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+
+	// Relationship
+	err := parser.parsePair2_1("Relationship", "SPDXRef-something CONTAINS DocumentRef-otherdoc:SPDXRef-something-else")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// invalid tag
+	err = parser.parsePairForRelationship2_1("blah", "whoops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
