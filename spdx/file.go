@@ -144,7 +144,7 @@ type File2_2 struct {
 
 	// 4.15: File Attribution Text
 	// Cardinality: optional, one or many
-	FileAttributionText []string
+	FileAttributionTexts []string
 
 	// DEPRECATED in version 2.0 of spec
 	// 4.16: File Dependencies

@@ -95,5 +95,5 @@ type Snippet2_2 struct {
 
 	// 5.11: Snippet Attribution Text
 	// Cardinality: optional, one or many
-	SnippetAttributionText []string
+	SnippetAttributionTexts []string
 }
