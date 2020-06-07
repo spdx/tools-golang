@@ -247,7 +247,7 @@ type Package2_2 struct {
 
 	// 3.23: Package Attribution Text
 	// Cardinality: optional, one or many
-	PackageAttributionText string
+	PackageAttributionText []string
 
 	// Files contained in this Package
 	Files []*File2_2
