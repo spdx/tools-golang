@@ -16,7 +16,7 @@ type CreationInfo2_1 struct {
 
 	// 2.3: SPDX Identifier; should be "SPDXRef-DOCUMENT"
 	// Cardinality: mandatory, one
-	SPDXIdentifier string
+	SPDXIdentifier ElementID
 
 	// 2.4: Document Name
 	// Cardinality: mandatory, one

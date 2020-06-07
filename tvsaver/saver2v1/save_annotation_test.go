@@ -16,7 +16,7 @@ func TestSaver2_1AnnotationSavesTextForPerson(t *testing.T) {
 		AnnotatorType:            "Person",
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: "SPDXRef-DOCUMENT",
+		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 
@@ -49,7 +49,7 @@ func TestSaver2_1AnnotationSavesTextForOrganization(t *testing.T) {
 		AnnotatorType:            "Organization",
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: "SPDXRef-DOCUMENT",
+		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 
@@ -82,7 +82,7 @@ func TestSaver2_1AnnotationSavesTextForTool(t *testing.T) {
 		AnnotatorType:            "Tool",
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: "SPDXRef-DOCUMENT",
+		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 

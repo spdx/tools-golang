@@ -14,7 +14,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// f1 will be identical in both
 	f1 := &spdx.File2_1{
 		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: "SPDXRef-File561",
+		FileSPDXIdentifier: spdx.ElementID("File561"),
 		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 		LicenseConcluded:   "Apache-2.0",
 		LicenseInfoInFile: []string{
@@ -26,7 +26,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_1{
 		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: "SPDXRef-File562",
+		FileSPDXIdentifier: spdx.ElementID("File562"),
 		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
 		LicenseConcluded:   "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
@@ -38,7 +38,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_1{
 		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: "SPDXRef-File563",
+		FileSPDXIdentifier: spdx.ElementID("File563"),
 		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
 		LicenseConcluded:   "MPL-2.0",
 		LicenseInfoInFile: []string{
@@ -51,7 +51,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: "SPDXRef-File564",
+		FileSPDXIdentifier: spdx.ElementID("File564"),
 		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
 		LicenseConcluded:   "MIT",
 		LicenseInfoInFile: []string{
@@ -61,7 +61,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	}
 	f4_2 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: "SPDXRef-File564",
+		FileSPDXIdentifier: spdx.ElementID("File564"),
 		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
 		LicenseConcluded:   "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
@@ -74,7 +74,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: "SPDXRef-File565",
+		FileSPDXIdentifier: spdx.ElementID("File565"),
 		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
 		LicenseConcluded:   "BSD-3-Clause",
 		LicenseInfoInFile: []string{
@@ -84,7 +84,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	}
 	f5_2 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: "SPDXRef-File565",
+		FileSPDXIdentifier: spdx.ElementID("File565"),
 		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
 		LicenseConcluded:   "BSD-3-Clause",
 		LicenseInfoInFile: []string{
@@ -97,7 +97,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: "SPDXRef-File566",
+		FileSPDXIdentifier: spdx.ElementID("File566"),
 		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
 		LicenseConcluded:   "CC0-1.0",
 		LicenseInfoInFile: []string{
@@ -107,7 +107,7 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 	}
 	f6_2 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: "SPDXRef-File566",
+		FileSPDXIdentifier: spdx.ElementID("File566"),
 		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
 		LicenseConcluded:   "Unlicense",
 		LicenseInfoInFile: []string{
@@ -118,9 +118,8 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     "SPDXRef-p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
 		PackageDownloadLocation:   "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
@@ -132,18 +131,17 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: []*spdx.File2_1{
-			f1,
-			f2,
-			f4_1,
-			f5_1,
-			f6_1,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
+			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p2",
-		PackageSPDXIdentifier:     "SPDXRef-p2",
+		PackageSPDXIdentifier:     spdx.ElementID("p2"),
 		PackageDownloadLocation:   "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
@@ -155,12 +153,12 @@ func TestDifferCanCreateDiffPairs(t *testing.T) {
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: []*spdx.File2_1{
-			f1,
-			f3,
-			f4_2,
-			f5_2,
-			f6_2,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
+			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
 		},
 	}
 
@@ -255,7 +253,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// f1 will be identical in both
 	f1 := &spdx.File2_1{
 		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: "SPDXRef-File561",
+		FileSPDXIdentifier: spdx.ElementID("File561"),
 		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 		LicenseConcluded:   "Apache-2.0",
 		LicenseInfoInFile: []string{
@@ -267,7 +265,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_1{
 		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: "SPDXRef-File562",
+		FileSPDXIdentifier: spdx.ElementID("File562"),
 		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
 		LicenseConcluded:   "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
@@ -279,7 +277,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_1{
 		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: "SPDXRef-File563",
+		FileSPDXIdentifier: spdx.ElementID("File563"),
 		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
 		LicenseConcluded:   "MPL-2.0",
 		LicenseInfoInFile: []string{
@@ -292,7 +290,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: "SPDXRef-File564",
+		FileSPDXIdentifier: spdx.ElementID("File564"),
 		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
 		LicenseConcluded:   "MIT",
 		LicenseInfoInFile: []string{
@@ -302,7 +300,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	}
 	f4_2 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: "SPDXRef-File564",
+		FileSPDXIdentifier: spdx.ElementID("File564"),
 		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
 		LicenseConcluded:   "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
@@ -315,7 +313,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: "SPDXRef-File565",
+		FileSPDXIdentifier: spdx.ElementID("File565"),
 		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
 		LicenseConcluded:   "BSD-3-Clause",
 		LicenseInfoInFile: []string{
@@ -325,7 +323,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	}
 	f5_2 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: "SPDXRef-File565",
+		FileSPDXIdentifier: spdx.ElementID("File565"),
 		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
 		LicenseConcluded:   "BSD-3-Clause",
 		LicenseInfoInFile: []string{
@@ -338,7 +336,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: "SPDXRef-File566",
+		FileSPDXIdentifier: spdx.ElementID("File566"),
 		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
 		LicenseConcluded:   "CC0-1.0",
 		LicenseInfoInFile: []string{
@@ -348,7 +346,7 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 	}
 	f6_2 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: "SPDXRef-File566",
+		FileSPDXIdentifier: spdx.ElementID("File566"),
 		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
 		LicenseConcluded:   "Unlicense",
 		LicenseInfoInFile: []string{
@@ -359,9 +357,8 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     "SPDXRef-p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
 		PackageDownloadLocation:   "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
@@ -373,18 +370,17 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: []*spdx.File2_1{
-			f1,
-			f2,
-			f4_1,
-			f5_1,
-			f6_1,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
+			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
-		IsUnpackaged:              false,
 		PackageName:               "p2",
-		PackageSPDXIdentifier:     "SPDXRef-p2",
+		PackageSPDXIdentifier:     spdx.ElementID("p2"),
 		PackageDownloadLocation:   "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
@@ -396,12 +392,12 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: []*spdx.File2_1{
-			f1,
-			f3,
-			f4_2,
-			f5_2,
-			f6_2,
+		Files: map[spdx.ElementID]*spdx.File2_1{
+			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
+			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
 		},
 	}
 

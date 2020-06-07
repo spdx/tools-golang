@@ -4,6 +4,8 @@ package builder2v1
 
 import (
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx"
 )
 
 // ===== File section builder tests =====
@@ -23,8 +25,8 @@ func TestBuilder2_1CanBuildFileSection(t *testing.T) {
 	if file1.FileName != "/file1.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
 	}
-	if file1.FileSPDXIdentifier != "SPDXRef-File17" {
-		t.Errorf("expected %v, got %v", "SPDXRef-File17", file1.FileSPDXIdentifier)
+	if file1.FileSPDXIdentifier != spdx.ElementID("File17") {
+		t.Errorf("expected %v, got %v", "File17", file1.FileSPDXIdentifier)
 	}
 	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
 		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)

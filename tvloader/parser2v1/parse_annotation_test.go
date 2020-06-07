@@ -19,6 +19,23 @@ func TestParser2_1FailsIfAnnotationNotSet(t *testing.T) {
 	}
 }
 
+func TestParser2_1FailsIfAnnotationTagUnknown(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	// start with valid annotator
+	err := parser.parsePair2_1("Annotator", "Person: John Doe (jdoe@example.com)")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	// parse invalid tag, using parsePairForAnnotation2_1(
+	err = parser.parsePairForAnnotation2_1("blah", "oops")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
 func TestParser2_1FailsIfAnnotationFieldsWithoutAnnotation(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{},
@@ -86,8 +103,9 @@ func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.AnnotationSPDXIdentifier != ref {
-		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.AnnotationSPDXIdentifier, ref)
+	deID := parser.ann.AnnotationSPDXIdentifier
+	if deID.DocumentRefID != "" || deID.ElementRefID != "30" {
+		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.AnnotationSPDXIdentifier, "30")
 	}
 
 	// Annotation Comment
@@ -100,3 +118,42 @@ func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 		t.Errorf("got %v for AnnotationComment, expected %v", parser.ann.AnnotationComment, cmt)
 	}
 }
+
+func TestParser2_1FailsIfAnnotatorInvalid(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("Annotator", "John Doe (jdoe@example.com)")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfAnnotatorTypeInvalid(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	err := parser.parsePair2_1("Annotator", "Human: John Doe (jdoe@example.com)")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_1FailsIfAnnotationRefInvalid(t *testing.T) {
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	// start with valid annotator
+	err := parser.parsePair2_1("Annotator", "Person: John Doe (jdoe@example.com)")
+	if err != nil {
+		t.Errorf("expected nil error, got %v", err)
+	}
+	err = parser.parsePair2_1("SPDXREF", "blah:other")
+	if err == nil {
+		t.Errorf("expected non-nil error, got nil")
+	}
+}
+

@@ -11,7 +11,7 @@ type File2_1 struct {
 
 	// 4.2: File SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	FileSPDXIdentifier string
+	FileSPDXIdentifier ElementID
 
 	// 4.3: File Type
 	// Cardinality: optional, multiple
@@ -62,7 +62,10 @@ type File2_1 struct {
 	FileDependencies []string
 
 	// Snippets contained in this File
-	Snippets []*Snippet2_1
+	// Note that Snippets could be defined in a different Document! However,
+	// the only ones that _THIS_ document can contain are this ones that are
+	// defined here -- so this should just be an ElementID.
+	Snippets map[ElementID]*Snippet2_1
 }
 
 // ArtifactOfProject2_1 is a DEPRECATED collection of data regarding

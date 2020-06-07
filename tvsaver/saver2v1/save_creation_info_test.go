@@ -14,7 +14,7 @@ func TestSaver2_1CISavesText(t *testing.T) {
 	ci := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    "SPDXRef-DOCUMENT",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
 		DocumentName:      "spdx-go-0.0.1.abcdef",
 		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
 		ExternalDocumentReferences: []string{
@@ -81,7 +81,7 @@ func TestSaver2_1CIOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	ci1 := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    "SPDXRef-DOCUMENT",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
 		DocumentName:      "spdx-go-0.0.1.abcdef",
 		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
 		CreatorPersons: []string{
@@ -118,7 +118,7 @@ Created: 2018-10-10T06:20:00Z
 	ci2 := &spdx.CreationInfo2_1{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    "SPDXRef-DOCUMENT",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
 		DocumentName:      "spdx-go-0.0.1.abcdef",
 		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
 		CreatorOrganizations: []string{

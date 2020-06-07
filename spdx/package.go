@@ -5,18 +5,13 @@ package spdx
 // Package2_1 is a Package section of an SPDX Document for version 2.1 of the spec.
 type Package2_1 struct {
 
-	// NOT PART OF SPEC
-	// flag: does this "package" contain files that were in fact "unpackaged",
-	// e.g. included directly in the Document without being in a Package?
-	IsUnpackaged bool
-
 	// 3.1: Package Name
 	// Cardinality: mandatory, one
 	PackageName string
 
 	// 3.2: Package SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	PackageSPDXIdentifier string
+	PackageSPDXIdentifier ElementID
 
 	// 3.3: Package Version
 	// Cardinality: optional, one
@@ -115,7 +110,7 @@ type Package2_1 struct {
 	// contained within PackageExternalReference2_1 struct, if present
 
 	// Files contained in this Package
-	Files []*File2_1
+	Files map[ElementID]*File2_1
 }
 
 // PackageExternalReference2_1 is an External Reference to additional info

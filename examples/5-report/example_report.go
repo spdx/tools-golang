@@ -13,6 +13,7 @@ import (
 	"os"
 
 	"github.com/spdx/tools-golang/reporter"
+	"github.com/spdx/tools-golang/spdxlib"
 	"github.com/spdx/tools-golang/tvloader"
 )
 
@@ -46,32 +47,41 @@ func main() {
 	// if we got here, the file is now loaded into memory.
 	fmt.Printf("Successfully loaded %s\n\n", filename)
 
-	// check whether the SPDX file has at least one package
-	if doc.Packages == nil || len(doc.Packages) < 1 {
-		fmt.Printf("No packages found in SPDX document\n")
-		return
-	}
-
-	// it does, so we'll choose the first one
-	pkg := doc.Packages[0]
-
-	// check whether the package had its files analyzed
-	if !pkg.FilesAnalyzed {
-		fmt.Printf("First Package (%s) had FilesAnalyzed: false\n", pkg.PackageName)
-		return
-	}
-
-	// also check whether the package has any files present
-	if pkg.Files == nil || len(pkg.Files) < 1 {
-		fmt.Printf("No Files found in first Package (%s)\n", pkg.PackageName)
-		return
-	}
-
-	// if we got here, there's at least one file
-	// generate and print a report of the Package's Files' LicenseConcluded
-	// values, sorted by # of occurrences
-	err = reporter.Generate(pkg, os.Stdout)
+	// check whether the SPDX file has at least one package that it describes
+	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_1(doc)
 	if err != nil {
-		fmt.Printf("Error while generating report: %v\n", err)
+		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
+		return
+	}
+
+	// it does, so we'll go through each one
+	for _, pkgID := range pkgIDs {
+		pkg, ok := doc.Packages[pkgID]
+		if !ok {
+			fmt.Printf("Package %s has described relationship but ID not found\n", string(pkgID))
+			continue
+		}
+
+		// check whether the package had its files analyzed
+		if !pkg.FilesAnalyzed {
+			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.PackageName)
+			return
+		}
+
+		// also check whether the package has any files present
+		if pkg.Files == nil || len(pkg.Files) < 1 {
+			fmt.Printf("Package %s (%s) has no Files\n", string(pkgID), pkg.PackageName)
+			return
+		}
+
+		// if we got here, there's at least one file
+		// generate and print a report of the Package's Files' LicenseConcluded
+		// values, sorted by # of occurrences
+		fmt.Printf("============================\n")
+		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.PackageName)
+		err = reporter.Generate(pkg, os.Stdout)
+		if err != nil {
+			fmt.Printf("Error while generating report: %v\n", err)
+		}
 	}
 }

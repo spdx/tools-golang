@@ -11,8 +11,8 @@ type Relationship2_1 struct {
 	//              one mandatory for SPDX Document with multiple packages
 	// RefA and RefB are first and second item
 	// Relationship is type from 7.1.1
-	RefA         string
-	RefB         string
+	RefA         DocElementID
+	RefB         DocElementID
 	Relationship string
 
 	// 7.2: Relationship Comment

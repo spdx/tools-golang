@@ -17,7 +17,7 @@ func renderCreationInfo2_1(ci *spdx.CreationInfo2_1, w io.Writer) error {
 		fmt.Fprintf(w, "DataLicense: %s\n", ci.DataLicense)
 	}
 	if ci.SPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", ci.SPDXIdentifier)
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(ci.SPDXIdentifier))
 	}
 	if ci.DocumentName != "" {
 		fmt.Fprintf(w, "DocumentName: %s\n", ci.DocumentName)
