@@ -8,15 +8,15 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-// ===== Searcher top-level function tests =====
+// ===== 2.1 Searcher top-level function tests =====
 func TestSearcherCanFillInIDs(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "../testdata/project2/"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 	}
 
-	doc, err := BuildIDsDocument(packageName, dirRoot, config)
+	doc, err := BuildIDsDocument2_1(packageName, dirRoot, config)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -180,7 +180,7 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	packageName := "project3"
 	dirRoot := "../testdata/project3/"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 		BuilderPathsIgnored: []string{
 			"**/ignoredir/",
@@ -193,7 +193,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		},
 	}
 
-	doc, err := BuildIDsDocument(packageName, dirRoot, config)
+	doc, err := BuildIDsDocument2_1(packageName, dirRoot, config)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -287,11 +287,11 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 func TestSearcherFailsWithInvalidPath(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "./oops/invalid"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "whatever",
 	}
 
-	_, err := BuildIDsDocument(packageName, dirRoot, config)
+	_, err := BuildIDsDocument2_1(packageName, dirRoot, config)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
