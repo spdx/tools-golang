@@ -10,8 +10,8 @@ This software is in an early state, and its API may change significantly.
 
 ## What it does
 
-tools-golang currently works with files conformant to version 2.1 of the
-SPDX specification, available at: https://spdx.org/specifications
+tools-golang currently works with files conformant to versions 2.1 and 2.2
+of the SPDX specification, available at: https://spdx.org/specifications
 
 tools-golang provides the following packages:
 
@@ -31,7 +31,7 @@ directory.
 
 tools-golang doesn't currently do any of the following:
 
-* work with files under any version of the SPDX spec *other than* v2.1
+* work with files under any version of the SPDX spec prior to v2.1
 * work with RDF files
 * convert between RDF and tag-value files, or between different versions
 * enable applications to interact with SPDX files without needing to care
