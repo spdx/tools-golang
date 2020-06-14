@@ -22,7 +22,7 @@ func main() {
 	args := os.Args
 	if len(args) != 4 {
 		fmt.Printf("Usage: %v <package-name> <package-root-dir> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Build a SPDX 2.1 document with one package called <package-name>;\n")
+		fmt.Printf("  Build a SPDX 2.2 document with one package called <package-name>;\n")
 		fmt.Printf("  create files with hashes corresponding to the files in <package-root-dir>;\n")
 		fmt.Printf("  and save it out as a tag-value file to <spdx-file-out>.\n")
 		return
@@ -34,9 +34,9 @@ func main() {
 	fileOut := args[3]
 
 	// to use the SPDX builder package, the first step is to define a
-	// builder.Config2_1 struct. this config data can be reused, in case you
+	// builder.Config2_2 struct. this config data can be reused, in case you
 	// are building SPDX documents for several directories in sequence.
-	config := &builder.Config2_1{
+	config := &builder.Config2_2{
 
 		// NamespacePrefix is a prefix that will be used to populate the
 		// mandatory DocumentNamespace field in the Creation Info section.
@@ -86,7 +86,7 @@ func main() {
 	//   - what to name the package; and
 	//   - where the directory is located on disk; and
 	//   - the config object we just defined.
-	doc, err := builder.Build2_1(packageName, packageRootDir, config)
+	doc, err := builder.Build2_2(packageName, packageRootDir, config)
 	if err != nil {
 		fmt.Printf("Error while building document: %v\n", err)
 		return
@@ -107,7 +107,7 @@ func main() {
 	}
 	defer w.Close()
 
-	err = tvsaver.Save2_1(doc, w)
+	err = tvsaver.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return

@@ -21,7 +21,7 @@ func main() {
 	args := os.Args
 	if len(args) != 2 {
 		fmt.Printf("Usage: %v <spdx-file-in>\n", args[0])
-		fmt.Printf("  Load SPDX 2.1 tag-value file <spdx-file-in>, and\n")
+		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
 		fmt.Printf("  print a portion of its contents.\n")
 		return
 	}
@@ -35,8 +35,8 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a tag-value file, version 2.1
-	doc, err := tvloader.Load2_1(r)
+	// try to load the SPDX file's contents as a tag-value file, version 2.2
+	doc, err := tvloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filename, err)
 		return
@@ -55,7 +55,7 @@ func main() {
 	fmt.Printf("%#v\n\n", doc.CreationInfo)
 
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_1(doc)
+	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
 		return

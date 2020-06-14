@@ -26,7 +26,7 @@ func main() {
 	args := os.Args
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <spdx-file-first> <spdx-file-second>\n", args[0])
-		fmt.Printf("  Load SPDX 2.1 tag-value files <spdx-file-first> and <spdx-file-second>,\n")
+		fmt.Printf("  Load SPDX 2.2 tag-value files <spdx-file-first> and <spdx-file-second>,\n")
 		fmt.Printf("  run a diff between their concluded licenses, and print basic results.\n")
 		return
 	}
@@ -40,14 +40,14 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the first SPDX file's contents as a tag-value file, version 2.1
-	docFirst, err := tvloader.Load2_1(r)
+	// try to load the first SPDX file's contents as a tag-value file, version 2.2
+	docFirst, err := tvloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filenameFirst, err)
 		return
 	}
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDsFirst, err := spdxlib.GetDescribedPackageIDs2_1(docFirst)
+	pkgIDsFirst, err := spdxlib.GetDescribedPackageIDs2_2(docFirst)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from first SPDX document: %v\n", err)
 		return
@@ -65,14 +65,14 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the second SPDX file's contents as a tag-value file, version 2.1
-	docSecond, err := tvloader.Load2_1(r)
+	// try to load the second SPDX file's contents as a tag-value file, version 2.2
+	docSecond, err := tvloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filenameSecond, err)
 		return
 	}
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDsSecond, err := spdxlib.GetDescribedPackageIDs2_1(docSecond)
+	pkgIDsSecond, err := spdxlib.GetDescribedPackageIDs2_2(docSecond)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from second SPDX document: %v\n", err)
 		return
@@ -98,7 +98,7 @@ func main() {
 		}
 
 		// now, run a diff between the two
-		pairs, err := licensediff.MakePairs(p1, p2)
+		pairs, err := licensediff.MakePairs2_2(p1, p2)
 		if err != nil {
 			fmt.Printf("  Error generating licensediff pairs: %v\n", err)
 			continue

@@ -21,7 +21,7 @@ func main() {
 	args := os.Args
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <spdx-file-in> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Load SPDX 2.1 tag-value file <spdx-file-in>, and\n")
+		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
 		fmt.Printf("  save it out to <spdx-file-out>.\n")
 		return
 	}
@@ -35,8 +35,8 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a tag-value file, version 2.1
-	doc, err := tvloader.Load2_1(r)
+	// try to load the SPDX file's contents as a tag-value file, version 2.2
+	doc, err := tvloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", fileIn, err)
 		return
@@ -56,8 +56,8 @@ func main() {
 	}
 	defer w.Close()
 
-	// try to save the document to disk as an SPDX tag-value file, version 2.1
-	err = tvsaver.Save2_1(doc, w)
+	// try to save the document to disk as an SPDX tag-value file, version 2.2
+	err = tvsaver.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return
