@@ -25,7 +25,7 @@ func main() {
 	args := os.Args
 	if len(args) != 4 {
 		fmt.Printf("Usage: %v <package-name> <package-root-dir> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Build a SPDX 2.1 document with one package called <package-name>;\n")
+		fmt.Printf("  Build a SPDX 2.2 document with one package called <package-name>;\n")
 		fmt.Printf("  create files with hashes corresponding to the files in <package-root-dir>;\n")
 		fmt.Printf("  search for SPDX short-form IDs, and use them to fill in license data\n")
 		fmt.Printf("  where possible; and save it out as a tag-value file to <spdx-file-out>.\n")
@@ -38,9 +38,9 @@ func main() {
 	fileOut := args[3]
 
 	// to use the SPDX idsearcher package, the first step is to define a
-	// idsearcher.Config2_1 struct. this config data can be reused, in case you
+	// idsearcher.Config2_2 struct. this config data can be reused, in case you
 	// are building SPDX documents for several directories in sequence.
-	config := &idsearcher.Config{
+	config := &idsearcher.Config2_2{
 
 		// NamespacePrefix is a prefix that will be used to populate the
 		// mandatory DocumentNamespace field in the Creation Info section.
@@ -49,8 +49,8 @@ func main() {
 		// appended to this prefix.
 		NamespacePrefix: "https://example.com/whatever/testdata-",
 
-		// CreatorType and Creator, from builder.Config2_1, are not needed for
-		// idsearcher.Config. Because it is automated and doesn't assume
+		// CreatorType and Creator, from builder.Config2_2, are not needed for
+		// idsearcher.Config2_2. Because it is automated and doesn't assume
 		// further review, the following two Creator fields are filled in:
 		// Creator: Tool: github.com/spdx/tools-golang/builder
 		// Creator: Tool: github.com/spdx/tools-golang/idsearcher
@@ -109,7 +109,7 @@ func main() {
 	// these are the same arguments needed for builder, and in fact they get
 	// passed through to builder (with the relevant data from the config
 	// object extracted behind the scenes).
-	doc, err := idsearcher.BuildIDsDocument(packageName, packageRootDir, config)
+	doc, err := idsearcher.BuildIDsDocument2_2(packageName, packageRootDir, config)
 	if err != nil {
 		fmt.Printf("Error while building document: %v\n", err)
 		return
@@ -138,7 +138,7 @@ func main() {
 	}
 	defer w.Close()
 
-	err = tvsaver.Save2_1(doc, w)
+	err = tvsaver.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return

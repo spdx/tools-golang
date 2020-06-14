@@ -8,15 +8,15 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-// ===== Searcher top-level function tests =====
-func TestSearcherCanFillInIDs(t *testing.T) {
+// ===== 2.1 Searcher top-level function tests =====
+func Test2_1SearcherCanFillInIDs(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "../testdata/project2/"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 	}
 
-	doc, err := BuildIDsDocument(packageName, dirRoot, config)
+	doc, err := BuildIDsDocument2_1(packageName, dirRoot, config)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -177,10 +177,10 @@ func TestSearcherCanFillInIDs(t *testing.T) {
 
 }
 
-func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
+func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	packageName := "project3"
 	dirRoot := "../testdata/project3/"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
 		BuilderPathsIgnored: []string{
 			"**/ignoredir/",
@@ -193,7 +193,7 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 		},
 	}
 
-	doc, err := BuildIDsDocument(packageName, dirRoot, config)
+	doc, err := BuildIDsDocument2_1(packageName, dirRoot, config)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -284,14 +284,303 @@ func TestSearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 }
 
-func TestSearcherFailsWithInvalidPath(t *testing.T) {
+func Test2_1SearcherFailsWithInvalidPath(t *testing.T) {
 	packageName := "project2"
 	dirRoot := "./oops/invalid"
-	config := &Config{
+	config := &Config2_1{
 		NamespacePrefix: "whatever",
 	}
 
-	_, err := BuildIDsDocument(packageName, dirRoot, config)
+	_, err := BuildIDsDocument2_1(packageName, dirRoot, config)
+	if err == nil {
+		t.Fatalf("expected non-nil error, got nil")
+	}
+}
+
+// ===== 2.2 Searcher top-level function tests =====
+func Test2_2SearcherCanFillInIDs(t *testing.T) {
+	packageName := "project2"
+	dirRoot := "../testdata/project2/"
+	config := &Config2_2{
+		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
+	}
+
+	doc, err := BuildIDsDocument2_2(packageName, dirRoot, config)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if doc == nil {
+		t.Fatalf("expected non-nil Document, got nil")
+	}
+
+	// not checking all contents of doc, see builder tests for those
+
+	// get the package and its files, checking size of each
+	if doc.Packages == nil {
+		t.Fatalf("expected non-nil Packages, got nil")
+	}
+	if len(doc.Packages) != 1 {
+		t.Fatalf("expected Packages len to be 1, got %d", len(doc.Packages))
+	}
+	pkg := doc.Packages[spdx.ElementID("Package-project2")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
+
+	if pkg.Files == nil {
+		t.Fatalf("expected non-nil Files, got nil")
+	}
+	if len(pkg.Files) != 6 {
+		t.Fatalf("expected Files len to be 6, got %d", len(pkg.Files))
+	}
+
+	fileInFolder := pkg.Files[spdx.ElementID("File0")]
+	if fileInFolder.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileInFolder.LicenseInfoInFile) != 1 {
+		t.Fatalf("expected LicenseInfoInFile len to be 1, got %d", len(fileInFolder.LicenseInfoInFile))
+	}
+	if fileInFolder.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", fileInFolder.LicenseInfoInFile[0])
+	}
+	if fileInFolder.LicenseConcluded != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", fileInFolder.LicenseConcluded)
+	}
+
+	fileTrailingComment := pkg.Files[spdx.ElementID("File1")]
+	if fileTrailingComment.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileTrailingComment.LicenseInfoInFile) != 1 {
+		t.Fatalf("expected LicenseInfoInFile len to be 1, got %d", len(fileTrailingComment.LicenseInfoInFile))
+	}
+	if fileTrailingComment.LicenseInfoInFile[0] != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", fileTrailingComment.LicenseInfoInFile[0])
+	}
+	if fileTrailingComment.LicenseConcluded != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", fileTrailingComment.LicenseConcluded)
+	}
+
+	fileHasDuplicateID := pkg.Files[spdx.ElementID("File2")]
+	if fileHasDuplicateID.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileHasDuplicateID.LicenseInfoInFile) != 1 {
+		t.Fatalf("expected LicenseInfoInFile len to be 1, got %d", len(fileHasDuplicateID.LicenseInfoInFile))
+	}
+	if fileHasDuplicateID.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", fileHasDuplicateID.LicenseInfoInFile[0])
+	}
+	if fileHasDuplicateID.LicenseConcluded != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", fileHasDuplicateID.LicenseConcluded)
+	}
+
+	fileHasID := pkg.Files[spdx.ElementID("File3")]
+	if fileHasID.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileHasID.LicenseInfoInFile) != 2 {
+		t.Fatalf("expected LicenseInfoInFile len to be 2, got %d", len(fileHasID.LicenseInfoInFile))
+	}
+	if fileHasID.LicenseInfoInFile[0] != "Apache-2.0" {
+		t.Errorf("expected %v, got %v", "Apache-2.0", fileHasID.LicenseInfoInFile[0])
+	}
+	if fileHasID.LicenseInfoInFile[1] != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", fileHasID.LicenseInfoInFile[1])
+	}
+	if fileHasID.LicenseConcluded != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "Apache-2.0 OR GPL-2.0-or-later", fileHasID.LicenseConcluded)
+	}
+
+	fileMultipleIDs := pkg.Files[spdx.ElementID("File4")]
+	if fileMultipleIDs.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileMultipleIDs.LicenseInfoInFile) != 5 {
+		t.Fatalf("expected LicenseInfoInFile len to be 5, got %d", len(fileMultipleIDs.LicenseInfoInFile))
+	}
+	if fileMultipleIDs.LicenseInfoInFile[0] != "BSD-2-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-2-Clause", fileMultipleIDs.LicenseInfoInFile[0])
+	}
+	if fileMultipleIDs.LicenseInfoInFile[1] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", fileMultipleIDs.LicenseInfoInFile[1])
+	}
+	// here, DO NOT keep the +
+	if fileMultipleIDs.LicenseInfoInFile[2] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", fileMultipleIDs.LicenseInfoInFile[2])
+	}
+	if fileMultipleIDs.LicenseInfoInFile[3] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", fileMultipleIDs.LicenseInfoInFile[3])
+	}
+	if fileMultipleIDs.LicenseInfoInFile[4] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", fileMultipleIDs.LicenseInfoInFile[4])
+	}
+	if fileMultipleIDs.LicenseConcluded != "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND EPL-1.0+" {
+		t.Errorf("expected %v, got %v", "((MIT AND BSD-3-Clause) OR ISC) AND BSD-2-Clause AND EPL-1.0+", fileMultipleIDs.LicenseConcluded)
+	}
+
+	fileNoID := pkg.Files[spdx.ElementID("File5")]
+	if fileNoID.LicenseInfoInFile == nil {
+		t.Fatalf("expected non-nil LicenseInfoInFile, got nil")
+	}
+	if len(fileNoID.LicenseInfoInFile) != 1 {
+		t.Fatalf("expected LicenseInfoInFile len to be 1, got %d", len(fileNoID.LicenseInfoInFile))
+	}
+	if fileNoID.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", fileNoID.LicenseInfoInFile[0])
+	}
+	if fileNoID.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", fileNoID.LicenseConcluded)
+	}
+
+	// and finally, the package should have all of these licenses
+	if pkg.PackageLicenseInfoFromFiles == nil {
+		t.Fatalf("expected non-nil PackageLicenseInfoFromFiles, got nil")
+	}
+	if len(pkg.PackageLicenseInfoFromFiles) != 7 {
+		t.Fatalf("expected PackageLicenseInfoFromFiles len to be 7, got %d", len(pkg.PackageLicenseInfoFromFiles))
+	}
+	if pkg.PackageLicenseInfoFromFiles[0] != "Apache-2.0" {
+		t.Errorf("expected %v, got %v", "Apache-2.0", pkg.PackageLicenseInfoFromFiles[0])
+	}
+	if pkg.PackageLicenseInfoFromFiles[1] != "BSD-2-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-2-Clause", pkg.PackageLicenseInfoFromFiles[1])
+	}
+	if pkg.PackageLicenseInfoFromFiles[2] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.PackageLicenseInfoFromFiles[2])
+	}
+	// here, DO NOT keep the +
+	if pkg.PackageLicenseInfoFromFiles[3] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.PackageLicenseInfoFromFiles[3])
+	}
+	if pkg.PackageLicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.PackageLicenseInfoFromFiles[4])
+	}
+	if pkg.PackageLicenseInfoFromFiles[5] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", pkg.PackageLicenseInfoFromFiles[5])
+	}
+	if pkg.PackageLicenseInfoFromFiles[6] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", pkg.PackageLicenseInfoFromFiles[6])
+	}
+
+}
+
+func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
+	packageName := "project3"
+	dirRoot := "../testdata/project3/"
+	config := &Config2_2{
+		NamespacePrefix: "https://github.com/swinslow/spdx-docs/spdx-go/testdata-",
+		BuilderPathsIgnored: []string{
+			"**/ignoredir/",
+			"/excludedir/",
+			"**/ignorefile.txt",
+			"/alsoEXCLUDEthis.txt",
+		},
+		SearcherPathsIgnored: []string{
+			"**/dontscan.txt",
+		},
+	}
+
+	doc, err := BuildIDsDocument2_2(packageName, dirRoot, config)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if doc == nil {
+		t.Fatalf("expected non-nil Document, got nil")
+	}
+
+	// not checking all contents of doc, see builder tests for those
+
+	// get the package and its files, checking licenses for each, and
+	// confirming NOASSERTION for those that are skipped
+	pkg := doc.Packages[spdx.ElementID("Package-project3")]
+	if pkg == nil {
+		t.Fatalf("expected non-nil pkg, got nil")
+	}
+	if len(pkg.Files) != 5 {
+		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
+	}
+
+	f := pkg.Files[spdx.ElementID("File0")]
+	if f.FileName != "/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[spdx.ElementID("File1")]
+	if f.FileName != "/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[spdx.ElementID("File2")]
+	if f.FileName != "/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[spdx.ElementID("File3")]
+	if f.FileName != "/subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %s, got %s", "NOASSERTION", f.LicenseConcluded)
+	}
+
+	f = pkg.Files[spdx.ElementID("File4")]
+	if f.FileName != "/subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	}
+	if len(f.LicenseInfoInFile) != 1 {
+		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
+	}
+	if f.LicenseInfoInFile[0] != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseInfoInFile[0])
+	}
+	if f.LicenseConcluded != "MIT" {
+		t.Errorf("expected %s, got %s", "MIT", f.LicenseConcluded)
+	}
+}
+
+func Test2_2SearcherFailsWithInvalidPath(t *testing.T) {
+	packageName := "project2"
+	dirRoot := "./oops/invalid"
+	config := &Config2_2{
+		NamespacePrefix: "whatever",
+	}
+
+	_, err := BuildIDsDocument2_2(packageName, dirRoot, config)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
