@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/spdx/tools-golang/workflows/build/badge.svg)](https://github.com/spdx/tools-golang/workflows/build/badge.svg)
+[![Build Status](https://github.com/spdx/tools-golang/workflows/build/badge.svg)](https://github.com/spdx/tools-golang/actions)
 [![Coverage Status](https://coveralls.io/repos/github/spdx/tools-golang/badge.svg)](https://coveralls.io/github/spdx/tools-golang)
 
 # tools-golang
