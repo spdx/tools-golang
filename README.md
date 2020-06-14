@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/spdx/tools-golang.svg?branch=master)](https://travis-ci.org/spdx/tools-golang)
+[![Build Status](https://github.com/spdx/tools-golang/workflows/build/badge.svg)](https://github.com/spdx/tools-golang/workflows/build/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/spdx/tools-golang/badge.svg)](https://coveralls.io/github/spdx/tools-golang)
 
 # tools-golang
