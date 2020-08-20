@@ -1,8 +1,10 @@
 package parser2v2
 
 import (
+	"errors"
 	"fmt"
 	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
+	"github.com/RishabhBhatnagar/gordf/rdfwriter"
 	urilib "github.com/RishabhBhatnagar/gordf/uri"
 	"github.com/spdx/tools-golang/spdx"
 	"regexp"
@@ -16,20 +18,6 @@ func getLastPartOfURI(uri string) string {
 	}
 	parts := strings.Split(uri, "/")
 	return parts[len(parts)-1]
-}
-
-func stripLastPartOfUri(uri string) string {
-	lastPart := getLastPartOfURI(uri)
-	uri = strings.TrimSuffix(uri, lastPart)
-	return uri
-}
-
-func stripJoiningChars(uri string) string {
-	return strings.TrimSuffix(strings.TrimSuffix(uri, "/"), "#")
-}
-
-func isUriSame(uri1, uri2 string) bool {
-	return stripJoiningChars(uri1) == stripJoiningChars(uri2)
 }
 
 func (parser *rdfParser2_2) filterAllTriplesByString(subject, predicate, object string) (retTriples []*gordfParser.Triple) {
@@ -68,8 +56,44 @@ func isUriValid(uri string) bool {
 	return err == nil
 }
 
+func (parser *rdfParser2_2) getNodeTypeFromTriples(triples []*gordfParser.Triple, node *gordfParser.Node) (string, error) {
+	if node == nil {
+		return "", errors.New("empty node passed to find node type")
+	}
+	typeTriples := rdfwriter.FilterTriples(triples, &node.ID, &RDF_TYPE, nil)
+	switch len(typeTriples) {
+	case 0:
+		return "", fmt.Errorf("node{%v} not associated with any type triple", node)
+	case 1:
+		return typeTriples[0].Object.ID, nil
+	default:
+		return "", fmt.Errorf("node{%v} is associated with more than one type triples", node)
+	}
+}
 
-// Function Below this line is taken from the tvloader/parser2v2/utils.go
+func (parser *rdfParser2_2) getNodeType(node *gordfParser.Node) (string, error) {
+	return parser.getNodeTypeFromTriples(parser.gordfParserObj.Triples, node)
+}
+
+func (parser *rdfParser2_2) nodeToTriples(node *gordfParser.Node) []*gordfParser.Triple {
+	if node == nil {
+		return []*gordfParser.Triple{}
+	}
+	return parser.nodeStringToTriples[node.String()]
+}
+
+func boolFromString(boolString string) (bool, error) {
+	switch strings.ToLower(boolString) {
+	case "true":
+		return true, nil
+	case "false":
+		return false, nil
+	default:
+		return false, fmt.Errorf("boolean string can be either true/false")
+	}
+}
+
+/* Function Below this line is taken from the tvloader/parser2v2/utils.go */
 
 // used to extract DocumentRef and SPDXRef values from an SPDX Identifier
 // which can point either to this document or to a different one

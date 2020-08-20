@@ -20,7 +20,7 @@ func (parser *rdfParser2_2) getSnippetInformationFromTriple2_2(triple *gordfPars
 		return nil, err
 	}
 
-	for _, siTriple := range parser.nodeToTriples[triple.Subject.String()] {
+	for _, siTriple := range parser.nodeToTriples(triple.Subject) {
 		switch siTriple.Predicate.ID {
 		case RDF_TYPE:
 			// cardinality: exactly 1
@@ -79,14 +79,14 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 	// todo: apply DRY in this method.
 	rangeType := 0 // 0: undefined range, 1: byte, 2: line
 	var start, end string
-	for _, t := range parser.nodeToTriples[node.String()] {
+	for _, t := range parser.nodeToTriples(node) {
 		switch t.Predicate.ID {
 		case RDF_TYPE:
 			if t.Object.ID != PTR_START_END_POINTER {
 				return fmt.Errorf("expected range to have sub tag of type StartEndPointer, found %v", t.Object.ID)
 			}
 		case PTR_START_POINTER:
-			for _, subTriple := range parser.nodeToTriples[t.Object.String()] {
+			for _, subTriple := range parser.nodeToTriples(t.Object) {
 				switch subTriple.Predicate.ID {
 				case RDF_TYPE:
 					switch subTriple.Object.ID {
@@ -115,7 +115,7 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 				}
 			}
 		case PTR_END_POINTER:
-			subTriples := parser.nodeToTriples[t.Object.String()]
+			subTriples := parser.nodeToTriples(t.Object)
 			for _, subTriple := range subTriples {
 				switch subTriple.Predicate.ID {
 				case RDF_TYPE:

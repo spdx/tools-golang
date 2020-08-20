@@ -10,7 +10,7 @@ import (
 
 // Cardinality: Mandatory, one.
 func (parser *rdfParser2_2) parseCreationInfoFromNode(ci *spdx.CreationInfo2_2, node *gordfParser.Node) error {
-	for _, triple := range parser.nodeToTriples[node.String()] {
+	for _, triple := range parser.nodeToTriples(node) {
 		switch triple.Predicate.ID {
 		case SPDX_LICENSE_LIST_VERSION: // 2.7
 			// cardinality: max 1

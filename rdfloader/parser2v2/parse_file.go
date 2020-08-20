@@ -18,7 +18,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		return nil, err
 	}
 
-	for _, subTriple := range parser.nodeToTriples[fileNode.String()] {
+	for _, subTriple := range parser.nodeToTriples(fileNode) {
 		switch subTriple.Predicate.ID {
 		case SPDX_FILE_NAME: // 4.1
 			// cardinality: exactly 1
@@ -38,7 +38,11 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			err = parser.setFileChecksumFromNode(file, subTriple.Object)
 		case SPDX_LICENSE_CONCLUDED: // 4.5
 			// cardinality: (exactly 1 anyLicenseInfo) or (None) or (Noassertion)
-			file.LicenseConcluded, err = parser.getLicenseFromTriple(subTriple)
+			anyLicense, err := parser.getAnyLicenseFromNode(subTriple.Object)
+			if err != nil {
+				return nil, fmt.Errorf("error parsing licenseConcluded: %v", err)
+			}
+			file.LicenseConcluded = anyLicense.ToLicenseString()
 		case SPDX_LICENSE_INFO_IN_FILE: // 4.6
 			// cardinality: min 1
 			lastPart := getLastPartOfURI(subTriple.Object.ID)
@@ -117,7 +121,7 @@ func (parser *rdfParser2_2) getArtifactFromNode(node *gordfParser.Node) (*spdx.A
 		artifactOf.URI = node.ID
 	}
 	// parsing rest triples and attributes of the artifact.
-	for _, triple := range parser.nodeToTriples[node.String()] {
+	for _, triple := range parser.nodeToTriples(node) {
 		switch triple.Predicate.ID {
 		case RDF_TYPE:
 		case DOAP_HOMEPAGE:

@@ -3,7 +3,6 @@
 package parser2v2
 
 import (
-	"errors"
 	"fmt"
 	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
 	gordfWriter "github.com/RishabhBhatnagar/gordf/rdfwriter"
@@ -13,8 +12,8 @@ import (
 // returns a new instance of rdfParser2_2 given the gordf object and nodeToTriples mapping
 func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][]*gordfParser.Triple) *rdfParser2_2 {
 	parser := rdfParser2_2{
-		gordfParserObj: gordfParserObj,
-		nodeToTriples:  nodeToTriples,
+		gordfParserObj:      gordfParserObj,
+		nodeStringToTriples: nodeToTriples,
 		doc: &spdx.Document2_2{
 			CreationInfo:    &spdx.CreationInfo2_2{},
 			Packages:        map[spdx.ElementID]*spdx.Package2_2{},
@@ -101,10 +100,10 @@ func (parser *rdfParser2_2) getSpdxDocNode() (node *gordfParser.Node, err error)
 	var spdxDocNode *gordfParser.Node
 	for _, rootNode := range gordfWriter.GetRootNodes(parser.gordfParserObj.Triples) {
 		typeTriples := gordfWriter.FilterTriples(
-			parser.nodeToTriples[rootNode.String()], // triples
-			&rootNode.ID,                            // Subject
-			&RDF_TYPE,                               // Predicate
-			nil,                                     // Object
+			parser.nodeToTriples(rootNode), // triples
+			&rootNode.ID,                   // Subject
+			&RDF_TYPE,                      // Predicate
+			nil,                            // Object
 		)
 		if len(typeTriples) != 1 {
 			return nil, fmt.Errorf("rootNode (%v) must be associated with exactly one"+
@@ -123,187 +122,4 @@ func (parser *rdfParser2_2) getSpdxDocNode() (node *gordfParser.Node, err error)
 		return nil, fmt.Errorf("RDF files must be associated with a SpdxDocument tag. No tag found")
 	}
 	return spdxDocNode, nil
-}
-
-// unused
-func (parser *rdfParser2_2) setFiles() error {
-	allFilesTriples, err := parser.filterTriplesByRegex(parser.gordfParserObj.Triples, ".*", RDF_TYPE+"$", SPDX_FILE+"$")
-	if err != nil {
-		return err
-	}
-	for _, fileTriple := range allFilesTriples {
-		file, err := parser.getFileFromNode(fileTriple.Subject)
-		if err != nil {
-			return fmt.Errorf("error setting a file: %v", err)
-		}
-		parser.files[file.FileSPDXIdentifier] = file
-	}
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) setPackages() error {
-	allPackagesTriples, err := parser.filterTriplesByRegex(parser.gordfParserObj.Triples, ".*", RDF_TYPE+"$", SPDX_PACKAGE+"$")
-	if err != nil {
-		return err
-	}
-	for _, pkgTriple := range allPackagesTriples {
-		pkg, err := parser.getPackageFromNode(pkgTriple.Subject)
-		if err != nil {
-			return fmt.Errorf("error setting a package: %v", err)
-		}
-		parser.packages[pkg.PackageSPDXIdentifier] = pkg
-	}
-	return nil
-}
-
-// unused
-// assumes that the document's namespace is already set.
-func (parser *rdfParser2_2) setSnippetToDoc(si *spdx.Snippet2_2, snippetNode *gordfParser.Node) (err error) {
-	if parser.doc == nil || parser.doc.CreationInfo == nil {
-		return errors.New("document namespace not set yet")
-	}
-	docNS := parser.doc.CreationInfo.DocumentNamespace
-	snippetNS := stripLastPartOfUri(snippetNode.ID)
-	if !isUriSame(docNS, snippetNS) {
-		// found a snippet which doesn't belong to current document being set
-		return fmt.Errorf("document namespace(%s) and snippet namespace(%s) doesn't match", docNS, snippetNS)
-	}
-
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) setAnnotations(spdxDocNode *gordfParser.Node) error {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_ANNOTATION, nil)
-	for _, triple := range triples {
-		err := parser.parseAnnotationFromNode(triple.Object)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) getSpecVersion(spdxDocNode *gordfParser.Node) (string, error) {
-	specVersionTriples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_SPEC_VERSION, nil)
-	n := len(specVersionTriples)
-	if n == 0 {
-		return "", fmt.Errorf("no specVersion found for the given spdxNode")
-	}
-	if n > 1 {
-		return "", fmt.Errorf("there must be exactly one specVersion. found %d specVersion", n)
-	}
-	return specVersionTriples[0].Object.ID, nil
-}
-
-// unused
-func (parser *rdfParser2_2) getDataLicense(spdxDocNode *gordfParser.Node) (string, error) {
-	dataLicenseTriples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_DATA_LICENSE, nil)
-	n := len(dataLicenseTriples)
-	if n == 0 {
-		return "", fmt.Errorf("no dataLicense found for the given spdxNode")
-	}
-	if n > 1 {
-		return "", fmt.Errorf("there must be exactly one dataLicense. found %d dataLicense", n)
-	}
-	return parser.getLicenseFromTriple(dataLicenseTriples[0])
-}
-
-// unused
-func (parser *rdfParser2_2) getDocumentName(spdxDocNode *gordfParser.Node) (string, error) {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_NAME, nil)
-	n := len(triples)
-	if n == 0 {
-		return "", fmt.Errorf("no documentName found for the given spdxNode")
-	}
-	if n > 1 {
-		return "", fmt.Errorf("there must be exactly one documentName. found %d documentName", n)
-	}
-	return triples[0].Object.ID, nil
-}
-
-// unused
-func (parser *rdfParser2_2) setCreationInfo(spdxDocNode *gordfParser.Node, ci *spdx.CreationInfo2_2) error {
-	docNS := stripJoiningChars(stripLastPartOfUri(spdxDocNode.ID))
-	allCreationInfoTriples, err := parser.filterTriplesByRegex(parser.gordfParserObj.Triples, docNS+".*", SPDX_CREATION_INFO, ".*")
-	if err != nil {
-		return err
-	}
-	n := len(allCreationInfoTriples)
-	if n > 1 {
-		return fmt.Errorf("document(%s) must have exactly one creation info. found %d", docNS, n)
-	}
-	if n == 0 {
-		return fmt.Errorf("no creation info found for the document identified by %s", docNS)
-	}
-	err = parser.parseCreationInfoFromNode(ci, allCreationInfoTriples[0].Object)
-	if err != nil {
-		return err
-	}
-	parser.doc.CreationInfo = ci
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) getDocumentComment(spdxDocNode *gordfParser.Node) (string, error) {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_NAME, nil)
-	n := len(triples)
-	if n > 1 {
-		return "", fmt.Errorf("there must be atmost one documentComment. found %d documentComment", n)
-	}
-	if n == 0 {
-		return triples[0].Object.ID, nil
-	}
-	return "", nil
-}
-
-// unused
-func (parser *rdfParser2_2) setReviewed(spdxDocNode *gordfParser.Node) error {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_REVIEWED, nil)
-	for _, triple := range triples {
-		err := parser.setReviewFromNode(triple.Object)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) setDescribesPackage(spdxDocNode *gordfParser.Node) error {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_DESCRIBES_PACKAGE, nil)
-	for _, triple := range triples {
-		pkg, err := parser.getPackageFromNode(triple.Object)
-		if err != nil {
-			return err
-		}
-		parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
-	}
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) setExtractedLicensingInfo(spdxDocNode *gordfParser.Node) error {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_HAS_EXTRACTED_LICENSING_INFO, nil)
-	for _, triple := range triples {
-		err := parser.parseOtherLicenseFromNode(triple.Object)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// unused
-func (parser *rdfParser2_2) setRelationships(spdxDocNode *gordfParser.Node) error {
-	triples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, &spdxDocNode.ID, &SPDX_RELATIONSHIP, nil)
-	for _, triple := range triples {
-		err := parser.parseRelationship(triple)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }

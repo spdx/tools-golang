@@ -10,7 +10,7 @@ import (
 
 func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) error {
 	review := spdx.Review2_2{}
-	for _, triple := range parser.nodeToTriples[reviewedNode.String()] {
+	for _, triple := range parser.nodeToTriples(reviewedNode) {
 		switch triple.Predicate.ID {
 		case RDF_TYPE:
 			// cardinality: exactly 1

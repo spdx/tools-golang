@@ -22,7 +22,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 		return err
 	}
 
-	for _, subTriple := range parser.nodeToTriples[triple.Object.String()] {
+	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
 		case SPDX_RELATIONSHIP_TYPE:
 			// cardinality: exactly 1
@@ -38,7 +38,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 				return err
 			}
 
-			relatedSpdxElementTriples := parser.nodeToTriples[subTriple.Object.String()]
+			relatedSpdxElementTriples := parser.nodeToTriples(subTriple.Object)
 			if len(relatedSpdxElementTriples) == 0 {
 				continue
 			}

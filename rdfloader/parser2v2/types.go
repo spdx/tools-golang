@@ -10,8 +10,8 @@ import (
 type rdfParser2_2 struct {
 	// fields associated with gordf project which
 	// will be required by rdfloader
-	gordfParserObj *gordfParser.Parser
-	nodeToTriples  map[string][]*gordfParser.Triple
+	gordfParserObj      *gordfParser.Parser
+	nodeStringToTriples map[string][]*gordfParser.Triple
 
 	// document into which data is being parsed
 	doc *spdx.Document2_2
@@ -24,3 +24,82 @@ type rdfParser2_2 struct {
 	// mapping of nodeStrings to parsed object to save double computation.
 	cache map[string]interface{}
 }
+
+type AnyLicenseInfo interface {
+	// ToLicenseString returns the representation of license about how it will
+	// be stored in the tools-golang data model
+	ToLicenseString() string
+}
+
+type SimpleLicensingInfo struct {
+	AnyLicenseInfo
+	comment   string
+	licenseID string
+	name      string
+	seeAlso   []string
+	example   string
+}
+
+type ExtractedLicensingInfo struct {
+	SimpleLicensingInfo
+	extractedText string
+}
+
+type OrLaterOperator struct {
+	AnyLicenseInfo
+	license SimpleLicensingInfo
+}
+
+type ConjunctiveLicenseSet struct {
+	AnyLicenseInfo
+	members []AnyLicenseInfo
+}
+
+type DisjunctiveLicenseSet struct {
+	AnyLicenseInfo
+	members []AnyLicenseInfo
+}
+
+type License struct {
+	SimpleLicensingInfo
+	isOsiApproved                 bool
+	licenseText                   string
+	standardLicenseHeader         string
+	standardLicenseTemplate       string
+	standardLicenseHeaderTemplate string
+	seeAlso                       string
+	isDeprecatedLicenseID         bool
+	isFsfLibre                    bool
+}
+
+type ListedLicense struct {
+	License
+}
+
+type LicenseException struct {
+	licenseExceptionId   string
+	licenseExceptionText string
+	seeAlso              string // must be a valid uri
+	name                 string
+	example              string
+}
+
+type WithExceptionOperator struct {
+	AnyLicenseInfo
+	license          SimpleLicensingInfo
+	licenseException LicenseException
+}
+
+// custom LicenseType to provide support for licences of
+// type Noassertion, None and customLicenses
+type SpecialLicense struct {
+	AnyLicenseInfo
+	value SpecialLicenseValue
+}
+
+type SpecialLicenseValue string
+
+const (
+	NONE        SpecialLicenseValue = "NONE"
+	NOASSERTION SpecialLicenseValue = "NOASSERTION"
+)

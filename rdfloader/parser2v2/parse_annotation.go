@@ -13,7 +13,7 @@ import (
 // The newly created annotation is appended to the doc.
 func (parser *rdfParser2_2) parseAnnotationFromNode(node *gordfParser.Node) (err error) {
 	ann := &spdx.Annotation2_2{}
-	for _, subTriple := range parser.nodeToTriples[node.String()] {
+	for _, subTriple := range parser.nodeToTriples(node) {
 		switch subTriple.Predicate.ID {
 		case SPDX_ANNOTATOR:
 			// cardinality: exactly 1

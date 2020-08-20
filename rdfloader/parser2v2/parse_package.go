@@ -20,7 +20,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	pkg.PackageSPDXIdentifier = eId // 3.2
 
 	// iterate over all the triples associated with the provided package packageNode.
-	for _, subTriple := range parser.nodeToTriples[packageNode.String()] {
+	for _, subTriple := range parser.nodeToTriples(packageNode) {
 		switch subTriple.Predicate.ID {
 		case RDF_TYPE:
 			// cardinality: exactly 1
@@ -76,21 +76,21 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 			pkg.PackageSourceInfo = subTriple.Object.ID
 		case SPDX_LICENSE_CONCLUDED: // 3.13
 			// cardinality: exactly 1
-			licenseConcluded, err := parser.getLicenseFromTriple(subTriple)
+			anyLicenseInfo, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return nil, err
 			}
-			pkg.PackageLicenseConcluded = licenseConcluded
+			pkg.PackageLicenseConcluded = anyLicenseInfo.ToLicenseString()
 		case SPDX_LICENSE_INFO_FROM_FILES: // 3.14
 			// cardinality: min 0
 			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, getLicenseStringFromURI(subTriple.Object.ID))
 		case SPDX_LICENSE_DECLARED: // 3.15
 			// cardinality: exactly 1
-			license, err := parser.getLicenseFromTriple(subTriple)
+			anyLicenseInfo, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return nil, err
 			}
-			pkg.PackageLicenseDeclared = license
+			pkg.PackageLicenseDeclared = anyLicenseInfo.ToLicenseString()
 		case SPDX_LICENSE_COMMENTS: // 3.16
 			// cardinality: max 1
 			pkg.PackageLicenseComments = subTriple.Object.ID
@@ -149,7 +149,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 // parses externalReference found in the package by the associated triple.
 func (parser *rdfParser2_2) getPackageExternalRef(triple *gordfParser.Triple) (externalDocRef *spdx.PackageExternalReference2_2, err error) {
 	externalDocRef = &spdx.PackageExternalReference2_2{}
-	for _, subTriple := range parser.nodeToTriples[triple.Object.String()] {
+	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
 		case SPDX_REFERENCE_CATEGORY:
 			// cardinality: exactly 1
@@ -187,7 +187,7 @@ func (parser *rdfParser2_2) getPackageExternalRef(triple *gordfParser.Triple) (e
 }
 
 func (parser *rdfParser2_2) setPackageVerificationCode(pkg *spdx.Package2_2, node *gordfParser.Node) error {
-	for _, subTriple := range parser.nodeToTriples[node.String()] {
+	for _, subTriple := range parser.nodeToTriples(node) {
 		switch subTriple.Predicate.ID {
 		case SPDX_PACKAGE_VERIFICATION_CODE_VALUE:
 			// cardinality: exactly 1
@@ -265,9 +265,9 @@ func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 // validates the uri and sets the location if it is valid
 func setDocumentLocationFromURI(locationURI string, pkg *spdx.Package2_2) error {
 	switch locationURI {
-	case SPDX_NOASSERTION:
+	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_CAPS:
 		pkg.PackageDownloadLocation = "NOASSERTION"
-	case SPDX_NONE:
+	case SPDX_NONE_CAPS, SPDX_NONE_SMALL:
 		pkg.PackageDownloadLocation = "NONE"
 	default:
 		if !isUriValid(locationURI) {
