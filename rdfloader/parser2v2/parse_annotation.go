@@ -51,6 +51,7 @@ func setAnnotationToParser(parser *rdfParser2_2, annotation *spdx.Annotation2_2)
 	return nil
 }
 
+// annotator is of type [Person|Organization|Tool]:String
 func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) error {
 	subkey, subvalue, err := ExtractSubs(annotatorString, ":")
 	if err != nil {
@@ -64,6 +65,7 @@ func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) err
 	return fmt.Errorf("unrecognized Annotator type %v while parsing annotation", subkey)
 }
 
+// it can be NS_SPDX+annotationType_[review|other]
 func setAnnotationType(annType string, ann *spdx.Annotation2_2) error {
 	switch annType {
 	case SPDX_ANNOTATION_TYPE_OTHER:
