@@ -47,7 +47,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 			if len(typeTriples) != 1 {
 				return fmt.Errorf("expected %s to have exactly one rdf:type triple. found %d triples", subTriple.Object, len(typeTriples))
 			}
-			err = parser.parseRelatedElementFromTriple(reln, typeTriples[0])
+			err = parser.parseRelatedElementFromTriple(&reln, typeTriples[0])
 			if err != nil {
 				return err
 			}
@@ -65,7 +65,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 	return nil
 }
 
-func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln spdx.Relationship2_2, triple *gordfParser.Triple) error {
+func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationship2_2, triple *gordfParser.Triple) error {
 	// iterate over relatedElement Type and check which SpdxElement it is.
 	var err error
 	switch triple.Object.ID {
@@ -105,7 +105,6 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln spdx.Relationship
 	return nil
 }
 
-
 // references like RefA and RefB of any relationship
 func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
 	fragment := getLastPartOfURI(uri)
@@ -119,6 +118,7 @@ func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
 	return ExtractDocElementID(fragment)
 }
 
+// note: relationshipType is case sensitive.
 func getRelationshipTypeFromURI(relnTypeURI string) (string, error) {
 	relnTypeURI = strings.TrimSpace(relnTypeURI)
 	lastPart := getLastPartOfURI(relnTypeURI)
