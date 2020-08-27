@@ -26,7 +26,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 		switch subTriple.Predicate.ID {
 		case SPDX_RELATIONSHIP_TYPE:
 			// cardinality: exactly 1
-			reln.Relationship, err = getRelationshipType(subTriple.Object.ID)
+			reln.Relationship, err = getRelationshipTypeFromURI(subTriple.Object.ID)
 		case RDF_TYPE:
 			// cardinality: exactly 1
 			continue
@@ -56,6 +56,9 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 			reln.RelationshipComment = subTriple.Object.ID
 		default:
 			return fmt.Errorf("unexpected predicate id: %s", subTriple.Predicate.ID)
+		}
+		if err != nil {
+			return err
 		}
 	}
 	parser.doc.Relationships = append(parser.doc.Relationships, &reln)
@@ -102,6 +105,8 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln spdx.Relationship
 	return nil
 }
 
+
+// references like RefA and RefB of any relationship
 func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
 	fragment := getLastPartOfURI(uri)
 	switch strings.ToLower(strings.TrimSpace(fragment)) {
@@ -114,18 +119,19 @@ func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
 	return ExtractDocElementID(fragment)
 }
 
-func getRelationshipType(relnType string) (string, error) {
-	relnType = strings.TrimSpace(relnType)
-	if !strings.HasPrefix(relnType, PREFIX_RELATIONSHIP_TYPE) {
-		return "", fmt.Errorf("relationshipType must start with %s. found %s", PREFIX_RELATIONSHIP_TYPE, relnType)
+func getRelationshipTypeFromURI(relnTypeURI string) (string, error) {
+	relnTypeURI = strings.TrimSpace(relnTypeURI)
+	lastPart := getLastPartOfURI(relnTypeURI)
+	if !strings.HasPrefix(lastPart, PREFIX_RELATIONSHIP_TYPE) {
+		return "", fmt.Errorf("relationshipType must start with %s. found %s", PREFIX_RELATIONSHIP_TYPE, lastPart)
 	}
-	relnType = strings.TrimPrefix(relnType, PREFIX_RELATIONSHIP_TYPE)
+	lastPart = strings.TrimPrefix(lastPart, PREFIX_RELATIONSHIP_TYPE)
 
-	relnType = strings.TrimSpace(relnType)
+	lastPart = strings.TrimSpace(lastPart)
 	for _, validRelationshipType := range AllRelationshipTypes() {
-		if relnType == validRelationshipType {
-			return relnType, nil
+		if lastPart == validRelationshipType {
+			return lastPart, nil
 		}
 	}
-	return "", fmt.Errorf("unknown relationshipType: %s", relnType)
+	return "", fmt.Errorf("unknown relationshipType: '%s'", lastPart)
 }

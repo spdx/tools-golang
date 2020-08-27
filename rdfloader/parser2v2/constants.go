@@ -32,6 +32,7 @@ var (
 	SPDX_SPDX_DOCUMENT                           = NS_SPDX + "spdxDocument"
 	SPDX_SPDX_DOCUMENT_CAPITALIZED               = NS_SPDX + "SpdxDocument"
 	SPDX_CHECKSUM                                = NS_SPDX + "checksum"
+	SPDX_CHECKSUM_CAPITALIZED                    = NS_SPDX + "Checksum"
 	SPDX_ANNOTATION_TYPE                         = NS_SPDX + "annotationType"
 	SPDX_ANNOTATION_TYPE_OTHER                   = NS_SPDX + "annotationType_other"
 	SPDX_ANNOTATION_TYPE_REVIEW                  = NS_SPDX + "annotationType_review"
