@@ -11,7 +11,7 @@ import (
 
 func (parser *rdfParser2_2) getExtractedLicensingInfoFromNode(node *gordfParser.Node) (lic ExtractedLicensingInfo, err error) {
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
-	restTriples := []*gordfParser.Triple{}
+	var restTriples []*gordfParser.Triple
 	for _, triple := range associatedTriples {
 		switch triple.Predicate.ID {
 		case SPDX_EXTRACTED_TEXT:
