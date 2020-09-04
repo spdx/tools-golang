@@ -42,10 +42,7 @@ func Test_rdfParser2_2_parseCreationInfoFromNode(t *testing.T) {
 		<spdx:CreationInfo>
 			<spdx:licenseListVersion>2.6</spdx:licenseListVersion>
 			<spdx:creator>Person Unknown</spdx:creator>
-			<spdx:creator>Organization: </spdx:creator>
-			<spdx:creator>Tool: spdx2</spdx:creator>
 			<spdx:created>2018-08-24T19:55:34Z</spdx:created>
-			<spdx:unknownPredicate />
 		</spdx:CreationInfo>
 	`)
 	ciNode := parser.gordfParserObj.Triples[0].Subject

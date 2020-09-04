@@ -424,10 +424,22 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	_, err = parser.getFileFromNode(fileNode)
 	if err == nil {
-		t.Errorf("should've raised an error stating invalid predicate for a file")
+		t.Error("should've raised an error stating invalid predicate for a file")
 	}
 
-	// TestCase 9: all valid attribute and it's values.
+	// TestCase 9: invalid licenseInfoInFile.
+	parser, _ = parserFromBodyContent(`
+		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+			<spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/DC0-1.0" />
+		</spdx:File>
+	`)
+	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
+	_, err = parser.getFileFromNode(fileNode)
+	if err == nil {
+		t.Error("should've raised an error stating invalid licenseInfoInFile for a file")
+	}
+
+	// TestCase 10: all valid attribute and it's values.
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
@@ -647,55 +659,5 @@ func Test_getNoticeTextFromNode(t *testing.T) {
 	})
 	if output != "text" {
 		t.Errorf("expected text, found %s", output)
-	}
-}
-
-func Test_rdfParser2_2_getLicenseInfoInFileFromNode(t *testing.T) {
-	parser, _ := parserFromBodyContent(``)
-
-	// TestCase 1: noassertion License
-	lic, err := parser.getLicenseInfoInFileFromNode(&gordfParser.Node{
-		NodeType: gordfParser.RESOURCELITERAL,
-		ID:       SPDX_NOASSERTION_CAPS,
-	})
-	if err != nil {
-		t.Errorf("error parsing a valid license")
-	}
-	if lic.ToLicenseString() != "NOASSERTION" {
-		t.Errorf("expected %s, found %s", "NOASSERTION", lic.ToLicenseString())
-	}
-
-	// TestCase 2: none License
-	lic, err = parser.getLicenseInfoInFileFromNode(&gordfParser.Node{
-		NodeType: gordfParser.RESOURCELITERAL,
-		ID:       SPDX_NONE_CAPS,
-	})
-	if err != nil {
-		t.Errorf("error parsing a valid license")
-	}
-	if lic.ToLicenseString() != "NONE" {
-		t.Errorf("expected %s, found %s", "NONE", lic.ToLicenseString())
-	}
-
-	// TestCase 3: invalid license
-	// TestCase 1: noassertion License
-	node := &gordfParser.Node{
-		NodeType: gordfParser.BLANK,
-		ID:       "N0",
-	}
-	parser.gordfParserObj.Triples = append(parser.gordfParserObj.Triples, &gordfParser.Triple{
-		Subject: node,
-		Predicate: &gordfParser.Node{
-			NodeType: gordfParser.IRI,
-			ID:       NS_SPDX + "invalidAttribute",
-		},
-		Object: &gordfParser.Node{
-			NodeType: gordfParser.IRI,
-			ID:       NS_SPDX + "weirdLicense",
-		},
-	})
-	lic, err = parser.getLicenseInfoInFileFromNode(node)
-	if err == nil {
-		t.Errorf("should've raised an error parsing an invalid license")
 	}
 }

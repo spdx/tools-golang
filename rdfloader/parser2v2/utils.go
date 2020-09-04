@@ -7,10 +7,11 @@ import (
 	"github.com/RishabhBhatnagar/gordf/rdfwriter"
 	urilib "github.com/RishabhBhatnagar/gordf/uri"
 	"github.com/spdx/tools-golang/spdx"
-	"regexp"
 	"strings"
 )
 
+// a uri is of type baseURI#fragment or baseFragment/subFragment
+// returns fragment or subFragment when given as an input.
 func getLastPartOfURI(uri string) string {
 	if strings.Contains(uri, "#") {
 		parts := strings.Split(uri, "#")
@@ -20,43 +21,12 @@ func getLastPartOfURI(uri string) string {
 	return parts[len(parts)-1]
 }
 
-func (parser *rdfParser2_2) filterAllTriplesByString(subject, predicate, object string) (retTriples []*gordfParser.Triple) {
-	for _, triple := range parser.gordfParserObj.Triples {
-		if triple.Subject.ID == subject && triple.Predicate.ID == predicate && triple.Object.ID == object {
-			retTriples = append(retTriples, triple)
-		}
-	}
-	return retTriples
-}
-
-func (parser *rdfParser2_2) filterTriplesByRegex(triples []*gordfParser.Triple, subject, predicate, object string) (retTriples []*gordfParser.Triple, err error) {
-	var subjectCompiled, objectCompiled, predicateCompiled *regexp.Regexp
-	subjectCompiled, err = regexp.Compile(subject)
-	if err != nil {
-		return
-	}
-	predicateCompiled, err = regexp.Compile(predicate)
-	if err != nil {
-		return
-	}
-	objectCompiled, err = regexp.Compile(object)
-	if err != nil {
-		return
-	}
-	for _, triple := range triples {
-		if subjectCompiled.MatchString(triple.Subject.ID) && predicateCompiled.MatchString(triple.Predicate.ID) && objectCompiled.MatchString(triple.Object.ID) {
-			retTriples = append(retTriples, triple)
-		}
-	}
-	return
-}
-
 func isUriValid(uri string) bool {
 	_, err := urilib.NewURIRef(uri)
 	return err == nil
 }
 
-func (parser *rdfParser2_2) getNodeTypeFromTriples(triples []*gordfParser.Triple, node *gordfParser.Node) (string, error) {
+func getNodeTypeFromTriples(triples []*gordfParser.Triple, node *gordfParser.Node) (string, error) {
 	if node == nil {
 		return "", errors.New("empty node passed to find node type")
 	}
@@ -71,10 +41,6 @@ func (parser *rdfParser2_2) getNodeTypeFromTriples(triples []*gordfParser.Triple
 	}
 }
 
-func (parser *rdfParser2_2) getNodeType(node *gordfParser.Node) (string, error) {
-	return parser.getNodeTypeFromTriples(parser.gordfParserObj.Triples, node)
-}
-
 func (parser *rdfParser2_2) nodeToTriples(node *gordfParser.Node) []*gordfParser.Triple {
 	if node == nil {
 		return []*gordfParser.Triple{}
@@ -82,6 +48,8 @@ func (parser *rdfParser2_2) nodeToTriples(node *gordfParser.Node) []*gordfParser
 	return parser.nodeStringToTriples[node.String()]
 }
 
+// returns which boolean was given as an input
+// string(bool) is the only possible input for which it will not raise any error.
 func boolFromString(boolString string) (bool, error) {
 	switch strings.ToLower(boolString) {
 	case "true":

@@ -45,7 +45,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.LicenseConcluded = anyLicense.ToLicenseString()
 		case SPDX_LICENSE_INFO_IN_FILE: // 4.6
 			// cardinality: min 1
-			lic, err := parser.getLicenseInfoInFileFromNode(subTriple.Object)
+			lic, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return nil, fmt.Errorf("error parsing licenseInfoInFile: %v", err)
 			}
@@ -180,23 +180,4 @@ func getNoticeTextFromNode(node *gordfParser.Node) string {
 	default:
 		return node.ID
 	}
-}
-
-func (parser *rdfParser2_2) getLicenseInfoInFileFromNode(node *gordfParser.Node) (AnyLicenseInfo, error) {
-	// LicenseInfoInFile can either be NONE | NOASSERTION | SimpleLicensingInfo
-	// return type is kept as AnyLicenseInfo because, we can have
-	// either SpecialLicense or SimpleLicensingInfo as the output
-	switch node.ID {
-	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_SMALL:
-		return SpecialLicense{
-			value: NOASSERTION,
-		}, nil
-	case SPDX_NONE_CAPS, SPDX_NONE_SMALL:
-		return SpecialLicense{
-			value: NONE,
-		}, nil
-	}
-
-	// the license must be a SimpleLicense
-	return parser.getSimpleLicensingInfoFromNode(node)
 }

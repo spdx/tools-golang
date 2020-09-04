@@ -9,7 +9,7 @@ import (
 )
 
 func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node) (err error) {
-	// create a new creation info
+	// shorthand for document's creation info.
 	ci := parser.doc.CreationInfo
 
 	// parse the document header information (SPDXID and document namespace)
@@ -25,6 +25,8 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 	for _, subTriple := range parser.nodeToTriples(spdxDocNode) {
 		objectValue := subTriple.Object.ID
 		switch subTriple.Predicate.ID {
+		case RDF_TYPE:
+			continue
 		case SPDX_SPEC_VERSION: // 2.1: specVersion
 			// cardinality: exactly 1
 			ci.SPDXVersion = objectValue
@@ -41,7 +43,7 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 		case SPDX_EXTERNAL_DOCUMENT_REF: // 2.6: externalDocumentReferences
 			// cardinality: min 0
 			var extRef string
-			extRef, err = parser.getExternalDocumentRefFromTriples(parser.nodeToTriples(subTriple.Object))
+			extRef, err = parser.getExternalDocumentRefFromNode(subTriple.Object)
 			ci.ExternalDocumentReferences = append(ci.ExternalDocumentReferences, extRef)
 		case SPDX_CREATION_INFO: // 2.7 - 2.10:
 			// cardinality: exactly 1
@@ -74,22 +76,20 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 		case SPDX_ANNOTATION: // annotations
 			// cardinality: min 0
 			err = parser.parseAnnotationFromNode(subTriple.Object)
+		default:
+			return fmt.Errorf("invalid predicate while parsing SpdxDocument: %v", subTriple.Predicate)
 		}
 		if err != nil {
 			return err
 		}
 	}
-
-	// control reaches here iff no error is encountered
-	// set the ci if no error is encountered while parsing triples.
-	parser.doc.CreationInfo = ci
 	return nil
 }
 
-func (parser *rdfParser2_2) getExternalDocumentRefFromTriples(triples []*gordfParser.Triple) (string, error) {
+func (parser *rdfParser2_2) getExternalDocumentRefFromNode(node *gordfParser.Node) (string, error) {
 	var docID, checksumValue, checksumAlgorithm, spdxDocument string
 	var err error
-	for _, triple := range triples {
+	for _, triple := range parser.nodeToTriples(node) {
 		switch triple.Predicate.ID {
 		case SPDX_EXTERNAL_DOCUMENT_ID:
 			// cardinality: exactly 1

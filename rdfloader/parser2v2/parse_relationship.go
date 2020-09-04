@@ -72,11 +72,11 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 	case SPDX_FILE:
 		file, err := parser.getFileFromNode(triple.Subject)
 		if err != nil {
-			return fmt.Errorf("error setting a package: %v", err)
+			return fmt.Errorf("error setting a file: %v", err)
 		}
-		reln.RefB, err = ExtractDocElementID(getLastPartOfURI(triple.Subject.ID))
-		if err != nil {
-			return err
+		reln.RefB = spdx.DocElementID{
+			DocumentRefID: "",
+			ElementRefID:  file.FileSPDXIdentifier,
 		}
 		parser.files[file.FileSPDXIdentifier] = file
 
@@ -85,11 +85,10 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 		if err != nil {
 			return fmt.Errorf("error setting a package inside a relationship: %v", err)
 		}
-		reln.RefB, err = ExtractDocElementID(getLastPartOfURI(triple.Subject.ID))
-		if err != nil {
-			return err
+		reln.RefB = spdx.DocElementID{
+			DocumentRefID: "",
+			ElementRefID:  pkg.PackageSPDXIdentifier,
 		}
-
 		parser.packages[pkg.PackageSPDXIdentifier] = pkg
 
 	case SPDX_SPDX_ELEMENT:

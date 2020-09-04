@@ -100,7 +100,22 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 		t.Errorf("expected %+v, found %+v", expectedRefB, reln.RefB)
 	}
 
-	// TestCase 2: File as a related element
+	// TestCase 3: invalid package as a relatedElement
+	parser, _ = parserFromBodyContent(`
+		<spdx:Relationship>
+			<spdx:relatedSpdxElement>
+				<spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
+			</spdx:relatedSpdxElement>
+		</spdx:Relationship>
+	`)
+	reln = &spdx.Relationship2_2{}
+	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_PACKAGE)[0]
+	err = parser.parseRelatedElementFromTriple(reln, triple)
+	if err == nil {
+		t.Errorf("expected an error due to invalid Package id, got %v", err)
+	}
+
+	// TestCase 4: valid File as a related element
 	parser, _ = parserFromBodyContent(`
 		<spdx:Relationship>
 			<spdx:relatedSpdxElement>
@@ -129,6 +144,22 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 		t.Errorf("expected %+v, found %+v", expectedRefB, reln.RefB)
 	}
 
+	// TestCase 5: invalid File as a relatedElement
+	parser, _ = parserFromBodyContent(`
+		<spdx:Relationship>
+			<spdx:relatedSpdxElement>
+				<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
+			</spdx:relatedSpdxElement>
+		</spdx:Relationship>
+	`)
+	reln = &spdx.Relationship2_2{}
+	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0]
+	err = parser.parseRelatedElementFromTriple(reln, triple)
+	if err == nil {
+		t.Errorf("expected an error while parsing an invalid File, got %v", err)
+	}
+
+	// TestCase 6: valid SpdxElement as a related element
 	parser, _ = parserFromBodyContent(`
 		<spdx:Relationship>		
 			<spdx:relatedSpdxElement>
@@ -155,6 +186,21 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	}
 	if !reflect.DeepEqual(expectedRefB, reln.RefB) {
 		t.Errorf("expected %+v, found %+v", expectedRefB, reln.RefB)
+	}
+
+	// TestCase 7: invalid SpdxElement as a related element
+	parser, _ = parserFromBodyContent(`
+		<spdx:Relationship>		
+			<spdx:relatedSpdxElement>
+				<spdx:SpdxElement rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-:File"/>
+			</spdx:relatedSpdxElement>
+		</spdx:Relationship>
+	`)
+	reln = &spdx.Relationship2_2{}
+	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_SPDX_ELEMENT)[0]
+	err = parser.parseRelatedElementFromTriple(reln, triple)
+	if err == nil {
+		t.Errorf("expected an error due to invalid documentId for SpdxElement, got %v", err)
 	}
 }
 
@@ -231,7 +277,26 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &SPDX_RELATIONSHIP, nil)[0]
 	err = parser.parseRelationship(triple)
 	if err == nil {
-		t.Errorf("should've raised an error due to unknown relatedElement")
+		t.Errorf("should've raised an error due to unknown relatedElement, got %v", err)
+	}
+
+	// TestCase 6: relatedElement associated with more than one type
+	parser, _ = parserFromBodyContent(`
+		<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+			<spdx:relationship>
+				<spdx:Relationship>
+					<spdx:relatedSpdxElement>
+						<spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+					</spdx:relatedSpdxElement>
+				</spdx:Relationship>
+			</spdx:relationship>
+		</spdx:File>
+		<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+	`)
+	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &SPDX_RELATIONSHIP, nil)[0]
+	err = parser.parseRelationship(triple)
+	if err == nil {
+		t.Errorf("expected an error due to invalid relatedElement, got %v", err)
 	}
 
 	// TestCase 5: unknown predicate inside a relationship

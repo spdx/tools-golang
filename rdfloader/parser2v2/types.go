@@ -103,3 +103,10 @@ const (
 	NONE        SpecialLicenseValue = "NONE"
 	NOASSERTION SpecialLicenseValue = "NOASSERTION"
 )
+
+type RangeType string
+
+const (
+	BYTE_RANGE RangeType = "byteRange"
+	LINE_RANGE RangeType = "lineRange"
+)

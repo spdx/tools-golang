@@ -11,7 +11,7 @@ func Test_setAnnotatorFromString(t *testing.T) {
 	input := ""
 	err := setAnnotatorFromString(input, ann)
 	if err == nil {
-		t.Errorf("should've raised an error for an empty string")
+		t.Error("should've raised an error for an empty string")
 	}
 
 	// TestCase 2: Invalid annotator type

@@ -91,6 +91,7 @@ var (
 	SPDX_DISJUNCTIVE_LICENSE_SET          = NS_SPDX + "DisjunctiveLicenseSet"
 	SPDX_CONJUNCTIVE_LICENSE_SET          = NS_SPDX + "ConjunctiveLicenseSet"
 	SPDX_EXTRACTED_LICENSING_INFO         = NS_SPDX + "ExtractedLicensingInfo"
+	SPDX_SIMPLE_LICENSING_INFO            = NS_SPDX + "SimpleLicensingInfo"
 	SPDX_NONE_CAPS                        = NS_SPDX + "NONE"
 	SPDX_NOASSERTION_CAPS                 = NS_SPDX + "NOASSERTION"
 	SPDX_NONE_SMALL                       = NS_SPDX + "none"

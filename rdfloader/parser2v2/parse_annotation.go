@@ -3,6 +3,7 @@
 package parser2v2
 
 import (
+	"errors"
 	"fmt"
 	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
@@ -42,7 +43,7 @@ func (parser *rdfParser2_2) parseAnnotationFromNode(node *gordfParser.Node) (err
 
 func setAnnotationToParser(parser *rdfParser2_2, annotation *spdx.Annotation2_2) error {
 	if parser.doc == nil {
-		return fmt.Errorf("uninitialized spdx document")
+		return errors.New("uninitialized spdx document")
 	}
 	if parser.doc.Annotations == nil {
 		parser.doc.Annotations = []*spdx.Annotation2_2{}

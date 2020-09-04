@@ -23,7 +23,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	}
 
 	// we have some attributes associated with the license node.
-	nodeType, err := parser.getNodeTypeFromTriples(associatedTriples, node)
+	nodeType, err := getNodeTypeFromTriples(associatedTriples, node)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing license triple: %v", err)
 	}
@@ -40,6 +40,8 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 		return parser.getWithExceptionOperatorFromNode(node)
 	case SPDX_OR_LATER_OPERATOR:
 		return parser.getOrLaterOperatorFromNode(node)
+	case SPDX_SIMPLE_LICENSING_INFO:
+		return parser.getSimpleLicensingInfoFromNode(node)
 	}
 	return nil, fmt.Errorf("Unknown subTag (%s) found while parsing AnyLicense", nodeType)
 }

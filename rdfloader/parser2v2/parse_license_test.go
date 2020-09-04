@@ -182,12 +182,15 @@ func Test_rdfParser2_2_getAnyLicenseFromNode(t *testing.T) {
 		t.Errorf("expected license to be of type OrLaterOperator, found %v", reflect.TypeOf(lic))
 	}
 
-	// TestCase 7: checking if any random node which is not associated with any
-	//			   rdf:type triple raises an error
-	parser, _ = parserFromBodyContent(``)
-	bnodeGetter := gordfParser.BlankNodeGetter{}
-	bnode := bnodeGetter.Get()
-	_, err = parser.getAnyLicenseFromNode(&bnode)
+	// TestCase 7: checking if an unknown license raises an error.
+	parser, _ = parserFromBodyContent(`
+		<spdx:UnknownLicense>
+			<spdx:unknownTag />
+		</spdx:UnknownLicense>
+	`)
+	node := parser.gordfParserObj.Triples[0].Subject
+	_, err = parser.getAnyLicenseFromNode(node)
+	t.Log(err)
 	if err == nil {
 		t.Errorf("should've raised an error for invalid input")
 	}
@@ -215,7 +218,7 @@ func Test_rdfParser2_2_getConjunctiveLicenseSetFromNode(t *testing.T) {
 	// TestCase 2: invalid predicate in the licenseSet.
 	parser, _ = parserFromBodyContent(`
 		<spdx:ConjunctiveLicenseSet>
-			<spdx:member rdf:resource="http://spdx.org/licenses/Unknown"/>
+			<spdx:member rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
 			<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
 			<spdx:unknownTag />
 		</spdx:ConjunctiveLicenseSet>
@@ -551,7 +554,25 @@ func Test_rdfParser2_2_getOrLaterOperatorFromNode(t *testing.T) {
 		t.Error("expected an error due to invalid predicate, got <nil>")
 	}
 
-	// TestCase 3: valid input
+	// TestCase 5: invalid member
+	parser, _ = parserFromBodyContent(`
+		<spdx:OrLaterOperator>
+			<spdx:member>
+				<spdx:SimpleLicensingInfo>
+					<spdx:invalidTag />
+					<spdx:licenseId>LicenseRef-Freeware</spdx:licenseId>
+					<spdx:name>freeware</spdx:name>
+				</spdx:SimpleLicensingInfo>
+			</spdx:member>
+		</spdx:OrLaterOperator>
+	`)
+	node = parser.gordfParserObj.Triples[0].Subject
+	_, err = parser.getOrLaterOperatorFromNode(node)
+	if err == nil {
+		t.Errorf("expected an error parsing invalid license member, got %v", err)
+	}
+
+	// TestCase 4: valid input
 	parser, _ = parserFromBodyContent(`
 		<spdx:OrLaterOperator>
 			<spdx:member>

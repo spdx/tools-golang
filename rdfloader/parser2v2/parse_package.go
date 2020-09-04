@@ -37,33 +37,21 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 		case SPDX_SUPPLIER: // 3.5
 			// cardinality: max 1
 			err = setPackageSupplier(pkg, subTriple.Object.ID)
-			if err != nil {
-				return nil, err
-			}
 		case SPDX_ORIGINATOR: // 3.6
 			// cardinality: max 1
 			err = setPackageOriginator(pkg, subTriple.Object.ID)
-			if err != nil {
-				return nil, err
-			}
 		case SPDX_DOWNLOAD_LOCATION: // 3.7
 			// cardinality: exactly 1
-			err = setDocumentLocationFromURI(subTriple.Object.ID, pkg)
-			if err != nil {
-				return nil, err
-			}
+			err = setDocumentLocationFromURI(pkg, subTriple.Object.ID)
 		case SPDX_FILES_ANALYZED: // 3.8
 			// cardinality: max 1
-			err = setFilesAnalyzed(subTriple.Object.ID, pkg)
-			if err != nil {
-				err = fmt.Errorf("error setting a filesAnalyzed attribute of a package: %v", err)
-			}
+			err = setFilesAnalyzed(pkg, subTriple.Object.ID)
 		case SPDX_PACKAGE_VERIFICATION_CODE: // 3.9
 			// cardinality: max 1
 			err = parser.setPackageVerificationCode(pkg, subTriple.Object)
 		case SPDX_CHECKSUM: // 3.10
 			// cardinality: min 0
-			err = setPackageChecksum(parser, pkg, subTriple.Object)
+			err = parser.setPackageChecksum(pkg, subTriple.Object)
 		case DOAP_HOMEPAGE: // 3.11
 			// cardinality: max 1
 			// homepage must be a valid Uri
@@ -108,33 +96,27 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 			pkg.PackageComment = subTriple.Object.ID
 		case SPDX_EXTERNAL_REF: // 3.21
 			// cardinality: min 0
-			externalDocRef, err := parser.getPackageExternalRef(subTriple)
+			externalDocRef, err := parser.getPackageExternalRef(subTriple.Object)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("error parsing externalRef of a package: %v", err)
 			}
 			pkg.PackageExternalReferences = append(pkg.PackageExternalReferences, externalDocRef)
 		case SPDX_HAS_FILE: // 3.22
 			// cardinality: min 0
 			file, err := parser.getFileFromNode(subTriple.Object)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("error setting file inside a package: %v", err)
 			}
 			parser.setFileToPackage(pkg, file)
 		case SPDX_RELATIONSHIP:
 			// cardinality: min 0
-			err := parser.parseRelationship(subTriple)
-			if err != nil {
-				return nil, err
-			}
+			err = parser.parseRelationship(subTriple)
 		case SPDX_ATTRIBUTION_TEXT:
 			// cardinality: min 0
 			pkg.PackageAttributionTexts = append(pkg.PackageAttributionTexts, subTriple.Object.ID)
 		case SPDX_ANNOTATION:
 			// cardinality: min 0
-			err := parser.parseAnnotationFromNode(subTriple.Object)
-			if err != nil {
-				return nil, err
-			}
+			err = parser.parseAnnotationFromNode(subTriple.Object)
 		default:
 			return nil, fmt.Errorf("unknown predicate id %s while parsing a package", subTriple.Predicate.ID)
 		}
@@ -147,13 +129,13 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 }
 
 // parses externalReference found in the package by the associated triple.
-func (parser *rdfParser2_2) getPackageExternalRef(triple *gordfParser.Triple) (externalDocRef *spdx.PackageExternalReference2_2, err error) {
+func (parser *rdfParser2_2) getPackageExternalRef(node *gordfParser.Node) (externalDocRef *spdx.PackageExternalReference2_2, err error) {
 	externalDocRef = &spdx.PackageExternalReference2_2{}
-	for _, subTriple := range parser.nodeToTriples(triple.Object) {
-		switch subTriple.Predicate.ID {
+	for _, triple := range parser.nodeToTriples(node) {
+		switch triple.Predicate.ID {
 		case SPDX_REFERENCE_CATEGORY:
 			// cardinality: exactly 1
-			switch subTriple.Object.ID {
+			switch triple.Object.ID {
 			case SPDX_REFERENCE_CATEGORY_SECURITY:
 				externalDocRef.Category = "SECURITY"
 			case SPDX_REFERENCE_CATEGORY_PACKAGE_MANAGER:
@@ -161,7 +143,7 @@ func (parser *rdfParser2_2) getPackageExternalRef(triple *gordfParser.Triple) (e
 			case SPDX_REFERENCE_CATEGORY_OTHER:
 				externalDocRef.Category = "OTHER"
 			default:
-				return nil, fmt.Errorf("unknown packageManager predicate uri %s", subTriple.Predicate.ID)
+				return nil, fmt.Errorf("unknown packageManager uri %s", triple.Predicate.ID)
 			}
 		case RDF_TYPE:
 			continue
@@ -172,15 +154,15 @@ func (parser *rdfParser2_2) getPackageExternalRef(triple *gordfParser.Triple) (e
 			//		1. contextualExample,
 			//		2. documentation and,
 			//		3. externalReferenceSite
-			externalDocRef.RefType = subTriple.Object.ID
+			externalDocRef.RefType = triple.Object.ID
 		case SPDX_REFERENCE_LOCATOR:
 			// cardinality: exactly 1
-			externalDocRef.Locator = subTriple.Object.ID
+			externalDocRef.Locator = triple.Object.ID
 		case RDFS_COMMENT:
 			// cardinality: max 1
-			externalDocRef.ExternalRefComment = subTriple.Object.ID
+			externalDocRef.ExternalRefComment = triple.Object.ID
 		default:
-			return nil, fmt.Errorf("unknown package external reference predicate id %s", subTriple.Predicate.ID)
+			return nil, fmt.Errorf("unknown package external reference predicate id %s", triple.Predicate.ID)
 		}
 	}
 	return
@@ -205,6 +187,8 @@ func (parser *rdfParser2_2) setPackageVerificationCode(pkg *spdx.Package2_2, nod
 	return nil
 }
 
+// appends the file to the package and also sets the assocWithPackage for the
+// file to indicate the file is associated with a package
 func (parser *rdfParser2_2) setFileToPackage(pkg *spdx.Package2_2, file *spdx.File2_2) {
 	if pkg.Files == nil {
 		pkg.Files = map[spdx.ElementID]*spdx.File2_2{}
@@ -263,9 +247,9 @@ func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 }
 
 // validates the uri and sets the location if it is valid
-func setDocumentLocationFromURI(locationURI string, pkg *spdx.Package2_2) error {
+func setDocumentLocationFromURI(pkg *spdx.Package2_2, locationURI string) error {
 	switch locationURI {
-	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_CAPS:
+	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_SMALL:
 		pkg.PackageDownloadLocation = "NOASSERTION"
 	case SPDX_NONE_CAPS, SPDX_NONE_SMALL:
 		pkg.PackageDownloadLocation = "NONE"
@@ -280,23 +264,16 @@ func setDocumentLocationFromURI(locationURI string, pkg *spdx.Package2_2) error 
 
 // sets the FilesAnalyzed attribute to the given package
 // boolValue is a string of type "true" or "false"
-func setFilesAnalyzed(boolValue string, pkg *spdx.Package2_2) error {
+func setFilesAnalyzed(pkg *spdx.Package2_2, boolValue string) (err error) {
 	pkg.IsFilesAnalyzedTagPresent = true
-	switch strings.TrimSpace(boolValue) {
-	case "true":
-		pkg.FilesAnalyzed = true
-	case "false":
-		pkg.FilesAnalyzed = false
-	default:
-		return fmt.Errorf("filesAnalyzed can be either true/false. found %s", boolValue)
-	}
-	return nil
+	pkg.FilesAnalyzed, err = boolFromString(boolValue)
+	return err
 }
 
-func setPackageChecksum(parser *rdfParser2_2, pkg *spdx.Package2_2, node *gordfParser.Node) error {
+func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordfParser.Node) error {
 	checksumAlgorithm, checksumValue, err := parser.getChecksumFromNode(node)
 	if err != nil {
-		return err
+		return fmt.Errorf("error getting checksum algorithm and value from %v", node)
 	}
 	switch checksumAlgorithm {
 	case "MD5":

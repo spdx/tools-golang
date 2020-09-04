@@ -26,7 +26,7 @@ func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) er
 			var err error
 			review.ReviewerType, review.Reviewer, err = ExtractSubs(triple.Object.ID, ":")
 			if err != nil {
-				return fmt.Errorf("error parsing reviewer: err")
+				return fmt.Errorf("error parsing reviewer: %v", err)
 			}
 		default:
 			return fmt.Errorf("unknown predicate %v for review triples", triple.Predicate)
