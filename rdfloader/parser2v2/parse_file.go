@@ -13,7 +13,7 @@ import (
 func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *spdx.File2_2, err error) {
 	file = &spdx.File2_2{}
 
-	err = setFileIdentifier(fileNode.ID, file, parser) // 4.2
+	err = setFileIdentifier(fileNode.ID, file) // 4.2
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.FileName = subTriple.Object.ID
 		case SPDX_NAME:
 			// cardinality: exactly 1
-			// todo: check where it will be set in the golang-tools spdx-data-model
+			// TODO: check where it will be set in the golang-tools spdx-data-model
 		case RDF_TYPE:
 			// cardinality: exactly 1
 		case SPDX_FILE_TYPE: // 4.3
@@ -45,16 +45,20 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.LicenseConcluded = anyLicense.ToLicenseString()
 		case SPDX_LICENSE_INFO_IN_FILE: // 4.6
 			// cardinality: min 1
-			lastPart := getLastPartOfURI(subTriple.Object.ID)
-			file.LicenseInfoInFile = append(file.LicenseInfoInFile, lastPart)
+			lic, err := parser.getAnyLicenseFromNode(subTriple.Object)
+			if err != nil {
+				return nil, fmt.Errorf("error parsing licenseInfoInFile: %v", err)
+			}
+			file.LicenseInfoInFile = append(file.LicenseInfoInFile, lic.ToLicenseString())
 		case SPDX_LICENSE_COMMENTS: // 4.7
 			// cardinality: max 1
 			file.LicenseComments = subTriple.Object.ID
+		// TODO: allow copyright text to be of type NOASSERTION
 		case SPDX_COPYRIGHT_TEXT: // 4.8
 			// cardinality: exactly 1
 			file.FileCopyrightText = subTriple.Object.ID
 		case SPDX_LICENSE_INFO_FROM_FILES:
-			// todo: implement it. It is not defined in the tools-golang model.
+			// TODO: implement it. It is not defined in the tools-golang model.
 		// deprecated artifactOf (see sections 4.9, 4.10, 4.11)
 		case SPDX_ARTIFACT_OF:
 			// cardinality: min 0
@@ -66,23 +70,26 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.FileComment = subTriple.Object.ID
 		case SPDX_NOTICE_TEXT: // 4.13
 			// cardinality: max 1
-			file.FileNotice = subTriple.Object.ID
+			file.FileNotice = getNoticeTextFromNode(subTriple.Object)
 		case SPDX_FILE_CONTRIBUTOR: // 4.14
 			// cardinality: min 0
 			file.FileContributor = append(file.FileContributor, subTriple.Object.ID)
 		case SPDX_FILE_DEPENDENCY:
 			// cardinality: min 0
-			file, err := parser.getFileFromNode(subTriple.Object)
+			newFile, err := parser.getFileFromNode(subTriple.Object)
 			if err != nil {
 				return nil, fmt.Errorf("error setting a file dependency in a file: %v", err)
 			}
+			file.FileDependencies = append(file.FileDependencies, string(newFile.FileSPDXIdentifier))
 			parser.files[file.FileSPDXIdentifier] = file
 		case SPDX_ATTRIBUTION_TEXT:
 			// cardinality: min 0
 			file.FileAttributionTexts = append(file.FileAttributionTexts, subTriple.Object.ID)
-		case SPDX_ANNOTATION: // unknown section
+		case SPDX_ANNOTATION:
+			// cardinality: min 0
 			err = parser.parseAnnotationFromNode(subTriple.Object)
-		case SPDX_RELATIONSHIP: // unknown section
+		case SPDX_RELATIONSHIP:
+			// cardinality: min 0
 			err = parser.parseRelationship(subTriple)
 		default:
 			return nil, fmt.Errorf("unknown triple predicate id %s", subTriple.Predicate.ID)
@@ -97,7 +104,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 func (parser *rdfParser2_2) setFileChecksumFromNode(file *spdx.File2_2, checksumNode *gordfParser.Node) error {
 	checksumAlgorithm, checksumValue, err := parser.getChecksumFromNode(checksumNode)
 	if err != nil {
-		return nil
+		return fmt.Errorf("error parsing checksumNode of a file: %v", err)
 	}
 	switch checksumAlgorithm {
 	case "MD5":
@@ -109,7 +116,7 @@ func (parser *rdfParser2_2) setFileChecksumFromNode(file *spdx.File2_2, checksum
 	case "":
 		return fmt.Errorf("empty checksum algorithm and value")
 	default:
-		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a file", checksumAlgorithm)
+		return fmt.Errorf("unknown checksumAlgorithm %s for a file", checksumAlgorithm)
 	}
 	return nil
 }
@@ -135,6 +142,7 @@ func (parser *rdfParser2_2) getArtifactFromNode(node *gordfParser.Node) (*spdx.A
 	return artifactOf, nil
 }
 
+// TODO: check if the filetype is valid.
 func (parser *rdfParser2_2) getFileTypeFromUri(uri string) (string, error) {
 	// fileType is given as a uri. for example: http://spdx.org/rdf/terms#fileType_text
 	lastPart := getLastPartOfURI(uri)
@@ -155,7 +163,7 @@ func (parser *rdfParser2_2) setUnpackagedFiles() {
 	}
 }
 
-func setFileIdentifier(idURI string, file *spdx.File2_2, parser *rdfParser2_2) (err error) {
+func setFileIdentifier(idURI string, file *spdx.File2_2) (err error) {
 	idURI = strings.TrimSpace(idURI)
 	uriFragment := getLastPartOfURI(idURI)
 	file.FileSPDXIdentifier, err = ExtractElementID(uriFragment)
@@ -163,4 +171,13 @@ func setFileIdentifier(idURI string, file *spdx.File2_2, parser *rdfParser2_2) (
 		return fmt.Errorf("error setting file identifier: %s", err)
 	}
 	return nil
+}
+
+func getNoticeTextFromNode(node *gordfParser.Node) string {
+	switch node.ID {
+	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_SMALL:
+		return "NOASSERTION"
+	default:
+		return node.ID
+	}
 }

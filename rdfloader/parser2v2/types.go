@@ -47,7 +47,7 @@ type ExtractedLicensingInfo struct {
 
 type OrLaterOperator struct {
 	AnyLicenseInfo
-	license SimpleLicensingInfo
+	member SimpleLicensingInfo
 }
 
 type ConjunctiveLicenseSet struct {
@@ -67,7 +67,6 @@ type License struct {
 	standardLicenseHeader         string
 	standardLicenseTemplate       string
 	standardLicenseHeaderTemplate string
-	seeAlso                       string
 	isDeprecatedLicenseID         bool
 	isFsfLibre                    bool
 }
@@ -82,11 +81,12 @@ type LicenseException struct {
 	seeAlso              string // must be a valid uri
 	name                 string
 	example              string
+	comment              string
 }
 
 type WithExceptionOperator struct {
 	AnyLicenseInfo
-	license          SimpleLicensingInfo
+	member           SimpleLicensingInfo
 	licenseException LicenseException
 }
 
@@ -102,4 +102,11 @@ type SpecialLicenseValue string
 const (
 	NONE        SpecialLicenseValue = "NONE"
 	NOASSERTION SpecialLicenseValue = "NOASSERTION"
+)
+
+type RangeType string
+
+const (
+	BYTE_RANGE RangeType = "byteRange"
+	LINE_RANGE RangeType = "lineRange"
 )

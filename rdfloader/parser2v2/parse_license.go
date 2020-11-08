@@ -9,6 +9,12 @@ import (
 	"strings"
 )
 
+// AnyLicense is a baseClass for all the licenses
+// All the types of licenses is a sub-type of AnyLicense,
+// either directly or indirectly.
+// This function acts as a mux for all the licenses. Based on the input, it
+// decides which type of license it is and passes control to that type of
+// license parser to parse the given input.
 func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLicenseInfo, error) {
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
 	if len(associatedTriples) == 0 {
@@ -17,7 +23,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	}
 
 	// we have some attributes associated with the license node.
-	nodeType, err := parser.getNodeTypeFromTriples(associatedTriples, node)
+	nodeType, err := getNodeTypeFromTriples(associatedTriples, node)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing license triple: %v", err)
 	}
@@ -34,6 +40,8 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 		return parser.getWithExceptionOperatorFromNode(node)
 	case SPDX_OR_LATER_OPERATOR:
 		return parser.getOrLaterOperatorFromNode(node)
+	case SPDX_SIMPLE_LICENSING_INFO:
+		return parser.getSimpleLicensingInfoFromNode(node)
 	}
 	return nil, fmt.Errorf("Unknown subTag (%s) found while parsing AnyLicense", nodeType)
 }
@@ -43,6 +51,8 @@ func (parser *rdfParser2_2) getLicenseExceptionFromNode(node *gordfParser.Node) 
 	for _, triple := range associatedTriples {
 		value := triple.Object.ID
 		switch triple.Predicate.ID {
+		case RDF_TYPE:
+			continue
 		case SPDX_LICENSE_EXCEPTION_ID:
 			exception.licenseExceptionId = value
 		case SPDX_LICENSE_EXCEPTION_TEXT:
@@ -56,6 +66,8 @@ func (parser *rdfParser2_2) getLicenseExceptionFromNode(node *gordfParser.Node) 
 			exception.name = value
 		case SPDX_EXAMPLE:
 			exception.example = value
+		case RDFS_COMMENT:
+			exception.comment = value
 		default:
 			return exception, fmt.Errorf("invalid predicate(%s) for LicenseException", triple.Predicate)
 		}
@@ -70,16 +82,27 @@ func (parser *rdfParser2_2) getSimpleLicensingInfoFromNode(node *gordfParser.Nod
 
 func (parser *rdfParser2_2) getWithExceptionOperatorFromNode(node *gordfParser.Node) (operator WithExceptionOperator, err error) {
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
+	var memberFound bool
 	for _, triple := range associatedTriples {
 		switch triple.Predicate.ID {
+		case RDF_TYPE:
+			continue
 		case SPDX_MEMBER:
+			if memberFound {
+				return operator,
+					fmt.Errorf("more than one member found in the WithExceptionOperator (expected only 1)")
+			}
+			memberFound = true
 			member, err := parser.getSimpleLicensingInfoFromNode(triple.Object)
 			if err != nil {
 				return operator, fmt.Errorf("error parsing member of a WithExceptionOperator: %v", err)
 			}
-			operator.license = member
+			operator.member = member
 		case SPDX_LICENSE_EXCEPTION:
 			operator.licenseException, err = parser.getLicenseExceptionFromNode(triple.Object)
+			if err != nil {
+				return operator, fmt.Errorf("error parsing licenseException of WithExceptionOperator: %v", err)
+			}
 		default:
 			return operator, fmt.Errorf("unknown predicate (%s) for a WithExceptionOperator", triple.Predicate.ID)
 		}
@@ -94,14 +117,24 @@ func (parser *rdfParser2_2) getOrLaterOperatorFromNode(node *gordfParser.Node) (
 		return operator, fmt.Errorf("orLaterOperator must be associated with exactly one tag. found %v triples", n-1)
 	}
 	for _, triple := range associatedTriples {
-		operator.license, err = parser.getSimpleLicensingInfoFromNode(triple.Object)
-		if err != nil {
-			return operator, fmt.Errorf("error parsing simpleLicensingInfo of OrLaterOperator: %v", err)
+		switch triple.Predicate.ID {
+		case RDF_TYPE:
+			continue
+		case SPDX_MEMBER:
+			operator.member, err = parser.getSimpleLicensingInfoFromNode(triple.Object)
+			if err != nil {
+				return operator, fmt.Errorf("error parsing simpleLicensingInfo of OrLaterOperator: %v", err)
+			}
+		default:
+			return operator, fmt.Errorf("unknown predicate %s", triple.Predicate.ID)
 		}
 	}
 	return operator, nil
 }
 
+// SpecialLicense is a type of license which is not defined in any of the
+// spdx documents, it is a type of license defined for the sake of brevity.
+// It can be [NONE|NOASSERTION|LicenseRef-<string>]
 func (parser *rdfParser2_2) getSpecialLicenseFromNode(node *gordfParser.Node) (lic SpecialLicense, err error) {
 	uri := strings.TrimSpace(node.ID)
 	switch uri {
@@ -161,6 +194,8 @@ func (parser *rdfParser2_2) getConjunctiveLicenseSetFromNode(node *gordfParser.N
 				return licenseSet, fmt.Errorf("error parsing conjunctive license set: %v", err)
 			}
 			licenseSet.members = append(licenseSet.members, member)
+		default:
+			return licenseSet, fmt.Errorf("unknown subTag for ConjunctiveLicenseSet: %s", triple.Predicate.ID)
 		}
 	}
 	return licenseSet, nil
@@ -176,6 +211,9 @@ func (parser *rdfParser2_2) getSimpleLicensingInfoFromTriples(triples []*gordfPa
 		case SPDX_NAME:
 			lic.name = triple.Object.ID
 		case RDFS_SEE_ALSO:
+			if !isUriValid(triple.Object.ID) {
+				return lic, fmt.Errorf("%s is not a valid uri for seeAlso attribute of a License", triple.Object.ID)
+			}
 			lic.seeAlso = append(lic.seeAlso, triple.Object.ID)
 		case SPDX_EXAMPLE:
 			lic.example = triple.Object.ID
@@ -207,12 +245,6 @@ func (parser *rdfParser2_2) getLicenseFromNode(node *gordfParser.Node) (lic Lice
 			lic.standardLicenseTemplate = value
 		case SPDX_STANDARD_LICENSE_HEADER_TEMPLATE:
 			lic.standardLicenseHeaderTemplate = value
-		case RDFS_SEE_ALSO:
-			if !isUriValid(value) {
-				return lic, fmt.Errorf("%s is not a valid uri for seeAlso attribute of a License", value)
-			}
-			lic.seeAlso = value
-
 		case SPDX_IS_DEPRECATED_LICENSE_ID:
 			lic.isDeprecatedLicenseID, err = boolFromString(value)
 			if err != nil {
@@ -232,100 +264,4 @@ func (parser *rdfParser2_2) getLicenseFromNode(node *gordfParser.Node) (lic Lice
 		return lic, fmt.Errorf("error setting simple licensing information of a License: %s", err)
 	}
 	return lic, nil
-}
-
-/* util methods for licenses and checksums below:*/
-
-// Given the license URI, returns the name of the license defined
-// in the last part of the uri.
-// This function is susceptible to false-positives.
-func getLicenseStringFromURI(uri string) string {
-	licenseEnd := strings.TrimSpace(getLastPartOfURI(uri))
-	lower := strings.ToLower(licenseEnd)
-	if lower == "none" || lower == "noassertion" {
-		return strings.ToUpper(licenseEnd)
-	}
-	return licenseEnd
-}
-
-// returns the checksum algorithm and it's value
-// In the newer versions, these two strings will be bound to a single checksum struct
-// whose pointer will be returned.
-func (parser *rdfParser2_2) getChecksumFromNode(checksumNode *gordfParser.Node) (algorithm string, value string, err error) {
-	var checksumValue, checksumAlgorithm string
-	for _, checksumTriple := range parser.nodeToTriples(checksumNode) {
-		switch checksumTriple.Predicate.ID {
-		case RDF_TYPE:
-			continue
-		case SPDX_CHECKSUM_VALUE:
-			// cardinality: exactly 1
-			checksumValue = strings.TrimSpace(checksumTriple.Object.ID)
-		case SPDX_ALGORITHM:
-			// cardinality: exactly 1
-			checksumAlgorithm, err = parser.getAlgorithmFromURI(checksumTriple.Object.ID)
-			if err != nil {
-				return
-			}
-		}
-	}
-	return checksumAlgorithm, checksumValue, nil
-}
-
-func (parser *rdfParser2_2) getAlgorithmFromURI(algorithmURI string) (checksumAlgorithm string, err error) {
-	fragment := getLastPartOfURI(algorithmURI)
-	if !strings.HasPrefix(fragment, "checksumAlgorithm") {
-		return "", fmt.Errorf("checksum algorithm uri must begin with checksumAlgorithm. found %s", fragment)
-	}
-	algorithm := strings.TrimPrefix(fragment, "checksumAlgorithm_")
-	algorithm = strings.ToLower(strings.TrimSpace(algorithm))
-	switch algorithm {
-	case "md2", "md4", "md5", "md6":
-		checksumAlgorithm = strings.ToUpper(algorithm)
-	case "sha1", "sha224", "sha256", "sha384", "sha512":
-		checksumAlgorithm = strings.ToUpper(algorithm)
-	default:
-		return "", fmt.Errorf("unknown checksum algorithm %s", algorithm)
-	}
-	return
-}
-
-func mapLicensesToStrings(licences []AnyLicenseInfo) []string {
-	res := make([]string, len(licences), len(licences))
-	for i, lic := range licences {
-		res[i] = lic.ToLicenseString()
-	}
-	return res
-}
-
-func (lic ConjunctiveLicenseSet) ToLicenseString() string {
-	return strings.Join(mapLicensesToStrings(lic.members), " AND ")
-}
-
-func (lic DisjunctiveLicenseSet) ToLicenseString() string {
-	return strings.Join(mapLicensesToStrings(lic.members), " OR ")
-}
-
-/****** Type Functions ******/
-func (lic ExtractedLicensingInfo) ToLicenseString() string {
-	return lic.licenseID
-}
-
-func (operator OrLaterOperator) ToLicenseString() string {
-	return operator.license.ToLicenseString()
-}
-
-func (lic License) ToLicenseString() string {
-	return lic.licenseID
-}
-
-func (lic ListedLicense) ToLicenseString() string {
-	return lic.licenseID
-}
-
-func (lic WithExceptionOperator) ToLicenseString() string {
-	return lic.license.ToLicenseString()
-}
-
-func (lic SpecialLicense) ToLicenseString() string {
-	return string(lic.value)
 }

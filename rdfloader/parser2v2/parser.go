@@ -3,6 +3,7 @@
 package parser2v2
 
 import (
+	"errors"
 	"fmt"
 	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
 	gordfWriter "github.com/RishabhBhatnagar/gordf/rdfwriter"
@@ -59,9 +60,9 @@ func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*spdx.Document2_2,
 		case SPDX_SPDX_DOCUMENT_CAPITALIZED:
 			continue // it is already parsed.
 		case SPDX_SNIPPET:
-			snippet, err := parser.getSnippetInformationFromTriple2_2(typeTriples[0])
+			snippet, err := parser.getSnippetInformationFromNode2_2(typeTriples[0].Subject)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("error parsing a snippet: %v", err)
 			}
 			err = parser.setSnippetToFileWithID(snippet, snippet.SnippetFromFileSPDXIdentifier.ElementRefID)
 			if err != nil {
@@ -105,12 +106,16 @@ func (parser *rdfParser2_2) getSpdxDocNode() (node *gordfParser.Node, err error)
 			&RDF_TYPE,                      // Predicate
 			nil,                            // Object
 		)
-		if len(typeTriples) != 1 {
-			return nil, fmt.Errorf("rootNode (%v) must be associated with exactly one"+
-				" triple of predicate rdf:type, found %d triples", rootNode, len(typeTriples))
-		}
+
 		if typeTriples[0].Object.ID == SPDX_SPDX_DOCUMENT_CAPITALIZED {
 			// we found a SpdxDocument Node
+
+			// must be associated with exactly one rdf:type.
+			if len(typeTriples) != 1 {
+				return nil, fmt.Errorf("rootNode (%v) must be associated with exactly one"+
+					" triple of predicate rdf:type, found %d triples", rootNode, len(typeTriples))
+			}
+
 			// checking if we've already found a node and it is not same as the current one.
 			if spdxDocNode != nil && spdxDocNode.ID != typeTriples[0].Subject.ID {
 				return nil, fmt.Errorf("found more than one SpdxDocument Node (%v and %v)", spdxDocNode, typeTriples[0].Subject)
@@ -119,7 +124,7 @@ func (parser *rdfParser2_2) getSpdxDocNode() (node *gordfParser.Node, err error)
 		}
 	}
 	if spdxDocNode == nil {
-		return nil, fmt.Errorf("RDF files must be associated with a SpdxDocument tag. No tag found")
+		return nil, errors.New("RDF files must be associated with a SpdxDocument tag. No tag found")
 	}
 	return spdxDocNode, nil
 }
