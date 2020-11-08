@@ -5,6 +5,7 @@ package saver2v2
 import (
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -25,8 +26,16 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, w io.Writer) error {
 	if ci.DocumentNamespace != "" {
 		fmt.Fprintf(w, "DocumentNamespace: %s\n", ci.DocumentNamespace)
 	}
-	for _, s := range ci.ExternalDocumentReferences {
-		fmt.Fprintf(w, "ExternalDocumentRef: %s\n", s)
+	// print EDRs in order sorted by identifier
+	edrIDs := []string{}
+	for docRefID := range ci.ExternalDocumentReferences {
+		edrIDs = append(edrIDs, docRefID)
+	}
+	sort.Strings(edrIDs)
+	for _, edrID := range edrIDs {
+		edr := ci.ExternalDocumentReferences[edrID]
+		fmt.Fprintf(w, "ExternalDocumentRef: DocumentRef-%s %s %s:%s\n",
+			edr.DocumentRefID, edr.URI, edr.Alg, edr.Checksum)
 	}
 	if ci.LicenseListVersion != "" {
 		fmt.Fprintf(w, "LicenseListVersion: %s\n", ci.LicenseListVersion)
