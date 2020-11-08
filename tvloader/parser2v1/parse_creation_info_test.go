@@ -242,7 +242,19 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	// External Document Reference
 	refs := []string{
 		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-		"DocumentRef-xyz-2.1.2 http://example.com/xyz-2.1.2 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2760",
+		"DocumentRef-xyz-2.1.2 http://example.com/xyz-2.1.2 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2760",
+	}
+	wantRef0 := spdx.ExternalDocumentRef2_1{
+		DocumentRefID: "spdx-tool-1.2",
+		URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+		Alg:           "SHA1",
+		Checksum:      "d6a770ba38583ed4bb4525bd96e50461655d2759",
+	}
+	wantRef1 := spdx.ExternalDocumentRef2_1{
+		DocumentRefID: "xyz-2.1.2",
+		URI:           "http://example.com/xyz-2.1.2",
+		Alg:           "SHA1",
+		Checksum:      "d6a770ba38583ed4bb4525bd96e50461655d2760",
 	}
 	err = parser.parsePairFromCreationInfo2_1("ExternalDocumentRef", refs[0])
 	if err != nil {
@@ -252,10 +264,22 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.doc.CreationInfo.ExternalDocumentReferences) != 2 ||
-		parser.doc.CreationInfo.ExternalDocumentReferences[0] != refs[0] ||
-		parser.doc.CreationInfo.ExternalDocumentReferences[1] != refs[1] {
-		t.Errorf("got %v for ExternalDocumentReferences", parser.doc.CreationInfo.ExternalDocumentReferences)
+	if len(parser.doc.CreationInfo.ExternalDocumentReferences) != 2 {
+		t.Errorf("got %d ExternalDocumentReferences, expected %d", len(parser.doc.CreationInfo.ExternalDocumentReferences), 2)
+	}
+	gotRef0 := parser.doc.CreationInfo.ExternalDocumentReferences["spdx-tool-1.2"]
+	if gotRef0.DocumentRefID != wantRef0.DocumentRefID ||
+		gotRef0.URI != wantRef0.URI ||
+		gotRef0.Alg != wantRef0.Alg ||
+		gotRef0.Checksum != wantRef0.Checksum {
+		t.Errorf("got %#v for ExternalDocumentReferences[0], wanted %#v", gotRef0, wantRef0)
+	}
+	gotRef1 := parser.doc.CreationInfo.ExternalDocumentReferences["xyz-2.1.2"]
+	if gotRef1.DocumentRefID != wantRef1.DocumentRefID ||
+		gotRef1.URI != wantRef1.URI ||
+		gotRef1.Alg != wantRef1.Alg ||
+		gotRef1.Checksum != wantRef1.Checksum {
+		t.Errorf("got %#v for ExternalDocumentReferences[1], wanted %#v", gotRef1, wantRef1)
 	}
 
 	// License List Version
@@ -427,5 +451,75 @@ func TestParser2_1CICreatesAnnotation(t *testing.T) {
 	}
 	if parser.ann != parser.doc.Annotations[0] {
 		t.Errorf("pointer to new Annotation doesn't match idx 0 for doc.Annotations[]")
+	}
+}
+
+// ===== Helper function tests =====
+
+func TestCanExtractExternalDocumentReference(t *testing.T) {
+	refstring := "DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759"
+	wantDocumentRefID := "spdx-tool-1.2"
+	wantURI := "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
+	wantAlg := "SHA1"
+	wantChecksum := "d6a770ba38583ed4bb4525bd96e50461655d2759"
+
+	gotDocumentRefID, gotURI, gotAlg, gotChecksum, err := extractExternalDocumentReference(refstring)
+	if err != nil {
+		t.Errorf("got non-nil error: %v", err)
+	}
+	if wantDocumentRefID != gotDocumentRefID {
+		t.Errorf("wanted document ref ID %s, got %s", wantDocumentRefID, gotDocumentRefID)
+	}
+	if wantURI != gotURI {
+		t.Errorf("wanted URI %s, got %s", wantURI, gotURI)
+	}
+	if wantAlg != gotAlg {
+		t.Errorf("wanted alg %s, got %s", wantAlg, gotAlg)
+	}
+	if wantChecksum != gotChecksum {
+		t.Errorf("wanted checksum %s, got %s", wantChecksum, gotChecksum)
+	}
+}
+
+func TestCanExtractExternalDocumentReferenceWithExtraWhitespace(t *testing.T) {
+	refstring := "   DocumentRef-spdx-tool-1.2    \t http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 \t SHA1:  \t   d6a770ba38583ed4bb4525bd96e50461655d2759"
+	wantDocumentRefID := "spdx-tool-1.2"
+	wantURI := "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
+	wantAlg := "SHA1"
+	wantChecksum := "d6a770ba38583ed4bb4525bd96e50461655d2759"
+
+	gotDocumentRefID, gotURI, gotAlg, gotChecksum, err := extractExternalDocumentReference(refstring)
+	if err != nil {
+		t.Errorf("got non-nil error: %v", err)
+	}
+	if wantDocumentRefID != gotDocumentRefID {
+		t.Errorf("wanted document ref ID %s, got %s", wantDocumentRefID, gotDocumentRefID)
+	}
+	if wantURI != gotURI {
+		t.Errorf("wanted URI %s, got %s", wantURI, gotURI)
+	}
+	if wantAlg != gotAlg {
+		t.Errorf("wanted alg %s, got %s", wantAlg, gotAlg)
+	}
+	if wantChecksum != gotChecksum {
+		t.Errorf("wanted checksum %s, got %s", wantChecksum, gotChecksum)
+	}
+}
+
+func TestFailsExternalDocumentReferenceWithInvalidFormats(t *testing.T) {
+	invalidRefs := []string{
+		"whoops",
+		"DocumentRef-",
+		"DocumentRef-   ",
+		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 d6a770ba38583ed4bb4525bd96e50461655d2759",
+		"DocumentRef-spdx-tool-1.2",
+		"spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759",
+	}
+	for _, refstring := range invalidRefs {
+		_, _, _, _, err := extractExternalDocumentReference(refstring)
+		if err == nil {
+			t.Errorf("expected non-nil error for %s, got nil", refstring)
+		}
 	}
 }
