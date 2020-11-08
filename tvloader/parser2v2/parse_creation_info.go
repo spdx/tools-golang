@@ -26,7 +26,11 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 	case "DataLicense":
 		ci.DataLicense = value
 	case "SPDXID":
-		ci.SPDXIdentifier = spdx.ElementID(value)
+		eID, err := extractElementID(value)
+		if err != nil {
+			return err
+		}
+		ci.SPDXIdentifier = eID
 	case "DocumentName":
 		ci.DocumentName = value
 	case "DocumentNamespace":

@@ -14,7 +14,8 @@ type CreationInfo2_1 struct {
 	// Cardinality: mandatory, one
 	DataLicense string
 
-	// 2.3: SPDX Identifier; should be "SPDXRef-DOCUMENT"
+	// 2.3: SPDX Identifier; should be "DOCUMENT" to represent
+	//      mandatory identifier of SPDXRef-DOCUMENT
 	// Cardinality: mandatory, one
 	SPDXIdentifier ElementID
 
@@ -66,7 +67,8 @@ type CreationInfo2_2 struct {
 	// Cardinality: mandatory, one
 	DataLicense string
 
-	// 2.3: SPDX Identifier; should be "SPDXRef-DOCUMENT"
+	// 2.3: SPDX Identifier; should be "DOCUMENT" to represent
+	//      mandatory identifier of SPDXRef-DOCUMENT
 	// Cardinality: mandatory, one
 	SPDXIdentifier ElementID
 
