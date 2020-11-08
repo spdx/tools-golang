@@ -17,9 +17,19 @@ func TestSaver2_1CISavesText(t *testing.T) {
 		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
 		DocumentName:      "spdx-go-0.0.1.abcdef",
 		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
-		ExternalDocumentReferences: []string{
-			"DocumentRef-spdx-go-0.0.1a https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1a.cdefab.whatever SHA1:0123456701234567012345670123456701234567",
-			"DocumentRef-time-1.2.3 https://github.com/swinslow/spdx-docs/time/time-1.2.3.cdefab.whatever SHA1:0123456701234567012345670123456701234568",
+		ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_1{
+			"spdx-go-0.0.1a": spdx.ExternalDocumentRef2_1{
+				DocumentRefID: "spdx-go-0.0.1a",
+				URI:           "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1a.cdefab.whatever",
+				Alg:           "SHA1",
+				Checksum:      "0123456701234567012345670123456701234567",
+			},
+			"time-1.2.3": spdx.ExternalDocumentRef2_1{
+				DocumentRefID: "time-1.2.3",
+				URI:           "https://github.com/swinslow/spdx-docs/time/time-1.2.3.cdefab.whatever",
+				Alg:           "SHA1",
+				Checksum:      "0123456701234567012345670123456701234568",
+			},
 		},
 		LicenseListVersion: "2.0",
 		CreatorPersons: []string{
