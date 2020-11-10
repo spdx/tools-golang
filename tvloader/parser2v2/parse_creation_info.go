@@ -4,6 +4,7 @@ package parser2v2
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -16,7 +17,9 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// create an SPDX Creation Info data struct if we don't have one already
 	if parser.doc.CreationInfo == nil {
-		parser.doc.CreationInfo = &spdx.CreationInfo2_2{}
+		parser.doc.CreationInfo = &spdx.CreationInfo2_2{
+			ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
+		}
 	}
 
 	ci := parser.doc.CreationInfo
@@ -32,7 +35,17 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 	case "DocumentNamespace":
 		ci.DocumentNamespace = value
 	case "ExternalDocumentRef":
-		ci.ExternalDocumentReferences = append(ci.ExternalDocumentReferences, value)
+		documentRefID, uri, alg, checksum, err := extractExternalDocumentReference(value)
+		if err != nil {
+			return err
+		}
+		edr := spdx.ExternalDocumentRef2_2{
+			DocumentRefID: documentRefID,
+			URI:           uri,
+			Alg:           alg,
+			Checksum:      checksum,
+		}
+		ci.ExternalDocumentReferences[documentRefID] = edr
 	case "LicenseListVersion":
 		ci.LicenseListVersion = value
 	case "Creator":
@@ -104,4 +117,58 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 	}
 
 	return nil
+}
+
+// ===== Helper functions =====
+
+func extractExternalDocumentReference(value string) (string, string, string, string, error) {
+	sp := strings.Split(value, " ")
+	// remove any that are just whitespace
+	keepSp := []string{}
+	for _, s := range sp {
+		ss := strings.TrimSpace(s)
+		if ss != "" {
+			keepSp = append(keepSp, ss)
+		}
+	}
+
+	var documentRefID, uri, alg, checksum string
+
+	// now, should have 4 items (or 3, if Alg and Checksum were joined)
+	// and should be able to map them
+	if len(keepSp) == 4 {
+		documentRefID = keepSp[0]
+		uri = keepSp[1]
+		alg = keepSp[2]
+		// check that colon is present for alg, and remove it
+		if !strings.HasSuffix(alg, ":") {
+			return "", "", "", "", fmt.Errorf("algorithm does not end with colon")
+		}
+		alg = strings.TrimSuffix(alg, ":")
+		checksum = keepSp[3]
+	} else if len(keepSp) == 3 {
+		documentRefID = keepSp[0]
+		uri = keepSp[1]
+		// split on colon into alg and checksum
+		parts := strings.SplitN(keepSp[2], ":", 2)
+		if len(parts) != 2 {
+			return "", "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
+		}
+		alg = parts[0]
+		checksum = parts[1]
+	} else {
+		return "", "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
+	}
+
+	// additionally, we should be able to parse the first element as a
+	// DocumentRef- ID string, and we should remove that prefix
+	if !strings.HasPrefix(documentRefID, "DocumentRef-") {
+		return "", "", "", "", fmt.Errorf("expected first element to have DocumentRef- prefix")
+	}
+	documentRefID = strings.TrimPrefix(documentRefID, "DocumentRef-")
+	if documentRefID == "" {
+		return "", "", "", "", fmt.Errorf("document identifier has nothing after prefix")
+	}
+
+	return documentRefID, uri, alg, checksum, nil
 }
