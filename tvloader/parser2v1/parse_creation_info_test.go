@@ -217,7 +217,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.doc.CreationInfo.SPDXIdentifier != "SPDXRef-DOCUMENT" {
+	if parser.doc.CreationInfo.SPDXIdentifier != "DOCUMENT" {
 		t.Errorf("got %v for SPDXIdentifier", parser.doc.CreationInfo.SPDXIdentifier)
 	}
 
