@@ -1,7 +1,7 @@
 package parser2v2
 
 import (
-	"github.com/RishabhBhatnagar/gordf/rdfwriter"
+	"github.com/spdx/gordf/rdfwriter"
 	"github.com/spdx/tools-golang/spdx"
 	"reflect"
 	"testing"

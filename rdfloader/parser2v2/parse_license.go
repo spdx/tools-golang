@@ -4,8 +4,8 @@ package parser2v2
 
 import (
 	"fmt"
-	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
-	"github.com/RishabhBhatnagar/gordf/rdfwriter"
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	"github.com/spdx/gordf/rdfwriter"
 	"strings"
 )
 

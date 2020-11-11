@@ -4,7 +4,7 @@ package parser2v2
 
 import (
 	"fmt"
-	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
 )
 

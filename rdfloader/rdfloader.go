@@ -1,7 +1,7 @@
 package rdfloader
 
 import (
-	"github.com/RishabhBhatnagar/gordf/rdfloader"
+	"github.com/spdx/gordf/rdfloader"
 	"github.com/spdx/tools-golang/rdfloader/parser2v2"
 	"github.com/spdx/tools-golang/spdx"
 	"io"
