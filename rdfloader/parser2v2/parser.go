@@ -16,7 +16,9 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 		gordfParserObj:      gordfParserObj,
 		nodeStringToTriples: nodeToTriples,
 		doc: &spdx.Document2_2{
-			CreationInfo:    &spdx.CreationInfo2_2{},
+			CreationInfo: &spdx.CreationInfo2_2{
+				ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
+			},
 			Packages:        map[spdx.ElementID]*spdx.Package2_2{},
 			UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{},
 			OtherLicenses:   []*spdx.OtherLicense2_2{},

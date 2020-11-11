@@ -42,9 +42,12 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 			ci.DocumentName = objectValue
 		case SPDX_EXTERNAL_DOCUMENT_REF: // 2.6: externalDocumentReferences
 			// cardinality: min 0
-			var extRef string
+			var extRef spdx.ExternalDocumentRef2_2
 			extRef, err = parser.getExternalDocumentRefFromNode(subTriple.Object)
-			ci.ExternalDocumentReferences = append(ci.ExternalDocumentReferences, extRef)
+			if err != nil {
+				return err
+			}
+			ci.ExternalDocumentReferences[extRef.DocumentRefID] = extRef
 		case SPDX_CREATION_INFO: // 2.7 - 2.10:
 			// cardinality: exactly 1
 			err = parser.parseCreationInfoFromNode(ci, subTriple.Object)
@@ -86,31 +89,28 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 	return nil
 }
 
-func (parser *rdfParser2_2) getExternalDocumentRefFromNode(node *gordfParser.Node) (string, error) {
-	var docID, checksumValue, checksumAlgorithm, spdxDocument string
-	var err error
+func (parser *rdfParser2_2) getExternalDocumentRefFromNode(node *gordfParser.Node) (edr spdx.ExternalDocumentRef2_2, err error) {
 	for _, triple := range parser.nodeToTriples(node) {
 		switch triple.Predicate.ID {
 		case SPDX_EXTERNAL_DOCUMENT_ID:
 			// cardinality: exactly 1
-			docID = triple.Object.ID
+			edr.DocumentRefID = triple.Object.ID
 		case SPDX_SPDX_DOCUMENT:
 			// cardinality: exactly 1
 			// assumption: "spdxDocument" property of an external document
 			// reference is just a uri which doesn't follow a spdxDocument definition
-			spdxDocument = triple.Object.ID
+			edr.URI = triple.Object.ID
 		case SPDX_CHECKSUM:
 			// cardinality: exactly 1
-			checksumAlgorithm, checksumValue, err = parser.getChecksumFromNode(triple.Object)
+			edr.Alg, edr.Checksum, err = parser.getChecksumFromNode(triple.Object)
 			if err != nil {
-				return "", err
+				return edr, err
 			}
 		case RDF_TYPE:
 			continue
 		default:
-			return "", fmt.Errorf("unknown predicate ID (%s) while parsing externalDocumentReference", triple.Predicate.ID)
+			return edr, fmt.Errorf("unknown predicate ID (%s) while parsing externalDocumentReference", triple.Predicate.ID)
 		}
 	}
-	// transform the variables into string form (same as that of tag-value).
-	return fmt.Sprintf("%s %s %s: %s", docID, spdxDocument, checksumAlgorithm, checksumValue), nil
+	return edr, nil
 }
