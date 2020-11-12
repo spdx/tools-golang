@@ -3,9 +3,9 @@ package parser2v2
 import (
 	"errors"
 	"fmt"
-	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
-	"github.com/RishabhBhatnagar/gordf/rdfwriter"
-	urilib "github.com/RishabhBhatnagar/gordf/uri"
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	"github.com/spdx/gordf/rdfwriter"
+	urilib "github.com/spdx/gordf/uri"
 	"github.com/spdx/tools-golang/spdx"
 	"strings"
 )

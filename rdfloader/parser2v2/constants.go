@@ -1,6 +1,6 @@
 package parser2v2
 
-import "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
+import "github.com/spdx/gordf/rdfloader/parser"
 
 var (
 	// NAMESPACES

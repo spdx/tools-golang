@@ -5,8 +5,8 @@ package parser2v2
 import (
 	"errors"
 	"fmt"
-	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
-	gordfWriter "github.com/RishabhBhatnagar/gordf/rdfwriter"
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	gordfWriter "github.com/spdx/gordf/rdfwriter"
 	"github.com/spdx/tools-golang/spdx"
 )
 
@@ -16,7 +16,9 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 		gordfParserObj:      gordfParserObj,
 		nodeStringToTriples: nodeToTriples,
 		doc: &spdx.Document2_2{
-			CreationInfo:    &spdx.CreationInfo2_2{},
+			CreationInfo: &spdx.CreationInfo2_2{
+				ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
+			},
 			Packages:        map[spdx.ElementID]*spdx.Package2_2{},
 			UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{},
 			OtherLicenses:   []*spdx.OtherLicense2_2{},

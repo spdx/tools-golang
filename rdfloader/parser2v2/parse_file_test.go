@@ -2,9 +2,9 @@ package parser2v2
 
 import (
 	"bufio"
-	gordfParser "github.com/RishabhBhatnagar/gordf/rdfloader/parser"
-	rdfloader2 "github.com/RishabhBhatnagar/gordf/rdfloader/xmlreader"
-	gordfWriter "github.com/RishabhBhatnagar/gordf/rdfwriter"
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	rdfloader2 "github.com/spdx/gordf/rdfloader/xmlreader"
+	gordfWriter "github.com/spdx/gordf/rdfwriter"
 	"github.com/spdx/tools-golang/spdx"
 	"strings"
 	"testing"
