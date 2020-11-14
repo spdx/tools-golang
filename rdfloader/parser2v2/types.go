@@ -1,5 +1,5 @@
-// copied from tvloader/parser2v2/types.go
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+// copied from tvloader/parser2v2/types.go
 package parser2v2
 
 import (
