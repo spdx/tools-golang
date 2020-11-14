@@ -18,6 +18,7 @@ tools-golang provides the following packages:
 * *spdx* - in-memory data model for the sections of an SPDX document
 * *tvloader* - tag-value file loader
 * *tvsaver* - tag-value file saver
+* *rdfloader* - RDF file loader
 * *builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
 * *licensediff* - compares concluded licenses between files in two packages
@@ -27,13 +28,16 @@ tools-golang provides the following packages:
 Examples for how to use these packages can be found in the `examples/`
 directory.
 
+RDF support was added by @RishabhBhatnagar as part of his Google Summer of
+Code 2020 project, and is in the process of being merged into the main
+tools-golang code.
+
 ## What it doesn't do
 
 tools-golang doesn't currently do any of the following:
 
 * work with files under any version of the SPDX spec prior to v2.1
-* work with RDF files
-* convert between RDF and tag-value files, or between different versions
+* convert between different versions of SPDX documents (e.g., from 2.1 to 2.2)
 * enable applications to interact with SPDX files without needing to care
   (too much) about the particular SPDX file version
 
