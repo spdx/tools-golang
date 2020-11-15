@@ -78,7 +78,6 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 			DocumentRefID: "",
 			ElementRefID:  file.FileSPDXIdentifier,
 		}
-		parser.files[file.FileSPDXIdentifier] = file
 
 	case SPDX_PACKAGE:
 		pkg, err := parser.getPackageFromNode(triple.Subject)
