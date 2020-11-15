@@ -19,7 +19,6 @@ type rdfParser2_2 struct {
 	// map of packages and files.
 	files            map[spdx.ElementID]*spdx.File2_2
 	assocWithPackage map[spdx.ElementID]bool
-	packages         map[spdx.ElementID]*spdx.Package2_2
 
 	// mapping of nodeStrings to parsed object to save double computation.
 	cache map[string]interface{}

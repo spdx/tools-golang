@@ -441,7 +441,60 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		t.Error("should've raised an error stating invalid licenseInfoInFile for a file")
 	}
 
-	// TestCase 10: all valid attribute and it's values.
+	// TestCase 10: Splitting of File definition into parents of different tags mustn't create new file objects.
+	fileDefinitions := []string{
+		`<spdx:Package rdf:about="#SPDXRef-Package1">
+			<spdx:hasFile>
+				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+					<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
+					<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+				</spdx:File>
+			</spdx:hasFile>
+		</spdx:Package>`,
+		`<spdx:Package rdf:about="#SPDXRef-Package2">
+			<spdx:hasFile>
+				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+					<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+					<spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#NOASSERTION" />
+				</spdx:File>
+			</spdx:hasFile>
+		</spdx:Package>`,
+	}
+	parser, _ = parserFromBodyContent(strings.Join(fileDefinitions, ""))
+
+	var file *spdx.File2_2
+	packageTypeTriples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_PACKAGE)
+	for _, typeTriple := range packageTypeTriples {
+		pkg, err := parser.getPackageFromNode(typeTriple.Subject)
+		if err != nil {
+			t.Errorf("unexpected error parsing a valid package: %v", err)
+		}
+		if n := len(pkg.Files); n != 1 {
+			t.Errorf("expected package to contain exactly 1 file. Found %d files", n)
+		}
+		for _, file = range pkg.Files {
+		}
+	}
+
+	// checking if all the attributes that spanned over a several tags are set in the same variable.
+	expectedFileName := "time-1.9/ChangeLog"
+	if file.FileName != expectedFileName {
+		t.Errorf("expected %s, found %s", expectedFileName, file.FileName)
+	}
+	expectedLicenseConcluded := "NOASSERTION"
+	if file.LicenseConcluded != expectedLicenseConcluded {
+		t.Errorf("expected %s, found %s", expectedLicenseConcluded, file.LicenseConcluded)
+	}
+	expectedFileType := "source"
+	if file.FileType[0] != expectedFileType {
+		t.Errorf("expected %s, found %s", expectedFileType, file.FileType)
+	}
+	expectedLicenseInfoInFile := "NOASSERTION"
+	if file.LicenseInfoInFile[0] != expectedLicenseInfoInFile {
+		t.Errorf("expected %s, found %s", expectedLicenseInfoInFile, file.LicenseInfoInFile[0])
+	}
+
+	// TestCase 11: all valid attribute and it's values.
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
@@ -485,14 +538,14 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		</spdx:File>
 	`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
-	file, err := parser.getFileFromNode(fileNode)
+	file, err = parser.getFileFromNode(fileNode)
 	if err != nil {
 		t.Errorf("unexpected error parsing a valid file: %v", err)
 	}
 
 	// checking each and every attribute of the obtained file.
 
-	expectedFileName := "time-1.9/ChangeLog"
+	expectedFileName = "time-1.9/ChangeLog"
 	if file.FileName != expectedFileName {
 		t.Errorf("expected %s, found %s", expectedFileName, file.FileName)
 	}
@@ -500,7 +553,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	if len(file.FileType) != 1 {
 		t.Errorf("given file should have 1 fileType attribute. found %d", len(file.FileType))
 	}
-	expectedFileType := "source"
+	expectedFileType = "source"
 	if file.FileType[0] != expectedFileType {
 		t.Errorf("expected %s, found %s", expectedFileType, file.FileType)
 	}
@@ -510,7 +563,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		t.Errorf("expected %s, found %s", expectedChecksum, file.FileChecksumSHA1)
 	}
 
-	expectedLicenseConcluded := "NOASSERTION"
+	expectedLicenseConcluded = "NOASSERTION"
 	if file.LicenseConcluded != expectedLicenseConcluded {
 		t.Errorf("expected %s, found %s", expectedLicenseConcluded, file.LicenseConcluded)
 	}
@@ -518,7 +571,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	if len(file.LicenseInfoInFile) != 1 {
 		t.Errorf("given file should have 1 licenseInfoInFile attribute. found %d", len(file.LicenseInfoInFile))
 	}
-	expectedLicenseInfoInFile := "NOASSERTION"
+	expectedLicenseInfoInFile = "NOASSERTION"
 	if file.LicenseInfoInFile[0] != expectedLicenseInfoInFile {
 		t.Errorf("expected %s, found %s", expectedLicenseInfoInFile, file.LicenseInfoInFile[0])
 	}

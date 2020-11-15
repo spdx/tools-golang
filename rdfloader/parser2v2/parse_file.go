@@ -18,6 +18,10 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		return nil, err
 	}
 
+	if existingFile := parser.files[file.FileSPDXIdentifier]; existingFile != nil {
+		file = existingFile
+	}
+
 	for _, subTriple := range parser.nodeToTriples(fileNode) {
 		switch subTriple.Predicate.ID {
 		case SPDX_FILE_NAME: // 4.1
@@ -81,7 +85,6 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 				return nil, fmt.Errorf("error setting a file dependency in a file: %v", err)
 			}
 			file.FileDependencies = append(file.FileDependencies, string(newFile.FileSPDXIdentifier))
-			parser.files[file.FileSPDXIdentifier] = file
 		case SPDX_ATTRIBUTION_TEXT:
 			// cardinality: min 0
 			file.FileAttributionTexts = append(file.FileAttributionTexts, subTriple.Object.ID)
@@ -98,6 +101,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			return nil, err
 		}
 	}
+	parser.files[file.FileSPDXIdentifier] = file
 	return file, nil
 }
 

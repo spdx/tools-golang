@@ -418,7 +418,48 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 		t.Errorf("expected an error(invalid homepage uri), found %v", err)
 	}
 
-	// TestCase 7: everything valid
+	// TestCase 7: Package tag declared more than once should be parsed into a single object's definition
+	parser, _ = parserFromBodyContent(`
+		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+			<spdx:name>Test Package</spdx:name>
+		</spdx:Package>
+	`)
+	node = parser.gordfParserObj.Triples[0].Subject
+	_, err = parser.getPackageFromNode(node)
+	if err != nil {
+		t.Errorf("error parsing a valid package: %v", err)
+	}
+	yetAnotherPkgTriple := gordfParser.Triple{
+		Subject: node,
+		Predicate: &gordfParser.Node{
+			NodeType: gordfParser.IRI,
+			ID:       SPDX_PACKAGE_FILE_NAME,
+		},
+		Object: &gordfParser.Node{
+			NodeType: gordfParser.LITERAL,
+			ID:       "packageFileName",
+		},
+	}
+	parser.nodeStringToTriples[node.String()] = append(parser.nodeStringToTriples[node.String()], &yetAnotherPkgTriple)
+	pkg, err := parser.getPackageFromNode(node)
+	if err != nil {
+		t.Errorf("error parsing a valid package: %v", err)
+	}
+	// validating if all the attributes that spanned over two tags are included in the parsed package.
+	expectedID := "upload2"
+	if string(pkg.PackageSPDXIdentifier) != expectedID {
+		t.Errorf("expected package id: %s, got %s", expectedID, pkg.PackageSPDXIdentifier)
+	}
+	expectedPkgFileName := "packageFileName"
+	if expectedPkgFileName != pkg.PackageFileName {
+		t.Errorf("expected package file name: %s, got %s", expectedPkgFileName, pkg.PackageFileName)
+	}
+	expectedName := "Test Package"
+	if pkg.PackageName != expectedName {
+		t.Errorf("expected package name: %s, got %s", expectedPkgFileName, pkg.PackageName)
+	}
+
+	// TestCase 8: everything valid
 	parser, _ = parserFromBodyContent(`
 		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
 			<spdx:name>Test Package</spdx:name>
