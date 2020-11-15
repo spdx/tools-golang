@@ -19,6 +19,10 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	}
 	pkg.PackageSPDXIdentifier = eId // 3.2
 
+	if existingPkg := parser.doc.Packages[eId]; existingPkg != nil {
+		pkg = existingPkg
+	}
+
 	// iterate over all the triples associated with the provided package packageNode.
 	for _, subTriple := range parser.nodeToTriples(packageNode) {
 		switch subTriple.Predicate.ID {
@@ -125,6 +129,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 		}
 	}
 
+	parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
 	return pkg, nil
 }
 

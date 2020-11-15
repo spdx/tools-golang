@@ -18,6 +18,10 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		return nil, err
 	}
 
+	if existingFile := parser.files[file.FileSPDXIdentifier]; existingFile != nil {
+		file = existingFile
+	}
+
 	for _, subTriple := range parser.nodeToTriples(fileNode) {
 		switch subTriple.Predicate.ID {
 		case SPDX_FILE_NAME: // 4.1
