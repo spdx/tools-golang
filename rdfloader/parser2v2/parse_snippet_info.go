@@ -27,12 +27,11 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 		case SPDX_SNIPPET_FROM_FILE:
 			// cardinality: exactly 1
 			// file which is associated with the snippet
-			file, err := parser.getFileFromNode(siTriple.Object)
+			_, err := parser.getFileFromNode(siTriple.Object)
 			if err != nil {
 				return nil, err
 			}
 			si.SnippetFromFileSPDXIdentifier, err = ExtractDocElementID(getLastPartOfURI(siTriple.Object.ID))
-			parser.files[file.FileSPDXIdentifier] = file
 		case SPDX_RANGE:
 			// cardinality: min 1
 			err = parser.setSnippetRangeFromNode(siTriple.Object, si)
@@ -175,15 +174,10 @@ func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet 
 	if len(associatedTriples) == 0 {
 		return nil
 	}
-	file, err := parser.getFileFromNode(node)
+	_, err := parser.getFileFromNode(node)
 	if err != nil {
 		return fmt.Errorf("error parsing a new file in a reference: %v", err)
 	}
-
-	// setting the file to the parser. We cannot say if it is unpackaged
-	// because it is quite possible that the range references a file which
-	// belongs to another package.
-	parser.files[file.FileSPDXIdentifier] = file
 	return nil
 }
 
