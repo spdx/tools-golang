@@ -27,7 +27,6 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 			Reviews:         []*spdx.Review2_2{},
 		},
 		files:            map[spdx.ElementID]*spdx.File2_2{},
-		packages:         map[spdx.ElementID]*spdx.Package2_2{},
 		assocWithPackage: map[spdx.ElementID]bool{},
 	}
 	return &parser
