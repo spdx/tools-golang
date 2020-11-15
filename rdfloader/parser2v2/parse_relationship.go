@@ -88,7 +88,6 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 			DocumentRefID: "",
 			ElementRefID:  pkg.PackageSPDXIdentifier,
 		}
-		parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
 
 	case SPDX_SPDX_ELEMENT:
 		// it shouldn't be associated with any other triple.
