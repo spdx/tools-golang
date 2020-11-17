@@ -320,7 +320,33 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 		t.Errorf("should've raised an error due to unknown predicate in a relationship")
 	}
 
-	// TestCase 6: completely valid example:
+	// TestCase 8: Recursive relationships mustn't raise any error:
+	parser, _ = parserFromBodyContent(`
+		<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+			<spdx:relationship>
+				<spdx:Relationship rdf:about="#SPDXRef-reln">
+					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+					<spdx:relatedSpdxElement>
+						<spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon">
+							<spdx:relationship>
+								<spdx:Relationship rdf:about="#SPDXRef-reln">
+									<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+									<spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File"/>
+								</spdx:Relationship>
+							</spdx:relationship>
+						</spdx:Package>
+					</spdx:relatedSpdxElement>
+				</spdx:Relationship>
+			</spdx:relationship>
+		</spdx:File>
+	`)
+	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &SPDX_RELATIONSHIP, nil)[0]
+	err = parser.parseRelationship(triple)
+	if err != nil {
+		t.Errorf("error parsing a valid example")
+	}
+
+	// TestCase 7: completely valid example:
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 			<spdx:relationship>

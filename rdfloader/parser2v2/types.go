@@ -21,7 +21,22 @@ type rdfParser2_2 struct {
 	assocWithPackage map[spdx.ElementID]bool
 
 	// mapping of nodeStrings to parsed object to save double computation.
-	cache map[string]interface{}
+	cache map[string]*nodeState
+}
+
+type Color int
+
+const (
+	GREY Color = iota // represents that the node is being visited
+	WHITE             // unvisited node
+	BLACK             // visited node
+)
+
+type nodeState struct {
+	// object will be pointer to the parsed or element being parsed.
+	object interface{}
+	// color of a state represents if the node is visited/unvisited/being-visited.
+	Color  Color
 }
 
 type AnyLicenseInfo interface {

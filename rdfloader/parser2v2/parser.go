@@ -28,6 +28,7 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 		},
 		files:            map[spdx.ElementID]*spdx.File2_2{},
 		assocWithPackage: map[spdx.ElementID]bool{},
+		cache: map[string]*nodeState{},
 	}
 	return &parser
 }

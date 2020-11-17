@@ -13,6 +13,25 @@ import (
 func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *spdx.File2_2, err error) {
 	file = &spdx.File2_2{}
 
+	currState := parser.cache[fileNode.ID]
+	if currState == nil {
+		// this is the first time we are seeing this node.
+		parser.cache[fileNode.ID] = &nodeState{
+			object: file,
+			Color:  WHITE,
+		}
+	} else if currState.Color == GREY {
+		// we have already started parsing this file node and we needn't parse it again.
+		return currState.object.(*spdx.File2_2), nil
+	}
+
+	// setting color to grey to indicate that we've started parsing this node.
+	parser.cache[fileNode.ID].Color = GREY;
+
+	// setting color to black just before function returns to the caller to
+	// indicate that parsing current node is complete.
+	defer func() { parser.cache[fileNode.ID].Color = BLACK }()
+
 	err = setFileIdentifier(fileNode.ID, file) // 4.2
 	if err != nil {
 		return nil, err
