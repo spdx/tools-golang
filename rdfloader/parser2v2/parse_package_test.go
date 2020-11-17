@@ -459,7 +459,39 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 		t.Errorf("expected package name: %s, got %s", expectedPkgFileName, pkg.PackageName)
 	}
 
-	// TestCase 8: everything valid
+	// TestCase 8: Checking if packages can handle cyclic dependencies:
+	// Simulating a smallest possible cycle: package related to itself.
+	parser, _ = parserFromBodyContent(`
+		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+			<spdx:name>Test Package</spdx:name>
+			<spdx:relationship>
+			    <spdx:Relationship>
+					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes" />
+					<spdx:relatedSpdxElement>
+						<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+							<spdx:versionInfo>1.1.1</spdx:versionInfo>
+						</spdx:Package>
+					</spdx:relatedSpdxElement>
+				</spdx:Relationship>
+			</spdx:relationship>
+		</spdx:Package>
+	`)
+	node = parser.gordfParserObj.Triples[0].Subject
+	pkg, err = parser.getPackageFromNode(node)
+	if err != nil {
+		t.Errorf("error parsing a valid package: %v", err)
+	}
+	// checking if both the attributes of the packages are set.
+	expectedVersionInfo := "1.1.1"
+	expectedPackageName := "Test Package"
+	if pkg.PackageVersion != expectedVersionInfo {
+		t.Errorf("Expected %s, found %s", expectedVersionInfo, pkg.PackageVersion)
+	}
+	if pkg.PackageName != expectedPackageName {
+		t.Errorf("Expected %s, found %s", expectedPackageName, pkg.PackageName)
+	}
+
+	// TestCase 9: everything valid
 	parser, _ = parserFromBodyContent(`
 		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
 			<spdx:name>Test Package</spdx:name>

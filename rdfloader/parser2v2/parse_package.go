@@ -12,6 +12,26 @@ import (
 func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (pkg *spdx.Package2_2, err error) {
 	pkg = &spdx.Package2_2{} // new package which will be returned
 
+	currState := parser.cache[packageNode.ID]
+	if currState == nil {
+		// there is no entry about the state of current package node.
+		// this is the first time we're seeing this node.
+		parser.cache[packageNode.ID] = &nodeState{
+			object: pkg,
+			Color:  WHITE,
+		}
+	} else if currState.Color == GREY {
+		// we have already started parsing this package node and we needn't parse it again.
+		return currState.object.(*spdx.Package2_2), nil
+	}
+
+	// setting color of the state to grey to indicate that we've started to
+	// parse this node once.
+	parser.cache[packageNode.ID].Color = GREY
+
+	// setting state color to black to indicate when we're done parsing this node.
+	defer func(){parser.cache[packageNode.ID].Color = BLACK}();
+
 	// setting the SPDXIdentifier for the package.
 	eId, err := ExtractElementID(getLastPartOfURI(packageNode.ID))
 	if err != nil {

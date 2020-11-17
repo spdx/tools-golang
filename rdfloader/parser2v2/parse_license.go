@@ -3,6 +3,7 @@
 package parser2v2
 
 import (
+	"errors"
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/gordf/rdfwriter"
@@ -16,6 +17,28 @@ import (
 // decides which type of license it is and passes control to that type of
 // license parser to parse the given input.
 func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLicenseInfo, error) {
+
+	currState := parser.cache[node.ID]
+	if currState == nil {
+		// there is no entry about the state of current package node.
+		// this is the first time we're seeing this node.
+		parser.cache[node.ID] = &nodeState{
+			object: nil, // not storing the object as we won't retrieve it later.
+			Color:  WHITE,
+		}
+	} else if currState.Color == GREY {
+		// we have already started parsing this license node.
+		// We have a cyclic dependency!
+		return nil, errors.New("Couldn't parse license: found a cyclic dependency on " + node.ID)
+	}
+
+	// setting color of the state to grey to indicate that we've started to
+	// parse this node once.
+	parser.cache[node.ID].Color = GREY
+
+	// setting state color to black when we're done parsing this node.
+	defer func(){parser.cache[node.ID].Color = BLACK}()
+
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
 	if len(associatedTriples) == 0 {
 		// just a license uri string was found.

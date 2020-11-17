@@ -22,6 +22,26 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 		return err
 	}
 
+	currState := parser.cache[triple.Object.ID]
+	if currState == nil {
+		// there is no entry about the state of current package node.
+		// this is the first time we're seeing this node.
+		parser.cache[triple.Object.ID] = &nodeState{
+			object: reln,
+			Color:  WHITE,
+		}
+	} else if currState.Color == GREY {
+		// we have already started parsing this relationship node and we needn't parse it again.
+		return nil
+	}
+
+	// setting color of the state to grey to indicate that we've started to
+	// parse this node once.
+	parser.cache[triple.Object.ID].Color = GREY
+
+	// setting state color to black to indicate when we're done parsing this node.
+	defer func(){parser.cache[triple.Object.ID].Color = BLACK}();
+
 	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
 		case SPDX_RELATIONSHIP_TYPE:

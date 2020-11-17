@@ -494,6 +494,25 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		t.Errorf("expected %s, found %s", expectedLicenseInfoInFile, file.LicenseInfoInFile[0])
 	}
 
+
+	// TestCase 12: checking if recursive dependencies are resolved.
+	parser, _ = parserFromBodyContent(`
+		<spdx:File rdf:about="#SPDXRef-ParentFile">
+			<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+			<spdx:fileDependency>
+				<spdx:File rdf:about="#SPDXRef-ChildFile">
+					<spdx:fileDependency>
+						<spdx:File rdf:about="#SPDXRef-ParentFile">
+							<spdx:fileName>ParentFile</spdx:fileName>
+						</spdx:File>
+					</spdx:fileDependency>
+				</spdx:File>
+			</spdx:fileDependency>
+		</spdx:File>
+	`)
+	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
+	file, err = parser.getFileFromNode(fileNode)
+
 	// TestCase 11: all valid attribute and it's values.
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
