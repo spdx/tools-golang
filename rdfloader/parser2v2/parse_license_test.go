@@ -196,6 +196,24 @@ func Test_rdfParser2_2_getAnyLicenseFromNode(t *testing.T) {
 	if err == nil {
 		t.Errorf("should've raised an error for invalid input")
 	}
+
+	// TestCase 8: cyclic dependent license must raise an error.
+	parser, _ = parserFromBodyContent(`
+		<spdx:ConjunctiveLicenseSet rdf:about="#SPDXRef-RecursiveLicense">
+			<spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-or-later"/>
+			<spdx:member>
+				<spdx:ConjunctiveLicenseSet rdf:about="#SPDXRef-RecursiveLicense">
+					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
+					<spdx:member rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-RecursiveLicense"/>
+				</spdx:ConjunctiveLicenseSet>
+			</spdx:member>
+		</spdx:ConjunctiveLicenseSet>
+	`)
+	node = parser.gordfParserObj.Triples[0].Subject
+	_, err = parser.getAnyLicenseFromNode(node)
+	if err == nil {
+		t.Errorf("expected an error due to cyclic dependent license. found %v", err)
+	}
 }
 
 func Test_rdfParser2_2_getConjunctiveLicenseSetFromNode(t *testing.T) {
