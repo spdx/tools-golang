@@ -26,7 +26,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 	}
 
 	// setting color to grey to indicate that we've started parsing this node.
-	parser.cache[fileNode.ID].Color = GREY;
+	parser.cache[fileNode.ID].Color = GREY
 
 	// setting color to black just before function returns to the caller to
 	// indicate that parsing current node is complete.
@@ -37,7 +37,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		return nil, err
 	}
 
-	if existingFile := parser.files[file.FileSPDXIdentifier]; existingFile != nil {
+	if existingFile := parser.files[file.SPDXIdentifier]; existingFile != nil {
 		file = existingFile
 	}
 
@@ -45,7 +45,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		switch subTriple.Predicate.ID {
 		case SPDX_FILE_NAME: // 4.1
 			// cardinality: exactly 1
-			file.FileName = subTriple.Object.ID
+			file.Name = subTriple.Object.ID
 		case SPDX_NAME:
 			// cardinality: exactly 1
 			// TODO: check where it will be set in the golang-tools spdx-data-model
@@ -55,7 +55,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			// cardinality: min 0
 			fileType := ""
 			fileType, err = parser.getFileTypeFromUri(subTriple.Object.ID)
-			file.FileType = append(file.FileType, fileType)
+			file.Type = append(file.Type, fileType)
 		case SPDX_CHECKSUM: // 4.4
 			// cardinality: min 1
 			err = parser.setFileChecksumFromNode(file, subTriple.Object)
@@ -79,7 +79,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 		// TODO: allow copyright text to be of type NOASSERTION
 		case SPDX_COPYRIGHT_TEXT: // 4.8
 			// cardinality: exactly 1
-			file.FileCopyrightText = subTriple.Object.ID
+			file.CopyrightText = subTriple.Object.ID
 		case SPDX_LICENSE_INFO_FROM_FILES:
 			// TODO: implement it. It is not defined in the tools-golang model.
 		// deprecated artifactOf (see sections 4.9, 4.10, 4.11)
@@ -90,23 +90,23 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.ArtifactOfProjects = append(file.ArtifactOfProjects, artifactOf)
 		case RDFS_COMMENT: // 4.12
 			// cardinality: max 1
-			file.FileComment = subTriple.Object.ID
+			file.Comment = subTriple.Object.ID
 		case SPDX_NOTICE_TEXT: // 4.13
 			// cardinality: max 1
-			file.FileNotice = getNoticeTextFromNode(subTriple.Object)
+			file.Notice = getNoticeTextFromNode(subTriple.Object)
 		case SPDX_FILE_CONTRIBUTOR: // 4.14
 			// cardinality: min 0
-			file.FileContributor = append(file.FileContributor, subTriple.Object.ID)
+			file.Contributor = append(file.Contributor, subTriple.Object.ID)
 		case SPDX_FILE_DEPENDENCY:
 			// cardinality: min 0
 			newFile, err := parser.getFileFromNode(subTriple.Object)
 			if err != nil {
 				return nil, fmt.Errorf("error setting a file dependency in a file: %v", err)
 			}
-			file.FileDependencies = append(file.FileDependencies, string(newFile.FileSPDXIdentifier))
+			file.Dependencies = append(file.Dependencies, string(newFile.SPDXIdentifier))
 		case SPDX_ATTRIBUTION_TEXT:
 			// cardinality: min 0
-			file.FileAttributionTexts = append(file.FileAttributionTexts, subTriple.Object.ID)
+			file.AttributionTexts = append(file.AttributionTexts, subTriple.Object.ID)
 		case SPDX_ANNOTATION:
 			// cardinality: min 0
 			err = parser.parseAnnotationFromNode(subTriple.Object)
@@ -120,7 +120,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			return nil, err
 		}
 	}
-	parser.files[file.FileSPDXIdentifier] = file
+	parser.files[file.SPDXIdentifier] = file
 	return file, nil
 }
 
@@ -131,11 +131,11 @@ func (parser *rdfParser2_2) setFileChecksumFromNode(file *spdx.File2_2, checksum
 	}
 	switch checksumAlgorithm {
 	case "MD5":
-		file.FileChecksumMD5 = checksumValue
+		file.ChecksumMD5 = checksumValue
 	case "SHA1":
-		file.FileChecksumSHA1 = checksumValue
+		file.ChecksumSHA1 = checksumValue
 	case "SHA256":
-		file.FileChecksumSHA256 = checksumValue
+		file.ChecksumSHA256 = checksumValue
 	case "":
 		return fmt.Errorf("empty checksum algorithm and value")
 	default:
@@ -189,7 +189,7 @@ func (parser *rdfParser2_2) setUnpackagedFiles() {
 func setFileIdentifier(idURI string, file *spdx.File2_2) (err error) {
 	idURI = strings.TrimSpace(idURI)
 	uriFragment := getLastPartOfURI(idURI)
-	file.FileSPDXIdentifier, err = ExtractElementID(uriFragment)
+	file.SPDXIdentifier, err = ExtractElementID(uriFragment)
 	if err != nil {
 		return fmt.Errorf("error setting file identifier: %s", err)
 	}

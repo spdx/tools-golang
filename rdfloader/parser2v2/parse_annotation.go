@@ -21,10 +21,10 @@ func (parser *rdfParser2_2) parseAnnotationFromNode(node *gordfParser.Node) (err
 			err = setAnnotatorFromString(subTriple.Object.ID, ann)
 		case SPDX_ANNOTATION_DATE:
 			// cardinality: exactly 1
-			ann.AnnotationDate = subTriple.Object.ID
+			ann.Date = subTriple.Object.ID
 		case RDFS_COMMENT:
 			// cardinality: exactly 1
-			ann.AnnotationComment = subTriple.Object.ID
+			ann.Comment = subTriple.Object.ID
 		case SPDX_ANNOTATION_TYPE:
 			// cardinality: exactly 1
 			err = setAnnotationType(subTriple.Object.ID, ann)
@@ -70,9 +70,9 @@ func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) err
 func setAnnotationType(annType string, ann *spdx.Annotation2_2) error {
 	switch annType {
 	case SPDX_ANNOTATION_TYPE_OTHER:
-		ann.AnnotationType = "OTHER"
+		ann.Type = "OTHER"
 	case SPDX_ANNOTATION_TYPE_REVIEW:
-		ann.AnnotationType = "REVIEW"
+		ann.Type = "REVIEW"
 	default:
 		return fmt.Errorf("unknown annotation type %s", annType)
 	}

@@ -12,16 +12,16 @@ import (
 // ===== Other License section Saver tests =====
 func TestSaver2_2OtherLicenseSavesText(t *testing.T) {
 	ol := &spdx.OtherLicense2_2{
-		LicenseIdentifier: "LicenseRef-1",
+		Identifier: "LicenseRef-1",
 		ExtractedText: `License 1 text
 blah blah blah
 blah blah blah blah`,
-		LicenseName: "License 1",
-		LicenseCrossReferences: []string{
+		Name: "License 1",
+		CrossReferences: []string{
 			"http://example.com/License1/",
 			"http://example.com/License1AnotherURL/",
 		},
-		LicenseComment: "this is a license comment",
+		Comment: "this is a license comment",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -52,11 +52,11 @@ LicenseComment: this is a license comment
 
 func TestSaver2_2OtherLicenseOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	ol := &spdx.OtherLicense2_2{
-		LicenseIdentifier: "LicenseRef-1",
+		Identifier: "LicenseRef-1",
 		ExtractedText: `License 1 text
 blah blah blah
 blah blah blah blah`,
-		LicenseName: "License 1",
+		Name: "License 1",
 	}
 
 	// what we want to get, as a buffer of bytes

@@ -55,19 +55,19 @@ func Test_rdfParser2_2_extractedLicenseToOtherLicense(t *testing.T) {
 	extLicense, _ := parser.getExtractedLicensingInfoFromNode(node)
 	othLic := parser.extractedLicenseToOtherLicense(extLicense)
 
-	if othLic.LicenseIdentifier != extLicense.licenseID {
-		t.Errorf("expected %v, got %v", othLic.LicenseIdentifier, extLicense.licenseID)
+	if othLic.Identifier != extLicense.licenseID {
+		t.Errorf("expected %v, got %v", othLic.Identifier, extLicense.licenseID)
 	}
 	if othLic.ExtractedText != extLicense.extractedText {
 		t.Errorf("expected %v, got %v", othLic.ExtractedText, extLicense.extractedText)
 	}
-	if othLic.LicenseComment != extLicense.comment {
-		t.Errorf("expected %v, got %v", othLic.LicenseComment, extLicense.comment)
+	if othLic.Comment != extLicense.comment {
+		t.Errorf("expected %v, got %v", othLic.Comment, extLicense.comment)
 	}
-	if !reflect.DeepEqual(othLic.LicenseCrossReferences, extLicense.seeAlso) {
-		t.Errorf("expected %v, got %v", othLic.LicenseCrossReferences, extLicense.seeAlso)
+	if !reflect.DeepEqual(othLic.CrossReferences, extLicense.seeAlso) {
+		t.Errorf("expected %v, got %v", othLic.CrossReferences, extLicense.seeAlso)
 	}
-	if othLic.LicenseName != extLicense.name {
-		t.Errorf("expected %v, got %v", othLic.LicenseName, extLicense.name)
+	if othLic.Name != extLicense.name {
+		t.Errorf("expected %v, got %v", othLic.Name, extLicense.name)
 	}
 }

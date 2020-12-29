@@ -14,9 +14,9 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: sid1},
+		pkg:     &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: sid1},
 	}
 	s1 := parser.snippet
 	parser.doc.Packages["test"] = parser.pkg
@@ -30,8 +30,8 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 	if parser.file.Snippets["s1"] != s1 {
 		t.Errorf("Expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
 	}
-	if parser.file.Snippets["s1"].SnippetSPDXIdentifier != sid1 {
-		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SnippetSPDXIdentifier)
+	if parser.file.Snippets["s1"].SPDXIdentifier != sid1 {
+		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SPDXIdentifier)
 	}
 
 	// now add a new snippet
@@ -48,8 +48,8 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 		t.Fatalf("parser didn't create new snippet")
 	}
 	// and the snippet ID should be as expected
-	if parser.snippet.SnippetSPDXIdentifier != "s2" {
-		t.Errorf("expected snippet ID %s, got %s", "s2", parser.snippet.SnippetSPDXIdentifier)
+	if parser.snippet.SPDXIdentifier != "s2" {
+		t.Errorf("expected snippet ID %s, got %s", "s2", parser.snippet.SPDXIdentifier)
 	}
 	// and the File's Snippets should be of size 2 and have these two
 	if len(parser.file.Snippets) != 2 {
@@ -58,14 +58,14 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 	if parser.file.Snippets["s1"] != s1 {
 		t.Errorf("Expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
 	}
-	if parser.file.Snippets["s1"].SnippetSPDXIdentifier != sid1 {
-		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SnippetSPDXIdentifier)
+	if parser.file.Snippets["s1"].SPDXIdentifier != sid1 {
+		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SPDXIdentifier)
 	}
 	if parser.file.Snippets["s2"] != parser.snippet {
 		t.Errorf("Expected snippet %v in Snippets[s2], got %v", parser.snippet, parser.file.Snippets["s2"])
 	}
-	if parser.file.Snippets["s2"].SnippetSPDXIdentifier != "s2" {
-		t.Errorf("expected snippet ID %s in Snippets[s2], got %s", "s2", parser.file.Snippets["s2"].SnippetSPDXIdentifier)
+	if parser.file.Snippets["s2"].SPDXIdentifier != "s2" {
+		t.Errorf("expected snippet ID %s in Snippets[s2], got %s", "s2", parser.file.Snippets["s2"].SPDXIdentifier)
 	}
 }
 
@@ -73,9 +73,9 @@ func TestParser2_1SnippetStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	p1 := parser.pkg
 	f1 := parser.file
@@ -98,8 +98,8 @@ func TestParser2_1SnippetStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 		t.Fatalf("parser didn't create new pkg")
 	}
 	// and the package name should be as expected
-	if parser.pkg.PackageName != p2Name {
-		t.Errorf("expected package name %s, got %s", p2Name, parser.pkg.PackageName)
+	if parser.pkg.Name != p2Name {
+		t.Errorf("expected package name %s, got %s", p2Name, parser.pkg.Name)
 	}
 	// and the package should default to true for FilesAnalyzed
 	if parser.pkg.FilesAnalyzed != true {
@@ -116,8 +116,8 @@ func TestParser2_1SnippetStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	if parser.doc.Packages["package1"] != p1 {
 		t.Errorf("Expected package %v in Packages[package1], got %v", p1, parser.doc.Packages["package1"])
 	}
-	if parser.doc.Packages["package1"].PackageName != "package1" {
-		t.Errorf("expected package name %s in Packages[package1], got %s", "package1", parser.doc.Packages["package1"].PackageName)
+	if parser.doc.Packages["package1"].Name != "package1" {
+		t.Errorf("expected package name %s in Packages[package1], got %s", "package1", parser.doc.Packages["package1"].Name)
 	}
 	// and the first Package's Files should be of size 1 and have f1 only
 	if len(parser.doc.Packages["package1"].Files) != 1 {
@@ -126,8 +126,8 @@ func TestParser2_1SnippetStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	if parser.doc.Packages["package1"].Files["f1"] != f1 {
 		t.Errorf("Expected file %v in Files[f1], got %v", f1, parser.doc.Packages["package1"].Files["f1"])
 	}
-	if parser.doc.Packages["package1"].Files["f1"].FileName != "f1.txt" {
-		t.Errorf("expected file name %s in Files[f1], got %s", "f1.txt", parser.doc.Packages["package1"].Files["f1"].FileName)
+	if parser.doc.Packages["package1"].Files["f1"].Name != "f1.txt" {
+		t.Errorf("expected file name %s in Files[f1], got %s", "f1.txt", parser.doc.Packages["package1"].Files["f1"].Name)
 	}
 	// and the new Package should have no files
 	if len(parser.pkg.Files) != 0 {
@@ -148,9 +148,9 @@ func TestParser2_1SnippetMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	p1 := parser.pkg
 	f1 := parser.file
@@ -176,8 +176,8 @@ func TestParser2_1SnippetMovesToFileAfterParsingFileNameTag(t *testing.T) {
 		t.Fatalf("parser didn't create new file")
 	}
 	// and the file name should be as expected
-	if parser.file.FileName != f2Name {
-		t.Errorf("expected file name %s, got %s", f2Name, parser.file.FileName)
+	if parser.file.Name != f2Name {
+		t.Errorf("expected file name %s, got %s", f2Name, parser.file.Name)
 	}
 	// and the Package's Files should still be of size 1 since we haven't seen
 	// an SPDX identifier yet for this new file
@@ -187,8 +187,8 @@ func TestParser2_1SnippetMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	if parser.pkg.Files["f1"] != f1 {
 		t.Errorf("Expected file %v in Files[f1], got %v", f1, parser.pkg.Files["f1"])
 	}
-	if parser.pkg.Files["f1"].FileName != f1Name {
-		t.Errorf("expected file name %s in Files[f1], got %s", f1Name, parser.pkg.Files["f1"].FileName)
+	if parser.pkg.Files["f1"].Name != f1Name {
+		t.Errorf("expected file name %s in Files[f1], got %s", f1Name, parser.pkg.Files["f1"].Name)
 	}
 	// and the current snippet should be nil
 	if parser.snippet != nil {
@@ -200,9 +200,9 @@ func TestParser2_1SnippetMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
 	parser.pkg.Files["f1"] = parser.file
@@ -221,9 +221,9 @@ func TestParser2_1SnippetMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
 	parser.pkg.Files["f1"] = parser.file
@@ -242,9 +242,9 @@ func TestParser2_1SnippetStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
 	parser.pkg.Files["f1"] = parser.file
@@ -281,9 +281,9 @@ func TestParser2_1SnippetStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
 	parser.pkg.Files["f1"] = parser.file
@@ -343,8 +343,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
 		snippet: &spdx.Snippet2_1{},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
@@ -355,8 +355,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetSPDXIdentifier != "s1" {
-		t.Errorf("got %v for SnippetSPDXIdentifier", parser.snippet.SnippetSPDXIdentifier)
+	if parser.snippet.SPDXIdentifier != "s1" {
+		t.Errorf("got %v for SnippetSPDXIdentifier", parser.snippet.SPDXIdentifier)
 	}
 
 	// Snippet from File SPDX Identifier
@@ -374,11 +374,11 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetByteRangeStart != 20 {
-		t.Errorf("got %v for SnippetByteRangeStart", parser.snippet.SnippetByteRangeStart)
+	if parser.snippet.ByteRangeStart != 20 {
+		t.Errorf("got %v for SnippetByteRangeStart", parser.snippet.ByteRangeStart)
 	}
-	if parser.snippet.SnippetByteRangeEnd != 320 {
-		t.Errorf("got %v for SnippetByteRangeEnd", parser.snippet.SnippetByteRangeEnd)
+	if parser.snippet.ByteRangeEnd != 320 {
+		t.Errorf("got %v for SnippetByteRangeEnd", parser.snippet.ByteRangeEnd)
 	}
 
 	// Snippet Line Range
@@ -386,11 +386,11 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetLineRangeStart != 5 {
-		t.Errorf("got %v for SnippetLineRangeStart", parser.snippet.SnippetLineRangeStart)
+	if parser.snippet.LineRangeStart != 5 {
+		t.Errorf("got %v for SnippetLineRangeStart", parser.snippet.LineRangeStart)
 	}
-	if parser.snippet.SnippetLineRangeEnd != 12 {
-		t.Errorf("got %v for SnippetLineRangeEnd", parser.snippet.SnippetLineRangeEnd)
+	if parser.snippet.LineRangeEnd != 12 {
+		t.Errorf("got %v for SnippetLineRangeEnd", parser.snippet.LineRangeEnd)
 	}
 
 	// Snippet Concluded License
@@ -398,8 +398,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetLicenseConcluded != "BSD-3-Clause" {
-		t.Errorf("got %v for SnippetLicenseConcluded", parser.snippet.SnippetLicenseConcluded)
+	if parser.snippet.LicenseConcluded != "BSD-3-Clause" {
+		t.Errorf("got %v for SnippetLicenseConcluded", parser.snippet.LicenseConcluded)
 	}
 
 	// License Information in Snippet
@@ -435,8 +435,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetLicenseComments != "this is a comment about the licenses" {
-		t.Errorf("got %v for SnippetLicenseComments", parser.snippet.SnippetLicenseComments)
+	if parser.snippet.LicenseComments != "this is a comment about the licenses" {
+		t.Errorf("got %v for SnippetLicenseComments", parser.snippet.LicenseComments)
 	}
 
 	// Snippet Copyright Text
@@ -444,8 +444,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetCopyrightText != "copyright (c) John Doe and friends" {
-		t.Errorf("got %v for SnippetCopyrightText", parser.snippet.SnippetCopyrightText)
+	if parser.snippet.CopyrightText != "copyright (c) John Doe and friends" {
+		t.Errorf("got %v for SnippetCopyrightText", parser.snippet.CopyrightText)
 	}
 
 	// Snippet Comment
@@ -453,8 +453,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetComment != "this is a comment about the snippet" {
-		t.Errorf("got %v for SnippetComment", parser.snippet.SnippetComment)
+	if parser.snippet.Comment != "this is a comment about the snippet" {
+		t.Errorf("got %v for SnippetComment", parser.snippet.Comment)
 	}
 
 	// Snippet Name
@@ -462,8 +462,8 @@ func TestParser2_1CanParseSnippetTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.snippet.SnippetName != "from some other package called abc" {
-		t.Errorf("got %v for SnippetName", parser.snippet.SnippetName)
+	if parser.snippet.Name != "from some other package called abc" {
+		t.Errorf("got %v for SnippetName", parser.snippet.Name)
 	}
 }
 
@@ -471,9 +471,9 @@ func TestParser2_1SnippetUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
-		snippet: &spdx.Snippet2_1{SnippetSPDXIdentifier: "s1"},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		snippet: &spdx.Snippet2_1{SPDXIdentifier: "s1"},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
 	parser.pkg.Files["f1"] = parser.file
@@ -488,8 +488,8 @@ func TestParser2_1FailsForInvalidSnippetSPDXID(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
 		snippet: &spdx.Snippet2_1{},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
@@ -506,8 +506,8 @@ func TestParser2_1FailsForInvalidSnippetFromFileSPDXID(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
 		snippet: &spdx.Snippet2_1{},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
@@ -529,8 +529,8 @@ func TestParser2_1FailsForInvalidSnippetByteValues(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
 		snippet: &spdx.Snippet2_1{},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
@@ -560,8 +560,8 @@ func TestParser2_1FailsForInvalidSnippetLineValues(t *testing.T) {
 	parser := tvParser2_1{
 		doc:     &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:      psSnippet2_1,
-		pkg:     &spdx.Package2_1{PackageName: "package1", PackageSPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file:    &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
+		pkg:     &spdx.Package2_1{Name: "package1", SPDXIdentifier: "package1", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file:    &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1", Snippets: map[spdx.ElementID]*spdx.Snippet2_1{}},
 		snippet: &spdx.Snippet2_1{},
 	}
 	parser.doc.Packages["package1"] = parser.pkg
@@ -586,4 +586,3 @@ func TestParser2_1FailsForInvalidSnippetLineValues(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
-

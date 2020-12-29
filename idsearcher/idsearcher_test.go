@@ -146,33 +146,33 @@ func Test2_1SearcherCanFillInIDs(t *testing.T) {
 	}
 
 	// and finally, the package should have all of these licenses
-	if pkg.PackageLicenseInfoFromFiles == nil {
+	if pkg.LicenseInfoFromFiles == nil {
 		t.Fatalf("expected non-nil PackageLicenseInfoFromFiles, got nil")
 	}
-	if len(pkg.PackageLicenseInfoFromFiles) != 7 {
-		t.Fatalf("expected PackageLicenseInfoFromFiles len to be 7, got %d", len(pkg.PackageLicenseInfoFromFiles))
+	if len(pkg.LicenseInfoFromFiles) != 7 {
+		t.Fatalf("expected PackageLicenseInfoFromFiles len to be 7, got %d", len(pkg.LicenseInfoFromFiles))
 	}
-	if pkg.PackageLicenseInfoFromFiles[0] != "Apache-2.0" {
-		t.Errorf("expected %v, got %v", "Apache-2.0", pkg.PackageLicenseInfoFromFiles[0])
+	if pkg.LicenseInfoFromFiles[0] != "Apache-2.0" {
+		t.Errorf("expected %v, got %v", "Apache-2.0", pkg.LicenseInfoFromFiles[0])
 	}
-	if pkg.PackageLicenseInfoFromFiles[1] != "BSD-2-Clause" {
-		t.Errorf("expected %v, got %v", "BSD-2-Clause", pkg.PackageLicenseInfoFromFiles[1])
+	if pkg.LicenseInfoFromFiles[1] != "BSD-2-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-2-Clause", pkg.LicenseInfoFromFiles[1])
 	}
-	if pkg.PackageLicenseInfoFromFiles[2] != "BSD-3-Clause" {
-		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.PackageLicenseInfoFromFiles[2])
+	if pkg.LicenseInfoFromFiles[2] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.LicenseInfoFromFiles[2])
 	}
 	// here, DO NOT keep the +
-	if pkg.PackageLicenseInfoFromFiles[3] != "EPL-1.0" {
-		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.PackageLicenseInfoFromFiles[3])
+	if pkg.LicenseInfoFromFiles[3] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.LicenseInfoFromFiles[3])
 	}
-	if pkg.PackageLicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
-		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.PackageLicenseInfoFromFiles[4])
+	if pkg.LicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.LicenseInfoFromFiles[4])
 	}
-	if pkg.PackageLicenseInfoFromFiles[5] != "ISC" {
-		t.Errorf("expected %v, got %v", "ISC", pkg.PackageLicenseInfoFromFiles[5])
+	if pkg.LicenseInfoFromFiles[5] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", pkg.LicenseInfoFromFiles[5])
 	}
-	if pkg.PackageLicenseInfoFromFiles[6] != "MIT" {
-		t.Errorf("expected %v, got %v", "MIT", pkg.PackageLicenseInfoFromFiles[6])
+	if pkg.LicenseInfoFromFiles[6] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", pkg.LicenseInfoFromFiles[6])
 	}
 
 }
@@ -214,8 +214,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f := pkg.Files[spdx.ElementID("File0")]
-	if f.FileName != "/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	if f.Name != "/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/dontscan.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -228,8 +228,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File1")]
-	if f.FileName != "/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
+	if f.Name != "/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -242,8 +242,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File2")]
-	if f.FileName != "/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
+	if f.Name != "/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -256,8 +256,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File3")]
-	if f.FileName != "/subdir/keep/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	if f.Name != "/subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -270,8 +270,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File4")]
-	if f.FileName != "/subdir/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	if f.Name != "/subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -435,33 +435,33 @@ func Test2_2SearcherCanFillInIDs(t *testing.T) {
 	}
 
 	// and finally, the package should have all of these licenses
-	if pkg.PackageLicenseInfoFromFiles == nil {
+	if pkg.LicenseInfoFromFiles == nil {
 		t.Fatalf("expected non-nil PackageLicenseInfoFromFiles, got nil")
 	}
-	if len(pkg.PackageLicenseInfoFromFiles) != 7 {
-		t.Fatalf("expected PackageLicenseInfoFromFiles len to be 7, got %d", len(pkg.PackageLicenseInfoFromFiles))
+	if len(pkg.LicenseInfoFromFiles) != 7 {
+		t.Fatalf("expected PackageLicenseInfoFromFiles len to be 7, got %d", len(pkg.LicenseInfoFromFiles))
 	}
-	if pkg.PackageLicenseInfoFromFiles[0] != "Apache-2.0" {
-		t.Errorf("expected %v, got %v", "Apache-2.0", pkg.PackageLicenseInfoFromFiles[0])
+	if pkg.LicenseInfoFromFiles[0] != "Apache-2.0" {
+		t.Errorf("expected %v, got %v", "Apache-2.0", pkg.LicenseInfoFromFiles[0])
 	}
-	if pkg.PackageLicenseInfoFromFiles[1] != "BSD-2-Clause" {
-		t.Errorf("expected %v, got %v", "BSD-2-Clause", pkg.PackageLicenseInfoFromFiles[1])
+	if pkg.LicenseInfoFromFiles[1] != "BSD-2-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-2-Clause", pkg.LicenseInfoFromFiles[1])
 	}
-	if pkg.PackageLicenseInfoFromFiles[2] != "BSD-3-Clause" {
-		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.PackageLicenseInfoFromFiles[2])
+	if pkg.LicenseInfoFromFiles[2] != "BSD-3-Clause" {
+		t.Errorf("expected %v, got %v", "BSD-3-Clause", pkg.LicenseInfoFromFiles[2])
 	}
 	// here, DO NOT keep the +
-	if pkg.PackageLicenseInfoFromFiles[3] != "EPL-1.0" {
-		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.PackageLicenseInfoFromFiles[3])
+	if pkg.LicenseInfoFromFiles[3] != "EPL-1.0" {
+		t.Errorf("expected %v, got %v", "EPL-1.0", pkg.LicenseInfoFromFiles[3])
 	}
-	if pkg.PackageLicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
-		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.PackageLicenseInfoFromFiles[4])
+	if pkg.LicenseInfoFromFiles[4] != "GPL-2.0-or-later" {
+		t.Errorf("expected %v, got %v", "GPL-2.0-or-later", pkg.LicenseInfoFromFiles[4])
 	}
-	if pkg.PackageLicenseInfoFromFiles[5] != "ISC" {
-		t.Errorf("expected %v, got %v", "ISC", pkg.PackageLicenseInfoFromFiles[5])
+	if pkg.LicenseInfoFromFiles[5] != "ISC" {
+		t.Errorf("expected %v, got %v", "ISC", pkg.LicenseInfoFromFiles[5])
 	}
-	if pkg.PackageLicenseInfoFromFiles[6] != "MIT" {
-		t.Errorf("expected %v, got %v", "MIT", pkg.PackageLicenseInfoFromFiles[6])
+	if pkg.LicenseInfoFromFiles[6] != "MIT" {
+		t.Errorf("expected %v, got %v", "MIT", pkg.LicenseInfoFromFiles[6])
 	}
 
 }
@@ -503,8 +503,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f := pkg.Files[spdx.ElementID("File0")]
-	if f.FileName != "/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	if f.Name != "/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/dontscan.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -517,8 +517,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File1")]
-	if f.FileName != "/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
+	if f.Name != "/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -531,8 +531,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File2")]
-	if f.FileName != "/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
+	if f.Name != "/keep.txt" {
+		t.Errorf("expected %v, got %v", "/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -545,8 +545,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File3")]
-	if f.FileName != "/subdir/keep/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	if f.Name != "/subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -559,8 +559,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File4")]
-	if f.FileName != "/subdir/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	if f.Name != "/subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.Name)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))

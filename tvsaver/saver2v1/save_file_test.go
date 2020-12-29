@@ -12,22 +12,22 @@ import (
 // ===== File section Saver tests =====
 func TestSaver2_1FileSavesText(t *testing.T) {
 	f := &spdx.File2_1{
-		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		FileType: []string{
+		Name:           "/tmp/whatever.txt",
+		SPDXIdentifier: spdx.ElementID("File123"),
+		Type: []string{
 			"TEXT",
 			"DOCUMENTATION",
 		},
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		FileChecksumSHA256: "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		FileChecksumMD5:    "624c1abb3664f4b35547e7c73864ad24",
-		LicenseConcluded:   "Apache-2.0",
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+		ChecksumSHA256:   "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+		ChecksumMD5:      "624c1abb3664f4b35547e7c73864ad24",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
 			"Apache-1.1",
 		},
-		LicenseComments:   "this is a license comment(s)",
-		FileCopyrightText: "Copyright (c) Jane Doe",
+		LicenseComments: "this is a license comment(s)",
+		CopyrightText:   "Copyright (c) Jane Doe",
 		ArtifactOfProjects: []*spdx.ArtifactOfProject2_1{
 			&spdx.ArtifactOfProject2_1{
 				Name:     "project1",
@@ -46,13 +46,13 @@ func TestSaver2_1FileSavesText(t *testing.T) {
 				URI:  "http://example.com/4/uri.whatever",
 			},
 		},
-		FileComment: "this is a file comment",
-		FileNotice:  "This file may be used under either Apache-2.0 or Apache-1.1.",
-		FileContributor: []string{
+		Comment: "this is a file comment",
+		Notice:  "This file may be used under either Apache-2.0 or Apache-1.1.",
+		Contributor: []string{
 			"John Doe jdoe@example.com",
 			"EvilCorp",
 		},
-		FileDependencies: []string{
+		Dependencies: []string{
 			"f-1.txt",
 			"g.txt",
 		},
@@ -104,21 +104,21 @@ FileDependency: g.txt
 
 func TestSaver2_1FileSavesSnippetsAlso(t *testing.T) {
 	sn1 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet19"),
+		SPDXIdentifier:                spdx.ElementID("Snippet19"),
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File123"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
-		SnippetCopyrightText:          "Copyright (c) John Doe 20x6",
+		ByteRangeStart:                17,
+		ByteRangeEnd:                  209,
+		LicenseConcluded:              "GPL-2.0-or-later",
+		CopyrightText:                 "Copyright (c) John Doe 20x6",
 	}
 
 	sn2 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet20"),
+		SPDXIdentifier:                spdx.ElementID("Snippet20"),
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File123"),
-		SnippetByteRangeStart:         268,
-		SnippetByteRangeEnd:           309,
-		SnippetLicenseConcluded:       "WTFPL",
-		SnippetCopyrightText:          "NOASSERTION",
+		ByteRangeStart:                268,
+		ByteRangeEnd:                  309,
+		LicenseConcluded:              "WTFPL",
+		CopyrightText:                 "NOASSERTION",
 	}
 
 	sns := map[spdx.ElementID]*spdx.Snippet2_1{
@@ -127,15 +127,15 @@ func TestSaver2_1FileSavesSnippetsAlso(t *testing.T) {
 	}
 
 	f := &spdx.File2_1{
-		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/tmp/whatever.txt",
+		SPDXIdentifier:   spdx.ElementID("File123"),
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
 		},
-		FileCopyrightText: "Copyright (c) Jane Doe",
-		Snippets:          sns,
+		CopyrightText: "Copyright (c) Jane Doe",
+		Snippets:      sns,
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -176,14 +176,14 @@ SnippetCopyrightText: NOASSERTION
 
 func TestSaver2_1FileOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	f := &spdx.File2_1{
-		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/tmp/whatever.txt",
+		SPDXIdentifier:   spdx.ElementID("File123"),
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
 		},
-		FileCopyrightText: "Copyright (c) Jane Doe",
+		CopyrightText: "Copyright (c) Jane Doe",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -212,14 +212,14 @@ FileCopyrightText: Copyright (c) Jane Doe
 
 func TestSaver2_1FileWrapsCopyrightMultiLine(t *testing.T) {
 	f := &spdx.File2_1{
-		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/tmp/whatever.txt",
+		SPDXIdentifier:   spdx.ElementID("File123"),
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
 		},
-		FileCopyrightText: `Copyright (c) Jane Doe
+		CopyrightText: `Copyright (c) Jane Doe
 Copyright (c) John Doe`,
 	}
 

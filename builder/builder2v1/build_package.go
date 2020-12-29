@@ -29,7 +29,7 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		if err != nil {
 			return nil, err
 		}
-		files[newFile.FileSPDXIdentifier] = newFile
+		files[newFile.SPDXIdentifier] = newFile
 		fileNumber++
 	}
 
@@ -41,17 +41,17 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 
 	// now build the package section
 	pkg := &spdx.Package2_1{
-		PackageName:                 packageName,
-		PackageSPDXIdentifier:       spdx.ElementID(fmt.Sprintf("Package-%s", packageName)),
-		PackageDownloadLocation:     "NOASSERTION",
-		FilesAnalyzed:               true,
-		IsFilesAnalyzedTagPresent:   true,
-		PackageVerificationCode:     code,
-		PackageLicenseConcluded:     "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{},
-		PackageLicenseDeclared:      "NOASSERTION",
-		PackageCopyrightText:        "NOASSERTION",
-		Files:                       files,
+		Name:                      packageName,
+		SPDXIdentifier:            spdx.ElementID(fmt.Sprintf("Package-%s", packageName)),
+		DownloadLocation:          "NOASSERTION",
+		FilesAnalyzed:             true,
+		IsFilesAnalyzedTagPresent: true,
+		VerificationCode:          code,
+		LicenseConcluded:          "NOASSERTION",
+		LicenseInfoFromFiles:      []string{},
+		LicenseDeclared:           "NOASSERTION",
+		CopyrightText:             "NOASSERTION",
+		Files:                     files,
 	}
 
 	return pkg, nil

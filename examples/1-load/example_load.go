@@ -71,27 +71,27 @@ func main() {
 
 		// check whether the package had its files analyzed
 		if !pkg.FilesAnalyzed {
-			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.PackageName)
+			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.Name)
 			continue
 		}
 
 		// also check whether the package has any files present
 		if pkg.Files == nil || len(pkg.Files) < 1 {
-			fmt.Printf("Package %s (%s) has no Files\n", string(pkgID), pkg.PackageName)
+			fmt.Printf("Package %s (%s) has no Files\n", string(pkgID), pkg.Name)
 			continue
 		}
 
 		// if we got here, there's at least one file
 		// print the filename and license info for the first 50
 		fmt.Printf("============================\n")
-		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.PackageName)
+		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.Name)
 		fmt.Printf("File info (up to first 50):\n")
 		i := 1
 		for _, f := range pkg.Files {
 			// note that these will be in random order, since we're pulling
 			// from a map. if we care about order, we should first pull the
 			// IDs into a slice, sort it, and then print the ordered files.
-			fmt.Printf("- File %d: %s\n", i, f.FileName)
+			fmt.Printf("- File %d: %s\n", i, f.Name)
 			fmt.Printf("    License from file: %v\n", f.LicenseInfoInFile)
 			fmt.Printf("    License concluded: %v\n", f.LicenseConcluded)
 			i++

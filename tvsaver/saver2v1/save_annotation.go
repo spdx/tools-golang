@@ -13,18 +13,18 @@ func renderAnnotation2_1(ann *spdx.Annotation2_1, w io.Writer) error {
 	if ann.Annotator != "" && ann.AnnotatorType != "" {
 		fmt.Fprintf(w, "Annotator: %s: %s\n", ann.AnnotatorType, ann.Annotator)
 	}
-	if ann.AnnotationDate != "" {
-		fmt.Fprintf(w, "AnnotationDate: %s\n", ann.AnnotationDate)
+	if ann.Date != "" {
+		fmt.Fprintf(w, "AnnotationDate: %s\n", ann.Date)
 	}
-	if ann.AnnotationType != "" {
-		fmt.Fprintf(w, "AnnotationType: %s\n", ann.AnnotationType)
+	if ann.Type != "" {
+		fmt.Fprintf(w, "AnnotationType: %s\n", ann.Type)
 	}
-	annIDStr := spdx.RenderDocElementID(ann.AnnotationSPDXIdentifier)
+	annIDStr := spdx.RenderDocElementID(ann.SPDXIdentifier)
 	if annIDStr != "SPDXRef-" {
 		fmt.Fprintf(w, "SPDXREF: %s\n", annIDStr)
 	}
-	if ann.AnnotationComment != "" {
-		fmt.Fprintf(w, "AnnotationComment: %s\n", textify(ann.AnnotationComment))
+	if ann.Comment != "" {
+		fmt.Fprintf(w, "AnnotationComment: %s\n", textify(ann.Comment))
 	}
 
 	return nil

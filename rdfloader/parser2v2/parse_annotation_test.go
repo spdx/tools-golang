@@ -58,8 +58,8 @@ func Test_setAnnotationType(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if ann.AnnotationType != "OTHER" {
-		t.Errorf("expected: OTHER, found: %s", ann.AnnotationType)
+	if ann.Type != "OTHER" {
+		t.Errorf("expected: OTHER, found: %s", ann.Type)
 	}
 
 	// TestCase 4: valid input (annotationType_review)
@@ -67,8 +67,8 @@ func Test_setAnnotationType(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if ann.AnnotationType != "REVIEW" {
-		t.Errorf("expected: REVIEW, found: %s", ann.AnnotationType)
+	if ann.Type != "REVIEW" {
+		t.Errorf("expected: REVIEW, found: %s", ann.Type)
 	}
 }
 
@@ -161,12 +161,12 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 	ann := parser.doc.Annotations[0]
 	// validating all the attributes of the annotations
 	expectedComment := "Document level annotation"
-	if ann.AnnotationComment != expectedComment {
-		t.Errorf(`expected: "%s", found "%s"`, expectedComment, ann.AnnotationComment)
+	if ann.Comment != expectedComment {
+		t.Errorf(`expected: "%s", found "%s"`, expectedComment, ann.Comment)
 	}
 	expectedDate := "2010-01-29T18:30:22Z"
-	if expectedDate != ann.AnnotationDate {
-		t.Errorf(`expected: "%s", found "%s"`, expectedDate, ann.AnnotationDate)
+	if expectedDate != ann.Date {
+		t.Errorf(`expected: "%s", found "%s"`, expectedDate, ann.Date)
 	}
 	expectedAnnotator := "Jane Doe"
 	if expectedAnnotator != ann.Annotator {
@@ -176,7 +176,7 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 		t.Errorf(`expected: "%s", found "%s"`, "Person", ann.AnnotatorType)
 	}
 	expectedAnnotationType := "OTHER"
-	if expectedAnnotationType != ann.AnnotationType {
-		t.Errorf(`expected: "%s", found "%s"`, expectedAnnotationType, ann.AnnotationType)
+	if expectedAnnotationType != ann.Type {
+		t.Errorf(`expected: "%s", found "%s"`, expectedAnnotationType, ann.Type)
 	}
 }

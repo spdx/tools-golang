@@ -14,15 +14,15 @@ func (parser *tvParser2_1) parsePairFromOtherLicense2_1(tag string, value string
 	case "LicenseID":
 		parser.otherLic = &spdx.OtherLicense2_1{}
 		parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
-		parser.otherLic.LicenseIdentifier = value
+		parser.otherLic.Identifier = value
 	case "ExtractedText":
 		parser.otherLic.ExtractedText = value
 	case "LicenseName":
-		parser.otherLic.LicenseName = value
+		parser.otherLic.Name = value
 	case "LicenseCrossReference":
-		parser.otherLic.LicenseCrossReferences = append(parser.otherLic.LicenseCrossReferences, value)
+		parser.otherLic.CrossReferences = append(parser.otherLic.CrossReferences, value)
 	case "LicenseComment":
-		parser.otherLic.LicenseComment = value
+		parser.otherLic.Comment = value
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_1{}

@@ -16,12 +16,12 @@ type Review2_1 struct {
 	// DEPRECATED in version 2.0 of spec
 	// 9.2: Review Date: YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: conditional (mandatory, one) if there is a Reviewer
-	ReviewDate string
+	Date string
 
 	// DEPRECATED in version 2.0 of spec
 	// 9.3: Review Comment
 	// Cardinality: optional, one
-	ReviewComment string
+	Comment string
 }
 
 // Review2_2 is a Review section of an SPDX Document for version 2.2 of the spec.
@@ -38,10 +38,10 @@ type Review2_2 struct {
 	// DEPRECATED in version 2.0 of spec
 	// 9.2: Review Date: YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: conditional (mandatory, one) if there is a Reviewer
-	ReviewDate string
+	Date string
 
 	// DEPRECATED in version 2.0 of spec
 	// 9.3: Review Comment
 	// Cardinality: optional, one
-	ReviewComment string
+	Comment string
 }

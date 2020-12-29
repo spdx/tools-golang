@@ -15,7 +15,7 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: pkgOldName, PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: pkgOldName, SPDXIdentifier: "p1"},
 	}
 	pkgOld := parser.pkg
 	parser.doc.Packages["p1"] = pkgOld
@@ -46,8 +46,8 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 		t.Errorf("expected new package, got pkgOld")
 	}
 	// and the package name should be as expected
-	if parser.pkg.PackageName != pkgName {
-		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
+	if parser.pkg.Name != pkgName {
+		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.Name)
 	}
 	// and the package should default to true for FilesAnalyzed
 	if parser.pkg.FilesAnalyzed != true {
@@ -93,8 +93,8 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 		t.Fatalf("parser didn't create new package")
 	}
 	// and the package name should be as expected
-	if parser.pkg.PackageName != pkgName {
-		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
+	if parser.pkg.Name != pkgName {
+		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.Name)
 	}
 	// and the package should default to true for FilesAnalyzed
 	if parser.pkg.FilesAnalyzed != true {
@@ -114,7 +114,7 @@ func TestParser2_1PackageMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 	pkgCurrent := parser.pkg
@@ -137,7 +137,7 @@ func TestParser2_1PackageMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -154,7 +154,7 @@ func TestParser2_1PackageMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -171,7 +171,7 @@ func TestParser2_1PackageStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -198,7 +198,7 @@ func TestParser2_1PackageStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -261,8 +261,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageName != "p1" {
-		t.Errorf("got %v for PackageName", parser.pkg.PackageName)
+	if parser.pkg.Name != "p1" {
+		t.Errorf("got %v for PackageName", parser.pkg.Name)
 	}
 	// still should not yet be in Packages map, b/c no SPDX identifier
 	if len(parser.doc.Packages) != 0 {
@@ -275,8 +275,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 		t.Errorf("expected nil error, got %v", err)
 	}
 	// "SPDXRef-" prefix should be removed from the item
-	if parser.pkg.PackageSPDXIdentifier != "p1" {
-		t.Errorf("got %v for PackageSPDXIdentifier", parser.pkg.PackageSPDXIdentifier)
+	if parser.pkg.SPDXIdentifier != "p1" {
+		t.Errorf("got %v for PackageSPDXIdentifier", parser.pkg.SPDXIdentifier)
 	}
 	// and it should now be added to the Packages map
 	if len(parser.doc.Packages) != 1 {
@@ -291,8 +291,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageVersion != "2.1.1" {
-		t.Errorf("got %v for PackageVersion", parser.pkg.PackageVersion)
+	if parser.pkg.Version != "2.1.1" {
+		t.Errorf("got %v for PackageVersion", parser.pkg.Version)
 	}
 
 	// Package File Name
@@ -300,8 +300,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageFileName != "p1-2.1.1.tar.gz" {
-		t.Errorf("got %v for PackageFileName", parser.pkg.PackageFileName)
+	if parser.pkg.FileName != "p1-2.1.1.tar.gz" {
+		t.Errorf("got %v for PackageFileName", parser.pkg.FileName)
 	}
 
 	// Package Supplier
@@ -315,8 +315,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageDownloadLocation != "https://example.com/whatever" {
-		t.Errorf("got %v for PackageDownloadLocation", parser.pkg.PackageDownloadLocation)
+	if parser.pkg.DownloadLocation != "https://example.com/whatever" {
+		t.Errorf("got %v for PackageDownloadLocation", parser.pkg.DownloadLocation)
 	}
 
 	// Files Analyzed
@@ -353,14 +353,14 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageChecksumSHA1 != codeSha1 {
-		t.Errorf("expected %s for PackageChecksumSHA1, got %s", codeSha1, parser.pkg.PackageChecksumSHA1)
+	if parser.pkg.ChecksumSHA1 != codeSha1 {
+		t.Errorf("expected %s for PackageChecksumSHA1, got %s", codeSha1, parser.pkg.ChecksumSHA1)
 	}
-	if parser.pkg.PackageChecksumSHA256 != codeSha256 {
-		t.Errorf("expected %s for PackageChecksumSHA256, got %s", codeSha256, parser.pkg.PackageChecksumSHA256)
+	if parser.pkg.ChecksumSHA256 != codeSha256 {
+		t.Errorf("expected %s for PackageChecksumSHA256, got %s", codeSha256, parser.pkg.ChecksumSHA256)
 	}
-	if parser.pkg.PackageChecksumMD5 != codeMd5 {
-		t.Errorf("expected %s for PackageChecksumMD5, got %s", codeMd5, parser.pkg.PackageChecksumMD5)
+	if parser.pkg.ChecksumMD5 != codeMd5 {
+		t.Errorf("expected %s for PackageChecksumMD5, got %s", codeMd5, parser.pkg.ChecksumMD5)
 	}
 
 	// Package Home Page
@@ -368,8 +368,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageHomePage != "https://example.com/whatever2" {
-		t.Errorf("got %v for PackageHomePage", parser.pkg.PackageHomePage)
+	if parser.pkg.HomePage != "https://example.com/whatever2" {
+		t.Errorf("got %v for PackageHomePage", parser.pkg.HomePage)
 	}
 
 	// Package Source Info
@@ -377,8 +377,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageSourceInfo != "random comment" {
-		t.Errorf("got %v for PackageSourceInfo", parser.pkg.PackageSourceInfo)
+	if parser.pkg.SourceInfo != "random comment" {
+		t.Errorf("got %v for PackageSourceInfo", parser.pkg.SourceInfo)
 	}
 
 	// Package License Concluded
@@ -386,8 +386,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageLicenseConcluded != "Apache-2.0 OR GPL-2.0-or-later" {
-		t.Errorf("got %v for PackageLicenseConcluded", parser.pkg.PackageLicenseConcluded)
+	if parser.pkg.LicenseConcluded != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("got %v for PackageLicenseConcluded", parser.pkg.LicenseConcluded)
 	}
 
 	// All Licenses Info From Files
@@ -404,7 +404,7 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	}
 	for _, licWant := range lics {
 		flagFound := false
-		for _, licCheck := range parser.pkg.PackageLicenseInfoFromFiles {
+		for _, licCheck := range parser.pkg.LicenseInfoFromFiles {
 			if licWant == licCheck {
 				flagFound = true
 			}
@@ -413,9 +413,9 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 			t.Errorf("didn't find %s in PackageLicenseInfoFromFiles", licWant)
 		}
 	}
-	if len(lics) != len(parser.pkg.PackageLicenseInfoFromFiles) {
+	if len(lics) != len(parser.pkg.LicenseInfoFromFiles) {
 		t.Errorf("expected %d licenses in PackageLicenseInfoFromFiles, got %d", len(lics),
-			len(parser.pkg.PackageLicenseInfoFromFiles))
+			len(parser.pkg.LicenseInfoFromFiles))
 	}
 
 	// Package License Declared
@@ -423,8 +423,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageLicenseDeclared != "Apache-2.0 OR GPL-2.0-or-later" {
-		t.Errorf("got %v for PackageLicenseDeclared", parser.pkg.PackageLicenseDeclared)
+	if parser.pkg.LicenseDeclared != "Apache-2.0 OR GPL-2.0-or-later" {
+		t.Errorf("got %v for PackageLicenseDeclared", parser.pkg.LicenseDeclared)
 	}
 
 	// Package License Comments
@@ -432,8 +432,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageLicenseComments != "this is a license comment" {
-		t.Errorf("got %v for PackageLicenseComments", parser.pkg.PackageLicenseComments)
+	if parser.pkg.LicenseComments != "this is a license comment" {
+		t.Errorf("got %v for PackageLicenseComments", parser.pkg.LicenseComments)
 	}
 
 	// Package Copyright Text
@@ -441,8 +441,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageCopyrightText != "Copyright (c) me myself and i" {
-		t.Errorf("got %v for PackageCopyrightText", parser.pkg.PackageCopyrightText)
+	if parser.pkg.CopyrightText != "Copyright (c) me myself and i" {
+		t.Errorf("got %v for PackageCopyrightText", parser.pkg.CopyrightText)
 	}
 
 	// Package Summary
@@ -450,8 +450,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageSummary != "i wrote this package" {
-		t.Errorf("got %v for PackageSummary", parser.pkg.PackageSummary)
+	if parser.pkg.Summary != "i wrote this package" {
+		t.Errorf("got %v for PackageSummary", parser.pkg.Summary)
 	}
 
 	// Package Description
@@ -459,8 +459,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageDescription != "i wrote this package a lot" {
-		t.Errorf("got %v for PackageDescription", parser.pkg.PackageDescription)
+	if parser.pkg.Description != "i wrote this package a lot" {
+		t.Errorf("got %v for PackageDescription", parser.pkg.Description)
 	}
 
 	// Package Comment
@@ -468,8 +468,8 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageComment != "i scanned this package" {
-		t.Errorf("got %v for PackageComment", parser.pkg.PackageComment)
+	if parser.pkg.Comment != "i scanned this package" {
+		t.Errorf("got %v for PackageComment", parser.pkg.Comment)
 	}
 
 	// Package External References and Comments
@@ -487,16 +487,16 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.pkg.PackageExternalReferences) != 1 {
-		t.Errorf("expected 1 external reference, got %d", len(parser.pkg.PackageExternalReferences))
+	if len(parser.pkg.ExternalReferences) != 1 {
+		t.Errorf("expected 1 external reference, got %d", len(parser.pkg.ExternalReferences))
 	}
 	if parser.pkgExtRef == nil {
 		t.Errorf("expected non-nil pkgExtRef, got nil")
 	}
-	if parser.pkg.PackageExternalReferences[0] == nil {
+	if parser.pkg.ExternalReferences[0] == nil {
 		t.Errorf("expected non-nil PackageExternalReferences[0], got nil")
 	}
-	if parser.pkgExtRef != parser.pkg.PackageExternalReferences[0] {
+	if parser.pkgExtRef != parser.pkg.ExternalReferences[0] {
 		t.Errorf("expected pkgExtRef to match PackageExternalReferences[0], got no match")
 	}
 	err = parser.parsePairFromPackage2_1("ExternalRefComment", ref1Comment)
@@ -507,16 +507,16 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.pkg.PackageExternalReferences) != 2 {
-		t.Errorf("expected 2 external references, got %d", len(parser.pkg.PackageExternalReferences))
+	if len(parser.pkg.ExternalReferences) != 2 {
+		t.Errorf("expected 2 external references, got %d", len(parser.pkg.ExternalReferences))
 	}
 	if parser.pkgExtRef == nil {
 		t.Errorf("expected non-nil pkgExtRef, got nil")
 	}
-	if parser.pkg.PackageExternalReferences[1] == nil {
+	if parser.pkg.ExternalReferences[1] == nil {
 		t.Errorf("expected non-nil PackageExternalReferences[1], got nil")
 	}
-	if parser.pkgExtRef != parser.pkg.PackageExternalReferences[1] {
+	if parser.pkgExtRef != parser.pkg.ExternalReferences[1] {
 		t.Errorf("expected pkgExtRef to match PackageExternalReferences[1], got no match")
 	}
 	err = parser.parsePairFromPackage2_1("ExternalRefComment", ref2Comment)
@@ -524,7 +524,7 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 		t.Errorf("expected nil error, got %v", err)
 	}
 	// finally, check these values
-	gotRef1 := parser.pkg.PackageExternalReferences[0]
+	gotRef1 := parser.pkg.ExternalReferences[0]
 	if gotRef1.Category != ref1Category {
 		t.Errorf("expected ref1 category to be %s, got %s", gotRef1.Category, ref1Category)
 	}
@@ -537,7 +537,7 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	if gotRef1.ExternalRefComment != ref1Comment {
 		t.Errorf("expected ref1 comment to be %s, got %s", gotRef1.ExternalRefComment, ref1Comment)
 	}
-	gotRef2 := parser.pkg.PackageExternalReferences[1]
+	gotRef2 := parser.pkg.ExternalReferences[1]
 	if gotRef2.Category != ref2Category {
 		t.Errorf("expected ref2 category to be %s, got %s", gotRef2.Category, ref2Category)
 	}
@@ -557,7 +557,7 @@ func TestParser2_1CanParsePackageSupplierPersonTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -566,8 +566,8 @@ func TestParser2_1CanParsePackageSupplierPersonTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageSupplierPerson != "John Doe" {
-		t.Errorf("got %v for PackageSupplierPerson", parser.pkg.PackageSupplierPerson)
+	if parser.pkg.SupplierPerson != "John Doe" {
+		t.Errorf("got %v for PackageSupplierPerson", parser.pkg.SupplierPerson)
 	}
 }
 
@@ -575,7 +575,7 @@ func TestParser2_1CanParsePackageSupplierOrganizationTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -584,8 +584,8 @@ func TestParser2_1CanParsePackageSupplierOrganizationTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageSupplierOrganization != "John Doe, Inc." {
-		t.Errorf("got %v for PackageSupplierOrganization", parser.pkg.PackageSupplierOrganization)
+	if parser.pkg.SupplierOrganization != "John Doe, Inc." {
+		t.Errorf("got %v for PackageSupplierOrganization", parser.pkg.SupplierOrganization)
 	}
 }
 
@@ -593,7 +593,7 @@ func TestParser2_1CanParsePackageSupplierNOASSERTIONTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -602,7 +602,7 @@ func TestParser2_1CanParsePackageSupplierNOASSERTIONTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageSupplierNOASSERTION != true {
+	if parser.pkg.SupplierNOASSERTION != true {
 		t.Errorf("got false for PackageSupplierNOASSERTION")
 	}
 }
@@ -611,7 +611,7 @@ func TestParser2_1CanParsePackageOriginatorPersonTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -620,8 +620,8 @@ func TestParser2_1CanParsePackageOriginatorPersonTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageOriginatorPerson != "John Doe" {
-		t.Errorf("got %v for PackageOriginatorPerson", parser.pkg.PackageOriginatorPerson)
+	if parser.pkg.OriginatorPerson != "John Doe" {
+		t.Errorf("got %v for PackageOriginatorPerson", parser.pkg.OriginatorPerson)
 	}
 }
 
@@ -629,7 +629,7 @@ func TestParser2_1CanParsePackageOriginatorOrganizationTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -638,8 +638,8 @@ func TestParser2_1CanParsePackageOriginatorOrganizationTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageOriginatorOrganization != "John Doe, Inc." {
-		t.Errorf("got %v for PackageOriginatorOrganization", parser.pkg.PackageOriginatorOrganization)
+	if parser.pkg.OriginatorOrganization != "John Doe, Inc." {
+		t.Errorf("got %v for PackageOriginatorOrganization", parser.pkg.OriginatorOrganization)
 	}
 }
 
@@ -647,7 +647,7 @@ func TestParser2_1CanParsePackageOriginatorNOASSERTIONTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -656,7 +656,7 @@ func TestParser2_1CanParsePackageOriginatorNOASSERTIONTag(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageOriginatorNOASSERTION != true {
+	if parser.pkg.OriginatorNOASSERTION != true {
 		t.Errorf("got false for PackageOriginatorNOASSERTION")
 	}
 }
@@ -665,7 +665,7 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithExcludes(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -677,11 +677,11 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithExcludes(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageVerificationCode != code {
-		t.Errorf("got %v for PackageVerificationCode", parser.pkg.PackageVerificationCode)
+	if parser.pkg.VerificationCode != code {
+		t.Errorf("got %v for PackageVerificationCode", parser.pkg.VerificationCode)
 	}
-	if parser.pkg.PackageVerificationCodeExcludedFile != fileName {
-		t.Errorf("got %v for PackageVerificationCodeExcludedFile", parser.pkg.PackageVerificationCodeExcludedFile)
+	if parser.pkg.VerificationCodeExcludedFile != fileName {
+		t.Errorf("got %v for PackageVerificationCodeExcludedFile", parser.pkg.VerificationCodeExcludedFile)
 	}
 
 }
@@ -690,7 +690,7 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithoutExcludes(t *testing.T
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -700,11 +700,11 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithoutExcludes(t *testing.T
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.PackageVerificationCode != code {
-		t.Errorf("got %v for PackageVerificationCode", parser.pkg.PackageVerificationCode)
+	if parser.pkg.VerificationCode != code {
+		t.Errorf("got %v for PackageVerificationCode", parser.pkg.VerificationCode)
 	}
-	if parser.pkg.PackageVerificationCodeExcludedFile != "" {
-		t.Errorf("got %v for PackageVerificationCodeExcludedFile", parser.pkg.PackageVerificationCodeExcludedFile)
+	if parser.pkg.VerificationCodeExcludedFile != "" {
+		t.Errorf("got %v for PackageVerificationCodeExcludedFile", parser.pkg.VerificationCodeExcludedFile)
 	}
 
 }
@@ -713,7 +713,7 @@ func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -758,7 +758,7 @@ func TestParser2_1PackageCreatesRelationshipInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -778,7 +778,7 @@ func TestParser2_1PackageCreatesAnnotationInDocument(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -798,7 +798,7 @@ func TestParser2_1PackageUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
 		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &spdx.Package2_1{Name: "p1", SPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages["p1"] = parser.pkg
 
@@ -1068,4 +1068,3 @@ func TestFailsPackageExternalRefWithInvalidFormat(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
-

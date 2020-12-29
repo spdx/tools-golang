@@ -30,14 +30,14 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	parser.cache[packageNode.ID].Color = GREY
 
 	// setting state color to black to indicate when we're done parsing this node.
-	defer func(){parser.cache[packageNode.ID].Color = BLACK}();
+	defer func() { parser.cache[packageNode.ID].Color = BLACK }()
 
 	// setting the SPDXIdentifier for the package.
 	eId, err := ExtractElementID(getLastPartOfURI(packageNode.ID))
 	if err != nil {
 		return nil, fmt.Errorf("error extracting elementID of a package identifier: %v", err)
 	}
-	pkg.PackageSPDXIdentifier = eId // 3.2
+	pkg.SPDXIdentifier = eId // 3.2
 
 	if existingPkg := parser.doc.Packages[eId]; existingPkg != nil {
 		pkg = existingPkg
@@ -51,13 +51,13 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 			continue
 		case SPDX_NAME: // 3.1
 			// cardinality: exactly 1
-			pkg.PackageName = subTriple.Object.ID
+			pkg.Name = subTriple.Object.ID
 		case SPDX_VERSION_INFO: // 3.3
 			// cardinality: max 1
-			pkg.PackageVersion = subTriple.Object.ID
+			pkg.Version = subTriple.Object.ID
 		case SPDX_PACKAGE_FILE_NAME: // 3.4
 			// cardinality: max 1
-			pkg.PackageFileName = subTriple.Object.ID
+			pkg.FileName = subTriple.Object.ID
 		case SPDX_SUPPLIER: // 3.5
 			// cardinality: max 1
 			err = setPackageSupplier(pkg, subTriple.Object.ID)
@@ -82,49 +82,49 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 			if !isUriValid(subTriple.Object.ID) {
 				return nil, fmt.Errorf("invalid uri %s while parsing doap_homepage in a package", subTriple.Object.ID)
 			}
-			pkg.PackageHomePage = subTriple.Object.ID
+			pkg.HomePage = subTriple.Object.ID
 		case SPDX_SOURCE_INFO: // 3.12
 			// cardinality: max 1
-			pkg.PackageSourceInfo = subTriple.Object.ID
+			pkg.SourceInfo = subTriple.Object.ID
 		case SPDX_LICENSE_CONCLUDED: // 3.13
 			// cardinality: exactly 1
 			anyLicenseInfo, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return nil, err
 			}
-			pkg.PackageLicenseConcluded = anyLicenseInfo.ToLicenseString()
+			pkg.LicenseConcluded = anyLicenseInfo.ToLicenseString()
 		case SPDX_LICENSE_INFO_FROM_FILES: // 3.14
 			// cardinality: min 0
-			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, getLicenseStringFromURI(subTriple.Object.ID))
+			pkg.LicenseInfoFromFiles = append(pkg.LicenseInfoFromFiles, getLicenseStringFromURI(subTriple.Object.ID))
 		case SPDX_LICENSE_DECLARED: // 3.15
 			// cardinality: exactly 1
 			anyLicenseInfo, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return nil, err
 			}
-			pkg.PackageLicenseDeclared = anyLicenseInfo.ToLicenseString()
+			pkg.LicenseDeclared = anyLicenseInfo.ToLicenseString()
 		case SPDX_LICENSE_COMMENTS: // 3.16
 			// cardinality: max 1
-			pkg.PackageLicenseComments = subTriple.Object.ID
+			pkg.LicenseComments = subTriple.Object.ID
 		case SPDX_COPYRIGHT_TEXT: // 3.17
 			// cardinality: exactly 1
-			pkg.PackageCopyrightText = subTriple.Object.ID
+			pkg.CopyrightText = subTriple.Object.ID
 		case SPDX_SUMMARY: // 3.18
 			// cardinality: max 1
-			pkg.PackageSummary = subTriple.Object.ID
+			pkg.Summary = subTriple.Object.ID
 		case SPDX_DESCRIPTION: // 3.19
 			// cardinality: max 1
-			pkg.PackageDescription = subTriple.Object.ID
+			pkg.Description = subTriple.Object.ID
 		case RDFS_COMMENT: // 3.20
 			// cardinality: max 1
-			pkg.PackageComment = subTriple.Object.ID
+			pkg.Comment = subTriple.Object.ID
 		case SPDX_EXTERNAL_REF: // 3.21
 			// cardinality: min 0
 			externalDocRef, err := parser.getPackageExternalRef(subTriple.Object)
 			if err != nil {
 				return nil, fmt.Errorf("error parsing externalRef of a package: %v", err)
 			}
-			pkg.PackageExternalReferences = append(pkg.PackageExternalReferences, externalDocRef)
+			pkg.ExternalReferences = append(pkg.ExternalReferences, externalDocRef)
 		case SPDX_HAS_FILE: // 3.22
 			// cardinality: min 0
 			file, err := parser.getFileFromNode(subTriple.Object)
@@ -137,7 +137,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 			err = parser.parseRelationship(subTriple)
 		case SPDX_ATTRIBUTION_TEXT:
 			// cardinality: min 0
-			pkg.PackageAttributionTexts = append(pkg.PackageAttributionTexts, subTriple.Object.ID)
+			pkg.AttributionTexts = append(pkg.AttributionTexts, subTriple.Object.ID)
 		case SPDX_ANNOTATION:
 			// cardinality: min 0
 			err = parser.parseAnnotationFromNode(subTriple.Object)
@@ -149,7 +149,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 		}
 	}
 
-	parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
+	parser.doc.Packages[pkg.SPDXIdentifier] = pkg
 	return pkg, nil
 }
 
@@ -198,10 +198,10 @@ func (parser *rdfParser2_2) setPackageVerificationCode(pkg *spdx.Package2_2, nod
 		switch subTriple.Predicate.ID {
 		case SPDX_PACKAGE_VERIFICATION_CODE_VALUE:
 			// cardinality: exactly 1
-			pkg.PackageVerificationCode = subTriple.Object.ID
+			pkg.VerificationCode = subTriple.Object.ID
 		case SPDX_PACKAGE_VERIFICATION_CODE_EXCLUDED_FILE:
 			// cardinality: min 0
-			pkg.PackageVerificationCodeExcludedFile = subTriple.Object.ID
+			pkg.VerificationCodeExcludedFile = subTriple.Object.ID
 		case RDF_TYPE:
 			// cardinality: exactly 1
 			continue
@@ -218,8 +218,8 @@ func (parser *rdfParser2_2) setFileToPackage(pkg *spdx.Package2_2, file *spdx.Fi
 	if pkg.Files == nil {
 		pkg.Files = map[spdx.ElementID]*spdx.File2_2{}
 	}
-	pkg.Files[file.FileSPDXIdentifier] = file
-	parser.assocWithPackage[file.FileSPDXIdentifier] = true
+	pkg.Files[file.SPDXIdentifier] = file
+	parser.assocWithPackage[file.SPDXIdentifier] = true
 }
 
 // given a supplierObject, sets the PackageSupplier attribute of the pkg.
@@ -228,7 +228,7 @@ func (parser *rdfParser2_2) setFileToPackage(pkg *spdx.Package2_2, file *spdx.Fi
 func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 	value = strings.TrimSpace(value)
 	if strings.ToUpper(value) == "NOASSERTION" {
-		pkg.PackageSupplierNOASSERTION = true
+		pkg.SupplierNOASSERTION = true
 		return nil
 	}
 	subKey, subValue, err := ExtractSubs(value, ":")
@@ -237,9 +237,9 @@ func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 	}
 	switch subKey {
 	case "Person":
-		pkg.PackageSupplierPerson = subValue
+		pkg.SupplierPerson = subValue
 	case "Organization":
-		pkg.PackageSupplierOrganization = subValue
+		pkg.SupplierOrganization = subValue
 	default:
 		return fmt.Errorf("unknown supplier %s", subKey)
 	}
@@ -252,7 +252,7 @@ func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 	value = strings.TrimSpace(value)
 	if strings.ToUpper(value) == "NOASSERTION" {
-		pkg.PackageOriginatorNOASSERTION = true
+		pkg.OriginatorNOASSERTION = true
 		return nil
 	}
 	subKey, subValue, err := ExtractSubs(value, ":")
@@ -262,9 +262,9 @@ func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 
 	switch subKey {
 	case "Person":
-		pkg.PackageOriginatorPerson = subValue
+		pkg.OriginatorPerson = subValue
 	case "Organization":
-		pkg.PackageOriginatorOrganization = subValue
+		pkg.OriginatorOrganization = subValue
 	default:
 		return fmt.Errorf("originator can be either a Person or Organization. found %s", subKey)
 	}
@@ -275,14 +275,14 @@ func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 func setDocumentLocationFromURI(pkg *spdx.Package2_2, locationURI string) error {
 	switch locationURI {
 	case SPDX_NOASSERTION_CAPS, SPDX_NOASSERTION_SMALL:
-		pkg.PackageDownloadLocation = "NOASSERTION"
+		pkg.DownloadLocation = "NOASSERTION"
 	case SPDX_NONE_CAPS, SPDX_NONE_SMALL:
-		pkg.PackageDownloadLocation = "NONE"
+		pkg.DownloadLocation = "NONE"
 	default:
 		if !isUriValid(locationURI) {
 			return fmt.Errorf("%s is not a valid uri", locationURI)
 		}
-		pkg.PackageDownloadLocation = locationURI
+		pkg.DownloadLocation = locationURI
 	}
 	return nil
 }
@@ -302,11 +302,11 @@ func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordf
 	}
 	switch checksumAlgorithm {
 	case "MD5":
-		pkg.PackageChecksumMD5 = checksumValue
+		pkg.ChecksumMD5 = checksumValue
 	case "SHA1":
-		pkg.PackageChecksumSHA1 = checksumValue
+		pkg.ChecksumSHA1 = checksumValue
 	case "SHA256":
-		pkg.PackageChecksumSHA256 = checksumValue
+		pkg.ChecksumSHA256 = checksumValue
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)
 	}

@@ -57,8 +57,8 @@ func TestParser2_2CanParseRelationshipTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.rln.RelationshipComment != cmt {
-		t.Errorf("got %v for RelationshipComment, expected %v", parser.rln.RelationshipComment, cmt)
+	if parser.rln.Comment != cmt {
+		t.Errorf("got %v for RelationshipComment, expected %v", parser.rln.Comment, cmt)
 	}
 }
 

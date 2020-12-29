@@ -49,20 +49,20 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 			}
 			si.LicenseInfoInSnippet = append(si.LicenseInfoInSnippet, anyLicense.ToLicenseString())
 		case SPDX_NAME:
-			si.SnippetName = siTriple.Object.ID
+			si.Name = siTriple.Object.ID
 		case SPDX_COPYRIGHT_TEXT:
-			si.SnippetCopyrightText = siTriple.Object.ID
+			si.CopyrightText = siTriple.Object.ID
 		case SPDX_LICENSE_COMMENTS:
-			si.SnippetLicenseComments = siTriple.Object.ID
+			si.LicenseComments = siTriple.Object.ID
 		case RDFS_COMMENT:
-			si.SnippetComment = siTriple.Object.ID
+			si.Comment = siTriple.Object.ID
 		case SPDX_LICENSE_CONCLUDED:
 			var anyLicense AnyLicenseInfo
 			anyLicense, err = parser.getAnyLicenseFromNode(siTriple.Object)
 			if err != nil {
 				return nil, fmt.Errorf("error parsing license info in snippet: %v", err)
 			}
-			si.SnippetLicenseConcluded = anyLicense.ToLicenseString()
+			si.LicenseConcluded = anyLicense.ToLicenseString()
 		default:
 			return nil, fmt.Errorf("unknown predicate %v", siTriple.Predicate.ID)
 		}
@@ -82,7 +82,7 @@ func (parser *rdfParser2_2) setSnippetToFileWithID(snippet *spdx.Snippet2_2, fil
 	}
 
 	// setting the snippet to the file.
-	parser.files[fileID].Snippets[snippet.SnippetSPDXIdentifier] = snippet
+	parser.files[fileID].Snippets[snippet.SPDXIdentifier] = snippet
 
 	return nil
 }
@@ -132,11 +132,11 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 	}
 
 	if startRangeType == LINE_RANGE {
-		si.SnippetLineRangeStart = start
-		si.SnippetLineRangeEnd = end
+		si.LineRangeStart = start
+		si.LineRangeEnd = end
 	} else {
-		si.SnippetByteRangeStart = start
-		si.SnippetByteRangeEnd = end
+		si.ByteRangeStart = start
+		si.ByteRangeEnd = end
 	}
 	return nil
 }
@@ -183,7 +183,7 @@ func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet 
 
 func setSnippetID(uri string, si *spdx.Snippet2_2) (err error) {
 	fragment := getLastPartOfURI(uri)
-	si.SnippetSPDXIdentifier, err = ExtractElementID(fragment)
+	si.SPDXIdentifier, err = ExtractElementID(fragment)
 	if err != nil {
 		return fmt.Errorf("error setting snippet identifier: %v", uri)
 	}

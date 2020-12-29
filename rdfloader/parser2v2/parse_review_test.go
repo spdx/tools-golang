@@ -55,12 +55,12 @@ func Test_rdfParser2_2_setReviewFromNode(t *testing.T) {
 	}
 	review := parser.doc.Reviews[0]
 	expectedComment := "Another example reviewer."
-	if review.ReviewComment != expectedComment {
-		t.Errorf("expected: %v, found: %s", expectedComment, review.ReviewComment)
+	if review.Comment != expectedComment {
+		t.Errorf("expected: %v, found: %s", expectedComment, review.Comment)
 	}
 	expectedDate := "2011-03-13T00:00:00Z"
-	if review.ReviewDate != expectedDate {
-		t.Errorf("expected %s, found %s", expectedDate, review.ReviewDate)
+	if review.Date != expectedDate {
+		t.Errorf("expected %s, found %s", expectedDate, review.Date)
 	}
 	expectedReviewer := "Suzanne"
 	if review.Reviewer != expectedReviewer {

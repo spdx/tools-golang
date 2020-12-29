@@ -7,37 +7,37 @@ type Package2_1 struct {
 
 	// 3.1: Package Name
 	// Cardinality: mandatory, one
-	PackageName string
+	Name string
 
 	// 3.2: Package SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	PackageSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 3.3: Package Version
 	// Cardinality: optional, one
-	PackageVersion string
+	Version string
 
 	// 3.4: Package File Name
 	// Cardinality: optional, one
-	PackageFileName string
+	FileName string
 
 	// 3.5: Package Supplier: may have single result for either Person or Organization,
 	//                        or NOASSERTION
 	// Cardinality: optional, one
-	PackageSupplierPerson       string
-	PackageSupplierOrganization string
-	PackageSupplierNOASSERTION  bool
+	SupplierPerson       string
+	SupplierOrganization string
+	SupplierNOASSERTION  bool
 
 	// 3.6: Package Originator: may have single result for either Person or Organization,
 	//                          or NOASSERTION
 	// Cardinality: optional, one
-	PackageOriginatorPerson       string
-	PackageOriginatorOrganization string
-	PackageOriginatorNOASSERTION  bool
+	OriginatorPerson       string
+	OriginatorOrganization string
+	OriginatorNOASSERTION  bool
 
 	// 3.7: Package Download Location
 	// Cardinality: mandatory, one
-	PackageDownloadLocation string
+	DownloadLocation string
 
 	// 3.8: FilesAnalyzed
 	// Cardinality: optional, one; default value is "true" if omitted
@@ -48,62 +48,62 @@ type Package2_1 struct {
 	// 3.9: Package Verification Code
 	// Cardinality: mandatory, one if filesAnalyzed is true / omitted;
 	//              zero (must be omitted) if filesAnalyzed is false
-	PackageVerificationCode string
+	VerificationCode string
 	// Spec also allows specifying a single file to exclude from the
 	// verification code algorithm; intended to enable exclusion of
 	// the SPDX document file itself.
-	PackageVerificationCodeExcludedFile string
+	VerificationCodeExcludedFile string
 
 	// 3.10: Package Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: optional, one or many
-	PackageChecksumSHA1   string
-	PackageChecksumSHA256 string
-	PackageChecksumMD5    string
+	ChecksumSHA1   string
+	ChecksumSHA256 string
+	ChecksumMD5    string
 
 	// 3.11: Package Home Page
 	// Cardinality: optional, one
-	PackageHomePage string
+	HomePage string
 
 	// 3.12: Source Information
 	// Cardinality: optional, one
-	PackageSourceInfo string
+	SourceInfo string
 
 	// 3.13: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageLicenseConcluded string
+	LicenseConcluded string
 
 	// 3.14: All Licenses Info from Files: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one or many if filesAnalyzed is true / omitted;
 	//              zero (must be omitted) if filesAnalyzed is false
-	PackageLicenseInfoFromFiles []string
+	LicenseInfoFromFiles []string
 
 	// 3.15: Declared License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageLicenseDeclared string
+	LicenseDeclared string
 
 	// 3.16: Comments on License
 	// Cardinality: optional, one
-	PackageLicenseComments string
+	LicenseComments string
 
 	// 3.17: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageCopyrightText string
+	CopyrightText string
 
 	// 3.18: Package Summary Description
 	// Cardinality: optional, one
-	PackageSummary string
+	Summary string
 
 	// 3.19: Package Detailed Description
 	// Cardinality: optional, one
-	PackageDescription string
+	Description string
 
 	// 3.20: Package Comment
 	// Cardinality: optional, one
-	PackageComment string
+	Comment string
 
 	// 3.21: Package External Reference
 	// Cardinality: optional, one or many
-	PackageExternalReferences []*PackageExternalReference2_1
+	ExternalReferences []*PackageExternalReference2_1
 
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
@@ -143,37 +143,37 @@ type Package2_2 struct {
 
 	// 3.1: Package Name
 	// Cardinality: mandatory, one
-	PackageName string
+	Name string
 
 	// 3.2: Package SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	PackageSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 3.3: Package Version
 	// Cardinality: optional, one
-	PackageVersion string
+	Version string
 
 	// 3.4: Package File Name
 	// Cardinality: optional, one
-	PackageFileName string
+	FileName string
 
 	// 3.5: Package Supplier: may have single result for either Person or Organization,
 	//                        or NOASSERTION
 	// Cardinality: optional, one
-	PackageSupplierPerson       string
-	PackageSupplierOrganization string
-	PackageSupplierNOASSERTION  bool
+	SupplierPerson       string
+	SupplierOrganization string
+	SupplierNOASSERTION  bool
 
 	// 3.6: Package Originator: may have single result for either Person or Organization,
 	//                          or NOASSERTION
 	// Cardinality: optional, one
-	PackageOriginatorPerson       string
-	PackageOriginatorOrganization string
-	PackageOriginatorNOASSERTION  bool
+	OriginatorPerson       string
+	OriginatorOrganization string
+	OriginatorNOASSERTION  bool
 
 	// 3.7: Package Download Location
 	// Cardinality: mandatory, one
-	PackageDownloadLocation string
+	DownloadLocation string
 
 	// 3.8: FilesAnalyzed
 	// Cardinality: optional, one; default value is "true" if omitted
@@ -184,62 +184,62 @@ type Package2_2 struct {
 	// 3.9: Package Verification Code
 	// Cardinality: mandatory, one if filesAnalyzed is true / omitted;
 	//              zero (must be omitted) if filesAnalyzed is false
-	PackageVerificationCode string
+	VerificationCode string
 	// Spec also allows specifying a single file to exclude from the
 	// verification code algorithm; intended to enable exclusion of
 	// the SPDX document file itself.
-	PackageVerificationCodeExcludedFile string
+	VerificationCodeExcludedFile string
 
 	// 3.10: Package Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: optional, one or many
-	PackageChecksumSHA1   string
-	PackageChecksumSHA256 string
-	PackageChecksumMD5    string
+	ChecksumSHA1   string
+	ChecksumSHA256 string
+	ChecksumMD5    string
 
 	// 3.11: Package Home Page
 	// Cardinality: optional, one
-	PackageHomePage string
+	HomePage string
 
 	// 3.12: Source Information
 	// Cardinality: optional, one
-	PackageSourceInfo string
+	SourceInfo string
 
 	// 3.13: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageLicenseConcluded string
+	LicenseConcluded string
 
 	// 3.14: All Licenses Info from Files: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one or many if filesAnalyzed is true / omitted;
 	//              zero (must be omitted) if filesAnalyzed is false
-	PackageLicenseInfoFromFiles []string
+	LicenseInfoFromFiles []string
 
 	// 3.15: Declared License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageLicenseDeclared string
+	LicenseDeclared string
 
 	// 3.16: Comments on License
 	// Cardinality: optional, one
-	PackageLicenseComments string
+	LicenseComments string
 
 	// 3.17: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	PackageCopyrightText string
+	CopyrightText string
 
 	// 3.18: Package Summary Description
 	// Cardinality: optional, one
-	PackageSummary string
+	Summary string
 
 	// 3.19: Package Detailed Description
 	// Cardinality: optional, one
-	PackageDescription string
+	Description string
 
 	// 3.20: Package Comment
 	// Cardinality: optional, one
-	PackageComment string
+	Comment string
 
 	// 3.21: Package External Reference
 	// Cardinality: optional, one or many
-	PackageExternalReferences []*PackageExternalReference2_2
+	ExternalReferences []*PackageExternalReference2_2
 
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
@@ -247,7 +247,7 @@ type Package2_2 struct {
 
 	// 3.23: Package Attribution Text
 	// Cardinality: optional, one or many
-	PackageAttributionTexts []string
+	AttributionTexts []string
 
 	// Files contained in this Package
 	Files map[ElementID]*File2_2

@@ -44,7 +44,7 @@ func (parser *tvParser2_2) parsePairForRelationship2_2(tag string, value string)
 	}
 
 	if tag == "RelationshipComment" {
-		parser.rln.RelationshipComment = value
+		parser.rln.Comment = value
 		return nil
 	}
 

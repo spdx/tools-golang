@@ -17,10 +17,10 @@ func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) er
 			continue
 		case RDFS_COMMENT:
 			// cardinality: max 1
-			review.ReviewComment = triple.Object.ID
+			review.Comment = triple.Object.ID
 		case SPDX_REVIEW_DATE:
 			// cardinality: exactly 1
-			review.ReviewDate = triple.Object.ID
+			review.Date = triple.Object.ID
 		case SPDX_REVIEWER:
 			// cardinality: max 1
 			var err error

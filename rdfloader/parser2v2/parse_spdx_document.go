@@ -64,7 +64,7 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 			if err != nil {
 				return err
 			}
-			parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
+			parser.doc.Packages[pkg.SPDXIdentifier] = pkg
 		case SPDX_HAS_EXTRACTED_LICENSING_INFO: // hasExtractedLicensingInfo
 			// cardinality: min 0
 			extractedLicensingInfo, err := parser.getExtractedLicensingInfoFromNode(subTriple.Object)

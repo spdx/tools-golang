@@ -83,8 +83,8 @@ func TestParser2_2CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.AnnotationDate != dt {
-		t.Errorf("got %v for AnnotationDate, expected %v", parser.ann.AnnotationDate, dt)
+	if parser.ann.Date != dt {
+		t.Errorf("got %v for AnnotationDate, expected %v", parser.ann.Date, dt)
 	}
 
 	// Annotation type
@@ -93,8 +93,8 @@ func TestParser2_2CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.AnnotationType != aType {
-		t.Errorf("got %v for AnnotationType, expected %v", parser.ann.AnnotationType, aType)
+	if parser.ann.Type != aType {
+		t.Errorf("got %v for AnnotationType, expected %v", parser.ann.Type, aType)
 	}
 
 	// SPDX Identifier Reference
@@ -103,9 +103,9 @@ func TestParser2_2CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	deID := parser.ann.AnnotationSPDXIdentifier
+	deID := parser.ann.SPDXIdentifier
 	if deID.DocumentRefID != "" || deID.ElementRefID != "30" {
-		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.AnnotationSPDXIdentifier, "30")
+		t.Errorf("got %v for SPDXREF, expected %v", parser.ann.SPDXIdentifier, "30")
 	}
 
 	// Annotation Comment
@@ -114,8 +114,8 @@ func TestParser2_2CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.AnnotationComment != cmt {
-		t.Errorf("got %v for AnnotationComment, expected %v", parser.ann.AnnotationComment, cmt)
+	if parser.ann.Comment != cmt {
+		t.Errorf("got %v for AnnotationComment, expected %v", parser.ann.Comment, cmt)
 	}
 }
 

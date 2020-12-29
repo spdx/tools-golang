@@ -27,21 +27,21 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	// unpackaged files
 	f1 := &spdx.File2_1{
-		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile:  []string{"Apache-2.0"},
-		FileCopyrightText:  "Copyright (c) Jane Doe",
+		Name:              "/tmp/whatever1.txt",
+		SPDXIdentifier:    spdx.ElementID("File1231"),
+		ChecksumSHA1:      "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded:  "Apache-2.0",
+		LicenseInfoInFile: []string{"Apache-2.0"},
+		CopyrightText:     "Copyright (c) Jane Doe",
 	}
 
 	f2 := &spdx.File2_1{
-		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
-		LicenseConcluded:   "MIT",
-		LicenseInfoInFile:  []string{"MIT"},
-		FileCopyrightText:  "Copyright (c) John Doe",
+		Name:              "/tmp/whatever2.txt",
+		SPDXIdentifier:    spdx.ElementID("File1232"),
+		ChecksumSHA1:      "85ed0817af83a24ad8da68c2b5094de69833983d",
+		LicenseConcluded:  "MIT",
+		LicenseInfoInFile: []string{"MIT"},
+		CopyrightText:     "Copyright (c) John Doe",
 	}
 
 	unFiles := map[spdx.ElementID]*spdx.File2_1{
@@ -51,34 +51,34 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	// Package 1: packaged files with snippets
 	sn1 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "Snippet19",
+		SPDXIdentifier:                "Snippet19",
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "FileHasSnippets"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
-		SnippetCopyrightText:          "Copyright (c) John Doe 20x6",
+		ByteRangeStart:                17,
+		ByteRangeEnd:                  209,
+		LicenseConcluded:              "GPL-2.0-or-later",
+		CopyrightText:                 "Copyright (c) John Doe 20x6",
 	}
 
 	sn2 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         "Snippet20",
+		SPDXIdentifier:                "Snippet20",
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "FileHasSnippets"),
-		SnippetByteRangeStart:         268,
-		SnippetByteRangeEnd:           309,
-		SnippetLicenseConcluded:       "WTFPL",
-		SnippetCopyrightText:          "NOASSERTION",
+		ByteRangeStart:                268,
+		ByteRangeEnd:                  309,
+		LicenseConcluded:              "WTFPL",
+		CopyrightText:                 "NOASSERTION",
 	}
 
 	f3 := &spdx.File2_1{
-		FileName:           "/tmp/file-with-snippets.txt",
-		FileSPDXIdentifier: spdx.ElementID("FileHasSnippets"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983e",
-		LicenseConcluded:   "GPL-2.0-or-later AND WTFPL",
+		Name:             "/tmp/file-with-snippets.txt",
+		SPDXIdentifier:   spdx.ElementID("FileHasSnippets"),
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983e",
+		LicenseConcluded: "GPL-2.0-or-later AND WTFPL",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 			"WTFPL",
 		},
-		FileCopyrightText: "Copyright (c) Jane Doe",
+		CopyrightText: "Copyright (c) Jane Doe",
 		Snippets: map[spdx.ElementID]*spdx.Snippet2_1{
 			spdx.ElementID("Snippet19"): sn1,
 			spdx.ElementID("Snippet20"): sn2,
@@ -86,30 +86,30 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	}
 
 	f4 := &spdx.File2_1{
-		FileName:           "/tmp/another-file.txt",
-		FileSPDXIdentifier: spdx.ElementID("FileAnother"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983f",
-		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile:  []string{"BSD-3-Clause"},
-		FileCopyrightText:  "Copyright (c) Jane Doe LLC",
+		Name:              "/tmp/another-file.txt",
+		SPDXIdentifier:    spdx.ElementID("FileAnother"),
+		ChecksumSHA1:      "85ed0817af83a24ad8da68c2b5094de69833983f",
+		LicenseConcluded:  "BSD-3-Clause",
+		LicenseInfoInFile: []string{"BSD-3-Clause"},
+		CopyrightText:     "Copyright (c) Jane Doe LLC",
 	}
 
 	pkgWith := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
-		PackageVerificationCode:   "0123456789abcdef0123456789abcdef01234567",
-		PackageLicenseConcluded:   "GPL-2.0-or-later AND BSD-3-Clause AND WTFPL",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode:          "0123456789abcdef0123456789abcdef01234567",
+		LicenseConcluded:          "GPL-2.0-or-later AND BSD-3-Clause AND WTFPL",
+		LicenseInfoFromFiles: []string{
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 			"WTFPL",
 			"BSD-3-Clause",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
 		Files: map[spdx.ElementID]*spdx.File2_1{
 			spdx.ElementID("FileHasSnippets"): f3,
 			spdx.ElementID("FileAnother"):     f4,
@@ -118,17 +118,17 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 
 	// Other Licenses 1 and 2
 	ol1 := &spdx.OtherLicense2_1{
-		LicenseIdentifier: "LicenseRef-1",
+		Identifier: "LicenseRef-1",
 		ExtractedText: `License 1 text
 blah blah blah
 blah blah blah blah`,
-		LicenseName: "License 1",
+		Name: "License 1",
 	}
 
 	ol2 := &spdx.OtherLicense2_1{
-		LicenseIdentifier: "LicenseRef-2",
-		ExtractedText:     `License 2 text - this is a license that does some stuff`,
-		LicenseName:       "License 2",
+		Identifier:    "LicenseRef-2",
+		ExtractedText: `License 2 text - this is a license that does some stuff`,
+		Name:          "License 2",
 	}
 
 	// Relationships
@@ -152,34 +152,34 @@ blah blah blah blah`,
 
 	// Annotations
 	ann1 := &spdx.Annotation2_1{
-		Annotator:                "John Doe",
-		AnnotatorType:            "Person",
-		AnnotationDate:           "2018-10-10T17:52:00Z",
-		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
-		AnnotationComment:        "This is an annotation about the SPDX document",
+		Annotator:      "John Doe",
+		AnnotatorType:  "Person",
+		Date:           "2018-10-10T17:52:00Z",
+		Type:           "REVIEW",
+		SPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		Comment:        "This is an annotation about the SPDX document",
 	}
 
 	ann2 := &spdx.Annotation2_1{
-		Annotator:                "John Doe, Inc.",
-		AnnotatorType:            "Organization",
-		AnnotationDate:           "2018-10-10T17:52:00Z",
-		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "p1"),
-		AnnotationComment:        "This is an annotation about Package p1",
+		Annotator:      "John Doe, Inc.",
+		AnnotatorType:  "Organization",
+		Date:           "2018-10-10T17:52:00Z",
+		Type:           "REVIEW",
+		SPDXIdentifier: spdx.MakeDocElementID("", "p1"),
+		Comment:        "This is an annotation about Package p1",
 	}
 
 	// Reviews
 	rev1 := &spdx.Review2_1{
 		Reviewer:     "John Doe",
 		ReviewerType: "Person",
-		ReviewDate:   "2018-10-14T10:28:00Z",
+		Date:         "2018-10-14T10:28:00Z",
 	}
 	rev2 := &spdx.Review2_1{
-		Reviewer:      "Jane Doe LLC",
-		ReviewerType:  "Organization",
-		ReviewDate:    "2018-10-14T10:28:00Z",
-		ReviewComment: "I have reviewed this SPDX document and it is awesome",
+		Reviewer:     "Jane Doe LLC",
+		ReviewerType: "Organization",
+		Date:         "2018-10-14T10:28:00Z",
+		Comment:      "I have reviewed this SPDX document and it is awesome",
 	}
 
 	// now, build the document

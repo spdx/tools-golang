@@ -17,7 +17,7 @@ type Relationship2_1 struct {
 
 	// 7.2: Relationship Comment
 	// Cardinality: optional, one
-	RelationshipComment string
+	Comment string
 }
 
 // Relationship2_2 is a Relationship section of an SPDX Document for
@@ -35,5 +35,5 @@ type Relationship2_2 struct {
 
 	// 7.2: Relationship Comment
 	// Cardinality: optional, one
-	RelationshipComment string
+	Comment string
 }

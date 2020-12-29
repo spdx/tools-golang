@@ -12,22 +12,22 @@ import (
 // ===== Snippet section Saver tests =====
 func TestSaver2_2SnippetSavesText(t *testing.T) {
 	sn := &spdx.Snippet2_2{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
+		SPDXIdentifier:                spdx.ElementID("Snippet17"),
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLineRangeStart:         3,
-		SnippetLineRangeEnd:           8,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
+		ByteRangeStart:                17,
+		ByteRangeEnd:                  209,
+		LineRangeStart:                3,
+		LineRangeEnd:                  8,
+		LicenseConcluded:              "GPL-2.0-or-later",
 		LicenseInfoInSnippet: []string{
 			"GPL-2.0-or-later",
 			"MIT",
 		},
-		SnippetLicenseComments:  "this is a comment(s) about the snippet license",
-		SnippetCopyrightText:    "Copyright (c) John Doe 20x6",
-		SnippetComment:          "this is a snippet comment",
-		SnippetName:             "from John's program",
-		SnippetAttributionTexts: []string{"some attributions"},
+		LicenseComments:  "this is a comment(s) about the snippet license",
+		CopyrightText:    "Copyright (c) John Doe 20x6",
+		Comment:          "this is a snippet comment",
+		Name:             "from John's program",
+		AttributionTexts: []string{"some attributions"},
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -62,12 +62,12 @@ SnippetAttributionText: some attributions
 
 func TestSaver2_2SnippetOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	sn := &spdx.Snippet2_2{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
+		SPDXIdentifier:                spdx.ElementID("Snippet17"),
 		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
-		SnippetCopyrightText:          "Copyright (c) John Doe 20x6",
+		ByteRangeStart:                17,
+		ByteRangeEnd:                  209,
+		LicenseConcluded:              "GPL-2.0-or-later",
+		CopyrightText:                 "Copyright (c) John Doe 20x6",
 	}
 
 	// what we want to get, as a buffer of bytes

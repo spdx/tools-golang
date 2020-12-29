@@ -87,11 +87,11 @@ func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1
 		f.LicenseConcluded = "NOASSERTION"
 
 		// check whether the searcher should ignore this file
-		if utils.ShouldIgnore(f.FileName, idconfig.SearcherPathsIgnored) {
+		if utils.ShouldIgnore(f.Name, idconfig.SearcherPathsIgnored) {
 			continue
 		}
 
-		fPath := filepath.Join(dirRoot, f.FileName)
+		fPath := filepath.Join(dirRoot, f.Name)
 		// FIXME this is not preferable -- ignoring error
 		ids, _ := searchFileIDs(fPath)
 		// FIXME for now, proceed onwards with whatever IDs we obtained.
@@ -130,13 +130,13 @@ func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1
 
 	// and finally, we can fill in the package's details
 	if len(licsForPackage) == 0 {
-		pkg.PackageLicenseInfoFromFiles = []string{"NOASSERTION"}
+		pkg.LicenseInfoFromFiles = []string{"NOASSERTION"}
 	} else {
-		pkg.PackageLicenseInfoFromFiles = []string{}
+		pkg.LicenseInfoFromFiles = []string{}
 		for lic := range licsForPackage {
-			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, lic)
+			pkg.LicenseInfoFromFiles = append(pkg.LicenseInfoFromFiles, lic)
 		}
-		sort.Strings(pkg.PackageLicenseInfoFromFiles)
+		sort.Strings(pkg.LicenseInfoFromFiles)
 	}
 
 	return doc, nil
@@ -211,11 +211,11 @@ func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2
 		f.LicenseConcluded = "NOASSERTION"
 
 		// check whether the searcher should ignore this file
-		if utils.ShouldIgnore(f.FileName, idconfig.SearcherPathsIgnored) {
+		if utils.ShouldIgnore(f.Name, idconfig.SearcherPathsIgnored) {
 			continue
 		}
 
-		fPath := filepath.Join(dirRoot, f.FileName)
+		fPath := filepath.Join(dirRoot, f.Name)
 		// FIXME this is not preferable -- ignoring error
 		ids, _ := searchFileIDs(fPath)
 		// FIXME for now, proceed onwards with whatever IDs we obtained.
@@ -254,13 +254,13 @@ func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2
 
 	// and finally, we can fill in the package's details
 	if len(licsForPackage) == 0 {
-		pkg.PackageLicenseInfoFromFiles = []string{"NOASSERTION"}
+		pkg.LicenseInfoFromFiles = []string{"NOASSERTION"}
 	} else {
-		pkg.PackageLicenseInfoFromFiles = []string{}
+		pkg.LicenseInfoFromFiles = []string{}
 		for lic := range licsForPackage {
-			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, lic)
+			pkg.LicenseInfoFromFiles = append(pkg.LicenseInfoFromFiles, lic)
 		}
-		sort.Strings(pkg.PackageLicenseInfoFromFiles)
+		sort.Strings(pkg.LicenseInfoFromFiles)
 	}
 
 	return doc, nil

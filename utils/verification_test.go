@@ -13,29 +13,29 @@ import (
 func TestPackage2_1CanGetVerificationCode(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_1{
 		"File0": &spdx.File2_1{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File1": &spdx.File2_1{
-			FileName:           "file1.txt",
-			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file1.txt",
+			SPDXIdentifier: "File1",
+			ChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File2": &spdx.File2_1{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File3": &spdx.File2_1{
-			FileName:           "file5.txt",
-			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file5.txt",
+			SPDXIdentifier: "File3",
+			ChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File4": &spdx.File2_1{
-			FileName:           "file4.txt",
-			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			Name:           "file4.txt",
+			SPDXIdentifier: "File4",
+			ChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
 	}
 
@@ -54,29 +54,29 @@ func TestPackage2_1CanGetVerificationCode(t *testing.T) {
 func TestPackage2_1CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_1{
 		spdx.ElementID("File0"): &spdx.File2_1{
-			FileName:           "file1.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file1.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File1"): &spdx.File2_1{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File1",
+			ChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File2"): &spdx.File2_1{
-			FileName:           "thisfile.spdx",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			Name:           "thisfile.spdx",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
 		spdx.ElementID("File3"): &spdx.File2_1{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File3",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File4"): &spdx.File2_1{
-			FileName:           "file4.txt",
-			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file4.txt",
+			SPDXIdentifier: "File4",
+			ChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
 	}
 
@@ -95,15 +95,15 @@ func TestPackage2_1CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 func TestPackage2_1GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_1{
 		spdx.ElementID("File0"): &spdx.File2_1{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File1"): nil,
 		spdx.ElementID("File2"): &spdx.File2_1{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 	}
 
@@ -118,29 +118,29 @@ func TestPackage2_1GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 func TestPackage2_2CanGetVerificationCode(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_2{
 		"File0": &spdx.File2_2{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File1": &spdx.File2_2{
-			FileName:           "file1.txt",
-			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file1.txt",
+			SPDXIdentifier: "File1",
+			ChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File2": &spdx.File2_2{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File3": &spdx.File2_2{
-			FileName:           "file5.txt",
-			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file5.txt",
+			SPDXIdentifier: "File3",
+			ChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
 		"File4": &spdx.File2_2{
-			FileName:           "file4.txt",
-			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			Name:           "file4.txt",
+			SPDXIdentifier: "File4",
+			ChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
 	}
 
@@ -159,29 +159,29 @@ func TestPackage2_2CanGetVerificationCode(t *testing.T) {
 func TestPackage2_2CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_2{
 		spdx.ElementID("File0"): &spdx.File2_2{
-			FileName:           "file1.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file1.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File1"): &spdx.File2_2{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File1",
+			ChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File2"): &spdx.File2_2{
-			FileName:           "thisfile.spdx",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			Name:           "thisfile.spdx",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
 		},
 		spdx.ElementID("File3"): &spdx.File2_2{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File3",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File4"): &spdx.File2_2{
-			FileName:           "file4.txt",
-			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file4.txt",
+			SPDXIdentifier: "File4",
+			ChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
 		},
 	}
 
@@ -200,15 +200,15 @@ func TestPackage2_2CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 func TestPackage2_2GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 	files := map[spdx.ElementID]*spdx.File2_2{
 		spdx.ElementID("File0"): &spdx.File2_2{
-			FileName:           "file2.txt",
-			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file2.txt",
+			SPDXIdentifier: "File0",
+			ChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 		},
 		spdx.ElementID("File1"): nil,
 		spdx.ElementID("File2"): &spdx.File2_2{
-			FileName:           "file3.txt",
-			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			Name:           "file3.txt",
+			SPDXIdentifier: "File2",
+			ChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
 		},
 	}
 

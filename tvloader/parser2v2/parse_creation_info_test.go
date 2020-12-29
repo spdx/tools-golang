@@ -27,8 +27,8 @@ func TestParser2_2CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 		t.Fatalf("parser didn't create new package")
 	}
 	// and the package name should be as expected
-	if parser.pkg.PackageName != pkgName {
-		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
+	if parser.pkg.Name != pkgName {
+		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.Name)
 	}
 	// and the package should default to true for FilesAnalyzed
 	if parser.pkg.FilesAnalyzed != true {

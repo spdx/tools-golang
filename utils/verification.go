@@ -22,8 +22,8 @@ func GetVerificationCode2_1(files map[spdx.ElementID]*spdx.File2_1, excludeFile 
 		if f == nil {
 			return "", fmt.Errorf("got nil file for identifier %v", i)
 		}
-		if f.FileName != excludeFile {
-			shas = append(shas, f.FileChecksumSHA1)
+		if f.Name != excludeFile {
+			shas = append(shas, f.ChecksumSHA1)
 		}
 	}
 
@@ -52,8 +52,8 @@ func GetVerificationCode2_2(files map[spdx.ElementID]*spdx.File2_2, excludeFile 
 		if f == nil {
 			return "", fmt.Errorf("got nil file for identifier %v", i)
 		}
-		if f.FileName != excludeFile {
-			shas = append(shas, f.FileChecksumSHA1)
+		if f.Name != excludeFile {
+			shas = append(shas, f.ChecksumSHA1)
 		}
 	}
 

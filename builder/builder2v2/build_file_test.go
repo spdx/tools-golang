@@ -22,20 +22,20 @@ func TestBuilder2_2CanBuildFileSection(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.Name != "/file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.Name)
 	}
-	if file1.FileSPDXIdentifier != spdx.ElementID("File17") {
-		t.Errorf("expected %v, got %v", "File17", file1.FileSPDXIdentifier)
+	if file1.SPDXIdentifier != spdx.ElementID("File17") {
+		t.Errorf("expected %v, got %v", "File17", file1.SPDXIdentifier)
 	}
-	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
-		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
+	if file1.ChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
+		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.ChecksumSHA1)
 	}
-	if file1.FileChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
-		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.FileChecksumSHA256)
+	if file1.ChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
+		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.ChecksumSHA256)
 	}
-	if file1.FileChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
-		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.FileChecksumMD5)
+	if file1.ChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
+		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.ChecksumMD5)
 	}
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
@@ -43,8 +43,8 @@ func TestBuilder2_2CanBuildFileSection(t *testing.T) {
 	if len(file1.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
 	}
-	if file1.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
+	if file1.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file1.CopyrightText)
 	}
 
 }

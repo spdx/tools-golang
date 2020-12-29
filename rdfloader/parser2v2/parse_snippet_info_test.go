@@ -140,8 +140,8 @@ func Test_setSnippetID(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if si.SnippetSPDXIdentifier != "Snippet" {
-		t.Errorf("expected: %s, found: %s", "Snippet", si.SnippetSPDXIdentifier)
+	if si.SPDXIdentifier != "Snippet" {
+		t.Errorf("expected: %s, found: %s", "Snippet", si.SPDXIdentifier)
 	}
 }
 
@@ -520,7 +520,7 @@ func Test_rdfParser2_2_setSnippetToFileWithID(t *testing.T) {
 	// TestCase 2: file exists, but snippet of the file doesn't ( it mustn't raise any error )
 	fileId = spdx.ElementID("File1")
 	file = &spdx.File2_2{
-		FileSPDXIdentifier: fileId,
+		SPDXIdentifier: fileId,
 	}
 	parser.files[fileId] = file
 	file.Snippets = nil // nil snippets

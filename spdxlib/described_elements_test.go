@@ -19,11 +19,11 @@ func Test2_1CanGetIDsOfDescribedPackages(t *testing.T) {
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			spdx.ElementID("p1"): &spdx.Package2_1{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_1{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
-			spdx.ElementID("p3"): &spdx.Package2_1{PackageName: "pkg3", PackageSPDXIdentifier: "p3"},
-			spdx.ElementID("p4"): &spdx.Package2_1{PackageName: "pkg4", PackageSPDXIdentifier: "p4"},
-			spdx.ElementID("p5"): &spdx.Package2_1{PackageName: "pkg5", PackageSPDXIdentifier: "p5"},
+			spdx.ElementID("p1"): &spdx.Package2_1{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_1{Name: "pkg2", SPDXIdentifier: "p2"},
+			spdx.ElementID("p3"): &spdx.Package2_1{Name: "pkg3", SPDXIdentifier: "p3"},
+			spdx.ElementID("p4"): &spdx.Package2_1{Name: "pkg4", SPDXIdentifier: "p4"},
+			spdx.ElementID("p5"): &spdx.Package2_1{Name: "pkg5", SPDXIdentifier: "p5"},
 		},
 		Relationships: []*spdx.Relationship2_1{
 			&spdx.Relationship2_1{
@@ -81,7 +81,7 @@ func Test2_1GetDescribedPackagesReturnsSinglePackageIfOnlyOne(t *testing.T) {
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			spdx.ElementID("p1"): &spdx.Package2_1{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			spdx.ElementID("p1"): &spdx.Package2_1{Name: "pkg1", SPDXIdentifier: "p1"},
 		},
 	}
 
@@ -108,11 +108,11 @@ func Test2_1FailsToGetDescribedPackagesIfMoreThanOneWithoutDescribesRelationship
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			spdx.ElementID("p1"): &spdx.Package2_1{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_1{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
-			spdx.ElementID("p3"): &spdx.Package2_1{PackageName: "pkg3", PackageSPDXIdentifier: "p3"},
-			spdx.ElementID("p4"): &spdx.Package2_1{PackageName: "pkg4", PackageSPDXIdentifier: "p4"},
-			spdx.ElementID("p5"): &spdx.Package2_1{PackageName: "pkg5", PackageSPDXIdentifier: "p5"},
+			spdx.ElementID("p1"): &spdx.Package2_1{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_1{Name: "pkg2", SPDXIdentifier: "p2"},
+			spdx.ElementID("p3"): &spdx.Package2_1{Name: "pkg3", SPDXIdentifier: "p3"},
+			spdx.ElementID("p4"): &spdx.Package2_1{Name: "pkg4", SPDXIdentifier: "p4"},
+			spdx.ElementID("p5"): &spdx.Package2_1{Name: "pkg5", SPDXIdentifier: "p5"},
 		},
 		Relationships: []*spdx.Relationship2_1{
 			// different relationship
@@ -139,8 +139,8 @@ func Test2_1FailsToGetDescribedPackagesIfMoreThanOneWithNilRelationships(t *test
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			spdx.ElementID("p1"): &spdx.Package2_1{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_1{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
+			spdx.ElementID("p1"): &spdx.Package2_1{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_1{Name: "pkg2", SPDXIdentifier: "p2"},
 		},
 	}
 
@@ -192,8 +192,8 @@ func Test2_1FailsToGetDescribedPackagesIfRelationshipForNonexistantPackageID(t *
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_1{
-			spdx.ElementID("p1"): &spdx.Package2_1{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_1{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
+			spdx.ElementID("p1"): &spdx.Package2_1{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_1{Name: "pkg2", SPDXIdentifier: "p2"},
 		},
 		Relationships: []*spdx.Relationship2_1{
 			// different relationship
@@ -222,11 +222,11 @@ func Test2_2CanGetIDsOfDescribedPackages(t *testing.T) {
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_2{
-			spdx.ElementID("p1"): &spdx.Package2_2{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_2{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
-			spdx.ElementID("p3"): &spdx.Package2_2{PackageName: "pkg3", PackageSPDXIdentifier: "p3"},
-			spdx.ElementID("p4"): &spdx.Package2_2{PackageName: "pkg4", PackageSPDXIdentifier: "p4"},
-			spdx.ElementID("p5"): &spdx.Package2_2{PackageName: "pkg5", PackageSPDXIdentifier: "p5"},
+			spdx.ElementID("p1"): &spdx.Package2_2{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_2{Name: "pkg2", SPDXIdentifier: "p2"},
+			spdx.ElementID("p3"): &spdx.Package2_2{Name: "pkg3", SPDXIdentifier: "p3"},
+			spdx.ElementID("p4"): &spdx.Package2_2{Name: "pkg4", SPDXIdentifier: "p4"},
+			spdx.ElementID("p5"): &spdx.Package2_2{Name: "pkg5", SPDXIdentifier: "p5"},
 		},
 		Relationships: []*spdx.Relationship2_2{
 			&spdx.Relationship2_2{
@@ -284,7 +284,7 @@ func Test2_2GetDescribedPackagesReturnsSinglePackageIfOnlyOne(t *testing.T) {
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_2{
-			spdx.ElementID("p1"): &spdx.Package2_2{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			spdx.ElementID("p1"): &spdx.Package2_2{Name: "pkg1", SPDXIdentifier: "p1"},
 		},
 	}
 
@@ -311,11 +311,11 @@ func Test2_2FailsToGetDescribedPackagesIfMoreThanOneWithoutDescribesRelationship
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_2{
-			spdx.ElementID("p1"): &spdx.Package2_2{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_2{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
-			spdx.ElementID("p3"): &spdx.Package2_2{PackageName: "pkg3", PackageSPDXIdentifier: "p3"},
-			spdx.ElementID("p4"): &spdx.Package2_2{PackageName: "pkg4", PackageSPDXIdentifier: "p4"},
-			spdx.ElementID("p5"): &spdx.Package2_2{PackageName: "pkg5", PackageSPDXIdentifier: "p5"},
+			spdx.ElementID("p1"): &spdx.Package2_2{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_2{Name: "pkg2", SPDXIdentifier: "p2"},
+			spdx.ElementID("p3"): &spdx.Package2_2{Name: "pkg3", SPDXIdentifier: "p3"},
+			spdx.ElementID("p4"): &spdx.Package2_2{Name: "pkg4", SPDXIdentifier: "p4"},
+			spdx.ElementID("p5"): &spdx.Package2_2{Name: "pkg5", SPDXIdentifier: "p5"},
 		},
 		Relationships: []*spdx.Relationship2_2{
 			// different relationship
@@ -342,8 +342,8 @@ func Test2_2FailsToGetDescribedPackagesIfMoreThanOneWithNilRelationships(t *test
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_2{
-			spdx.ElementID("p1"): &spdx.Package2_2{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_2{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
+			spdx.ElementID("p1"): &spdx.Package2_2{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_2{Name: "pkg2", SPDXIdentifier: "p2"},
 		},
 	}
 
@@ -395,8 +395,8 @@ func Test2_2FailsToGetDescribedPackagesIfRelationshipForNonexistantPackageID(t *
 			SPDXIdentifier: spdx.ElementID("DOCUMENT"),
 		},
 		Packages: map[spdx.ElementID]*spdx.Package2_2{
-			spdx.ElementID("p1"): &spdx.Package2_2{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
-			spdx.ElementID("p2"): &spdx.Package2_2{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
+			spdx.ElementID("p1"): &spdx.Package2_2{Name: "pkg1", SPDXIdentifier: "p1"},
+			spdx.ElementID("p2"): &spdx.Package2_2{Name: "pkg2", SPDXIdentifier: "p2"},
 		},
 		Relationships: []*spdx.Relationship2_2{
 			// different relationship

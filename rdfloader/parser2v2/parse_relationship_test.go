@@ -389,7 +389,7 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 		t.Errorf("expected %+v, found %+v", expectedRefB, reln.RefB)
 	}
 	expectedComment := "comment"
-	if reln.RelationshipComment != expectedComment {
-		t.Errorf("expected %v, found %v", expectedComment, reln.RelationshipComment)
+	if reln.Comment != expectedComment {
+		t.Errorf("expected %v, found %v", expectedComment, reln.Comment)
 	}
 }

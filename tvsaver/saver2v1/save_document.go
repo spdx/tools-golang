@@ -45,7 +45,7 @@ func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 	sort.Strings(packageKeys)
 	for _, pkgID := range packageKeys {
 		pkg := doc.Packages[spdx.ElementID(pkgID)]
-		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
+		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.Name)
 		renderPackage2_1(pkg, w)
 	}
 

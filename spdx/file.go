@@ -7,21 +7,21 @@ type File2_1 struct {
 
 	// 4.1: File Name
 	// Cardinality: mandatory, one
-	FileName string
+	Name string
 
 	// 4.2: File SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	FileSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 4.3: File Type
 	// Cardinality: optional, multiple
-	FileType []string
+	Type []string
 
 	// 4.4: File Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: mandatory, one SHA1, others may be optionally provided
-	FileChecksumSHA1   string
-	FileChecksumSHA256 string
-	FileChecksumMD5    string
+	ChecksumSHA1   string
+	ChecksumSHA256 string
+	ChecksumMD5    string
 
 	// 4.5: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
@@ -37,7 +37,7 @@ type File2_1 struct {
 
 	// 4.8: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	FileCopyrightText string
+	CopyrightText string
 
 	// DEPRECATED in version 2.1 of spec
 	// 4.9-4.11: Artifact of Project variables (defined below)
@@ -46,20 +46,20 @@ type File2_1 struct {
 
 	// 4.12: File Comment
 	// Cardinality: optional, one
-	FileComment string
+	Comment string
 
 	// 4.13: File Notice
 	// Cardinality: optional, one
-	FileNotice string
+	Notice string
 
 	// 4.14: File Contributor
 	// Cardinality: optional, one or many
-	FileContributor []string
+	Contributor []string
 
 	// DEPRECATED in version 2.0 of spec
 	// 4.15: File Dependencies
 	// Cardinality: optional, one or many
-	FileDependencies []string
+	Dependencies []string
 
 	// Snippets contained in this File
 	// Note that Snippets could be defined in a different Document! However,
@@ -93,21 +93,21 @@ type File2_2 struct {
 
 	// 4.1: File Name
 	// Cardinality: mandatory, one
-	FileName string
+	Name string
 
 	// 4.2: File SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	FileSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 4.3: File Type
 	// Cardinality: optional, multiple
-	FileType []string
+	Type []string
 
 	// 4.4: File Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: mandatory, one SHA1, others may be optionally provided
-	FileChecksumSHA1   string
-	FileChecksumSHA256 string
-	FileChecksumMD5    string
+	ChecksumSHA1   string
+	ChecksumSHA256 string
+	ChecksumMD5    string
 
 	// 4.5: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
@@ -123,7 +123,7 @@ type File2_2 struct {
 
 	// 4.8: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	FileCopyrightText string
+	CopyrightText string
 
 	// DEPRECATED in version 2.1 of spec
 	// 4.9-4.11: Artifact of Project variables (defined below)
@@ -132,24 +132,24 @@ type File2_2 struct {
 
 	// 4.12: File Comment
 	// Cardinality: optional, one
-	FileComment string
+	Comment string
 
 	// 4.13: File Notice
 	// Cardinality: optional, one
-	FileNotice string
+	Notice string
 
 	// 4.14: File Contributor
 	// Cardinality: optional, one or many
-	FileContributor []string
+	Contributor []string
 
 	// 4.15: File Attribution Text
 	// Cardinality: optional, one or many
-	FileAttributionTexts []string
+	AttributionTexts []string
 
 	// DEPRECATED in version 2.0 of spec
 	// 4.16: File Dependencies
 	// Cardinality: optional, one or many
-	FileDependencies []string
+	Dependencies []string
 
 	// Snippets contained in this File
 	// Note that Snippets could be defined in a different Document! However,

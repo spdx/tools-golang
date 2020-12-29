@@ -142,17 +142,17 @@ func Test_rdfParser2_2_setUnpackagedFiles(t *testing.T) {
 	// unpackaged files are the files which are not associated with any package
 	// file associated with a package sets parser.assocWithPackage[fileID] to true.
 	rdfParser, _ := parserFromBodyContent(``)
-	file1 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file1")}
-	file2 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file2")}
-	file3 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file3")}
+	file1 := &spdx.File2_2{SPDXIdentifier: spdx.ElementID("file1")}
+	file2 := &spdx.File2_2{SPDXIdentifier: spdx.ElementID("file2")}
+	file3 := &spdx.File2_2{SPDXIdentifier: spdx.ElementID("file3")}
 
 	// setting files to the document as if it were to be set when it was parsed using triples.
-	rdfParser.files[file1.FileSPDXIdentifier] = file1
-	rdfParser.files[file2.FileSPDXIdentifier] = file2
-	rdfParser.files[file3.FileSPDXIdentifier] = file3
+	rdfParser.files[file1.SPDXIdentifier] = file1
+	rdfParser.files[file2.SPDXIdentifier] = file2
+	rdfParser.files[file3.SPDXIdentifier] = file3
 
 	// assuming file1 is associated with a package
-	rdfParser.assocWithPackage[file1.FileSPDXIdentifier] = true
+	rdfParser.assocWithPackage[file1.SPDXIdentifier] = true
 
 	rdfParser.setUnpackagedFiles()
 
@@ -180,8 +180,8 @@ func Test_setFileIdentifier(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if file.FileSPDXIdentifier != "129" {
-		t.Errorf("expected %s, found: %s", "129", file.FileSPDXIdentifier)
+	if file.SPDXIdentifier != "129" {
+		t.Errorf("expected %s, found: %s", "129", file.SPDXIdentifier)
 	}
 
 	// TestCase 2: invalid example
@@ -206,13 +206,13 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		t.Errorf("error parsing a valid checksum node")
 	}
 	checksumValue := "d2356e0fe1c0b85285d83c6b2ad51b5f"
-	if file.FileChecksumMD5 != checksumValue {
-		t.Errorf("wrong checksum value for md5. Expected: %s, found: %s", checksumValue, file.FileChecksumMD5)
+	if file.ChecksumMD5 != checksumValue {
+		t.Errorf("wrong checksum value for md5. Expected: %s, found: %s", checksumValue, file.ChecksumMD5)
 	}
-	if file.FileChecksumSHA1 != "" {
+	if file.ChecksumSHA1 != "" {
 		t.Errorf("incorrectly set sha1, should've been empty")
 	}
-	if file.FileChecksumSHA256 != "" {
+	if file.ChecksumSHA256 != "" {
 		t.Errorf("incorrectly set sha256, should've been empty")
 	}
 
@@ -229,13 +229,13 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
-	if file.FileChecksumSHA1 != checksumValue {
-		t.Errorf("wrong checksum value for sha1. Expected: %s, found: %s", checksumValue, file.FileChecksumSHA1)
+	if file.ChecksumSHA1 != checksumValue {
+		t.Errorf("wrong checksum value for sha1. Expected: %s, found: %s", checksumValue, file.ChecksumSHA1)
 	}
-	if file.FileChecksumMD5 != "" {
+	if file.ChecksumMD5 != "" {
 		t.Errorf("incorrectly set md5, should've been empty")
 	}
-	if file.FileChecksumSHA256 != "" {
+	if file.ChecksumSHA256 != "" {
 		t.Errorf("incorrectly set sha256, should've been empty")
 	}
 
@@ -252,13 +252,13 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
-	if file.FileChecksumSHA256 != checksumValue {
-		t.Errorf("wrong checksum value for sha256. Expected: %s, found: %s", checksumValue, file.FileChecksumSHA256)
+	if file.ChecksumSHA256 != checksumValue {
+		t.Errorf("wrong checksum value for sha256. Expected: %s, found: %s", checksumValue, file.ChecksumSHA256)
 	}
-	if file.FileChecksumMD5 != "" {
+	if file.ChecksumMD5 != "" {
 		t.Errorf("incorrectly set md5, should've been empty")
 	}
-	if file.FileChecksumSHA1 != "" {
+	if file.ChecksumSHA1 != "" {
 		t.Errorf("incorrectly set sha1, should've been empty")
 	}
 
@@ -478,22 +478,21 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// checking if all the attributes that spanned over a several tags are set in the same variable.
 	expectedFileName := "time-1.9/ChangeLog"
-	if file.FileName != expectedFileName {
-		t.Errorf("expected %s, found %s", expectedFileName, file.FileName)
+	if file.Name != expectedFileName {
+		t.Errorf("expected %s, found %s", expectedFileName, file.Name)
 	}
 	expectedLicenseConcluded := "NOASSERTION"
 	if file.LicenseConcluded != expectedLicenseConcluded {
 		t.Errorf("expected %s, found %s", expectedLicenseConcluded, file.LicenseConcluded)
 	}
 	expectedFileType := "source"
-	if file.FileType[0] != expectedFileType {
-		t.Errorf("expected %s, found %s", expectedFileType, file.FileType)
+	if file.Type[0] != expectedFileType {
+		t.Errorf("expected %s, found %s", expectedFileType, file.Type)
 	}
 	expectedLicenseInfoInFile := "NOASSERTION"
 	if file.LicenseInfoInFile[0] != expectedLicenseInfoInFile {
 		t.Errorf("expected %s, found %s", expectedLicenseInfoInFile, file.LicenseInfoInFile[0])
 	}
-
 
 	// TestCase 12: checking if recursive dependencies are resolved.
 	parser, _ = parserFromBodyContent(`
@@ -565,21 +564,21 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	// checking each and every attribute of the obtained file.
 
 	expectedFileName = "time-1.9/ChangeLog"
-	if file.FileName != expectedFileName {
-		t.Errorf("expected %s, found %s", expectedFileName, file.FileName)
+	if file.Name != expectedFileName {
+		t.Errorf("expected %s, found %s", expectedFileName, file.Name)
 	}
 
-	if len(file.FileType) != 1 {
-		t.Errorf("given file should have 1 fileType attribute. found %d", len(file.FileType))
+	if len(file.Type) != 1 {
+		t.Errorf("given file should have 1 fileType attribute. found %d", len(file.Type))
 	}
 	expectedFileType = "source"
-	if file.FileType[0] != expectedFileType {
-		t.Errorf("expected %s, found %s", expectedFileType, file.FileType)
+	if file.Type[0] != expectedFileType {
+		t.Errorf("expected %s, found %s", expectedFileType, file.Type)
 	}
 
 	expectedChecksum := "0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd"
-	if file.FileChecksumSHA1 != expectedChecksum {
-		t.Errorf("expected %s, found %s", expectedChecksum, file.FileChecksumSHA1)
+	if file.ChecksumSHA1 != expectedChecksum {
+		t.Errorf("expected %s, found %s", expectedChecksum, file.ChecksumSHA1)
 	}
 
 	expectedLicenseConcluded = "NOASSERTION"
@@ -601,8 +600,8 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	}
 
 	expectedCopyrightText := "from spdx file"
-	if file.FileCopyrightText != expectedCopyrightText {
-		t.Errorf("expected %s, found %s", expectedCopyrightText, file.FileCopyrightText)
+	if file.CopyrightText != expectedCopyrightText {
+		t.Errorf("expected %s, found %s", expectedCopyrightText, file.CopyrightText)
 	}
 
 	if n := len(file.ArtifactOfProjects); n != 1 {
@@ -621,37 +620,37 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	}
 
 	expectedFileComment := "no comments"
-	if file.FileComment != expectedFileComment {
-		t.Errorf("expected %s, found %s", expectedFileName, file.FileComment)
+	if file.Comment != expectedFileComment {
+		t.Errorf("expected %s, found %s", expectedFileName, file.Comment)
 	}
 
 	expectedNoticeText := "NOASSERTION"
-	if file.FileNotice != expectedNoticeText {
-		t.Errorf("expected %s, found %s", expectedNoticeText, file.FileNotice)
+	if file.Notice != expectedNoticeText {
+		t.Errorf("expected %s, found %s", expectedNoticeText, file.Notice)
 	}
 
-	if n := len(file.FileContributor); n != 1 {
+	if n := len(file.Contributor); n != 1 {
 		t.Errorf("given file should have 1 fileContributor. found %d", n)
 	}
 	expectedFileContributor := "Some Organization"
-	if file.FileContributor[0] != expectedFileContributor {
-		t.Errorf("expected %s, found %s", expectedFileContributor, file.FileContributor)
+	if file.Contributor[0] != expectedFileContributor {
+		t.Errorf("expected %s, found %s", expectedFileContributor, file.Contributor)
 	}
 
-	if n := len(file.FileDependencies); n != 1 {
+	if n := len(file.Dependencies); n != 1 {
 		t.Errorf("given file should have 1 fileDependencies. found %d", n)
 	}
 	expectedFileDependency := "CommonsLangSrc"
-	if file.FileDependencies[0] != expectedFileDependency {
-		t.Errorf("expected %s, found %s", expectedFileDependency, file.FileDependencies[0])
+	if file.Dependencies[0] != expectedFileDependency {
+		t.Errorf("expected %s, found %s", expectedFileDependency, file.Dependencies[0])
 	}
 
-	if n := len(file.FileAttributionTexts); n != 1 {
+	if n := len(file.AttributionTexts); n != 1 {
 		t.Errorf("given file should have 1 attributionText. found %d", n)
 	}
 	expectedAttributionText := "attribution text"
-	if file.FileAttributionTexts[0] != expectedAttributionText {
-		t.Errorf("expected %s, found %s", expectedAttributionText, file.FileAttributionTexts[0])
+	if file.AttributionTexts[0] != expectedAttributionText {
+		t.Errorf("expected %s, found %s", expectedAttributionText, file.AttributionTexts[0])
 	}
 
 	if n := len(parser.doc.Annotations); n != 1 {
@@ -659,23 +658,23 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	}
 	ann := parser.doc.Annotations[0]
 	expectedAnnDate := "2011-01-29T18:30:22Z"
-	if ann.AnnotationDate != expectedAnnDate {
-		t.Errorf("expected %s, found %s", expectedAnnDate, ann.AnnotationDate)
+	if ann.Date != expectedAnnDate {
+		t.Errorf("expected %s, found %s", expectedAnnDate, ann.Date)
 	}
 	expectedAnnComment := "File level annotation copied from a spdx document"
-	if ann.AnnotationComment != expectedAnnComment {
-		t.Errorf("expected %s, found %s", expectedAnnComment, ann.AnnotationComment)
+	if ann.Comment != expectedAnnComment {
+		t.Errorf("expected %s, found %s", expectedAnnComment, ann.Comment)
 	}
 	expectedAnnotationType := "OTHER"
-	if ann.AnnotationType != expectedAnnotationType {
-		t.Errorf("expected %s, found %s", expectedAnnotationType, ann.AnnotationType)
+	if ann.Type != expectedAnnotationType {
+		t.Errorf("expected %s, found %s", expectedAnnotationType, ann.Type)
 	}
 	expectedAnnotator := "File Commenter"
 	if ann.Annotator != expectedAnnotator {
 		t.Errorf("expected %s, found %s", expectedAnnotator, ann.Annotator)
 	}
 	expectedAnnotatorType := "Person"
-	if ann.AnnotationType != expectedAnnotationType {
+	if ann.Type != expectedAnnotationType {
 		t.Errorf("expected %s, found %s", expectedAnnotatorType, ann.AnnotatorType)
 	}
 
@@ -701,8 +700,8 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	if reln.Relationship != expectedRelationType {
 		t.Errorf("expected %s, found %s", expectedRefBEID, reln.RefB.ElementRefID)
 	}
-	if reln.RelationshipComment != "" {
-		t.Errorf("expected relationship comment to be empty, found %s", reln.RelationshipComment)
+	if reln.Comment != "" {
+		t.Errorf("expected relationship comment to be empty, found %s", reln.Comment)
 	}
 }
 

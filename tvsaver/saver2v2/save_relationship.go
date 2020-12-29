@@ -15,8 +15,8 @@ func renderRelationship2_2(rln *spdx.Relationship2_2, w io.Writer) error {
 	if rlnAStr != "SPDXRef-" && rlnBStr != "SPDXRef-" && rln.Relationship != "" {
 		fmt.Fprintf(w, "Relationship: %s %s %s\n", rlnAStr, rln.Relationship, rlnBStr)
 	}
-	if rln.RelationshipComment != "" {
-		fmt.Fprintf(w, "RelationshipComment: %s\n", rln.RelationshipComment)
+	if rln.Comment != "" {
+		fmt.Fprintf(w, "RelationshipComment: %s\n", rln.Comment)
 	}
 
 	return nil

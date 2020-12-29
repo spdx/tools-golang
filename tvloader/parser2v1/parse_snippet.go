@@ -25,7 +25,7 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 			}
 			parser.file.Snippets[eID] = parser.snippet
 		}
-		parser.snippet.SnippetSPDXIdentifier = eID
+		parser.snippet.SPDXIdentifier = eID
 	// tag for creating new file section and going back to parsing File
 	case "FileName":
 		parser.st = psFile2_1
@@ -61,8 +61,8 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.snippet.SnippetByteRangeStart = bIntStart
-		parser.snippet.SnippetByteRangeEnd = bIntEnd
+		parser.snippet.ByteRangeStart = bIntStart
+		parser.snippet.ByteRangeEnd = bIntEnd
 	case "SnippetLineRange":
 		lineStart, lineEnd, err := extractSubs(value)
 		if err != nil {
@@ -76,20 +76,20 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.snippet.SnippetLineRangeStart = lInttStart
-		parser.snippet.SnippetLineRangeEnd = lInttEnd
+		parser.snippet.LineRangeStart = lInttStart
+		parser.snippet.LineRangeEnd = lInttEnd
 	case "SnippetLicenseConcluded":
-		parser.snippet.SnippetLicenseConcluded = value
+		parser.snippet.LicenseConcluded = value
 	case "LicenseInfoInSnippet":
 		parser.snippet.LicenseInfoInSnippet = append(parser.snippet.LicenseInfoInSnippet, value)
 	case "SnippetLicenseComments":
-		parser.snippet.SnippetLicenseComments = value
+		parser.snippet.LicenseComments = value
 	case "SnippetCopyrightText":
-		parser.snippet.SnippetCopyrightText = value
+		parser.snippet.CopyrightText = value
 	case "SnippetComment":
-		parser.snippet.SnippetComment = value
+		parser.snippet.Comment = value
 	case "SnippetName":
-		parser.snippet.SnippetName = value
+		parser.snippet.Name = value
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_1{}

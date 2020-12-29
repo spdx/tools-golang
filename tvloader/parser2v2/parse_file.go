@@ -19,7 +19,7 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 	// tag for creating new file section
 	case "FileName":
 		parser.file = &spdx.File2_2{}
-		parser.file.FileName = value
+		parser.file.Name = value
 	// tag for creating new package section and going back to parsing Package
 	case "PackageName":
 		parser.st = psPackage2_2
@@ -39,7 +39,7 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 		if err != nil {
 			return err
 		}
-		parser.file.FileSPDXIdentifier = eID
+		parser.file.SPDXIdentifier = eID
 		if parser.pkg == nil {
 			if parser.doc.UnpackagedFiles == nil {
 				parser.doc.UnpackagedFiles = map[spdx.ElementID]*spdx.File2_2{}
@@ -52,7 +52,7 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 			parser.pkg.Files[eID] = parser.file
 		}
 	case "FileType":
-		parser.file.FileType = append(parser.file.FileType, value)
+		parser.file.Type = append(parser.file.Type, value)
 	case "FileChecksum":
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
@@ -60,11 +60,11 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 		}
 		switch subkey {
 		case "SHA1":
-			parser.file.FileChecksumSHA1 = subvalue
+			parser.file.ChecksumSHA1 = subvalue
 		case "SHA256":
-			parser.file.FileChecksumSHA256 = subvalue
+			parser.file.ChecksumSHA256 = subvalue
 		case "MD5":
-			parser.file.FileChecksumMD5 = subvalue
+			parser.file.ChecksumMD5 = subvalue
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
@@ -75,7 +75,7 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 	case "LicenseComments":
 		parser.file.LicenseComments = value
 	case "FileCopyrightText":
-		parser.file.FileCopyrightText = value
+		parser.file.CopyrightText = value
 	case "ArtifactOfProjectName":
 		parser.fileAOP = &spdx.ArtifactOfProject2_2{}
 		parser.file.ArtifactOfProjects = append(parser.file.ArtifactOfProjects, parser.fileAOP)
@@ -91,15 +91,15 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 		}
 		parser.fileAOP.URI = value
 	case "FileComment":
-		parser.file.FileComment = value
+		parser.file.Comment = value
 	case "FileNotice":
-		parser.file.FileNotice = value
+		parser.file.Notice = value
 	case "FileContributor":
-		parser.file.FileContributor = append(parser.file.FileContributor, value)
+		parser.file.Contributor = append(parser.file.Contributor, value)
 	case "FileDependency":
-		parser.file.FileDependencies = append(parser.file.FileDependencies, value)
+		parser.file.Dependencies = append(parser.file.Dependencies, value)
 	case "FileAttributionText":
-		parser.file.FileAttributionTexts = append(parser.file.FileAttributionTexts, value)
+		parser.file.AttributionTexts = append(parser.file.AttributionTexts, value)
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_2{}

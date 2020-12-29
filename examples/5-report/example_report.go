@@ -64,13 +64,13 @@ func main() {
 
 		// check whether the package had its files analyzed
 		if !pkg.FilesAnalyzed {
-			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.PackageName)
+			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.Name)
 			return
 		}
 
 		// also check whether the package has any files present
 		if pkg.Files == nil || len(pkg.Files) < 1 {
-			fmt.Printf("Package %s (%s) has no Files\n", string(pkgID), pkg.PackageName)
+			fmt.Printf("Package %s (%s) has no Files\n", string(pkgID), pkg.Name)
 			return
 		}
 
@@ -78,7 +78,7 @@ func main() {
 		// generate and print a report of the Package's Files' LicenseConcluded
 		// values, sorted by # of occurrences
 		fmt.Printf("============================\n")
-		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.PackageName)
+		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.Name)
 		err = reporter.Generate2_2(pkg, os.Stdout)
 		if err != nil {
 			fmt.Printf("Error while generating report: %v\n", err)

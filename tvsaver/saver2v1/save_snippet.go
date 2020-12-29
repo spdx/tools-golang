@@ -10,36 +10,36 @@ import (
 )
 
 func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
-	if sn.SnippetSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SnippetSPDXIdentifier: %s\n", spdx.RenderElementID(sn.SnippetSPDXIdentifier))
+	if sn.SPDXIdentifier != "" {
+		fmt.Fprintf(w, "SnippetSPDXIdentifier: %s\n", spdx.RenderElementID(sn.SPDXIdentifier))
 	}
 	snFromFileIDStr := spdx.RenderDocElementID(sn.SnippetFromFileSPDXIdentifier)
 	if snFromFileIDStr != "" {
 		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", snFromFileIDStr)
 	}
-	if sn.SnippetByteRangeStart != 0 && sn.SnippetByteRangeEnd != 0 {
-		fmt.Fprintf(w, "SnippetByteRange: %d:%d\n", sn.SnippetByteRangeStart, sn.SnippetByteRangeEnd)
+	if sn.ByteRangeStart != 0 && sn.ByteRangeEnd != 0 {
+		fmt.Fprintf(w, "SnippetByteRange: %d:%d\n", sn.ByteRangeStart, sn.ByteRangeEnd)
 	}
-	if sn.SnippetLineRangeStart != 0 && sn.SnippetLineRangeEnd != 0 {
-		fmt.Fprintf(w, "SnippetLineRange: %d:%d\n", sn.SnippetLineRangeStart, sn.SnippetLineRangeEnd)
+	if sn.LineRangeStart != 0 && sn.LineRangeEnd != 0 {
+		fmt.Fprintf(w, "SnippetLineRange: %d:%d\n", sn.LineRangeStart, sn.LineRangeEnd)
 	}
-	if sn.SnippetLicenseConcluded != "" {
-		fmt.Fprintf(w, "SnippetLicenseConcluded: %s\n", sn.SnippetLicenseConcluded)
+	if sn.LicenseConcluded != "" {
+		fmt.Fprintf(w, "SnippetLicenseConcluded: %s\n", sn.LicenseConcluded)
 	}
 	for _, s := range sn.LicenseInfoInSnippet {
 		fmt.Fprintf(w, "LicenseInfoInSnippet: %s\n", s)
 	}
-	if sn.SnippetLicenseComments != "" {
-		fmt.Fprintf(w, "SnippetLicenseComments: %s\n", textify(sn.SnippetLicenseComments))
+	if sn.LicenseComments != "" {
+		fmt.Fprintf(w, "SnippetLicenseComments: %s\n", textify(sn.LicenseComments))
 	}
-	if sn.SnippetCopyrightText != "" {
-		fmt.Fprintf(w, "SnippetCopyrightText: %s\n", sn.SnippetCopyrightText)
+	if sn.CopyrightText != "" {
+		fmt.Fprintf(w, "SnippetCopyrightText: %s\n", sn.CopyrightText)
 	}
-	if sn.SnippetComment != "" {
-		fmt.Fprintf(w, "SnippetComment: %s\n", textify(sn.SnippetComment))
+	if sn.Comment != "" {
+		fmt.Fprintf(w, "SnippetComment: %s\n", textify(sn.Comment))
 	}
-	if sn.SnippetName != "" {
-		fmt.Fprintf(w, "SnippetName: %s\n", sn.SnippetName)
+	if sn.Name != "" {
+		fmt.Fprintf(w, "SnippetName: %s\n", sn.Name)
 	}
 
 	fmt.Fprintf(w, "\n")

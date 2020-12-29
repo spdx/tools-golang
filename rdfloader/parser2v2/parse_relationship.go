@@ -40,7 +40,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 	parser.cache[triple.Object.ID].Color = GREY
 
 	// setting state color to black to indicate when we're done parsing this node.
-	defer func(){parser.cache[triple.Object.ID].Color = BLACK}();
+	defer func() { parser.cache[triple.Object.ID].Color = BLACK }()
 
 	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
@@ -73,7 +73,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 			}
 		case RDFS_COMMENT:
 			// cardinality: max 1
-			reln.RelationshipComment = subTriple.Object.ID
+			reln.Comment = subTriple.Object.ID
 		default:
 			return fmt.Errorf("unexpected predicate id: %s", subTriple.Predicate.ID)
 		}
@@ -96,7 +96,7 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 		}
 		reln.RefB = spdx.DocElementID{
 			DocumentRefID: "",
-			ElementRefID:  file.FileSPDXIdentifier,
+			ElementRefID:  file.SPDXIdentifier,
 		}
 
 	case SPDX_PACKAGE:
@@ -106,7 +106,7 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 		}
 		reln.RefB = spdx.DocElementID{
 			DocumentRefID: "",
-			ElementRefID:  pkg.PackageSPDXIdentifier,
+			ElementRefID:  pkg.SPDXIdentifier,
 		}
 
 	case SPDX_SPDX_ELEMENT:

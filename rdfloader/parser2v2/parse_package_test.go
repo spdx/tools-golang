@@ -18,7 +18,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageSupplierNOASSERTION {
+	if !pkg.SupplierNOASSERTION {
 		t.Errorf("PackageSupplierNOASSERTION must've been set to true")
 	}
 
@@ -29,7 +29,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageSupplierNOASSERTION {
+	if !pkg.SupplierNOASSERTION {
 		t.Errorf("PackageSupplierNOASSERTION must've been set to true")
 	}
 
@@ -49,8 +49,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageSupplierPerson != personName {
-		t.Errorf("PackageSupplierPerson should be %s. found %s", personName, pkg.PackageSupplierPerson)
+	if pkg.SupplierPerson != personName {
+		t.Errorf("PackageSupplierPerson should be %s. found %s", personName, pkg.SupplierPerson)
 	}
 
 	// TestCase 5: Valid Organization
@@ -61,8 +61,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageSupplierOrganization != orgName {
-		t.Errorf("PackageSupplierPerson should be %s. found %s", orgName, pkg.PackageSupplierOrganization)
+	if pkg.SupplierOrganization != orgName {
+		t.Errorf("PackageSupplierPerson should be %s. found %s", orgName, pkg.SupplierOrganization)
 	}
 
 	// TestCase 6: Invalid EntityType
@@ -83,7 +83,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageOriginatorNOASSERTION {
+	if !pkg.OriginatorNOASSERTION {
 		t.Errorf("PackageOriginatorNOASSERTION must've been set to true")
 	}
 
@@ -94,7 +94,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageOriginatorNOASSERTION {
+	if !pkg.OriginatorNOASSERTION {
 		t.Errorf("PackageOriginatorNOASSERTION must've been set to true")
 	}
 
@@ -114,8 +114,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageOriginatorPerson != personName {
-		t.Errorf("PackageOriginatorPerson should be %s. found %s", personName, pkg.PackageOriginatorPerson)
+	if pkg.OriginatorPerson != personName {
+		t.Errorf("PackageOriginatorPerson should be %s. found %s", personName, pkg.OriginatorPerson)
 	}
 
 	// TestCase 5: Valid Organization
@@ -126,8 +126,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageOriginatorOrganization != orgName {
-		t.Errorf("PackageOriginatorOrganization should be %s. found %s", orgName, pkg.PackageOriginatorOrganization)
+	if pkg.OriginatorOrganization != orgName {
+		t.Errorf("PackageOriginatorOrganization should be %s. found %s", orgName, pkg.OriginatorOrganization)
 	}
 
 	// TestCase 6: Invalid EntityType
@@ -174,12 +174,12 @@ func Test_rdfParser2_2_setPackageVerificationCode(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedValue := "cbceb8b5689b75a584efe35587b5d41bd48820ce"
-	if pkg.PackageVerificationCode != expectedValue {
-		t.Errorf("expected %v, got %v", expectedValue, pkg.PackageVerificationCode)
+	if pkg.VerificationCode != expectedValue {
+		t.Errorf("expected %v, got %v", expectedValue, pkg.VerificationCode)
 	}
 	expectedExcludedFile := "./package.spdx"
-	if pkg.PackageVerificationCodeExcludedFile != expectedExcludedFile {
-		t.Errorf("expected %v, got %v", expectedExcludedFile, pkg.PackageVerificationCodeExcludedFile)
+	if pkg.VerificationCodeExcludedFile != expectedExcludedFile {
+		t.Errorf("expected %v, got %v", expectedExcludedFile, pkg.VerificationCodeExcludedFile)
 	}
 }
 
@@ -447,16 +447,16 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 	}
 	// validating if all the attributes that spanned over two tags are included in the parsed package.
 	expectedID := "upload2"
-	if string(pkg.PackageSPDXIdentifier) != expectedID {
-		t.Errorf("expected package id: %s, got %s", expectedID, pkg.PackageSPDXIdentifier)
+	if string(pkg.SPDXIdentifier) != expectedID {
+		t.Errorf("expected package id: %s, got %s", expectedID, pkg.SPDXIdentifier)
 	}
 	expectedPkgFileName := "packageFileName"
-	if expectedPkgFileName != pkg.PackageFileName {
-		t.Errorf("expected package file name: %s, got %s", expectedPkgFileName, pkg.PackageFileName)
+	if expectedPkgFileName != pkg.FileName {
+		t.Errorf("expected package file name: %s, got %s", expectedPkgFileName, pkg.FileName)
 	}
 	expectedName := "Test Package"
-	if pkg.PackageName != expectedName {
-		t.Errorf("expected package name: %s, got %s", expectedPkgFileName, pkg.PackageName)
+	if pkg.Name != expectedName {
+		t.Errorf("expected package name: %s, got %s", expectedPkgFileName, pkg.Name)
 	}
 
 	// TestCase 8: Checking if packages can handle cyclic dependencies:
@@ -484,11 +484,11 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 	// checking if both the attributes of the packages are set.
 	expectedVersionInfo := "1.1.1"
 	expectedPackageName := "Test Package"
-	if pkg.PackageVersion != expectedVersionInfo {
-		t.Errorf("Expected %s, found %s", expectedVersionInfo, pkg.PackageVersion)
+	if pkg.Version != expectedVersionInfo {
+		t.Errorf("Expected %s, found %s", expectedVersionInfo, pkg.Version)
 	}
-	if pkg.PackageName != expectedPackageName {
-		t.Errorf("Expected %s, found %s", expectedPackageName, pkg.PackageName)
+	if pkg.Name != expectedPackageName {
+		t.Errorf("Expected %s, found %s", expectedPackageName, pkg.Name)
 	}
 
 	// TestCase 9: everything valid
@@ -575,7 +575,7 @@ func Test_rdfParser2_2_setFileToPackage(t *testing.T) {
 	if len(pkg.Files) != 1 {
 		t.Errorf("expected given package to have one file after setting, got %d", len(pkg.Files))
 	}
-	if parser.assocWithPackage[file.FileSPDXIdentifier] != true {
+	if parser.assocWithPackage[file.SPDXIdentifier] != true {
 		t.Errorf("given file should've been associated with a package, assocWithPackage is false")
 	}
 }
@@ -629,7 +629,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumSHA1
+	gotChecksumValue = pkg.ChecksumSHA1
 	if gotChecksumValue != expectedChecksumValue {
 		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
 	}
@@ -648,7 +648,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumSHA256
+	gotChecksumValue = pkg.ChecksumSHA256
 	if gotChecksumValue != expectedChecksumValue {
 		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
 	}
@@ -667,7 +667,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumMD5
+	gotChecksumValue = pkg.ChecksumMD5
 	if gotChecksumValue != expectedChecksumValue {
 		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
 	}
@@ -687,7 +687,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	expectedDocumentLocation = "NOASSERTION"
-	gotDocumentLocation = pkg.PackageDownloadLocation
+	gotDocumentLocation = pkg.DownloadLocation
 	if expectedDocumentLocation != gotDocumentLocation {
 		t.Errorf("expected: %v, got: %v", expectedDocumentLocation, gotDocumentLocation)
 	}
@@ -700,7 +700,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	expectedDocumentLocation = "NONE"
-	gotDocumentLocation = pkg.PackageDownloadLocation
+	gotDocumentLocation = pkg.DownloadLocation
 	if expectedDocumentLocation != gotDocumentLocation {
 		t.Errorf("expected: %v, got: %v", expectedDocumentLocation, gotDocumentLocation)
 	}
@@ -713,7 +713,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	expectedDocumentLocation = "https://www.gnu.org/software/texinfo/"
-	gotDocumentLocation = pkg.PackageDownloadLocation
+	gotDocumentLocation = pkg.DownloadLocation
 	if expectedDocumentLocation != gotDocumentLocation {
 		t.Errorf("expected: %v, got: %v", expectedDocumentLocation, gotDocumentLocation)
 	}

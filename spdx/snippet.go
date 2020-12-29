@@ -7,7 +7,7 @@ type Snippet2_1 struct {
 
 	// 5.1: Snippet SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	SnippetSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 5.2: Snippet from File SPDX Identifier
 	// Cardinality: mandatory, one
@@ -15,17 +15,17 @@ type Snippet2_1 struct {
 
 	// 5.3: Snippet Byte Range: [start byte]:[end byte]
 	// Cardinality: mandatory, one
-	SnippetByteRangeStart int
-	SnippetByteRangeEnd   int
+	ByteRangeStart int
+	ByteRangeEnd   int
 
 	// 5.4: Snippet Line Range: [start line]:[end line]
 	// Cardinality: optional, one
-	SnippetLineRangeStart int
-	SnippetLineRangeEnd   int
+	LineRangeStart int
+	LineRangeEnd   int
 
 	// 5.5: Snippet Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	SnippetLicenseConcluded string
+	LicenseConcluded string
 
 	// 5.6: License Information in Snippet: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: optional, one or many
@@ -33,19 +33,19 @@ type Snippet2_1 struct {
 
 	// 5.7: Snippet Comments on License
 	// Cardinality: optional, one
-	SnippetLicenseComments string
+	LicenseComments string
 
 	// 5.8: Snippet Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	SnippetCopyrightText string
+	CopyrightText string
 
 	// 5.9: Snippet Comment
 	// Cardinality: optional, one
-	SnippetComment string
+	Comment string
 
 	// 5.10: Snippet Name
 	// Cardinality: optional, one
-	SnippetName string
+	Name string
 }
 
 // Snippet2_2 is a Snippet section of an SPDX Document for version 2.2 of the spec.
@@ -53,7 +53,7 @@ type Snippet2_2 struct {
 
 	// 5.1: Snippet SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	SnippetSPDXIdentifier ElementID
+	SPDXIdentifier ElementID
 
 	// 5.2: Snippet from File SPDX Identifier
 	// Cardinality: mandatory, one
@@ -61,17 +61,17 @@ type Snippet2_2 struct {
 
 	// 5.3: Snippet Byte Range: [start byte]:[end byte]
 	// Cardinality: mandatory, one
-	SnippetByteRangeStart int
-	SnippetByteRangeEnd   int
+	ByteRangeStart int
+	ByteRangeEnd   int
 
 	// 5.4: Snippet Line Range: [start line]:[end line]
 	// Cardinality: optional, one
-	SnippetLineRangeStart int
-	SnippetLineRangeEnd   int
+	LineRangeStart int
+	LineRangeEnd   int
 
 	// 5.5: Snippet Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	SnippetLicenseConcluded string
+	LicenseConcluded string
 
 	// 5.6: License Information in Snippet: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: optional, one or many
@@ -79,21 +79,21 @@ type Snippet2_2 struct {
 
 	// 5.7: Snippet Comments on License
 	// Cardinality: optional, one
-	SnippetLicenseComments string
+	LicenseComments string
 
 	// 5.8: Snippet Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	SnippetCopyrightText string
+	CopyrightText string
 
 	// 5.9: Snippet Comment
 	// Cardinality: optional, one
-	SnippetComment string
+	Comment string
 
 	// 5.10: Snippet Name
 	// Cardinality: optional, one
-	SnippetName string
+	Name string
 
 	// 5.11: Snippet Attribution Text
 	// Cardinality: optional, one or many
-	SnippetAttributionTexts []string
+	AttributionTexts []string
 }

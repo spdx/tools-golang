@@ -12,10 +12,10 @@ import (
 // ===== Relationship section Saver tests =====
 func TestSaver2_2RelationshipSavesText(t *testing.T) {
 	rln := &spdx.Relationship2_2{
-		RefA:                spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:                spdx.MakeDocElementID("", "2"),
-		Relationship:        "DESCRIBES",
-		RelationshipComment: "this is a comment",
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "2"),
+		Relationship: "DESCRIBES",
+		Comment:      "this is a comment",
 	}
 
 	// what we want to get, as a buffer of bytes

@@ -13,19 +13,19 @@ type Annotation2_1 struct {
 
 	// 8.2: Annotation Date: YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationDate string
+	Date string
 
 	// 8.3: Annotation Type: "REVIEW" or "OTHER"
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationType string
+	Type string
 
 	// 8.4: SPDX Identifier Reference
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationSPDXIdentifier DocElementID
+	SPDXIdentifier DocElementID
 
 	// 8.5: Annotation Comment
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationComment string
+	Comment string
 }
 
 // Annotation2_2 is an Annotation section of an SPDX Document for version 2.2 of the spec.
@@ -39,17 +39,17 @@ type Annotation2_2 struct {
 
 	// 8.2: Annotation Date: YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationDate string
+	Date string
 
 	// 8.3: Annotation Type: "REVIEW" or "OTHER"
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationType string
+	Type string
 
 	// 8.4: SPDX Identifier Reference
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationSPDXIdentifier DocElementID
+	SPDXIdentifier DocElementID
 
 	// 8.5: Annotation Comment
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
-	AnnotationComment string
+	Comment string
 }

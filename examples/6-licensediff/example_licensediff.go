@@ -90,7 +90,7 @@ func main() {
 			fmt.Printf("Package %s has described relationship in first document but ID not found\n", string(pkgID))
 			continue
 		}
-		fmt.Printf("Package %s (%s)\n", string(pkgID), p1.PackageName)
+		fmt.Printf("Package %s (%s)\n", string(pkgID), p1.Name)
 		p2, okSecond := docSecond.Packages[pkgID]
 		if !okSecond {
 			fmt.Printf("  Found in first document, not found in second\n")
@@ -130,7 +130,7 @@ func main() {
 		_, okFirst := docFirst.Packages[pkgID]
 		if !okFirst {
 			fmt.Printf("================================\n")
-			fmt.Printf("Package %s (%s)\n", string(pkgID), p2.PackageName)
+			fmt.Printf("Package %s (%s)\n", string(pkgID), p2.Name)
 			fmt.Printf("  Found in second document, not found in first\n")
 		}
 	}

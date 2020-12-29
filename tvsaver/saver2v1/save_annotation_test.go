@@ -12,12 +12,12 @@ import (
 // ===== Annotation section Saver tests =====
 func TestSaver2_1AnnotationSavesTextForPerson(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "John Doe",
-		AnnotatorType:            "Person",
-		AnnotationDate:           "2018-10-10T17:52:00Z",
-		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
-		AnnotationComment:        "This is an annotation about the SPDX document",
+		Annotator:      "John Doe",
+		AnnotatorType:  "Person",
+		Date:           "2018-10-10T17:52:00Z",
+		Type:           "REVIEW",
+		SPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		Comment:        "This is an annotation about the SPDX document",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -45,12 +45,12 @@ AnnotationComment: This is an annotation about the SPDX document
 
 func TestSaver2_1AnnotationSavesTextForOrganization(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "John Doe, Inc.",
-		AnnotatorType:            "Organization",
-		AnnotationDate:           "2018-10-10T17:52:00Z",
-		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
-		AnnotationComment:        "This is an annotation about the SPDX document",
+		Annotator:      "John Doe, Inc.",
+		AnnotatorType:  "Organization",
+		Date:           "2018-10-10T17:52:00Z",
+		Type:           "REVIEW",
+		SPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		Comment:        "This is an annotation about the SPDX document",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -78,12 +78,12 @@ AnnotationComment: This is an annotation about the SPDX document
 
 func TestSaver2_1AnnotationSavesTextForTool(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "magictool-1.1",
-		AnnotatorType:            "Tool",
-		AnnotationDate:           "2018-10-10T17:52:00Z",
-		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
-		AnnotationComment:        "This is an annotation about the SPDX document",
+		Annotator:      "magictool-1.1",
+		AnnotatorType:  "Tool",
+		Date:           "2018-10-10T17:52:00Z",
+		Type:           "REVIEW",
+		SPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		Comment:        "This is an annotation about the SPDX document",
 	}
 
 	// what we want to get, as a buffer of bytes

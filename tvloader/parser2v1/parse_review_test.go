@@ -14,11 +14,11 @@ func TestParser2_1ReviewStartsNewReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{
 			Reviewer:     rev1,
@@ -84,11 +84,11 @@ func TestParser2_1ReviewStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{
 			Reviewer:     "Jane Doe",
@@ -131,11 +131,11 @@ func TestParser2_1ReviewStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{
 			Reviewer:     "Jane Doe",
@@ -200,11 +200,11 @@ func TestParser2_1ReviewFailsAfterParsingOtherSectionTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -237,11 +237,11 @@ func TestParser2_1CanParseReviewTags(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -258,8 +258,8 @@ func TestParser2_1CanParseReviewTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.rev.ReviewDate != "2018-09-23T08:30:00Z" {
-		t.Errorf("got %v for ReviewDate", parser.rev.ReviewDate)
+	if parser.rev.Date != "2018-09-23T08:30:00Z" {
+		t.Errorf("got %v for ReviewDate", parser.rev.Date)
 	}
 
 	// Review Comment (DEPRECATED)
@@ -267,8 +267,8 @@ func TestParser2_1CanParseReviewTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.rev.ReviewComment != "this is a comment" {
-		t.Errorf("got %v for ReviewComment", parser.rev.ReviewComment)
+	if parser.rev.Comment != "this is a comment" {
+		t.Errorf("got %v for ReviewComment", parser.rev.Comment)
 	}
 }
 
@@ -276,11 +276,11 @@ func TestParser2_1CanParseReviewerPersonTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -306,11 +306,11 @@ func TestParser2_1CanParseReviewerOrganizationTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -336,11 +336,11 @@ func TestParser2_1CanParseReviewerToolTag(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -364,8 +364,8 @@ func TestParser2_1CanParseReviewerToolTag(t *testing.T) {
 
 func TestParser2_1FailsIfReviewerInvalidFormat(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
-		st:   psReview2_1,
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psReview2_1,
 		rev: &spdx.Review2_1{},
 	}
 	parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
@@ -378,8 +378,8 @@ func TestParser2_1FailsIfReviewerInvalidFormat(t *testing.T) {
 
 func TestParser2_1FailsIfReviewerUnknownType(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
-		st:   psReview2_1,
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psReview2_1,
 		rev: &spdx.Review2_1{},
 	}
 	parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
@@ -394,11 +394,11 @@ func TestParser2_1ReviewUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
 		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
 		st:   psReview2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
-		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		pkg:  &spdx.Package2_1{Name: "test", SPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		file: &spdx.File2_1{Name: "f1.txt", SPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
-			LicenseIdentifier: "LicenseRef-Lic11",
-			LicenseName:       "License 11",
+			Identifier: "LicenseRef-Lic11",
+			Name:       "License 11",
 		},
 		rev: &spdx.Review2_1{},
 	}
@@ -412,5 +412,3 @@ func TestParser2_1ReviewUnknownTagFails(t *testing.T) {
 		t.Errorf("expected error from parsing unknown tag")
 	}
 }
-
-

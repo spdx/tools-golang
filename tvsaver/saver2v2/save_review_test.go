@@ -12,10 +12,10 @@ import (
 // ===== Review section Saver tests =====
 func TestSaver2_2ReviewSavesText(t *testing.T) {
 	rev := &spdx.Review2_2{
-		Reviewer:      "John Doe",
-		ReviewerType:  "Person",
-		ReviewDate:    "2018-10-14T10:28:00Z",
-		ReviewComment: "this is a review comment",
+		Reviewer:     "John Doe",
+		ReviewerType: "Person",
+		Date:         "2018-10-14T10:28:00Z",
+		Comment:      "this is a review comment",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -43,7 +43,7 @@ func TestSaver2_2ReviewOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	rev := &spdx.Review2_2{
 		Reviewer:     "John Doe",
 		ReviewerType: "Person",
-		ReviewDate:   "2018-10-14T10:28:00Z",
+		Date:         "2018-10-14T10:28:00Z",
 	}
 
 	// what we want to get, as a buffer of bytes

@@ -19,13 +19,13 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 	switch tag {
 	case "PackageName":
 		// if package already has a name, create and go on to a new package
-		if parser.pkg == nil || parser.pkg.PackageName != "" {
+		if parser.pkg == nil || parser.pkg.Name != "" {
 			parser.pkg = &spdx.Package2_2{
 				FilesAnalyzed:             true,
 				IsFilesAnalyzedTagPresent: false,
 			}
 		}
-		parser.pkg.PackageName = value
+		parser.pkg.Name = value
 	// tag for going on to file section
 	case "FileName":
 		parser.st = psFile2_2
@@ -39,18 +39,18 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.pkg.PackageSPDXIdentifier = eID
+		parser.pkg.SPDXIdentifier = eID
 		if parser.doc.Packages == nil {
 			parser.doc.Packages = map[spdx.ElementID]*spdx.Package2_2{}
 		}
 		parser.doc.Packages[eID] = parser.pkg
 	case "PackageVersion":
-		parser.pkg.PackageVersion = value
+		parser.pkg.Version = value
 	case "PackageFileName":
-		parser.pkg.PackageFileName = value
+		parser.pkg.FileName = value
 	case "PackageSupplier":
 		if value == "NOASSERTION" {
-			parser.pkg.PackageSupplierNOASSERTION = true
+			parser.pkg.SupplierNOASSERTION = true
 			break
 		}
 		subkey, subvalue, err := extractSubs(value)
@@ -59,15 +59,15 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		switch subkey {
 		case "Person":
-			parser.pkg.PackageSupplierPerson = subvalue
+			parser.pkg.SupplierPerson = subvalue
 		case "Organization":
-			parser.pkg.PackageSupplierOrganization = subvalue
+			parser.pkg.SupplierOrganization = subvalue
 		default:
 			return fmt.Errorf("unrecognized PackageSupplier type %v", subkey)
 		}
 	case "PackageOriginator":
 		if value == "NOASSERTION" {
-			parser.pkg.PackageOriginatorNOASSERTION = true
+			parser.pkg.OriginatorNOASSERTION = true
 			break
 		}
 		subkey, subvalue, err := extractSubs(value)
@@ -76,14 +76,14 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		switch subkey {
 		case "Person":
-			parser.pkg.PackageOriginatorPerson = subvalue
+			parser.pkg.OriginatorPerson = subvalue
 		case "Organization":
-			parser.pkg.PackageOriginatorOrganization = subvalue
+			parser.pkg.OriginatorOrganization = subvalue
 		default:
 			return fmt.Errorf("unrecognized PackageOriginator type %v", subkey)
 		}
 	case "PackageDownloadLocation":
-		parser.pkg.PackageDownloadLocation = value
+		parser.pkg.DownloadLocation = value
 	case "FilesAnalyzed":
 		parser.pkg.IsFilesAnalyzedTagPresent = true
 		if value == "false" {
@@ -93,8 +93,8 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 	case "PackageVerificationCode":
 		code, excludesFileName := extractCodeAndExcludes(value)
-		parser.pkg.PackageVerificationCode = code
-		parser.pkg.PackageVerificationCodeExcludedFile = excludesFileName
+		parser.pkg.VerificationCode = code
+		parser.pkg.VerificationCodeExcludedFile = excludesFileName
 	case "PackageChecksum":
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
@@ -102,39 +102,39 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		switch subkey {
 		case "SHA1":
-			parser.pkg.PackageChecksumSHA1 = subvalue
+			parser.pkg.ChecksumSHA1 = subvalue
 		case "SHA256":
-			parser.pkg.PackageChecksumSHA256 = subvalue
+			parser.pkg.ChecksumSHA256 = subvalue
 		case "MD5":
-			parser.pkg.PackageChecksumMD5 = subvalue
+			parser.pkg.ChecksumMD5 = subvalue
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
 	case "PackageHomePage":
-		parser.pkg.PackageHomePage = value
+		parser.pkg.HomePage = value
 	case "PackageSourceInfo":
-		parser.pkg.PackageSourceInfo = value
+		parser.pkg.SourceInfo = value
 	case "PackageLicenseConcluded":
-		parser.pkg.PackageLicenseConcluded = value
+		parser.pkg.LicenseConcluded = value
 	case "PackageLicenseInfoFromFiles":
-		parser.pkg.PackageLicenseInfoFromFiles = append(parser.pkg.PackageLicenseInfoFromFiles, value)
+		parser.pkg.LicenseInfoFromFiles = append(parser.pkg.LicenseInfoFromFiles, value)
 	case "PackageLicenseDeclared":
-		parser.pkg.PackageLicenseDeclared = value
+		parser.pkg.LicenseDeclared = value
 	case "PackageLicenseComments":
-		parser.pkg.PackageLicenseComments = value
+		parser.pkg.LicenseComments = value
 	case "PackageCopyrightText":
-		parser.pkg.PackageCopyrightText = value
+		parser.pkg.CopyrightText = value
 	case "PackageSummary":
-		parser.pkg.PackageSummary = value
+		parser.pkg.Summary = value
 	case "PackageDescription":
-		parser.pkg.PackageDescription = value
+		parser.pkg.Description = value
 	case "PackageComment":
-		parser.pkg.PackageComment = value
+		parser.pkg.Comment = value
 	case "PackageAttributionText":
-		parser.pkg.PackageAttributionTexts = append(parser.pkg.PackageAttributionTexts, value)
+		parser.pkg.AttributionTexts = append(parser.pkg.AttributionTexts, value)
 	case "ExternalRef":
 		parser.pkgExtRef = &spdx.PackageExternalReference2_2{}
-		parser.pkg.PackageExternalReferences = append(parser.pkg.PackageExternalReferences, parser.pkgExtRef)
+		parser.pkg.ExternalReferences = append(parser.pkg.ExternalReferences, parser.pkgExtRef)
 		category, refType, locator, err := extractPackageExternalReference(value)
 		if err != nil {
 			return err

@@ -10,20 +10,20 @@ import (
 )
 
 func renderOtherLicense2_1(ol *spdx.OtherLicense2_1, w io.Writer) error {
-	if ol.LicenseIdentifier != "" {
-		fmt.Fprintf(w, "LicenseID: %s\n", ol.LicenseIdentifier)
+	if ol.Identifier != "" {
+		fmt.Fprintf(w, "LicenseID: %s\n", ol.Identifier)
 	}
 	if ol.ExtractedText != "" {
 		fmt.Fprintf(w, "ExtractedText: %s\n", textify(ol.ExtractedText))
 	}
-	if ol.LicenseName != "" {
-		fmt.Fprintf(w, "LicenseName: %s\n", ol.LicenseName)
+	if ol.Name != "" {
+		fmt.Fprintf(w, "LicenseName: %s\n", ol.Name)
 	}
-	for _, s := range ol.LicenseCrossReferences {
+	for _, s := range ol.CrossReferences {
 		fmt.Fprintf(w, "LicenseCrossReference: %s\n", s)
 	}
-	if ol.LicenseComment != "" {
-		fmt.Fprintf(w, "LicenseComment: %s\n", textify(ol.LicenseComment))
+	if ol.Comment != "" {
+		fmt.Fprintf(w, "LicenseComment: %s\n", textify(ol.Comment))
 	}
 
 	fmt.Fprintf(w, "\n")

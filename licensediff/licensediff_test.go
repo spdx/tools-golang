@@ -13,152 +13,152 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	// create files to be used in diff
 	// f1 will be identical in both
 	f1 := &spdx.File2_1{
-		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/project/file1.txt",
+		SPDXIdentifier:   spdx.ElementID("File561"),
+		ChecksumSHA1:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
 		},
-		FileCopyrightText: "We'll ignore copyright values",
+		CopyrightText: "We'll ignore copyright values",
 	}
 
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_1{
-		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
-		LicenseConcluded:   "GPL-2.0-or-later",
+		Name:             "/project/file2.txt",
+		SPDXIdentifier:   spdx.ElementID("File562"),
+		ChecksumSHA1:     "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_1{
-		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
-		LicenseConcluded:   "MPL-2.0",
+		Name:             "/project/file3.txt",
+		SPDXIdentifier:   spdx.ElementID("File563"),
+		ChecksumSHA1:     "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f4_1 and f4_2 will appear in first and second,
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_1{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f4_2 := &spdx.File2_1{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "Apache-2.0 AND MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f5_1 and f5_2 will appear in first and second,
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_1{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f5_2 := &spdx.File2_1{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f6_1 and f6_2 will appear in first and second,
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_1{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "CC0-1.0",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f6_2 := &spdx.File2_1{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "Unlicense",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "abc123abc123",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f2.SPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.SPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.SPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.SPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p2",
+		SPDXIdentifier:            spdx.ElementID("p2"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "def456def456",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f3.SPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.SPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.SPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.SPDXIdentifier): f6_2,
 		},
 	}
 
@@ -252,152 +252,152 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	// create files to be used in diff
 	// f1 will be identical in both
 	f1 := &spdx.File2_1{
-		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/project/file1.txt",
+		SPDXIdentifier:   spdx.ElementID("File561"),
+		ChecksumSHA1:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
 		},
-		FileCopyrightText: "We'll ignore copyright values",
+		CopyrightText: "We'll ignore copyright values",
 	}
 
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_1{
-		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
-		LicenseConcluded:   "GPL-2.0-or-later",
+		Name:             "/project/file2.txt",
+		SPDXIdentifier:   spdx.ElementID("File562"),
+		ChecksumSHA1:     "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_1{
-		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
-		LicenseConcluded:   "MPL-2.0",
+		Name:             "/project/file3.txt",
+		SPDXIdentifier:   spdx.ElementID("File563"),
+		ChecksumSHA1:     "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f4_1 and f4_2 will appear in first and second,
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_1{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f4_2 := &spdx.File2_1{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "Apache-2.0 AND MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f5_1 and f5_2 will appear in first and second,
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_1{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f5_2 := &spdx.File2_1{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f6_1 and f6_2 will appear in first and second,
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_1{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "CC0-1.0",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f6_2 := &spdx.File2_1{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "Unlicense",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// create Packages
 	p1 := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "abc123abc123",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f2.SPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.SPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.SPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.SPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p2",
+		SPDXIdentifier:            spdx.ElementID("p2"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "def456def456",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f3.SPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.SPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.SPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.SPDXIdentifier): f6_2,
 		},
 	}
 
@@ -499,152 +499,152 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	// create files to be used in diff
 	// f1 will be identical in both
 	f1 := &spdx.File2_2{
-		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/project/file1.txt",
+		SPDXIdentifier:   spdx.ElementID("File561"),
+		ChecksumSHA1:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
 		},
-		FileCopyrightText: "We'll ignore copyright values",
+		CopyrightText: "We'll ignore copyright values",
 	}
 
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_2{
-		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
-		LicenseConcluded:   "GPL-2.0-or-later",
+		Name:             "/project/file2.txt",
+		SPDXIdentifier:   spdx.ElementID("File562"),
+		ChecksumSHA1:     "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_2{
-		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
-		LicenseConcluded:   "MPL-2.0",
+		Name:             "/project/file3.txt",
+		SPDXIdentifier:   spdx.ElementID("File563"),
+		ChecksumSHA1:     "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f4_1 and f4_2 will appear in first and second,
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_2{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f4_2 := &spdx.File2_2{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "Apache-2.0 AND MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f5_1 and f5_2 will appear in first and second,
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_2{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f5_2 := &spdx.File2_2{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f6_1 and f6_2 will appear in first and second,
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_2{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "CC0-1.0",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f6_2 := &spdx.File2_2{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "Unlicense",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// create Packages
 	p1 := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "abc123abc123",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f2.SPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.SPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.SPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.SPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_2{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p2",
+		SPDXIdentifier:            spdx.ElementID("p2"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "def456def456",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f3.SPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.SPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.SPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.SPDXIdentifier): f6_2,
 		},
 	}
 
@@ -738,152 +738,152 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	// create files to be used in diff
 	// f1 will be identical in both
 	f1 := &spdx.File2_2{
-		FileName:           "/project/file1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-		LicenseConcluded:   "Apache-2.0",
+		Name:             "/project/file1.txt",
+		SPDXIdentifier:   spdx.ElementID("File561"),
+		ChecksumSHA1:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
 		},
-		FileCopyrightText: "We'll ignore copyright values",
+		CopyrightText: "We'll ignore copyright values",
 	}
 
 	// f2 will only appear in the first Package
 	f2 := &spdx.File2_2{
-		FileName:           "/project/file2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
-		LicenseConcluded:   "GPL-2.0-or-later",
+		Name:             "/project/file2.txt",
+		SPDXIdentifier:   spdx.ElementID("File562"),
+		ChecksumSHA1:     "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f3 will only appear in the second Package
 	f3 := &spdx.File2_2{
-		FileName:           "/project/file3.txt",
-		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
-		LicenseConcluded:   "MPL-2.0",
+		Name:             "/project/file3.txt",
+		SPDXIdentifier:   spdx.ElementID("File563"),
+		ChecksumSHA1:     "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f4_1 and f4_2 will appear in first and second,
 	// with same name, same hash and different license
 	f4_1 := &spdx.File2_2{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f4_2 := &spdx.File2_2{
-		FileName:           "/project/file4.txt",
-		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
-		LicenseConcluded:   "Apache-2.0 AND MIT",
+		Name:             "/project/file4.txt",
+		SPDXIdentifier:   spdx.ElementID("File564"),
+		ChecksumSHA1:     "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f5_1 and f5_2 will appear in first and second,
 	// with same name, different hash and same license
 	f5_1 := &spdx.File2_2{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f5_2 := &spdx.File2_2{
-		FileName:           "/project/file5.txt",
-		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "BSD-3-Clause",
+		Name:             "/project/file5.txt",
+		SPDXIdentifier:   spdx.ElementID("File565"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// f6_1 and f6_2 will appear in first and second,
 	// with same name, different hash and different license
 	f6_1 := &spdx.File2_2{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
-		LicenseConcluded:   "CC0-1.0",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "ba226db943bbbf455da77afab6f16dbab156d000",
+		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 	f6_2 := &spdx.File2_2{
-		FileName:           "/project/file6.txt",
-		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
-		LicenseConcluded:   "Unlicense",
+		Name:             "/project/file6.txt",
+		SPDXIdentifier:   spdx.ElementID("File566"),
+		ChecksumSHA1:     "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
 		},
-		FileCopyrightText: "NOASSERTION",
+		CopyrightText: "NOASSERTION",
 	}
 
 	// create Packages
 	p1 := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "abc123abc123",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f2.SPDXIdentifier):   f2,
+			spdx.ElementID(f4_1.SPDXIdentifier): f4_1,
+			spdx.ElementID(f5_1.SPDXIdentifier): f5_1,
+			spdx.ElementID(f6_1.SPDXIdentifier): f6_1,
 		},
 	}
 	p2 := &spdx.Package2_2{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
+		Name:                      "p2",
+		SPDXIdentifier:            spdx.ElementID("p2"),
+		DownloadLocation:          "NOASSERTION",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
-		PackageLicenseConcluded: "NOASSERTION",
-		PackageLicenseInfoFromFiles: []string{
+		VerificationCode: "def456def456",
+		LicenseConcluded: "NOASSERTION",
+		LicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
-		PackageLicenseDeclared: "NOASSERTION",
-		PackageCopyrightText:   "NOASSERTION",
+		LicenseDeclared: "NOASSERTION",
+		CopyrightText:   "NOASSERTION",
 		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+			spdx.ElementID(f1.SPDXIdentifier):   f1,
+			spdx.ElementID(f3.SPDXIdentifier):   f3,
+			spdx.ElementID(f4_2.SPDXIdentifier): f4_2,
+			spdx.ElementID(f5_2.SPDXIdentifier): f5_2,
+			spdx.ElementID(f6_2.SPDXIdentifier): f6_2,
 		},
 	}
 

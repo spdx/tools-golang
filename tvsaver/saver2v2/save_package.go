@@ -11,38 +11,38 @@ import (
 )
 
 func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
-	if pkg.PackageName != "" {
-		fmt.Fprintf(w, "PackageName: %s\n", pkg.PackageName)
+	if pkg.Name != "" {
+		fmt.Fprintf(w, "PackageName: %s\n", pkg.Name)
 	}
-	if pkg.PackageSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(pkg.PackageSPDXIdentifier))
+	if pkg.SPDXIdentifier != "" {
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(pkg.SPDXIdentifier))
 	}
-	if pkg.PackageVersion != "" {
-		fmt.Fprintf(w, "PackageVersion: %s\n", pkg.PackageVersion)
+	if pkg.Version != "" {
+		fmt.Fprintf(w, "PackageVersion: %s\n", pkg.Version)
 	}
-	if pkg.PackageFileName != "" {
-		fmt.Fprintf(w, "PackageFileName: %s\n", pkg.PackageFileName)
+	if pkg.FileName != "" {
+		fmt.Fprintf(w, "PackageFileName: %s\n", pkg.FileName)
 	}
-	if pkg.PackageSupplierPerson != "" {
-		fmt.Fprintf(w, "PackageSupplier: Person: %s\n", pkg.PackageSupplierPerson)
+	if pkg.SupplierPerson != "" {
+		fmt.Fprintf(w, "PackageSupplier: Person: %s\n", pkg.SupplierPerson)
 	}
-	if pkg.PackageSupplierOrganization != "" {
-		fmt.Fprintf(w, "PackageSupplier: Organization: %s\n", pkg.PackageSupplierOrganization)
+	if pkg.SupplierOrganization != "" {
+		fmt.Fprintf(w, "PackageSupplier: Organization: %s\n", pkg.SupplierOrganization)
 	}
-	if pkg.PackageSupplierNOASSERTION == true {
+	if pkg.SupplierNOASSERTION == true {
 		fmt.Fprintf(w, "PackageSupplier: NOASSERTION\n")
 	}
-	if pkg.PackageOriginatorPerson != "" {
-		fmt.Fprintf(w, "PackageOriginator: Person: %s\n", pkg.PackageOriginatorPerson)
+	if pkg.OriginatorPerson != "" {
+		fmt.Fprintf(w, "PackageOriginator: Person: %s\n", pkg.OriginatorPerson)
 	}
-	if pkg.PackageOriginatorOrganization != "" {
-		fmt.Fprintf(w, "PackageOriginator: Organization: %s\n", pkg.PackageOriginatorOrganization)
+	if pkg.OriginatorOrganization != "" {
+		fmt.Fprintf(w, "PackageOriginator: Organization: %s\n", pkg.OriginatorOrganization)
 	}
-	if pkg.PackageOriginatorNOASSERTION == true {
+	if pkg.OriginatorNOASSERTION == true {
 		fmt.Fprintf(w, "PackageOriginator: NOASSERTION\n")
 	}
-	if pkg.PackageDownloadLocation != "" {
-		fmt.Fprintf(w, "PackageDownloadLocation: %s\n", pkg.PackageDownloadLocation)
+	if pkg.DownloadLocation != "" {
+		fmt.Fprintf(w, "PackageDownloadLocation: %s\n", pkg.DownloadLocation)
 	}
 	if pkg.FilesAnalyzed == true {
 		if pkg.IsFilesAnalyzedTagPresent == true {
@@ -51,61 +51,61 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	} else {
 		fmt.Fprintf(w, "FilesAnalyzed: false\n")
 	}
-	if pkg.PackageVerificationCode != "" && pkg.FilesAnalyzed == true {
-		if pkg.PackageVerificationCodeExcludedFile == "" {
-			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode)
+	if pkg.VerificationCode != "" && pkg.FilesAnalyzed == true {
+		if pkg.VerificationCodeExcludedFile == "" {
+			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.VerificationCode)
 		} else {
-			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
+			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes %s)\n", pkg.VerificationCode, pkg.VerificationCodeExcludedFile)
 		}
 	}
-	if pkg.PackageChecksumSHA1 != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA1: %s\n", pkg.PackageChecksumSHA1)
+	if pkg.ChecksumSHA1 != "" {
+		fmt.Fprintf(w, "PackageChecksum: SHA1: %s\n", pkg.ChecksumSHA1)
 	}
-	if pkg.PackageChecksumSHA256 != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA256: %s\n", pkg.PackageChecksumSHA256)
+	if pkg.ChecksumSHA256 != "" {
+		fmt.Fprintf(w, "PackageChecksum: SHA256: %s\n", pkg.ChecksumSHA256)
 	}
-	if pkg.PackageChecksumMD5 != "" {
-		fmt.Fprintf(w, "PackageChecksum: MD5: %s\n", pkg.PackageChecksumMD5)
+	if pkg.ChecksumMD5 != "" {
+		fmt.Fprintf(w, "PackageChecksum: MD5: %s\n", pkg.ChecksumMD5)
 	}
-	if pkg.PackageHomePage != "" {
-		fmt.Fprintf(w, "PackageHomePage: %s\n", pkg.PackageHomePage)
+	if pkg.HomePage != "" {
+		fmt.Fprintf(w, "PackageHomePage: %s\n", pkg.HomePage)
 	}
-	if pkg.PackageSourceInfo != "" {
-		fmt.Fprintf(w, "PackageSourceInfo: %s\n", textify(pkg.PackageSourceInfo))
+	if pkg.SourceInfo != "" {
+		fmt.Fprintf(w, "PackageSourceInfo: %s\n", textify(pkg.SourceInfo))
 	}
-	if pkg.PackageLicenseConcluded != "" {
-		fmt.Fprintf(w, "PackageLicenseConcluded: %s\n", pkg.PackageLicenseConcluded)
+	if pkg.LicenseConcluded != "" {
+		fmt.Fprintf(w, "PackageLicenseConcluded: %s\n", pkg.LicenseConcluded)
 	}
 	if pkg.FilesAnalyzed == true {
-		for _, s := range pkg.PackageLicenseInfoFromFiles {
+		for _, s := range pkg.LicenseInfoFromFiles {
 			fmt.Fprintf(w, "PackageLicenseInfoFromFiles: %s\n", s)
 		}
 	}
-	if pkg.PackageLicenseDeclared != "" {
-		fmt.Fprintf(w, "PackageLicenseDeclared: %s\n", pkg.PackageLicenseDeclared)
+	if pkg.LicenseDeclared != "" {
+		fmt.Fprintf(w, "PackageLicenseDeclared: %s\n", pkg.LicenseDeclared)
 	}
-	if pkg.PackageLicenseComments != "" {
-		fmt.Fprintf(w, "PackageLicenseComments: %s\n", textify(pkg.PackageLicenseComments))
+	if pkg.LicenseComments != "" {
+		fmt.Fprintf(w, "PackageLicenseComments: %s\n", textify(pkg.LicenseComments))
 	}
-	if pkg.PackageCopyrightText != "" {
-		fmt.Fprintf(w, "PackageCopyrightText: %s\n", pkg.PackageCopyrightText)
+	if pkg.CopyrightText != "" {
+		fmt.Fprintf(w, "PackageCopyrightText: %s\n", pkg.CopyrightText)
 	}
-	if pkg.PackageSummary != "" {
-		fmt.Fprintf(w, "PackageSummary: %s\n", textify(pkg.PackageSummary))
+	if pkg.Summary != "" {
+		fmt.Fprintf(w, "PackageSummary: %s\n", textify(pkg.Summary))
 	}
-	if pkg.PackageDescription != "" {
-		fmt.Fprintf(w, "PackageDescription: %s\n", textify(pkg.PackageDescription))
+	if pkg.Description != "" {
+		fmt.Fprintf(w, "PackageDescription: %s\n", textify(pkg.Description))
 	}
-	if pkg.PackageComment != "" {
-		fmt.Fprintf(w, "PackageComment: %s\n", textify(pkg.PackageComment))
+	if pkg.Comment != "" {
+		fmt.Fprintf(w, "PackageComment: %s\n", textify(pkg.Comment))
 	}
-	for _, s := range pkg.PackageExternalReferences {
+	for _, s := range pkg.ExternalReferences {
 		fmt.Fprintf(w, "ExternalRef: %s %s %s\n", s.Category, s.RefType, s.Locator)
 		if s.ExternalRefComment != "" {
 			fmt.Fprintf(w, "ExternalRefComment: %s\n", s.ExternalRefComment)
 		}
 	}
-	for _, s := range pkg.PackageAttributionTexts {
+	for _, s := range pkg.AttributionTexts {
 		fmt.Fprintf(w, "PackageAttributionText: %s\n", textify(s))
 	}
 

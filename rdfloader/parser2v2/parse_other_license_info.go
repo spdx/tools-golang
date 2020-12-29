@@ -28,10 +28,10 @@ func (parser *rdfParser2_2) getExtractedLicensingInfoFromNode(node *gordfParser.
 }
 
 func (parser *rdfParser2_2) extractedLicenseToOtherLicense(extLicense ExtractedLicensingInfo) (othLic spdx.OtherLicense2_2) {
-	othLic.LicenseIdentifier = extLicense.licenseID
+	othLic.Identifier = extLicense.licenseID
 	othLic.ExtractedText = extLicense.extractedText
-	othLic.LicenseComment = extLicense.comment
-	othLic.LicenseCrossReferences = extLicense.seeAlso
-	othLic.LicenseName = extLicense.name
+	othLic.Comment = extLicense.comment
+	othLic.CrossReferences = extLicense.seeAlso
+	othLic.Name = extLicense.name
 	return othLic
 }

@@ -78,32 +78,32 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
-	if pkg.PackageName != "project1" {
-		t.Errorf("expected %v, got %v", "project1", pkg.PackageName)
+	if pkg.Name != "project1" {
+		t.Errorf("expected %v, got %v", "project1", pkg.Name)
 	}
-	if pkg.PackageSPDXIdentifier != spdx.ElementID("Package-project1") {
-		t.Errorf("expected %v, got %v", "Package-project1", pkg.PackageSPDXIdentifier)
+	if pkg.SPDXIdentifier != spdx.ElementID("Package-project1") {
+		t.Errorf("expected %v, got %v", "Package-project1", pkg.SPDXIdentifier)
 	}
-	if pkg.PackageDownloadLocation != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
+	if pkg.DownloadLocation != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.DownloadLocation)
 	}
 	if pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
-	if pkg.PackageVerificationCode != wantVerificationCode {
-		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
+	if pkg.VerificationCode != wantVerificationCode {
+		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.VerificationCode)
 	}
-	if pkg.PackageLicenseConcluded != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageLicenseConcluded)
+	if pkg.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.LicenseConcluded)
 	}
-	if len(pkg.PackageLicenseInfoFromFiles) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(pkg.PackageLicenseInfoFromFiles))
+	if len(pkg.LicenseInfoFromFiles) != 0 {
+		t.Errorf("expected %v, got %v", 0, len(pkg.LicenseInfoFromFiles))
 	}
-	if pkg.PackageLicenseDeclared != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageLicenseDeclared)
+	if pkg.LicenseDeclared != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.LicenseDeclared)
 	}
-	if pkg.PackageCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageCopyrightText)
+	if pkg.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.CopyrightText)
 	}
 
 	// check Files section
@@ -123,20 +123,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
+	if fileEmpty.Name != "/emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.Name)
 	}
-	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
-		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
+	if fileEmpty.SPDXIdentifier != spdx.ElementID("File0") {
+		t.Errorf("expected %v, got %v", "File0", fileEmpty.SPDXIdentifier)
 	}
-	if fileEmpty.FileChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
-		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.FileChecksumSHA1)
+	if fileEmpty.ChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
+		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.ChecksumSHA1)
 	}
-	if fileEmpty.FileChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
-		t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.FileChecksumSHA256)
+	if fileEmpty.ChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
+		t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.ChecksumSHA256)
 	}
-	if fileEmpty.FileChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
-		t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.FileChecksumMD5)
+	if fileEmpty.ChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
+		t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.ChecksumMD5)
 	}
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
@@ -144,8 +144,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(fileEmpty.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(fileEmpty.LicenseInfoInFile))
 	}
-	if fileEmpty.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
+	if fileEmpty.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.CopyrightText)
 	}
 
 	// check file1.testdata.txt
@@ -153,20 +153,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.Name != "/file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.Name)
 	}
-	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
-		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
+	if file1.SPDXIdentifier != spdx.ElementID("File1") {
+		t.Errorf("expected %v, got %v", "File1", file1.SPDXIdentifier)
 	}
-	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
-		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
+	if file1.ChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
+		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.ChecksumSHA1)
 	}
-	if file1.FileChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
-		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.FileChecksumSHA256)
+	if file1.ChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
+		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.ChecksumSHA256)
 	}
-	if file1.FileChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
-		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.FileChecksumMD5)
+	if file1.ChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
+		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.ChecksumMD5)
 	}
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
@@ -174,8 +174,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(file1.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
 	}
-	if file1.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
+	if file1.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file1.CopyrightText)
 	}
 
 	// check file3.testdata.txt
@@ -183,20 +183,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file3.FileName != "/file3.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
+	if file3.Name != "/file3.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.Name)
 	}
-	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
-		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
+	if file3.SPDXIdentifier != spdx.ElementID("File2") {
+		t.Errorf("expected %v, got %v", "File2", file3.SPDXIdentifier)
 	}
-	if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
-		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
+	if file3.ChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
+		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.ChecksumSHA1)
 	}
-	if file3.FileChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
-		t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.FileChecksumSHA256)
+	if file3.ChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
+		t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.ChecksumSHA256)
 	}
-	if file3.FileChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
-		t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.FileChecksumMD5)
+	if file3.ChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
+		t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.ChecksumMD5)
 	}
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
@@ -204,8 +204,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(file3.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file3.LicenseInfoInFile))
 	}
-	if file3.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file3.FileCopyrightText)
+	if file3.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file3.CopyrightText)
 	}
 
 	// check folder1/file4.testdata.txt
@@ -213,20 +213,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file4.FileName != "/folder1/file4.testdata.txt" {
-		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
+	if file4.Name != "/folder1/file4.testdata.txt" {
+		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.Name)
 	}
-	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
-		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
+	if file4.SPDXIdentifier != spdx.ElementID("File3") {
+		t.Errorf("expected %v, got %v", "File3", file4.SPDXIdentifier)
 	}
-	if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
-		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
+	if file4.ChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
+		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.ChecksumSHA1)
 	}
-	if file4.FileChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
-		t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.FileChecksumSHA256)
+	if file4.ChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
+		t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.ChecksumSHA256)
 	}
-	if file4.FileChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
-		t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.FileChecksumMD5)
+	if file4.ChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
+		t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.ChecksumMD5)
 	}
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
@@ -234,8 +234,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(file4.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file4.LicenseInfoInFile))
 	}
-	if file4.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file4.FileCopyrightText)
+	if file4.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file4.CopyrightText)
 	}
 
 	// check lastfile.testdata.txt
@@ -243,20 +243,20 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if lastfile.FileName != "/lastfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
+	if lastfile.Name != "/lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.Name)
 	}
-	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
-		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
+	if lastfile.SPDXIdentifier != spdx.ElementID("File4") {
+		t.Errorf("expected %v, got %v", "File4", lastfile.SPDXIdentifier)
 	}
-	if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
-		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
+	if lastfile.ChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
+		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.ChecksumSHA1)
 	}
-	if lastfile.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
-		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.FileChecksumSHA256)
+	if lastfile.ChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
+		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.ChecksumSHA256)
 	}
-	if lastfile.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
-		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.FileChecksumMD5)
+	if lastfile.ChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
+		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.ChecksumMD5)
 	}
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
@@ -264,8 +264,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(lastfile.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(lastfile.LicenseInfoInFile))
 	}
-	if lastfile.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.FileCopyrightText)
+	if lastfile.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.CopyrightText)
 	}
 
 	// check Relationship section -- should be a relationship for doc DESCRIBES pkg
@@ -332,31 +332,31 @@ func TestBuild2_1CanIgnoreFiles(t *testing.T) {
 	}
 
 	want := "/dontscan.txt"
-	got := pkg.Files[spdx.ElementID("File0")].FileName
+	got := pkg.Files[spdx.ElementID("File0")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File1")].FileName
+	got = pkg.Files[spdx.ElementID("File1")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep.txt"
-	got = pkg.Files[spdx.ElementID("File2")].FileName
+	got = pkg.Files[spdx.ElementID("File2")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/dontscan.txt"
-	got = pkg.Files[spdx.ElementID("File3")].FileName
+	got = pkg.Files[spdx.ElementID("File3")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File4")].FileName
+	got = pkg.Files[spdx.ElementID("File4")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
@@ -431,32 +431,32 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
-	if pkg.PackageName != "project1" {
-		t.Errorf("expected %v, got %v", "project1", pkg.PackageName)
+	if pkg.Name != "project1" {
+		t.Errorf("expected %v, got %v", "project1", pkg.Name)
 	}
-	if pkg.PackageSPDXIdentifier != spdx.ElementID("Package-project1") {
-		t.Errorf("expected %v, got %v", "Package-project1", pkg.PackageSPDXIdentifier)
+	if pkg.SPDXIdentifier != spdx.ElementID("Package-project1") {
+		t.Errorf("expected %v, got %v", "Package-project1", pkg.SPDXIdentifier)
 	}
-	if pkg.PackageDownloadLocation != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
+	if pkg.DownloadLocation != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.DownloadLocation)
 	}
 	if pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
-	if pkg.PackageVerificationCode != wantVerificationCode {
-		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
+	if pkg.VerificationCode != wantVerificationCode {
+		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.VerificationCode)
 	}
-	if pkg.PackageLicenseConcluded != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageLicenseConcluded)
+	if pkg.LicenseConcluded != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.LicenseConcluded)
 	}
-	if len(pkg.PackageLicenseInfoFromFiles) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(pkg.PackageLicenseInfoFromFiles))
+	if len(pkg.LicenseInfoFromFiles) != 0 {
+		t.Errorf("expected %v, got %v", 0, len(pkg.LicenseInfoFromFiles))
 	}
-	if pkg.PackageLicenseDeclared != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageLicenseDeclared)
+	if pkg.LicenseDeclared != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.LicenseDeclared)
 	}
-	if pkg.PackageCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageCopyrightText)
+	if pkg.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.CopyrightText)
 	}
 
 	// check Files section
@@ -476,20 +476,20 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
+	if fileEmpty.Name != "/emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.Name)
 	}
-	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
-		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
+	if fileEmpty.SPDXIdentifier != spdx.ElementID("File0") {
+		t.Errorf("expected %v, got %v", "File0", fileEmpty.SPDXIdentifier)
 	}
-	if fileEmpty.FileChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
-		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.FileChecksumSHA1)
+	if fileEmpty.ChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
+		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.ChecksumSHA1)
 	}
-	if fileEmpty.FileChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
-		t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.FileChecksumSHA256)
+	if fileEmpty.ChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
+		t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.ChecksumSHA256)
 	}
-	if fileEmpty.FileChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
-		t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.FileChecksumMD5)
+	if fileEmpty.ChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
+		t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.ChecksumMD5)
 	}
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
@@ -497,8 +497,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(fileEmpty.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(fileEmpty.LicenseInfoInFile))
 	}
-	if fileEmpty.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
+	if fileEmpty.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.CopyrightText)
 	}
 
 	// check file1.testdata.txt
@@ -506,20 +506,20 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.Name != "/file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.Name)
 	}
-	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
-		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
+	if file1.SPDXIdentifier != spdx.ElementID("File1") {
+		t.Errorf("expected %v, got %v", "File1", file1.SPDXIdentifier)
 	}
-	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
-		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
+	if file1.ChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
+		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.ChecksumSHA1)
 	}
-	if file1.FileChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
-		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.FileChecksumSHA256)
+	if file1.ChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
+		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.ChecksumSHA256)
 	}
-	if file1.FileChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
-		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.FileChecksumMD5)
+	if file1.ChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
+		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.ChecksumMD5)
 	}
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
@@ -527,8 +527,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(file1.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
 	}
-	if file1.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
+	if file1.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file1.CopyrightText)
 	}
 
 	// check file3.testdata.txt
@@ -536,20 +536,20 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file3.FileName != "/file3.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
+	if file3.Name != "/file3.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.Name)
 	}
-	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
-		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
+	if file3.SPDXIdentifier != spdx.ElementID("File2") {
+		t.Errorf("expected %v, got %v", "File2", file3.SPDXIdentifier)
 	}
-	if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
-		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
+	if file3.ChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
+		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.ChecksumSHA1)
 	}
-	if file3.FileChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
-		t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.FileChecksumSHA256)
+	if file3.ChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
+		t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.ChecksumSHA256)
 	}
-	if file3.FileChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
-		t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.FileChecksumMD5)
+	if file3.ChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
+		t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.ChecksumMD5)
 	}
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
@@ -557,8 +557,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(file3.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file3.LicenseInfoInFile))
 	}
-	if file3.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file3.FileCopyrightText)
+	if file3.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file3.CopyrightText)
 	}
 
 	// check folder1/file4.testdata.txt
@@ -566,20 +566,20 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file4.FileName != "/folder1/file4.testdata.txt" {
-		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
+	if file4.Name != "/folder1/file4.testdata.txt" {
+		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.Name)
 	}
-	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
-		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
+	if file4.SPDXIdentifier != spdx.ElementID("File3") {
+		t.Errorf("expected %v, got %v", "File3", file4.SPDXIdentifier)
 	}
-	if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
-		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
+	if file4.ChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
+		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.ChecksumSHA1)
 	}
-	if file4.FileChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
-		t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.FileChecksumSHA256)
+	if file4.ChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
+		t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.ChecksumSHA256)
 	}
-	if file4.FileChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
-		t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.FileChecksumMD5)
+	if file4.ChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
+		t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.ChecksumMD5)
 	}
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
@@ -587,8 +587,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(file4.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(file4.LicenseInfoInFile))
 	}
-	if file4.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", file4.FileCopyrightText)
+	if file4.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", file4.CopyrightText)
 	}
 
 	// check lastfile.testdata.txt
@@ -596,20 +596,20 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if lastfile.FileName != "/lastfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
+	if lastfile.Name != "/lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.Name)
 	}
-	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
-		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
+	if lastfile.SPDXIdentifier != spdx.ElementID("File4") {
+		t.Errorf("expected %v, got %v", "File4", lastfile.SPDXIdentifier)
 	}
-	if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
-		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
+	if lastfile.ChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
+		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.ChecksumSHA1)
 	}
-	if lastfile.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
-		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.FileChecksumSHA256)
+	if lastfile.ChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
+		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.ChecksumSHA256)
 	}
-	if lastfile.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
-		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.FileChecksumMD5)
+	if lastfile.ChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
+		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.ChecksumMD5)
 	}
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
@@ -617,8 +617,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(lastfile.LicenseInfoInFile) != 0 {
 		t.Errorf("expected %v, got %v", 0, len(lastfile.LicenseInfoInFile))
 	}
-	if lastfile.FileCopyrightText != "NOASSERTION" {
-		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.FileCopyrightText)
+	if lastfile.CopyrightText != "NOASSERTION" {
+		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.CopyrightText)
 	}
 
 	// check Relationship section -- should be a relationship for doc DESCRIBES pkg
@@ -685,31 +685,31 @@ func TestBuild2_2CanIgnoreFiles(t *testing.T) {
 	}
 
 	want := "/dontscan.txt"
-	got := pkg.Files[spdx.ElementID("File0")].FileName
+	got := pkg.Files[spdx.ElementID("File0")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File1")].FileName
+	got = pkg.Files[spdx.ElementID("File1")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/keep.txt"
-	got = pkg.Files[spdx.ElementID("File2")].FileName
+	got = pkg.Files[spdx.ElementID("File2")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/dontscan.txt"
-	got = pkg.Files[spdx.ElementID("File3")].FileName
+	got = pkg.Files[spdx.ElementID("File3")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "/subdir/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File4")].FileName
+	got = pkg.Files[spdx.ElementID("File4")].Name
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}

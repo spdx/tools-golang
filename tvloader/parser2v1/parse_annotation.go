@@ -24,17 +24,17 @@ func (parser *tvParser2_1) parsePairForAnnotation2_1(tag string, value string) e
 		}
 		return fmt.Errorf("unrecognized Annotator type %v", subkey)
 	case "AnnotationDate":
-		parser.ann.AnnotationDate = value
+		parser.ann.Date = value
 	case "AnnotationType":
-		parser.ann.AnnotationType = value
+		parser.ann.Type = value
 	case "SPDXREF":
 		deID, err := extractDocElementID(value)
 		if err != nil {
 			return err
 		}
-		parser.ann.AnnotationSPDXIdentifier = deID
+		parser.ann.SPDXIdentifier = deID
 	case "AnnotationComment":
-		parser.ann.AnnotationComment = value
+		parser.ann.Comment = value
 	default:
 		return fmt.Errorf("received unknown tag %v in Annotation section", tag)
 	}

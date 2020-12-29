@@ -22,21 +22,21 @@ func MakePairs2_1(p1 *spdx.Package2_1, p2 *spdx.Package2_1) (map[string]LicenseP
 	// first, go through and add all files/licenses from p1
 	for _, f := range p1.Files {
 		pair := LicensePair{First: f.LicenseConcluded, Second: ""}
-		pairs[f.FileName] = pair
+		pairs[f.Name] = pair
 	}
 
 	// now, go through all files/licenses from p2. If already
 	// present, add as .second; if not, create new pair
 	for _, f := range p2.Files {
 		firstLic := ""
-		existingPair, ok := pairs[f.FileName]
+		existingPair, ok := pairs[f.Name]
 		if ok {
 			// already present; update it
 			firstLic = existingPair.First
 		}
 		// now, update what's there, either way
 		pair := LicensePair{First: firstLic, Second: f.LicenseConcluded}
-		pairs[f.FileName] = pair
+		pairs[f.Name] = pair
 	}
 
 	return pairs, nil
@@ -50,21 +50,21 @@ func MakePairs2_2(p1 *spdx.Package2_2, p2 *spdx.Package2_2) (map[string]LicenseP
 	// first, go through and add all files/licenses from p1
 	for _, f := range p1.Files {
 		pair := LicensePair{First: f.LicenseConcluded, Second: ""}
-		pairs[f.FileName] = pair
+		pairs[f.Name] = pair
 	}
 
 	// now, go through all files/licenses from p2. If already
 	// present, add as .second; if not, create new pair
 	for _, f := range p2.Files {
 		firstLic := ""
-		existingPair, ok := pairs[f.FileName]
+		existingPair, ok := pairs[f.Name]
 		if ok {
 			// already present; update it
 			firstLic = existingPair.First
 		}
 		// now, update what's there, either way
 		pair := LicensePair{First: firstLic, Second: f.LicenseConcluded}
-		pairs[f.FileName] = pair
+		pairs[f.Name] = pair
 	}
 
 	return pairs, nil

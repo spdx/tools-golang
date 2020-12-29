@@ -40,35 +40,35 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 	}
 
 	pkg := &spdx.Package2_1{
-		PackageName:                         "p1",
-		PackageSPDXIdentifier:               spdx.ElementID("p1"),
-		PackageVersion:                      "0.1.0",
-		PackageFileName:                     "p1-0.1.0-master.tar.gz",
-		PackageSupplierOrganization:         "John Doe, Inc.",
-		PackageOriginatorPerson:             "John Doe",
-		PackageDownloadLocation:             "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                       true,
-		IsFilesAnalyzedTagPresent:           true,
-		PackageVerificationCode:             "0123456789abcdef0123456789abcdef01234567",
-		PackageVerificationCodeExcludedFile: "p1-0.1.0.spdx",
-		PackageChecksumSHA1:                 "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:               "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:                  "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:                     "http://example.com/p1",
-		PackageSourceInfo:                   "this is a source comment",
-		PackageLicenseConcluded:             "GPL-2.0-or-later",
-		PackageLicenseInfoFromFiles: []string{
+		Name:                         "p1",
+		SPDXIdentifier:               spdx.ElementID("p1"),
+		Version:                      "0.1.0",
+		FileName:                     "p1-0.1.0-master.tar.gz",
+		SupplierOrganization:         "John Doe, Inc.",
+		OriginatorPerson:             "John Doe",
+		DownloadLocation:             "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:                true,
+		IsFilesAnalyzedTagPresent:    true,
+		VerificationCode:             "0123456789abcdef0123456789abcdef01234567",
+		VerificationCodeExcludedFile: "p1-0.1.0.spdx",
+		ChecksumSHA1:                 "85ed0817af83a24ad8da68c2b5094de69833983c",
+		ChecksumSHA256:               "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+		ChecksumMD5:                  "624c1abb3664f4b35547e7c73864ad24",
+		HomePage:                     "http://example.com/p1",
+		SourceInfo:                   "this is a source comment",
+		LicenseConcluded:             "GPL-2.0-or-later",
+		LicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageLicenseComments: "this is a license comment(s)",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		PackageSummary:         "this is a summary comment",
-		PackageDescription:     "this is a description comment",
-		PackageComment:         "this is a comment comment",
-		PackageExternalReferences: []*spdx.PackageExternalReference2_1{
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		LicenseComments: "this is a license comment(s)",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
+		Summary:         "this is a summary comment",
+		Description:     "this is a description comment",
+		Comment:         "this is a comment comment",
+		ExternalReferences: []*spdx.PackageExternalReference2_1{
 			per1,
 			per2,
 			per3,
@@ -128,33 +128,33 @@ func TestSaver2_1PackageSavesTextCombo2(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		PackageName:                   "p1",
-		PackageSPDXIdentifier:         spdx.ElementID("p1"),
-		PackageVersion:                "0.1.0",
-		PackageFileName:               "p1-0.1.0-master.tar.gz",
-		PackageSupplierNOASSERTION:    true,
-		PackageOriginatorOrganization: "John Doe, Inc.",
-		PackageDownloadLocation:       "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                 true,
-		IsFilesAnalyzedTagPresent:     false,
-		PackageVerificationCode:       "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:           "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:         "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:            "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:               "http://example.com/p1",
-		PackageSourceInfo:             "this is a source comment",
-		PackageLicenseConcluded:       "GPL-2.0-or-later",
-		PackageLicenseInfoFromFiles: []string{
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		Version:                   "0.1.0",
+		FileName:                  "p1-0.1.0-master.tar.gz",
+		SupplierNOASSERTION:       true,
+		OriginatorOrganization:    "John Doe, Inc.",
+		DownloadLocation:          "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             true,
+		IsFilesAnalyzedTagPresent: false,
+		VerificationCode:          "0123456789abcdef0123456789abcdef01234567",
+		ChecksumSHA1:              "85ed0817af83a24ad8da68c2b5094de69833983c",
+		ChecksumSHA256:            "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+		ChecksumMD5:               "624c1abb3664f4b35547e7c73864ad24",
+		HomePage:                  "http://example.com/p1",
+		SourceInfo:                "this is a source comment",
+		LicenseConcluded:          "GPL-2.0-or-later",
+		LicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageLicenseComments: "this is a license comment(s)",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		PackageSummary:         "this is a summary comment",
-		PackageDescription:     "this is a description comment",
-		PackageComment:         "this is a comment comment",
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		LicenseComments: "this is a license comment(s)",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
+		Summary:         "this is a summary comment",
+		Description:     "this is a description comment",
+		Comment:         "this is a comment comment",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -205,37 +205,37 @@ func TestSaver2_1PackageSavesTextCombo3(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		PackageName:                  "p1",
-		PackageSPDXIdentifier:        spdx.ElementID("p1"),
-		PackageVersion:               "0.1.0",
-		PackageFileName:              "p1-0.1.0-master.tar.gz",
-		PackageSupplierPerson:        "John Doe",
-		PackageOriginatorNOASSERTION: true,
-		PackageDownloadLocation:      "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                false,
-		IsFilesAnalyzedTagPresent:    true,
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		Version:                   "0.1.0",
+		FileName:                  "p1-0.1.0-master.tar.gz",
+		SupplierPerson:            "John Doe",
+		OriginatorNOASSERTION:     true,
+		DownloadLocation:          "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             false,
+		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output
 		// since FilesAnalyzed is false
-		PackageVerificationCode: "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:   "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:      "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:         "http://example.com/p1",
-		PackageSourceInfo:       "this is a source comment",
-		PackageLicenseConcluded: "GPL-2.0-or-later",
+		VerificationCode: "0123456789abcdef0123456789abcdef01234567",
+		ChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+		ChecksumSHA256:   "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+		ChecksumMD5:      "624c1abb3664f4b35547e7c73864ad24",
+		HomePage:         "http://example.com/p1",
+		SourceInfo:       "this is a source comment",
+		LicenseConcluded: "GPL-2.0-or-later",
 		// NOTE that license info from files MUST be omitted from output
 		// since FilesAnalyzed is false
-		PackageLicenseInfoFromFiles: []string{
+		LicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageLicenseComments: "this is a license comment(s)",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		PackageSummary:         "this is a summary comment",
-		PackageDescription:     "this is a description comment",
-		PackageComment:         "this is a comment comment",
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		LicenseComments: "this is a license comment(s)",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
+		Summary:         "this is a summary comment",
+		Description:     "this is a description comment",
+		Comment:         "this is a comment comment",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -278,23 +278,23 @@ PackageComment: this is a comment comment
 
 func TestSaver2_1PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	pkg := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output,
 		// even if present in model, since FilesAnalyzed is false
-		PackageLicenseConcluded: "GPL-2.0-or-later",
+		LicenseConcluded: "GPL-2.0-or-later",
 		// NOTE that license info from files MUST be omitted from output
 		// even if present in model, since FilesAnalyzed is false
-		PackageLicenseInfoFromFiles: []string{
+		LicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -324,41 +324,41 @@ PackageCopyrightText: Copyright (c) John Doe, Inc.
 
 func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 	f1 := &spdx.File2_1{
-		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile:  []string{"Apache-2.0"},
-		FileCopyrightText:  "Copyright (c) Jane Doe",
+		Name:              "/tmp/whatever1.txt",
+		SPDXIdentifier:    spdx.ElementID("File1231"),
+		ChecksumSHA1:      "85ed0817af83a24ad8da68c2b5094de69833983c",
+		LicenseConcluded:  "Apache-2.0",
+		LicenseInfoInFile: []string{"Apache-2.0"},
+		CopyrightText:     "Copyright (c) Jane Doe",
 	}
 
 	f2 := &spdx.File2_1{
-		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
-		LicenseConcluded:   "MIT",
-		LicenseInfoInFile:  []string{"MIT"},
-		FileCopyrightText:  "Copyright (c) John Doe",
+		Name:              "/tmp/whatever2.txt",
+		SPDXIdentifier:    spdx.ElementID("File1232"),
+		ChecksumSHA1:      "85ed0817af83a24ad8da68c2b5094de69833983d",
+		LicenseConcluded:  "MIT",
+		LicenseInfoInFile: []string{"MIT"},
+		CopyrightText:     "Copyright (c) John Doe",
 	}
 
 	pkg := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		Name:                      "p1",
+		SPDXIdentifier:            spdx.ElementID("p1"),
+		DownloadLocation:          "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output,
 		// even if present in model, since FilesAnalyzed is false
-		PackageLicenseConcluded: "GPL-2.0-or-later",
+		LicenseConcluded: "GPL-2.0-or-later",
 		// NOTE that license info from files MUST be omitted from output
 		// even if present in model, since FilesAnalyzed is false
-		PackageLicenseInfoFromFiles: []string{
+		LicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
 			"GPL-2.0-or-later",
 		},
-		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
-		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
+		LicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		CopyrightText:   "Copyright (c) John Doe, Inc.",
 		Files: map[spdx.ElementID]*spdx.File2_1{
 			spdx.ElementID("File1231"): f1,
 			spdx.ElementID("File1232"): f2,

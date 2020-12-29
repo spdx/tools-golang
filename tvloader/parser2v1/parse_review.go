@@ -32,9 +32,9 @@ func (parser *tvParser2_1) parsePairFromReview2_1(tag string, value string) erro
 			return fmt.Errorf("unrecognized Reviewer type %v", subkey)
 		}
 	case "ReviewDate":
-		parser.rev.ReviewDate = value
+		parser.rev.Date = value
 	case "ReviewComment":
-		parser.rev.ReviewComment = value
+		parser.rev.Comment = value
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
 		parser.rln = &spdx.Relationship2_1{}

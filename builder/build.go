@@ -55,7 +55,7 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 		return nil, err
 	}
 
-	ci, err := builder2v1.BuildCreationInfoSection2_1(packageName, pkg.PackageVerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
+	ci, err := builder2v1.BuildCreationInfoSection2_1(packageName, pkg.VerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 
 	doc := &spdx.Document2_1{
 		CreationInfo:  ci,
-		Packages:      map[spdx.ElementID]*spdx.Package2_1{pkg.PackageSPDXIdentifier: pkg},
+		Packages:      map[spdx.ElementID]*spdx.Package2_1{pkg.SPDXIdentifier: pkg},
 		Relationships: []*spdx.Relationship2_1{rln},
 	}
 
@@ -119,7 +119,7 @@ func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Docu
 		return nil, err
 	}
 
-	ci, err := builder2v2.BuildCreationInfoSection2_2(packageName, pkg.PackageVerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
+	ci, err := builder2v2.BuildCreationInfoSection2_2(packageName, pkg.VerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Docu
 
 	doc := &spdx.Document2_2{
 		CreationInfo:  ci,
-		Packages:      map[spdx.ElementID]*spdx.Package2_2{pkg.PackageSPDXIdentifier: pkg},
+		Packages:      map[spdx.ElementID]*spdx.Package2_2{pkg.SPDXIdentifier: pkg},
 		Relationships: []*spdx.Relationship2_2{rln},
 	}
 

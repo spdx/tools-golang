@@ -11,23 +11,23 @@ import (
 )
 
 func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
-	if f.FileName != "" {
-		fmt.Fprintf(w, "FileName: %s\n", f.FileName)
+	if f.Name != "" {
+		fmt.Fprintf(w, "FileName: %s\n", f.Name)
 	}
-	if f.FileSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.FileSPDXIdentifier))
+	if f.SPDXIdentifier != "" {
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.SPDXIdentifier))
 	}
-	for _, s := range f.FileType {
+	for _, s := range f.Type {
 		fmt.Fprintf(w, "FileType: %s\n", s)
 	}
-	if f.FileChecksumSHA1 != "" {
-		fmt.Fprintf(w, "FileChecksum: SHA1: %s\n", f.FileChecksumSHA1)
+	if f.ChecksumSHA1 != "" {
+		fmt.Fprintf(w, "FileChecksum: SHA1: %s\n", f.ChecksumSHA1)
 	}
-	if f.FileChecksumSHA256 != "" {
-		fmt.Fprintf(w, "FileChecksum: SHA256: %s\n", f.FileChecksumSHA256)
+	if f.ChecksumSHA256 != "" {
+		fmt.Fprintf(w, "FileChecksum: SHA256: %s\n", f.ChecksumSHA256)
 	}
-	if f.FileChecksumMD5 != "" {
-		fmt.Fprintf(w, "FileChecksum: MD5: %s\n", f.FileChecksumMD5)
+	if f.ChecksumMD5 != "" {
+		fmt.Fprintf(w, "FileChecksum: MD5: %s\n", f.ChecksumMD5)
 	}
 	if f.LicenseConcluded != "" {
 		fmt.Fprintf(w, "LicenseConcluded: %s\n", f.LicenseConcluded)
@@ -38,8 +38,8 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 	if f.LicenseComments != "" {
 		fmt.Fprintf(w, "LicenseComments: %s\n", f.LicenseComments)
 	}
-	if f.FileCopyrightText != "" {
-		fmt.Fprintf(w, "FileCopyrightText: %s\n", textify(f.FileCopyrightText))
+	if f.CopyrightText != "" {
+		fmt.Fprintf(w, "FileCopyrightText: %s\n", textify(f.CopyrightText))
 	}
 	for _, aop := range f.ArtifactOfProjects {
 		fmt.Fprintf(w, "ArtifactOfProjectName: %s\n", aop.Name)
@@ -50,16 +50,16 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 			fmt.Fprintf(w, "ArtifactOfProjectURI: %s\n", aop.URI)
 		}
 	}
-	if f.FileComment != "" {
-		fmt.Fprintf(w, "FileComment: %s\n", f.FileComment)
+	if f.Comment != "" {
+		fmt.Fprintf(w, "FileComment: %s\n", f.Comment)
 	}
-	if f.FileNotice != "" {
-		fmt.Fprintf(w, "FileNotice: %s\n", f.FileNotice)
+	if f.Notice != "" {
+		fmt.Fprintf(w, "FileNotice: %s\n", f.Notice)
 	}
-	for _, s := range f.FileContributor {
+	for _, s := range f.Contributor {
 		fmt.Fprintf(w, "FileContributor: %s\n", s)
 	}
-	for _, s := range f.FileDependencies {
+	for _, s := range f.Dependencies {
 		fmt.Fprintf(w, "FileDependency: %s\n", s)
 	}
 
