@@ -67,9 +67,54 @@ func helperForExtractDocElementID(t *testing.T, tst string, wantErr bool, wantDo
 	}
 	if deID.ElementRefID != spdx.ElementID(wantElt) {
 		if wantElt == "" {
-			t.Errorf("testing %v: want emptyString for ElementRefID, got %v", tst, deID.ElementRefID)
+			t.Errorf("testing %v: want empty string for ElementRefID, got %v", tst, deID.ElementRefID)
 		} else {
 			t.Errorf("testing %v: want %v for ElementRefID, got %v", tst, wantElt, deID.ElementRefID)
+		}
+	}
+}
+
+func TestCanExtractSpecialDocumentIDs(t *testing.T) {
+	permittedSpecial := []string{"NONE", "NOASSERTION"}
+	// test with valid special values
+	helperForExtractDocElementSpecial(t, permittedSpecial, "NONE", false, "", "", "NONE")
+	helperForExtractDocElementSpecial(t, permittedSpecial, "NOASSERTION", false, "", "", "NOASSERTION")
+	// test with valid regular IDs
+	helperForExtractDocElementSpecial(t, permittedSpecial, "SPDXRef-file1", false, "", "file1", "")
+	helperForExtractDocElementSpecial(t, permittedSpecial, "DocumentRef-doc2:SPDXRef-file2", false, "doc2", "file2", "")
+	helperForExtractDocElementSpecial(t, permittedSpecial, "a:SPDXRef-file1", true, "", "", "")
+	helperForExtractDocElementSpecial(t, permittedSpecial, "DocumentRef-doc2", true, "", "", "")
+	// test with invalid other words not on permitted list
+	helperForExtractDocElementSpecial(t, permittedSpecial, "FOO", true, "", "", "")
+}
+
+func helperForExtractDocElementSpecial(t *testing.T, permittedSpecial []string, tst string, wantErr bool, wantDoc string, wantElt string, wantSpecial string) {
+	deID, err := extractDocElementSpecial(tst, permittedSpecial)
+	if err != nil && wantErr == false {
+		t.Errorf("testing %v: expected nil error, got %v", tst, err)
+	}
+	if err == nil && wantErr == true {
+		t.Errorf("testing %v: expected non-nil error, got nil", tst)
+	}
+	if deID.DocumentRefID != wantDoc {
+		if wantDoc == "" {
+			t.Errorf("testing %v: want empty string for DocumentRefID, got %v", tst, deID.DocumentRefID)
+		} else {
+			t.Errorf("testing %v: want %v for DocumentRefID, got %v", tst, wantDoc, deID.DocumentRefID)
+		}
+	}
+	if deID.ElementRefID != spdx.ElementID(wantElt) {
+		if wantElt == "" {
+			t.Errorf("testing %v: want empty string for ElementRefID, got %v", tst, deID.ElementRefID)
+		} else {
+			t.Errorf("testing %v: want %v for ElementRefID, got %v", tst, wantElt, deID.ElementRefID)
+		}
+	}
+	if deID.SpecialID != wantSpecial {
+		if wantSpecial == "" {
+			t.Errorf("testing %v: want empty string for SpecialID, got %v", tst, deID.SpecialID)
+		} else {
+			t.Errorf("testing %v: want %v for SpecialID, got %v", tst, wantSpecial, deID.SpecialID)
 		}
 	}
 }

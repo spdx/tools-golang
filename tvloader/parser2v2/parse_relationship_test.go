@@ -152,6 +152,37 @@ func TestParser2_2InvalidRelationshipTagsInvalidRefIDs(t *testing.T) {
 	}
 }
 
+func TestParser2_2SpecialValuesValidForRightSideOfRelationship(t *testing.T) {
+	parser := tvParser2_2{
+		doc: &spdx.Document2_2{},
+		st:  psCreationInfo2_2,
+	}
+
+	// NONE in right side of relationship should pass
+	err := parser.parsePair2_2("Relationship", "SPDXRef-a CONTAINS NONE")
+	if err != nil {
+		t.Errorf("expected nil error for CONTAINS NONE, got %v", err)
+	}
+
+	// NOASSERTION in right side of relationship should pass
+	err = parser.parsePair2_2("Relationship", "SPDXRef-a CONTAINS NOASSERTION")
+	if err != nil {
+		t.Errorf("expected nil error for CONTAINS NOASSERTION, got %v", err)
+	}
+
+	// NONE in left side of relationship should fail
+	err = parser.parsePair2_2("Relationship", "NONE CONTAINS SPDXRef-a")
+	if err == nil {
+		t.Errorf("expected non-nil error for NONE CONTAINS, got nil")
+	}
+
+	// NOASSERTION in left side of relationship should fail
+	err = parser.parsePair2_2("Relationship", "NOASSERTION CONTAINS SPDXRef-a")
+	if err == nil {
+		t.Errorf("expected non-nil error for NOASSERTION CONTAINS, got nil")
+	}
+}
+
 func TestParser2_2FailsToParseUnknownTagInRelationshipSection(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{},
