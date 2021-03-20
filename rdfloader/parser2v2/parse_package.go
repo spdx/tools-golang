@@ -302,15 +302,15 @@ func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordf
 		return fmt.Errorf("error getting checksum algorithm and value from %v", node)
 	}
 	if pkg.PackageChecksums == nil {
-		pkg.PackageChecksums = make(map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2)
+		pkg.PackageChecksums = make(map[spdx.ChecksumAlgorithm]spdx.Checksum)
 	}
 	switch checksumAlgorithm {
 	case spdx.MD5:
-		pkg.PackageChecksums[spdx.MD5] = spdx.Checksum2_2{Algorithm: spdx.MD5, Value: checksumValue}
+		pkg.PackageChecksums[spdx.MD5] = spdx.Checksum{Algorithm: spdx.MD5, Value: checksumValue}
 	case spdx.SHA1:
-		pkg.PackageChecksums[spdx.SHA1] = spdx.Checksum2_2{Algorithm: spdx.SHA1, Value: checksumValue}
+		pkg.PackageChecksums[spdx.SHA1] = spdx.Checksum{Algorithm: spdx.SHA1, Value: checksumValue}
 	case spdx.SHA256:
-		pkg.PackageChecksums[spdx.SHA256] = spdx.Checksum2_2{Algorithm: spdx.SHA256, Value: checksumValue}
+		pkg.PackageChecksums[spdx.SHA256] = spdx.Checksum{Algorithm: spdx.SHA256, Value: checksumValue}
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)
 	}
