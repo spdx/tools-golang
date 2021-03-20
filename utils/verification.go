@@ -53,7 +53,7 @@ func GetVerificationCode2_2(files map[spdx.ElementID]*spdx.File2_2, excludeFile 
 			return "", fmt.Errorf("got nil file for identifier %v", i)
 		}
 		if f.FileName != excludeFile {
-			shas = append(shas, f.FileChecksumSHA1)
+			shas = append(shas, f.FileChecksums[spdx.SHA1].Value)
 		}
 	}
 

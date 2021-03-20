@@ -59,12 +59,24 @@ func TestSaver2_2PackageSavesTextCombo1(t *testing.T) {
 		IsFilesAnalyzedTagPresent:           true,
 		PackageVerificationCode:             "0123456789abcdef0123456789abcdef01234567",
 		PackageVerificationCodeExcludedFile: "p1-0.1.0.spdx",
-		PackageChecksumSHA1:                 "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:               "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:                  "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:                     "http://example.com/p1",
-		PackageSourceInfo:                   "this is a source comment",
-		PackageLicenseConcluded:             "GPL-2.0-or-later",
+		PackageChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
+			spdx.SHA1: spdx.Checksum2_2{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			spdx.SHA256: spdx.Checksum2_2{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			spdx.MD5: spdx.Checksum2_2{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
+
+		PackageHomePage:         "http://example.com/p1",
+		PackageSourceInfo:       "this is a source comment",
+		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
@@ -150,12 +162,23 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 		FilesAnalyzed:                 true,
 		IsFilesAnalyzedTagPresent:     false,
 		PackageVerificationCode:       "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:           "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:         "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:            "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:               "http://example.com/p1",
-		PackageSourceInfo:             "this is a source comment",
-		PackageLicenseConcluded:       "GPL-2.0-or-later",
+		PackageChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
+			spdx.SHA1: spdx.Checksum2_2{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			spdx.SHA256: spdx.Checksum2_2{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			spdx.MD5: spdx.Checksum2_2{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
+		PackageHomePage:         "http://example.com/p1",
+		PackageSourceInfo:       "this is a source comment",
+		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
@@ -232,9 +255,21 @@ func TestSaver2_2PackageSavesTextCombo3(t *testing.T) {
 		// NOTE that verification code MUST be omitted from output
 		// since FilesAnalyzed is false
 		PackageVerificationCode: "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:   "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:      "624c1abb3664f4b35547e7c73864ad24",
+		PackageChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
+			spdx.SHA1: spdx.Checksum2_2{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			spdx.SHA256: spdx.Checksum2_2{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			spdx.MD5: spdx.Checksum2_2{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
+
 		PackageHomePage:         "http://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -351,19 +386,31 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 	f1 := &spdx.File2_2{
 		FileName:           "/tmp/whatever1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile:  []string{"Apache-2.0"},
-		FileCopyrightText:  "Copyright (c) Jane Doe",
+		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
+			spdx.SHA1: spdx.Checksum2_2{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+		},
+
+		LicenseConcluded:  "Apache-2.0",
+		LicenseInfoInFile: []string{"Apache-2.0"},
+		FileCopyrightText: "Copyright (c) Jane Doe",
 	}
 
 	f2 := &spdx.File2_2{
 		FileName:           "/tmp/whatever2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
-		LicenseConcluded:   "MIT",
-		LicenseInfoInFile:  []string{"MIT"},
-		FileCopyrightText:  "Copyright (c) John Doe",
+		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
+			spdx.SHA1: spdx.Checksum2_2{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983d",
+			},
+		},
+
+		LicenseConcluded:  "MIT",
+		LicenseInfoInFile: []string{"MIT"},
+		FileCopyrightText: "Copyright (c) John Doe",
 	}
 
 	pkg := &spdx.Package2_2{
