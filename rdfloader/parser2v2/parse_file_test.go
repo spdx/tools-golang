@@ -4,12 +4,13 @@ package parser2v2
 
 import (
 	"bufio"
+	"strings"
+	"testing"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	rdfloader2 "github.com/spdx/gordf/rdfloader/xmlreader"
 	gordfWriter "github.com/spdx/gordf/rdfwriter"
 	"github.com/spdx/tools-golang/spdx"
-	"strings"
-	"testing"
 )
 
 // content is the tags within the rdf:RDF tag
@@ -206,14 +207,21 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		t.Errorf("error parsing a valid checksum node")
 	}
 	checksumValue := "d2356e0fe1c0b85285d83c6b2ad51b5f"
-	if file.FileChecksumMD5 != checksumValue {
-		t.Errorf("wrong checksum value for md5. Expected: %s, found: %s", checksumValue, file.FileChecksumMD5)
-	}
-	if file.FileChecksumSHA1 != "" {
-		t.Errorf("incorrectly set sha1, should've been empty")
-	}
-	if file.FileChecksumSHA256 != "" {
-		t.Errorf("incorrectly set sha256, should've been empty")
+	for _, checksum := range file.FileChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "" {
+				t.Errorf("incorrectly set sha1, should've been empty")
+			}
+		case spdx.SHA256:
+			if checksum.Value != "" {
+				t.Errorf("incorrectly set sha256, should've been empty")
+			}
+		case spdx.MD5:
+			if checksum.Value != checksumValue {
+				t.Errorf("wrong checksum value for md5. Expected: %s, found: %s", checksumValue, checksum.Value)
+			}
+		}
 	}
 
 	// TestCase 2: valid sha1 checksum
@@ -229,14 +237,21 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
-	if file.FileChecksumSHA1 != checksumValue {
-		t.Errorf("wrong checksum value for sha1. Expected: %s, found: %s", checksumValue, file.FileChecksumSHA1)
-	}
-	if file.FileChecksumMD5 != "" {
-		t.Errorf("incorrectly set md5, should've been empty")
-	}
-	if file.FileChecksumSHA256 != "" {
-		t.Errorf("incorrectly set sha256, should've been empty")
+	for _, checksum := range file.FileChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != checksumValue {
+				t.Errorf("wrong checksum value for sha1. Expected: %s, found: %s", checksumValue, checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "" {
+				t.Errorf("incorrectly set sha256, should've been empty")
+			}
+		case spdx.MD5:
+			if checksum.Value != checksumValue {
+				t.Errorf("incorrectly set md5, should've been empty")
+			}
+		}
 	}
 
 	// TestCase 3: valid sha256 checksum
@@ -252,14 +267,21 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
-	if file.FileChecksumSHA256 != checksumValue {
-		t.Errorf("wrong checksum value for sha256. Expected: %s, found: %s", checksumValue, file.FileChecksumSHA256)
-	}
-	if file.FileChecksumMD5 != "" {
-		t.Errorf("incorrectly set md5, should've been empty")
-	}
-	if file.FileChecksumSHA1 != "" {
-		t.Errorf("incorrectly set sha1, should've been empty")
+	for _, checksum := range file.FileChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != checksumValue {
+				t.Errorf("incorrectly set sha1, should've been empty")
+			}
+		case spdx.SHA256:
+			if checksum.Value != checksumValue {
+				t.Errorf("wrong checksum value for sha256. Expected: %s, found: %s", checksumValue, checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != checksumValue {
+				t.Errorf("incorrectly set md5, should've been empty")
+			}
+		}
 	}
 
 	// TestCase 4: checksum node without one of the mandatory attributes
@@ -494,7 +516,6 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		t.Errorf("expected %s, found %s", expectedLicenseInfoInFile, file.LicenseInfoInFile[0])
 	}
 
-
 	// TestCase 12: checking if recursive dependencies are resolved.
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="#SPDXRef-ParentFile">
@@ -578,8 +599,14 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	}
 
 	expectedChecksum := "0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd"
-	if file.FileChecksumSHA1 != expectedChecksum {
-		t.Errorf("expected %s, found %s", expectedChecksum, file.FileChecksumSHA1)
+
+	for _, checksum := range file.FileChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != expectedChecksum {
+				t.Errorf("expected %s, found %s", expectedChecksum, checksum.Value)
+			}
+		}
 	}
 
 	expectedLicenseConcluded = "NOASSERTION"

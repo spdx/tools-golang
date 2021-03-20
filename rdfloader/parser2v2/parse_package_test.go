@@ -3,10 +3,11 @@
 package parser2v2
 
 import (
-	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
 	"reflect"
 	"testing"
+
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	"github.com/spdx/tools-golang/spdx"
 )
 
 func Test_setPackageSupplier(t *testing.T) {
@@ -584,7 +585,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 	var parser *rdfParser2_2
 	var node *gordfParser.Node
 	var pkg *spdx.Package2_2
-	var gotChecksumValue, expectedChecksumValue string
+	var expectedChecksumValue string
 	var err error
 
 	// TestCase 1: invalid checksum algorithm
@@ -629,9 +630,14 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumSHA1
-	if gotChecksumValue != expectedChecksumValue {
-		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
+
+	for _, checksum := range pkg.PackageChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != expectedChecksumValue {
+				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
+			}
+		}
 	}
 
 	// TestCase 3: valid checksum (sha256)
@@ -648,9 +654,13 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumSHA256
-	if gotChecksumValue != expectedChecksumValue {
-		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
+	for _, checksum := range pkg.PackageChecksums {
+		switch checksum.Algorithm {
+		case spdx.SHA256:
+			if checksum.Value != expectedChecksumValue {
+				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
+			}
+		}
 	}
 
 	// TestCase 4: valid checksum (md5)
@@ -667,9 +677,13 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-	gotChecksumValue = pkg.PackageChecksumMD5
-	if gotChecksumValue != expectedChecksumValue {
-		t.Errorf("expected: %v, got: %v", expectedChecksumValue, gotChecksumValue)
+	for _, checksum := range pkg.PackageChecksums {
+		switch checksum.Algorithm {
+		case spdx.MD5:
+			if checksum.Value != expectedChecksumValue {
+				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
+			}
+		}
 	}
 }
 

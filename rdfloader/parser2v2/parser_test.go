@@ -132,7 +132,19 @@ func Test_rdfParser2_2_getSpdxDocNode(t *testing.T) {
 		t.Errorf("expected and error due to more than one type triples for the SpdxDocument Node, got %v", err)
 	}
 
-	// TestCase 2: two different spdx nodes found in a single document.
+	// TestCase 2: must be associated with exactly one rdf:type.
+	parser, _ = parserFromBodyContent(`
+		<spdx:SpdxDocument rdf:about="#SPDXRef-Document"/>
+		<spdx:Snippet rdf:about="#SPDXRef-Document"/>
+		<spdx:File rdf:about="#SPDXRef-DoapSource"/>
+	`)
+	_, err = parser.getSpdxDocNode()
+	t.Log(err)
+	if err == nil {
+		t.Errorf("rootNode  must be associated with exactly one triple of predicate rdf:type, got %v", err)
+	}
+
+	// TestCase 3: two different spdx nodes found in a single document.
 	parser, _ = parserFromBodyContent(`
 		<spdx:SpdxDocument rdf:about="#SPDXRef-Document-1"/>
 		<spdx:SpdxDocument rdf:about="#SPDXRef-Document-2"/>
@@ -142,14 +154,14 @@ func Test_rdfParser2_2_getSpdxDocNode(t *testing.T) {
 		t.Errorf("expected and error due to more than one type SpdxDocument Node, got %v", err)
 	}
 
-	// TestCase 3: no spdx document
+	// TestCase 4: no spdx document
 	parser, _ = parserFromBodyContent(``)
 	_, err = parser.getSpdxDocNode()
 	if err == nil {
 		t.Errorf("expected and error due to no SpdxDocument Node, got %v", err)
 	}
 
-	// TestCase 4: valid spdxDocument node
+	// TestCase 5: valid spdxDocument node
 	parser, _ = parserFromBodyContent(`
 		<spdx:SpdxDocument rdf:about="#SPDXRef-Document-1"/>
 	`)
