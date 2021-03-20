@@ -8,6 +8,11 @@ Go programs to work with [SPDX®](https://spdx.org/) files.
 
 This software is in an early state, and its API may change significantly.
 
+## Recent news
+
+2021-03-20: **v0.1.0**: initial pre-v1 release tagged, prior to making more
+extensive API changes in some pending PRs.
+
 ## What it does
 
 tools-golang currently works with files conformant to versions 2.1 and 2.2
@@ -46,7 +51,9 @@ are welcome!
 
 ## Requirements
 
-At present, tools-golang does not require anything outside the Go standard
+tools-golang uses https://github.com/spdx/gordf to manage RDF input and output.
+
+Other than that, tools-golang does not require anything outside the Go standard
 library.
 
 ## Licenses
