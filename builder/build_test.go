@@ -499,15 +499,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		}
 	}
 
-	// if fileEmpty.FileChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
-	// 	t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.FileChecksumSHA1)
-	// }
-	// if fileEmpty.FileChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
-	// 	t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.FileChecksumSHA256)
-	// }
-	// if fileEmpty.FileChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
-	// 	t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.FileChecksumMD5)
-	// }
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
@@ -546,15 +537,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		}
 	}
 
-	// if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
-	// 	t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
-	// }
-	// if file1.FileChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
-	// 	t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.FileChecksumSHA256)
-	// }
-	// if file1.FileChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
-	// 	t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.FileChecksumMD5)
-	// }
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
@@ -593,15 +575,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		}
 	}
 
-	// if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
-	// 	t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
-	// }
-	// if file3.FileChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
-	// 	t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.FileChecksumSHA256)
-	// }
-	// if file3.FileChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
-	// 	t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.FileChecksumMD5)
-	// }
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
@@ -640,15 +613,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		}
 	}
 
-	// if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
-	// 	t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
-	// }
-	// if file4.FileChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
-	// 	t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.FileChecksumSHA256)
-	// }
-	// if file4.FileChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
-	// 	t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.FileChecksumMD5)
-	// }
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}
@@ -686,15 +650,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 			}
 		}
 	}
-	// if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
-	// 	t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
-	// }
-	// if lastfile.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
-	// 	t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.FileChecksumSHA256)
-	// }
-	// if lastfile.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
-	// 	t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.FileChecksumMD5)
-	// }
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
 	}

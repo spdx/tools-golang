@@ -29,9 +29,8 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 	f1 := &spdx.File2_2{
 		FileName:           "/tmp/whatever1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		// FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
-		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
-			spdx.SHA1: spdx.Checksum2_2{
+		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+			spdx.SHA1: spdx.Checksum{
 				Algorithm: spdx.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
@@ -44,9 +43,8 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 	f2 := &spdx.File2_2{
 		FileName:           "/tmp/whatever2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		// FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
-		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
-			spdx.SHA1: spdx.Checksum2_2{
+		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+			spdx.SHA1: spdx.Checksum{
 				Algorithm: spdx.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983d",
 			},
@@ -83,9 +81,8 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 	f3 := &spdx.File2_2{
 		FileName:           "/tmp/file-with-snippets.txt",
 		FileSPDXIdentifier: spdx.ElementID("FileHasSnippets"),
-		// FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983e",
-		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
-			spdx.SHA1: spdx.Checksum2_2{
+		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+			spdx.SHA1: spdx.Checksum{
 				Algorithm: spdx.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983e",
 			},
@@ -107,9 +104,8 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 	f4 := &spdx.File2_2{
 		FileName:           "/tmp/another-file.txt",
 		FileSPDXIdentifier: spdx.ElementID("FileAnother"),
-		// FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983f",
-		FileChecksums: map[spdx.ChecksumAlgorithm2_2]spdx.Checksum2_2{
-			spdx.SHA1: spdx.Checksum2_2{
+		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+			spdx.SHA1: spdx.Checksum{
 				Algorithm: spdx.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983f",
 			},
