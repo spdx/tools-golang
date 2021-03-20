@@ -18,9 +18,14 @@ type ElementID string
 // present document.
 // DocElementIDs should NOT contain the mandatory 'DocumentRef-' or
 // 'SPDXRef-' portions.
+// SpecialID is used ONLY if the DocElementID matches a defined set of
+// permitted special values for a particular field, e.g. "NONE" or
+// "NOASSERTION" for the right-hand side of Relationships. If SpecialID
+// is set, DocumentRefID and ElementRefID should be empty (and vice versa).
 type DocElementID struct {
 	DocumentRefID string
 	ElementRefID  ElementID
+	SpecialID     string
 }
 
 // TODO: add equivalents for LicenseRef- identifiers
@@ -36,6 +41,14 @@ func MakeDocElementID(docRef string, eltRef string) DocElementID {
 	}
 }
 
+// MakeDocElementSpecial takes a "special" string (e.g. "NONE" or
+// "NOASSERTION" for the right side of a Relationship), nd returns
+// a DocElementID with it in the SpecialID field. Other fields will
+// be empty.
+func MakeDocElementSpecial(specialID string) DocElementID {
+	return DocElementID{SpecialID: specialID}
+}
+
 // RenderElementID takes an ElementID and returns the string equivalent,
 // with the SPDXRef- prefix reinserted.
 func RenderElementID(eID ElementID) string {
@@ -44,8 +57,12 @@ func RenderElementID(eID ElementID) string {
 
 // RenderDocElementID takes a DocElementID and returns the string equivalent,
 // with the SPDXRef- prefix (and, if applicable, the DocumentRef- prefix)
-// reinserted.
+// reinserted. If a SpecialID is present, it will be rendered verbatim and
+// DocumentRefID and ElementRefID will be ignored.
 func RenderDocElementID(deID DocElementID) string {
+	if deID.SpecialID != "" {
+		return deID.SpecialID
+	}
 	prefix := ""
 	if deID.DocumentRefID != "" {
 		prefix = "DocumentRef-" + deID.DocumentRefID + ":"
