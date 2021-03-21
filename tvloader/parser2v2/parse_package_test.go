@@ -367,7 +367,6 @@ func TestParser2_2CanParsePackageTags(t *testing.T) {
 			if checksum.Value != codeMd5 {
 				t.Errorf("expected %s for FileChecksumSHA1, got %s", codeMd5, checksum.Value)
 			}
-
 		}
 	}
 

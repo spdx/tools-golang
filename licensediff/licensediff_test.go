@@ -507,7 +507,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
@@ -525,7 +524,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -543,7 +541,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -562,7 +559,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -578,7 +574,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -597,7 +592,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -613,7 +607,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "BSD-3-Clause",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -632,7 +625,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -648,7 +640,6 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -800,7 +791,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"LicenseRef-We-will-ignore-LicenseInfoInFile",
@@ -818,7 +808,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -836,7 +825,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "MPL-2.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -855,7 +843,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -871,7 +858,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0 AND MIT",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -918,7 +904,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "CC0-1.0",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",
@@ -934,7 +919,6 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
 			},
 		},
-
 		LicenseConcluded: "Unlicense",
 		LicenseInfoInFile: []string{
 			"NOASSERTION",

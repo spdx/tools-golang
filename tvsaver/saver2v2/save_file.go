@@ -20,20 +20,15 @@ func renderFile2_2(f *spdx.File2_2, w io.Writer) error {
 	for _, s := range f.FileType {
 		fmt.Fprintf(w, "FileType: %s\n", s)
 	}
-
 	if f.FileChecksums[spdx.SHA1].Value != "" {
 		fmt.Fprintf(w, "FileChecksum: SHA1: %s\n", f.FileChecksums[spdx.SHA1].Value)
-
 	}
 	if f.FileChecksums[spdx.SHA256].Value != "" {
 		fmt.Fprintf(w, "FileChecksum: SHA256: %s\n", f.FileChecksums[spdx.SHA256].Value)
-
 	}
 	if f.FileChecksums[spdx.MD5].Value != "" {
 		fmt.Fprintf(w, "FileChecksum: MD5: %s\n", f.FileChecksums[spdx.MD5].Value)
-
 	}
-
 	if f.LicenseConcluded != "" {
 		fmt.Fprintf(w, "LicenseConcluded: %s\n", f.LicenseConcluded)
 	}

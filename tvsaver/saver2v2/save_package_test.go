@@ -73,7 +73,6 @@ func TestSaver2_2PackageSavesTextCombo1(t *testing.T) {
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-
 		PackageHomePage:         "http://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -269,7 +268,6 @@ func TestSaver2_2PackageSavesTextCombo3(t *testing.T) {
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-
 		PackageHomePage:         "http://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -392,7 +390,6 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 		},
-
 		LicenseConcluded:  "Apache-2.0",
 		LicenseInfoInFile: []string{"Apache-2.0"},
 		FileCopyrightText: "Copyright (c) Jane Doe",
@@ -407,7 +404,6 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983d",
 			},
 		},
-
 		LicenseConcluded:  "MIT",
 		LicenseInfoInFile: []string{"MIT"},
 		FileCopyrightText: "Copyright (c) John Doe",
