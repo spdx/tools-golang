@@ -4,9 +4,10 @@ package parser2v2
 
 import (
 	"fmt"
+	"strings"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
-	"strings"
 )
 
 func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (pkg *spdx.Package2_2, err error) {
@@ -30,7 +31,7 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	parser.cache[packageNode.ID].Color = GREY
 
 	// setting state color to black to indicate when we're done parsing this node.
-	defer func(){parser.cache[packageNode.ID].Color = BLACK}();
+	defer func() { parser.cache[packageNode.ID].Color = BLACK }()
 
 	// setting the SPDXIdentifier for the package.
 	eId, err := ExtractElementID(getLastPartOfURI(packageNode.ID))
@@ -300,13 +301,13 @@ func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordf
 	if err != nil {
 		return fmt.Errorf("error getting checksum algorithm and value from %v", node)
 	}
+	if pkg.PackageChecksums == nil {
+		pkg.PackageChecksums = make(map[spdx.ChecksumAlgorithm]spdx.Checksum)
+	}
 	switch checksumAlgorithm {
-	case "MD5":
-		pkg.PackageChecksumMD5 = checksumValue
-	case "SHA1":
-		pkg.PackageChecksumSHA1 = checksumValue
-	case "SHA256":
-		pkg.PackageChecksumSHA256 = checksumValue
+	case spdx.MD5, spdx.SHA1, spdx.SHA256:
+		algorithm := spdx.ChecksumAlgorithm(checksumAlgorithm)
+		pkg.PackageChecksums[algorithm] = spdx.Checksum{Algorithm: algorithm, Value: checksumValue}
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)
 	}

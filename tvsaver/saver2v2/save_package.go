@@ -58,14 +58,14 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
 		}
 	}
-	if pkg.PackageChecksumSHA1 != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA1: %s\n", pkg.PackageChecksumSHA1)
+	if pkg.PackageChecksums[spdx.SHA1].Value != "" {
+		fmt.Fprintf(w, "PackageChecksum: SHA1: %s\n", pkg.PackageChecksums[spdx.SHA1].Value)
 	}
-	if pkg.PackageChecksumSHA256 != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA256: %s\n", pkg.PackageChecksumSHA256)
+	if pkg.PackageChecksums[spdx.SHA256].Value != "" {
+		fmt.Fprintf(w, "PackageChecksum: SHA256: %s\n", pkg.PackageChecksums[spdx.SHA256].Value)
 	}
-	if pkg.PackageChecksumMD5 != "" {
-		fmt.Fprintf(w, "PackageChecksum: MD5: %s\n", pkg.PackageChecksumMD5)
+	if pkg.PackageChecksums[spdx.MD5].Value != "" {
+		fmt.Fprintf(w, "PackageChecksum: MD5: %s\n", pkg.PackageChecksums[spdx.MD5].Value)
 	}
 	if pkg.PackageHomePage != "" {
 		fmt.Fprintf(w, "PackageHomePage: %s\n", pkg.PackageHomePage)

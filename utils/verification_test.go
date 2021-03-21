@@ -120,27 +120,52 @@ func TestPackage2_2CanGetVerificationCode(t *testing.T) {
 		"File0": &spdx.File2_2{
 			FileName:           "file2.txt",
 			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		"File1": &spdx.File2_2{
 			FileName:           "file1.txt",
 			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "3333333333bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		"File2": &spdx.File2_2{
 			FileName:           "file3.txt",
 			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "8888888888bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		"File3": &spdx.File2_2{
 			FileName:           "file5.txt",
 			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "2222222222bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		"File4": &spdx.File2_2{
 			FileName:           "file4.txt",
 			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+				},
+			},
 		},
 	}
 
@@ -161,27 +186,52 @@ func TestPackage2_2CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 		spdx.ElementID("File0"): &spdx.File2_2{
 			FileName:           "file1.txt",
 			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		spdx.ElementID("File1"): &spdx.File2_2{
 			FileName:           "file2.txt",
 			FileSPDXIdentifier: "File1",
-			FileChecksumSHA1:   "3333333333bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "3333333333bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		spdx.ElementID("File2"): &spdx.File2_2{
 			FileName:           "thisfile.spdx",
 			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "bbbbbbbbbbccccccccccddddddddddaaaaaaaaaa",
+				},
+			},
 		},
 		spdx.ElementID("File3"): &spdx.File2_2{
 			FileName:           "file3.txt",
 			FileSPDXIdentifier: "File3",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "8888888888bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		spdx.ElementID("File4"): &spdx.File2_2{
 			FileName:           "file4.txt",
 			FileSPDXIdentifier: "File4",
-			FileChecksumSHA1:   "2222222222bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "2222222222bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 	}
 
@@ -202,13 +252,23 @@ func TestPackage2_2GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 		spdx.ElementID("File0"): &spdx.File2_2{
 			FileName:           "file2.txt",
 			FileSPDXIdentifier: "File0",
-			FileChecksumSHA1:   "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 		spdx.ElementID("File1"): nil,
 		spdx.ElementID("File2"): &spdx.File2_2{
 			FileName:           "file3.txt",
 			FileSPDXIdentifier: "File2",
-			FileChecksumSHA1:   "8888888888bbbbbbbbbbccccccccccdddddddddd",
+			FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+				spdx.SHA1: spdx.Checksum{
+					Algorithm: spdx.SHA1,
+					Value:     "8888888888bbbbbbbbbbccccccccccdddddddddd",
+				},
+			},
 		},
 	}
 
