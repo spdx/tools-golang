@@ -87,7 +87,6 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983e",
 			},
 		},
-
 		LicenseConcluded: "GPL-2.0-or-later AND WTFPL",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
@@ -110,7 +109,6 @@ func TestSaver2_2DocumentSavesText(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983f",
 			},
 		},
-
 		LicenseConcluded:  "BSD-3-Clause",
 		LicenseInfoInFile: []string{"BSD-3-Clause"},
 		FileCopyrightText: "Copyright (c) Jane Doe LLC",

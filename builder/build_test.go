@@ -498,7 +498,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 			}
 		}
 	}
-
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
@@ -536,7 +535,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 			}
 		}
 	}
-
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
@@ -574,7 +572,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 			}
 		}
 	}
-
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
@@ -612,7 +609,6 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 			}
 		}
 	}
-
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}

@@ -46,7 +46,6 @@ func BuildFileSection2_2(filePath string, prefix string, fileNumber int) (*spdx.
 				Value:     smd5,
 			},
 		},
-
 		LicenseConcluded:  "NOASSERTION",
 		LicenseInfoInFile: []string{},
 		FileCopyrightText: "NOASSERTION",

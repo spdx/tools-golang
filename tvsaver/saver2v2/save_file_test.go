@@ -32,7 +32,6 @@ func TestSaver2_2FileSavesText(t *testing.T) {
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
@@ -151,7 +150,6 @@ func TestSaver2_2FileSavesSnippetsAlso(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
@@ -206,7 +204,6 @@ func TestSaver2_2FileOmitsOptionalFieldsIfEmpty(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",
@@ -248,7 +245,6 @@ func TestSaver2_2FileWrapsCopyrightMultiLine(t *testing.T) {
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 		},
-
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFile: []string{
 			"Apache-2.0",

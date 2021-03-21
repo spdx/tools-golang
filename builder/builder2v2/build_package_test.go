@@ -87,7 +87,6 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 			}
 		}
 	}
-
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}

@@ -192,7 +192,6 @@ type Package2_2 struct {
 
 	// 3.10: Package Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: optional, one or many
-
 	PackageChecksums map[ChecksumAlgorithm]Checksum
 
 	// 3.11: Package Home Page
