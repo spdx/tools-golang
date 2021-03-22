@@ -33,7 +33,7 @@ func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
 		fmt.Fprintf(w, "SnippetLicenseComments: %s\n", textify(sn.SnippetLicenseComments))
 	}
 	if sn.SnippetCopyrightText != "" {
-		fmt.Fprintf(w, "SnippetCopyrightText: %s\n", sn.SnippetCopyrightText)
+		fmt.Fprintf(w, "SnippetCopyrightText: %s\n", textify(sn.SnippetCopyrightText))
 	}
 	if sn.SnippetComment != "" {
 		fmt.Fprintf(w, "SnippetComment: %s\n", textify(sn.SnippetComment))
