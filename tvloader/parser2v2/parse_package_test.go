@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ===== Parser package section state change tests =====
@@ -1100,5 +1101,44 @@ func TestFailsPackageExternalRefWithInvalidFormat(t *testing.T) {
 	_, _, _, err := extractPackageExternalReference("whoops")
 	if err == nil {
 		t.Errorf("expected non-nil error, got nil")
+	}
+}
+
+func TestParser2_2PackageWithoutSpdxIdentifierThrowsError(t *testing.T) {
+	// More than one package , the previous package doesn't contain the SPDXID
+	pkgOldName := "p1"
+	parser := tvParser2_2{
+		doc: &spdx.Document2_2{Packages: map[spdx.ElementID]*spdx.Package2_2{}},
+		st:  psPackage2_2,
+		pkg: &spdx.Package2_2{PackageName: pkgOldName},
+	}
+	pkgOld := parser.pkg
+	parser.doc.Packages["p1"] = pkgOld
+	// the Document's Packages should have this one only
+	if parser.doc.Packages["p1"] != pkgOld {
+		t.Errorf("expected package %v, got %v", pkgOld, parser.doc.Packages["p1"])
+	}
+	if len(parser.doc.Packages) != 1 {
+		t.Errorf("expected 1 package, got %d", len(parser.doc.Packages))
+	}
+
+	// Case 2: Checks the Last package
+	pkgName := "p2"
+	err := parser.parsePair2_2("PackageName", pkgName)
+	if err == nil {
+		t.Errorf("Packages withoutSpdx Identifiers getting accepted")
+	}
+	var tvPairs []reader.TagValuePair
+	tvPair1 := reader.TagValuePair{Tag: "SPDXVersion", Value: "SPDX-2.2"}
+	tvPairs = append(tvPairs, tvPair1)
+	tvPair2 := reader.TagValuePair{Tag: "DataLicense", Value: "CC0-1.0"}
+	tvPairs = append(tvPairs, tvPair2)
+	tvPair3 := reader.TagValuePair{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"}
+	tvPairs = append(tvPairs, tvPair3)
+	tvPair4 := reader.TagValuePair{Tag: "PackageName", Value: "p1"}
+	tvPairs = append(tvPairs, tvPair4)
+	_, err = ParseTagValues(tvPairs)
+	if err == nil {
+		t.Errorf("Packages withoutSpdx Identifiers getting accepted")
 	}
 }
