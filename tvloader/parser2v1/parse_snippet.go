@@ -34,6 +34,10 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 	// tag for creating new package section and going back to parsing Package
 	case "PackageName":
 		parser.st = psPackage2_1
+		//check here whether the last file of the previous package contained the FileSpdxIdentifier
+		if parser.file != nil && parser.file.FileSPDXIdentifier == spdx.ElementID("") {
+			return fmt.Errorf("Invalid file without a file SPDX identifier")
+		}
 		parser.file = nil
 		parser.snippet = nil
 		return parser.parsePairFromPackage2_1(tag, value)

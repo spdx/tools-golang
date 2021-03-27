@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ===== Parser file section state change tests =====
@@ -885,4 +886,60 @@ func TestParser2_1FailsIfArtifactURIBeforeArtifactName(t *testing.T) {
 	}
 }
 
+func TestParser2_1FilesWithoutSpdxIdThrowError(t *testing.T) {
+	//case 1
+	// Last unpackaged file no packages in doc
+	// Last file of last package in the doc
+	var tvPairs []reader.TagValuePair
+	tvPair1 := reader.TagValuePair{Tag: "SPDXVersion", Value: "SPDX-2.1"}
+	tvPairs = append(tvPairs, tvPair1)
+	tvPair2 := reader.TagValuePair{Tag: "DataLicense", Value: "CC0-1.0"}
+	tvPairs = append(tvPairs, tvPair2)
+	tvPair3 := reader.TagValuePair{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"}
+	tvPairs = append(tvPairs, tvPair3)
+	tvPair4 := reader.TagValuePair{Tag: "FileName", Value: "f1"}
+	tvPairs = append(tvPairs, tvPair4)
+	_, err := ParseTagValues(tvPairs)
+	if err == nil {
+		t.Errorf("files withoutSpdx Identifiers getting accepted")
+	}
 
+	//case 2 : The previous file (packaged or unpackaged does not contain spdxID)
+	tvPair5 := reader.TagValuePair{Tag: "FileName", Value: "f2"}
+	tvPairs = append(tvPairs, tvPair5)
+	_, err = ParseTagValues(tvPairs)
+	if err == nil {
+		t.Errorf("%s", err)
+	}
+
+	//case 3 : Invalid file with snippet
+	//Last unpackaged file before the packges start
+	//Last file of a package and New package starts
+	sid1 := spdx.ElementID("s1")
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	fileName := "f2.txt"
+	err = parser.parsePair2_1("FileName", fileName)
+	err = parser.parsePair2_1("SnippetSPDXID", string(sid1))
+	err = parser.parsePair2_1("PackageName", "p2")
+	if err == nil {
+		t.Errorf("files withoutSpdx Identifiers getting accepted")
+	}
+
+	//case 4 : Invalid File without snippets
+	//Last unpackaged file before the packges start
+	//Last file of a package and New package starts
+	parser3 := tvParser2_1{
+		doc: &spdx.Document2_1{},
+		st:  psCreationInfo2_1,
+	}
+	fileName = "f3.txt"
+	err = parser3.parsePair2_1("FileName", fileName)
+	err = parser3.parsePair2_1("PackageName", "p2")
+	if err == nil {
+		t.Errorf("files withoutSpdx Identifiers getting accepted")
+	}
+	err = parser3.parsePair2_1("PackageName", "p2")
+}

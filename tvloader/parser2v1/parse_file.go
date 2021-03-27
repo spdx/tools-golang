@@ -18,10 +18,18 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	switch tag {
 	// tag for creating new file section
 	case "FileName":
+		//check if the previous file contained a spdxId or not
+		if parser.file != nil && parser.file.FileSPDXIdentifier == spdx.ElementID("") {
+			return fmt.Errorf("Invalid file without a file SPDX identifier")
+		}
 		parser.file = &spdx.File2_1{}
 		parser.file.FileName = value
 	// tag for creating new package section and going back to parsing Package
 	case "PackageName":
+		//check if the previous file contained a spdxId or not
+		if parser.file != nil && parser.file.FileSPDXIdentifier == spdx.ElementID("") {
+			return fmt.Errorf("Invalid file without a file SPDX identifier")
+		}
 		parser.st = psPackage2_1
 		parser.file = nil
 		return parser.parsePairFromPackage2_1(tag, value)

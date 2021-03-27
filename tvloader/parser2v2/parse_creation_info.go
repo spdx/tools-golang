@@ -76,7 +76,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// tag for going on to package section
 	case "PackageName":
-		//before starting the parsing of packages check if the last unpackaged file did contain a SPDX file Identifier
+		//Error if last file does not has FileSPDXId
 		if parser.file != nil && parser.file.FileSPDXIdentifier == spdx.ElementID("") {
 			return fmt.Errorf("Invalid file without a package SPDX identifier")
 		}
