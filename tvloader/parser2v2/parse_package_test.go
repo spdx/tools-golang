@@ -1126,19 +1126,16 @@ func TestParser2_2PackageWithoutSpdxIdentifierThrowsError(t *testing.T) {
 	pkgName := "p2"
 	err := parser.parsePair2_2("PackageName", pkgName)
 	if err == nil {
-		t.Errorf("Packages withoutSpdx Identifiers getting accepted")
+		t.Errorf("packages withoutSpdx Identifiers getting accepted")
 	}
-	var tvPairs []reader.TagValuePair
-	tvPair1 := reader.TagValuePair{Tag: "SPDXVersion", Value: "SPDX-2.2"}
-	tvPairs = append(tvPairs, tvPair1)
-	tvPair2 := reader.TagValuePair{Tag: "DataLicense", Value: "CC0-1.0"}
-	tvPairs = append(tvPairs, tvPair2)
-	tvPair3 := reader.TagValuePair{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"}
-	tvPairs = append(tvPairs, tvPair3)
-	tvPair4 := reader.TagValuePair{Tag: "PackageName", Value: "p1"}
-	tvPairs = append(tvPairs, tvPair4)
+	tvPairs := []reader.TagValuePair{
+		{Tag: "SPDXVersion", Value: "SPDX-2.2"},
+		{Tag: "DataLicense", Value: "CC0-1.0"},
+		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
+		{Tag: "PackageName", Value: "p1"},
+	}
 	_, err = ParseTagValues(tvPairs)
 	if err == nil {
-		t.Errorf("Packages withoutSpdx Identifiers getting accepted")
+		t.Errorf("packages withoutSpdx Identifiers getting accepted")
 	}
 }
