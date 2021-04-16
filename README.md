@@ -58,12 +58,12 @@ library.
 
 ## Licenses
 
-As indicated in `LICENSE-code.txt`, tools-golang **source code files** are
+As indicated in `LICENSE-code`, tools-golang **source code files** are
 provided and may be used, at your option, under *either*:
 * Apache License, version 2.0 (**Apache-2.0**), **OR**
 * GNU General Public License, version 2.0 or later (**GPL-2.0-or-later**).
 
-As indicated in `LICENSE-docs.txt`, tools-golang **documentation files** are
+As indicated in `LICENSE-docs`, tools-golang **documentation files** are
 provided and may be used under the Creative Commons Attribution
 4.0 International license (**CC-BY-4.0**).
 
