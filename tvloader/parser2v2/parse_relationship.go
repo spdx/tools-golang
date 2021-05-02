@@ -35,7 +35,9 @@ func (parser *tvParser2_2) parsePairForRelationship2_2(tag string, value string)
 		}
 		parser.rln.RefA = aID
 		parser.rln.Relationship = strings.TrimSpace(rp[1])
-		bID, err := extractDocElementID(strings.TrimSpace(rp[2]))
+		// NONE and NOASSERTION are permitted on right side
+		permittedSpecial := []string{"NONE", "NOASSERTION"}
+		bID, err := extractDocElementSpecial(strings.TrimSpace(rp[2]), permittedSpecial)
 		if err != nil {
 			return err
 		}
