@@ -21,10 +21,10 @@ func ParseTagValues(tvs []reader.TagValuePair) (*spdx.Document2_2, error) {
 		}
 	}
 	if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_2 {
-		return nil, fmt.Errorf("invalid file without a file SPDX identifier")
+		return nil, fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 	}
 	if parser.pkg != nil && parser.pkg.PackageSPDXIdentifier == nullSpdxElementId2_2 {
-		return nil, fmt.Errorf("invalid package without a package SPDX identifier")
+		return nil, fmt.Errorf("package with PackageName %s does not have SPDX identifier", parser.pkg.PackageName)
 	}
 	return parser.doc, nil
 }

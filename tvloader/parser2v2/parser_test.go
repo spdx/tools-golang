@@ -77,3 +77,33 @@ func TestParser2_2StartFailsToParseIfInInvalidState(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
+
+func TestParser2_2FilesWithoutSpdxIdThrowErrorAtCompleteParse(t *testing.T) {
+	// case
+	// Last unpackaged file no packages in doc
+	// Last file of last package in the doc
+	tvPairs := []reader.TagValuePair{
+		{Tag: "SPDXVersion", Value: "SPDX-2.2"},
+		{Tag: "DataLicense", Value: "CC0-1.0"},
+		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
+		{Tag: "FileName", Value: "f1"},
+	}
+	_, err := ParseTagValues(tvPairs)
+	if err == nil {
+		t.Errorf("files withoutSpdx Identifiers getting accepted")
+	}
+}
+
+func TestParser2_2PackageWithoutSpdxIdThrowErrorAtCompleteParse(t *testing.T) {
+	// case : Checks the last package
+	tvPairs := []reader.TagValuePair{
+		{Tag: "SPDXVersion", Value: "SPDX-2.2"},
+		{Tag: "DataLicense", Value: "CC0-1.0"},
+		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
+		{Tag: "PackageName", Value: "p1"},
+	}
+	_, err := ParseTagValues(tvPairs)
+	if err == nil {
+		t.Errorf("packages withoutSpdx Identifiers getting accepted")
+	}
+}

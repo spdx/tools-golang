@@ -20,7 +20,7 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "FileName":
 		// check if the previous file contained a spdxId or not
 		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
-			return fmt.Errorf("invalid file without a file SPDX identifier")
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
 		parser.file = &spdx.File2_1{}
 		parser.file.FileName = value
@@ -28,7 +28,7 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "PackageName":
 		// check if the previous file contained a spdxId or not
 		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
-			return fmt.Errorf("invalid file without a file SPDX identifier")
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
 		parser.st = psPackage2_1
 		parser.file = nil

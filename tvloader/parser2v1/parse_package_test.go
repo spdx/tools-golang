@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
-	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ===== Parser package section state change tests =====
@@ -1088,19 +1087,8 @@ func TestParser2_1PackageWithoutSpdxIdentifierThrowsError(t *testing.T) {
 		t.Errorf("expected 1 package, got %d", len(parser.doc.Packages))
 	}
 
-	// Case 2: Checks the Last package
 	pkgName := "p2"
 	err := parser.parsePair2_1("PackageName", pkgName)
-	if err == nil {
-		t.Errorf("packages withoutSpdx Identifiers getting accepted")
-	}
-	tvPairs := []reader.TagValuePair{
-		{Tag: "SPDXVersion", Value: "SPDX-2.1"},
-		{Tag: "DataLicense", Value: "CC0-1.0"},
-		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
-		{Tag: "PackageName", Value: "p1"},
-	}
-	_, err = ParseTagValues(tvPairs)
 	if err == nil {
 		t.Errorf("packages withoutSpdx Identifiers getting accepted")
 	}

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
-	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ===== Parser file section state change tests =====
@@ -887,44 +886,34 @@ func TestParser2_1FailsIfArtifactURIBeforeArtifactName(t *testing.T) {
 }
 
 func TestParser2_1FilesWithoutSpdxIdThrowError(t *testing.T) {
-	// case 1
-	// Last unpackaged file no packages in doc
-	// Last file of last package in the doc
-	tvPairs := []reader.TagValuePair{
-		{Tag: "SPDXVersion", Value: "SPDX-2.1"},
-		{Tag: "DataLicense", Value: "CC0-1.0"},
-		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
-		{Tag: "FileName", Value: "f1"},
+	// case 1 : The previous file (packaged or unpackaged does not contain spdxID)
+	parser1 := tvParser2_1{
+		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:   psFile2_1,
+		file: &spdx.File2_1{FileName: "FileName"},
 	}
-	_, err := ParseTagValues(tvPairs)
+
+	err := parser1.parsePair2_1("FileName", "f2")
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")
 	}
 
-	// case 2 : The previous file (packaged or unpackaged does not contain spdxID)
-	tvPairs = append(tvPairs, reader.TagValuePair{Tag: "FileName", Value: "f2"})
-	_, err = ParseTagValues(tvPairs)
-	if err == nil {
-		t.Errorf("%s", err)
-	}
-
-	// case 3 : Invalid file with snippet
-	// Last unpackaged file before the packges start
+	// case 2 : Invalid file with snippet
+	// Last unpackaged file before the snippet start
 	// Last file of a package and New package starts
 	sid1 := spdx.ElementID("s1")
-	parser := tvParser2_1{
+	parser2 := tvParser2_1{
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
 	}
 	fileName := "f2.txt"
-	_ = parser.parsePair2_1("FileName", fileName)
-	_ = parser.parsePair2_1("SnippetSPDXID", string(sid1))
-	err = parser.parsePair2_1("PackageName", "p2")
+	_ = parser2.parsePair2_1("FileName", fileName)
+	err = parser2.parsePair2_1("SnippetSPDXID", string(sid1))
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")
 	}
 
-	// case 4 : Invalid File without snippets
+	// case 3 : Invalid File without snippets
 	// Last unpackaged file before the packges start
 	// Last file of a package and New package starts
 	parser3 := tvParser2_1{

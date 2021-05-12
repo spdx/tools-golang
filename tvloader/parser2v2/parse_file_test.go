@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
-	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ===== Parser file section state change tests =====
@@ -920,44 +919,34 @@ func TestParser2_2FailsIfArtifactURIBeforeArtifactName(t *testing.T) {
 }
 
 func TestParser2_2FilesWithoutSpdxIdThrowError(t *testing.T) {
-	// case 1
-	// Last unpackaged file no packages in doc
-	// Last file of last package in the doc
-	tvPairs := []reader.TagValuePair{
-		{Tag: "SPDXVersion", Value: "SPDX-2.2"},
-		{Tag: "DataLicense", Value: "CC0-1.0"},
-		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
-		{Tag: "FileName", Value: "f1"},
+	// case 1 : The previous file (packaged or unpackaged does not contain spdxID)
+	parser1 := tvParser2_2{
+		doc:  &spdx.Document2_2{Packages: map[spdx.ElementID]*spdx.Package2_2{}},
+		st:   psFile2_2,
+		file: &spdx.File2_2{FileName: "FileName"},
 	}
-	_, err := ParseTagValues(tvPairs)
+
+	err := parser1.parsePair2_2("FileName", "f2")
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")
 	}
 
-	// case 2 : The previous file (packaged or unpackaged does not contain spdxID)
-	tvPairs = append(tvPairs, reader.TagValuePair{Tag: "FileName", Value: "f2"})
-	_, err = ParseTagValues(tvPairs)
-	if err == nil {
-		t.Errorf("%s", err)
-	}
-
-	// case 3 : Invalid file with snippet
-	// Last unpackaged file before the packges start
+	// case 2 : Invalid file with snippet
+	// Last unpackaged file before the snippet start
 	// Last file of a package and New package starts
 	sid1 := spdx.ElementID("s1")
-	parser := tvParser2_2{
+	parser2 := tvParser2_2{
 		doc: &spdx.Document2_2{},
 		st:  psCreationInfo2_2,
 	}
 	fileName := "f2.txt"
-	_ = parser.parsePair2_2("FileName", fileName)
-	_ = parser.parsePair2_2("SnippetSPDXID", string(sid1))
-	err = parser.parsePair2_2("PackageName", "p2")
+	_ = parser2.parsePair2_2("FileName", fileName)
+	err = parser2.parsePair2_2("SnippetSPDXID", string(sid1))
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")
 	}
 
-	// case 4 : Invalid File without snippets
+	// case 3 : Invalid File without snippets
 	// Last unpackaged file before the packges start
 	// Last file of a package and New package starts
 	parser3 := tvParser2_2{
@@ -965,7 +954,10 @@ func TestParser2_2FilesWithoutSpdxIdThrowError(t *testing.T) {
 		st:  psCreationInfo2_2,
 	}
 	fileName = "f3.txt"
-	_ = parser3.parsePair2_2("FileName", fileName)
+	err = parser3.parsePair2_2("FileName", fileName)
+	if err != nil {
+		t.Errorf("%s", err)
+	}
 	err = parser3.parsePair2_2("PackageName", "p2")
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")

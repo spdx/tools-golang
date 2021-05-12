@@ -13,6 +13,10 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 	switch tag {
 	// tag for creating new snippet section
 	case "SnippetSPDXID":
+		// check here whether the file containe
+		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
+		}
 		parser.snippet = &spdx.Snippet2_1{}
 		eID, err := extractElementID(value)
 		if err != nil {
@@ -34,10 +38,6 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 	// tag for creating new package section and going back to parsing Package
 	case "PackageName":
 		parser.st = psPackage2_1
-		// check here whether the last file of the previous package contained the FileSpdxIdentifier
-		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
-			return fmt.Errorf("invalid file without a file SPDX identifier")
-		}
 		parser.file = nil
 		parser.snippet = nil
 		return parser.parsePairFromPackage2_1(tag, value)
