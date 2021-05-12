@@ -902,12 +902,12 @@ func TestParser2_1FilesWithoutSpdxIdThrowError(t *testing.T) {
 	// Last unpackaged file before the snippet start
 	// Last file of a package and New package starts
 	sid1 := spdx.ElementID("s1")
-	parser2 := tvParser2_1{
-		doc: &spdx.Document2_1{},
-		st:  psCreationInfo2_1,
-	}
 	fileName := "f2.txt"
-	_ = parser2.parsePair2_1("FileName", fileName)
+	parser2 := tvParser2_1{
+		doc:  &spdx.Document2_1{},
+		st:   psCreationInfo2_1,
+		file: &spdx.File2_1{FileName: fileName},
+	}
 	err = parser2.parsePair2_1("SnippetSPDXID", string(sid1))
 	if err == nil {
 		t.Errorf("files withoutSpdx Identifiers getting accepted")
