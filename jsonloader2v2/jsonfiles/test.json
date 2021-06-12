@@ -1,0 +1,72 @@
+{
+    "SPDXID" : "SPDXRef-DOCUMENT",
+    "spdxVersion" : "SPDX-2.2",
+    "creationInfo" : {
+      "comment" : "This package has been shipped in source and binary form.\nThe binaries were created with gcc 4.5.1 and expect to link to\ncompatible system run time libraries.",
+      "created" : "2010-01-29T18:30:22Z",
+      "creators" : [ "Tool: LicenseFind-1.0", "Organization: ExampleCodeInspect ()", "Person: Jane Doe ()" ],
+      "licenseListVersion" : "3.8"
+    },
+    "name" : "SPDX-Tools-v2.0",
+    "dataLicense" : "CC0-1.0",
+    "comment" : "This document was created using SPDX 2.0 using licenses from the web site.",
+    "externalDocumentRefs" : [ {
+      "externalDocumentId" : "DocumentRef-spdx-tool-1.2",
+      "checksum" : {
+        "algorithm" : "SHA1",
+        "checksumValue" : "d6a770ba38583ed4bb4525bd96e50461655d2759"
+      },
+      "spdxDocument" : "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
+    } ],
+    "annotations" : [ {
+      "annotationDate" : "2010-02-10T00:00:00Z",
+      "annotationType" : "REVIEW",
+      "annotator" : "Person: Joe Reviewer",
+      "comment" : "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses"
+    }, {
+      "annotationDate" : "2011-03-13T00:00:00Z",
+      "annotationType" : "REVIEW",
+      "annotator" : "Person: Suzanne Reviewer",
+      "comment" : "Another example reviewer."
+    }, {
+      "annotationDate" : "2010-01-29T18:30:22Z",
+      "annotationType" : "OTHER",
+      "annotator" : "Person: Jane Doe ()",
+      "comment" : "Document level annotation"
+    } ],
+    "documentNamespace" : "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+    "relationships" : [ {
+      "spdxElementId" : "SPDXRef-DOCUMENT",
+      "relatedSpdxElement" : "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement",
+      "relationshipType" : "COPY_OF"
+    }, {
+      "spdxElementId" : "SPDXRef-DOCUMENT",
+      "relatedSpdxElement" : "SPDXRef-Package",
+      "relationshipType" : "CONTAINS"
+    }, {
+      "spdxElementId" : "SPDXRef-DOCUMENT",
+      "relatedSpdxElement" : "SPDXRef-File",
+      "relationshipType" : "DESCRIBES"
+    }, {
+      "spdxElementId" : "SPDXRef-DOCUMENT",
+      "relatedSpdxElement" : "SPDXRef-Package",
+      "relationshipType" : "DESCRIBES"
+    }, {
+      "spdxElementId" : "SPDXRef-Package",
+      "relatedSpdxElement" : "SPDXRef-Saxon",
+      "relationshipType" : "DYNAMIC_LINK"
+    }, {
+      "spdxElementId" : "SPDXRef-Package",
+      "relatedSpdxElement" : "SPDXRef-JenaLib",
+      "relationshipType" : "CONTAINS"
+    }, {
+      "spdxElementId" : "SPDXRef-JenaLib",
+      "relatedSpdxElement" : "SPDXRef-Package",
+      "relationshipType" : "CONTAINS"
+    }, {
+      "spdxElementId" : "SPDXRef-File",
+      "relatedSpdxElement" : "SPDXRef-fromDoap-0",
+      "relationshipType" : "GENERATED_FROM"
+    } ]
+  }
+  
