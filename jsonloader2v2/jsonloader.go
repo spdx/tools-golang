@@ -53,11 +53,11 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 		// 	if err != nil {
 		// 		return err
 		// 	}
-		// case "relationships":
-		// 	err := spec.parseJsonRelationships2_2(key, val, doc)
-		// 	if err != nil {
-		// 		return err
-		// 	}
+		case "relationships":
+			err := spec.parseJsonRelationships2_2(key, val, doc)
+			if err != nil {
+				return err
+			}
 		default:
 			return fmt.Errorf("unrecognized key here %v", key)
 
