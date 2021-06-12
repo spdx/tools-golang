@@ -9,8 +9,6 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-//TODO: inspect all functions
-
 // used to extract key / value from embedded substrings
 // returns subkey, subvalue, nil if no error, or "", "", error otherwise
 func extractSubs(value string) (string, string, error) {
@@ -73,6 +71,23 @@ func extractDocElementID(value string) (spdx.DocElementID, error) {
 
 	// we're good
 	return spdx.DocElementID{DocumentRefID: docRefID, ElementRefID: spdx.ElementID(eltRefID)}, nil
+}
+
+// used to extract SPDXRef values from an SPDX Identifier, OR "special" strings
+// from a specified set of permitted values. The primary use case for this is
+// the right-hand side of Relationships, where beginning in SPDX 2.2 the values
+// "NONE" and "NOASSERTION" are permitted. If the value does not match one of
+// the specified permitted values, it will fall back to the ordinary
+// DocElementID extractor.
+func extractDocElementSpecial(value string, permittedSpecial []string) (spdx.DocElementID, error) {
+	// check value against special set first
+	for _, sp := range permittedSpecial {
+		if sp == value {
+			return spdx.DocElementID{SpecialID: sp}, nil
+		}
+	}
+	// not found, fall back to regular search
+	return extractDocElementID(value)
 }
 
 // used to extract SPDXRef values only from an SPDX Identifier which can point
