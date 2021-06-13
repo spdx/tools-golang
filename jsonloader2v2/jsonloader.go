@@ -69,9 +69,11 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 				return err
 			}
 			//then parse the snippets
-			err = spec.parseJsonSnippets2_2(key, val, doc)
-			if err != nil {
-				return err
+			if spec["snippets"] != nil {
+				err = spec.parseJsonSnippets2_2("snippets", spec["snippets"], doc)
+				if err != nil {
+					return err
+				}
 			}
 		default:
 			return fmt.Errorf("unrecognized key here %v", key)
