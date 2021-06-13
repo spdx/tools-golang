@@ -49,7 +49,11 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 				return err
 			}
 		case "annotations":
-			err := spec.parseJsonAnnotations2_2(key, val, doc)
+			id, err := extractDocElementID(spec["SPDXID"].(string))
+			if err != nil {
+				return fmt.Errorf("%s", err)
+			}
+			err = spec.parseJsonAnnotations2_2(key, val, doc, id)
 			if err != nil {
 				return err
 			}
@@ -60,7 +64,6 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 			}
 		default:
 			return fmt.Errorf("unrecognized key here %v", key)
-
 		}
 
 	}
