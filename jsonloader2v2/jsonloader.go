@@ -63,7 +63,13 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 				return err
 			}
 		case "files":
+			//first parse all the files
 			err := spec.parseJsonFiles2_2(key, val, doc)
+			if err != nil {
+				return err
+			}
+			//then parse the snippets
+			err = spec.parseJsonSnippets2_2(key, val, doc)
 			if err != nil {
 				return err
 			}
