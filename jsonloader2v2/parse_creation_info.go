@@ -73,7 +73,6 @@ func parseCreators(creators interface{}, ci *spdx.CreationInfo2_2) error {
 		s := reflect.ValueOf(creators)
 
 		for i := 0; i < s.Len(); i++ {
-			fmt.Println(s.Index(i))
 			subkey, subvalue, err := extractSubs(s.Index(i).Interface().(string))
 			if err != nil {
 				return err
@@ -99,7 +98,6 @@ func parseExternalDocumentRefs(references interface{}, ci *spdx.CreationInfo2_2)
 		s := reflect.ValueOf(references)
 
 		for i := 0; i < s.Len(); i++ {
-			fmt.Println(s.Index(i))
 			ref := s.Index(i).Interface().(map[string]interface{})
 			documentRefID := ref["externalDocumentId"].(string)
 			if !strings.HasPrefix(documentRefID, "DocumentRef-") {

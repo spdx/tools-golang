@@ -84,6 +84,22 @@ func TestLoad2_2(t *testing.T) {
 						Annotator:                "Jane Doe ()",
 						AnnotationComment:        "Document level annotation",
 					},
+					{
+						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "File"},
+						AnnotationDate:           "2011-01-29T18:30:22Z",
+						AnnotationType:           "OTHER",
+						AnnotatorType:            "Person",
+						Annotator:                "File Commenter",
+						AnnotationComment:        "File level annotation",
+					},
+					{
+						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
+						AnnotationDate:           "2011-01-29T18:30:22Z",
+						AnnotationType:           "OTHER",
+						AnnotatorType:            "Person",
+						Annotator:                "Package Commenter",
+						AnnotationComment:        "Package level annotation",
+					},
 				},
 				Relationships: []*spdx.Relationship2_2{
 					{
@@ -330,11 +346,11 @@ func TestLoad2_2(t *testing.T) {
 			if !reflect.DeepEqual(got.CreationInfo, tt.want.CreationInfo) {
 				t.Errorf("Load2_2() = %v, want %v", got.CreationInfo, tt.want.CreationInfo)
 			}
-			// for i := 0; i < len(got.Annotations); i++ {
-			// 	if !reflect.DeepEqual(got.Annotations[i], tt.want.Annotations[i]) {
-			// 		t.Errorf("Load2_2() = %v, want %v", got.Annotations[i], tt.want.Annotations[i])
-			// 	}
-			// }
+			for i := 0; i < len(tt.want.Annotations); i++ {
+				if !reflect.DeepEqual(got.Annotations[i], tt.want.Annotations[i]) {
+					t.Errorf("Load2_2() = %v, want %v", got.Annotations[i], tt.want.Annotations[i])
+				}
+			}
 			for i := 0; i < len(got.Relationships); i++ {
 				if !reflect.DeepEqual(got.Relationships[i], tt.want.Relationships[i]) {
 					t.Errorf("Load2_2() = %v, want %v", got.Relationships[i], tt.want.Relationships[i])
