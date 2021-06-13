@@ -74,6 +74,9 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 			if err2 != nil {
 				return fmt.Errorf("%s", err2)
 			}
+			if doc.UnpackagedFiles[fileID].Snippets == nil {
+				doc.UnpackagedFiles[fileID].Snippets = make(map[spdx.ElementID]*spdx.Snippet2_2)
+			}
 			doc.UnpackagedFiles[fileID].Snippets[eID] = snippet
 		}
 

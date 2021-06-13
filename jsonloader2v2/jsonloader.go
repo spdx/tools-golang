@@ -94,6 +94,8 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 					return err
 				}
 			}
+		case "snippets":
+			//redundant case
 		default:
 			return fmt.Errorf("unrecognized key here %v", key)
 		}
