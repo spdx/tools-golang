@@ -66,7 +66,7 @@ and then printing the corresponding spdx struct for the document .
 
 ## 8-jsonparser2v2
 
-*rdfloader*, 
+*jsonparser2v2*, *tvsaver*
 
 This example demonstrates loading an SPDX json from disk into memory,
 and then re-saving it to a different file on disk in tag-value format .

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *tvloader*, *tvsaver*
+// Example for: *jsonparser2v2*, *tvsaver*
 
-// This example demonstrates loading an SPDX tag-value file from disk into memory,
-// and re-saving it to a different file on disk.
+// This example demonstrates loading an SPDX json from disk into memory,
+// and then re-saving it to a different file on disk in tag-value format .
 
 package main
 
@@ -29,12 +29,12 @@ func main() {
 	}
 
 	// open the SPDX file
-	jsonData, err := ioutil.ReadFile(args[1]) // b has type []byte
+	jsonData, err := ioutil.ReadFile(args[1]) // jsondata has type []byte
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// try to load the SPDX file's contents as a tag-value file, version 2.2
+	// try to load the SPDX file's contents as a json file, version 2.2
 	doc, err := jsonloader2v2.Load2_2(jsonData)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
