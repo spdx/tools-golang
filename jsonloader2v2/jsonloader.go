@@ -94,6 +94,11 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 					return err
 				}
 			}
+		case "hasExtractedLicensingInfos":
+			err := spec.parseJsonOtherLicenses2_2(key, val, doc)
+			if err != nil {
+				return err
+			}
 		case "snippets":
 			//redundant case
 		default:
