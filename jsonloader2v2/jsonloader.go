@@ -80,6 +80,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 					return err
 				}
 			}
+			//then parse the packages
 			if spec["packages"] != nil {
 				err = spec.parseJsonPackages2_2("packages", spec["packages"], doc)
 				if err != nil {
