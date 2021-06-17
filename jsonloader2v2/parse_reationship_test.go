@@ -36,7 +36,11 @@ func TestJSONSpdxDocument_parseJsonRelationships2_2(t *testing.T) {
 			"spdxElementId" : "SPDXRef-Package",
 			"relatedSpdxElement" : "SPDXRef-JenaLib",
 			"relationshipType" : "CONTAINS"
-		  }, {
+		  },{
+			"spdxElementId" : "SPDXRef-CommonsLangSrc",
+			"relatedSpdxElement" : "NOASSERTION",
+			"relationshipType" : "GENERATED_FROM"
+		  } , {
 			"spdxElementId" : "SPDXRef-JenaLib",
 			"relatedSpdxElement" : "SPDXRef-Package",
 			"relationshipType" : "CONTAINS"
@@ -78,6 +82,11 @@ func TestJSONSpdxDocument_parseJsonRelationships2_2(t *testing.T) {
 			RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
 			RefB:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "JenaLib"},
 			Relationship: "CONTAINS",
+		},
+		{
+			RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "CommonsLangSrc"},
+			RefB:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "", SpecialID: "NOASSERTION"},
+			Relationship: "GENERATED_FROM",
 		},
 		{
 			RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "JenaLib"},

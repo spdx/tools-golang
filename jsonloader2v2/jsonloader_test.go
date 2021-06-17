@@ -133,6 +133,11 @@ func TestLoad2_2(t *testing.T) {
 						Relationship: "CONTAINS",
 					},
 					{
+						RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "CommonsLangSrc"},
+						RefB:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "", SpecialID: "NOASSERTION"},
+						Relationship: "GENERATED_FROM",
+					},
+					{
 						RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "JenaLib"},
 						RefB:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
 						Relationship: "CONTAINS",
