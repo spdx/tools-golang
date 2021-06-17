@@ -298,10 +298,23 @@ Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
 Relationship: SPDXRef-Package DYNAMIC_LINK SPDXRef-Saxon
 Relationship: SPDXRef-Package CONTAINS SPDXRef-JenaLib
+Relationship: SPDXRef-CommonsLangSrc GENERATED_FROM NOASSERTION
 Relationship: SPDXRef-JenaLib CONTAINS SPDXRef-Package
 Relationship: SPDXRef-File GENERATED_FROM SPDXRef-fromDoap-0
 
 ##### Annotations
+
+Annotator: Person: File Commenter
+AnnotationDate: 2011-01-29T18:30:22Z
+AnnotationType: OTHER
+SPDXREF: SPDXRef-File
+AnnotationComment: File level annotation
+
+Annotator: Person: Package Commenter
+AnnotationDate: 2011-01-29T18:30:22Z
+AnnotationType: OTHER
+SPDXREF: SPDXRef-Package
+AnnotationComment: Package level annotation
 
 Annotator: Person: Joe Reviewer
 AnnotationDate: 2010-02-10T00:00:00Z
@@ -320,16 +333,4 @@ AnnotationDate: 2010-01-29T18:30:22Z
 AnnotationType: OTHER
 SPDXREF: SPDXRef-DOCUMENT
 AnnotationComment: Document level annotation
-
-Annotator: Person: File Commenter
-AnnotationDate: 2011-01-29T18:30:22Z
-AnnotationType: OTHER
-SPDXREF: SPDXRef-File
-AnnotationComment: File level annotation
-
-Annotator: Person: Package Commenter
-AnnotationDate: 2011-01-29T18:30:22Z
-AnnotationType: OTHER
-SPDXREF: SPDXRef-Package
-AnnotationComment: Package level annotation
 
