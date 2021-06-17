@@ -54,13 +54,16 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 				return err
 			}
 		case "annotations":
-			id, err := extractDocElementID(spec["SPDXID"].(string))
-			if err != nil {
-				return fmt.Errorf("%s", err)
-			}
-			err = spec.parseJsonAnnotations2_2(key, val, doc, id)
-			if err != nil {
-				return err
+			if spec["files"] == nil {
+
+				id, err := extractDocElementID(spec["SPDXID"].(string))
+				if err != nil {
+					return fmt.Errorf("%s", err)
+				}
+				err = spec.parseJsonAnnotations2_2(key, val, doc, id)
+				if err != nil {
+					return err
+				}
 			}
 		case "relationships":
 			err := spec.parseJsonRelationships2_2(key, val, doc)
@@ -87,6 +90,17 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 					return err
 				}
 			}
+			if spec["annotations"] != nil {
+				id, err := extractDocElementID(spec["SPDXID"].(string))
+				if err != nil {
+					return fmt.Errorf("%s", err)
+				}
+				err = spec.parseJsonAnnotations2_2("annotations", spec["annotations"], doc, id)
+				if err != nil {
+					return err
+				}
+			}
+
 		case "packages":
 			// if the json spec doesn't has any files to parse
 			if spec["files"] == nil {

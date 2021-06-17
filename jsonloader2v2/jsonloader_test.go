@@ -61,6 +61,22 @@ func TestLoad2_2(t *testing.T) {
 				},
 				Annotations: []*spdx.Annotation2_2{
 					{
+						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "File"},
+						AnnotationDate:           "2011-01-29T18:30:22Z",
+						AnnotationType:           "OTHER",
+						AnnotatorType:            "Person",
+						Annotator:                "File Commenter",
+						AnnotationComment:        "File level annotation",
+					},
+					{
+						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
+						AnnotationDate:           "2011-01-29T18:30:22Z",
+						AnnotationType:           "OTHER",
+						AnnotatorType:            "Person",
+						Annotator:                "Package Commenter",
+						AnnotationComment:        "Package level annotation",
+					},
+					{
 						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
 						AnnotationDate:           "2010-02-10T00:00:00Z",
 						AnnotationType:           "REVIEW",
@@ -83,22 +99,6 @@ func TestLoad2_2(t *testing.T) {
 						AnnotatorType:            "Person",
 						Annotator:                "Jane Doe ()",
 						AnnotationComment:        "Document level annotation",
-					},
-					{
-						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "File"},
-						AnnotationDate:           "2011-01-29T18:30:22Z",
-						AnnotationType:           "OTHER",
-						AnnotatorType:            "Person",
-						Annotator:                "File Commenter",
-						AnnotationComment:        "File level annotation",
-					},
-					{
-						AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
-						AnnotationDate:           "2011-01-29T18:30:22Z",
-						AnnotationType:           "OTHER",
-						AnnotatorType:            "Person",
-						Annotator:                "Package Commenter",
-						AnnotationComment:        "Package level annotation",
 					},
 				},
 				Relationships: []*spdx.Relationship2_2{
