@@ -17,23 +17,28 @@ func (spec JSONSpdxDocument) parseJsonRelationships2_2(key string, value interfa
 		for i := 0; i < relationships.Len(); i++ {
 			relationship := relationships.Index(i).Interface().(map[string]interface{})
 			rel := spdx.Relationship2_2{}
+			// Parse ref A of the relationship
 			aid, err := extractDocElementID(relationship["spdxElementId"].(string))
 			if err != nil {
 				return fmt.Errorf("%s", err)
 			}
 			rel.RefA = aid
 
-			bid, err := extractDocElementID(relationship["relatedSpdxElement"].(string))
+			// Parse the refB of the relationship
+			// NONE and NOASSERTION are permitted on right side
+			permittedSpecial := []string{"NONE", "NOASSERTION"}
+			bid, err := extractDocElementSpecial(relationship["relatedSpdxElement"].(string), permittedSpecial)
 			if err != nil {
 				return fmt.Errorf("%s", err)
 			}
 			rel.RefB = bid
-
+			// Parse relationship type
 			if relationship["relationshipType"] == nil {
 				return fmt.Errorf("%s , %d", "RelationshipType propty missing in relationship number", i)
 			}
 			rel.Relationship = relationship["relationshipType"].(string)
 
+			// Parse the relationship comment
 			if relationship["comment"] != nil {
 				rel.RelationshipComment = relationship["comment"].(string)
 			}

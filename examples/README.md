@@ -55,3 +55,18 @@ with matching IDs in each document.
 This is generally only useful when run with two SPDX documents that describe
 licenses for subsequent versions of the same set of files, AND if they have
 the same identifier in both documents.
+
+
+## 7-rdfloader
+
+*rdfloader*, 
+
+This example demonstrates loading an SPDX rdf file from disk into memory 
+and then printing the corresponding spdx struct for the document.
+
+## 8-jsonloader
+
+*jsonloader2v2*, *tvsaver*
+
+This example demonstrates loading an SPDX json from disk into memory
+and then re-saving it to a different file on disk in tag-value format.
