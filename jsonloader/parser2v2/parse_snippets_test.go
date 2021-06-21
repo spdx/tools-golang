@@ -5,6 +5,7 @@ package parser2v2
 import (
 	"encoding/json"
 	"log"
+	"reflect"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -50,17 +51,18 @@ func TestJSONSpdxDocument_parseJsonSnippets2_2(t *testing.T) {
 		FileChecksums:      map[spdx.ChecksumAlgorithm]spdx.Checksum{},
 		Snippets: map[spdx.ElementID]*spdx.Snippet2_2{
 			"Snippet": {
-				SnippetSPDXIdentifier:   "Snippet",
-				SnippetComment:          "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
-				SnippetCopyrightText:    "Copyright 2008-2010 John Smith",
-				SnippetLicenseComments:  "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
-				SnippetLicenseConcluded: "GPL-2.0-only",
-				LicenseInfoInSnippet:    []string{"GPL-2.0-only"},
-				SnippetName:             "from linux kernel",
-				SnippetByteRangeStart:   310,
-				SnippetByteRangeEnd:     420,
-				SnippetLineRangeStart:   5,
-				SnippetLineRangeEnd:     23,
+				SnippetSPDXIdentifier:         "Snippet",
+				SnippetFromFileSPDXIdentifier: spdx.DocElementID{ElementRefID: "DoapSource"},
+				SnippetComment:                "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
+				SnippetCopyrightText:          "Copyright 2008-2010 John Smith",
+				SnippetLicenseComments:        "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
+				SnippetLicenseConcluded:       "GPL-2.0-only",
+				LicenseInfoInSnippet:          []string{"GPL-2.0-only"},
+				SnippetName:                   "from linux kernel",
+				SnippetByteRangeStart:         310,
+				SnippetByteRangeEnd:           420,
+				SnippetLineRangeStart:         5,
+				SnippetLineRangeEnd:           23,
 			},
 		},
 	}
@@ -107,6 +109,13 @@ func TestJSONSpdxDocument_parseJsonSnippets2_2(t *testing.T) {
 			if err := tt.spec.parseJsonSnippets2_2(tt.args.key, tt.args.value, tt.args.doc); (err != nil) != tt.wantErr {
 				t.Errorf("JSONSpdxDocument.parseJsonSnippets2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
+
+			for k, v := range tt.want.Snippets {
+				if !reflect.DeepEqual(tt.args.doc.UnpackagedFiles["DoapSource"].Snippets[k], v) {
+					t.Errorf("Load2_2() = %v, want %v", tt.args.doc.UnpackagedFiles["DoapSource"].Snippets[k], v)
+				}
+			}
+
 		})
 	}
 }
