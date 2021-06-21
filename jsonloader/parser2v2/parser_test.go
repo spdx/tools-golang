@@ -2,7 +2,7 @@
 // into tools-golang data structures.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package jsonloader2v2
+package parser2v2
 
 import (
 	"io/ioutil"
@@ -32,7 +32,6 @@ func TestLoad2_2(t *testing.T) {
 		want    *spdxDocument2_2
 		wantErr bool
 	}{
-		// TODO: Add test cases.
 		{
 			name: "True test",
 			args: args{content: jsonData},

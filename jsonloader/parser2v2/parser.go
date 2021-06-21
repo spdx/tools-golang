@@ -2,7 +2,7 @@
 // into tools-golang data structures.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package jsonloader2v2
+package parser2v2
 
 import (
 	"encoding/json"
