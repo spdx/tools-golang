@@ -138,15 +138,21 @@ func (spec JSONSpdxDocument) parseJsonPackages2_2(key string, value interface{},
 					pkg.PackageFileName = v.(string)
 				case "packageVerificationCode":
 					code := v.(map[string]interface{})
-					if reflect.TypeOf(code["packageVerificationCodeExcludedFiles"]).Kind() == reflect.Slice {
-						efiles := reflect.ValueOf(code["packageVerificationCodeExcludedFiles"])
-						_, filename, err := extractSubs(efiles.Index(0).Interface().(string))
-						if err != nil {
-							return fmt.Errorf("%s", err)
+					for codekey, codeval := range code {
+						switch codekey {
+						case "packageVerificationCodeExcludedFiles":
+							if reflect.TypeOf(codeval).Kind() == reflect.Slice {
+								efiles := reflect.ValueOf(codeval)
+								_, filename, err := extractSubs(efiles.Index(0).Interface().(string))
+								if err != nil {
+									return fmt.Errorf("%s", err)
+								}
+								pkg.PackageVerificationCodeExcludedFile = filename
+							}
+						case "packageVerificationCodeValue":
+							pkg.PackageVerificationCode = code["packageVerificationCodeValue"].(string)
 						}
-						pkg.PackageVerificationCodeExcludedFile = filename
 					}
-					pkg.PackageVerificationCode = code["packageVerificationCodeValue"].(string)
 				case "sourceInfo":
 					pkg.PackageSourceInfo = v.(string)
 				case "summary":
