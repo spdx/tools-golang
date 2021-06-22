@@ -9,11 +9,9 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 
-	"github.com/spdx/tools-golang/jsonloader2v2"
+	"github.com/spdx/tools-golang/jsonloader"
 	"github.com/spdx/tools-golang/tvsaver"
 )
 
@@ -29,13 +27,16 @@ func main() {
 	}
 
 	// open the SPDX file
-	jsonData, err := ioutil.ReadFile(args[1]) // jsondata has type []byte
+	fileIn := args[1]
+	r, err := os.Open(fileIn)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error while opening %v for reading: %v", fileIn, err)
+		return
 	}
+	defer r.Close()
 
 	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := jsonloader2v2.Load2_2(jsonData)
+	doc, err := jsonloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return
