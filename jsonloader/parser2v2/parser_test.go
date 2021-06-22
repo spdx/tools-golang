@@ -391,11 +391,11 @@ func TestLoad2_2(t *testing.T) {
 					t.Errorf("Load2_2() = %v, want %v", got.UnpackagedFiles[k], v)
 				}
 			}
-			// for k, v := range tt.want.Packages {
-			// 	if !reflect.DeepEqual(got.Packages[k], v) {
-			// 		t.Errorf("Load2_2() = %v, want %v", got.Packages[k], v)
-			// 	}
-			// }
+			for k, v := range tt.want.Packages {
+				if !reflect.DeepEqual(got.Packages[k], v) {
+					t.Errorf("Load2_2() = %v, want %v", got.Packages[k], v)
+				}
+			}
 
 			for i := 0; i < len(got.OtherLicenses); i++ {
 				if !reflect.DeepEqual(got.OtherLicenses[i], tt.want.OtherLicenses[i]) {
