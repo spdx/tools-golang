@@ -54,6 +54,7 @@
     "comment" : "Document level annotation"
   } ],
   "documentNamespace" : "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+  "documentDescribes" : [ "SPDXRef-File", "SPDXRef-Package" ],
   "packages" : [ {
     "SPDXID" : "SPDXRef-Package",
     "annotations" : [ {
@@ -261,11 +262,11 @@
     "spdxElementId" : "SPDXRef-Package",
     "relatedSpdxElement" : "SPDXRef-JenaLib",
     "relationshipType" : "CONTAINS"
-  },{
+  }, {
     "spdxElementId" : "SPDXRef-CommonsLangSrc",
     "relatedSpdxElement" : "NOASSERTION",
     "relationshipType" : "GENERATED_FROM"
-    } ,{
+  }, {
     "spdxElementId" : "SPDXRef-JenaLib",
     "relatedSpdxElement" : "SPDXRef-Package",
     "relationshipType" : "CONTAINS"

@@ -2,7 +2,7 @@
 // into tools-golang data structures.
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package jsonloader2v2
+package parser2v2
 
 import (
 	"io/ioutil"
@@ -32,7 +32,6 @@ func TestLoad2_2(t *testing.T) {
 		want    *spdxDocument2_2
 		wantErr bool
 	}{
-		// TODO: Add test cases.
 		{
 			name: "True test",
 			args: args{content: jsonData},
@@ -195,17 +194,18 @@ func TestLoad2_2(t *testing.T) {
 								},
 								Snippets: map[spdx.ElementID]*spdx.Snippet2_2{
 									"Snippet": {
-										SnippetSPDXIdentifier:   "Snippet",
-										SnippetComment:          "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
-										SnippetCopyrightText:    "Copyright 2008-2010 John Smith",
-										SnippetLicenseComments:  "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
-										SnippetLicenseConcluded: "GPL-2.0-only",
-										LicenseInfoInSnippet:    []string{"GPL-2.0-only"},
-										SnippetName:             "from linux kernel",
-										SnippetByteRangeStart:   310,
-										SnippetByteRangeEnd:     420,
-										SnippetLineRangeStart:   5,
-										SnippetLineRangeEnd:     23,
+										SnippetSPDXIdentifier:         "Snippet",
+										SnippetFromFileSPDXIdentifier: spdx.DocElementID{ElementRefID: "DoapSource"},
+										SnippetComment:                "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
+										SnippetCopyrightText:          "Copyright 2008-2010 John Smith",
+										SnippetLicenseComments:        "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
+										SnippetLicenseConcluded:       "GPL-2.0-only",
+										LicenseInfoInSnippet:          []string{"GPL-2.0-only"},
+										SnippetName:                   "from linux kernel",
+										SnippetByteRangeStart:         310,
+										SnippetByteRangeEnd:           420,
+										SnippetLineRangeStart:         5,
+										SnippetLineRangeEnd:           23,
 									},
 								},
 								FileCopyrightText: "Copyright 2010, 2011 Source Auditor Inc.",
@@ -391,11 +391,11 @@ func TestLoad2_2(t *testing.T) {
 					t.Errorf("Load2_2() = %v, want %v", got.UnpackagedFiles[k], v)
 				}
 			}
-			// for k, v := range tt.want.Packages {
-			// 	if !reflect.DeepEqual(got.Packages[k], v) {
-			// 		t.Errorf("Load2_2() = %v, want %v", got.Packages[k], v)
-			// 	}
-			// }
+			for k, v := range tt.want.Packages {
+				if !reflect.DeepEqual(got.Packages[k], v) {
+					t.Errorf("Load2_2() = %v, want %v", got.Packages[k], v)
+				}
+			}
 
 			for i := 0; i < len(got.OtherLicenses); i++ {
 				if !reflect.DeepEqual(got.OtherLicenses[i], tt.want.OtherLicenses[i]) {

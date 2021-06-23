@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package jsonloader2v2
+package parser2v2
 
 import (
 	"fmt"
@@ -57,29 +57,30 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 					if reflect.TypeOf(v).Kind() == reflect.Slice {
 						info := reflect.ValueOf(v)
 						lineRanges := info.Index(0).Interface().(map[string]interface{})
-						lineRangeStart := lineRanges["endPointer"].(map[string]interface{})
-						lineRangeEnd := lineRanges["startPointer"].(map[string]interface{})
+						lineRangeStart := lineRanges["startPointer"].(map[string]interface{})
+						lineRangeEnd := lineRanges["endPointer"].(map[string]interface{})
 						snippet.SnippetLineRangeStart = int(lineRangeStart["lineNumber"].(float64))
 						snippet.SnippetLineRangeEnd = int(lineRangeEnd["lineNumber"].(float64))
 
 						byteRanges := info.Index(1).Interface().(map[string]interface{})
-						byteRangeStart := byteRanges["endPointer"].(map[string]interface{})
-						byteRangeEnd := byteRanges["startPointer"].(map[string]interface{})
-						snippet.SnippetLineRangeStart = int(byteRangeStart["offset"].(float64))
-						snippet.SnippetLineRangeEnd = int(byteRangeEnd["offset"].(float64))
+						byteRangeStart := byteRanges["startPointer"].(map[string]interface{})
+						byteRangeEnd := byteRanges["endPointer"].(map[string]interface{})
+						snippet.SnippetByteRangeStart = int(byteRangeStart["offset"].(float64))
+						snippet.SnippetByteRangeEnd = int(byteRangeEnd["offset"].(float64))
 					}
 				default:
 					return fmt.Errorf("received unknown tag %v in files section", k)
 				}
 			}
-			fileID, err2 := extractElementID(snippetmap["snippetFromFile"].(string))
+			fileID, err2 := extractDocElementID(snippetmap["snippetFromFile"].(string))
 			if err2 != nil {
 				return fmt.Errorf("%s", err2)
 			}
-			if doc.UnpackagedFiles[fileID].Snippets == nil {
-				doc.UnpackagedFiles[fileID].Snippets = make(map[spdx.ElementID]*spdx.Snippet2_2)
+			snippet.SnippetFromFileSPDXIdentifier = fileID
+			if doc.UnpackagedFiles[fileID.ElementRefID].Snippets == nil {
+				doc.UnpackagedFiles[fileID.ElementRefID].Snippets = make(map[spdx.ElementID]*spdx.Snippet2_2)
 			}
-			doc.UnpackagedFiles[fileID].Snippets[eID] = snippet
+			doc.UnpackagedFiles[fileID.ElementRefID].Snippets[eID] = snippet
 		}
 
 	}
