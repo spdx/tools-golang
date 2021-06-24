@@ -56,17 +56,18 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 					//TODO: optimise this logic
 					if reflect.TypeOf(v).Kind() == reflect.Slice {
 						info := reflect.ValueOf(v)
-						lineRanges := info.Index(0).Interface().(map[string]interface{})
-						lineRangeStart := lineRanges["startPointer"].(map[string]interface{})
-						lineRangeEnd := lineRanges["endPointer"].(map[string]interface{})
-						snippet.SnippetLineRangeStart = int(lineRangeStart["lineNumber"].(float64))
-						snippet.SnippetLineRangeEnd = int(lineRangeEnd["lineNumber"].(float64))
-
-						byteRanges := info.Index(1).Interface().(map[string]interface{})
-						byteRangeStart := byteRanges["startPointer"].(map[string]interface{})
-						byteRangeEnd := byteRanges["endPointer"].(map[string]interface{})
-						snippet.SnippetByteRangeStart = int(byteRangeStart["offset"].(float64))
-						snippet.SnippetByteRangeEnd = int(byteRangeEnd["offset"].(float64))
+						for i := 0; i < info.Len(); i++ {
+							ranges := info.Index(i).Interface().(map[string]interface{})
+							rangeStart := ranges["startPointer"].(map[string]interface{})
+							rangeEnd := ranges["endPointer"].(map[string]interface{})
+							if rangeStart["lineNumber"] != nil && rangeEnd["lineNumber"] != nil {
+								snippet.SnippetLineRangeStart = int(rangeStart["lineNumber"].(float64))
+								snippet.SnippetLineRangeEnd = int(rangeEnd["lineNumber"].(float64))
+							} else {
+								snippet.SnippetByteRangeStart = int(rangeStart["offset"].(float64))
+								snippet.SnippetByteRangeEnd = int(rangeEnd["offset"].(float64))
+							}
+						}
 					}
 				default:
 					return fmt.Errorf("received unknown tag %v in files section", k)
