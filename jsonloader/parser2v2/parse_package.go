@@ -5,6 +5,7 @@ package parser2v2
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -143,11 +144,14 @@ func (spec JSONSpdxDocument) parseJsonPackages2_2(key string, value interface{},
 						case "packageVerificationCodeExcludedFiles":
 							if reflect.TypeOf(codeval).Kind() == reflect.Slice {
 								efiles := reflect.ValueOf(codeval)
-								_, filename, err := extractSubs(efiles.Index(0).Interface().(string))
-								if err != nil {
-									return fmt.Errorf("%s", err)
+								filename := efiles.Index(0).Interface().(string)
+								if strings.HasPrefix(filename, "excludes:") {
+									_, filename, err = extractSubs(efiles.Index(0).Interface().(string))
+									if err != nil {
+										return fmt.Errorf("%s", err)
+									}
 								}
-								pkg.PackageVerificationCodeExcludedFile = filename
+								pkg.PackageVerificationCodeExcludedFile = strings.Trim(filename, " ")
 							}
 						case "packageVerificationCodeValue":
 							pkg.PackageVerificationCode = code["packageVerificationCodeValue"].(string)
