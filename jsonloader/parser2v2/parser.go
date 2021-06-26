@@ -54,6 +54,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 				return err
 			}
 		case "annotations":
+			// if the json spec doenn't has any files then only this case will be executed
 			if spec["files"] == nil {
 
 				id, err := extractDocElementID(spec["SPDXID"].(string))
@@ -90,6 +91,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 					return err
 				}
 			}
+			// then parse the annotations
 			if spec["annotations"] != nil {
 				id, err := extractDocElementID(spec["SPDXID"].(string))
 				if err != nil {
@@ -102,7 +104,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 			}
 
 		case "packages":
-			// if the json spec doesn't has any files to parse
+			// if the json spec doesn't has any files to parse then this switch case will be executed
 			if spec["files"] == nil {
 				err := spec.parseJsonPackages2_2("packages", spec["packages"], doc)
 				if err != nil {
@@ -111,6 +113,11 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 			}
 		case "hasExtractedLicensingInfos":
 			err := spec.parseJsonOtherLicenses2_2(key, val, doc)
+			if err != nil {
+				return err
+			}
+		case "revieweds":
+			err := spec.parseJsonReviews2_2(key, val, doc)
 			if err != nil {
 				return err
 			}
