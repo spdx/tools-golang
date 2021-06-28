@@ -373,33 +373,44 @@ func TestLoad2_2(t *testing.T) {
 				t.Errorf("Load2_2() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+			// check creation info
 			if !reflect.DeepEqual(got.CreationInfo, tt.want.CreationInfo) {
 				t.Errorf("Load2_2() = %v, want %v", got.CreationInfo, tt.want.CreationInfo)
 			}
+			// check annotations
 			for i := 0; i < len(tt.want.Annotations); i++ {
 				if !reflect.DeepEqual(got.Annotations[i], tt.want.Annotations[i]) {
 					t.Errorf("Load2_2() = %v, want %v", got.Annotations[i], tt.want.Annotations[i])
 				}
 			}
+			// check relationships
 			for i := 0; i < len(got.Relationships); i++ {
 				if !reflect.DeepEqual(got.Relationships[i], tt.want.Relationships[i]) {
 					t.Errorf("Load2_2() = %v, want %v", got.Relationships[i], tt.want.Relationships[i])
 				}
 			}
+			//check unpackaged files
 			for k, v := range tt.want.UnpackagedFiles {
 				if !reflect.DeepEqual(got.UnpackagedFiles[k], v) {
 					t.Errorf("Load2_2() = %v, want %v", got.UnpackagedFiles[k], v)
 				}
 			}
+			// check packages
 			for k, v := range tt.want.Packages {
 				if !reflect.DeepEqual(got.Packages[k], v) {
 					t.Errorf("Load2_2() = %v, want %v", got.Packages[k], v)
 				}
 			}
-
+			// check other licenses
 			for i := 0; i < len(got.OtherLicenses); i++ {
 				if !reflect.DeepEqual(got.OtherLicenses[i], tt.want.OtherLicenses[i]) {
 					t.Errorf("Load2_2() = %v, want %v", got.OtherLicenses[i], tt.want.OtherLicenses[i])
+				}
+			}
+			// check reviews
+			for i := 0; i < len(got.Reviews); i++ {
+				if !reflect.DeepEqual(got.Reviews[i], tt.want.Reviews[i]) {
+					t.Errorf("Load2_2() = %v, want %v", got.Reviews[i], tt.want.Reviews[i])
 				}
 			}
 
