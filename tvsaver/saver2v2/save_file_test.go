@@ -65,6 +65,8 @@ func TestSaver2_2FileSavesText(t *testing.T) {
 		},
 		FileAttributionTexts: []string{
 			"attributions",
+			`multi-line
+attribution`,
 		},
 		FileDependencies: []string{
 			"f-1.txt",
@@ -98,6 +100,8 @@ FileNotice: This file may be used under either Apache-2.0 or Apache-1.1.
 FileContributor: John Doe jdoe@example.com
 FileContributor: EvilCorp
 FileAttributionText: attributions
+FileAttributionText: <text>multi-line
+attribution</text>
 FileDependency: f-1.txt
 FileDependency: g.txt
 
@@ -261,6 +265,59 @@ LicenseConcluded: Apache-2.0
 LicenseInfoInFile: Apache-2.0
 FileCopyrightText: <text>Copyright (c) Jane Doe
 Copyright (c) John Doe</text>
+
+`)
+
+	// render as buffer of bytes
+	var got bytes.Buffer
+	err := renderFile2_2(f, &got)
+	if err != nil {
+		t.Errorf("Expected nil error, got %v", err)
+	}
+
+	// check that they match
+	c := bytes.Compare(want.Bytes(), got.Bytes())
+	if c != 0 {
+		t.Errorf("Expected %v, got %v", want.String(), got.String())
+	}
+}
+
+func TestSaver2_2FileWrapsCommentsAndNoticesMultiLine(t *testing.T) {
+	f := &spdx.File2_2{
+		FileName:           "/tmp/whatever.txt",
+		FileSPDXIdentifier: spdx.ElementID("File123"),
+		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+			spdx.SHA1: spdx.Checksum{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+		},
+		LicenseComments: `this is a
+multi-line license comment`,
+		LicenseConcluded: "Apache-2.0",
+		LicenseInfoInFile: []string{
+			"Apache-2.0",
+		},
+		FileCopyrightText: "Copyright (c) Jane Doe",
+		FileComment: `this is a
+multi-line file comment`,
+		FileNotice: `This file may be used
+under either Apache-2.0 or Apache-1.1.`,
+	}
+
+	// what we want to get, as a buffer of bytes
+	want := bytes.NewBufferString(`FileName: /tmp/whatever.txt
+SPDXID: SPDXRef-File123
+FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+LicenseConcluded: Apache-2.0
+LicenseInfoInFile: Apache-2.0
+LicenseComments: <text>this is a
+multi-line license comment</text>
+FileCopyrightText: Copyright (c) Jane Doe
+FileComment: <text>this is a
+multi-line file comment</text>
+FileNotice: <text>This file may be used
+under either Apache-2.0 or Apache-1.1.</text>
 
 `)
 

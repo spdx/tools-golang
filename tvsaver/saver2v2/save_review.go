@@ -17,7 +17,7 @@ func renderReview2_2(rev *spdx.Review2_2, w io.Writer) error {
 		fmt.Fprintf(w, "ReviewDate: %s\n", rev.ReviewDate)
 	}
 	if rev.ReviewComment != "" {
-		fmt.Fprintf(w, "ReviewComment: %s\n", rev.ReviewComment)
+		fmt.Fprintf(w, "ReviewComment: %s\n", textify(rev.ReviewComment))
 	}
 
 	fmt.Fprintf(w, "\n")

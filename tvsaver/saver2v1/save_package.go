@@ -88,7 +88,7 @@ func renderPackage2_1(pkg *spdx.Package2_1, w io.Writer) error {
 		fmt.Fprintf(w, "PackageLicenseComments: %s\n", textify(pkg.PackageLicenseComments))
 	}
 	if pkg.PackageCopyrightText != "" {
-		fmt.Fprintf(w, "PackageCopyrightText: %s\n", pkg.PackageCopyrightText)
+		fmt.Fprintf(w, "PackageCopyrightText: %s\n", textify(pkg.PackageCopyrightText))
 	}
 	if pkg.PackageSummary != "" {
 		fmt.Fprintf(w, "PackageSummary: %s\n", textify(pkg.PackageSummary))
@@ -102,7 +102,7 @@ func renderPackage2_1(pkg *spdx.Package2_1, w io.Writer) error {
 	for _, s := range pkg.PackageExternalReferences {
 		fmt.Fprintf(w, "ExternalRef: %s %s %s\n", s.Category, s.RefType, s.Locator)
 		if s.ExternalRefComment != "" {
-			fmt.Fprintf(w, "ExternalRefComment: %s\n", s.ExternalRefComment)
+			fmt.Fprintf(w, "ExternalRefComment: %s\n", textify(s.ExternalRefComment))
 		}
 	}
 

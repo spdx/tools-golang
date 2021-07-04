@@ -112,3 +112,33 @@ func TestSaver2_2RelationshipCanHaveNOASSERTIONOnRight(t *testing.T) {
 		t.Errorf("Expected %v, got %v", want.String(), got.String())
 	}
 }
+
+func TestSaver2_2RelationshipWrapsCommentMultiLine(t *testing.T) {
+	rln := &spdx.Relationship2_2{
+		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
+		RefB:         spdx.MakeDocElementID("", "2"),
+		Relationship: "DESCRIBES",
+		RelationshipComment: `this is a
+multi-line comment`,
+	}
+
+	// what we want to get, as a buffer of bytes
+	// no trailing blank newline
+	want := bytes.NewBufferString(`Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-2
+RelationshipComment: <text>this is a
+multi-line comment</text>
+`)
+
+	// render as buffer of bytes
+	var got bytes.Buffer
+	err := renderRelationship2_2(rln, &got)
+	if err != nil {
+		t.Errorf("Expected nil error, got %v", err)
+	}
+
+	// check that they match
+	c := bytes.Compare(want.Bytes(), got.Bytes())
+	if c != 0 {
+		t.Errorf("Expected %v, got %v", want.String(), got.String())
+	}
+}
