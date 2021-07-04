@@ -51,7 +51,6 @@ func Test2_1FilterForDependencies(t *testing.T) {
 				RefB:         spdx.MakeDocElementID("", "p4"),
 				Relationship: "DEPENDENCY_OF",
 			},
-
 		},
 	}
 
