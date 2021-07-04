@@ -55,7 +55,7 @@ func renderPackage2_1(pkg *spdx.Package2_1, w io.Writer) error {
 		if pkg.PackageVerificationCodeExcludedFile == "" {
 			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode)
 		} else {
-			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
+			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes: %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
 		}
 	}
 	if pkg.PackageChecksumSHA1 != "" {
