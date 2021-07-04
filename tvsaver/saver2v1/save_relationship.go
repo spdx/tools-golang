@@ -16,7 +16,7 @@ func renderRelationship2_1(rln *spdx.Relationship2_1, w io.Writer) error {
 		fmt.Fprintf(w, "Relationship: %s %s %s\n", rlnAStr, rln.Relationship, rlnBStr)
 	}
 	if rln.RelationshipComment != "" {
-		fmt.Fprintf(w, "RelationshipComment: %s\n", rln.RelationshipComment)
+		fmt.Fprintf(w, "RelationshipComment: %s\n", textify(rln.RelationshipComment))
 	}
 
 	return nil
