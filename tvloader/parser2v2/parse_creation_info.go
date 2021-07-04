@@ -76,7 +76,10 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// tag for going on to package section
 	case "PackageName":
-		// Error if last file does not has FileSPDXId
+		// error if last file does not have an identifier
+		// this may be a null case: can we ever have a "last file" in
+		// the "creation info" state? should go on to "file" state
+		// even when parsing unpackaged files.
 		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_2 {
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}

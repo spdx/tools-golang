@@ -13,7 +13,7 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 	switch tag {
 	// tag for creating new snippet section
 	case "SnippetSPDXID":
-		// check here whether the file containe
+		// check here whether the file contained an SPDX ID or not
 		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_2 {
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}

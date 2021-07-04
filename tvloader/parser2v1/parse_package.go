@@ -20,7 +20,7 @@ func (parser *tvParser2_1) parsePairFromPackage2_1(tag string, value string) err
 	case "PackageName":
 		// if package already has a name, create and go on to a new package
 		if parser.pkg == nil || parser.pkg.PackageName != "" {
-			// check if the previous package contained a spdxId or not
+			// check if the previous package contained an spdxId or not
 			if parser.pkg != nil && parser.pkg.PackageSPDXIdentifier == nullSpdxElementId2_1 {
 				return fmt.Errorf("package with PackageName %s does not have SPDX identifier", parser.pkg.PackageName)
 			}
