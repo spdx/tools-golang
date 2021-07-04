@@ -9,7 +9,8 @@ Go programs to work with [SPDX®](https://spdx.org/) files.
 ## Recent news
 
 2021-07-04: **v0.2.0**: added support for parsing SPDX JSON files as well as
-other improvements and bugfixes. See [RELEASE-NOTES.md] for full details.
+other improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md)
+for full details.
 
 ## What it does
 
