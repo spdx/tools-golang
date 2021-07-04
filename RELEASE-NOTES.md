@@ -30,3 +30,14 @@ Released on: 2021-07-04
 * @RishabhBhatnagar
 * @specter25
 * @swinslow
+
+## 0.1.0
+
+Released on: 2021-03-20
+
+### Contributors
+* @abhishekspeer
+* @goneall
+* @RishabhBhatnagar
+* @rtgdk
+* @swinslow

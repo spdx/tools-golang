@@ -59,7 +59,7 @@ the same identifier in both documents.
 
 ## 7-rdfloader
 
-*rdfloader*, 
+*rdfloader*, *spdx*
 
 This example demonstrates loading an SPDX rdf file from disk into memory 
 and then printing the corresponding spdx struct for the document.
