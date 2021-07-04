@@ -20,6 +20,12 @@ func ParseTagValues(tvs []reader.TagValuePair) (*spdx.Document2_1, error) {
 			return nil, err
 		}
 	}
+	if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
+		return nil, fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
+	}
+	if parser.pkg != nil && parser.pkg.PackageSPDXIdentifier == nullSpdxElementId2_1 {
+		return nil, fmt.Errorf("package with PackageName %s does not have SPDX identifier", parser.pkg.PackageName)
+	}
 
 	return parser.doc, nil
 }
@@ -41,14 +47,14 @@ func (parser *tvParser2_1) parsePair2_1(tag string, value string) error {
 	case psReview2_1:
 		return parser.parsePairFromReview2_1(tag, value)
 	default:
-		return fmt.Errorf("Parser state %v not recognized when parsing (%s, %s)", parser.st, tag, value)
+		return fmt.Errorf("parser state %v not recognized when parsing (%s, %s)", parser.st, tag, value)
 	}
 }
 
 func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error {
 	// fail if not in Start parser state
 	if parser.st != psStart2_1 {
-		return fmt.Errorf("Got invalid state %v in parsePairFromStart2_1", parser.st)
+		return fmt.Errorf("got invalid state %v in parsePairFromStart2_1", parser.st)
 	}
 
 	// create an SPDX Document data struct if we don't have one already

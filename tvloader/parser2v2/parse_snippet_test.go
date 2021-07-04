@@ -614,3 +614,21 @@ func TestParser2_2FailsForInvalidSnippetLineValues(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
+
+func TestParser2_2FilesWithoutSpdxIdThrowErrorWithSnippets(t *testing.T) {
+	// Invalid file with snippet
+	// Last unpackaged file before the snippet starts
+	// Last file of a package and New package starts
+	fileName := "f2.txt"
+	sid1 := spdx.ElementID("s1")
+	parser2 := tvParser2_2{
+		doc:  &spdx.Document2_2{},
+		st:   psCreationInfo2_2,
+		file: &spdx.File2_2{FileName: fileName},
+	}
+	err := parser2.parsePair2_2("SnippetSPDXID", string(sid1))
+	if err == nil {
+		t.Errorf("file without SPDX Identifier getting accepted")
+	}
+
+}

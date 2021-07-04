@@ -917,3 +917,48 @@ func TestParser2_2FailsIfArtifactURIBeforeArtifactName(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
+
+func TestParser2_2FilesWithoutSpdxIdThrowError(t *testing.T) {
+	// case 1: The previous file (packaged or unpackaged) does not contain spdx ID
+	parser1 := tvParser2_2{
+		doc:  &spdx.Document2_2{Packages: map[spdx.ElementID]*spdx.Package2_2{}},
+		st:   psFile2_2,
+		file: &spdx.File2_2{FileName: "FileName"},
+	}
+
+	err := parser1.parsePair2_2("FileName", "f2")
+	if err == nil {
+		t.Errorf("file without SPDX Identifier getting accepted")
+	}
+
+	// case 2: Invalid file with snippet
+	// Last unpackaged file before the snippet start
+	fileName := "f2.txt"
+	sid1 := spdx.ElementID("s1")
+	parser2 := tvParser2_2{
+		doc:  &spdx.Document2_2{},
+		st:   psCreationInfo2_2,
+		file: &spdx.File2_2{FileName: fileName},
+	}
+	err = parser2.parsePair2_2("SnippetSPDXID", string(sid1))
+	if err == nil {
+		t.Errorf("file without SPDX Identifier getting accepted")
+	}
+
+	// case 3: Invalid File without snippets
+	// Last unpackaged file before the package starts
+	// Last file of a package and New package starts
+	parser3 := tvParser2_2{
+		doc: &spdx.Document2_2{},
+		st:  psCreationInfo2_2,
+	}
+	fileName = "f3.txt"
+	err = parser3.parsePair2_2("FileName", fileName)
+	if err != nil {
+		t.Errorf("%s", err)
+	}
+	err = parser3.parsePair2_2("PackageName", "p2")
+	if err == nil {
+		t.Errorf("file without SPDX Identifier getting accepted")
+	}
+}

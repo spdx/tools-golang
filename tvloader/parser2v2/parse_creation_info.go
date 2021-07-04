@@ -12,7 +12,7 @@ import (
 func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string) error {
 	// fail if not in Creation Info parser state
 	if parser.st != psCreationInfo2_2 {
-		return fmt.Errorf("Got invalid state %v in parsePairFromCreationInfo2_2", parser.st)
+		return fmt.Errorf("got invalid state %v in parsePairFromCreationInfo2_2", parser.st)
 	}
 
 	// create an SPDX Creation Info data struct if we don't have one already
@@ -76,6 +76,13 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// tag for going on to package section
 	case "PackageName":
+		// error if last file does not have an identifier
+		// this may be a null case: can we ever have a "last file" in
+		// the "creation info" state? should go on to "file" state
+		// even when parsing unpackaged files.
+		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_2 {
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
+		}
 		parser.st = psPackage2_2
 		parser.pkg = &spdx.Package2_2{
 			FilesAnalyzed:             true,

@@ -1069,3 +1069,27 @@ func TestFailsPackageExternalRefWithInvalidFormat(t *testing.T) {
 	}
 }
 
+func TestParser2_1PackageWithoutSpdxIdentifierThrowsError(t *testing.T) {
+	// More than one package, the previous package doesn't contain the SPDXID
+	pkgOldName := "p1"
+	parser := tvParser2_1{
+		doc: &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		st:  psPackage2_1,
+		pkg: &spdx.Package2_1{PackageName: pkgOldName},
+	}
+	pkgOld := parser.pkg
+	parser.doc.Packages["p1"] = pkgOld
+	// the Document's Packages should have this one only
+	if parser.doc.Packages["p1"] != pkgOld {
+		t.Errorf("expected package %v, got %v", pkgOld, parser.doc.Packages["p1"])
+	}
+	if len(parser.doc.Packages) != 1 {
+		t.Errorf("expected 1 package, got %d", len(parser.doc.Packages))
+	}
+
+	pkgName := "p2"
+	err := parser.parsePair2_1("PackageName", pkgName)
+	if err == nil {
+		t.Errorf("package without SPDX Identifier getting accepted")
+	}
+}
