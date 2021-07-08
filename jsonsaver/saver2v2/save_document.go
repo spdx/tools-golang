@@ -26,6 +26,10 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 	renderCreationInfo2_2(doc.CreationInfo, buf)
 
+	if doc.OtherLicenses != nil {
+		renderOtherLicenses2_2(doc.OtherLicenses, buf)
+	}
+
 	// parsing ends
 	buf.WriteRune('}')
 	// remove the pattern ",}" from the json
