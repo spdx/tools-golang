@@ -63,6 +63,48 @@ func TestRenderDocument2_2(t *testing.T) {
 				LicenseIdentifier: "LicenseRef-1",
 			},
 		},
+		Annotations: []*spdx.Annotation2_2{
+			{
+				AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "File"},
+				AnnotationDate:           "2011-01-29T18:30:22Z",
+				AnnotationType:           "OTHER",
+				AnnotatorType:            "Person",
+				Annotator:                "File Commenter",
+				AnnotationComment:        "File level annotation",
+			},
+			{
+				AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "Package"},
+				AnnotationDate:           "2011-01-29T18:30:22Z",
+				AnnotationType:           "OTHER",
+				AnnotatorType:            "Person",
+				Annotator:                "Package Commenter",
+				AnnotationComment:        "Package level annotation",
+			},
+			{
+				AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+				AnnotationDate:           "2010-02-10T00:00:00Z",
+				AnnotationType:           "REVIEW",
+				AnnotatorType:            "Person",
+				Annotator:                "Joe Reviewer",
+				AnnotationComment:        "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
+			},
+			{
+				AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+				AnnotationDate:           "2011-03-13T00:00:00Z",
+				AnnotationType:           "REVIEW",
+				AnnotatorType:            "Person",
+				Annotator:                "Suzanne Reviewer",
+				AnnotationComment:        "Another example reviewer.",
+			},
+			{
+				AnnotationSPDXIdentifier: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+				AnnotationDate:           "2010-01-29T18:30:22Z",
+				AnnotationType:           "OTHER",
+				AnnotatorType:            "Person",
+				Annotator:                "Jane Doe ()",
+				AnnotationComment:        "Document level annotation",
+			},
+		},
 	}
 	var b []byte
 

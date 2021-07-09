@@ -30,6 +30,14 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		renderOtherLicenses2_2(doc.OtherLicenses, buf)
 	}
 
+	if doc.Annotations != nil {
+		renderAnnotations2_2(doc.Annotations, buf)
+	}
+
+	if doc.CreationInfo.DocumentNamespace != "" {
+		fmt.Fprintf(buf, "\"%s\": \"%s\",", "documentNamespace", doc.CreationInfo.DocumentNamespace)
+	}
+
 	// parsing ends
 	buf.WriteRune('}')
 	// remove the pattern ",}" from the json
