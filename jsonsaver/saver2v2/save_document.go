@@ -11,6 +11,7 @@ import (
 	"log"
 
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdxlib"
 )
 
 // RenderDocument2_2 is the main entry point to take an SPDX in-memory
@@ -37,6 +38,14 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	if doc.CreationInfo.DocumentNamespace != "" {
 		fmt.Fprintf(buf, "\"%s\": \"%s\",", "documentNamespace", doc.CreationInfo.DocumentNamespace)
 	}
+
+	describes, _ := spdxlib.GetDescribedPackageIDs2_2(doc)
+	var describesID []string
+	for _, v := range describes {
+		describesID = append(describesID, spdx.RenderElementID(v))
+	}
+	describesjson, _ := json.Marshal(describesID)
+	fmt.Fprintf(buf, "\"%s\": %s,", "documentDescribes", describesjson)
 
 	// parsing ends
 	buf.WriteRune('}')
