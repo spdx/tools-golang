@@ -32,7 +32,9 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 
 	if doc.Annotations != nil {
-		renderAnnotations2_2(doc.Annotations, buf)
+		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
+		annotationjson, _ := json.Marshal(ann)
+		fmt.Fprintf(buf, "\"%s\": %s ,", "annotations", annotationjson)
 	}
 
 	if doc.CreationInfo.DocumentNamespace != "" {
@@ -40,12 +42,24 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 
 	describes, _ := spdxlib.GetDescribedPackageIDs2_2(doc)
-	var describesID []string
-	for _, v := range describes {
-		describesID = append(describesID, spdx.RenderElementID(v))
+	if describes != nil {
+		var describesID []string
+		for _, v := range describes {
+			describesID = append(describesID, spdx.RenderElementID(v))
+		}
+		describesjson, _ := json.Marshal(describesID)
+		fmt.Fprintf(buf, "\"%s\": %s,", "documentDescribes", describesjson)
 	}
-	describesjson, _ := json.Marshal(describesID)
-	fmt.Fprintf(buf, "\"%s\": %s,", "documentDescribes", describesjson)
+
+	if doc.Packages != nil {
+		renderPackage2_2(doc, buf)
+	}
+
+	if doc.Relationships != nil {
+		rels, _ := renderRelationships2_2(doc.Relationships)
+		relsjson, _ := json.Marshal(rels)
+		fmt.Fprintf(buf, "\"%s\": %s ,", "relationships", relsjson)
+	}
 
 	// parsing ends
 	buf.WriteRune('}')
