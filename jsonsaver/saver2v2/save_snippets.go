@@ -10,69 +10,66 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func rendersnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 	var snippets []interface{}
-	for k, v := range doc.UnpackagedFiles {
+	for _, value := range doc.UnpackagedFiles {
 		snippet := make(map[string]interface{})
-		snippet["SPDXID"] = spdx.RenderElementID(k)
-		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(v.FileSPDXIdentifier)))
-		if ann != nil {
-			snippet["annotations"] = ann
-		}
-		if v.FileContributor != nil {
-			snippet["attributionTexts"] = v.FileContributor
-		}
-		if v.FileComment != "" {
-			snippet["comment"] = v.FileComment
-		}
-
-		// parse package checksums
-		if v.FileChecksums != nil {
-			var checksums []interface{}
-			for _, value := range v.FileChecksums {
-				checksum := make(map[string]interface{})
-				checksum["algorithm"] = value.Algorithm
-				checksum["checksumValue"] = value.Value
-				checksums = append(checksums, checksum)
+		for _, v := range value.Snippets {
+			snippet["SPDXID"] = spdx.RenderElementID(v.SnippetSPDXIdentifier)
+			if v.SnippetComment != "" {
+				snippet["comment"] = v.SnippetComment
 			}
-			snippet["checksums"] = checksums
-		}
-		if v.FileCopyrightText != "" {
-			snippet["copyrightText"] = v.FileCopyrightText
-		}
-		if v.FileName != "" {
-			snippet["fileName"] = v.FileName
-		}
-		if v.FileType != nil {
-			snippet["fileTypes"] = v.FileType
-		}
-		if v.LicenseComments != "" {
-			snippet["licenseComments"] = v.LicenseComments
-		}
-		if v.LicenseConcluded != "" {
-			snippet["licenseConcluded"] = v.LicenseConcluded
-		}
-		if v.LicenseInfoInFile != nil {
-			snippet["licenseInfoFromFiles"] = v.LicenseInfoInFile
-		}
-		if v.FileNotice != "" {
-			snippet["name"] = v.FileNotice
-		}
-		if v.FileContributor != nil {
-			snippet["fileContributors"] = v.FileContributor
-		}
-		if v.FileDependencies != nil {
-			snippet["fileDependencies"] = v.FileDependencies
-		}
-		if v.FileAttributionTexts != nil {
-			snippet["attributionTexts"] = v.FileAttributionTexts
-		}
+			if v.SnippetCopyrightText != "" {
+				snippet["copyrightText"] = v.SnippetCopyrightText
+			}
+			if v.SnippetLicenseComments != "" {
+				snippet["licenseComments"] = v.SnippetLicenseComments
+			}
+			if v.SnippetLicenseConcluded != "" {
+				snippet["licenseConcluded"] = v.SnippetLicenseConcluded
+			}
+			if v.LicenseInfoInSnippet != nil {
+				snippet["licenseInfoFromFiles"] = v.LicenseInfoInSnippet
+			}
+			if v.SnippetName != "" {
+				snippet["name"] = v.SnippetName
+			}
+			if v.SnippetName != "" {
+				snippet["snippetFromFile"] = spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier)
+			}
+			if v.SnippetAttributionTexts != nil {
+				snippet["attributionTexts"] = v.SnippetAttributionTexts
+			}
 
-		snippets = append(snippets, snippet)
+			// parse package checksums
+			var ranges []interface{}
+			byterange := map[string]interface{}{
+				"endPointer": map[string]interface{}{
+					"offset":    v.SnippetByteRangeEnd,
+					"reference": spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier),
+				},
+				"startPointer": map[string]interface{}{
+					"offset":    v.SnippetByteRangeStart,
+					"reference": spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier),
+				},
+			}
+			linerange := map[string]interface{}{
+				"endPointer": map[string]interface{}{
+					"lineNumber": v.SnippetLineRangeEnd,
+					"reference":  spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier),
+				},
+				"startPointer": map[string]interface{}{
+					"lineNumber": v.SnippetLineRangeStart,
+					"reference":  spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier),
+				},
+			}
+			ranges = append(ranges, byterange, linerange)
+			snippet["ranges"] = ranges
+			snippets = append(snippets, snippet)
+		}
 	}
 	snippetjson, _ := json.Marshal(snippets)
 	fmt.Fprintf(buf, "\"%s\": %s ,", "snippets", snippetjson)
-
 	return nil
 }

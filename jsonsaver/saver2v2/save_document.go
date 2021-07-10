@@ -62,6 +62,7 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	// parse files from spdx to json
 	if doc.UnpackagedFiles != nil {
 		renderfiles2_2(doc, buf)
+		renderSnippets2_2(doc, buf)
 	}
 
 	// parse relationships  from spdx to json
