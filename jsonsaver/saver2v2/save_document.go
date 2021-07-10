@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdxlib"
@@ -59,10 +58,16 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	if doc.Packages != nil {
 		renderPackage2_2(doc, buf)
 	}
-	// parse files from spdx to json
+
+	// parse files and snippets from spdx to json
 	if doc.UnpackagedFiles != nil {
 		renderfiles2_2(doc, buf)
 		renderSnippets2_2(doc, buf)
+	}
+
+	// parse reviews from spdx to json
+	if doc.Reviews != nil {
+		renderReviews2_2(doc.Reviews, buf)
 	}
 
 	// parse relationships  from spdx to json
@@ -83,8 +88,8 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	if err != nil {
 		return err
 	}
-	str := newbuf.String()
-	logger := log.Default()
-	logger.Fatal(str)
+	// str := newbuf.String()
+	// logger := log.Default()
+	// logger.Fatal(str)
 	return nil
 }

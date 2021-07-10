@@ -42,7 +42,7 @@ func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 				snippet["attributionTexts"] = v.SnippetAttributionTexts
 			}
 
-			// parse package checksums
+			// parse snippet ranges
 			var ranges []interface{}
 			byterange := map[string]interface{}{
 				"endPointer": map[string]interface{}{
