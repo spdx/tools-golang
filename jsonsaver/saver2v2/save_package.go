@@ -65,7 +65,8 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		// parse package hass files
 		if v.Files != nil {
 			var fileIds []string
-			for k := range v.Files {
+			for k, v := range v.Files {
+				doc.UnpackagedFiles[k] = v
 				fileIds = append(fileIds, spdx.RenderElementID(k))
 			}
 			pkg["hasFiles"] = fileIds

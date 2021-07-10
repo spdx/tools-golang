@@ -27,20 +27,24 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 	renderCreationInfo2_2(doc.CreationInfo, buf)
 
+	// parse otherlicenses from sodx struct to json
 	if doc.OtherLicenses != nil {
 		renderOtherLicenses2_2(doc.OtherLicenses, buf)
 	}
 
+	// parse document level annotations
 	if doc.Annotations != nil {
 		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
 		annotationjson, _ := json.Marshal(ann)
 		fmt.Fprintf(buf, "\"%s\": %s ,", "annotations", annotationjson)
 	}
 
+	// parse document namespace
 	if doc.CreationInfo.DocumentNamespace != "" {
 		fmt.Fprintf(buf, "\"%s\": \"%s\",", "documentNamespace", doc.CreationInfo.DocumentNamespace)
 	}
 
+	// parse document describes
 	describes, _ := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if describes != nil {
 		var describesID []string
@@ -51,10 +55,16 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		fmt.Fprintf(buf, "\"%s\": %s,", "documentDescribes", describesjson)
 	}
 
+	// parse packages from spdx to json
 	if doc.Packages != nil {
 		renderPackage2_2(doc, buf)
 	}
+	// parse files from spdx to json
+	if doc.UnpackagedFiles != nil {
+		renderfiles2_2(doc, buf)
+	}
 
+	// parse relationships  from spdx to json
 	if doc.Relationships != nil {
 		rels, _ := renderRelationships2_2(doc.Relationships)
 		relsjson, _ := json.Marshal(rels)
