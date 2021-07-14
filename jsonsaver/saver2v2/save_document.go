@@ -17,12 +17,12 @@ import (
 // Document (version 2.2), and render it to the received *bytes.Buffer.
 // It is only exported in order to be available to the jsonsaver package,
 // and typically does not need to be called by client code.
-func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) (*bytes.Buffer, error) {
 
 	fmt.Fprintln(buf, "{")
 	// start to parse the creationInfo
 	if doc.CreationInfo == nil {
-		return fmt.Errorf("document had nil CreationInfo section")
+		return nil, fmt.Errorf("document had nil CreationInfo section")
 	}
 	renderCreationInfo2_2(doc.CreationInfo, buf)
 
@@ -72,24 +72,22 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 	// parse relationships  from spdx to json
 	if doc.Relationships != nil {
-		rels, _ := renderRelationships2_2(doc.Relationships)
-		relsjson, _ := json.Marshal(rels)
-		fmt.Fprintf(buf, "\"%s\": %s ,", "relationships", relsjson)
+		renderRelationships2_2(doc.Relationships, buf)
 	}
 
 	// parsing ends
 	buf.WriteRune('}')
 	// remove the pattern ",}" from the json
 	final := bytes.ReplaceAll(buf.Bytes(), []byte(",}"), []byte("}"))
-	// indent the json
+	// indent the json properly
 	var b []byte
 	newbuf := bytes.NewBuffer(b)
 	err := json.Indent(newbuf, final, "", "\t")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	// str := newbuf.String()
 	// logger := log.Default()
 	// logger.Fatal(str)
-	return nil
+	return newbuf, nil
 }

@@ -14,5 +14,10 @@ import (
 func Save2_2(doc *spdx.Document2_2, w io.Writer) error {
 	var b []byte
 	buf := bytes.NewBuffer(b)
-	return saver2v2.RenderDocument2_2(doc, buf)
+	result, err := saver2v2.RenderDocument2_2(doc, buf)
+	if err != nil {
+		return err
+	}
+	w.Write(result.Bytes())
+	return nil
 }
