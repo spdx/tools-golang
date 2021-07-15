@@ -79,9 +79,9 @@ func parseCreators(creators interface{}, ci *spdx.CreationInfo2_2) error {
 			}
 			switch subkey {
 			case "Person":
-				ci.CreatorPersons = append(ci.CreatorPersons, strings.TrimSuffix(subvalue, " ()"))
+				ci.CreatorPersons = append(ci.CreatorPersons, subvalue)
 			case "Organization":
-				ci.CreatorOrganizations = append(ci.CreatorOrganizations, strings.TrimSuffix(subvalue, " ()"))
+				ci.CreatorOrganizations = append(ci.CreatorOrganizations, subvalue)
 			case "Tool":
 				ci.CreatorTools = append(ci.CreatorTools, subvalue)
 			default:

@@ -115,8 +115,8 @@ func TestJSONSpdxDocument_parseJsonCreationInfo2_2(t *testing.T) {
 			want: &spdx.CreationInfo2_2{
 				CreatorComment:             "This package has been shipped in source and binary form.\nThe binaries were created with gcc 4.5.1 and expect to link to\ncompatible system run time libraries.",
 				Created:                    "2010-01-29T18:30:22Z",
-				CreatorPersons:             []string{"Jane Doe"},
-				CreatorOrganizations:       []string{"ExampleCodeInspect"},
+				CreatorPersons:             []string{"Jane Doe ()"},
+				CreatorOrganizations:       []string{"ExampleCodeInspect ()"},
 				CreatorTools:               []string{"LicenseFind-1.0"},
 				LicenseListVersion:         "3.8",
 				ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
