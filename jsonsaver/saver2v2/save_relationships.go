@@ -10,7 +10,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderRelationships2_2(relationships []*spdx.Relationship2_2, buf *bytes.Buffer) ([]interface{}, error) {
+func renderRelationships2_2(relationships []*spdx.Relationship2_2, buf *bytes.Buffer) error {
 
 	var rels []interface{}
 	for _, v := range relationships {
@@ -25,5 +25,5 @@ func renderRelationships2_2(relationships []*spdx.Relationship2_2, buf *bytes.Bu
 	}
 	relsjson, _ := json.Marshal(rels)
 	fmt.Fprintf(buf, "\"%s\": %s ,", "relationships", relsjson)
-	return rels, nil
+	return nil
 }

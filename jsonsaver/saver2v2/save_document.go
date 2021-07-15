@@ -86,8 +86,5 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) (*bytes.Buffer,
 	if err != nil {
 		return nil, err
 	}
-	// str := newbuf.String()
-	// logger := log.Default()
-	// logger.Fatal(str)
 	return newbuf, nil
 }
