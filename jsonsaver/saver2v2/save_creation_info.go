@@ -58,7 +58,7 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, buf *bytes.Buffer) error {
 		var refs []interface{}
 		for _, v := range ci.ExternalDocumentReferences {
 			aa := make(map[string]interface{})
-			aa["externalDocumentId"] = v.DocumentRefID
+			aa["externalDocumentId"] = fmt.Sprintf("DocumentRef-%s", v.DocumentRefID)
 			aa["checksum"] = map[string]string{
 				"algorithm":     v.Alg,
 				"checksumValue": v.Checksum,

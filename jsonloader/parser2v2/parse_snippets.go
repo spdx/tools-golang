@@ -70,7 +70,7 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 						}
 					}
 				default:
-					return fmt.Errorf("received unknown tag %v in files section", k)
+					return fmt.Errorf("received unknown tag %v in snippet section", k)
 				}
 			}
 			fileID, err2 := extractDocElementID(snippetmap["snippetFromFile"].(string))

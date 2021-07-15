@@ -30,7 +30,7 @@ func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 				snippet["licenseConcluded"] = v.SnippetLicenseConcluded
 			}
 			if v.LicenseInfoInSnippet != nil {
-				snippet["licenseInfoFromFiles"] = v.LicenseInfoInSnippet
+				snippet["licenseInfoInSnippets"] = v.LicenseInfoInSnippet
 			}
 			if v.SnippetName != "" {
 				snippet["name"] = v.SnippetName

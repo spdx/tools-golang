@@ -54,7 +54,7 @@ func renderfiles2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			file["licenseConcluded"] = v.LicenseConcluded
 		}
 		if v.LicenseInfoInFile != nil {
-			file["licenseInfoFromFiles"] = v.LicenseInfoInFile
+			file["licenseInfoInFiles"] = v.LicenseInfoInFile
 		}
 		if v.FileNotice != "" {
 			file["noticeText"] = v.FileNotice

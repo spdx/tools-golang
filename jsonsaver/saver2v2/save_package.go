@@ -104,18 +104,14 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		}
 
 		//parse package originator
-		var originator []string
 		if v.PackageOriginatorPerson != "" {
-			originator = append(originator, fmt.Sprintf("Person: %s", v.PackageOriginatorPerson))
+			pkg["originator"] = fmt.Sprintf("Person: %s", v.PackageOriginatorPerson)
 		}
 		if v.PackageOriginatorOrganization != "" {
-			originator = append(originator, fmt.Sprintf("Organization: %s", v.PackageOriginatorOrganization))
+			pkg["originator"] = fmt.Sprintf("Organization: %s", v.PackageOriginatorOrganization)
 		}
 		if v.PackageOriginatorNOASSERTION {
-			originator = append(originator, "NOASSERTION")
-		}
-		if originator != nil {
-			pkg["originator"] = originator
+			pkg["originator"] = "NOASSERTION"
 		}
 
 		//parse package verification code
