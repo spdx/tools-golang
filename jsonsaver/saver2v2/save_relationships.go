@@ -3,14 +3,10 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderRelationships2_2(relationships []*spdx.Relationship2_2, buf *bytes.Buffer) error {
+func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument map[string]interface{}) error {
 
 	var rels []interface{}
 	for _, v := range relationships {
@@ -23,7 +19,6 @@ func renderRelationships2_2(relationships []*spdx.Relationship2_2, buf *bytes.Bu
 		}
 		rels = append(rels, rel)
 	}
-	relsjson, _ := json.Marshal(rels)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "relationships", relsjson)
+	jsondocument["relationships"] = rels
 	return nil
 }

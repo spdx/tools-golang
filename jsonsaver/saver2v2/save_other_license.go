@@ -3,14 +3,10 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, buf *bytes.Buffer) error {
+func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument map[string]interface{}) error {
 
 	var licenses []interface{}
 	for _, v := range otherlicenses {
@@ -28,8 +24,7 @@ func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, buf *bytes.Bu
 		}
 		licenses = append(licenses, lic)
 	}
-	licensesjson, _ := json.Marshal(licenses)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "hasExtractedLicensingInfos", licensesjson)
+	jsondocument["hasExtractedLicensingInfos"] = licenses
 
 	return nil
 }

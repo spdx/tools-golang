@@ -366,7 +366,7 @@ func TestRenderDocument2_2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if _, err := RenderDocument2_2(tt.args.doc, tt.args.buf); (err != nil) != tt.wantErr {
+			if err := RenderDocument2_2(tt.args.doc, tt.args.buf); (err != nil) != tt.wantErr {
 				t.Errorf("RenderDocument2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

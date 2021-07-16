@@ -3,14 +3,12 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
 
 	var packages []interface{}
 	for k, v := range doc.Packages {
@@ -135,8 +133,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 		packages = append(packages, pkg)
 	}
-	packagejson, _ := json.Marshal(packages)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "packages", packagejson)
+	jsondocument["packages"] = packages
 
 	return nil
 }

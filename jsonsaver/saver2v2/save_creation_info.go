@@ -3,28 +3,26 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, buf *bytes.Buffer) error {
+func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, jsondocument map[string]interface{}) error {
 	if ci.SPDXIdentifier != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "SPDXID", spdx.RenderElementID(ci.SPDXIdentifier))
+		jsondocument["SPDXID"] = spdx.RenderElementID(ci.SPDXIdentifier)
 	}
 	if ci.SPDXVersion != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "spdxVersion", ci.SPDXVersion)
+		jsondocument["spdxVersion"] = ci.SPDXVersion
 	}
 	if ci.CreatorComment != "" || ci.Created != "" || ci.CreatorPersons != nil || ci.CreatorOrganizations != nil || ci.CreatorTools != nil || ci.LicenseListVersion != "" {
-		fmt.Fprintf(buf, "\"%s\": %s", "creationInfo", "{")
+		creationInfo := make(map[string]interface{})
 		if ci.CreatorComment != "" {
-			commentjson, _ := json.Marshal(ci.CreatorComment)
-			fmt.Fprintf(buf, "\"%s\": %s,", "comment", commentjson)
+			creationInfo["comment"] = ci.CreatorComment
 		}
 		if ci.Created != "" {
-			fmt.Fprintf(buf, "\"%s\": \"%s\",", "created", ci.Created)
+			creationInfo["created"] = ci.Created
+
 		}
 		if ci.CreatorPersons != nil || ci.CreatorOrganizations != nil || ci.CreatorTools != nil {
 			var creators []string
@@ -37,23 +35,26 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, buf *bytes.Buffer) error {
 			for _, v := range ci.CreatorTools {
 				creators = append(creators, fmt.Sprintf("Tool: %s", v))
 			}
-			creatorsjson, _ := json.Marshal(creators)
-			fmt.Fprintf(buf, "\"%s\": %s ,", "creators", creatorsjson)
+			creationInfo["creators"] = creators
 		}
 		if ci.LicenseListVersion != "" {
-			fmt.Fprintf(buf, "\"%s\": \"%s\",", "licenseListVersion", ci.LicenseListVersion)
+			creationInfo["licenseListVersion"] = ci.LicenseListVersion
 		}
-		fmt.Fprintf(buf, "%s", "},")
+		jsondocument["creationInfo"] = creationInfo
 	}
 	if ci.DocumentName != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "name", ci.DocumentName)
+		jsondocument["name"] = ci.DocumentName
 	}
 	if ci.DataLicense != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "dataLicense", ci.DataLicense)
+		jsondocument["dataLicense"] = ci.DataLicense
 	}
 	if ci.DocumentComment != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "comment", ci.DocumentComment)
+		jsondocument["comment"] = ci.DocumentComment
 	}
+	if ci.DocumentNamespace != "" {
+		jsondocument["documentNamespace"] = ci.DocumentNamespace
+	}
+
 	if ci.ExternalDocumentReferences != nil {
 		var refs []interface{}
 		for _, v := range ci.ExternalDocumentReferences {
@@ -66,8 +67,7 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, buf *bytes.Buffer) error {
 			aa["spdxDocument"] = v.URI
 			refs = append(refs, aa)
 		}
-		refsjson, _ := json.Marshal(refs)
-		fmt.Fprintf(buf, "\"%s\": %s ,", "externalDocumentRefs", refsjson)
+		jsondocument["externalDocumentRefs"] = refs
 	}
 
 	return nil

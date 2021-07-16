@@ -3,14 +3,10 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderfiles2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func renderfiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
 
 	var files []interface{}
 	for k, v := range doc.UnpackagedFiles {
@@ -71,8 +67,7 @@ func renderfiles2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 		files = append(files, file)
 	}
-	filesjson, _ := json.Marshal(files)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "files", filesjson)
+	jsondocument["files"] = files
 
 	return nil
 }

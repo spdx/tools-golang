@@ -3,14 +3,12 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderReviews2_2(reviews []*spdx.Review2_2, buf *bytes.Buffer) error {
+func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interface{}) error {
 
 	var review []interface{}
 	for _, v := range reviews {
@@ -22,8 +20,6 @@ func renderReviews2_2(reviews []*spdx.Review2_2, buf *bytes.Buffer) error {
 		}
 		review = append(review, rev)
 	}
-	reviewjson, _ := json.Marshal(review)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "revieweds", reviewjson)
-
+	jsondocument["revieweds"] = review
 	return nil
 }
