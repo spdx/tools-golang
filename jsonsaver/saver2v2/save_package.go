@@ -21,7 +21,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 		if v.PackageAttributionTexts != nil {
 			pkg["attributionTexts"] = v.PackageAttributionTexts
 		}
-		// parse package checksums
+		// save package checksums
 		if v.PackageChecksums != nil {
 			var checksums []interface{}
 			for _, value := range v.PackageChecksums {
@@ -42,7 +42,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 			pkg["downloadLocation"] = v.PackageDownloadLocation
 		}
 
-		//parse document external refereneces
+		//save document external refereneces
 		if v.PackageExternalReferences != nil {
 			var externalrefs []interface{}
 			for _, value := range v.PackageExternalReferences {
@@ -60,7 +60,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 
 		pkg["filesAnalyzed"] = v.FilesAnalyzed
 
-		// parse package hass files
+		// save package hass files
 		if v.Files != nil {
 			var fileIds []string
 			for k, v := range v.Files {
@@ -101,7 +101,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 			pkg["packageFileName"] = v.PackageFileName
 		}
 
-		//parse package originator
+		//save package originator
 		if v.PackageOriginatorPerson != "" {
 			pkg["originator"] = fmt.Sprintf("Person: %s", v.PackageOriginatorPerson)
 		}
@@ -112,7 +112,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 			pkg["originator"] = "NOASSERTION"
 		}
 
-		//parse package verification code
+		//save package verification code
 		if v.PackageVerificationCode != "" {
 			verification := make(map[string]interface{})
 			verification["packageVerificationCodeExcludedFiles"] = []string{v.PackageVerificationCodeExcludedFile}
@@ -120,7 +120,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 			pkg["packageVerificationCode"] = verification
 		}
 
-		//parse package supplier
+		//save package supplier
 		if v.PackageSupplierPerson != "" {
 			pkg["supplier"] = fmt.Sprintf("Person: %s", v.PackageSupplierPerson)
 		}

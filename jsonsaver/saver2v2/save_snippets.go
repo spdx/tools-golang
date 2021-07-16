@@ -38,7 +38,7 @@ func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{
 				snippet["attributionTexts"] = v.SnippetAttributionTexts
 			}
 
-			// parse snippet ranges
+			// save  snippet ranges
 			var ranges []interface{}
 			byterange := map[string]interface{}{
 				"endPointer": map[string]interface{}{

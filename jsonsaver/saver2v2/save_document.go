@@ -26,18 +26,18 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 	renderCreationInfo2_2(doc.CreationInfo, jsondocument)
 
-	// parse otherlicenses from sodx struct to json
+	// save otherlicenses from sodx struct to json
 	if doc.OtherLicenses != nil {
 		renderOtherLicenses2_2(doc.OtherLicenses, jsondocument)
 	}
 
-	// parse document level annotations
+	// save document level annotations
 	if doc.Annotations != nil {
 		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
 		jsondocument["annotations"] = ann
 	}
 
-	// parse document describes
+	// save document describes
 	describes, _ := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if describes != nil {
 		var describesID []string
@@ -47,23 +47,23 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		jsondocument["documentDescribes"] = describesID
 	}
 
-	// parse packages from spdx to json
+	// save packages from spdx to json
 	if doc.Packages != nil {
 		renderPackage2_2(doc, jsondocument)
 	}
 
-	// parse files and snippets from spdx to json
+	// save files and snippets from spdx to json
 	if doc.UnpackagedFiles != nil {
-		renderfiles2_2(doc, jsondocument)
+		renderFiles2_2(doc, jsondocument)
 		renderSnippets2_2(doc, jsondocument)
 	}
 
-	// parse reviews from spdx to json
+	// save reviews from spdx to json
 	if doc.Reviews != nil {
 		renderReviews2_2(doc.Reviews, jsondocument)
 	}
 
-	// parse relationships  from spdx to json
+	// save relationships  from spdx to json
 	if doc.Relationships != nil {
 		renderRelationships2_2(doc.Relationships, jsondocument)
 	}

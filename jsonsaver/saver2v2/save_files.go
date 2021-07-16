@@ -6,7 +6,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderfiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
+func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
 
 	var files []interface{}
 	for k, v := range doc.UnpackagedFiles {
@@ -23,7 +23,7 @@ func renderfiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 			file["comment"] = v.FileComment
 		}
 
-		// parse package checksums
+		// save package checksums
 		if v.FileChecksums != nil {
 			var checksums []interface{}
 			for _, value := range v.FileChecksums {
