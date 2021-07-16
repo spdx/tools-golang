@@ -22,7 +22,7 @@ New **code files** should include a [short-form SPDX ID](https://spdx.org/ids) a
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 ```
 
-New **documentation files** should include a [short-form SPDX ID](https://spdx.org/ids) at the top, indicating the project license for code, which is CC-BY-4.0. This should look like the following:
+New **documentation files** should include a [short-form SPDX ID](https://spdx.org/ids) at the top, indicating the project license for documentation, which is CC-BY-4.0. This should look like the following:
 
 ```
 SPDX-License-Identifier: CC-BY-4.0

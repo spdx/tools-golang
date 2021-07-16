@@ -1,41 +1,38 @@
 [![Build Status](https://github.com/spdx/tools-golang/workflows/build/badge.svg)](https://github.com/spdx/tools-golang/actions)
 [![Coverage Status](https://coveralls.io/repos/github/spdx/tools-golang/badge.svg)](https://coveralls.io/github/spdx/tools-golang)
 
-# tools-golang
+# SPDX tools-golang
 
 tools-golang is a collection of Go packages intended to make it easier for
 Go programs to work with [SPDX®](https://spdx.org/) files.
 
-This software is in an early state, and its API may change significantly.
-
 ## Recent news
 
-2021-03-20: **v0.1.0**: initial pre-v1 release tagged, prior to making more
-extensive API changes in some pending PRs.
+2021-07-04: **v0.2.0**: added support for parsing SPDX JSON files as well as
+other improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md)
+for full details.
 
 ## What it does
 
 tools-golang currently works with files conformant to versions 2.1 and 2.2
-of the SPDX specification, available at: https://spdx.org/specifications
+of the SPDX specification, available at: https://spdx.dev/specifications
 
 tools-golang provides the following packages:
 
 * *spdx* - in-memory data model for the sections of an SPDX document
-* *tvloader* - tag-value file loader
-* *tvsaver* - tag-value file saver
-* *rdfloader* - RDF file loader
+* *tvloader* - tag-value document loader
+* *tvsaver* - tag-value document saver
+* *rdfloader* - RDF document loader
+* *jsonloader* - JSON document loader
 * *builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
 * *licensediff* - compares concluded licenses between files in two packages
 * *reporter* - generates basic license count report from SPDX document
+* *spdxlib* - various utility functions for manipulating SPDX documents in memory
 * *utils* - various utility functions that support the other tools-golang packages
 
 Examples for how to use these packages can be found in the `examples/`
 directory.
-
-RDF support was added by @RishabhBhatnagar as part of his Google Summer of
-Code 2020 project, and is in the process of being merged into the main
-tools-golang code.
 
 ## What it doesn't do
 
@@ -55,6 +52,19 @@ tools-golang uses https://github.com/spdx/gordf to manage RDF input and output.
 
 Other than that, tools-golang does not require anything outside the Go standard
 library.
+
+## Contributors
+
+Thank you to all of the contributors to spdx/tools-golang. A full list can be
+found in the GitHub repo and in [the release notes](RELEASE-NOTES.md).
+
+In particular, thank you to the following for major contributions:
+
+JSON parsing support was added by @specter25 as part of his Google Summer of
+Code 2021 project.
+
+RDF parsing support was added by @RishabhBhatnagar as part of his Google Summer
+of Code 2020 project.
 
 ## Licenses
 

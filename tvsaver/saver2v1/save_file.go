@@ -36,7 +36,7 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 		fmt.Fprintf(w, "LicenseInfoInFile: %s\n", s)
 	}
 	if f.LicenseComments != "" {
-		fmt.Fprintf(w, "LicenseComments: %s\n", f.LicenseComments)
+		fmt.Fprintf(w, "LicenseComments: %s\n", textify(f.LicenseComments))
 	}
 	if f.FileCopyrightText != "" {
 		fmt.Fprintf(w, "FileCopyrightText: %s\n", textify(f.FileCopyrightText))
@@ -51,10 +51,10 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 		}
 	}
 	if f.FileComment != "" {
-		fmt.Fprintf(w, "FileComment: %s\n", f.FileComment)
+		fmt.Fprintf(w, "FileComment: %s\n", textify(f.FileComment))
 	}
 	if f.FileNotice != "" {
-		fmt.Fprintf(w, "FileNotice: %s\n", f.FileNotice)
+		fmt.Fprintf(w, "FileNotice: %s\n", textify(f.FileNotice))
 	}
 	for _, s := range f.FileContributor {
 		fmt.Fprintf(w, "FileContributor: %s\n", s)

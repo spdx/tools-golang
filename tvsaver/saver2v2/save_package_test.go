@@ -29,7 +29,8 @@ func TestSaver2_2PackageSavesTextCombo1(t *testing.T) {
 		Category: "PACKAGE-MANAGER",
 		RefType:  "npm",
 		Locator:  "p1@0.1.0",
-		// no ExternalRefComment for this one
+		ExternalRefComment: `this is a
+multi-line external ref comment`,
 	}
 
 	// NOTE, this is an entirely made up SWH persistent ID
@@ -105,7 +106,7 @@ PackageSupplier: Organization: John Doe, Inc.
 PackageOriginator: Person: John Doe
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 FilesAnalyzed: true
-PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes p1-0.1.0.spdx)
+PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
 PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
@@ -124,6 +125,8 @@ PackageComment: this is a comment comment
 ExternalRef: SECURITY cpe22Type cpe:/a:john_doe_inc:p1:0.1.0
 ExternalRefComment: this is an external ref comment #1
 ExternalRef: PACKAGE-MANAGER npm p1@0.1.0
+ExternalRefComment: <text>this is a
+multi-line external ref comment</text>
 ExternalRef: PERSISTENT-ID swh swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2
 ExternalRef: OTHER anything anything-without-spaces-can-go-here
 PackageAttributionText: Include this notice in all advertising materials
@@ -455,6 +458,50 @@ FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
 LicenseConcluded: MIT
 LicenseInfoInFile: MIT
 FileCopyrightText: Copyright (c) John Doe
+
+`)
+
+	// render as buffer of bytes
+	var got bytes.Buffer
+	err := renderPackage2_2(pkg, &got)
+	if err != nil {
+		t.Errorf("Expected nil error, got %v", err)
+	}
+
+	// check that they match
+	c := bytes.Compare(want.Bytes(), got.Bytes())
+	if c != 0 {
+		t.Errorf("Expected %v, got %v", want.String(), got.String())
+	}
+}
+
+func TestSaver2_2PackageWrapsMultiLine(t *testing.T) {
+	pkg := &spdx.Package2_2{
+		PackageName:               "p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             false,
+		IsFilesAnalyzedTagPresent: true,
+		PackageLicenseConcluded:   "GPL-2.0-or-later",
+		PackageLicenseInfoFromFiles: []string{
+			"Apache-1.1",
+			"Apache-2.0",
+			"GPL-2.0-or-later",
+		},
+		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+		PackageCopyrightText: `Copyright (c) John Doe, Inc.
+Copyright Jane Doe`,
+	}
+
+	// what we want to get, as a buffer of bytes
+	want := bytes.NewBufferString(`PackageName: p1
+SPDXID: SPDXRef-p1
+PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
+FilesAnalyzed: false
+PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
+Copyright Jane Doe</text>
 
 `)
 

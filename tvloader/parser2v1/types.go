@@ -52,3 +52,5 @@ const (
 	// in review section
 	psReview2_1
 )
+
+const nullSpdxElementId2_1 = spdx.ElementID("")

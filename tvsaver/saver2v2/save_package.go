@@ -55,7 +55,7 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 		if pkg.PackageVerificationCodeExcludedFile == "" {
 			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode)
 		} else {
-			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
+			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes: %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
 		}
 	}
 	if pkg.PackageChecksums[spdx.SHA1].Value != "" {
@@ -88,7 +88,7 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 		fmt.Fprintf(w, "PackageLicenseComments: %s\n", textify(pkg.PackageLicenseComments))
 	}
 	if pkg.PackageCopyrightText != "" {
-		fmt.Fprintf(w, "PackageCopyrightText: %s\n", pkg.PackageCopyrightText)
+		fmt.Fprintf(w, "PackageCopyrightText: %s\n", textify(pkg.PackageCopyrightText))
 	}
 	if pkg.PackageSummary != "" {
 		fmt.Fprintf(w, "PackageSummary: %s\n", textify(pkg.PackageSummary))
@@ -102,7 +102,7 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	for _, s := range pkg.PackageExternalReferences {
 		fmt.Fprintf(w, "ExternalRef: %s %s %s\n", s.Category, s.RefType, s.Locator)
 		if s.ExternalRefComment != "" {
-			fmt.Fprintf(w, "ExternalRefComment: %s\n", s.ExternalRefComment)
+			fmt.Fprintf(w, "ExternalRefComment: %s\n", textify(s.ExternalRefComment))
 		}
 	}
 	for _, s := range pkg.PackageAttributionTexts {
