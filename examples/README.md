@@ -70,3 +70,11 @@ and then printing the corresponding spdx struct for the document.
 
 This example demonstrates loading an SPDX json from disk into memory
 and then re-saving it to a different file on disk in tag-value format.
+
+## 9-jsonsaver
+
+*jsonsaver*, *tvloader*
+
+This example demonstrates loading an SPDX tag-value from disk into memory
+and then re-saving it to a different file on disk in json format.
+
