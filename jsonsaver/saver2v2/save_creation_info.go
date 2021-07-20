@@ -26,15 +26,16 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, jsondocument map[string]int
 		}
 		if ci.CreatorPersons != nil || ci.CreatorOrganizations != nil || ci.CreatorTools != nil {
 			var creators []string
-			for _, v := range ci.CreatorPersons {
-				creators = append(creators, fmt.Sprintf("Person: %s", v))
+			for _, v := range ci.CreatorTools {
+				creators = append(creators, fmt.Sprintf("Tool: %s", v))
 			}
 			for _, v := range ci.CreatorOrganizations {
 				creators = append(creators, fmt.Sprintf("Organization: %s", v))
 			}
-			for _, v := range ci.CreatorTools {
-				creators = append(creators, fmt.Sprintf("Tool: %s", v))
+			for _, v := range ci.CreatorPersons {
+				creators = append(creators, fmt.Sprintf("Person: %s", v))
 			}
+
 			creationInfo["creators"] = creators
 		}
 		if ci.LicenseListVersion != "" {
