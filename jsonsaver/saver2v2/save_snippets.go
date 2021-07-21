@@ -6,7 +6,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
+func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var snippets []interface{}
 	for _, value := range doc.UnpackagedFiles {
@@ -66,5 +66,5 @@ func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{
 		}
 	}
 	jsondocument["snippets"] = snippets
-	return nil
+	return snippets, nil
 }

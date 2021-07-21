@@ -6,7 +6,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
+func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var files []interface{}
 	for k, v := range doc.UnpackagedFiles {
@@ -17,7 +17,7 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 			file["annotations"] = ann
 		}
 		if v.FileContributor != nil {
-			file["attributionTexts"] = v.FileContributor
+			file["fileContributors"] = v.FileContributor
 		}
 		if v.FileComment != "" {
 			file["comment"] = v.FileComment
@@ -55,9 +55,6 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 		if v.FileNotice != "" {
 			file["noticeText"] = v.FileNotice
 		}
-		if v.FileContributor != nil {
-			file["fileContributors"] = v.FileContributor
-		}
 		if v.FileDependencies != nil {
 			file["fileDependencies"] = v.FileDependencies
 		}
@@ -69,5 +66,5 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 	}
 	jsondocument["files"] = files
 
-	return nil
+	return files, nil
 }

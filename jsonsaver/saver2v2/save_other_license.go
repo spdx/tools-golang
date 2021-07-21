@@ -6,7 +6,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument map[string]interface{}) error {
+func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var licenses []interface{}
 	for _, v := range otherlicenses {
@@ -26,5 +26,5 @@ func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument 
 	}
 	jsondocument["hasExtractedLicensingInfos"] = licenses
 
-	return nil
+	return licenses, nil
 }

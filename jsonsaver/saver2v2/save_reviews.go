@@ -8,7 +8,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interface{}) error {
+func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var review []interface{}
 	for _, v := range reviews {
@@ -21,5 +21,5 @@ func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interfa
 		review = append(review, rev)
 	}
 	jsondocument["revieweds"] = review
-	return nil
+	return review, nil
 }

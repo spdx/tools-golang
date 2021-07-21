@@ -6,7 +6,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument map[string]interface{}) error {
+func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var rels []interface{}
 	for _, v := range relationships {
@@ -20,5 +20,5 @@ func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument 
 		rels = append(rels, rel)
 	}
 	jsondocument["relationships"] = rels
-	return nil
+	return rels, nil
 }

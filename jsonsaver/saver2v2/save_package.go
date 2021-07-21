@@ -8,7 +8,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) error {
+func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var packages []interface{}
 	for k, v := range doc.Packages {
@@ -135,5 +135,5 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 	}
 	jsondocument["packages"] = packages
 
-	return nil
+	return packages, nil
 }
