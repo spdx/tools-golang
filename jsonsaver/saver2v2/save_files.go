@@ -3,6 +3,8 @@
 package saver2v2
 
 import (
+	"fmt"
+
 	"github.com/spdx/tools-golang/spdx"
 )
 
@@ -28,7 +30,7 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 			var checksums []interface{}
 			for _, value := range v.FileChecksums {
 				checksum := make(map[string]interface{})
-				checksum["algorithm"] = value.Algorithm
+				checksum["algorithm"] = fmt.Sprintf("%s", value.Algorithm)
 				checksum["checksumValue"] = value.Value
 				checksums = append(checksums, checksum)
 			}

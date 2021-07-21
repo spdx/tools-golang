@@ -47,12 +47,12 @@ func Test_renderPackage2_2(t *testing.T) {
 						"Package": {
 							PackageSPDXIdentifier:   "Package",
 							PackageAttributionTexts: []string{"The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually."},
-							// PackageChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-							// 	"MD5": {
-							// 		Algorithm: "MD5",
-							// 		Value:     "624c1abb3664f4b35547e7c73864ad24",
-							// 	},
-							// },
+							PackageChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+								"MD5": {
+									Algorithm: "MD5",
+									Value:     "624c1abb3664f4b35547e7c73864ad24",
+								},
+							},
 							PackageCopyrightText:    "Copyright 2008-2010 John Smith",
 							PackageDescription:      "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
 							PackageDownloadLocation: "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
@@ -160,12 +160,12 @@ func Test_renderPackage2_2(t *testing.T) {
 						},
 					},
 					"attributionTexts": []string{"The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually."},
-					// "checksums": []interface{}{
-					// 	map[string]interface{}{
-					// 		"algorithm":     "MD5",
-					// 		"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
-					// 	},
-					// },
+					"checksums": []interface{}{
+						map[string]interface{}{
+							"algorithm":     "MD5",
+							"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
+						},
+					},
 					"copyrightText":    "Copyright 2008-2010 John Smith",
 					"description":      "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
 					"downloadLocation": "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",

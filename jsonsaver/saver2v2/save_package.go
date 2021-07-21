@@ -26,7 +26,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 			var checksums []interface{}
 			for _, value := range v.PackageChecksums {
 				checksum := make(map[string]interface{})
-				checksum["algorithm"] = value.Algorithm
+				checksum["algorithm"] = fmt.Sprintf("%s", value.Algorithm)
 				checksum["checksumValue"] = value.Value
 				checksums = append(checksums, checksum)
 			}
