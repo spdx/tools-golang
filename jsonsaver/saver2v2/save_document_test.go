@@ -6,6 +6,8 @@ package saver2v2
 
 import (
 	"bytes"
+	"encoding/json"
+	"reflect"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -184,15 +186,15 @@ func TestRenderDocument2_2(t *testing.T) {
 						Value:     "624c1abb3664f4b35547e7c73864ad24",
 					},
 				},
-				FileComment:       "The concluded license was taken from the package level that the file was included in.\nThis information was found in the COPYING.txt file in the xyz directory.",
+				FileComment:       "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
 				FileCopyrightText: "Copyright 2008-2010 John Smith",
 				FileContributor:   []string{"The Regents of the University of California", "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"},
 				FileName:          "./package/foo.c",
 				FileType:          []string{"SOURCE"},
-				LicenseComments:   "The concluded license was taken from the package level that the file was included in.",
+				LicenseComments:   "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
 				LicenseConcluded:  "(LGPL-2.0-only OR LicenseRef-2)",
 				LicenseInfoInFile: []string{"GPL-2.0-only", "LicenseRef-2"},
-				FileNotice:        "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the �Software�), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED �AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+				FileNotice:        "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.",
 			},
 		},
 	}
@@ -202,6 +204,7 @@ func TestRenderDocument2_2(t *testing.T) {
 		"spdxVersion":       "SPDX-2.2",
 		"SPDXID":            "SPDXRef-DOCUMENT",
 		"documentNamespace": "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+		"documentDescribes": []string{"SPDXRef-Package"},
 		"name":              "SPDX-Tools-v2.0",
 		"comment":           "This document was created using SPDX 2.0 using licenses from the web site.",
 		"creationInfo": map[string]interface{}{
@@ -239,6 +242,24 @@ func TestRenderDocument2_2(t *testing.T) {
 				"annotationType": "REVIEW",
 				"annotator":      "Person: Joe Reviewer",
 				"comment":        "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
+			},
+		},
+		"relationships": []interface{}{
+			map[string]interface{}{
+				"spdxElementId":      "SPDXRef-DOCUMENT",
+				"relatedSpdxElement": "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement",
+				"relationshipType":   "COPY_OF",
+			},
+			map[string]interface{}{
+				"spdxElementId":      "SPDXRef-DOCUMENT",
+				"relatedSpdxElement": "SPDXRef-Package",
+				"relationshipType":   "CONTAINS",
+			},
+			map[string]interface{}{
+				"spdxElementId":      "SPDXRef-DOCUMENT",
+				"relatedSpdxElement": "SPDXRef-File",
+				"relationshipType":   "DESCRIBES",
+				"comment":            "This is a comment.",
 			},
 		},
 		"packages": []interface{}{
@@ -316,16 +337,15 @@ func TestRenderDocument2_2(t *testing.T) {
 						"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
 					},
 				},
-				"comment":            "The concluded license was taken from the package level that the file was .",
+				"comment":            "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
 				"copyrightText":      "Copyright 2008-2010 John Smith",
 				"fileContributors":   []string{"The Regents of the University of California", "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"},
 				"fileName":           "./package/foo.c",
 				"fileTypes":          []string{"SOURCE"},
-				"licenseComments":    "The concluded license was taken from the package level that the file was included in.",
+				"licenseComments":    "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
 				"licenseConcluded":   "(LGPL-2.0-only OR LicenseRef-2)",
 				"licenseInfoInFiles": []string{"GPL-2.0-only", "LicenseRef-2"},
 				"noticeText":         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.",
-				"attributionTexts":   []string{"text1", "text2 "},
 			},
 			map[string]interface{}{
 				"SPDXID": "SPDXRef-DoapSource",
@@ -375,8 +395,7 @@ func TestRenderDocument2_2(t *testing.T) {
 						},
 					},
 				},
-				"snippetFromFile":  "SPDXRef-DoapSource",
-				"attributionTexts": []string{"text1", "text2 "},
+				"snippetFromFile": "SPDXRef-DoapSource",
 			},
 		},
 	}
@@ -405,6 +424,11 @@ func TestRenderDocument2_2(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := RenderDocument2_2(tt.args.doc, tt.args.buf); (err != nil) != tt.wantErr {
 				t.Errorf("RenderDocument2_2() error = %v, wantErr %v", err, want)
+			}
+			jsonspec, _ := json.MarshalIndent(want, "", "\t")
+			result := tt.args.buf.Bytes()
+			if !reflect.DeepEqual(jsonspec, result) {
+				t.Errorf("RenderDocument2_2() error = %v, wantErr %v", string(jsonspec), string(result))
 			}
 		})
 	}
