@@ -21,6 +21,7 @@ func TestJSONSpdxDocument_parseJsonSnippets2_2(t *testing.T) {
 			"licenseComments" : "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
 			"licenseConcluded" : "GPL-2.0-only",
 			"licenseInfoInSnippets" : [ "GPL-2.0-only" ],
+			"attributionTexts":["text1"],
 			"name" : "from linux kernel",
 			"ranges" : [ {
 			  "endPointer" : {
@@ -52,6 +53,7 @@ func TestJSONSpdxDocument_parseJsonSnippets2_2(t *testing.T) {
 		Snippets: map[spdx.ElementID]*spdx.Snippet2_2{
 			"Snippet": {
 				SnippetSPDXIdentifier:         "Snippet",
+				SnippetAttributionTexts:       []string{"text1"},
 				SnippetFromFileSPDXIdentifier: spdx.DocElementID{ElementRefID: "DoapSource"},
 				SnippetComment:                "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
 				SnippetCopyrightText:          "Copyright 2008-2010 John Smith",
