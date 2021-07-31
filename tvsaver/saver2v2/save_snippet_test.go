@@ -31,7 +31,7 @@ func TestSaver2_2SnippetSavesText(t *testing.T) {
 	}
 
 	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`SnippetSPDXIdentifier: SPDXRef-Snippet17
+	want := bytes.NewBufferString(`SnippetSPDXID: SPDXRef-Snippet17
 SnippetFromFileSPDXID: SPDXRef-File292
 SnippetByteRange: 17:209
 SnippetLineRange: 3:8
@@ -71,7 +71,7 @@ func TestSaver2_2SnippetOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	}
 
 	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`SnippetSPDXIdentifier: SPDXRef-Snippet17
+	want := bytes.NewBufferString(`SnippetSPDXID: SPDXRef-Snippet17
 SnippetFromFileSPDXID: SPDXRef-File292
 SnippetByteRange: 17:209
 SnippetLicenseConcluded: GPL-2.0-or-later
@@ -100,12 +100,12 @@ func TestSaver2_2SnippetWrapsCopyrightMultiline(t *testing.T) {
 		SnippetByteRangeStart:         17,
 		SnippetByteRangeEnd:           209,
 		SnippetLicenseConcluded:       "GPL-2.0-or-later",
-		SnippetCopyrightText:          `Copyright (c) John Doe 20x6
+		SnippetCopyrightText: `Copyright (c) John Doe 20x6
 Copyright (c) John Doe 20x6`,
 	}
 
 	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`SnippetSPDXIdentifier: SPDXRef-Snippet17
+	want := bytes.NewBufferString(`SnippetSPDXID: SPDXRef-Snippet17
 SnippetFromFileSPDXID: SPDXRef-File292
 SnippetByteRange: 17:209
 SnippetLicenseConcluded: GPL-2.0-or-later

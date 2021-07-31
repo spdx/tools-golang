@@ -263,13 +263,13 @@ LicenseInfoInFile: GPL-2.0-or-later
 LicenseInfoInFile: WTFPL
 FileCopyrightText: Copyright (c) Jane Doe
 
-SnippetSPDXIdentifier: SPDXRef-Snippet19
+SnippetSPDXID: SPDXRef-Snippet19
 SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
 SnippetByteRange: 17:209
 SnippetLicenseConcluded: GPL-2.0-or-later
 SnippetCopyrightText: Copyright (c) John Doe 20x6
 
-SnippetSPDXIdentifier: SPDXRef-Snippet20
+SnippetSPDXID: SPDXRef-Snippet20
 SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
 SnippetByteRange: 268:309
 SnippetLicenseConcluded: WTFPL
