@@ -82,7 +82,7 @@ func Test_renderCreationInfo2_2(t *testing.T) {
 			}
 			for k, v := range tt.want {
 				if !reflect.DeepEqual(tt.args.jsondocument[k], v) {
-					t.Errorf("Load2_2() = %v, want %v", tt.args.jsondocument[k], v)
+					t.Errorf("renderCreationInfo2_2() = %v, want %v", tt.args.jsondocument[k], v)
 				}
 			}
 		})

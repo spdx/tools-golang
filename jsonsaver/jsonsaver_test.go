@@ -197,16 +197,13 @@ func TestSave2_2(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		wantW   string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
 		{
 			name: "success",
 			args: args{
 				doc: test1,
 			},
-			wantW:   "",
 			wantErr: false,
 		},
 		{
@@ -214,7 +211,6 @@ func TestSave2_2(t *testing.T) {
 			args: args{
 				doc: &spdx.Document2_2{},
 			},
-			wantW:   "",
 			wantErr: true,
 		},
 	}

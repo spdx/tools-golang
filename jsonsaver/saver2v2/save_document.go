@@ -24,17 +24,28 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	if doc.CreationInfo == nil {
 		return fmt.Errorf("document had nil CreationInfo section")
 	}
-	renderCreationInfo2_2(doc.CreationInfo, jsondocument)
+	err := renderCreationInfo2_2(doc.CreationInfo, jsondocument)
+	if err != nil {
+		return err
+	}
 
 	// save otherlicenses from sodx struct to json
 	if doc.OtherLicenses != nil {
-		renderOtherLicenses2_2(doc.OtherLicenses, jsondocument)
+		_, err = renderOtherLicenses2_2(doc.OtherLicenses, jsondocument)
+		if err != nil {
+			return err
+		}
 	}
 
 	// save document level annotations
 	if doc.Annotations != nil {
-		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
+		ann, err := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
+		if err != nil {
+			return err
+		}
+
 		jsondocument["annotations"] = ann
+
 	}
 
 	// save document describes
@@ -49,23 +60,41 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 	// save packages from spdx to json
 	if doc.Packages != nil {
-		renderPackage2_2(doc, jsondocument)
+		_, err = renderPackage2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
 	}
 
 	// save files and snippets from spdx to json
 	if doc.UnpackagedFiles != nil {
-		renderFiles2_2(doc, jsondocument)
-		renderSnippets2_2(doc, jsondocument)
+		_, err = renderFiles2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
+		_, err = renderSnippets2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
 	// save reviews from spdx to json
 	if doc.Reviews != nil {
-		renderReviews2_2(doc.Reviews, jsondocument)
+		_, err = renderReviews2_2(doc.Reviews, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
 	// save relationships  from spdx to json
 	if doc.Relationships != nil {
-		renderRelationships2_2(doc.Relationships, jsondocument)
+		_, err = renderRelationships2_2(doc.Relationships, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
 	jsonspec, err := json.MarshalIndent(jsondocument, "", "\t")
