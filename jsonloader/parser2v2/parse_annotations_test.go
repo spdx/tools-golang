@@ -31,6 +31,26 @@ func TestJSONSpdxDocument_parseJsonAnnotations2_2(t *testing.T) {
 	  } ]
 	}
   `)
+	data2 := []byte(`{
+	"annotations" : [ {
+	"annotationDate" : "2010-02-10T00:00:00Z",
+	"annotationType" : "REVIEW",
+	"annotator" : "Person: Joe Reviewer",
+	"comment" : "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
+	"Hello":"hellp"
+  }]
+}
+`)
+	data3 := []byte(`{
+	"annotations" : [ {
+	"annotationDate" : "2010-02-10T00:00:00Z",
+	"annotationType" : "REVIEW",
+	"annotator" : "Fasle: Joe Reviewer",
+	"comment" : "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
+	"Hello":"hellp"
+  }]
+}
+`)
 
 	annotationstest1 := []*spdx.Annotation2_2{
 		{
@@ -60,7 +80,12 @@ func TestJSONSpdxDocument_parseJsonAnnotations2_2(t *testing.T) {
 	}
 
 	var specs JSONSpdxDocument
+	var specs2 JSONSpdxDocument
+	var specs3 JSONSpdxDocument
+
 	json.Unmarshal(data, &specs)
+	json.Unmarshal(data2, &specs2)
+	json.Unmarshal(data3, &specs3)
 
 	type args struct {
 		key           string
@@ -88,16 +113,41 @@ func TestJSONSpdxDocument_parseJsonAnnotations2_2(t *testing.T) {
 			want:    annotationstest1,
 			wantErr: false,
 		},
+		{
+			name: "failure test - invaid creator type",
+			spec: specs2,
+			args: args{
+				key:           "annotations",
+				value:         specs2["annotations"],
+				doc:           &spdxDocument2_2{},
+				SPDXElementID: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name: "failure test - invalid tag",
+			spec: specs3,
+			args: args{
+				key:           "annotations",
+				value:         specs3["annotations"],
+				doc:           &spdxDocument2_2{},
+				SPDXElementID: spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := tt.spec.parseJsonAnnotations2_2(tt.args.key, tt.args.value, tt.args.doc, tt.args.SPDXElementID); (err != nil) != tt.wantErr {
 				t.Errorf("JSONSpdxDocument.parseJsonAnnotations2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
-
-			for i := 0; i < len(tt.want); i++ {
-				if !reflect.DeepEqual(tt.args.doc.Annotations[i], tt.want[i]) {
-					t.Errorf("Load2_2() = %v, want %v", tt.args.doc.Annotations[i], tt.want[i])
+			if !tt.wantErr {
+				for i := 0; i < len(tt.want); i++ {
+					if !reflect.DeepEqual(tt.args.doc.Annotations[i], tt.want[i]) {
+						t.Errorf("Load2_2() = %v, want %v", tt.args.doc.Annotations[i], tt.want[i])
+					}
 				}
 			}
 

@@ -3,6 +3,7 @@
 package jsonloader
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -45,6 +46,14 @@ func TestLoad2_2(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "fail - invalidjson ",
+			args: args{
+				content: bytes.NewReader([]byte(`{"Hello":"HI",}`)),
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -53,7 +62,7 @@ func TestLoad2_2(t *testing.T) {
 				t.Errorf("Load2_2() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got.CreationInfo, tt.want.CreationInfo) {
+			if !tt.wantErr && !reflect.DeepEqual(got.CreationInfo, tt.want.CreationInfo) {
 				t.Errorf("Load2_2() = %v, want %v", got.CreationInfo, tt.want.CreationInfo)
 			}
 		})

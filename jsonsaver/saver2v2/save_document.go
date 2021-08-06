@@ -17,74 +17,90 @@ import (
 // Document (version 2.2), and render it to the received *bytes.Buffer.
 // It is only exported in order to be available to the jsonsaver package,
 // and typically does not need to be called by client code.
-func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) (*bytes.Buffer, error) {
+func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
-	fmt.Fprintln(buf, "{")
+	jsondocument := make(map[string]interface{})
 	// start to parse the creationInfo
 	if doc.CreationInfo == nil {
-		return nil, fmt.Errorf("document had nil CreationInfo section")
+		return fmt.Errorf("document had nil CreationInfo section")
 	}
-	renderCreationInfo2_2(doc.CreationInfo, buf)
+	err := renderCreationInfo2_2(doc.CreationInfo, jsondocument)
+	if err != nil {
+		return err
+	}
 
-	// parse otherlicenses from sodx struct to json
+	// save otherlicenses from sodx struct to json
 	if doc.OtherLicenses != nil {
-		renderOtherLicenses2_2(doc.OtherLicenses, buf)
+		_, err = renderOtherLicenses2_2(doc.OtherLicenses, jsondocument)
+		if err != nil {
+			return err
+		}
 	}
 
-	// parse document level annotations
+	// save document level annotations
 	if doc.Annotations != nil {
-		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
-		annotationjson, _ := json.Marshal(ann)
-		fmt.Fprintf(buf, "\"%s\": %s ,", "annotations", annotationjson)
+		ann, err := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(doc.CreationInfo.SPDXIdentifier)))
+		if err != nil {
+			return err
+		}
+
+		jsondocument["annotations"] = ann
+
 	}
 
-	// parse document namespace
-	if doc.CreationInfo.DocumentNamespace != "" {
-		fmt.Fprintf(buf, "\"%s\": \"%s\",", "documentNamespace", doc.CreationInfo.DocumentNamespace)
-	}
-
-	// parse document describes
+	// save document describes
 	describes, _ := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if describes != nil {
 		var describesID []string
 		for _, v := range describes {
 			describesID = append(describesID, spdx.RenderElementID(v))
 		}
-		describesjson, _ := json.Marshal(describesID)
-		fmt.Fprintf(buf, "\"%s\": %s,", "documentDescribes", describesjson)
+		jsondocument["documentDescribes"] = describesID
 	}
 
-	// parse packages from spdx to json
+	// save packages from spdx to json
 	if doc.Packages != nil {
-		renderPackage2_2(doc, buf)
+		_, err = renderPackage2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
 	}
 
-	// parse files and snippets from spdx to json
+	// save files and snippets from spdx to json
 	if doc.UnpackagedFiles != nil {
-		renderfiles2_2(doc, buf)
-		renderSnippets2_2(doc, buf)
+		_, err = renderFiles2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
+		_, err = renderSnippets2_2(doc, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
-	// parse reviews from spdx to json
+	// save reviews from spdx to json
 	if doc.Reviews != nil {
-		renderReviews2_2(doc.Reviews, buf)
+		_, err = renderReviews2_2(doc.Reviews, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
-	// parse relationships  from spdx to json
+	// save relationships  from spdx to json
 	if doc.Relationships != nil {
-		renderRelationships2_2(doc.Relationships, buf)
+		_, err = renderRelationships2_2(doc.Relationships, jsondocument)
+		if err != nil {
+			return err
+		}
+
 	}
 
-	// parsing ends
-	buf.WriteRune('}')
-	// remove the pattern ",}" from the json
-	final := bytes.ReplaceAll(buf.Bytes(), []byte(",}"), []byte("}"))
-	// indent the json properly
-	var b []byte
-	newbuf := bytes.NewBuffer(b)
-	err := json.Indent(newbuf, final, "", "\t")
+	jsonspec, err := json.MarshalIndent(jsondocument, "", "\t")
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return newbuf, nil
+	buf.Write(jsonspec)
+	return nil
 }

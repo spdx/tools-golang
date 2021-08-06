@@ -3,14 +3,12 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var packages []interface{}
 	for k, v := range doc.Packages {
@@ -23,12 +21,12 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		if v.PackageAttributionTexts != nil {
 			pkg["attributionTexts"] = v.PackageAttributionTexts
 		}
-		// parse package checksums
+		// save package checksums
 		if v.PackageChecksums != nil {
 			var checksums []interface{}
 			for _, value := range v.PackageChecksums {
 				checksum := make(map[string]interface{})
-				checksum["algorithm"] = value.Algorithm
+				checksum["algorithm"] = string(value.Algorithm)
 				checksum["checksumValue"] = value.Value
 				checksums = append(checksums, checksum)
 			}
@@ -44,7 +42,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			pkg["downloadLocation"] = v.PackageDownloadLocation
 		}
 
-		//parse document external refereneces
+		//save document external refereneces
 		if v.PackageExternalReferences != nil {
 			var externalrefs []interface{}
 			for _, value := range v.PackageExternalReferences {
@@ -62,7 +60,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 		pkg["filesAnalyzed"] = v.FilesAnalyzed
 
-		// parse package hass files
+		// save package hass files
 		if v.Files != nil {
 			var fileIds []string
 			for k, v := range v.Files {
@@ -103,7 +101,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			pkg["packageFileName"] = v.PackageFileName
 		}
 
-		//parse package originator
+		//save package originator
 		if v.PackageOriginatorPerson != "" {
 			pkg["originator"] = fmt.Sprintf("Person: %s", v.PackageOriginatorPerson)
 		}
@@ -114,7 +112,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			pkg["originator"] = "NOASSERTION"
 		}
 
-		//parse package verification code
+		//save package verification code
 		if v.PackageVerificationCode != "" {
 			verification := make(map[string]interface{})
 			verification["packageVerificationCodeExcludedFiles"] = []string{v.PackageVerificationCodeExcludedFile}
@@ -122,7 +120,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			pkg["packageVerificationCode"] = verification
 		}
 
-		//parse package supplier
+		//save package supplier
 		if v.PackageSupplierPerson != "" {
 			pkg["supplier"] = fmt.Sprintf("Person: %s", v.PackageSupplierPerson)
 		}
@@ -135,8 +133,7 @@ func renderPackage2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 
 		packages = append(packages, pkg)
 	}
-	packagejson, _ := json.Marshal(packages)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "packages", packagejson)
+	jsondocument["packages"] = packages
 
-	return nil
+	return packages, nil
 }

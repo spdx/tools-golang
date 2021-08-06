@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *tvloader*, *tvsaver*
+// Example for: *tvloader*, *jsonsaver*
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
-// and re-saving it to a different file on disk.
+// and re-saving it to a different json file on disk.
 
 package main
 
@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/jsonloader"
 	"github.com/spdx/tools-golang/jsonsaver"
+	"github.com/spdx/tools-golang/tvloader"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	defer r.Close()
 
 	// try to load the SPDX file's contents as a tag-value file, version 2.2
-	doc, err := jsonloader.Load2_2(r)
+	doc, err := tvloader.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return
@@ -45,7 +45,7 @@ func main() {
 	// if we got here, the file is now loaded into memory.
 	fmt.Printf("Successfully loaded %s\n", args[1])
 
-	// we can now save it back to disk, using tvsaver.
+	// we can now save it back to disk, using jsonsaver.
 
 	// create a new file for writing
 	fileOut := args[2]
@@ -56,7 +56,7 @@ func main() {
 	}
 	defer w.Close()
 
-	// try to save the document to disk as an SPDX tag-value file, version 2.2
+	// try to save the document to disk as an SPDX json file, version 2.2
 	err = jsonsaver.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)

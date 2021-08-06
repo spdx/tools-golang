@@ -3,14 +3,10 @@
 package saver2v2
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
+func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var snippets []interface{}
 	for _, value := range doc.UnpackagedFiles {
@@ -42,7 +38,7 @@ func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 				snippet["attributionTexts"] = v.SnippetAttributionTexts
 			}
 
-			// parse snippet ranges
+			// save  snippet ranges
 			var ranges []interface{}
 			byterange := map[string]interface{}{
 				"endPointer": map[string]interface{}{
@@ -69,7 +65,6 @@ func renderSnippets2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 			snippets = append(snippets, snippet)
 		}
 	}
-	snippetjson, _ := json.Marshal(snippets)
-	fmt.Fprintf(buf, "\"%s\": %s ,", "snippets", snippetjson)
-	return nil
+	jsondocument["snippets"] = snippets
+	return snippets, nil
 }
