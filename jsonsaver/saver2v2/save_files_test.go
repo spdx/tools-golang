@@ -75,10 +75,10 @@ func Test_renderFiles2_2(t *testing.T) {
 									Algorithm: "SHA1",
 									Value:     "d6a770ba38583ed4bb4525bd96e50461655d2758",
 								},
-								// "MD5": {
-								// 	Algorithm: "MD5",
-								// 	Value:     "624c1abb3664f4b35547e7c73864ad24",
-								// },
+								"MD5": {
+									Algorithm: "MD5",
+									Value:     "624c1abb3664f4b35547e7c73864ad24",
+								},
 							},
 							FileComment:          "The concluded license was taken from the package level that the file was .",
 							FileCopyrightText:    "Copyright 2008-2010 John Smith",
@@ -108,13 +108,13 @@ func Test_renderFiles2_2(t *testing.T) {
 					},
 					"checksums": []interface{}{
 						map[string]interface{}{
+							"algorithm":     "MD5",
+							"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
+						},
+						map[string]interface{}{
 							"algorithm":     "SHA1",
 							"checksumValue": "d6a770ba38583ed4bb4525bd96e50461655d2758",
 						},
-						// map[string]interface{}{
-						// 	"algorithm":     "MD5",
-						// 	"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
-						// },
 					},
 					"comment":            "The concluded license was taken from the package level that the file was .",
 					"copyrightText":      "Copyright 2008-2010 John Smith",

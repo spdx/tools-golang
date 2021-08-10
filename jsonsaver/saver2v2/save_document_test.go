@@ -177,14 +177,14 @@ func TestRenderDocument2_2(t *testing.T) {
 			"File": {
 				FileSPDXIdentifier: "File",
 				FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+					"MD5": {
+						Algorithm: "MD5",
+						Value:     "624c1abb3664f4b35547e7c73864ad24",
+					},
 					"SHA1": {
 						Algorithm: "SHA1",
 						Value:     "d6a770ba38583ed4bb4525bd96e50461655d2758",
 					},
-					// "MD5": {
-					// 	Algorithm: "MD5",
-					// 	Value:     "624c1abb3664f4b35547e7c73864ad24",
-					// },
 				},
 				FileComment:       "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
 				FileCopyrightText: "Copyright 2008-2010 John Smith",
@@ -318,36 +318,6 @@ func TestRenderDocument2_2(t *testing.T) {
 		},
 		"files": []interface{}{
 			map[string]interface{}{
-				"SPDXID": "SPDXRef-File",
-				"annotations": []interface{}{
-					map[string]interface{}{
-						"annotationDate": "2011-01-29T18:30:22Z",
-						"annotationType": "OTHER",
-						"annotator":      "Person: File Commenter",
-						"comment":        "File level annotation",
-					},
-				},
-				"checksums": []interface{}{
-					map[string]interface{}{
-						"algorithm":     "SHA1",
-						"checksumValue": "d6a770ba38583ed4bb4525bd96e50461655d2758",
-					},
-					// map[string]interface{}{
-					// 	"algorithm":     "MD5",
-					// 	"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
-					// },
-				},
-				"comment":            "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
-				"copyrightText":      "Copyright 2008-2010 John Smith",
-				"fileContributors":   []string{"The Regents of the University of California", "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"},
-				"fileName":           "./package/foo.c",
-				"fileTypes":          []string{"SOURCE"},
-				"licenseComments":    "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
-				"licenseConcluded":   "(LGPL-2.0-only OR LicenseRef-2)",
-				"licenseInfoInFiles": []string{"GPL-2.0-only", "LicenseRef-2"},
-				"noticeText":         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.",
-			},
-			map[string]interface{}{
 				"SPDXID": "SPDXRef-DoapSource",
 				"checksums": []interface{}{
 					map[string]interface{}{
@@ -362,6 +332,37 @@ func TestRenderDocument2_2(t *testing.T) {
 				"fileTypes":          []string{"SOURCE"},
 				"licenseConcluded":   "Apache-2.0",
 				"licenseInfoInFiles": []string{"Apache-2.0"},
+			},
+			map[string]interface{}{
+				"SPDXID": "SPDXRef-File",
+				"annotations": []interface{}{
+					map[string]interface{}{
+						"annotationDate": "2011-01-29T18:30:22Z",
+						"annotationType": "OTHER",
+						"annotator":      "Person: File Commenter",
+						"comment":        "File level annotation",
+					},
+				},
+				"checksums": []interface{}{
+					map[string]interface{}{
+						"algorithm":     "MD5",
+						"checksumValue": "624c1abb3664f4b35547e7c73864ad24",
+					},
+
+					map[string]interface{}{
+						"algorithm":     "SHA1",
+						"checksumValue": "d6a770ba38583ed4bb4525bd96e50461655d2758",
+					},
+				},
+				"comment":            "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
+				"copyrightText":      "Copyright 2008-2010 John Smith",
+				"fileContributors":   []string{"The Regents of the University of California", "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"},
+				"fileName":           "./package/foo.c",
+				"fileTypes":          []string{"SOURCE"},
+				"licenseComments":    "The concluded license was taken from the package level that the file was .\nThis information was found in the COPYING.txt file in the xyz directory.",
+				"licenseConcluded":   "(LGPL-2.0-only OR LicenseRef-2)",
+				"licenseInfoInFiles": []string{"GPL-2.0-only", "LicenseRef-2"},
+				"noticeText":         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.",
 			},
 		},
 		"snippets": []interface{}{

@@ -4,6 +4,7 @@ package saver2v2
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -11,9 +12,18 @@ import (
 func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
 	var packages []interface{}
-	for k, v := range doc.Packages {
+
+	var keys []string
+	for ke := range doc.Packages {
+		keys = append(keys, string(ke))
+	}
+	sort.Strings(keys)
+
+	// for k, v := range doc.Packages {
+	for _, k := range keys {
+		v := doc.Packages[spdx.ElementID(k)]
 		pkg := make(map[string]interface{})
-		pkg["SPDXID"] = spdx.RenderElementID(k)
+		pkg["SPDXID"] = spdx.RenderElementID(spdx.ElementID(k))
 		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(v.PackageSPDXIdentifier)))
 		if ann != nil {
 			pkg["annotations"] = ann
@@ -24,7 +34,15 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 		// save package checksums
 		if v.PackageChecksums != nil {
 			var checksums []interface{}
-			for _, value := range v.PackageChecksums {
+
+			var algos []string
+			for alg := range v.PackageChecksums {
+				algos = append(algos, string(alg))
+			}
+			sort.Strings(algos)
+
+			for _, algo := range algos {
+				value := v.PackageChecksums[spdx.ChecksumAlgorithm(algo)]
 				checksum := make(map[string]interface{})
 				checksum["algorithm"] = string(value.Algorithm)
 				checksum["checksumValue"] = value.Value
