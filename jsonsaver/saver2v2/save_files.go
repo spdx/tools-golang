@@ -3,15 +3,25 @@
 package saver2v2
 
 import (
+	"sort"
+
 	"github.com/spdx/tools-golang/spdx"
 )
 
 func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
 
+	var keys []string
+	for ke := range doc.UnpackagedFiles {
+		keys = append(keys, string(ke))
+	}
+	sort.Strings(keys)
+
 	var files []interface{}
-	for k, v := range doc.UnpackagedFiles {
+	// for k, v := range doc.UnpackagedFiles {
+	for _, k := range keys {
+		v := doc.UnpackagedFiles[spdx.ElementID(k)]
 		file := make(map[string]interface{})
-		file["SPDXID"] = spdx.RenderElementID(k)
+		file["SPDXID"] = spdx.RenderElementID(spdx.ElementID(k))
 		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(v.FileSPDXIdentifier)))
 		if ann != nil {
 			file["annotations"] = ann
@@ -26,7 +36,16 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) 
 		// save package checksums
 		if v.FileChecksums != nil {
 			var checksums []interface{}
-			for _, value := range v.FileChecksums {
+
+			var algos []string
+			for alg := range v.FileChecksums {
+				algos = append(algos, string(alg))
+			}
+			sort.Strings(algos)
+
+			// for _, value := range v.FileChecksums {
+			for _, algo := range algos {
+				value := v.FileChecksums[spdx.ChecksumAlgorithm(algo)]
 				checksum := make(map[string]interface{})
 				checksum["algorithm"] = string(value.Algorithm)
 				checksum["checksumValue"] = value.Value

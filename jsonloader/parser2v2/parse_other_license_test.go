@@ -45,8 +45,19 @@ func TestJSONSpdxDocument_parseJsonOtherLicenses2_2(t *testing.T) {
 		},
 	}
 
+	otherLicensestest2 := []byte(`{
+		"hasExtractedLicensingInfos":[{
+			"extractedText" : "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp  </\nLicenseName: Beer-Ware License (Version 42)\nLicenseCrossReference:  http://people.freebsd.org/~phk/\nLicenseComment: \nThe beerware license has a couple of other standard variants.",
+			"licensd" : "LicenseRef-Beerware-4.2"
+		  }]
+		}
+  	`)
+
 	var specs JSONSpdxDocument
 	json.Unmarshal(jsonData, &specs)
+
+	var specs2 JSONSpdxDocument
+	json.Unmarshal(otherLicensestest2, &specs2)
 
 	type args struct {
 		key   string
@@ -72,6 +83,17 @@ func TestJSONSpdxDocument_parseJsonOtherLicenses2_2(t *testing.T) {
 			want:    otherLicensestest1,
 			wantErr: false,
 		},
+		{
+			name: "failure test --> unknown tag",
+			spec: specs2,
+			args: args{
+				key:   "hasExtractedLicensingInfos",
+				value: specs2["hasExtractedLicensingInfos"],
+				doc:   &spdxDocument2_2{},
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -79,12 +101,13 @@ func TestJSONSpdxDocument_parseJsonOtherLicenses2_2(t *testing.T) {
 				t.Errorf("JSONSpdxDocument.parseJsonOtherLicenses2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			for i := 0; i < len(tt.want); i++ {
-				if !reflect.DeepEqual(tt.args.doc.OtherLicenses[i], tt.want[i]) {
-					t.Errorf("Load2_2() = %v, want %v", tt.args.doc.OtherLicenses[i], tt.want[i])
+			if !tt.wantErr {
+				for i := 0; i < len(tt.want); i++ {
+					if !reflect.DeepEqual(tt.args.doc.OtherLicenses[i], tt.want[i]) {
+						t.Errorf("Load2_2() = %v, want %v", tt.args.doc.OtherLicenses[i], tt.want[i])
+					}
 				}
 			}
-
 		})
 	}
 }
