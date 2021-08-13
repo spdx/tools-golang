@@ -197,13 +197,11 @@ func TestJSONSpdxDocument_parseJsonFiles2_2(t *testing.T) {
 				t.Errorf("JSONSpdxDocument.parseJsonFiles2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			// if !reflect.DeepEqual(tt.args.doc.UnpackagedFiles, tt.want) {
-			// 	t.Errorf("Load2_2() = %v, want %v", tt.args.doc.UnpackagedFiles, tt.want)
-			// }
-
-			for k, v := range tt.want {
-				if !reflect.DeepEqual(tt.args.doc.UnpackagedFiles[k], v) {
-					t.Errorf("Load2_2() = %v, want %v", tt.args.doc.UnpackagedFiles[k], v)
+			if !tt.wantErr {
+				for k, v := range tt.want {
+					if !reflect.DeepEqual(tt.args.doc.UnpackagedFiles[k], v) {
+						t.Errorf("Load2_2() = %v, want %v", tt.args.doc.UnpackagedFiles[k], v)
+					}
 				}
 			}
 
