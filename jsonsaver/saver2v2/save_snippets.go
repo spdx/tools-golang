@@ -3,6 +3,8 @@
 package saver2v2
 
 import (
+	"sort"
+
 	"github.com/spdx/tools-golang/spdx"
 )
 
@@ -11,7 +13,15 @@ func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{
 	var snippets []interface{}
 	for _, value := range doc.UnpackagedFiles {
 		snippet := make(map[string]interface{})
-		for _, v := range value.Snippets {
+
+		var keys []string
+		for ke := range value.Snippets {
+			keys = append(keys, string(ke))
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			v := value.Snippets[spdx.ElementID(k)]
+			// for _, v := range value.Snippets {
 			snippet["SPDXID"] = spdx.RenderElementID(v.SnippetSPDXIdentifier)
 			if v.SnippetComment != "" {
 				snippet["comment"] = v.SnippetComment
