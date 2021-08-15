@@ -9,7 +9,7 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
+func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}, allfiles map[spdx.ElementID]*spdx.File2_2) ([]interface{}, error) {
 
 	var packages []interface{}
 
@@ -82,7 +82,7 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 		if v.Files != nil {
 			var fileIds []string
 			for k, v := range v.Files {
-				doc.UnpackagedFiles[k] = v
+				allfiles[k] = v
 				fileIds = append(fileIds, spdx.RenderElementID(k))
 			}
 			pkg["hasFiles"] = fileIds

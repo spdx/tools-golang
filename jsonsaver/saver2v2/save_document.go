@@ -57,22 +57,26 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 		}
 		jsondocument["documentDescribes"] = describesID
 	}
-
+	allfiles := make(map[spdx.ElementID]*spdx.File2_2)
 	// save packages from spdx to json
 	if doc.Packages != nil {
-		_, err = renderPackage2_2(doc, jsondocument)
+		_, err = renderPackage2_2(doc, jsondocument, allfiles)
 		if err != nil {
 			return err
 		}
 	}
 
+	for k, v := range doc.UnpackagedFiles {
+		allfiles[k] = v
+	}
+
 	// save files and snippets from spdx to json
-	if doc.UnpackagedFiles != nil {
-		_, err = renderFiles2_2(doc, jsondocument)
+	if allfiles != nil {
+		_, err = renderFiles2_2(doc, jsondocument, allfiles)
 		if err != nil {
 			return err
 		}
-		_, err = renderSnippets2_2(doc, jsondocument)
+		_, err = renderSnippets2_2(jsondocument, allfiles)
 		if err != nil {
 			return err
 		}

@@ -132,7 +132,7 @@ func Test_renderFiles2_2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := renderFiles2_2(tt.args.doc, tt.args.jsondocument)
+			got, err := renderFiles2_2(tt.args.doc, tt.args.jsondocument, tt.args.doc.UnpackagedFiles)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("renderFiles2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}

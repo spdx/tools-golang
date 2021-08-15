@@ -8,10 +8,10 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
+func renderSnippets2_2(jsondocument map[string]interface{}, allfiles map[spdx.ElementID]*spdx.File2_2) ([]interface{}, error) {
 
 	var snippets []interface{}
-	for _, value := range doc.UnpackagedFiles {
+	for _, value := range allfiles {
 		snippet := make(map[string]interface{})
 
 		var keys []string
@@ -21,7 +21,6 @@ func renderSnippets2_2(doc *spdx.Document2_2, jsondocument map[string]interface{
 		sort.Strings(keys)
 		for _, k := range keys {
 			v := value.Snippets[spdx.ElementID(k)]
-			// for _, v := range value.Snippets {
 			snippet["SPDXID"] = spdx.RenderElementID(v.SnippetSPDXIdentifier)
 			if v.SnippetComment != "" {
 				snippet["comment"] = v.SnippetComment

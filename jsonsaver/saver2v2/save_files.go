@@ -8,18 +8,17 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
-func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}) ([]interface{}, error) {
+func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}, allfiles map[spdx.ElementID]*spdx.File2_2) ([]interface{}, error) {
 
 	var keys []string
-	for ke := range doc.UnpackagedFiles {
+	for ke := range allfiles {
 		keys = append(keys, string(ke))
 	}
 	sort.Strings(keys)
 
 	var files []interface{}
-	// for k, v := range doc.UnpackagedFiles {
 	for _, k := range keys {
-		v := doc.UnpackagedFiles[spdx.ElementID(k)]
+		v := allfiles[spdx.ElementID(k)]
 		file := make(map[string]interface{})
 		file["SPDXID"] = spdx.RenderElementID(spdx.ElementID(k))
 		ann, _ := renderAnnotations2_2(doc.Annotations, spdx.MakeDocElementID("", string(v.FileSPDXIdentifier)))

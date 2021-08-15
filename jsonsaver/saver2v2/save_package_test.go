@@ -206,7 +206,7 @@ func Test_renderPackage2_2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := renderPackage2_2(tt.args.doc, tt.args.jsondocument)
+			got, err := renderPackage2_2(tt.args.doc, tt.args.jsondocument, make(map[spdx.ElementID]*spdx.File2_2))
 			if (err != nil) != tt.wantErr {
 				t.Errorf("renderPackage2_2() error = %v, wantErr %v", err, tt.wantErr)
 				return
