@@ -20,7 +20,7 @@ func (spec JSONSpdxDocument) parseJsonRelationships2_2(key string, value interfa
 			// Parse ref A of the relationship
 			aid, err := extractDocElementID(relationship["spdxElementId"].(string))
 			if err != nil {
-				return fmt.Errorf("%s", err)
+				return err
 			}
 			rel.RefA = aid
 
@@ -29,7 +29,7 @@ func (spec JSONSpdxDocument) parseJsonRelationships2_2(key string, value interfa
 			permittedSpecial := []string{"NONE", "NOASSERTION"}
 			bid, err := extractDocElementSpecial(relationship["relatedSpdxElement"].(string), permittedSpecial)
 			if err != nil {
-				return fmt.Errorf("%s", err)
+				return err
 			}
 			rel.RefB = bid
 			// Parse relationship type

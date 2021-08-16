@@ -3,6 +3,7 @@
 package parser2v2
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -27,7 +28,7 @@ func (spec JSONSpdxDocument) parseJsonCreationInfo2_2(key string, value interfac
 	case "SPDXID":
 		id, err := extractElementID(value.(string))
 		if err != nil {
-			return fmt.Errorf("%s", err)
+			return err
 		}
 		ci.SPDXIdentifier = id
 	case "documentNamespace":
@@ -49,14 +50,14 @@ func (spec JSONSpdxDocument) parseJsonCreationInfo2_2(key string, value interfac
 			case "creators":
 				err := parseCreators(creationInfo["creators"], ci)
 				if err != nil {
-					return fmt.Errorf("%s", err)
+					return err
 				}
 			}
 		}
 	case "externalDocumentRefs":
 		err := parseExternalDocumentRefs(value, ci)
 		if err != nil {
-			return fmt.Errorf("%s", err)
+			return err
 		}
 	default:
 		return fmt.Errorf("unrecognized key %v", key)
@@ -101,11 +102,11 @@ func parseExternalDocumentRefs(references interface{}, ci *spdx.CreationInfo2_2)
 			ref := s.Index(i).Interface().(map[string]interface{})
 			documentRefID := ref["externalDocumentId"].(string)
 			if !strings.HasPrefix(documentRefID, "DocumentRef-") {
-				return fmt.Errorf("expected first element to have DocumentRef- prefix")
+				return errors.New("expected first element to have DocumentRef- prefix")
 			}
 			documentRefID = strings.TrimPrefix(documentRefID, "DocumentRef-")
 			if documentRefID == "" {
-				return fmt.Errorf("document identifier has nothing after prefix")
+				return errors.New("document identifier has nothing after prefix")
 			}
 			checksum := ref["checksum"].(map[string]interface{})
 			edr := spdx.ExternalDocumentRef2_2{

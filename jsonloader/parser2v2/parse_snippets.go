@@ -20,7 +20,7 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 			//extract the SPDXID of the package
 			eID, err := extractElementID(snippetmap["SPDXID"].(string))
 			if err != nil {
-				return fmt.Errorf("%s", err)
+				return err
 			}
 			snippet.SnippetSPDXIdentifier = eID
 			//range over all other properties now
@@ -75,7 +75,7 @@ func (spec JSONSpdxDocument) parseJsonSnippets2_2(key string, value interface{},
 			}
 			fileID, err2 := extractDocElementID(snippetmap["snippetFromFile"].(string))
 			if err2 != nil {
-				return fmt.Errorf("%s", err2)
+				return err2
 			}
 			snippet.SnippetFromFileSPDXIdentifier = fileID
 			if doc.UnpackagedFiles[fileID.ElementRefID].Snippets == nil {

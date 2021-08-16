@@ -25,7 +25,7 @@ func (spec JSONSpdxDocument) parseJsonFiles2_2(key string, value interface{}, do
 			//extract the SPDXID of the package
 			eID, err := extractElementID(filemap["SPDXID"].(string))
 			if err != nil {
-				return fmt.Errorf("%s", err)
+				return err
 			}
 			file.FileSPDXIdentifier = eID
 			//range over all other properties now
@@ -63,7 +63,7 @@ func (spec JSONSpdxDocument) parseJsonFiles2_2(key string, value interface{}, do
 				case "annotations":
 					id, err := extractDocElementID(filemap["SPDXID"].(string))
 					if err != nil {
-						return fmt.Errorf("%s", err)
+						return err
 					}
 					err = spec.parseJsonAnnotations2_2(k, v, doc, id)
 					if err != nil {

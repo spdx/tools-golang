@@ -28,7 +28,7 @@ func (spec JSONSpdxDocument) parseJsonPackages2_2(key string, value interface{},
 			//extract the SPDXID of the package
 			eID, err := extractElementID(pack["SPDXID"].(string))
 			if err != nil {
-				return fmt.Errorf("%s", err)
+				return err
 			}
 			pkg.PackageSPDXIdentifier = eID
 			//range over all other properties now
@@ -41,7 +41,7 @@ func (spec JSONSpdxDocument) parseJsonPackages2_2(key string, value interface{},
 				case "annotations":
 					packageId, err := extractDocElementID(pack["SPDXID"].(string))
 					if err != nil {
-						return fmt.Errorf("%s", err)
+						return err
 					}
 					//generalize function to parse annotations
 					err = spec.parseJsonAnnotations2_2("annotations", v, doc, packageId)
@@ -148,7 +148,7 @@ func (spec JSONSpdxDocument) parseJsonPackages2_2(key string, value interface{},
 								if strings.HasPrefix(filename, "excludes:") {
 									_, filename, err = extractSubs(efiles.Index(0).Interface().(string))
 									if err != nil {
-										return fmt.Errorf("%s", err)
+										return err
 									}
 								}
 								pkg.PackageVerificationCodeExcludedFile = strings.Trim(filename, " ")

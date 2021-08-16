@@ -6,6 +6,7 @@ package parser2v2
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -15,7 +16,7 @@ import (
 func Load2_2(content []byte) (*spdx.Document2_2, error) {
 	// check whetehr the Json is valid or not
 	if !json.Valid(content) {
-		return nil, fmt.Errorf("%s", "Invalid JSON Specification")
+		return nil, errors.New("Invalid JSON Specification")
 	}
 	result := spdxDocument2_2{}
 	// unmarshall the json into the result struct
@@ -23,7 +24,7 @@ func Load2_2(content []byte) (*spdx.Document2_2, error) {
 	resultfinal := spdx.Document2_2(result)
 
 	if err != nil {
-		return nil, fmt.Errorf("%s", err)
+		return nil, err
 	}
 
 	return &resultfinal, nil
@@ -59,7 +60,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 
 				id, err := extractDocElementID(spec["SPDXID"].(string))
 				if err != nil {
-					return fmt.Errorf("%s", err)
+					return err
 				}
 				err = spec.parseJsonAnnotations2_2(key, val, doc, id)
 				if err != nil {
@@ -95,7 +96,7 @@ func (spec JSONSpdxDocument) newDocument(doc *spdxDocument2_2) error {
 			if spec["annotations"] != nil {
 				id, err := extractDocElementID(spec["SPDXID"].(string))
 				if err != nil {
-					return fmt.Errorf("%s", err)
+					return err
 				}
 				err = spec.parseJsonAnnotations2_2("annotations", spec["annotations"], doc, id)
 				if err != nil {
