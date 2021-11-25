@@ -89,6 +89,11 @@ func TestRenderDocument2_2(t *testing.T) {
 				Relationship: "CONTAINS",
 			},
 			{
+				RefA:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
+				RefB:         spdx.DocElementID{DocumentRefID: "", ElementRefID: "p1"},
+				Relationship: "CONTAINS",
+			},
+			{
 				RefA:                spdx.DocElementID{DocumentRefID: "", ElementRefID: "DOCUMENT"},
 				RefB:                spdx.DocElementID{DocumentRefID: "", ElementRefID: "File"},
 				Relationship:        "DESCRIBES",
@@ -172,6 +177,25 @@ func TestRenderDocument2_2(t *testing.T) {
 				PackageSupplierPerson:               "Jane Doe (jane.doe@example.com)",
 				PackageVersion:                      "2.11.1",
 			},
+			"p1": {
+				PackageName:               "p1",
+				PackageSPDXIdentifier:     "p1",
+				PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+				FilesAnalyzed:             false,
+				IsFilesAnalyzedTagPresent: true,
+				// NOTE that verification code MUST be omitted from output,
+				// even if present in model, since FilesAnalyzed is false
+				PackageLicenseConcluded: "GPL-2.0-or-later",
+				// NOTE that license info from files MUST be omitted from output
+				// even if present in model, since FilesAnalyzed is false
+				PackageLicenseInfoFromFiles: []string{
+					"Apache-1.1",
+					"Apache-2.0",
+					"GPL-2.0-or-later",
+				},
+				PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
+				PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
+			},
 		},
 		UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{
 			"File": {
@@ -204,7 +228,7 @@ func TestRenderDocument2_2(t *testing.T) {
 		"spdxVersion":       "SPDX-2.2",
 		"SPDXID":            "SPDXRef-DOCUMENT",
 		"documentNamespace": "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
-		"documentDescribes": []string{"SPDXRef-Package"},
+		"documentDescribes": []string{"SPDXRef-File"},
 		"name":              "SPDX-Tools-v2.0",
 		"comment":           "This document was created using SPDX 2.0 using licenses from the web site.",
 		"creationInfo": map[string]interface{}{
@@ -253,6 +277,11 @@ func TestRenderDocument2_2(t *testing.T) {
 			map[string]interface{}{
 				"spdxElementId":      "SPDXRef-DOCUMENT",
 				"relatedSpdxElement": "SPDXRef-Package",
+				"relationshipType":   "CONTAINS",
+			},
+			map[string]interface{}{
+				"spdxElementId":      "SPDXRef-DOCUMENT",
+				"relatedSpdxElement": "SPDXRef-p1",
 				"relationshipType":   "CONTAINS",
 			},
 			map[string]interface{}{
@@ -314,6 +343,16 @@ func TestRenderDocument2_2(t *testing.T) {
 				"summary":     "GNU C library.",
 				"supplier":    "Person: Jane Doe (jane.doe@example.com)",
 				"versionInfo": "2.11.1",
+			},
+			map[string]interface{}{
+				"SPDXID":               "SPDXRef-p1",
+				"copyrightText":        "Copyright (c) John Doe, Inc.",
+				"downloadLocation":     "http://example.com/p1/p1-0.1.0-master.tar.gz",
+				"filesAnalyzed":        false,
+				"licenseConcluded":     "GPL-2.0-or-later",
+				"licenseDeclared":      "Apache-2.0 OR GPL-2.0-or-later",
+				"licenseInfoFromFiles": []string{"Apache-1.1", "Apache-2.0", "GPL-2.0-or-later"},
+				"name":                 "p1",
 			},
 		},
 		"files": []interface{}{

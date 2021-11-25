@@ -71,7 +71,7 @@ func RenderDocument2_2(doc *spdx.Document2_2, buf *bytes.Buffer) error {
 	}
 
 	// save files and snippets from spdx to json
-	if allfiles != nil {
+	if len(allfiles) > 0 {
 		_, err = renderFiles2_2(doc, jsondocument, allfiles)
 		if err != nil {
 			return err
