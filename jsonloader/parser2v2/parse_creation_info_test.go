@@ -115,8 +115,8 @@ func TestJSONSpdxDocument_parseJsonCreationInfo2_2(t *testing.T) {
 			want: &spdx.CreationInfo2_2{
 				CreatorComment:             "This package has been shipped in source and binary form.\nThe binaries were created with gcc 4.5.1 and expect to link to\ncompatible system run time libraries.",
 				Created:                    "2010-01-29T18:30:22Z",
-				CreatorPersons:             []string{"Jane Doe"},
-				CreatorOrganizations:       []string{"ExampleCodeInspect"},
+				CreatorPersons:             []string{"Jane Doe ()"},
+				CreatorOrganizations:       []string{"ExampleCodeInspect ()"},
 				CreatorTools:               []string{"LicenseFind-1.0"},
 				LicenseListVersion:         "3.8",
 				ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
@@ -153,6 +153,64 @@ func TestJSONSpdxDocument_parseJsonCreationInfo2_2(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "failure : Invalid tag ",
+			spec: specs,
+			args: args{
+				key:   "invalid",
+				value: "This document was created using SPDX 2.0 using licenses from the web site.",
+				doc:   &spdxDocument2_2{},
+			},
+			want:    &spdx.CreationInfo2_2{ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{}},
+			wantErr: true,
+		},
+		{
+			name: "failure : DocRef missing in ExternalRefs",
+			spec: specs,
+			args: args{
+				key: "externalDocumentRefs",
+				value: []map[string]interface{}{
+					{
+						"externalDocumentId": "spdx-tool-1.2",
+						"spdxDocument":       "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+						"checksum": map[string]interface{}{
+							"algorithm":     "SHA1",
+							"checksumValue": "d6a770ba38583ed4bb4525bd96e50461655d2759",
+						},
+					},
+				},
+				doc: &spdxDocument2_2{},
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name: "failure : invalid SPDXID",
+			spec: specs,
+			args: args{
+				key:   "SPDXID",
+				value: "DOCUMENT",
+				doc:   &spdxDocument2_2{},
+			},
+			want:    &spdx.CreationInfo2_2{ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{}},
+			wantErr: true,
+		},
+		{
+			name: "failure - invalid creator type",
+			spec: specs,
+			args: args{
+				key: "creationInfo",
+				value: map[string]interface{}{
+					"comment":            "This package has been shipped in source and binary form.\nThe binaries were created with gcc 4.5.1 and expect to link to\ncompatible system run time libraries.",
+					"created":            "2010-01-29T18:30:22Z",
+					"creators":           []string{"Invalid: LicenseFind-1.0", "Organization: ExampleCodeInspect ()", "Person: Jane Doe ()"},
+					"licenseListVersion": "3.8",
+				},
+				doc: &spdxDocument2_2{},
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -160,7 +218,7 @@ func TestJSONSpdxDocument_parseJsonCreationInfo2_2(t *testing.T) {
 			if err := tt.spec.parseJsonCreationInfo2_2(tt.args.key, tt.args.value, tt.args.doc); (err != nil) != tt.wantErr {
 				t.Errorf("JSONSpdxDocument.parseJsonCreationInfo2_2() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if !reflect.DeepEqual(tt.args.doc.CreationInfo, tt.want) {
+			if !tt.wantErr && !reflect.DeepEqual(tt.args.doc.CreationInfo, tt.want) {
 				t.Errorf("Load2_2() = %v, want %v", tt.args.doc.CreationInfo, tt.want)
 			}
 

@@ -34,7 +34,7 @@ func (spec JSONSpdxDocument) parseJsonOtherLicenses2_2(key string, value interfa
 						}
 					}
 				default:
-					return fmt.Errorf("received unknown tag %v in Annotation section", k)
+					return fmt.Errorf("received unknown tag %v in Licenses section", k)
 				}
 			}
 			doc.OtherLicenses = append(doc.OtherLicenses, &license)
