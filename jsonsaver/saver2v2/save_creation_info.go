@@ -68,7 +68,9 @@ func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, jsondocument map[string]int
 			aa["spdxDocument"] = v.URI
 			refs = append(refs, aa)
 		}
-		jsondocument["externalDocumentRefs"] = refs
+		if len(refs) > 0 {
+			jsondocument["externalDocumentRefs"] = refs
+		}
 	}
 
 	return nil

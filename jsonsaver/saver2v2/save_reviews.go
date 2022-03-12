@@ -20,6 +20,8 @@ func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interfa
 		}
 		review = append(review, rev)
 	}
-	jsondocument["revieweds"] = review
+	if len(review) > 0 {
+		jsondocument["revieweds"] = review
+	}
 	return review, nil
 }

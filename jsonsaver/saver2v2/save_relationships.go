@@ -19,6 +19,8 @@ func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument 
 		}
 		rels = append(rels, rel)
 	}
-	jsondocument["relationships"] = rels
+	if len(rels) > 0 {
+		jsondocument["relationships"] = rels
+	}
 	return rels, nil
 }

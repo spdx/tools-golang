@@ -74,6 +74,8 @@ func renderSnippets2_2(jsondocument map[string]interface{}, allfiles map[spdx.El
 			snippets = append(snippets, snippet)
 		}
 	}
-	jsondocument["snippets"] = snippets
+	if len(snippets) > 0 {
+		jsondocument["snippets"] = snippets
+	}
 	return snippets, nil
 }

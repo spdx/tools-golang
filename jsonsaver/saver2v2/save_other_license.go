@@ -24,7 +24,8 @@ func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument 
 		}
 		licenses = append(licenses, lic)
 	}
-	jsondocument["hasExtractedLicensingInfos"] = licenses
-
+	if len(licenses) > 0 {
+		jsondocument["hasExtractedLicensingInfos"] = licenses
+	}
 	return licenses, nil
 }

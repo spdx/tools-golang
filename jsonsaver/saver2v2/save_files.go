@@ -82,7 +82,8 @@ func renderFiles2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}, 
 
 		files = append(files, file)
 	}
-	jsondocument["files"] = files
-
+	if len(files) > 0 {
+		jsondocument["files"] = files
+	}
 	return files, nil
 }
