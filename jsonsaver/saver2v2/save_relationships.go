@@ -11,9 +11,15 @@ func renderRelationships2_2(relationships []*spdx.Relationship2_2, jsondocument 
 	var rels []interface{}
 	for _, v := range relationships {
 		rel := make(map[string]interface{})
-		rel["spdxElementId"] = spdx.RenderDocElementID(v.RefA)
-		rel["relatedSpdxElement"] = spdx.RenderDocElementID(v.RefB)
-		rel["relationshipType"] = v.Relationship
+		if len(v.RefA.ElementRefID) != 0 || len(v.RefA.DocumentRefID) != 0 {
+			rel["spdxElementId"] = spdx.RenderDocElementID(v.RefA)
+		}
+		if len(v.RefB.ElementRefID) != 0 || len(v.RefB.DocumentRefID) != 0 {
+			rel["relatedSpdxElement"] = spdx.RenderDocElementID(v.RefB)
+		}
+		if v.Relationship != "" {
+			rel["relationshipType"] = v.Relationship
+		}
 		if v.RelationshipComment != "" {
 			rel["comment"] = v.RelationshipComment
 		}

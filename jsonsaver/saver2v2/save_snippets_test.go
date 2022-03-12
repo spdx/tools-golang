@@ -99,6 +99,36 @@ func Test_renderSnippets2_2(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "success empty",
+			args: args{
+				doc: &spdx.Document2_2{
+					UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{
+						"DoapSource": {
+							FileSPDXIdentifier: "DoapSource",
+							FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
+								"SHA1": {
+									Algorithm: "SHA1",
+									Value:     "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
+								},
+							},
+							Snippets: map[spdx.ElementID]*spdx.Snippet2_2{
+								"Snippet": {},
+							},
+						},
+					},
+				},
+				jsondocument: make(map[string]interface{}),
+			},
+			want: []interface{}{
+				map[string]interface{}{
+					"ranges": []interface{}{
+						map[string]interface{}{},
+						map[string]interface{}{},
+					},
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

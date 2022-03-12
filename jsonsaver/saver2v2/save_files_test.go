@@ -22,7 +22,7 @@ func Test_renderFiles2_2(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "",
+			name: "success",
 			args: args{
 				doc: &spdx.Document2_2{
 					Annotations: []*spdx.Annotation2_2{
@@ -127,6 +127,19 @@ func Test_renderFiles2_2(t *testing.T) {
 					"noticeText":         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.",
 					"attributionTexts":   []string{"text1", "text2 "},
 				},
+			},
+		},
+		{
+			name: "success empty",
+			args: args{
+				doc: &spdx.Document2_2{
+					Annotations:     []*spdx.Annotation2_2{},
+					UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{},
+				},
+				jsondocument: make(map[string]interface{}),
+			},
+			want: []interface{}{
+				map[string]interface{}{},
 			},
 		},
 	}

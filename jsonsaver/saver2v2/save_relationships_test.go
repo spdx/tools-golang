@@ -63,6 +63,18 @@ func Test_renderRelationships2_2(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "success empty",
+			args: args{
+				relationships: []*spdx.Relationship2_2{
+					{},
+				},
+				jsondocument: make(map[string]interface{}),
+			},
+			want: []interface{}{
+				map[string]interface{}{},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

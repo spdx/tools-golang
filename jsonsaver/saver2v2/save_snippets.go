@@ -49,6 +49,7 @@ func renderSnippets2_2(jsondocument map[string]interface{}, allfiles map[spdx.El
 
 			// save  snippet ranges
 			var ranges []interface{}
+
 			byterange := map[string]interface{}{
 				"endPointer": map[string]interface{}{
 					"offset":    v.SnippetByteRangeEnd,
@@ -69,7 +70,12 @@ func renderSnippets2_2(jsondocument map[string]interface{}, allfiles map[spdx.El
 					"reference":  spdx.RenderDocElementID(v.SnippetFromFileSPDXIdentifier),
 				},
 			}
-			ranges = append(ranges, byterange, linerange)
+			if len(byterange) > 0 {
+				ranges = append(ranges, byterange)
+			}
+			if len(linerange) > 0 {
+				ranges = append(ranges, linerange)
+			}
 			snippet["ranges"] = ranges
 			snippets = append(snippets, snippet)
 		}
