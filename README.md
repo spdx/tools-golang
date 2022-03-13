@@ -27,6 +27,7 @@ tools-golang provides the following packages:
 * *tvsaver* - tag-value document saver
 * *rdfloader* - RDF document loader
 * *jsonloader* - JSON document loader
+* *jsonsaver* - JSON document saver
 * *builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
 * *licensediff* - compares concluded licenses between files in two packages
@@ -67,8 +68,8 @@ found in the GitHub repo and in [the release notes](RELEASE-NOTES.md).
 
 In particular, thank you to the following for major contributions:
 
-JSON parsing support was added by @specter25 as part of his Google Summer of
-Code 2021 project.
+JSON parsing and saving support was added by @specter25 as part of his Google
+Summer of Code 2021 project.
 
 RDF parsing support was added by @RishabhBhatnagar as part of his Google Summer
 of Code 2020 project.
