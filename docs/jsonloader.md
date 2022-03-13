@@ -1,24 +1,23 @@
 SPDX-License-Identifier: CC-BY-4.0
 
-## Working
+## Usage
 
-A UnmarshallJSON function on the spdx.Document2_2 struct is defined so that when the JSON is unmarshalled in it the function is called and we can implement the process in a custom way . Then  a new map[string]interface{} is deifined which temporarily holds the unmarshalled json . The map is then parsed into the spdx.Document2_2 using functions defined for it’s different sections .
+A json.Unmarshal function on the spdx.Document2_2 struct is defined so that when the JSON is unmarshalled, the function is called and the JSON can be processed in a custom way. Then a new map[string]interface{} is defined which temporarily holds the unmarshalled JSON. The map is then parsed into the spdx.Document2_2 using functions defined for each different section.
 
-JSON  →  map[string]interface{}  → spdx.Document2_2
+JSON => map[string]interface{} => spdx.Document2_2
 
 ## Some Key Points 
 
-- The packages have a property "hasFiles" defined in the schema which is an array of the SPDX Identifiers of the files of that pacakge . The parses first parses all the files into the Unpackaged files map of the document and then when it parses the packages , it removes the respective files from the unpackaged files map and places it inside the files map of that package .
+- The packages have a property "hasFiles" defined in the schema which is an array of the SPDX Identifiers of the files of that package. The parser first parses all the files into the UnpackagedFiles map of the document and then when it parses the Packages, it removes the respective files from the UnpackagedFiles map and places them inside the Files map of the corresponding package.
 
-- The snippets have a property "snippetFromFile" which has the SPDX identiifer of the file to which the snippet is related . Thus the snippets require the files to be parsed before them . Then the snippets are parsed one by one and inserted into the respective files using this property .
+- The snippets have a property "snippetFromFile" which has the SPDX identifier of the file to which the snippet is related. Thus the snippets require the files to be parsed before them. Then the snippets are parsed one by one and inserted into the respective files using this property.
 
+## Assumptions
 
 The json file loader in `package jsonloader` makes the following assumptions:
 
-
 ### Order of appearance of the properties 
-* The parser does not make any pre-assumptions based on the order in which the properties appear . 
-
+* The parser does not make any assumptions based on the order in which the properties appear.
 
 ### Annotations
-* The json spdx schema does not define the SPDX Identifier property for the annotation object . The parser assumes the spdx Identifier of the parent property of the currently being parsed annotation array to be the SPDX Identifer for all the annotation objects of that array.
+* The JSON SPDX schema does not define the SPDX Identifier property for the annotation object. The parser assumes the SPDX Identifier of the parent property of the currently-being-parsed annotation array to be the SPDX Identifer for all the annotation objects of that array.
