@@ -2,6 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/spdx/tools-golang/badge.svg)](https://coveralls.io/github/spdx/tools-golang)
 [![GitHub release](https://img.shields.io/github/release/spdx/tools-golang.svg)](https://github.com/spdx/tools-golang/releases/latest)
 [![Go Reference](https://pkg.go.dev/badge/github.com/spdx/tools-golang.svg)](https://pkg.go.dev/github.com/spdx/tools-golang)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5710/badge)](https://bestpractices.coreinfrastructure.org/projects/5710)
 
 # SPDX tools-golang
 
