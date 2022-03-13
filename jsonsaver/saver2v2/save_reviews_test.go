@@ -42,6 +42,18 @@ func Test_renderReviews2_2(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "success empty",
+			args: args{
+				reviews: []*spdx.Review2_2{
+					{},
+				},
+				jsondocument: make(map[string]interface{}),
+			},
+			want: []interface{}{
+				map[string]interface{}{},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -54,7 +66,6 @@ func Test_renderReviews2_2(t *testing.T) {
 				if !reflect.DeepEqual(v, tt.want[k]) {
 					t.Errorf("renderReviews2_2() = %v, want %v", v, tt.want[k])
 				}
-
 			}
 		})
 	}

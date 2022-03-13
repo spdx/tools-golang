@@ -13,13 +13,21 @@ func renderReviews2_2(reviews []*spdx.Review2_2, jsondocument map[string]interfa
 	var review []interface{}
 	for _, v := range reviews {
 		rev := make(map[string]interface{})
-		rev["reviewDate"] = v.ReviewDate
-		rev["reviewer"] = fmt.Sprintf("%s: %s", v.ReviewerType, v.Reviewer)
-		if v.ReviewComment != "" {
+		if len(v.ReviewDate) > 0 {
+			rev["reviewDate"] = v.ReviewDate
+		}
+		if len(v.ReviewerType) > 0 || len(v.Reviewer) > 0 {
+			rev["reviewer"] = fmt.Sprintf("%s: %s", v.ReviewerType, v.Reviewer)
+		}
+		if len(v.ReviewComment) > 0 {
 			rev["comment"] = v.ReviewComment
 		}
-		review = append(review, rev)
+		if len(rev) > 0 {
+			review = append(review, rev)
+		}
 	}
-	jsondocument["revieweds"] = review
+	if len(review) > 0 {
+		jsondocument["revieweds"] = review
+	}
 	return review, nil
 }

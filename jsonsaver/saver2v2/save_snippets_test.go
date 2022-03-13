@@ -99,6 +99,16 @@ func Test_renderSnippets2_2(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "success empty",
+			args: args{
+				doc:          &spdx.Document2_2{},
+				jsondocument: make(map[string]interface{}),
+			},
+			want: []interface{}{
+				map[string]interface{}{},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

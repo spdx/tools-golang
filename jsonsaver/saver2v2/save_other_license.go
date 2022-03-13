@@ -11,8 +11,12 @@ func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument 
 	var licenses []interface{}
 	for _, v := range otherlicenses {
 		lic := make(map[string]interface{})
-		lic["licenseId"] = v.LicenseIdentifier
-		lic["extractedText"] = v.ExtractedText
+		if v.LicenseIdentifier != "" {
+			lic["licenseId"] = v.LicenseIdentifier
+		}
+		if v.ExtractedText != "" {
+			lic["extractedText"] = v.ExtractedText
+		}
 		if v.LicenseComment != "" {
 			lic["comment"] = v.LicenseComment
 		}
@@ -24,7 +28,8 @@ func renderOtherLicenses2_2(otherlicenses []*spdx.OtherLicense2_2, jsondocument 
 		}
 		licenses = append(licenses, lic)
 	}
-	jsondocument["hasExtractedLicensingInfos"] = licenses
-
+	if len(licenses) > 0 {
+		jsondocument["hasExtractedLicensingInfos"] = licenses
+	}
 	return licenses, nil
 }

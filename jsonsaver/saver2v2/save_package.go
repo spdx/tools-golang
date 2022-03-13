@@ -151,7 +151,8 @@ func renderPackage2_2(doc *spdx.Document2_2, jsondocument map[string]interface{}
 
 		packages = append(packages, pkg)
 	}
-	jsondocument["packages"] = packages
-
+	if len(packages) > 0 {
+		jsondocument["packages"] = packages
+	}
 	return packages, nil
 }
