@@ -228,7 +228,7 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File1")]
-	if f.FileName != "../keep/keep.txt" {
+	if f.FileName != "./keep/keep.txt" {
 		t.Errorf("expected %v, got %v", "./keep/keep.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
