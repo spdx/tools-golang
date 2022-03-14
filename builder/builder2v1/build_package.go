@@ -5,6 +5,7 @@ package builder2v1
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/utils"
@@ -26,14 +27,14 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 	files := map[spdx.ElementID]*spdx.File2_1{}
 	fileNumber := 0
 	for _, fp := range filepaths {
-		newFile, err := BuildFileSection2_1(filepath.FromSlash(filepath.ToSlash("./"+fp)), dirRoot, fileNumber)
+		newFilePatch := filepath.FromSlash("./" + fp)
+		newFile, err := BuildFileSection2_1(strings.Replace(newFilePatch, string(filepath.Separator), "/", -1), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}
 		files[newFile.FileSPDXIdentifier] = newFile
 		fileNumber++
 	}
-
 	// get the verification code
 	code, err := utils.GetVerificationCode2_1(files, "")
 	if err != nil {
