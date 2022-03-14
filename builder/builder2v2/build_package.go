@@ -26,7 +26,7 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	files := map[spdx.ElementID]*spdx.File2_2{}
 	fileNumber := 0
 	for _, fp := range filepaths {
-		newFile, err := BuildFileSection2_2(filepath.FromSlash("./"+fp), dirRoot, fileNumber)
+		newFile, err := BuildFileSection2_2(filepath.FromSlash(filepath.ToSlash("./"+fp)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}

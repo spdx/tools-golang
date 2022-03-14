@@ -65,7 +65,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
+	if fileEmpty.FileName != "./emptyfile.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
 	}
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
