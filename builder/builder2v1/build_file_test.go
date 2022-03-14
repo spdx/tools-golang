@@ -22,8 +22,8 @@ func TestBuilder2_1CanBuildFileSection(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.FileName != "./file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./file1.testdata.txt", file1.FileName)
 	}
 	if file1.FileSPDXIdentifier != spdx.ElementID("File17") {
 		t.Errorf("expected %v, got %v", "File17", file1.FileSPDXIdentifier)

@@ -214,8 +214,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f := pkg.Files[spdx.ElementID("File0")]
-	if f.FileName != "/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	if f.FileName != "./dontscan.txt" {
+		t.Errorf("expected %v, got %v", "./dontscan.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -228,8 +228,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File1")]
-	if f.FileName != "/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep/keep.txt", f.FileName)
+	if f.FileName != "../keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "./keep/keep.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -242,8 +242,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File2")]
-	if f.FileName != "/keep.txt" {
-		t.Errorf("expected %v, got %v", "/keep.txt", f.FileName)
+	if f.FileName != "./keep.txt" {
+		t.Errorf("expected %v, got %v", "./keep.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -256,8 +256,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File3")]
-	if f.FileName != "/subdir/keep/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	if f.FileName != "./subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "./subdir/keep/dontscan.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -270,8 +270,8 @@ func Test2_1SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File4")]
-	if f.FileName != "/subdir/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	if f.FileName != "./subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "./subdir/keep/keep.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -503,8 +503,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f := pkg.Files[spdx.ElementID("File0")]
-	if f.FileName != "/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/dontscan.txt", f.FileName)
+	if f.FileName != "./dontscan.txt" {
+		t.Errorf("expected %v, got %v", "./dontscan.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -545,8 +545,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File3")]
-	if f.FileName != "/subdir/keep/dontscan.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/dontscan.txt", f.FileName)
+	if f.FileName != "./subdir/keep/dontscan.txt" {
+		t.Errorf("expected %v, got %v", "./subdir/keep/dontscan.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))
@@ -559,8 +559,8 @@ func Test2_2SearcherCanFillInIDsAndIgnorePaths(t *testing.T) {
 	}
 
 	f = pkg.Files[spdx.ElementID("File4")]
-	if f.FileName != "/subdir/keep/keep.txt" {
-		t.Errorf("expected %v, got %v", "/subdir/keep/keep.txt", f.FileName)
+	if f.FileName != "./subdir/keep/keep.txt" {
+		t.Errorf("expected %v, got %v", "./subdir/keep/keep.txt", f.FileName)
 	}
 	if len(f.LicenseInfoInFile) != 1 {
 		t.Errorf("expected len to be %d, got %d", 1, len(f.LicenseInfoInFile))

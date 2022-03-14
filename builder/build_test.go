@@ -123,8 +123,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
+	if fileEmpty.FileName != "./emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./emptyfile.testdata.txt", fileEmpty.FileName)
 	}
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
@@ -153,8 +153,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.FileName != "./file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./file1.testdata.txt", file1.FileName)
 	}
 	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
 		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
@@ -183,8 +183,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file3.FileName != "/file3.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
+	if file3.FileName != "./file3.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./file3.testdata.txt", file3.FileName)
 	}
 	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
 		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
@@ -213,8 +213,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file4.FileName != "/folder1/file4.testdata.txt" {
-		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
+	if file4.FileName != "./folder1/file4.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./folder1/file4.testdata.txt", file4.FileName)
 	}
 	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
 		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
@@ -243,8 +243,8 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if lastfile.FileName != "/lastfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
+	if lastfile.FileName != "./lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./lastfile.testdata.txt", lastfile.FileName)
 	}
 	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
 		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
@@ -551,7 +551,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file3.FileName != "./file3.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
+		t.Errorf("expected %v, got %v", "./file3.testdata.txt", file3.FileName)
 	}
 	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
 		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
@@ -588,7 +588,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if file4.FileName != "./folder1/file4.testdata.txt" {
-		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
+		t.Errorf("expected %v, got %v", "./folder1/file4.testdata.txt", file4.FileName)
 	}
 	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
 		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
