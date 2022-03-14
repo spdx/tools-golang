@@ -66,7 +66,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 		t.Fatalf("expected non-nil file, got nil")
 	}
 	if fileEmpty.FileName != "./emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
+		t.Errorf("expected %v, got %v", "./emptyfile.testdata.txt", fileEmpty.FileName)
 	}
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
@@ -120,31 +120,31 @@ func TestBuilder2_2CanIgnoreFiles(t *testing.T) {
 		t.Fatalf("expected %d, got %d", 5, len(pkg.Files))
 	}
 
-	want := "/dontscan.txt"
+	want := "./dontscan.txt"
 	got := pkg.Files[spdx.ElementID("File0")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep/keep.txt"
+	want = "./keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File1")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep.txt"
+	want = "./keep.txt"
 	got = pkg.Files[spdx.ElementID("File2")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/dontscan.txt"
+	want = "./subdir/keep/dontscan.txt"
 	got = pkg.Files[spdx.ElementID("File3")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/keep.txt"
+	want = "./subdir/keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File4")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)

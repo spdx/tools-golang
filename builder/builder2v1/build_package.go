@@ -4,11 +4,10 @@ package builder2v1
 
 import (
 	"fmt"
-	"path/filepath"
-	"strings"
-
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/utils"
+	"path/filepath"
+	"regexp"
 )
 
 // BuildPackageSection2_1 creates an SPDX Package (version 2.1), returning
@@ -24,11 +23,15 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		return nil, err
 	}
 
+	re, ok := regexp.Compile("/+")
+	if ok != nil {
+		return nil, err
+	}
 	files := map[spdx.ElementID]*spdx.File2_1{}
 	fileNumber := 0
 	for _, fp := range filepaths {
 		newFilePatch := filepath.FromSlash("./" + fp)
-		newFile, err := BuildFileSection2_1(strings.Replace(newFilePatch, string(filepath.Separator), "/", -1), dirRoot, fileNumber)
+		newFile, err := BuildFileSection2_1(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}

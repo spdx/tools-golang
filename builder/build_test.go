@@ -331,31 +331,31 @@ func TestBuild2_1CanIgnoreFiles(t *testing.T) {
 		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
 	}
 
-	want := "/dontscan.txt"
+	want := "./dontscan.txt"
 	got := pkg.Files[spdx.ElementID("File0")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep/keep.txt"
+	want = "./keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File1")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep.txt"
+	want = "./keep.txt"
 	got = pkg.Files[spdx.ElementID("File2")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/dontscan.txt"
+	want = "./subdir/keep/dontscan.txt"
 	got = pkg.Files[spdx.ElementID("File3")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/keep.txt"
+	want = "./subdir/keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File4")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
@@ -476,8 +476,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "/emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", fileEmpty.FileName)
+	if fileEmpty.FileName != "./emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./emptyfile.testdata.txt", fileEmpty.FileName)
 	}
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
@@ -513,8 +513,8 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file1.FileName != "/file1.testdata.txt" {
-		t.Errorf("expected %v, got %v", "/file1.testdata.txt", file1.FileName)
+	if file1.FileName != "./file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "./file1.testdata.txt", file1.FileName)
 	}
 	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
 		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
@@ -550,7 +550,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file3.FileName != "/file3.testdata.txt" {
+	if file3.FileName != "./file3.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/file3.testdata.txt", file3.FileName)
 	}
 	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
@@ -587,7 +587,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if file4.FileName != "/folder1/file4.testdata.txt" {
+	if file4.FileName != "./folder1/file4.testdata.txt" {
 		t.Errorf("expected %v, got %v", "folder1/file4.testdata.txt", file4.FileName)
 	}
 	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
@@ -624,7 +624,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if lastfile.FileName != "/lastfile.testdata.txt" {
+	if lastfile.FileName != "./lastfile.testdata.txt" {
 		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", lastfile.FileName)
 	}
 	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
@@ -719,31 +719,31 @@ func TestBuild2_2CanIgnoreFiles(t *testing.T) {
 		t.Fatalf("expected len %d, got %d", 5, len(pkg.Files))
 	}
 
-	want := "/dontscan.txt"
+	want := "./dontscan.txt"
 	got := pkg.Files[spdx.ElementID("File0")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep/keep.txt"
+	want = "./keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File1")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/keep.txt"
+	want = "./keep.txt"
 	got = pkg.Files[spdx.ElementID("File2")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/dontscan.txt"
+	want = "./subdir/keep/dontscan.txt"
 	got = pkg.Files[spdx.ElementID("File3")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
-	want = "/subdir/keep/keep.txt"
+	want = "./subdir/keep/keep.txt"
 	got = pkg.Files[spdx.ElementID("File4")].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
