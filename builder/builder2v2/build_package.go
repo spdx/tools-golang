@@ -32,8 +32,8 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	fileNumber := 0
 	dirRootLen := len(dirRoot)
 	for _, fp := range filepaths {
-		newFileName := fp[dirRootLen+1:]
-		newFilePatch := filepath.FromSlash("./" + newFileName)
+		newFileName := fp[dirRootLen:]
+		newFilePatch := filepath.FromSlash("." + newFileName)
 		newFile, err := BuildFileSection2_2(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
