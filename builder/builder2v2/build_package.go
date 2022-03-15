@@ -8,6 +8,7 @@ import (
 	"github.com/spdx/tools-golang/utils"
 	"path/filepath"
 	"regexp"
+	"runtime"
 )
 
 // BuildPackageSection2_2 creates an SPDX Package (version 2.2), returning
@@ -19,6 +20,7 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
 	filepaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
+	osType := runtime.GOOS
 
 	if err != nil {
 		return nil, err
@@ -28,11 +30,20 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	if ok != nil {
 		return nil, err
 	}
+	dirRootLen := 0
+	if osType == "windows" {
+		dirRootLen = len(dirRoot)
+	}
 
 	files := map[spdx.ElementID]*spdx.File2_2{}
 	fileNumber := 0
 	for _, fp := range filepaths {
-		newFilePatch := filepath.FromSlash("." + fp)
+		newFilePatch := ""
+		if osType == "windows" {
+			newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+		} else {
+			newFilePatch = filepath.FromSlash("./" + fp)
+		}
 		newFile, err := BuildFileSection2_2(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err

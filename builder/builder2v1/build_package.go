@@ -8,6 +8,7 @@ import (
 	"github.com/spdx/tools-golang/utils"
 	"path/filepath"
 	"regexp"
+	"runtime"
 )
 
 // BuildPackageSection2_1 creates an SPDX Package (version 2.1), returning
@@ -22,18 +23,27 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 	if err != nil {
 		return nil, err
 	}
+	osType := runtime.GOOS
 
 	re, ok := regexp.Compile("/+")
 	if ok != nil {
 		return nil, err
 	}
+
+	dirRootLen := 0
+	if osType == "windows" {
+		dirRootLen = len(dirRoot)
+	}
+
 	files := map[spdx.ElementID]*spdx.File2_1{}
 	fileNumber := 0
-	//dirRootLen := len(dirRoot)
 	for _, fp := range filepaths {
-		newFileName := fp
-		newFilePatch := filepath.FromSlash("." + newFileName)
-		fmt.Println(newFilePatch)
+		newFilePatch := ""
+		if osType == "windows" {
+			newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+		} else {
+			newFilePatch = filepath.FromSlash("./" + fp)
+		}
 		newFile, err := BuildFileSection2_1(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
