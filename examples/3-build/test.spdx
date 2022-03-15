@@ -1,0 +1,72 @@
+SPDXVersion: SPDX-2.2
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: project2
+DocumentNamespace: https://example.com/whatever/testdata-project2-d1d2f67e003cd73c13c5ed7d0a1ea9dda997d319
+Creator: Person: Jane Doe
+Creator: Tool: github.com/spdx/tools-golang/builder
+Created: 2022-03-15T07:42:32Z
+
+##### Package: project2
+
+PackageName: project2
+SPDXID: SPDXRef-Package-project2
+PackageDownloadLocation: NOASSERTION
+FilesAnalyzed: true
+PackageVerificationCode: d1d2f67e003cd73c13c5ed7d0a1ea9dda997d319
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+
+FileName: ./folder/has-one-id.py
+SPDXID: SPDXRef-File0
+FileChecksum: SHA1: dcecdd26eebaea9c7a8263f190fc568210c8d4fd
+FileChecksum: SHA256: d293a2e70f58fc75195fe25be631c298c23305e5dd1b599c00a74f800856ed90
+FileChecksum: MD5: 1b6d188c67ec4a866a5210b104824db7
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+FileName: ./folder/has-trailing-comment-marker.c
+SPDXID: SPDXRef-File1
+FileChecksum: SHA1: a9ef82bbc630212f6aecf99f837b8dd1a67b0744
+FileChecksum: SHA256: 06d10a016e15f43a87dad889897e272f85074494701bf589966f31a572a97c87
+FileChecksum: MD5: 197d743c71b42926cca4751d82acc240
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+FileName: ./has-duplicate-ids.txt
+SPDXID: SPDXRef-File2
+FileChecksum: SHA1: 8a53ead202d74264017291e0f9f54673b0d4dd17
+FileChecksum: SHA256: cc33878a21b713001f0a021d5150dc555ff487807e323e7dfa8b50f5b284eeee
+FileChecksum: MD5: 5610a0a2b1f42001acd268145bb55720
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+FileName: ./has-id.txt
+SPDXID: SPDXRef-File3
+FileChecksum: SHA1: 26d6221d682d9ba59116f9753a701f34271c8ce1
+FileChecksum: SHA256: 0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805
+FileChecksum: MD5: f60baa793870d9085461ad6bbab50b7f
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+FileName: ./has-multiple-ids.txt
+SPDXID: SPDXRef-File4
+FileChecksum: SHA1: e352d23aa7208ec7e2f35669261b77d2b2051f70
+FileChecksum: SHA256: 1b994c5639a10bd00434616976bb31eeeef1dd97a89bab427579c5e6e216f8d5
+FileChecksum: MD5: f9414bce67777f537d2dec6ff52566d8
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+FileName: ./no-id.txt
+SPDXID: SPDXRef-File5
+FileChecksum: SHA1: feb0d01805ad59d520491c8062d60cc9a850614f
+FileChecksum: SHA256: 73eb012c38dbf684dcafed273055209a8878926a99518e48abaf02cc5072c1eb
+FileChecksum: MD5: bd03a7b7fad55b25d75248c01c9c0b13
+LicenseConcluded: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+##### Relationships
+
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-project2
+

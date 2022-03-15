@@ -29,10 +29,11 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 	}
 	files := map[spdx.ElementID]*spdx.File2_1{}
 	fileNumber := 0
-	dirRootLen := len(dirRoot)
+	//dirRootLen := len(dirRoot)
 	for _, fp := range filepaths {
-		newFileName := fp[dirRootLen+1:]
-		newFilePatch := filepath.FromSlash("./" + newFileName)
+		newFileName := fp
+		newFilePatch := filepath.FromSlash("." + newFileName)
+		fmt.Println(newFilePatch)
 		newFile, err := BuildFileSection2_1(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err

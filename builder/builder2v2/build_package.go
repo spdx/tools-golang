@@ -19,6 +19,7 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
 	filepaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
+
 	if err != nil {
 		return nil, err
 	}
@@ -30,10 +31,8 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 
 	files := map[spdx.ElementID]*spdx.File2_2{}
 	fileNumber := 0
-	dirRootLen := len(dirRoot)
 	for _, fp := range filepaths {
-		newFileName := fp[dirRootLen:]
-		newFilePatch := filepath.FromSlash("." + newFileName)
+		newFilePatch := filepath.FromSlash("." + fp)
 		newFile, err := BuildFileSection2_2(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
