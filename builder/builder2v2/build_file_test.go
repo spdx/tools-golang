@@ -47,8 +47,12 @@ func TestBuilder2_2CanBuildFileSection(t *testing.T) {
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	} else {
+		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
