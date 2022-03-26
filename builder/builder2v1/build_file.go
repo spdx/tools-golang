@@ -36,7 +36,7 @@ func BuildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.
 		FileChecksumSHA256: ssha256,
 		FileChecksumMD5:    smd5,
 		LicenseConcluded:   "NOASSERTION",
-		LicenseInfoInFile:  []string{},
+		LicenseInfoInFile:  []string{"NOASSERTION"},
 		FileCopyrightText:  "NOASSERTION",
 	}
 

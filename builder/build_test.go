@@ -141,8 +141,12 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
-	if len(fileEmpty.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(fileEmpty.LicenseInfoInFile))
+	if len(fileEmpty.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFile))
+	} else {
+		if fileEmpty.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFile[0])
+		}
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
@@ -171,8 +175,12 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	} else {
+		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
@@ -201,8 +209,12 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
-	if len(file3.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file3.LicenseInfoInFile))
+	if len(file3.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFile))
+	} else {
+		if file3.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFile[0])
+		}
 	}
 	if file3.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.FileCopyrightText)
@@ -231,8 +243,12 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}
-	if len(file4.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file4.LicenseInfoInFile))
+	if len(file4.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFile))
+	} else {
+		if file4.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFile[0])
+		}
 	}
 	if file4.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.FileCopyrightText)
@@ -261,8 +277,12 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
 	}
-	if len(lastfile.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(lastfile.LicenseInfoInFile))
+	if len(lastfile.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFile))
+	} else {
+		if lastfile.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFile[0])
+		}
 	}
 	if lastfile.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.FileCopyrightText)
@@ -501,8 +521,12 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
-	if len(fileEmpty.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(fileEmpty.LicenseInfoInFile))
+	if len(fileEmpty.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFile))
+	} else {
+		if fileEmpty.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFile[0])
+		}
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
@@ -538,8 +562,12 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	} else {
+		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.FileCopyrightText)
@@ -575,8 +603,12 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
-	if len(file3.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file3.LicenseInfoInFile))
+	if len(file3.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFile))
+	} else {
+		if file3.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFile[0])
+		}
 	}
 	if file3.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.FileCopyrightText)
@@ -612,8 +644,12 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}
-	if len(file4.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(file4.LicenseInfoInFile))
+	if len(file4.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFile))
+	} else {
+		if file4.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFile[0])
+		}
 	}
 	if file4.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.FileCopyrightText)
@@ -649,8 +685,12 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
 	}
-	if len(lastfile.LicenseInfoInFile) != 0 {
-		t.Errorf("expected %v, got %v", 0, len(lastfile.LicenseInfoInFile))
+	if len(lastfile.LicenseInfoInFile) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFile))
+	} else {
+		if lastfile.LicenseInfoInFile[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFile[0])
+		}
 	}
 	if lastfile.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.FileCopyrightText)
