@@ -7,13 +7,13 @@
 # SPDX tools-golang
 
 tools-golang is a collection of Go packages intended to make it easier for
-Go programs to work with [SPDX®](https://spdx.org/) files.
+Go programs to work with [SPDX®](https://spdx.dev/) files.
 
 ## Recent news
 
-2021-07-04: **v0.2.0**: added support for parsing SPDX JSON files as well as
+2022-03-27: **v0.3.0-rc1**: added support for saving SPDX JSON files as well as
 other improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md)
-for full details.
+for full details (to be updated for v0.3.0 prior to final release).
 
 ## What it does
 
