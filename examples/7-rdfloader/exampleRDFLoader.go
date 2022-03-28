@@ -21,13 +21,13 @@ func main() {
 	// example to use the rdfLoader.
 	filePath, ok := getFilePathFromUser()
 	if ok != nil {
-		_ = fmt.Errorf("%v", ok)
-		return
+		fmt.Println(fmt.Errorf("%v", ok))
+		os.Exit(1)
 	}
 	file, err := os.Open(filePath)
 	if err != nil {
-		_ = fmt.Errorf("error opening File: %s", err)
-		return
+		fmt.Println(fmt.Errorf("error opening File: %s", err))
+		os.Exit(1)
 	}
 
 	// loading the spdx-document
