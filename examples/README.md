@@ -11,7 +11,7 @@ tools-golang sub-packages.
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and printing some of its contents to standard output.
-#### Run project: *go run example_load.go ../../testdata/spdx-examples/example1/spdx/example1.spdx*
+#### Run project: *go run example_load.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx*
 
 ## 2-load-save/
 
@@ -19,7 +19,7 @@ and printing some of its contents to standard output.
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and re-saving it to a different file on disk.
-#### Run project: *go run example_load_save.go ../../testdata/spdx-examples/example1/spdx/example1.spdx test.spdx*
+#### Run project: *go run example_load_save.go ../sample-docs/example1/spdx/example1.spdx test.spdx*
 ## 3-build/
 
 *builder*, *tvsaver*
@@ -46,7 +46,7 @@ Package and File license fields; and saving the resulting document to disk.
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 generating a basic report listing counts of the concluded licenses for its
 files, and printing the report to standard output.
-#### Run project: * go run example_report.go ../../testdata/spdx-examples/example1/spdx/example1.spdx
+#### Run project: * go run example_report.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx
 *
 ## 6-licensediff
 
@@ -59,7 +59,7 @@ with matching IDs in each document.
 This is generally only useful when run with two SPDX documents that describe
 licenses for subsequent versions of the same set of files, AND if they have
 the same identifier in both documents.
-#### Run project *Run project: go run example_licensediff.go ../../testdata/spdx-examples/example1/spdx/example1.spdx ../../testdata/spdx-examples/example2/spdx/example2-src.spdx*
+#### Run project *Run project: go run example_licensediff.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx ../sample-docs/example2/spdx/SPDXTagExample2-v2.2.spdx*
 
 ## 7-rdfloader
 
@@ -67,7 +67,7 @@ the same identifier in both documents.
 
 This example demonstrates loading an SPDX rdf file from disk into memory 
 and then printing the corresponding spdx struct for the document.
-#### Run project: *go run exampleRDFLoader.go ../../testdata/spdx-examples/rdf/SPDXRdfExample.rdf*
+#### Run project: *go run exampleRDFLoader.go ../sample-docs/rdf/SPDXRdfExample-v2.2.spdx.rdf*
 
 ## 8-jsontotv
 
@@ -75,7 +75,7 @@ and then printing the corresponding spdx struct for the document.
 
 This example demonstrates loading an SPDX json from disk into memory
 and then re-saving it to a different file on disk in tag-value format.
-#### Run project: *go run examplejsontotv.go ../../testdata/spdx-examples/json/SPDXJSONExample-v2.2.spdx.json example.spdx*
+#### Run project: *go run examplejsontotv.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx*
 
 ## 9-tvtojson
 
@@ -83,7 +83,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in json format.
-#### Run project: *go run exampletvtojson.go ../../testdata/spdx-examples/example1/spdx/example1.spdx example.json*
+#### Run project: *go run exampletvtojson.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx example.json*
 
 ## 10-jsonloader
 
@@ -91,4 +91,4 @@ and then re-saving it to a different file on disk in json format.
 
 This example demonstrates loading an SPDX json from disk into memory
 and then logging some of the attributes to the console.
-#### Run project: *go run example_json_loader.go ../../testdata/spdx-examples/json/SPDXJSONExample-v2.2.spdx.json example.spdx*
+#### Run project: *go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx*

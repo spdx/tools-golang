@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
-// Run project: go run exampleRDFLoader.go ../../testdata/spdx-examples/rdf/SPDXRdfExample.rdf
+// Run project: go run exampleRDFLoader.go ../sample-docs/rdf/SPDXRdfExample-v2.2.spdx.rdf
 package main
 
 import (

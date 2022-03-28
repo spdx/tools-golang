@@ -4,7 +4,7 @@
 
 // This example demonstrates loading an SPDX tag-value file from disk into
 // memory, and printing some of its contents to standard output.
-// Run project:  go run example_load.go ../../testdata/spdx-examples/example1/spdx/example1.spdx
+// Run project:  go run example_load.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx
 
 package main
 

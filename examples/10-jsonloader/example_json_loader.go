@@ -4,7 +4,7 @@
 
 // This example demonstrates loading an SPDX json from disk into memory,
 // and then logging out some attributes to the console .
-// Run project: go run example_json_loader.go ../../testdata/spdx-examples/json/SPDXJSONExample-v2.2.spdx.json example.spdx
+// Run project: go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx
 package main
 
 import (
