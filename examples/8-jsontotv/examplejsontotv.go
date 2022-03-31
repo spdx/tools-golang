@@ -4,7 +4,7 @@
 
 // This example demonstrates loading an SPDX json from disk into memory,
 // and then re-saving it to a different file on disk in tag-value format .
-
+// Run project: go run examplejsontotv.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx
 package main
 
 import (
@@ -20,7 +20,7 @@ func main() {
 	// check that we've received the right number of arguments
 	args := os.Args
 	if len(args) != 3 {
-		fmt.Printf("Usage: %v <spdx-file-in> <spdx-file-out>\n", args[0])
+		fmt.Printf("Usage: %v <json-file-in> <spdx-file-out>\n", args[0])
 		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
 		fmt.Printf("  save it out to <spdx-file-out>.\n")
 		return

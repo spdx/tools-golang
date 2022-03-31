@@ -7,6 +7,7 @@
 // [SPDX short-form IDs](https://spdx.org/ids/); filling those IDs into the
 // document's Package and File license fields; and saving the resulting document
 // to disk.
+// Run project: go run example_search.go project2 ../../testdata/project2/folder test.spdx
 
 package main
 
