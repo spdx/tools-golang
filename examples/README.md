@@ -61,7 +61,7 @@ with matching IDs in each document.
 This is generally only useful when run with two SPDX documents that describe
 licenses for subsequent versions of the same set of files, AND if they have
 the same identifier in both documents.
-#### Run project: *go run example_licensediff.go ../sample-docs/tv/hello.spdx ../sample-docs/tv/SPDXTagExample2-v2.2.spdx*
+#### Run project: *go run example_licensediff.go ../sample-docs/tv/hello.spdx ../sample-docs/tv/hello-modified.spdx*
 
 ## 7-rdfloader
 
