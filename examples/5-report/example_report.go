@@ -5,7 +5,7 @@
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // generating a basic report listing counts of the concluded licenses for its
 // files, and printing the report to standard output.
-// Run project: go run example_report.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx
+// Run project: go run example_report.go ../sample-docs/tv/hello.spdx
 package main
 
 import (

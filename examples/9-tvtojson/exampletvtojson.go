@@ -4,7 +4,7 @@
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // and re-saving it to a different json file on disk.
-// Run project: go run exampletvtojson.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx example.json
+// Run project: go run exampletvtojson.go ../sample-docs/tv/hello.spdx example.json
 package main
 
 import (
