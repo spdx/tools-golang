@@ -12,7 +12,7 @@ within the example's subdirectory.
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and printing some of its contents to standard output.
-#### Run project: *go run example_load.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx*
+#### Run project: *go run example_load.go ../sample-docs/tv/hello.spdx*
 
 ## 2-load-save/
 
@@ -20,7 +20,7 @@ and printing some of its contents to standard output.
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and re-saving it to a different file on disk.
-#### Run project: *go run example_load_save.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx test.spdx*
+#### Run project: *go run example_load_save.go ../sample-docs/tv/hello.spdx test.spdx*
 
 ## 3-build/
 
@@ -48,7 +48,7 @@ Package and File license fields; and saving the resulting document to disk.
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 generating a basic report listing counts of the concluded licenses for its
 files, and printing the report to standard output.
-#### Run project: *go run example_report.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx*
+#### Run project: *go run example_report.go ../sample-docs/tv/hello.spdx*
 
 ## 6-licensediff
 
@@ -61,7 +61,7 @@ with matching IDs in each document.
 This is generally only useful when run with two SPDX documents that describe
 licenses for subsequent versions of the same set of files, AND if they have
 the same identifier in both documents.
-#### Run project: *go run example_licensediff.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx ../sample-docs/example2/spdx/SPDXTagExample2-v2.2.spdx*
+#### Run project: *go run example_licensediff.go ../sample-docs/tv/hello.spdx ../sample-docs/tv/SPDXTagExample2-v2.2.spdx*
 
 ## 7-rdfloader
 
@@ -85,7 +85,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in json format.
-#### Run project: *go run exampletvtojson.go ../sample-docs/example1/spdx/SPDXTagExample-v2.2.spdx example.json*
+#### Run project: *go run exampletvtojson.go ../sample-docs/tv/hello.spdx example.json*
 
 ## 10-jsonloader
 
