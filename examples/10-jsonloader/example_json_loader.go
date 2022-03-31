@@ -2,9 +2,9 @@
 
 // Example for: *jsonparser2v2*
 
-// This example demonstrates loading an SPDX json from disk into memory,
-// and then logging out some attributes to the console .
-// Run project: go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx
+// This example demonstrates loading an SPDX JSON document from disk into memory,
+// and then logging some of the attributes to the console.
+// Run project: go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json
 package main
 
 import (
@@ -19,10 +19,10 @@ func main() {
 
 	// check that we've received the right number of arguments
 	args := os.Args
-	if len(args) != 3 {
-		fmt.Printf("Usage: %v <json-file-in> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
-		fmt.Printf("  save it out to <spdx-file-out>.\n")
+	if len(args) != 2 {
+		fmt.Printf("Usage: %v <json-file-in>\n", args[0])
+		fmt.Printf("  Load SPDX 2.2 JSON file <spdx-file-in>, and\n")
+		fmt.Printf("  print portions of its creation info data.\n")
 		return
 	}
 
@@ -49,7 +49,7 @@ func main() {
 	fmt.Println("Some Attributes of the Document:")
 	fmt.Printf("Document Name:         %s\n", doc.CreationInfo.DocumentName)
 	fmt.Printf("DataLicense:           %s\n", doc.CreationInfo.DataLicense)
-	fmt.Printf("Document NameSpace:    %s\n", doc.CreationInfo.DocumentNamespace)
-	fmt.Printf("SPDX Document Version: %s\n", doc.CreationInfo.SPDXVersion)
+	fmt.Printf("Document Namespace:    %s\n", doc.CreationInfo.DocumentNamespace)
+	fmt.Printf("SPDX Version:          %s\n", doc.CreationInfo.SPDXVersion)
 	fmt.Println(strings.Repeat("=", 80))
 }

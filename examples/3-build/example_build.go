@@ -5,7 +5,7 @@
 // This example demonstrates building an 'empty' SPDX document in memory that
 // corresponds to a given directory's contents, including all files with their
 // hashes and the package's verification code, and saving the document to disk.
-// Run project:  go run example_build.go project2 ../../testdata/project2 test.spdx
+// Run project: go run example_build.go project2 ../../testdata/project2 test.spdx
 
 package main
 
