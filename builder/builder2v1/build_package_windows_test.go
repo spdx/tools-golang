@@ -22,9 +22,9 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	packageName := "project1"
 	dirRoot := "../../testdata/project1_windows/"
 
+	// check if the file exists
 	if !fileExists("../../testdata/project1_windows/symbolic-link") {
-
-		// create a new symbolic or "soft" link
+		// create a new symbolic link
 		err := os.Symlink("../../testdata/project1_windows/file3.testdata.txt", "../../testdata/project1_windows/symbolic-link")
 		if err != nil {
 			t.Errorf("Do not have administrator rights : %v", err)
@@ -112,6 +112,7 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
 	}
 
+	//  Remove symbolic link after test
 	err = os.Remove("../../testdata/project1_windows/symbolic-link")
 	if err != nil {
 		t.Errorf("the file could not be deleted : %v", err)
