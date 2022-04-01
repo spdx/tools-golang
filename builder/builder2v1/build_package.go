@@ -40,7 +40,7 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 	for _, fp := range filepaths {
 		newFilePatch := ""
 		if osType == "windows" {
-			newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+			newFilePatch = filepath.FromSlash(fp[dirRootLen:])
 		} else {
 			newFilePatch = filepath.FromSlash("./" + fp)
 		}
