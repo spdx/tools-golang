@@ -1,18 +1,36 @@
-// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+//go:build windows
+// +build windows
 
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package builder2v1
 
 import (
+	"os"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
 )
 
+// Verify if file exists
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
+}
+
 // ===== Package section builder tests =====
 func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	packageName := "project1"
-	dirRoot := "../../testdata/project1/"
+	dirRoot := "../../testdata/project1_windows/"
 
+	// check if the file exists
+	if !fileExists("../../testdata/project1_windows/symbolic-link") {
+		// create a new symbolic link
+		err := os.Symlink("../../testdata/project1_windows/file3.testdata.txt", "../../testdata/project1_windows/symbolic-link")
+		if err != nil {
+			t.Errorf("Do not have administrator rights : %v", err)
+			os.Exit(1)
+		}
+	}
 	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
 
 	pkg, err := BuildPackageSection2_1(packageName, dirRoot, nil)
@@ -65,8 +83,8 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
-	if fileEmpty.FileName != "./emptyfile.testdata.txt" {
-		t.Errorf("expected %v, got %v", "./emptyfile.testdata.txt", fileEmpty.FileName)
+	if fileEmpty.FileName != "emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "emptyfile.testdata.txt", fileEmpty.FileName)
 	}
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
@@ -92,6 +110,12 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.FileCopyrightText)
+	}
+
+	//  Remove symbolic link after test
+	err = os.Remove("../../testdata/project1_windows/symbolic-link")
+	if err != nil {
+		t.Errorf("the file could not be deleted : %v", err)
 	}
 }
 
