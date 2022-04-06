@@ -2,13 +2,16 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Release Notes for spdx/tools-golang
 
-## 0.3.0 (UPCOMING)
+## 0.3.0
 
-0.3.0-rc1 released on: 2022-03-27
+0.3.0 released on: 2022-04-03
+
+-rc1 released on: 2022-03-27
 
 ### New Features and Enhancements
 * Add support for saving SPDX JSON: #92, #94, #97, #98, #104, #106, #113
 * Begin OpenSSF Best Practices process and add initial badge: #111
+  * also enabled branch protection for main branch
 
 ### Bug fixes
 * tvsaver: Fix incorrect tag for Snippet IDs: #95
@@ -20,7 +23,8 @@ SPDX-License-Identifier: CC-BY-4.0
 * Fix link to release notes: #91
 * Language fixes for JSON documentation: #108
 * Add badges and links for releases and documentation: #109
-* Update readme for 0.3.0-rc1: #121
+* Update documentation for release: #121, #122
+* Fixes for examples and sample run commands: #123, #125, #126, #127
 
 ### Contributors
 * @CatalinStratu
