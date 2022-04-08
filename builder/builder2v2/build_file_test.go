@@ -28,7 +28,8 @@ func TestBuilder2_2CanBuildFileSection(t *testing.T) {
 	if file1.FileSPDXIdentifier != spdx.ElementID("File17") {
 		t.Errorf("expected %v, got %v", "File17", file1.FileSPDXIdentifier)
 	}
-	for _, checksum := range file1.FileChecksums {
+
+	for _, checksum := range file1.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "024f870eb6323f532515f7a09d5646a97083b819" {
@@ -44,14 +45,15 @@ func TestBuilder2_2CanBuildFileSection(t *testing.T) {
 			}
 		}
 	}
+
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFiles))
 	} else {
-		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		if file1.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFiles[0])
 		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {

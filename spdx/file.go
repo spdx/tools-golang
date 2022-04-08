@@ -4,68 +4,67 @@ package spdx
 
 // File2_1 is a File section of an SPDX Document for version 2.1 of the spec.
 type File2_1 struct {
-
 	// 4.1: File Name
 	// Cardinality: mandatory, one
-	FileName string
+	FileName string `json:"fileName"`
 
 	// 4.2: File SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	FileSPDXIdentifier ElementID
+	FileSPDXIdentifier ElementID `json:"SPDXID"`
 
-	// 4.3: File Type
+	// 4.3: File Types
 	// Cardinality: optional, multiple
-	FileType []string
+	FileTypes []string `json:"fileTypes,omitempty"`
 
 	// 4.4: File Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: mandatory, one SHA1, others may be optionally provided
-	FileChecksumSHA1   string
-	FileChecksumSHA256 string
-	FileChecksumMD5    string
+	Checksums []Checksum `json:"checksums"`
 
 	// 4.5: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	LicenseConcluded string
+	LicenseConcluded string `json:"licenseConcluded"`
 
 	// 4.6: License Information in File: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one or many
-	LicenseInfoInFile []string
+	LicenseInfoInFiles []string `json:"licenseInfoInFiles"`
 
 	// 4.7: Comments on License
 	// Cardinality: optional, one
-	LicenseComments string
+	LicenseComments string `json:"licenseComments,omitempty"`
 
 	// 4.8: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	FileCopyrightText string
+	FileCopyrightText string `json:"copyrightText"`
 
 	// DEPRECATED in version 2.1 of spec
 	// 4.9-4.11: Artifact of Project variables (defined below)
 	// Cardinality: optional, one or many
-	ArtifactOfProjects []*ArtifactOfProject2_1
+	ArtifactOfProjects []*ArtifactOfProject2_1 `json:"-"`
 
 	// 4.12: File Comment
 	// Cardinality: optional, one
-	FileComment string
+	FileComment string `json:"comment,omitempty"`
 
 	// 4.13: File Notice
 	// Cardinality: optional, one
-	FileNotice string
+	FileNotice string `json:"noticeText,omitempty"`
 
 	// 4.14: File Contributor
 	// Cardinality: optional, one or many
-	FileContributor []string
+	FileContributors []string `json:"fileContributors,omitempty"`
 
 	// DEPRECATED in version 2.0 of spec
 	// 4.15: File Dependencies
 	// Cardinality: optional, one or many
-	FileDependencies []string
+	FileDependencies []string `json:"-"`
 
 	// Snippets contained in this File
 	// Note that Snippets could be defined in a different Document! However,
-	// the only ones that _THIS_ document can contain are this ones that are
+	// the only ones that _THIS_ document can contain are the ones that are
 	// defined here -- so this should just be an ElementID.
-	Snippets map[ElementID]*Snippet2_1
+	Snippets map[ElementID]*Snippet2_1 `json:"-"`
+
+	Annotations []Annotation2_1 `json:"annotations"`
 }
 
 // ArtifactOfProject2_1 is a DEPRECATED collection of data regarding
@@ -90,70 +89,71 @@ type ArtifactOfProject2_1 struct {
 
 // File2_2 is a File section of an SPDX Document for version 2.2 of the spec.
 type File2_2 struct {
-
 	// 4.1: File Name
 	// Cardinality: mandatory, one
-	FileName string
+	FileName string `json:"fileName"`
 
 	// 4.2: File SPDX Identifier: "SPDXRef-[idstring]"
 	// Cardinality: mandatory, one
-	FileSPDXIdentifier ElementID
+	FileSPDXIdentifier ElementID `json:"SPDXID"`
 
-	// 4.3: File Type
+	// 4.3: File Types
 	// Cardinality: optional, multiple
-	FileType []string
+	FileTypes []string `json:"fileTypes,omitempty"`
 
 	// 4.4: File Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: mandatory, one SHA1, others may be optionally provided
-	FileChecksums map[ChecksumAlgorithm]Checksum
+	Checksums []Checksum `json:"checksums"`
 
 	// 4.5: Concluded License: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	LicenseConcluded string
+	LicenseConcluded string `json:"licenseConcluded"`
 
 	// 4.6: License Information in File: SPDX License Expression, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one or many
-	LicenseInfoInFile []string
+	LicenseInfoInFiles []string `json:"licenseInfoInFiles"`
 
 	// 4.7: Comments on License
 	// Cardinality: optional, one
-	LicenseComments string
+	LicenseComments string `json:"licenseComments,omitempty"`
 
 	// 4.8: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
 	// Cardinality: mandatory, one
-	FileCopyrightText string
+	FileCopyrightText string `json:"copyrightText"`
 
 	// DEPRECATED in version 2.1 of spec
 	// 4.9-4.11: Artifact of Project variables (defined below)
 	// Cardinality: optional, one or many
-	ArtifactOfProjects []*ArtifactOfProject2_2
+	ArtifactOfProjects []*ArtifactOfProject2_2 `json:"-"`
 
 	// 4.12: File Comment
 	// Cardinality: optional, one
-	FileComment string
+	FileComment string `json:"comment,omitempty"`
 
 	// 4.13: File Notice
 	// Cardinality: optional, one
-	FileNotice string
+	FileNotice string `json:"noticeText,omitempty"`
 
 	// 4.14: File Contributor
 	// Cardinality: optional, one or many
-	FileContributor []string
+	FileContributors []string `json:"fileContributors,omitempty"`
 
 	// 4.15: File Attribution Text
 	// Cardinality: optional, one or many
-	FileAttributionTexts []string
+	FileAttributionTexts []string `json:"attributionTexts,omitempty"`
 
 	// DEPRECATED in version 2.0 of spec
 	// 4.16: File Dependencies
 	// Cardinality: optional, one or many
-	FileDependencies []string
+	FileDependencies []string `json:"-"`
 
 	// Snippets contained in this File
 	// Note that Snippets could be defined in a different Document! However,
 	// the only ones that _THIS_ document can contain are this ones that are
 	// defined here -- so this should just be an ElementID.
-	Snippets map[ElementID]*Snippet2_2
+	Snippets map[ElementID]*Snippet2_2 `json:"-"`
+
+	Annotations []Annotation2_2 `json:"annotations,omitempty"`
 }
 
 // ArtifactOfProject2_2 is a DEPRECATED collection of data regarding

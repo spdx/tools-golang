@@ -70,11 +70,11 @@ func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.ann.Annotator != "John Doe" {
+	if parser.ann.Annotator.Annotator != "John Doe" {
 		t.Errorf("got %v for Annotator, expected John Doe", parser.ann.Annotator)
 	}
-	if parser.ann.AnnotatorType != "Person" {
-		t.Errorf("got %v for AnnotatorType, expected Person", parser.ann.AnnotatorType)
+	if parser.ann.Annotator.AnnotatorType != "Person" {
+		t.Errorf("got %v for AnnotatorType, expected Person", parser.ann.Annotator.AnnotatorType)
 	}
 
 	// Annotation Date
@@ -156,4 +156,3 @@ func TestParser2_1FailsIfAnnotationRefInvalid(t *testing.T) {
 		t.Errorf("expected non-nil error, got nil")
 	}
 }
-

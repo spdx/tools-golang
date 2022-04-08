@@ -49,37 +49,37 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 		}
 		parser.file.FileSPDXIdentifier = eID
 		if parser.pkg == nil {
-			if parser.doc.UnpackagedFiles == nil {
-				parser.doc.UnpackagedFiles = map[spdx.ElementID]*spdx.File2_1{}
+			if parser.doc.Files == nil {
+				parser.doc.Files = []*spdx.File2_1{}
 			}
-			parser.doc.UnpackagedFiles[eID] = parser.file
+			parser.doc.Files = append(parser.doc.Files, parser.file)
 		} else {
 			if parser.pkg.Files == nil {
-				parser.pkg.Files = map[spdx.ElementID]*spdx.File2_1{}
+				parser.pkg.Files = []*spdx.File2_1{}
 			}
-			parser.pkg.Files[eID] = parser.file
+			parser.pkg.Files = append(parser.pkg.Files, parser.file)
 		}
 	case "FileType":
-		parser.file.FileType = append(parser.file.FileType, value)
+		parser.file.FileTypes = append(parser.file.FileTypes, value)
 	case "FileChecksum":
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
 			return err
 		}
-		switch subkey {
-		case "SHA1":
-			parser.file.FileChecksumSHA1 = subvalue
-		case "SHA256":
-			parser.file.FileChecksumSHA256 = subvalue
-		case "MD5":
-			parser.file.FileChecksumMD5 = subvalue
+		if parser.file.Checksums == nil {
+			parser.file.Checksums = []spdx.Checksum{}
+		}
+		switch spdx.ChecksumAlgorithm(subkey) {
+		case spdx.SHA1, spdx.SHA256, spdx.MD5:
+			algorithm := spdx.ChecksumAlgorithm(subkey)
+			parser.file.Checksums = append(parser.file.Checksums, spdx.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
 	case "LicenseConcluded":
 		parser.file.LicenseConcluded = value
 	case "LicenseInfoInFile":
-		parser.file.LicenseInfoInFile = append(parser.file.LicenseInfoInFile, value)
+		parser.file.LicenseInfoInFiles = append(parser.file.LicenseInfoInFiles, value)
 	case "LicenseComments":
 		parser.file.LicenseComments = value
 	case "FileCopyrightText":
@@ -103,7 +103,7 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "FileNotice":
 		parser.file.FileNotice = value
 	case "FileContributor":
-		parser.file.FileContributor = append(parser.file.FileContributor, value)
+		parser.file.FileContributors = append(parser.file.FileContributors, value)
 	case "FileDependency":
 		parser.file.FileDependencies = append(parser.file.FileDependencies, value)
 	// for relationship tags, pass along but don't change state

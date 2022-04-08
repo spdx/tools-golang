@@ -58,7 +58,7 @@ func TestParser2_1CIMovesToFileAfterParsingFileNameTagWithNoPackages(t *testing.
 		t.Errorf("parser is in state %v, expected %v", parser.st, psFile2_1)
 	}
 	// and current package should be nil, meaning Files are placed in the
-	// UnpackagedFiles map instead of in a Package
+	// Files map instead of in a Package
 	if parser.pkg != nil {
 		t.Fatalf("expected pkg to be nil, got non-nil pkg")
 	}
@@ -179,7 +179,7 @@ func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
 		doc: &spdx.Document2_1{},
 		st:  psCreationInfo2_1,
 	}
-	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
+	err := parser.parsePairFromCreationInfo2_1("LicenseListVersion", "3.9")
 	if err != nil {
 		t.Errorf("got error when calling parsePairFromCreationInfo2_1: %v", err)
 	}
@@ -194,96 +194,8 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 		st:  psCreationInfo2_1,
 	}
 
-	// SPDX Version
-	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.SPDXVersion != "SPDX-2.1" {
-		t.Errorf("got %v for SPDXVersion", parser.doc.CreationInfo.SPDXVersion)
-	}
-
-	// Data License
-	err = parser.parsePairFromCreationInfo2_1("DataLicense", "CC0-1.0")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.DataLicense != "CC0-1.0" {
-		t.Errorf("got %v for DataLicense", parser.doc.CreationInfo.DataLicense)
-	}
-
-	// SPDX Identifier
-	err = parser.parsePairFromCreationInfo2_1("SPDXID", "SPDXRef-DOCUMENT")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.SPDXIdentifier != "DOCUMENT" {
-		t.Errorf("got %v for SPDXIdentifier", parser.doc.CreationInfo.SPDXIdentifier)
-	}
-
-	// Document Name
-	err = parser.parsePairFromCreationInfo2_1("DocumentName", "xyz-2.1.5")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.DocumentName != "xyz-2.1.5" {
-		t.Errorf("got %v for DocumentName", parser.doc.CreationInfo.DocumentName)
-	}
-
-	// Document Namespace
-	err = parser.parsePairFromCreationInfo2_1("DocumentNamespace", "http://example.com/xyz-2.1.5.spdx")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.DocumentNamespace != "http://example.com/xyz-2.1.5.spdx" {
-		t.Errorf("got %v for DocumentNamespace", parser.doc.CreationInfo.DocumentNamespace)
-	}
-
-	// External Document Reference
-	refs := []string{
-		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-		"DocumentRef-xyz-2.1.2 http://example.com/xyz-2.1.2 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2760",
-	}
-	wantRef0 := spdx.ExternalDocumentRef2_1{
-		DocumentRefID: "spdx-tool-1.2",
-		URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
-		Alg:           "SHA1",
-		Checksum:      "d6a770ba38583ed4bb4525bd96e50461655d2759",
-	}
-	wantRef1 := spdx.ExternalDocumentRef2_1{
-		DocumentRefID: "xyz-2.1.2",
-		URI:           "http://example.com/xyz-2.1.2",
-		Alg:           "SHA1",
-		Checksum:      "d6a770ba38583ed4bb4525bd96e50461655d2760",
-	}
-	err = parser.parsePairFromCreationInfo2_1("ExternalDocumentRef", refs[0])
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	err = parser.parsePairFromCreationInfo2_1("ExternalDocumentRef", refs[1])
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if len(parser.doc.CreationInfo.ExternalDocumentReferences) != 2 {
-		t.Errorf("got %d ExternalDocumentReferences, expected %d", len(parser.doc.CreationInfo.ExternalDocumentReferences), 2)
-	}
-	gotRef0 := parser.doc.CreationInfo.ExternalDocumentReferences["spdx-tool-1.2"]
-	if gotRef0.DocumentRefID != wantRef0.DocumentRefID ||
-		gotRef0.URI != wantRef0.URI ||
-		gotRef0.Alg != wantRef0.Alg ||
-		gotRef0.Checksum != wantRef0.Checksum {
-		t.Errorf("got %#v for ExternalDocumentReferences[0], wanted %#v", gotRef0, wantRef0)
-	}
-	gotRef1 := parser.doc.CreationInfo.ExternalDocumentReferences["xyz-2.1.2"]
-	if gotRef1.DocumentRefID != wantRef1.DocumentRefID ||
-		gotRef1.URI != wantRef1.URI ||
-		gotRef1.Alg != wantRef1.Alg ||
-		gotRef1.Checksum != wantRef1.Checksum {
-		t.Errorf("got %#v for ExternalDocumentReferences[1], wanted %#v", gotRef1, wantRef1)
-	}
-
 	// License List Version
-	err = parser.parsePairFromCreationInfo2_1("LicenseListVersion", "2.2")
+	err := parser.parsePairFromCreationInfo2_1("LicenseListVersion", "2.2")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -304,10 +216,10 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.doc.CreationInfo.CreatorPersons) != 2 ||
-		parser.doc.CreationInfo.CreatorPersons[0] != "Person A" ||
-		parser.doc.CreationInfo.CreatorPersons[1] != "Person B" {
-		t.Errorf("got %v for CreatorPersons", parser.doc.CreationInfo.CreatorPersons)
+	if len(parser.doc.CreationInfo.Creators) != 2 ||
+		parser.doc.CreationInfo.Creators[0].Creator != "Person A" ||
+		parser.doc.CreationInfo.Creators[1].Creator != "Person B" {
+		t.Errorf("got %+v for Creators", parser.doc.CreationInfo.Creators)
 	}
 
 	// Creators: Organizations
@@ -323,10 +235,10 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.doc.CreationInfo.CreatorOrganizations) != 2 ||
-		parser.doc.CreationInfo.CreatorOrganizations[0] != "Organization A" ||
-		parser.doc.CreationInfo.CreatorOrganizations[1] != "Organization B" {
-		t.Errorf("got %v for CreatorOrganizations", parser.doc.CreationInfo.CreatorOrganizations)
+	if len(parser.doc.CreationInfo.Creators) != 4 ||
+		parser.doc.CreationInfo.Creators[2].Creator != "Organization A" ||
+		parser.doc.CreationInfo.Creators[3].Creator != "Organization B" {
+		t.Errorf("got %+v for CreatorOrganizations", parser.doc.CreationInfo.Creators)
 	}
 
 	// Creators: Tools
@@ -342,10 +254,10 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if len(parser.doc.CreationInfo.CreatorTools) != 2 ||
-		parser.doc.CreationInfo.CreatorTools[0] != "Tool A" ||
-		parser.doc.CreationInfo.CreatorTools[1] != "Tool B" {
-		t.Errorf("got %v for CreatorTools", parser.doc.CreationInfo.CreatorTools)
+	if len(parser.doc.CreationInfo.Creators) != 6 ||
+		parser.doc.CreationInfo.Creators[4].Creator != "Tool A" ||
+		parser.doc.CreationInfo.Creators[5].Creator != "Tool B" {
+		t.Errorf("got %v for CreatorTools", parser.doc.CreationInfo.Creators)
 	}
 
 	// Created date
@@ -365,16 +277,6 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	if parser.doc.CreationInfo.CreatorComment != "Blah whatever" {
 		t.Errorf("got %v for CreatorComment", parser.doc.CreationInfo.CreatorComment)
 	}
-
-	// Document Comment
-	err = parser.parsePairFromCreationInfo2_1("DocumentComment", "Blah whatever")
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	if parser.doc.CreationInfo.DocumentComment != "Blah whatever" {
-		t.Errorf("got %v for DocumentComment", parser.doc.CreationInfo.DocumentComment)
-	}
-
 }
 
 func TestParser2_1InvalidCreatorTagsFail(t *testing.T) {

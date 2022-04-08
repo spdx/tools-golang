@@ -19,8 +19,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageSupplierNOASSERTION {
-		t.Errorf("PackageSupplierNOASSERTION must've been set to true")
+	if pkg.PackageSupplier.Supplier != "NOASSERTION" {
+		t.Errorf("PackageSupplier must've been set to NOASSERTION")
 	}
 
 	// TestCase 2: lower-case noassertion must also set the
@@ -30,8 +30,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageSupplierNOASSERTION {
-		t.Errorf("PackageSupplierNOASSERTION must've been set to true")
+	if pkg.PackageSupplier.Supplier != "NOASSERTION" {
+		t.Errorf("PackageSupplier must've been set to NOASSERTION")
 	}
 
 	// TestCase 3: invalid input without colon separator. must raise an error
@@ -50,8 +50,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageSupplierPerson != personName {
-		t.Errorf("PackageSupplierPerson should be %s. found %s", personName, pkg.PackageSupplierPerson)
+	if pkg.PackageSupplier.Supplier != personName {
+		t.Errorf("PackageSupplierPerson should be %s. found %s", personName, pkg.PackageSupplier.Supplier)
 	}
 
 	// TestCase 5: Valid Organization
@@ -62,8 +62,8 @@ func Test_setPackageSupplier(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageSupplierOrganization != orgName {
-		t.Errorf("PackageSupplierPerson should be %s. found %s", orgName, pkg.PackageSupplierOrganization)
+	if pkg.PackageSupplier.Supplier != orgName {
+		t.Errorf("PackageSupplierPerson should be %s. found %s", orgName, pkg.PackageSupplier.Supplier)
 	}
 
 	// TestCase 6: Invalid EntityType
@@ -84,8 +84,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageOriginatorNOASSERTION {
-		t.Errorf("PackageOriginatorNOASSERTION must've been set to true")
+	if pkg.PackageOriginator.Originator != "NOASSERTION" {
+		t.Errorf("PackageOriginator must've been set to NOASSERTION")
 	}
 
 	// TestCase 2: lower-case noassertion must also set the
@@ -95,8 +95,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.PackageOriginatorNOASSERTION {
-		t.Errorf("PackageOriginatorNOASSERTION must've been set to true")
+	if pkg.PackageOriginator.Originator != "NOASSERTION" {
+		t.Errorf("PackageOriginator must've been set to NOASSERTION")
 	}
 
 	// TestCase 3: invalid input without colon separator. must raise an error
@@ -115,8 +115,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageOriginatorPerson != personName {
-		t.Errorf("PackageOriginatorPerson should be %s. found %s", personName, pkg.PackageOriginatorPerson)
+	if pkg.PackageOriginator.Originator != personName {
+		t.Errorf("PackageOriginatorPerson should be %s. found %s", personName, pkg.PackageOriginator.Originator)
 	}
 
 	// TestCase 5: Valid Organization
@@ -127,8 +127,8 @@ func Test_setPackageOriginator(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
-	if pkg.PackageOriginatorOrganization != orgName {
-		t.Errorf("PackageOriginatorOrganization should be %s. found %s", orgName, pkg.PackageOriginatorOrganization)
+	if pkg.PackageOriginator.Originator != orgName {
+		t.Errorf("PackageOriginatorOrganization should be %s. found %s", orgName, pkg.PackageOriginator.Originator)
 	}
 
 	// TestCase 6: Invalid EntityType
@@ -175,12 +175,12 @@ func Test_rdfParser2_2_setPackageVerificationCode(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 	expectedValue := "cbceb8b5689b75a584efe35587b5d41bd48820ce"
-	if pkg.PackageVerificationCode != expectedValue {
+	if pkg.PackageVerificationCode.Value != expectedValue {
 		t.Errorf("expected %v, got %v", expectedValue, pkg.PackageVerificationCode)
 	}
 	expectedExcludedFile := "./package.spdx"
-	if pkg.PackageVerificationCodeExcludedFile != expectedExcludedFile {
-		t.Errorf("expected %v, got %v", expectedExcludedFile, pkg.PackageVerificationCodeExcludedFile)
+	if pkg.PackageVerificationCode.ExcludedFiles[0] != expectedExcludedFile {
+		t.Errorf("expected %v, got %v", expectedExcludedFile, pkg.PackageVerificationCode.ExcludedFiles)
 	}
 }
 

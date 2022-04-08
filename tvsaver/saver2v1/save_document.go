@@ -21,30 +21,50 @@ func RenderDocument2_1(doc *spdx.Document2_1, w io.Writer) error {
 		return fmt.Errorf("Document had nil CreationInfo section")
 	}
 
+	if doc.SPDXVersion != "" {
+		fmt.Fprintf(w, "SPDXVersion: %s\n", doc.SPDXVersion)
+	}
+	if doc.DataLicense != "" {
+		fmt.Fprintf(w, "DataLicense: %s\n", doc.DataLicense)
+	}
+	if doc.SPDXIdentifier != "" {
+		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(doc.SPDXIdentifier))
+	}
+	if doc.DocumentName != "" {
+		fmt.Fprintf(w, "DocumentName: %s\n", doc.DocumentName)
+	}
+	if doc.DocumentNamespace != "" {
+		fmt.Fprintf(w, "DocumentNamespace: %s\n", doc.DocumentNamespace)
+	}
+	// print EDRs in order sorted by identifier
+	sort.Slice(doc.ExternalDocumentReferences, func(i, j int) bool {
+		return doc.ExternalDocumentReferences[i].DocumentRefID < doc.ExternalDocumentReferences[j].DocumentRefID
+	})
+	for _, edr := range doc.ExternalDocumentReferences {
+		fmt.Fprintf(w, "ExternalDocumentRef: DocumentRef-%s %s %s:%s\n",
+			edr.DocumentRefID, edr.URI, edr.Checksum.Algorithm, edr.Checksum.Value)
+	}
+	if doc.DocumentComment != "" {
+		fmt.Fprintf(w, "DocumentComment: %s\n", textify(doc.DocumentComment))
+	}
+
 	renderCreationInfo2_1(doc.CreationInfo, w)
 
-	if len(doc.UnpackagedFiles) > 0 {
+	if len(doc.Files) > 0 {
 		fmt.Fprintf(w, "##### Unpackaged files\n\n")
-		// get slice of identifiers so we can sort them
-		unpackagedFileKeys := []string{}
-		for k := range doc.UnpackagedFiles {
-			unpackagedFileKeys = append(unpackagedFileKeys, string(k))
-		}
-		sort.Strings(unpackagedFileKeys)
-		for _, fiID := range unpackagedFileKeys {
-			fi := doc.UnpackagedFiles[spdx.ElementID(fiID)]
+		sort.Slice(doc.Files, func(i, j int) bool {
+			return doc.Files[i].FileSPDXIdentifier < doc.Files[j].FileSPDXIdentifier
+		})
+		for _, fi := range doc.Files {
 			renderFile2_1(fi, w)
 		}
 	}
 
-	// get slice of Package identifiers so we can sort them
-	packageKeys := []string{}
-	for k := range doc.Packages {
-		packageKeys = append(packageKeys, string(k))
-	}
-	sort.Strings(packageKeys)
-	for _, pkgID := range packageKeys {
-		pkg := doc.Packages[spdx.ElementID(pkgID)]
+	// sort Packages by identifier
+	sort.Slice(doc.Packages, func(i, j int) bool {
+		return doc.Packages[i].PackageSPDXIdentifier < doc.Packages[j].PackageSPDXIdentifier
+	})
+	for _, pkg := range doc.Packages {
 		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
 		renderPackage2_1(pkg, w)
 	}

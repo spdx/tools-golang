@@ -11,13 +11,13 @@ type Relationship2_1 struct {
 	//              one mandatory for SPDX Document with multiple packages
 	// RefA and RefB are first and second item
 	// Relationship is type from 7.1.1
-	RefA         DocElementID
-	RefB         DocElementID
-	Relationship string
+	RefA         DocElementID `json:"spdxElementId"`
+	RefB         DocElementID `json:"relatedSpdxElement"`
+	Relationship string       `json:"relationshipType"`
 
 	// 7.2: Relationship Comment
 	// Cardinality: optional, one
-	RelationshipComment string
+	RelationshipComment string `json:"comment,omitempty"`
 }
 
 // Relationship2_2 is a Relationship section of an SPDX Document for
@@ -29,11 +29,11 @@ type Relationship2_2 struct {
 	//              one mandatory for SPDX Document with multiple packages
 	// RefA and RefB are first and second item
 	// Relationship is type from 7.1.1
-	RefA         DocElementID
-	RefB         DocElementID
-	Relationship string
+	RefA         DocElementID `json:"spdxElementId"`
+	RefB         DocElementID `json:"relatedSpdxElement"`
+	Relationship string       `json:"relationshipType"`
 
 	// 7.2: Relationship Comment
 	// Cardinality: optional, one
-	RelationshipComment string
+	RelationshipComment string `json:"comment,omitempty"`
 }

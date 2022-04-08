@@ -73,7 +73,7 @@ func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1
 	}
 
 	// now, walk through each file and find its licenses (if any)
-	pkg := doc.Packages[spdx.ElementID("Package-"+packageName)]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		return nil, fmt.Errorf("builder returned nil Package")
 	}
@@ -83,7 +83,7 @@ func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1
 	licsForPackage := map[string]int{}
 	for _, f := range pkg.Files {
 		// start by initializing / clearing values
-		f.LicenseInfoInFile = []string{"NOASSERTION"}
+		f.LicenseInfoInFiles = []string{"NOASSERTION"}
 		f.LicenseConcluded = "NOASSERTION"
 
 		// check whether the searcher should ignore this file
@@ -114,11 +114,11 @@ func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1
 
 		// OK -- now we can fill in the file's details, or NOASSERTION if none
 		if len(licsForFile) > 0 {
-			f.LicenseInfoInFile = []string{}
+			f.LicenseInfoInFiles = []string{}
 			for lic := range licsForFile {
-				f.LicenseInfoInFile = append(f.LicenseInfoInFile, lic)
+				f.LicenseInfoInFiles = append(f.LicenseInfoInFiles, lic)
 			}
-			sort.Strings(f.LicenseInfoInFile)
+			sort.Strings(f.LicenseInfoInFiles)
 			// avoid adding parens and joining for single-ID items
 			if len(licsParens) == 1 {
 				f.LicenseConcluded = ids[0]
@@ -197,7 +197,7 @@ func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2
 	}
 
 	// now, walk through each file and find its licenses (if any)
-	pkg := doc.Packages[spdx.ElementID("Package-"+packageName)]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		return nil, fmt.Errorf("builder returned nil Package")
 	}
@@ -207,7 +207,7 @@ func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2
 	licsForPackage := map[string]int{}
 	for _, f := range pkg.Files {
 		// start by initializing / clearing values
-		f.LicenseInfoInFile = []string{"NOASSERTION"}
+		f.LicenseInfoInFiles = []string{"NOASSERTION"}
 		f.LicenseConcluded = "NOASSERTION"
 
 		// check whether the searcher should ignore this file
@@ -238,11 +238,11 @@ func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2
 
 		// OK -- now we can fill in the file's details, or NOASSERTION if none
 		if len(licsForFile) > 0 {
-			f.LicenseInfoInFile = []string{}
+			f.LicenseInfoInFiles = []string{}
 			for lic := range licsForFile {
-				f.LicenseInfoInFile = append(f.LicenseInfoInFile, lic)
+				f.LicenseInfoInFiles = append(f.LicenseInfoInFiles, lic)
 			}
-			sort.Strings(f.LicenseInfoInFile)
+			sort.Strings(f.LicenseInfoInFiles)
 			// avoid adding parens and joining for single-ID items
 			if len(licsParens) == 1 {
 				f.LicenseConcluded = ids[0]

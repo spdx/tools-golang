@@ -13,19 +13,19 @@ import (
 func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
 	pkg := &spdx.Package2_1{
 		FilesAnalyzed: true,
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID("File0"):  &spdx.File2_1{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			spdx.ElementID("File1"):  &spdx.File2_1{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File2"):  &spdx.File2_1{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			spdx.ElementID("File3"):  &spdx.File2_1{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			spdx.ElementID("File4"):  &spdx.File2_1{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File5"):  &spdx.File2_1{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File6"):  &spdx.File2_1{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File7"):  &spdx.File2_1{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File8"):  &spdx.File2_1{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			spdx.ElementID("File9"):  &spdx.File2_1{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File10"): &spdx.File2_1{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File11"): &spdx.File2_1{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
+		Files: []*spdx.File2_1{
+			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
 		},
 	}
 
@@ -71,19 +71,19 @@ func Test2_1ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
 func Test2_1CanGetCountsOfLicenses(t *testing.T) {
 	pkg := &spdx.Package2_1{
 		FilesAnalyzed: true,
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID("File0"):  &spdx.File2_1{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			spdx.ElementID("File1"):  &spdx.File2_1{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File2"):  &spdx.File2_1{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			spdx.ElementID("File3"):  &spdx.File2_1{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			spdx.ElementID("File4"):  &spdx.File2_1{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File5"):  &spdx.File2_1{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File6"):  &spdx.File2_1{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File7"):  &spdx.File2_1{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File8"):  &spdx.File2_1{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			spdx.ElementID("File9"):  &spdx.File2_1{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File10"): &spdx.File2_1{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File11"): &spdx.File2_1{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
+		Files: []*spdx.File2_1{
+			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
 		},
 	}
 
@@ -137,19 +137,19 @@ func Test2_1NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
 func Test2_2ReporterCanMakeReportFromPackage(t *testing.T) {
 	pkg := &spdx.Package2_2{
 		FilesAnalyzed: true,
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID("File0"):  &spdx.File2_2{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			spdx.ElementID("File1"):  &spdx.File2_2{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File2"):  &spdx.File2_2{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			spdx.ElementID("File3"):  &spdx.File2_2{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			spdx.ElementID("File4"):  &spdx.File2_2{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File5"):  &spdx.File2_2{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File6"):  &spdx.File2_2{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File7"):  &spdx.File2_2{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File8"):  &spdx.File2_2{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			spdx.ElementID("File9"):  &spdx.File2_2{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File10"): &spdx.File2_2{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File11"): &spdx.File2_2{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
+		Files: []*spdx.File2_2{
+			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
 		},
 	}
 
@@ -195,19 +195,19 @@ func Test2_2ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
 func Test2_2CanGetCountsOfLicenses(t *testing.T) {
 	pkg := &spdx.Package2_2{
 		FilesAnalyzed: true,
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID("File0"):  &spdx.File2_2{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			spdx.ElementID("File1"):  &spdx.File2_2{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File2"):  &spdx.File2_2{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			spdx.ElementID("File3"):  &spdx.File2_2{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			spdx.ElementID("File4"):  &spdx.File2_2{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File5"):  &spdx.File2_2{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			spdx.ElementID("File6"):  &spdx.File2_2{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File7"):  &spdx.File2_2{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File8"):  &spdx.File2_2{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			spdx.ElementID("File9"):  &spdx.File2_2{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File10"): &spdx.File2_2{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			spdx.ElementID("File11"): &spdx.File2_2{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
+		Files: []*spdx.File2_2{
+			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
+			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
+			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
+			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
 		},
 	}
 

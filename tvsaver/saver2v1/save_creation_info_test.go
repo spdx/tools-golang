@@ -12,53 +12,22 @@ import (
 // ===== Creation Info section Saver tests =====
 func TestSaver2_1CISavesText(t *testing.T) {
 	ci := &spdx.CreationInfo2_1{
-		SPDXVersion:       "SPDX-2.1",
-		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
-		DocumentName:      "spdx-go-0.0.1.abcdef",
-		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
-		ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_1{
-			"spdx-go-0.0.1a": spdx.ExternalDocumentRef2_1{
-				DocumentRefID: "spdx-go-0.0.1a",
-				URI:           "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1a.cdefab.whatever",
-				Alg:           "SHA1",
-				Checksum:      "0123456701234567012345670123456701234567",
-			},
-			"time-1.2.3": spdx.ExternalDocumentRef2_1{
-				DocumentRefID: "time-1.2.3",
-				URI:           "https://github.com/swinslow/spdx-docs/time/time-1.2.3.cdefab.whatever",
-				Alg:           "SHA1",
-				Checksum:      "0123456701234567012345670123456701234568",
-			},
-		},
 		LicenseListVersion: "2.0",
-		CreatorPersons: []string{
-			"John Doe",
-			"Jane Doe (janedoe@example.com)",
+		Creators: []spdx.Creator{
+			{Creator: "John Doe", CreatorType: "Person"},
+			{Creator: "Jane Doe (janedoe@example.com)", CreatorType: "Person"},
+			{Creator: "John Doe, Inc.", CreatorType: "Organization"},
+			{Creator: "Jane Doe LLC", CreatorType: "Organization"},
+			{Creator: "magictool1-1.0", CreatorType: "Tool"},
+			{Creator: "magictool2-1.0", CreatorType: "Tool"},
+			{Creator: "magictool3-1.0", CreatorType: "Tool"},
 		},
-		CreatorOrganizations: []string{
-			"John Doe, Inc.",
-			"Jane Doe LLC",
-		},
-		CreatorTools: []string{
-			"magictool1-1.0",
-			"magictool2-1.0",
-			"magictool3-1.0",
-		},
-		Created:         "2018-10-10T06:20:00Z",
-		CreatorComment:  "this is a creator comment",
-		DocumentComment: "this is a document comment",
+		Created:        "2018-10-10T06:20:00Z",
+		CreatorComment: "this is a creator comment",
 	}
 
 	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: SPDXRef-DOCUMENT
-DocumentName: spdx-go-0.0.1.abcdef
-DocumentNamespace: https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever
-ExternalDocumentRef: DocumentRef-spdx-go-0.0.1a https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1a.cdefab.whatever SHA1:0123456701234567012345670123456701234567
-ExternalDocumentRef: DocumentRef-time-1.2.3 https://github.com/swinslow/spdx-docs/time/time-1.2.3.cdefab.whatever SHA1:0123456701234567012345670123456701234568
-LicenseListVersion: 2.0
+	want := bytes.NewBufferString(`LicenseListVersion: 2.0
 Creator: Person: John Doe
 Creator: Person: Jane Doe (janedoe@example.com)
 Creator: Organization: John Doe, Inc.
@@ -68,7 +37,6 @@ Creator: Tool: magictool2-1.0
 Creator: Tool: magictool3-1.0
 Created: 2018-10-10T06:20:00Z
 CreatorComment: this is a creator comment
-DocumentComment: this is a document comment
 
 `)
 
@@ -89,24 +57,14 @@ DocumentComment: this is a document comment
 func TestSaver2_1CIOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	// --- need at least one creator; do first for Persons ---
 	ci1 := &spdx.CreationInfo2_1{
-		SPDXVersion:       "SPDX-2.1",
-		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
-		DocumentName:      "spdx-go-0.0.1.abcdef",
-		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
-		CreatorPersons: []string{
-			"John Doe",
+		Creators: []spdx.Creator{
+			{Creator: "John Doe", CreatorType: "Person"},
 		},
 		Created: "2018-10-10T06:20:00Z",
 	}
 
 	// what we want to get, as a buffer of bytes
-	want1 := bytes.NewBufferString(`SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: SPDXRef-DOCUMENT
-DocumentName: spdx-go-0.0.1.abcdef
-DocumentNamespace: https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever
-Creator: Person: John Doe
+	want1 := bytes.NewBufferString(`Creator: Person: John Doe
 Created: 2018-10-10T06:20:00Z
 
 `)
@@ -126,24 +84,14 @@ Created: 2018-10-10T06:20:00Z
 
 	// --- need at least one creator; now switch to organization ---
 	ci2 := &spdx.CreationInfo2_1{
-		SPDXVersion:       "SPDX-2.1",
-		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
-		DocumentName:      "spdx-go-0.0.1.abcdef",
-		DocumentNamespace: "https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever",
-		CreatorOrganizations: []string{
-			"John Doe, Inc.",
+		Creators: []spdx.Creator{
+			{Creator: "John Doe, Inc.", CreatorType: "Organization"},
 		},
 		Created: "2018-10-10T06:20:00Z",
 	}
 
 	// what we want to get, as a buffer of bytes
-	want2 := bytes.NewBufferString(`SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: SPDXRef-DOCUMENT
-DocumentName: spdx-go-0.0.1.abcdef
-DocumentNamespace: https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever
-Creator: Organization: John Doe, Inc.
+	want2 := bytes.NewBufferString(`Creator: Organization: John Doe, Inc.
 Created: 2018-10-10T06:20:00Z
 
 `)

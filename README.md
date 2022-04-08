@@ -26,8 +26,7 @@ tools-golang provides the following packages:
 * *tvloader* - tag-value document loader
 * *tvsaver* - tag-value document saver
 * *rdfloader* - RDF document loader
-* *jsonloader* - JSON document loader
-* *jsonsaver* - JSON document saver
+* *json* - JSON document parser and writer
 * *builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
 * *licensediff* - compares concluded licenses between files in two packages

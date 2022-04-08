@@ -3,7 +3,6 @@
 package builder2v2
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -17,23 +16,18 @@ import (
 //   - creatorType: one of Person, Organization or Tool
 //   - creator: creator string
 //   - testValues: for testing only; call with nil when using in production
-func BuildCreationInfoSection2_2(packageName string, code string, namespacePrefix string, creatorType string, creator string, testValues map[string]string) (*spdx.CreationInfo2_2, error) {
+func BuildCreationInfoSection2_2(creatorType string, creator string, testValues map[string]string) (*spdx.CreationInfo2_2, error) {
 	// build creator slices
-	cPersons := []string{}
-	cOrganizations := []string{}
-	cTools := []string{}
-	// add builder as a tool
-	cTools = append(cTools, "github.com/spdx/tools-golang/builder")
-
-	switch creatorType {
-	case "Person":
-		cPersons = append(cPersons, creator)
-	case "Organization":
-		cOrganizations = append(cOrganizations, creator)
-	case "Tool":
-		cTools = append(cTools, creator)
-	default:
-		cPersons = append(cPersons, creator)
+	creators := []spdx.Creator{
+		// add builder as a tool
+		{
+			Creator:     "github.com/spdx/tools-golang/builder",
+			CreatorType: "Tool",
+		},
+		{
+			Creator:     creator,
+			CreatorType: creatorType,
+		},
 	}
 
 	// use test Created time if passing test values
@@ -45,15 +39,8 @@ func BuildCreationInfoSection2_2(packageName string, code string, namespacePrefi
 	}
 
 	ci := &spdx.CreationInfo2_2{
-		SPDXVersion:          "SPDX-2.2",
-		DataLicense:          "CC0-1.0",
-		SPDXIdentifier:       spdx.ElementID("DOCUMENT"),
-		DocumentName:         packageName,
-		DocumentNamespace:    fmt.Sprintf("%s%s-%s", namespacePrefix, packageName, code),
-		CreatorPersons:       cPersons,
-		CreatorOrganizations: cOrganizations,
-		CreatorTools:         cTools,
-		Created:              created,
+		Creators: creators,
+		Created:  created,
 	}
 	return ci, nil
 }

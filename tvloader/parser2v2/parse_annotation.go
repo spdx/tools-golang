@@ -18,8 +18,8 @@ func (parser *tvParser2_2) parsePairForAnnotation2_2(tag string, value string) e
 			return err
 		}
 		if subkey == "Person" || subkey == "Organization" || subkey == "Tool" {
-			parser.ann.AnnotatorType = subkey
-			parser.ann.Annotator = subvalue
+			parser.ann.Annotator.AnnotatorType = subkey
+			parser.ann.Annotator.Annotator = subvalue
 			return nil
 		}
 		return fmt.Errorf("unrecognized Annotator type %v", subkey)

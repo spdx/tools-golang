@@ -24,8 +24,8 @@ func TestNewParser2_2(t *testing.T) {
 	if parser.doc.Packages == nil {
 		t.Errorf("doc.Packages should've been initialised, got %v", parser.doc.Packages)
 	}
-	if parser.doc.UnpackagedFiles == nil {
-		t.Errorf("doc.UnpackagedFiles should've been initialised, got %v", parser.doc.UnpackagedFiles)
+	if parser.doc.Files == nil {
+		t.Errorf("doc.Files should've been initialised, got %v", parser.doc.Files)
 	}
 }
 

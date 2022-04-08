@@ -5,6 +5,7 @@
 package builder
 
 import (
+	"fmt"
 	"github.com/spdx/tools-golang/builder/builder2v1"
 	"github.com/spdx/tools-golang/builder/builder2v2"
 	"github.com/spdx/tools-golang/spdx"
@@ -55,7 +56,7 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 		return nil, err
 	}
 
-	ci, err := builder2v1.BuildCreationInfoSection2_1(packageName, pkg.PackageVerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
+	ci, err := builder2v1.BuildCreationInfoSection2_1(config.CreatorType, config.Creator, config.TestValues)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +67,14 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 	}
 
 	doc := &spdx.Document2_1{
-		CreationInfo:  ci,
-		Packages:      map[spdx.ElementID]*spdx.Package2_1{pkg.PackageSPDXIdentifier: pkg},
-		Relationships: []*spdx.Relationship2_1{rln},
+		SPDXVersion:       "SPDX-2.1",
+		DataLicense:       "CC0-1.0",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
+		DocumentName:      packageName,
+		DocumentNamespace: fmt.Sprintf("%s%s-%s", config.NamespacePrefix, packageName, pkg.PackageVerificationCode),
+		CreationInfo:      ci,
+		Packages:          []*spdx.Package2_1{pkg},
+		Relationships:     []*spdx.Relationship2_1{rln},
 	}
 
 	return doc, nil
@@ -119,7 +125,7 @@ func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Docu
 		return nil, err
 	}
 
-	ci, err := builder2v2.BuildCreationInfoSection2_2(packageName, pkg.PackageVerificationCode, config.NamespacePrefix, config.CreatorType, config.Creator, config.TestValues)
+	ci, err := builder2v2.BuildCreationInfoSection2_2(config.CreatorType, config.Creator, config.TestValues)
 	if err != nil {
 		return nil, err
 	}
@@ -130,9 +136,14 @@ func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Docu
 	}
 
 	doc := &spdx.Document2_2{
-		CreationInfo:  ci,
-		Packages:      map[spdx.ElementID]*spdx.Package2_2{pkg.PackageSPDXIdentifier: pkg},
-		Relationships: []*spdx.Relationship2_2{rln},
+		SPDXVersion:       "SPDX-2.2",
+		DataLicense:       "CC0-1.0",
+		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
+		DocumentName:      packageName,
+		DocumentNamespace: fmt.Sprintf("%s%s-%s", config.NamespacePrefix, packageName, pkg.PackageVerificationCode),
+		CreationInfo:      ci,
+		Packages:          []*spdx.Package2_2{pkg},
+		Relationships:     []*spdx.Relationship2_2{rln},
 	}
 
 	return doc, nil

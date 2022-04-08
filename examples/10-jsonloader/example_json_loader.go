@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spdx/tools-golang/jsonloader"
+	"github.com/spdx/tools-golang/json"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	defer r.Close()
 
 	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := jsonloader.Load2_2(r)
+	doc, err := spdx_json.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return
@@ -47,9 +47,9 @@ func main() {
 
 	fmt.Println(strings.Repeat("=", 80))
 	fmt.Println("Some Attributes of the Document:")
-	fmt.Printf("Document Name:         %s\n", doc.CreationInfo.DocumentName)
-	fmt.Printf("DataLicense:           %s\n", doc.CreationInfo.DataLicense)
-	fmt.Printf("Document Namespace:    %s\n", doc.CreationInfo.DocumentNamespace)
-	fmt.Printf("SPDX Version:          %s\n", doc.CreationInfo.SPDXVersion)
+	fmt.Printf("Document Name:         %s\n", doc.DocumentName)
+	fmt.Printf("DataLicense:           %s\n", doc.DataLicense)
+	fmt.Printf("Document Namespace:    %s\n", doc.DocumentNamespace)
+	fmt.Printf("SPDX Version:          %s\n", doc.SPDXVersion)
 	fmt.Println(strings.Repeat("=", 80))
 }

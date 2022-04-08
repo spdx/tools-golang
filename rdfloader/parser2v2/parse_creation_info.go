@@ -35,20 +35,22 @@ func (parser *rdfParser2_2) parseCreationInfoFromNode(ci *spdx.CreationInfo2_2, 
 	return nil
 }
 
-func setCreator(creator string, ci *spdx.CreationInfo2_2) error {
-	entityType, entity, err := ExtractSubs(creator, ":")
+func setCreator(creatorStr string, ci *spdx.CreationInfo2_2) error {
+	entityType, entity, err := ExtractSubs(creatorStr, ":")
 	if err != nil {
 		return fmt.Errorf("error setting creator of a creation info: %s", err)
 	}
+
+	creator := spdx.Creator{Creator: entity}
+
 	switch entityType {
-	case "Person":
-		ci.CreatorPersons = append(ci.CreatorPersons, entity)
-	case "Organization":
-		ci.CreatorOrganizations = append(ci.CreatorOrganizations, entity)
-	case "Tool":
-		ci.CreatorTools = append(ci.CreatorTools, entity)
+	case "Person", "Organization", "Tool":
+		creator.CreatorType = entityType
 	default:
 		return fmt.Errorf("unknown creatorType %v in a creation info", entityType)
 	}
+
+	ci.Creators = append(ci.Creators, creator)
+
 	return nil
 }
