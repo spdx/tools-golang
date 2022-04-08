@@ -62,13 +62,25 @@ func main() {
 		return
 	}
 
+	if len(pkgIDs) == 0 {
+		return
+	}
+
 	// it does, so we'll go through each one
-	for _, pkgID := range pkgIDs {
-		pkg, ok := doc.Packages[pkgID]
-		if !ok {
-			fmt.Printf("Package %s has described relationship but ID not found\n", string(pkgID))
+	for _, pkg := range doc.Packages {
+		var documentDescribesPackage bool
+		for _, describedPackageID := range pkgIDs {
+			if pkg.PackageSPDXIdentifier == describedPackageID {
+				documentDescribesPackage = true
+				break
+			}
+		}
+
+		if !documentDescribesPackage {
 			continue
 		}
+
+		pkgID := pkg.PackageSPDXIdentifier
 
 		// check whether the package had its files analyzed
 		if !pkg.FilesAnalyzed {
@@ -93,7 +105,7 @@ func main() {
 			// from a map. if we care about order, we should first pull the
 			// IDs into a slice, sort it, and then print the ordered files.
 			fmt.Printf("- File %d: %s\n", i, f.FileName)
-			fmt.Printf("    License from file: %v\n", f.LicenseInfoInFile)
+			fmt.Printf("    License from file: %v\n", f.LicenseInfoInFiles)
 			fmt.Printf("    License concluded: %v\n", f.LicenseConcluded)
 			i++
 			if i > 50 {

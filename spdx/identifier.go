@@ -2,6 +2,12 @@
 
 package spdx
 
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
 // ElementID represents the identifier string portion of an SPDX element
 // identifier. DocElementID should be used for any attributes which can
 // contain identifiers defined in a different SPDX document.
@@ -26,6 +32,60 @@ type DocElementID struct {
 	DocumentRefID string
 	ElementRefID  ElementID
 	SpecialID     string
+}
+
+// UnmarshalJSON takes a SPDX Identifier string parses it into a DocElementID struct.
+// This function is also used when unmarshalling YAML
+func (d *DocElementID) UnmarshalJSON(data []byte) error {
+	// SPDX identifier will simply be a string
+	idStr := string(data)
+	idStr = strings.Trim(idStr, "\"")
+
+	// handle special cases
+	if idStr == "NONE" || idStr == "NOASSERTION" {
+		d.SpecialID = idStr
+		return nil
+	}
+
+	var idFields []string
+	// handle DocumentRef- if present
+	if strings.HasPrefix(idStr, "DocumentRef-") {
+		// strip out the "DocumentRef-" so we can get the value
+		idFields = strings.SplitN(idStr, "DocumentRef-", 2)
+		idStr = idFields[1]
+
+		// an SPDXRef can appear after a DocumentRef, separated by a colon
+		idFields = strings.SplitN(idStr, ":", 2)
+		d.DocumentRefID = idFields[0]
+
+		if len(idFields) == 2 {
+			idStr = idFields[1]
+		} else {
+			return nil
+		}
+	}
+
+	// handle SPDXRef-
+	idFields = strings.SplitN(idStr, "SPDXRef-", 2)
+	if len(idFields) != 2 {
+		return fmt.Errorf("failed to parse SPDX Identifier '%s'", idStr)
+	}
+
+	d.ElementRefID = ElementID(idFields[1])
+
+	return nil
+}
+
+// MarshalJSON converts the receiver into a slice of bytes representing a DocElementID in string form.
+// This function is also used when marshalling to YAML
+func (d DocElementID) MarshalJSON() ([]byte, error) {
+	if d.DocumentRefID != "" && d.ElementRefID != "" {
+		return json.Marshal(fmt.Sprintf("DocumentRef-%s-SPDXRef-%s", d.DocumentRefID, d.ElementRefID))
+	} else if d.ElementRefID != "" {
+		return json.Marshal(fmt.Sprintf("SPDXRef-%s", d.ElementRefID))
+	}
+
+	return []byte{}, nil
 }
 
 // TODO: add equivalents for LicenseRef- identifiers

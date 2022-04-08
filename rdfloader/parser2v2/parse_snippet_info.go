@@ -31,7 +31,8 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 			if err != nil {
 				return nil, err
 			}
-			si.SnippetFromFileSPDXIdentifier, err = ExtractDocElementID(getLastPartOfURI(siTriple.Object.ID))
+			docElemID, err := ExtractDocElementID(getLastPartOfURI(siTriple.Object.ID))
+			si.SnippetFromFileSPDXIdentifier = docElemID.ElementRefID
 		case SPDX_RANGE:
 			// cardinality: min 1
 			err = parser.setSnippetRangeFromNode(siTriple.Object, si)
@@ -131,12 +132,17 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 		return fmt.Errorf("start and end range type doesn't match")
 	}
 
+	si.Ranges = []spdx.SnippetRange{{
+		StartPointer: spdx.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
+		EndPointer:   spdx.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
+	}}
+
 	if startRangeType == LINE_RANGE {
-		si.SnippetLineRangeStart = start
-		si.SnippetLineRangeEnd = end
+		si.Ranges[0].StartPointer.LineNumber = start
+		si.Ranges[0].EndPointer.LineNumber = end
 	} else {
-		si.SnippetByteRangeStart = start
-		si.SnippetByteRangeEnd = end
+		si.Ranges[0].StartPointer.Offset = start
+		si.Ranges[0].EndPointer.Offset = end
 	}
 	return nil
 }

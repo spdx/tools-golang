@@ -35,7 +35,7 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		dirRootLen = len(dirRoot)
 	}
 
-	files := map[spdx.ElementID]*spdx.File2_1{}
+	files := []*spdx.File2_1{}
 	fileNumber := 0
 	for _, fp := range filepaths {
 		newFilePatch := ""
@@ -48,7 +48,7 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		if err != nil {
 			return nil, err
 		}
-		files[newFile.FileSPDXIdentifier] = newFile
+		files = append(files, newFile)
 		fileNumber++
 	}
 	// get the verification code

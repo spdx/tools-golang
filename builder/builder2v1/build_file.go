@@ -32,11 +32,22 @@ func BuildFileSection2_1(filePath string, prefix string, fileNumber int) (*spdx.
 	f := &spdx.File2_1{
 		FileName:           filePath,
 		FileSPDXIdentifier: spdx.ElementID(i),
-		FileChecksumSHA1:   ssha1,
-		FileChecksumSHA256: ssha256,
-		FileChecksumMD5:    smd5,
+		Checksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     ssha1,
+			},
+			{
+				Algorithm: spdx.SHA256,
+				Value:     ssha256,
+			},
+			{
+				Algorithm: spdx.MD5,
+				Value:     smd5,
+			},
+		},
 		LicenseConcluded:   "NOASSERTION",
-		LicenseInfoInFile:  []string{"NOASSERTION"},
+		LicenseInfoInFiles: []string{"NOASSERTION"},
 		FileCopyrightText:  "NOASSERTION",
 	}
 

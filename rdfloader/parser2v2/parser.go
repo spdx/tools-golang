@@ -16,19 +16,18 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 		gordfParserObj:      gordfParserObj,
 		nodeStringToTriples: nodeToTriples,
 		doc: &spdx.Document2_2{
-			CreationInfo: &spdx.CreationInfo2_2{
-				ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
-			},
-			Packages:        map[spdx.ElementID]*spdx.Package2_2{},
-			UnpackagedFiles: map[spdx.ElementID]*spdx.File2_2{},
-			OtherLicenses:   []*spdx.OtherLicense2_2{},
-			Relationships:   []*spdx.Relationship2_2{},
-			Annotations:     []*spdx.Annotation2_2{},
-			Reviews:         []*spdx.Review2_2{},
+			ExternalDocumentReferences: []spdx.ExternalDocumentRef2_2{},
+			CreationInfo:               &spdx.CreationInfo2_2{},
+			Packages:                   []*spdx.Package2_2{},
+			Files:                      []*spdx.File2_2{},
+			OtherLicenses:              []*spdx.OtherLicense2_2{},
+			Relationships:              []*spdx.Relationship2_2{},
+			Annotations:                []*spdx.Annotation2_2{},
+			Reviews:                    []*spdx.Review2_2{},
 		},
 		files:            map[spdx.ElementID]*spdx.File2_2{},
 		assocWithPackage: map[spdx.ElementID]bool{},
-		cache: map[string]*nodeState{},
+		cache:            map[string]*nodeState{},
 	}
 	return &parser
 }
@@ -66,7 +65,7 @@ func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*spdx.Document2_2,
 			if err != nil {
 				return nil, fmt.Errorf("error parsing a snippet: %v", err)
 			}
-			err = parser.setSnippetToFileWithID(snippet, snippet.SnippetFromFileSPDXIdentifier.ElementRefID)
+			err = parser.setSnippetToFileWithID(snippet, snippet.SnippetFromFileSPDXIdentifier)
 			if err != nil {
 				return nil, err
 			}
@@ -81,7 +80,7 @@ func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*spdx.Document2_2,
 	// parsing packages and files sets the files to a files variable which is
 	// associated with the parser and not the document. following method is
 	// necessary to transfer the files which are not set in the packages to the
-	// UnpackagedFiles attribute of the document
+	// Files attribute of the document
 	// WARNING: do not relocate following function call. It must be at the end of the function
 	parser.setUnpackagedFiles()
 	return parser.doc, nil

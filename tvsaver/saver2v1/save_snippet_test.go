@@ -13,12 +13,18 @@ import (
 func TestSaver2_1SnippetSavesText(t *testing.T) {
 	sn := &spdx.Snippet2_1{
 		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
-		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLineRangeStart:         3,
-		SnippetLineRangeEnd:           8,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292").ElementRefID,
+		Ranges: []spdx.SnippetRange{
+			{
+				StartPointer: spdx.SnippetRangePointer{LineNumber: 3},
+				EndPointer:   spdx.SnippetRangePointer{LineNumber: 8},
+			},
+			{
+				StartPointer: spdx.SnippetRangePointer{Offset: 17},
+				EndPointer:   spdx.SnippetRangePointer{Offset: 209},
+			},
+		},
+		SnippetLicenseConcluded: "GPL-2.0-or-later",
 		LicenseInfoInSnippet: []string{
 			"GPL-2.0-or-later",
 			"MIT",
@@ -32,8 +38,8 @@ func TestSaver2_1SnippetSavesText(t *testing.T) {
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`SnippetSPDXID: SPDXRef-Snippet17
 SnippetFromFileSPDXID: SPDXRef-File292
-SnippetByteRange: 17:209
 SnippetLineRange: 3:8
+SnippetByteRange: 17:209
 SnippetLicenseConcluded: GPL-2.0-or-later
 LicenseInfoInSnippet: GPL-2.0-or-later
 LicenseInfoInSnippet: MIT
@@ -61,11 +67,15 @@ SnippetName: from John's program
 func TestSaver2_1SnippetOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	sn := &spdx.Snippet2_1{
 		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
-		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
-		SnippetCopyrightText:          "Copyright (c) John Doe 20x6",
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292").ElementRefID,
+		Ranges: []spdx.SnippetRange{
+			{
+				StartPointer: spdx.SnippetRangePointer{Offset: 17},
+				EndPointer:   spdx.SnippetRangePointer{Offset: 209},
+			},
+		},
+		SnippetLicenseConcluded: "GPL-2.0-or-later",
+		SnippetCopyrightText:    "Copyright (c) John Doe 20x6",
 	}
 
 	// what we want to get, as a buffer of bytes
@@ -94,10 +104,14 @@ SnippetCopyrightText: Copyright (c) John Doe 20x6
 func TestSaver2_1SnippetWrapsCopyrightMultiline(t *testing.T) {
 	sn := &spdx.Snippet2_1{
 		SnippetSPDXIdentifier:         spdx.ElementID("Snippet17"),
-		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292"),
-		SnippetByteRangeStart:         17,
-		SnippetByteRangeEnd:           209,
-		SnippetLicenseConcluded:       "GPL-2.0-or-later",
+		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File292").ElementRefID,
+		Ranges: []spdx.SnippetRange{
+			{
+				StartPointer: spdx.SnippetRangePointer{Offset: 17},
+				EndPointer:   spdx.SnippetRangePointer{Offset: 209},
+			},
+		},
+		SnippetLicenseConcluded: "GPL-2.0-or-later",
 		SnippetCopyrightText: `Copyright (c) John Doe 20x6
 Copyright (c) John Doe 20x6`,
 	}

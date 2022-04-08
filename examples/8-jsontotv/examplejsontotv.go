@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/jsonloader"
+	"github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/tvsaver"
 )
 
@@ -36,7 +36,7 @@ func main() {
 	defer r.Close()
 
 	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := jsonloader.Load2_2(r)
+	doc, err := spdx_json.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return

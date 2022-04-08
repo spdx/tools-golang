@@ -49,37 +49,37 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 		}
 		parser.file.FileSPDXIdentifier = eID
 		if parser.pkg == nil {
-			if parser.doc.UnpackagedFiles == nil {
-				parser.doc.UnpackagedFiles = map[spdx.ElementID]*spdx.File2_2{}
+			if parser.doc.Files == nil {
+				parser.doc.Files = []*spdx.File2_2{}
 			}
-			parser.doc.UnpackagedFiles[eID] = parser.file
+			parser.doc.Files = append(parser.doc.Files, parser.file)
 		} else {
 			if parser.pkg.Files == nil {
-				parser.pkg.Files = map[spdx.ElementID]*spdx.File2_2{}
+				parser.pkg.Files = []*spdx.File2_2{}
 			}
-			parser.pkg.Files[eID] = parser.file
+			parser.pkg.Files = append(parser.pkg.Files, parser.file)
 		}
 	case "FileType":
-		parser.file.FileType = append(parser.file.FileType, value)
+		parser.file.FileTypes = append(parser.file.FileTypes, value)
 	case "FileChecksum":
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
 			return err
 		}
-		if parser.file.FileChecksums == nil {
-			parser.file.FileChecksums = map[spdx.ChecksumAlgorithm]spdx.Checksum{}
+		if parser.file.Checksums == nil {
+			parser.file.Checksums = []spdx.Checksum{}
 		}
-		switch subkey {
+		switch spdx.ChecksumAlgorithm(subkey) {
 		case spdx.SHA1, spdx.SHA256, spdx.MD5:
 			algorithm := spdx.ChecksumAlgorithm(subkey)
-			parser.file.FileChecksums[algorithm] = spdx.Checksum{Algorithm: algorithm, Value: subvalue}
+			parser.file.Checksums = append(parser.file.Checksums, spdx.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
 	case "LicenseConcluded":
 		parser.file.LicenseConcluded = value
-	case "LicenseInfoInFile":
-		parser.file.LicenseInfoInFile = append(parser.file.LicenseInfoInFile, value)
+	case "LicenseInfoInFiles":
+		parser.file.LicenseInfoInFiles = append(parser.file.LicenseInfoInFiles, value)
 	case "LicenseComments":
 		parser.file.LicenseComments = value
 	case "FileCopyrightText":
@@ -102,8 +102,8 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 		parser.file.FileComment = value
 	case "FileNotice":
 		parser.file.FileNotice = value
-	case "FileContributor":
-		parser.file.FileContributor = append(parser.file.FileContributor, value)
+	case "FileContributors":
+		parser.file.FileContributors = append(parser.file.FileContributors, value)
 	case "FileDependency":
 		parser.file.FileDependencies = append(parser.file.FileDependencies, value)
 	case "FileAttributionText":

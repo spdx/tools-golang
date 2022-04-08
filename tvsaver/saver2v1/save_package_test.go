@@ -41,23 +41,36 @@ multi-line external ref comment`,
 	}
 
 	pkg := &spdx.Package2_1{
-		PackageName:                         "p1",
-		PackageSPDXIdentifier:               spdx.ElementID("p1"),
-		PackageVersion:                      "0.1.0",
-		PackageFileName:                     "p1-0.1.0-master.tar.gz",
-		PackageSupplierOrganization:         "John Doe, Inc.",
-		PackageOriginatorPerson:             "John Doe",
-		PackageDownloadLocation:             "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                       true,
-		IsFilesAnalyzedTagPresent:           true,
-		PackageVerificationCode:             "0123456789abcdef0123456789abcdef01234567",
-		PackageVerificationCodeExcludedFile: "p1-0.1.0.spdx",
-		PackageChecksumSHA1:                 "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:               "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:                  "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:                     "http://example.com/p1",
-		PackageSourceInfo:                   "this is a source comment",
-		PackageLicenseConcluded:             "GPL-2.0-or-later",
+		PackageName:               "p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageVersion:            "0.1.0",
+		PackageFileName:           "p1-0.1.0-master.tar.gz",
+		PackageSupplier:           spdx.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
+		PackageOriginator:         spdx.Originator{Originator: "John Doe", OriginatorType: "Person"},
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             true,
+		IsFilesAnalyzedTagPresent: true,
+		PackageVerificationCode: spdx.PackageVerificationCode{
+			Value:         "0123456789abcdef0123456789abcdef01234567",
+			ExcludedFiles: []string{"p1-0.1.0.spdx"},
+		},
+		PackageChecksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
+		PackageHomePage:         "http://example.com/p1",
+		PackageSourceInfo:       "this is a source comment",
+		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
@@ -131,22 +144,33 @@ func TestSaver2_1PackageSavesTextCombo2(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		PackageName:                   "p1",
-		PackageSPDXIdentifier:         spdx.ElementID("p1"),
-		PackageVersion:                "0.1.0",
-		PackageFileName:               "p1-0.1.0-master.tar.gz",
-		PackageSupplierNOASSERTION:    true,
-		PackageOriginatorOrganization: "John Doe, Inc.",
-		PackageDownloadLocation:       "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                 true,
-		IsFilesAnalyzedTagPresent:     false,
-		PackageVerificationCode:       "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:           "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:         "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:            "624c1abb3664f4b35547e7c73864ad24",
-		PackageHomePage:               "http://example.com/p1",
-		PackageSourceInfo:             "this is a source comment",
-		PackageLicenseConcluded:       "GPL-2.0-or-later",
+		PackageName:               "p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageVersion:            "0.1.0",
+		PackageFileName:           "p1-0.1.0-master.tar.gz",
+		PackageSupplier:           spdx.Supplier{Supplier: "NOASSERTION"},
+		PackageOriginator:         spdx.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             true,
+		IsFilesAnalyzedTagPresent: false,
+		PackageVerificationCode:   spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageChecksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
+		PackageHomePage:         "http://example.com/p1",
+		PackageSourceInfo:       "this is a source comment",
+		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
@@ -208,21 +232,32 @@ func TestSaver2_1PackageSavesTextCombo3(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_1{
-		PackageName:                  "p1",
-		PackageSPDXIdentifier:        spdx.ElementID("p1"),
-		PackageVersion:               "0.1.0",
-		PackageFileName:              "p1-0.1.0-master.tar.gz",
-		PackageSupplierPerson:        "John Doe",
-		PackageOriginatorNOASSERTION: true,
-		PackageDownloadLocation:      "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:                false,
-		IsFilesAnalyzedTagPresent:    true,
+		PackageName:               "p1",
+		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageVersion:            "0.1.0",
+		PackageFileName:           "p1-0.1.0-master.tar.gz",
+		PackageSupplier:           spdx.Supplier{Supplier: "John Doe", SupplierType: "Person"},
+		PackageOriginator:         spdx.Originator{Originator: "NOASSERTION"},
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:             false,
+		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output
 		// since FilesAnalyzed is false
-		PackageVerificationCode: "0123456789abcdef0123456789abcdef01234567",
-		PackageChecksumSHA1:     "85ed0817af83a24ad8da68c2b5094de69833983c",
-		PackageChecksumSHA256:   "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
-		PackageChecksumMD5:      "624c1abb3664f4b35547e7c73864ad24",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageChecksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+			{
+				Algorithm: spdx.SHA256,
+				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+			},
+			{
+				Algorithm: spdx.MD5,
+				Value:     "624c1abb3664f4b35547e7c73864ad24",
+			},
+		},
 		PackageHomePage:         "http://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -329,18 +364,28 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 	f1 := &spdx.File2_1{
 		FileName:           "/tmp/whatever1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983c",
+		Checksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
+			},
+		},
 		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile:  []string{"Apache-2.0"},
+		LicenseInfoInFiles: []string{"Apache-2.0"},
 		FileCopyrightText:  "Copyright (c) Jane Doe",
 	}
 
 	f2 := &spdx.File2_1{
 		FileName:           "/tmp/whatever2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		FileChecksumSHA1:   "85ed0817af83a24ad8da68c2b5094de69833983d",
+		Checksums: []spdx.Checksum{
+			{
+				Algorithm: spdx.SHA1,
+				Value:     "85ed0817af83a24ad8da68c2b5094de69833983d",
+			},
+		},
 		LicenseConcluded:   "MIT",
-		LicenseInfoInFile:  []string{"MIT"},
+		LicenseInfoInFiles: []string{"MIT"},
 		FileCopyrightText:  "Copyright (c) John Doe",
 	}
 
@@ -362,9 +407,9 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 		},
 		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
 		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID("File1231"): f1,
-			spdx.ElementID("File1232"): f2,
+		Files: []*spdx.File2_1{
+			f1,
+			f2,
 		},
 	}
 
@@ -381,14 +426,14 @@ FileName: /tmp/whatever1.txt
 SPDXID: SPDXRef-File1231
 FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 LicenseConcluded: Apache-2.0
-LicenseInfoInFile: Apache-2.0
+LicenseInfoInFiles: Apache-2.0
 FileCopyrightText: Copyright (c) Jane Doe
 
 FileName: /tmp/whatever2.txt
 SPDXID: SPDXRef-File1232
 FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
 LicenseConcluded: MIT
-LicenseInfoInFile: MIT
+LicenseInfoInFiles: MIT
 FileCopyrightText: Copyright (c) John Doe
 
 `)

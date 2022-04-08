@@ -120,7 +120,7 @@ func main() {
 	// all file hashes and the package verification code have been filled in
 	// appropriately by builder.
 	// And, all files with "SPDX-License-Identifier:" tags have had their
-	// licenses extracted into LicenseInfoInFile and LicenseConcluded for
+	// licenses extracted into LicenseInfoInFiles and LicenseConcluded for
 	// each file by idsearcher. The PackageLicenseInfoFromFiles field will
 	// also be filled in with all license identifiers.
 	fmt.Printf("Successfully created document and searched for IDs for package %s\n", packageName)

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package jsonloader
+package spdx_json
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 
 func TestLoad2_2(t *testing.T) {
 
-	file, err := os.Open("./parser2v2/jsonfiles/jsonloadertest.json")
+	file, err := os.Open("../testdata/jsonloadertest.json")
 	if err != nil {
 		panic(fmt.Errorf("error opening File: %s", err))
 	}
@@ -31,27 +31,26 @@ func TestLoad2_2(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "success test",
+			name: "happy path",
 			args: args{
 				content: file,
 			},
 			want: &spdx.Document2_2{
-				CreationInfo: &spdx.CreationInfo2_2{
-					DataLicense:                "CC0-1.0",
-					SPDXVersion:                "SPDX-2.2",
-					SPDXIdentifier:             "DOCUMENT",
-					DocumentName:               "SPDX-Tools-v2.0",
-					ExternalDocumentReferences: make(map[string]spdx.ExternalDocumentRef2_2),
-				},
+				DataLicense:                "CC0-1.0",
+				SPDXVersion:                "SPDX-2.2",
+				SPDXIdentifier:             "DOCUMENT",
+				DocumentName:               "SPDX-Tools-v2.0",
+				ExternalDocumentReferences: []spdx.ExternalDocumentRef2_2{},
+				CreationInfo:               &spdx.CreationInfo2_2{},
 			},
 			wantErr: false,
 		},
 		{
-			name: "fail - invalidjson ",
+			name: "invalid json",
 			args: args{
 				content: bytes.NewReader([]byte(`{"Hello":"HI",}`)),
 			},
-			want:    nil,
+			want:    &spdx.Document2_2{},
 			wantErr: true,
 		},
 	}

@@ -13,6 +13,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/spdx"
 	"os"
 
 	"github.com/spdx/tools-golang/licensediff"
@@ -85,13 +86,30 @@ func main() {
 	// go through the first set first, report if they aren't in the second set
 	for _, pkgID := range pkgIDsFirst {
 		fmt.Printf("================================\n")
-		p1, okFirst := docFirst.Packages[pkgID]
+
+		var p1, p2 *spdx.Package2_2
+		var okFirst, okSecond bool
+		for _, pkg := range docFirst.Packages {
+			if pkg.PackageSPDXIdentifier == pkgID {
+				okFirst = true
+				p1 = pkg
+				break
+			}
+		}
 		if !okFirst {
 			fmt.Printf("Package %s has described relationship in first document but ID not found\n", string(pkgID))
 			continue
 		}
+
 		fmt.Printf("Package %s (%s)\n", string(pkgID), p1.PackageName)
-		p2, okSecond := docSecond.Packages[pkgID]
+
+		for _, pkg := range docSecond.Packages {
+			if pkg.PackageSPDXIdentifier == pkgID {
+				okSecond = true
+				p2 = pkg
+				break
+			}
+		}
 		if !okSecond {
 			fmt.Printf("  Found in first document, not found in second\n")
 			continue
@@ -121,13 +139,27 @@ func main() {
 	// now report if there are any package IDs in the second set that aren't
 	// in the first
 	for _, pkgID := range pkgIDsSecond {
-		p2, okSecond := docSecond.Packages[pkgID]
+		var p2 *spdx.Package2_2
+		var okFirst, okSecond bool
+		for _, pkg := range docSecond.Packages {
+			if pkg.PackageSPDXIdentifier == pkgID {
+				okSecond = true
+				p2 = pkg
+				break
+			}
+		}
 		if !okSecond {
 			fmt.Printf("================================\n")
 			fmt.Printf("Package %s has described relationship in second document but ID not found\n", string(pkgID))
 			continue
 		}
-		_, okFirst := docFirst.Packages[pkgID]
+
+		for _, pkg := range docFirst.Packages {
+			if pkg.PackageSPDXIdentifier == pkgID {
+				okFirst = true
+				break
+			}
+		}
 		if !okFirst {
 			fmt.Printf("================================\n")
 			fmt.Printf("Package %s (%s)\n", string(pkgID), p2.PackageName)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -23,23 +24,19 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	if pkg.PackageFileName != "" {
 		fmt.Fprintf(w, "PackageFileName: %s\n", pkg.PackageFileName)
 	}
-	if pkg.PackageSupplierPerson != "" {
-		fmt.Fprintf(w, "PackageSupplier: Person: %s\n", pkg.PackageSupplierPerson)
+	if pkg.PackageSupplier.Supplier != "" {
+		if pkg.PackageSupplier.SupplierType == "" {
+			fmt.Fprintf(w, "PackageSupplier: %s\n", pkg.PackageSupplier.Supplier)
+		} else {
+			fmt.Fprintf(w, "PackageSupplier: %s: %s\n", pkg.PackageSupplier.SupplierType, pkg.PackageSupplier.Supplier)
+		}
 	}
-	if pkg.PackageSupplierOrganization != "" {
-		fmt.Fprintf(w, "PackageSupplier: Organization: %s\n", pkg.PackageSupplierOrganization)
-	}
-	if pkg.PackageSupplierNOASSERTION == true {
-		fmt.Fprintf(w, "PackageSupplier: NOASSERTION\n")
-	}
-	if pkg.PackageOriginatorPerson != "" {
-		fmt.Fprintf(w, "PackageOriginator: Person: %s\n", pkg.PackageOriginatorPerson)
-	}
-	if pkg.PackageOriginatorOrganization != "" {
-		fmt.Fprintf(w, "PackageOriginator: Organization: %s\n", pkg.PackageOriginatorOrganization)
-	}
-	if pkg.PackageOriginatorNOASSERTION == true {
-		fmt.Fprintf(w, "PackageOriginator: NOASSERTION\n")
+	if pkg.PackageOriginator.Originator != "" {
+		if pkg.PackageOriginator.OriginatorType == "" {
+			fmt.Fprintf(w, "PackageOriginator: %s\n", pkg.PackageOriginator.Originator)
+		} else {
+			fmt.Fprintf(w, "PackageOriginator: %s: %s\n", pkg.PackageOriginator.OriginatorType, pkg.PackageOriginator.Originator)
+		}
 	}
 	if pkg.PackageDownloadLocation != "" {
 		fmt.Fprintf(w, "PackageDownloadLocation: %s\n", pkg.PackageDownloadLocation)
@@ -51,22 +48,18 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	} else {
 		fmt.Fprintf(w, "FilesAnalyzed: false\n")
 	}
-	if pkg.PackageVerificationCode != "" && pkg.FilesAnalyzed == true {
-		if pkg.PackageVerificationCodeExcludedFile == "" {
-			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode)
+	if pkg.PackageVerificationCode.Value != "" && pkg.FilesAnalyzed == true {
+		if len(pkg.PackageVerificationCode.ExcludedFiles) == 0 {
+			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode.Value)
 		} else {
-			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes: %s)\n", pkg.PackageVerificationCode, pkg.PackageVerificationCodeExcludedFile)
+			fmt.Fprintf(w, "PackageVerificationCode: %s (excludes: %s)\n", pkg.PackageVerificationCode.Value, strings.Join(pkg.PackageVerificationCode.ExcludedFiles, ", "))
 		}
 	}
-	if pkg.PackageChecksums[spdx.SHA1].Value != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA1: %s\n", pkg.PackageChecksums[spdx.SHA1].Value)
+
+	for _, checksum := range pkg.PackageChecksums {
+		fmt.Fprintf(w, "PackageChecksum: %s: %s\n", checksum.Algorithm, checksum.Value)
 	}
-	if pkg.PackageChecksums[spdx.SHA256].Value != "" {
-		fmt.Fprintf(w, "PackageChecksum: SHA256: %s\n", pkg.PackageChecksums[spdx.SHA256].Value)
-	}
-	if pkg.PackageChecksums[spdx.MD5].Value != "" {
-		fmt.Fprintf(w, "PackageChecksum: MD5: %s\n", pkg.PackageChecksums[spdx.MD5].Value)
-	}
+
 	if pkg.PackageHomePage != "" {
 		fmt.Fprintf(w, "PackageHomePage: %s\n", pkg.PackageHomePage)
 	}
@@ -112,14 +105,10 @@ func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	fmt.Fprintf(w, "\n")
 
 	// also render any files for this package
-	// get slice of File identifiers so we can sort them
-	fileKeys := []string{}
-	for k := range pkg.Files {
-		fileKeys = append(fileKeys, string(k))
-	}
-	sort.Strings(fileKeys)
-	for _, fiID := range fileKeys {
-		fi := pkg.Files[spdx.ElementID(fiID)]
+	sort.Slice(pkg.Files, func(i, j int) bool {
+		return pkg.Files[i].FileSPDXIdentifier < pkg.Files[j].FileSPDXIdentifier
+	})
+	for _, fi := range pkg.Files {
 		renderFile2_2(fi, w)
 	}
 

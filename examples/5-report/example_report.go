@@ -54,13 +54,25 @@ func main() {
 		return
 	}
 
+	if len(pkgIDs) == 0 {
+		return
+	}
+
 	// it does, so we'll go through each one
-	for _, pkgID := range pkgIDs {
-		pkg, ok := doc.Packages[pkgID]
-		if !ok {
-			fmt.Printf("Package %s has described relationship but ID not found\n", string(pkgID))
+	for _, pkg := range doc.Packages {
+		var documentDescribesPackage bool
+		for _, describedPackageID := range pkgIDs {
+			if pkg.PackageSPDXIdentifier == describedPackageID {
+				documentDescribesPackage = true
+				break
+			}
+		}
+
+		if !documentDescribesPackage {
 			continue
 		}
+
+		pkgID := pkg.PackageSPDXIdentifier
 
 		// check whether the package had its files analyzed
 		if !pkg.FilesAnalyzed {

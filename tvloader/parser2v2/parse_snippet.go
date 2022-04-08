@@ -51,7 +51,7 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.snippet.SnippetFromFileSPDXIdentifier = deID
+		parser.snippet.SnippetFromFileSPDXIdentifier = deID.ElementRefID
 	case "SnippetByteRange":
 		byteStart, byteEnd, err := extractSubs(value)
 		if err != nil {
@@ -65,8 +65,12 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.snippet.SnippetByteRangeStart = bIntStart
-		parser.snippet.SnippetByteRangeEnd = bIntEnd
+
+		if parser.snippet.Ranges == nil {
+			parser.snippet.Ranges = []spdx.SnippetRange{}
+		}
+		byteRange := spdx.SnippetRange{StartPointer: spdx.SnippetRangePointer{Offset: bIntStart}, EndPointer: spdx.SnippetRangePointer{Offset: bIntEnd}}
+		parser.snippet.Ranges = append(parser.snippet.Ranges, byteRange)
 	case "SnippetLineRange":
 		lineStart, lineEnd, err := extractSubs(value)
 		if err != nil {
@@ -80,8 +84,12 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 		if err != nil {
 			return err
 		}
-		parser.snippet.SnippetLineRangeStart = lInttStart
-		parser.snippet.SnippetLineRangeEnd = lInttEnd
+
+		if parser.snippet.Ranges == nil {
+			parser.snippet.Ranges = []spdx.SnippetRange{}
+		}
+		lineRange := spdx.SnippetRange{StartPointer: spdx.SnippetRangePointer{LineNumber: lInttStart}, EndPointer: spdx.SnippetRangePointer{LineNumber: lInttEnd}}
+		parser.snippet.Ranges = append(parser.snippet.Ranges, lineRange)
 	case "SnippetLicenseConcluded":
 		parser.snippet.SnippetLicenseConcluded = value
 	case "LicenseInfoInSnippet":

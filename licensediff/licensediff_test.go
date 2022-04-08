@@ -15,10 +15,10 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f1 := &spdx.File2_1{
 		FileName:           "/project/file1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		Checksums:          []spdx.Checksum{{Value: "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile: []string{
-			"LicenseRef-We-will-ignore-LicenseInfoInFile",
+		LicenseInfoInFiles: []string{
+			"LicenseRef-We-will-ignore-LicenseInfoInFiles",
 		},
 		FileCopyrightText: "We'll ignore copyright values",
 	}
@@ -27,9 +27,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f2 := &spdx.File2_1{
 		FileName:           "/project/file2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		Checksums:          []spdx.Checksum{{Value: "066c5139bd9a43d15812ec1a1755b08ccf199824", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "GPL-2.0-or-later",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -39,9 +39,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f3 := &spdx.File2_1{
 		FileName:           "/project/file3.txt",
 		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		Checksums:          []spdx.Checksum{{Value: "bd0f4863b15fad2b79b35303af54fcb5baaf7c68", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "MPL-2.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -52,9 +52,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f4_1 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		Checksums:          []spdx.Checksum{{Value: "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -62,9 +62,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f4_2 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		Checksums:          []spdx.Checksum{{Value: "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Apache-2.0 AND MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -75,9 +75,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f5_1 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
+		Checksums:          []spdx.Checksum{{Value: "ba226db943bbbf455da77afab6f16dbab156d000", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -85,9 +85,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f5_2 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		Checksums:          []spdx.Checksum{{Value: "b6e0ec7d085c5699b46f6f8d425413702652874d", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -98,9 +98,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f6_1 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
+		Checksums:          []spdx.Checksum{{Value: "ba226db943bbbf455da77afab6f16dbab156d000", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "CC0-1.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -108,9 +108,9 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 	f6_2 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		Checksums:          []spdx.Checksum{{Value: "b6e0ec7d085c5699b46f6f8d425413702652874d", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Unlicense",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -124,19 +124,19 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+		Files: []*spdx.File2_1{
+			f1,
+			f2,
+			f4_1,
+			f5_1,
+			f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
@@ -146,19 +146,19 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+		Files: []*spdx.File2_1{
+			f1,
+			f3,
+			f4_2,
+			f5_2,
+			f6_2,
 		},
 	}
 
@@ -254,10 +254,10 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f1 := &spdx.File2_1{
 		FileName:           "/project/file1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksumSHA1:   "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		Checksums:          []spdx.Checksum{{Value: "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Apache-2.0",
-		LicenseInfoInFile: []string{
-			"LicenseRef-We-will-ignore-LicenseInfoInFile",
+		LicenseInfoInFiles: []string{
+			"LicenseRef-We-will-ignore-LicenseInfoInFiles",
 		},
 		FileCopyrightText: "We'll ignore copyright values",
 	}
@@ -266,9 +266,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f2 := &spdx.File2_1{
 		FileName:           "/project/file2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksumSHA1:   "066c5139bd9a43d15812ec1a1755b08ccf199824",
+		Checksums:          []spdx.Checksum{{Value: "066c5139bd9a43d15812ec1a1755b08ccf199824", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "GPL-2.0-or-later",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -278,9 +278,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f3 := &spdx.File2_1{
 		FileName:           "/project/file3.txt",
 		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksumSHA1:   "bd0f4863b15fad2b79b35303af54fcb5baaf7c68",
+		Checksums:          []spdx.Checksum{{Value: "bd0f4863b15fad2b79b35303af54fcb5baaf7c68", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "MPL-2.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -291,9 +291,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f4_1 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		Checksums:          []spdx.Checksum{{Value: "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -301,9 +301,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f4_2 := &spdx.File2_1{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksumSHA1:   "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5",
+		Checksums:          []spdx.Checksum{{Value: "bc417a575ceae93435bcb7bfd382ac28cbdaa8b5", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Apache-2.0 AND MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -314,9 +314,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f5_1 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
+		Checksums:          []spdx.Checksum{{Value: "ba226db943bbbf455da77afab6f16dbab156d000", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -324,9 +324,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f5_2 := &spdx.File2_1{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		Checksums:          []spdx.Checksum{{Value: "b6e0ec7d085c5699b46f6f8d425413702652874d", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -337,9 +337,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f6_1 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "ba226db943bbbf455da77afab6f16dbab156d000",
+		Checksums:          []spdx.Checksum{{Value: "ba226db943bbbf455da77afab6f16dbab156d000", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "CC0-1.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -347,9 +347,9 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f6_2 := &spdx.File2_1{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksumSHA1:   "b6e0ec7d085c5699b46f6f8d425413702652874d",
+		Checksums:          []spdx.Checksum{{Value: "b6e0ec7d085c5699b46f6f8d425413702652874d", Algorithm: spdx.SHA1}},
 		LicenseConcluded:   "Unlicense",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -363,19 +363,19 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+		Files: []*spdx.File2_1{
+			f1,
+			f2,
+			f4_1,
+			f5_1,
+			f6_1,
 		},
 	}
 	p2 := &spdx.Package2_1{
@@ -385,19 +385,19 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_1{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+		Files: []*spdx.File2_1{
+			f1,
+			f3,
+			f4_2,
+			f5_2,
+			f6_2,
 		},
 	}
 
@@ -501,15 +501,14 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f1 := &spdx.File2_2{
 		FileName:           "/project/file1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Apache-2.0",
-		LicenseInfoInFile: []string{
-			"LicenseRef-We-will-ignore-LicenseInfoInFile",
+		LicenseInfoInFiles: []string{
+			"LicenseRef-We-will-ignore-LicenseInfoInFiles",
 		},
 		FileCopyrightText: "We'll ignore copyright values",
 	}
@@ -518,14 +517,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f2 := &spdx.File2_2{
 		FileName:           "/project/file2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "GPL-2.0-or-later",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -535,14 +533,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f3 := &spdx.File2_2{
 		FileName:           "/project/file3.txt",
 		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "MPL-2.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -553,14 +550,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f4_1 := &spdx.File2_2{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -568,14 +564,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f4_2 := &spdx.File2_2{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Apache-2.0 AND MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -586,14 +581,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f5_1 := &spdx.File2_2{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -601,14 +595,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f5_2 := &spdx.File2_2{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -619,14 +612,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f6_1 := &spdx.File2_2{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "CC0-1.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -634,14 +626,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 	f6_2 := &spdx.File2_2{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Unlicense",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -655,19 +646,19 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+		Files: []*spdx.File2_2{
+			f1,
+			f2,
+			f4_1,
+			f5_1,
+			f6_1,
 		},
 	}
 	p2 := &spdx.Package2_2{
@@ -677,19 +668,19 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+		Files: []*spdx.File2_2{
+			f1,
+			f3,
+			f4_2,
+			f5_2,
+			f6_2,
 		},
 	}
 
@@ -785,15 +776,14 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f1 := &spdx.File2_2{
 		FileName:           "/project/file1.txt",
 		FileSPDXIdentifier: spdx.ElementID("File561"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Apache-2.0",
-		LicenseInfoInFile: []string{
-			"LicenseRef-We-will-ignore-LicenseInfoInFile",
+		LicenseInfoInFiles: []string{
+			"LicenseRef-We-will-ignore-LicenseInfoInFiles",
 		},
 		FileCopyrightText: "We'll ignore copyright values",
 	}
@@ -802,14 +792,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f2 := &spdx.File2_2{
 		FileName:           "/project/file2.txt",
 		FileSPDXIdentifier: spdx.ElementID("File562"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "GPL-2.0-or-later",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -819,14 +808,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f3 := &spdx.File2_2{
 		FileName:           "/project/file3.txt",
 		FileSPDXIdentifier: spdx.ElementID("File563"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "MPL-2.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -837,14 +825,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f4_1 := &spdx.File2_2{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -852,14 +839,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f4_2 := &spdx.File2_2{
 		FileName:           "/project/file4.txt",
 		FileSPDXIdentifier: spdx.ElementID("File564"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Apache-2.0 AND MIT",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -871,7 +857,7 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
 		LicenseConcluded:   "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -879,15 +865,14 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f5_2 := &spdx.File2_2{
 		FileName:           "/project/file5.txt",
 		FileSPDXIdentifier: spdx.ElementID("File565"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 
 		LicenseConcluded: "BSD-3-Clause",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -898,14 +883,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f6_1 := &spdx.File2_2{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "CC0-1.0",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -913,14 +897,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 	f6_2 := &spdx.File2_2{
 		FileName:           "/project/file6.txt",
 		FileSPDXIdentifier: spdx.ElementID("File566"),
-		FileChecksums: map[spdx.ChecksumAlgorithm]spdx.Checksum{
-			spdx.SHA1: spdx.Checksum{
-				Algorithm: spdx.SHA1,
-				Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
-			},
+		Checksums: []spdx.Checksum{{
+			Algorithm: spdx.SHA1,
+			Value:     "6c92dc8bc462b6889d9b1c0bc16c54d19a2cbdd3",
+		},
 		},
 		LicenseConcluded: "Unlicense",
-		LicenseInfoInFile: []string{
+		LicenseInfoInFiles: []string{
 			"NOASSERTION",
 		},
 		FileCopyrightText: "NOASSERTION",
@@ -934,19 +917,19 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "abc123abc123",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f2.FileSPDXIdentifier):   f2,
-			spdx.ElementID(f4_1.FileSPDXIdentifier): f4_1,
-			spdx.ElementID(f5_1.FileSPDXIdentifier): f5_1,
-			spdx.ElementID(f6_1.FileSPDXIdentifier): f6_1,
+		Files: []*spdx.File2_2{
+			f1,
+			f2,
+			f4_1,
+			f5_1,
+			f6_1,
 		},
 	}
 	p2 := &spdx.Package2_2{
@@ -956,19 +939,19 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		// fake the verification code for present purposes
-		PackageVerificationCode: "def456def456",
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{
 			"NOASSERTION",
 		},
 		PackageLicenseDeclared: "NOASSERTION",
 		PackageCopyrightText:   "NOASSERTION",
-		Files: map[spdx.ElementID]*spdx.File2_2{
-			spdx.ElementID(f1.FileSPDXIdentifier):   f1,
-			spdx.ElementID(f3.FileSPDXIdentifier):   f3,
-			spdx.ElementID(f4_2.FileSPDXIdentifier): f4_2,
-			spdx.ElementID(f5_2.FileSPDXIdentifier): f5_2,
-			spdx.ElementID(f6_2.FileSPDXIdentifier): f6_2,
+		Files: []*spdx.File2_2{
+			f1,
+			f3,
+			f4_2,
+			f5_2,
+			f6_2,
 		},
 	}
 

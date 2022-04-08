@@ -17,39 +17,11 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// create an SPDX Creation Info data struct if we don't have one already
 	if parser.doc.CreationInfo == nil {
-		parser.doc.CreationInfo = &spdx.CreationInfo2_2{
-			ExternalDocumentReferences: map[string]spdx.ExternalDocumentRef2_2{},
-		}
+		parser.doc.CreationInfo = &spdx.CreationInfo2_2{}
 	}
 
 	ci := parser.doc.CreationInfo
 	switch tag {
-	case "SPDXVersion":
-		ci.SPDXVersion = value
-	case "DataLicense":
-		ci.DataLicense = value
-	case "SPDXID":
-		eID, err := extractElementID(value)
-		if err != nil {
-			return err
-		}
-		ci.SPDXIdentifier = eID
-	case "DocumentName":
-		ci.DocumentName = value
-	case "DocumentNamespace":
-		ci.DocumentNamespace = value
-	case "ExternalDocumentRef":
-		documentRefID, uri, alg, checksum, err := extractExternalDocumentReference(value)
-		if err != nil {
-			return err
-		}
-		edr := spdx.ExternalDocumentRef2_2{
-			DocumentRefID: documentRefID,
-			URI:           uri,
-			Alg:           alg,
-			Checksum:      checksum,
-		}
-		ci.ExternalDocumentReferences[documentRefID] = edr
 	case "LicenseListVersion":
 		ci.LicenseListVersion = value
 	case "Creator":
@@ -57,22 +29,20 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 		if err != nil {
 			return err
 		}
+
+		creator := spdx.Creator{Creator: subvalue}
 		switch subkey {
-		case "Person":
-			ci.CreatorPersons = append(ci.CreatorPersons, subvalue)
-		case "Organization":
-			ci.CreatorOrganizations = append(ci.CreatorOrganizations, subvalue)
-		case "Tool":
-			ci.CreatorTools = append(ci.CreatorTools, subvalue)
+		case "Person", "Organization", "Tool":
+			creator.CreatorType = subkey
 		default:
 			return fmt.Errorf("unrecognized Creator type %v", subkey)
 		}
+
+		ci.Creators = append(ci.Creators, creator)
 	case "Created":
 		ci.Created = value
 	case "CreatorComment":
 		ci.CreatorComment = value
-	case "DocumentComment":
-		ci.DocumentComment = value
 
 	// tag for going on to package section
 	case "PackageName":
@@ -91,7 +61,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 		return parser.parsePairFromPackage2_2(tag, value)
 	// tag for going on to _unpackaged_ file section
 	case "FileName":
-		// leave pkg as nil, so that packages will be placed in UnpackagedFiles
+		// leave pkg as nil, so that packages will be placed in Files
 		parser.st = psFile2_2
 		parser.pkg = nil
 		return parser.parsePairFromFile2_2(tag, value)
