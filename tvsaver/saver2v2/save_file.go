@@ -17,22 +17,18 @@ func renderFile2_2(f *spdx.File2_2, w io.Writer) error {
 	if f.FileSPDXIdentifier != "" {
 		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.FileSPDXIdentifier))
 	}
-	for _, s := range f.FileType {
+	for _, s := range f.FileTypes {
 		fmt.Fprintf(w, "FileType: %s\n", s)
 	}
-	if f.FileChecksums[spdx.SHA1].Value != "" {
-		fmt.Fprintf(w, "FileChecksum: SHA1: %s\n", f.FileChecksums[spdx.SHA1].Value)
+
+	for _, checksum := range f.Checksums {
+		fmt.Fprintf(w, "FileChecksum: %s: %s\n", checksum.Algorithm, checksum.Value)
 	}
-	if f.FileChecksums[spdx.SHA256].Value != "" {
-		fmt.Fprintf(w, "FileChecksum: SHA256: %s\n", f.FileChecksums[spdx.SHA256].Value)
-	}
-	if f.FileChecksums[spdx.MD5].Value != "" {
-		fmt.Fprintf(w, "FileChecksum: MD5: %s\n", f.FileChecksums[spdx.MD5].Value)
-	}
+
 	if f.LicenseConcluded != "" {
 		fmt.Fprintf(w, "LicenseConcluded: %s\n", f.LicenseConcluded)
 	}
-	for _, s := range f.LicenseInfoInFile {
+	for _, s := range f.LicenseInfoInFiles {
 		fmt.Fprintf(w, "LicenseInfoInFile: %s\n", s)
 	}
 	if f.LicenseComments != "" {
@@ -56,7 +52,7 @@ func renderFile2_2(f *spdx.File2_2, w io.Writer) error {
 	if f.FileNotice != "" {
 		fmt.Fprintf(w, "FileNotice: %s\n", textify(f.FileNotice))
 	}
-	for _, s := range f.FileContributor {
+	for _, s := range f.FileContributors {
 		fmt.Fprintf(w, "FileContributor: %s\n", s)
 	}
 	for _, s := range f.FileAttributionTexts {

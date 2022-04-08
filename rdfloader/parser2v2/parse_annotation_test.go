@@ -31,10 +31,10 @@ func Test_setAnnotatorFromString(t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error for a valid annotator")
 	}
-	if ann.AnnotatorType != "Person" {
+	if ann.Annotator.AnnotatorType != "Person" {
 		t.Errorf("wrnog annotator type: expected: %s, found: %s", "Person", ann.Annotator)
 	}
-	if ann.Annotator != "Rishabh" {
+	if ann.Annotator.Annotator != "Rishabh" {
 		t.Errorf("wrong annotator: expected: %s, found: %s", "Rishabh", ann.Annotator)
 	}
 }
@@ -169,11 +169,11 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 		t.Errorf(`expected: "%s", found "%s"`, expectedDate, ann.AnnotationDate)
 	}
 	expectedAnnotator := "Jane Doe"
-	if expectedAnnotator != ann.Annotator {
+	if expectedAnnotator != ann.Annotator.Annotator {
 		t.Errorf(`expected: "%s", found "%s"`, expectedAnnotator, ann.Annotator)
 	}
-	if ann.AnnotatorType != "Person" {
-		t.Errorf(`expected: "%s", found "%s"`, "Person", ann.AnnotatorType)
+	if ann.Annotator.AnnotatorType != "Person" {
+		t.Errorf(`expected: "%s", found "%s"`, "Person", ann.Annotator.AnnotatorType)
 	}
 	expectedAnnotationType := "OTHER"
 	if expectedAnnotationType != ann.AnnotationType {

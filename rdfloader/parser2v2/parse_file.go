@@ -56,7 +56,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			// cardinality: min 0
 			fileType := ""
 			fileType, err = parser.getFileTypeFromUri(subTriple.Object.ID)
-			file.FileType = append(file.FileType, fileType)
+			file.FileTypes = append(file.FileTypes, fileType)
 		case SPDX_CHECKSUM: // 4.4
 			// cardinality: min 1
 			err = parser.setFileChecksumFromNode(file, subTriple.Object)
@@ -73,7 +73,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			if err != nil {
 				return nil, fmt.Errorf("error parsing licenseInfoInFile: %v", err)
 			}
-			file.LicenseInfoInFile = append(file.LicenseInfoInFile, lic.ToLicenseString())
+			file.LicenseInfoInFiles = append(file.LicenseInfoInFiles, lic.ToLicenseString())
 		case SPDX_LICENSE_COMMENTS: // 4.7
 			// cardinality: max 1
 			file.LicenseComments = subTriple.Object.ID
@@ -97,7 +97,7 @@ func (parser *rdfParser2_2) getFileFromNode(fileNode *gordfParser.Node) (file *s
 			file.FileNotice = getNoticeTextFromNode(subTriple.Object)
 		case SPDX_FILE_CONTRIBUTOR: // 4.14
 			// cardinality: min 0
-			file.FileContributor = append(file.FileContributor, subTriple.Object.ID)
+			file.FileContributors = append(file.FileContributors, subTriple.Object.ID)
 		case SPDX_FILE_DEPENDENCY:
 			// cardinality: min 0
 			newFile, err := parser.getFileFromNode(subTriple.Object)
@@ -130,13 +130,12 @@ func (parser *rdfParser2_2) setFileChecksumFromNode(file *spdx.File2_2, checksum
 	if err != nil {
 		return fmt.Errorf("error parsing checksumNode of a file: %v", err)
 	}
-	if file.FileChecksums == nil {
-		file.FileChecksums = map[spdx.ChecksumAlgorithm]spdx.Checksum{}
+	if file.Checksums == nil {
+		file.Checksums = []spdx.Checksum{}
 	}
 	switch checksumAlgorithm {
 	case spdx.MD5, spdx.SHA1, spdx.SHA256:
-		algorithm := spdx.ChecksumAlgorithm(checksumAlgorithm)
-		file.FileChecksums[algorithm] = spdx.Checksum{Algorithm: algorithm, Value: checksumValue}
+		file.Checksums = append(file.Checksums, spdx.Checksum{Algorithm: checksumAlgorithm, Value: checksumValue})
 	case "":
 		return fmt.Errorf("empty checksum algorithm and value")
 	default:
@@ -176,13 +175,13 @@ func (parser *rdfParser2_2) getFileTypeFromUri(uri string) (string, error) {
 	return strings.TrimPrefix(lastPart, "fileType_"), nil
 }
 
-// populates parser.doc.UnpackagedFiles by a list of files which are not
+// populates parser.doc.Files by a list of files which are not
 // associated with a package by the hasFile attribute
 // assumes: all the packages are already parsed.
 func (parser *rdfParser2_2) setUnpackagedFiles() {
 	for fileID := range parser.files {
 		if !parser.assocWithPackage[fileID] {
-			parser.doc.UnpackagedFiles[fileID] = parser.files[fileID]
+			parser.doc.Files = append(parser.doc.Files, parser.files[fileID])
 		}
 	}
 }

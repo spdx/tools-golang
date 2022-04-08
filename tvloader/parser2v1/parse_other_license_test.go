@@ -14,9 +14,9 @@ func TestParser2_1OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 	olname1 := "License 11"
 
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
 			LicenseIdentifier: olid1,
@@ -24,8 +24,8 @@ func TestParser2_1OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 		},
 	}
 	olic1 := parser.otherLic
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	// the Document's OtherLicenses should have this one only
@@ -90,13 +90,13 @@ func TestParser2_1OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 
 func TestParser2_1OLMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	err := parser.parsePair2_1("Reviewer", "Person: John Doe")
@@ -110,17 +110,17 @@ func TestParser2_1OLMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 
 func TestParser2_1OtherLicenseStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
 			LicenseIdentifier: "LicenseRef-whatever",
 			LicenseName:       "the whatever license",
 		},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	err := parser.parsePair2_1("Relationship", "SPDXRef-blah CONTAINS SPDXRef-blah-else")
@@ -152,17 +152,17 @@ func TestParser2_1OtherLicenseStaysAfterParsingRelationshipTags(t *testing.T) {
 
 func TestParser2_1OtherLicenseStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
 			LicenseIdentifier: "LicenseRef-whatever",
 			LicenseName:       "the whatever license",
 		},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	err := parser.parsePair2_1("Annotator", "Person: John Doe ()")
@@ -209,24 +209,24 @@ func TestParser2_1OtherLicenseStaysAfterParsingAnnotationTags(t *testing.T) {
 	if len(parser.doc.Annotations) != 1 {
 		t.Fatalf("expected doc.Annotations to have len 1, got %d", len(parser.doc.Annotations))
 	}
-	if parser.doc.Annotations[0].Annotator != "John Doe ()" {
+	if parser.doc.Annotations[0].Annotator.Annotator != "John Doe ()" {
 		t.Errorf("expected Annotator to be %s, got %s", "John Doe ()", parser.doc.Annotations[0].Annotator)
 	}
 }
 
 func TestParser2_1OLFailsAfterParsingOtherSectionTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 		otherLic: &spdx.OtherLicense2_1{
 			LicenseIdentifier: "LicenseRef-Lic11",
 			LicenseName:       "License 11",
 		},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	// can't go back to old sections
@@ -247,13 +247,13 @@ func TestParser2_1OLFailsAfterParsingOtherSectionTags(t *testing.T) {
 // ===== Other License data section tests =====
 func TestParser2_1CanParseOtherLicenseTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	// License Identifier
@@ -323,13 +323,13 @@ func TestParser2_1CanParseOtherLicenseTags(t *testing.T) {
 
 func TestParser2_1OLUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
-		doc:  &spdx.Document2_1{Packages: map[spdx.ElementID]*spdx.Package2_1{}},
+		doc:  &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
 		st:   psOtherLicense2_1,
-		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: map[spdx.ElementID]*spdx.File2_1{}},
+		pkg:  &spdx.Package2_1{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File2_1{}},
 		file: &spdx.File2_1{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
 	}
-	parser.doc.Packages["test"] = parser.pkg
-	parser.pkg.Files["f1"] = parser.file
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
 	err := parser.parsePairFromOtherLicense2_1("blah", "something")

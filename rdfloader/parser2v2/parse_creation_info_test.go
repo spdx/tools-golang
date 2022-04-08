@@ -29,12 +29,12 @@ func Test_setCreator(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid input: %v", err)
 	}
-	if len(ci.CreatorPersons) != 1 {
-		t.Errorf("creationInfo should've had 1 creatorPersons, found %d", len(ci.CreatorPersons))
+	if len(ci.Creators) != 1 {
+		t.Errorf("creationInfo should've had 1 creatorPersons, found %d", len(ci.Creators))
 	}
 	expectedPerson := "Jane Doe"
-	if ci.CreatorPersons[0] != expectedPerson {
-		t.Errorf("expected %s, found %s", expectedPerson, ci.CreatorPersons[0])
+	if ci.Creators[0].Creator != expectedPerson {
+		t.Errorf("expected %s, found %s", expectedPerson, ci.Creators[0])
 	}
 }
 
@@ -88,12 +88,12 @@ func Test_rdfParser2_2_parseCreationInfoFromNode(t *testing.T) {
 	if ci.LicenseListVersion != "2.6" {
 		t.Errorf(`expected %s, found %s`, "2.6", ci.LicenseListVersion)
 	}
-	n := len(ci.CreatorPersons)
+	n := len(ci.Creators)
 	if n != 1 {
 		t.Errorf("expected 1 creatorPersons, found %d", n)
 	}
-	if ci.CreatorPersons[0] != "fossy" {
-		t.Errorf("expected %s, found %s", "fossy", ci.CreatorPersons[0])
+	if ci.Creators[0].Creator != "fossy" {
+		t.Errorf("expected %s, found %s", "fossy", ci.Creators[0].Creator)
 	}
 	expectedCreated := "2018-08-24T19:55:34Z"
 	if ci.Created != expectedCreated {

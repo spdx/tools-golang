@@ -59,8 +59,8 @@ func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) err
 		return err
 	}
 	if subkey == "Person" || subkey == "Organization" || subkey == "Tool" {
-		ann.AnnotatorType = subkey
-		ann.Annotator = subvalue
+		ann.Annotator.AnnotatorType = subkey
+		ann.Annotator.Annotator = subvalue
 		return nil
 	}
 	return fmt.Errorf("unrecognized Annotator type %v while parsing annotation", subkey)

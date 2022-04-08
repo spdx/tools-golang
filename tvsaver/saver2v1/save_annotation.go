@@ -10,8 +10,8 @@ import (
 )
 
 func renderAnnotation2_1(ann *spdx.Annotation2_1, w io.Writer) error {
-	if ann.Annotator != "" && ann.AnnotatorType != "" {
-		fmt.Fprintf(w, "Annotator: %s: %s\n", ann.AnnotatorType, ann.Annotator)
+	if ann.Annotator.Annotator != "" && ann.Annotator.AnnotatorType != "" {
+		fmt.Fprintf(w, "Annotator: %s: %s\n", ann.Annotator.AnnotatorType, ann.Annotator.Annotator)
 	}
 	if ann.AnnotationDate != "" {
 		fmt.Fprintf(w, "AnnotationDate: %s\n", ann.AnnotationDate)

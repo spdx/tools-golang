@@ -16,7 +16,7 @@ func ValidateDocument2_1(doc *spdx.Document2_1) error {
 		validElementIDs[docPackage.PackageSPDXIdentifier] = true
 	}
 
-	for _, unpackagedFile := range doc.UnpackagedFiles {
+	for _, unpackagedFile := range doc.Files {
 		validElementIDs[unpackagedFile.FileSPDXIdentifier] = true
 	}
 
@@ -46,7 +46,7 @@ func ValidateDocument2_2(doc *spdx.Document2_2) error {
 		validElementIDs[docPackage.PackageSPDXIdentifier] = true
 	}
 
-	for _, unpackagedFile := range doc.UnpackagedFiles {
+	for _, unpackagedFile := range doc.Files {
 		validElementIDs[unpackagedFile.FileSPDXIdentifier] = true
 	}
 

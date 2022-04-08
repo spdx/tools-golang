@@ -13,7 +13,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	packageName := "project1"
 	dirRoot := "../../testdata/project1/"
 
-	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
+	wantVerificationCode := spdx.PackageVerificationCode{Value: "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"}
 
 	pkg, err := BuildPackageSection2_2(packageName, dirRoot, nil)
 	if err != nil {
@@ -38,7 +38,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	if pkg.IsFilesAnalyzedTagPresent != true {
 		t.Errorf("expected %v, got %v", true, pkg.IsFilesAnalyzedTagPresent)
 	}
-	if pkg.PackageVerificationCode != wantVerificationCode {
+	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {
 		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
 	}
 	if pkg.PackageLicenseConcluded != "NOASSERTION" {
@@ -61,7 +61,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	if len(pkg.Files) != 5 {
 		t.Fatalf("expected %d, got %d", 5, len(pkg.Files))
 	}
-	fileEmpty := pkg.Files[spdx.ElementID("File0")]
+	fileEmpty := pkg.Files[0]
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -71,7 +71,7 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
 	}
-	for _, checksum := range fileEmpty.FileChecksums {
+	for _, checksum := range fileEmpty.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
@@ -90,11 +90,11 @@ func TestBuilder2_2CanBuildPackageSection(t *testing.T) {
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
-	if len(fileEmpty.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFile))
+	if len(fileEmpty.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFiles))
 	} else {
-		if fileEmpty.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFile[0])
+		if fileEmpty.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFiles[0])
 		}
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
@@ -125,31 +125,31 @@ func TestBuilder2_2CanIgnoreFiles(t *testing.T) {
 	}
 
 	want := "./dontscan.txt"
-	got := pkg.Files[spdx.ElementID("File0")].FileName
+	got := pkg.Files[0].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File1")].FileName
+	got = pkg.Files[1].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep.txt"
-	got = pkg.Files[spdx.ElementID("File2")].FileName
+	got = pkg.Files[2].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/dontscan.txt"
-	got = pkg.Files[spdx.ElementID("File3")].FileName
+	got = pkg.Files[3].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File4")].FileName
+	got = pkg.Files[4].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}

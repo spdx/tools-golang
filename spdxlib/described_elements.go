@@ -23,8 +23,8 @@ func GetDescribedPackageIDs2_1(doc *spdx.Document2_1) ([]spdx.ElementID, error) 
 	}
 	if len(doc.Packages) == 1 {
 		// get first (only) one and return its ID
-		for i := range doc.Packages {
-			return []spdx.ElementID{i}, nil
+		for _, pkg := range doc.Packages {
+			return []spdx.ElementID{pkg.PackageSPDXIdentifier}, nil
 		}
 	}
 
@@ -74,8 +74,8 @@ func GetDescribedPackageIDs2_2(doc *spdx.Document2_2) ([]spdx.ElementID, error) 
 	}
 	if len(doc.Packages) == 1 {
 		// get first (only) one and return its ID
-		for i := range doc.Packages {
-			return []spdx.ElementID{i}, nil
+		for _, pkg := range doc.Packages {
+			return []spdx.ElementID{pkg.PackageSPDXIdentifier}, nil
 		}
 	}
 

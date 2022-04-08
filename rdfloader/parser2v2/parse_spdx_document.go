@@ -18,8 +18,8 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 	if err != nil {
 		return err
 	}
-	ci.DocumentNamespace = baseUri             // 2.5
-	ci.SPDXIdentifier = spdx.ElementID(offset) // 2.3
+	parser.doc.DocumentNamespace = baseUri             // 2.5
+	parser.doc.SPDXIdentifier = spdx.ElementID(offset) // 2.3
 
 	// parse other associated triples.
 	for _, subTriple := range parser.nodeToTriples(spdxDocNode) {
@@ -29,17 +29,17 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 			continue
 		case SPDX_SPEC_VERSION: // 2.1: specVersion
 			// cardinality: exactly 1
-			ci.SPDXVersion = objectValue
+			parser.doc.SPDXVersion = objectValue
 		case SPDX_DATA_LICENSE: // 2.2: dataLicense
 			// cardinality: exactly 1
 			dataLicense, err := parser.getAnyLicenseFromNode(subTriple.Object)
 			if err != nil {
 				return err
 			}
-			ci.DataLicense = dataLicense.ToLicenseString()
+			parser.doc.DataLicense = dataLicense.ToLicenseString()
 		case SPDX_NAME: // 2.4: DocumentName
 			// cardinality: exactly 1
-			ci.DocumentName = objectValue
+			parser.doc.DocumentName = objectValue
 		case SPDX_EXTERNAL_DOCUMENT_REF: // 2.6: externalDocumentReferences
 			// cardinality: min 0
 			var extRef spdx.ExternalDocumentRef2_2
@@ -47,13 +47,13 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 			if err != nil {
 				return err
 			}
-			ci.ExternalDocumentReferences[extRef.DocumentRefID] = extRef
+			parser.doc.ExternalDocumentReferences = append(parser.doc.ExternalDocumentReferences, extRef)
 		case SPDX_CREATION_INFO: // 2.7 - 2.10:
 			// cardinality: exactly 1
 			err = parser.parseCreationInfoFromNode(ci, subTriple.Object)
 		case RDFS_COMMENT: // 2.11: Document Comment
 			// cardinality: max 1
-			ci.DocumentComment = objectValue
+			parser.doc.DocumentComment = objectValue
 		case SPDX_REVIEWED: // reviewed:
 			// cardinality: min 0
 			err = parser.setReviewFromNode(subTriple.Object)
@@ -64,7 +64,7 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 			if err != nil {
 				return err
 			}
-			parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
+			parser.doc.Packages = append(parser.doc.Packages, pkg)
 		case SPDX_HAS_EXTRACTED_LICENSING_INFO: // hasExtractedLicensingInfo
 			// cardinality: min 0
 			extractedLicensingInfo, err := parser.getExtractedLicensingInfoFromNode(subTriple.Object)
@@ -102,10 +102,12 @@ func (parser *rdfParser2_2) getExternalDocumentRefFromNode(node *gordfParser.Nod
 			edr.URI = triple.Object.ID
 		case SPDX_CHECKSUM:
 			// cardinality: exactly 1
-			edr.Alg, edr.Checksum, err = parser.getChecksumFromNode(triple.Object)
+			alg, checksum, err := parser.getChecksumFromNode(triple.Object)
 			if err != nil {
 				return edr, err
 			}
+			edr.Checksum.Value = checksum
+			edr.Checksum.Algorithm = alg
 		case RDF_TYPE:
 			continue
 		default:

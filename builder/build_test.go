@@ -21,7 +21,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 	config.TestValues["Created"] = "2018-10-19T04:38:00Z"
 
-	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
+	wantVerificationCode := spdx.PackageVerificationCode{Value: "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"}
 
 	doc, err := Build2_1("project1", dirRoot, config)
 	if err != nil {
@@ -35,33 +35,30 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if doc.CreationInfo == nil {
 		t.Fatalf("expected non-nil CreationInfo section, got nil")
 	}
-	if doc.CreationInfo.SPDXVersion != "SPDX-2.1" {
-		t.Errorf("expected %s, got %s", "SPDX-2.1", doc.CreationInfo.SPDXVersion)
+	if doc.SPDXVersion != "SPDX-2.1" {
+		t.Errorf("expected %s, got %s", "SPDX-2.1", doc.SPDXVersion)
 	}
-	if doc.CreationInfo.DataLicense != "CC0-1.0" {
-		t.Errorf("expected %s, got %s", "CC0-1.0", doc.CreationInfo.DataLicense)
+	if doc.DataLicense != "CC0-1.0" {
+		t.Errorf("expected %s, got %s", "CC0-1.0", doc.DataLicense)
 	}
-	if doc.CreationInfo.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
-		t.Errorf("expected %s, got %v", "DOCUMENT", doc.CreationInfo.SPDXIdentifier)
+	if doc.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
+		t.Errorf("expected %s, got %v", "DOCUMENT", doc.SPDXIdentifier)
 	}
-	if doc.CreationInfo.DocumentName != "project1" {
-		t.Errorf("expected %s, got %s", "project1", doc.CreationInfo.DocumentName)
+	if doc.DocumentName != "project1" {
+		t.Errorf("expected %s, got %s", "project1", doc.DocumentName)
 	}
 	wantNamespace := fmt.Sprintf("https://github.com/swinslow/spdx-docs/spdx-go/testdata-project1-%s", wantVerificationCode)
-	if doc.CreationInfo.DocumentNamespace != wantNamespace {
-		t.Errorf("expected %s, got %s", wantNamespace, doc.CreationInfo.DocumentNamespace)
+	if doc.DocumentNamespace != wantNamespace {
+		t.Errorf("expected %s, got %s", wantNamespace, doc.DocumentNamespace)
 	}
-	if len(doc.CreationInfo.CreatorPersons) != 1 {
-		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorPersons))
+	if len(doc.CreationInfo.Creators) != 2 {
+		t.Fatalf("expected %d, got %d", 2, len(doc.CreationInfo.Creators))
 	}
-	if doc.CreationInfo.CreatorPersons[0] != "John Doe" {
-		t.Errorf("expected %s, got %s", "John Doe", doc.CreationInfo.CreatorPersons[0])
+	if doc.CreationInfo.Creators[1].Creator != "John Doe" {
+		t.Errorf("expected %s, got %+v", "John Doe", doc.CreationInfo.Creators[1])
 	}
-	if len(doc.CreationInfo.CreatorTools) != 1 {
-		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorTools))
-	}
-	if doc.CreationInfo.CreatorTools[0] != "github.com/spdx/tools-golang/builder" {
-		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/builder", doc.CreationInfo.CreatorTools[0])
+	if doc.CreationInfo.Creators[0].Creator != "github.com/spdx/tools-golang/builder" {
+		t.Errorf("expected %s, got %+v", "github.com/spdx/tools-golang/builder", doc.CreationInfo.Creators[0])
 	}
 	if doc.CreationInfo.Created != "2018-10-19T04:38:00Z" {
 		t.Errorf("expected %s, got %s", "2018-10-19T04:38:00Z", doc.CreationInfo.Created)
@@ -74,7 +71,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if len(doc.Packages) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(doc.Packages))
 	}
-	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
@@ -90,7 +87,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
-	if pkg.PackageVerificationCode != wantVerificationCode {
+	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {
 		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
 	}
 	if pkg.PackageLicenseConcluded != "NOASSERTION" {
@@ -119,7 +116,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	// emptyfile, file1, file3, folder/file4, lastfile
 
 	// check emptyfile.testdata.txt
-	fileEmpty := pkg.Files[spdx.ElementID("File0")]
+	fileEmpty := pkg.Files[0]
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -129,23 +126,32 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
 	}
-	if fileEmpty.FileChecksumSHA1 != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
-		t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", fileEmpty.FileChecksumSHA1)
+
+	for _, checksum := range fileEmpty.Checksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
+				t.Errorf("expected %v, got %v", "da39a3ee5e6b4b0d3255bfef95601890afd80709", checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
+				t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != "d41d8cd98f00b204e9800998ecf8427e" {
+				t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", checksum.Value)
+			}
+		}
 	}
-	if fileEmpty.FileChecksumSHA256 != "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" {
-		t.Errorf("expected %v, got %v", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", fileEmpty.FileChecksumSHA256)
-	}
-	if fileEmpty.FileChecksumMD5 != "d41d8cd98f00b204e9800998ecf8427e" {
-		t.Errorf("expected %v, got %v", "d41d8cd98f00b204e9800998ecf8427e", fileEmpty.FileChecksumMD5)
-	}
+
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
-	if len(fileEmpty.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFile))
+	if len(fileEmpty.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFiles))
 	} else {
-		if fileEmpty.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFile[0])
+		if fileEmpty.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFiles[0])
 		}
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
@@ -153,7 +159,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check file1.testdata.txt
-	file1 := pkg.Files[spdx.ElementID("File1")]
+	file1 := pkg.Files[1]
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -163,23 +169,31 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
 		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
 	}
-	if file1.FileChecksumSHA1 != "024f870eb6323f532515f7a09d5646a97083b819" {
-		t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", file1.FileChecksumSHA1)
-	}
-	if file1.FileChecksumSHA256 != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
-		t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", file1.FileChecksumSHA256)
-	}
-	if file1.FileChecksumMD5 != "37c8208479dfe42d2bb29debd6e32d4a" {
-		t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", file1.FileChecksumMD5)
+
+	for _, checksum := range file1.Checksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "024f870eb6323f532515f7a09d5646a97083b819" {
+				t.Errorf("expected %v, got %v", "024f870eb6323f532515f7a09d5646a97083b819", checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf" {
+				t.Errorf("expected %v, got %v", "b14e44284ca477b4c0db34b15ca4c454b2947cce7883e22321cf2984050e15bf", checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != "37c8208479dfe42d2bb29debd6e32d4a" {
+				t.Errorf("expected %v, got %v", "37c8208479dfe42d2bb29debd6e32d4a", checksum.Value)
+			}
+		}
 	}
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFiles))
 	} else {
-		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		if file1.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFiles[0])
 		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {
@@ -187,7 +201,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check file3.testdata.txt
-	file3 := pkg.Files[spdx.ElementID("File2")]
+	file3 := pkg.Files[2]
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -197,23 +211,31 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
 		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
 	}
-	if file3.FileChecksumSHA1 != "a46114b70e163614f01c64adf44cdd438f158fce" {
-		t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", file3.FileChecksumSHA1)
-	}
-	if file3.FileChecksumSHA256 != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
-		t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", file3.FileChecksumSHA256)
-	}
-	if file3.FileChecksumMD5 != "3e02d3ab9c58eec6911dbba37570934f" {
-		t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", file3.FileChecksumMD5)
+
+	for _, checksum := range file3.Checksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "a46114b70e163614f01c64adf44cdd438f158fce" {
+				t.Errorf("expected %v, got %v", "a46114b70e163614f01c64adf44cdd438f158fce", checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4" {
+				t.Errorf("expected %v, got %v", "9fc181b9892720a15df1a1e561860318db40621bd4040ccdf18e110eb01d04b4", checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != "3e02d3ab9c58eec6911dbba37570934f" {
+				t.Errorf("expected %v, got %v", "3e02d3ab9c58eec6911dbba37570934f", checksum.Value)
+			}
+		}
 	}
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
-	if len(file3.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFile))
+	if len(file3.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFiles))
 	} else {
-		if file3.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFile[0])
+		if file3.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFiles[0])
 		}
 	}
 	if file3.FileCopyrightText != "NOASSERTION" {
@@ -221,7 +243,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check folder1/file4.testdata.txt
-	file4 := pkg.Files[spdx.ElementID("File3")]
+	file4 := pkg.Files[3]
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -231,23 +253,31 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
 		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
 	}
-	if file4.FileChecksumSHA1 != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
-		t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", file4.FileChecksumSHA1)
-	}
-	if file4.FileChecksumSHA256 != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
-		t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", file4.FileChecksumSHA256)
-	}
-	if file4.FileChecksumMD5 != "96e6a25d35df5b1c477710ef4d0c7210" {
-		t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", file4.FileChecksumMD5)
+
+	for _, checksum := range file4.Checksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
+				t.Errorf("expected %v, got %v", "e623d7d7d782a7c8323c4d436acee4afab34320f", checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59" {
+				t.Errorf("expected %v, got %v", "574fa42c5e0806c0f8906a44884166540206f021527729407cd5326838629c59", checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != "96e6a25d35df5b1c477710ef4d0c7210" {
+				t.Errorf("expected %v, got %v", "96e6a25d35df5b1c477710ef4d0c7210", checksum.Value)
+			}
+		}
 	}
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}
-	if len(file4.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFile))
+	if len(file4.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFiles))
 	} else {
-		if file4.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFile[0])
+		if file4.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFiles[0])
 		}
 	}
 	if file4.FileCopyrightText != "NOASSERTION" {
@@ -255,7 +285,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	}
 
 	// check lastfile.testdata.txt
-	lastfile := pkg.Files[spdx.ElementID("File4")]
+	lastfile := pkg.Files[4]
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -265,23 +295,31 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
 		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
 	}
-	if lastfile.FileChecksumSHA1 != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
-		t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", lastfile.FileChecksumSHA1)
-	}
-	if lastfile.FileChecksumSHA256 != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
-		t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", lastfile.FileChecksumSHA256)
-	}
-	if lastfile.FileChecksumMD5 != "f60baa793870d9085461ad6bbab50b7f" {
-		t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", lastfile.FileChecksumMD5)
+
+	for _, checksum := range lastfile.Checksums {
+		switch checksum.Algorithm {
+		case spdx.SHA1:
+			if checksum.Value != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
+				t.Errorf("expected %v, got %v", "26d6221d682d9ba59116f9753a701f34271c8ce1", checksum.Value)
+			}
+		case spdx.SHA256:
+			if checksum.Value != "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805" {
+				t.Errorf("expected %v, got %v", "0a4bdaf990e9b330ff72022dd78110ae98b60e08337cf2105b89856373416805", checksum.Value)
+			}
+		case spdx.MD5:
+			if checksum.Value != "f60baa793870d9085461ad6bbab50b7f" {
+				t.Errorf("expected %v, got %v", "f60baa793870d9085461ad6bbab50b7f", checksum.Value)
+			}
+		}
 	}
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
 	}
-	if len(lastfile.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFile))
+	if len(lastfile.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFiles))
 	} else {
-		if lastfile.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFile[0])
+		if lastfile.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFiles[0])
 		}
 	}
 	if lastfile.FileCopyrightText != "NOASSERTION" {
@@ -343,7 +381,7 @@ func TestBuild2_1CanIgnoreFiles(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
@@ -352,31 +390,31 @@ func TestBuild2_1CanIgnoreFiles(t *testing.T) {
 	}
 
 	want := "./dontscan.txt"
-	got := pkg.Files[spdx.ElementID("File0")].FileName
+	got := pkg.Files[0].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File1")].FileName
+	got = pkg.Files[1].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep.txt"
-	got = pkg.Files[spdx.ElementID("File2")].FileName
+	got = pkg.Files[2].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/dontscan.txt"
-	got = pkg.Files[spdx.ElementID("File3")].FileName
+	got = pkg.Files[3].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File4")].FileName
+	got = pkg.Files[4].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
@@ -394,7 +432,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	}
 	config.TestValues["Created"] = "2018-10-19T04:38:00Z"
 
-	wantVerificationCode := "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"
+	wantVerificationCode := spdx.PackageVerificationCode{Value: "fc9ac4a370af0a471c2e52af66d6b4cf4e2ba12b"}
 
 	doc, err := Build2_2("project1", dirRoot, config)
 	if err != nil {
@@ -408,33 +446,30 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if doc.CreationInfo == nil {
 		t.Fatalf("expected non-nil CreationInfo section, got nil")
 	}
-	if doc.CreationInfo.SPDXVersion != "SPDX-2.2" {
-		t.Errorf("expected %s, got %s", "SPDX-2.2", doc.CreationInfo.SPDXVersion)
+	if doc.SPDXVersion != "SPDX-2.2" {
+		t.Errorf("expected %s, got %s", "SPDX-2.2", doc.SPDXVersion)
 	}
-	if doc.CreationInfo.DataLicense != "CC0-1.0" {
-		t.Errorf("expected %s, got %s", "CC0-1.0", doc.CreationInfo.DataLicense)
+	if doc.DataLicense != "CC0-1.0" {
+		t.Errorf("expected %s, got %s", "CC0-1.0", doc.DataLicense)
 	}
-	if doc.CreationInfo.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
-		t.Errorf("expected %s, got %v", "DOCUMENT", doc.CreationInfo.SPDXIdentifier)
+	if doc.SPDXIdentifier != spdx.ElementID("DOCUMENT") {
+		t.Errorf("expected %s, got %v", "DOCUMENT", doc.SPDXIdentifier)
 	}
-	if doc.CreationInfo.DocumentName != "project1" {
-		t.Errorf("expected %s, got %s", "project1", doc.CreationInfo.DocumentName)
+	if doc.DocumentName != "project1" {
+		t.Errorf("expected %s, got %s", "project1", doc.DocumentName)
 	}
 	wantNamespace := fmt.Sprintf("https://github.com/swinslow/spdx-docs/spdx-go/testdata-project1-%s", wantVerificationCode)
-	if doc.CreationInfo.DocumentNamespace != wantNamespace {
-		t.Errorf("expected %s, got %s", wantNamespace, doc.CreationInfo.DocumentNamespace)
+	if doc.DocumentNamespace != wantNamespace {
+		t.Errorf("expected %s, got %s", wantNamespace, doc.DocumentNamespace)
 	}
-	if len(doc.CreationInfo.CreatorPersons) != 1 {
-		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorPersons))
+	if len(doc.CreationInfo.Creators) != 2 {
+		t.Fatalf("expected %d, got %d", 2, len(doc.CreationInfo.Creators))
 	}
-	if doc.CreationInfo.CreatorPersons[0] != "John Doe" {
-		t.Errorf("expected %s, got %s", "John Doe", doc.CreationInfo.CreatorPersons[0])
+	if doc.CreationInfo.Creators[1].Creator != "John Doe" {
+		t.Errorf("expected %s, got %+v", "John Doe", doc.CreationInfo.Creators[1])
 	}
-	if len(doc.CreationInfo.CreatorTools) != 1 {
-		t.Fatalf("expected %d, got %d", 1, len(doc.CreationInfo.CreatorTools))
-	}
-	if doc.CreationInfo.CreatorTools[0] != "github.com/spdx/tools-golang/builder" {
-		t.Errorf("expected %s, got %s", "github.com/spdx/tools-golang/builder", doc.CreationInfo.CreatorTools[0])
+	if doc.CreationInfo.Creators[0].Creator != "github.com/spdx/tools-golang/builder" {
+		t.Errorf("expected %s, got %+v", "github.com/spdx/tools-golang/builder", doc.CreationInfo.Creators[0])
 	}
 	if doc.CreationInfo.Created != "2018-10-19T04:38:00Z" {
 		t.Errorf("expected %s, got %s", "2018-10-19T04:38:00Z", doc.CreationInfo.Created)
@@ -447,7 +482,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if len(doc.Packages) != 1 {
 		t.Fatalf("expected %d, got %d", 1, len(doc.Packages))
 	}
-	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
@@ -463,7 +498,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
-	if pkg.PackageVerificationCode != wantVerificationCode {
+	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {
 		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)
 	}
 	if pkg.PackageLicenseConcluded != "NOASSERTION" {
@@ -492,7 +527,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	// emptyfile, file1, file3, folder/file4, lastfile
 
 	// check emptyfile.testdata.txt
-	fileEmpty := pkg.Files[spdx.ElementID("File0")]
+	fileEmpty := pkg.Files[0]
 	if fileEmpty == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -502,7 +537,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if fileEmpty.FileSPDXIdentifier != spdx.ElementID("File0") {
 		t.Errorf("expected %v, got %v", "File0", fileEmpty.FileSPDXIdentifier)
 	}
-	for _, checksum := range fileEmpty.FileChecksums {
+	for _, checksum := range fileEmpty.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "da39a3ee5e6b4b0d3255bfef95601890afd80709" {
@@ -521,11 +556,11 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if fileEmpty.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseConcluded)
 	}
-	if len(fileEmpty.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFile))
+	if len(fileEmpty.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(fileEmpty.LicenseInfoInFiles))
 	} else {
-		if fileEmpty.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFile[0])
+		if fileEmpty.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", fileEmpty.LicenseInfoInFiles[0])
 		}
 	}
 	if fileEmpty.FileCopyrightText != "NOASSERTION" {
@@ -533,7 +568,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	}
 
 	// check file1.testdata.txt
-	file1 := pkg.Files[spdx.ElementID("File1")]
+	file1 := pkg.Files[1]
 	if file1 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -543,7 +578,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file1.FileSPDXIdentifier != spdx.ElementID("File1") {
 		t.Errorf("expected %v, got %v", "File1", file1.FileSPDXIdentifier)
 	}
-	for _, checksum := range file1.FileChecksums {
+	for _, checksum := range file1.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "024f870eb6323f532515f7a09d5646a97083b819" {
@@ -562,11 +597,11 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file1.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseConcluded)
 	}
-	if len(file1.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFile))
+	if len(file1.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file1.LicenseInfoInFiles))
 	} else {
-		if file1.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFile[0])
+		if file1.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file1.LicenseInfoInFiles[0])
 		}
 	}
 	if file1.FileCopyrightText != "NOASSERTION" {
@@ -574,7 +609,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	}
 
 	// check file3.testdata.txt
-	file3 := pkg.Files[spdx.ElementID("File2")]
+	file3 := pkg.Files[2]
 	if file3 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -584,7 +619,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file3.FileSPDXIdentifier != spdx.ElementID("File2") {
 		t.Errorf("expected %v, got %v", "File2", file3.FileSPDXIdentifier)
 	}
-	for _, checksum := range file3.FileChecksums {
+	for _, checksum := range file3.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "a46114b70e163614f01c64adf44cdd438f158fce" {
@@ -603,11 +638,11 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file3.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseConcluded)
 	}
-	if len(file3.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFile))
+	if len(file3.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file3.LicenseInfoInFiles))
 	} else {
-		if file3.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFile[0])
+		if file3.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file3.LicenseInfoInFiles[0])
 		}
 	}
 	if file3.FileCopyrightText != "NOASSERTION" {
@@ -615,7 +650,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	}
 
 	// check folder1/file4.testdata.txt
-	file4 := pkg.Files[spdx.ElementID("File3")]
+	file4 := pkg.Files[3]
 	if file4 == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -625,7 +660,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file4.FileSPDXIdentifier != spdx.ElementID("File3") {
 		t.Errorf("expected %v, got %v", "File3", file4.FileSPDXIdentifier)
 	}
-	for _, checksum := range file4.FileChecksums {
+	for _, checksum := range file4.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "e623d7d7d782a7c8323c4d436acee4afab34320f" {
@@ -644,11 +679,11 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if file4.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseConcluded)
 	}
-	if len(file4.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFile))
+	if len(file4.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(file4.LicenseInfoInFiles))
 	} else {
-		if file4.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFile[0])
+		if file4.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", file4.LicenseInfoInFiles[0])
 		}
 	}
 	if file4.FileCopyrightText != "NOASSERTION" {
@@ -656,7 +691,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	}
 
 	// check lastfile.testdata.txt
-	lastfile := pkg.Files[spdx.ElementID("File4")]
+	lastfile := pkg.Files[4]
 	if lastfile == nil {
 		t.Fatalf("expected non-nil file, got nil")
 	}
@@ -666,7 +701,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if lastfile.FileSPDXIdentifier != spdx.ElementID("File4") {
 		t.Errorf("expected %v, got %v", "File4", lastfile.FileSPDXIdentifier)
 	}
-	for _, checksum := range lastfile.FileChecksums {
+	for _, checksum := range lastfile.Checksums {
 		switch checksum.Algorithm {
 		case spdx.SHA1:
 			if checksum.Value != "26d6221d682d9ba59116f9753a701f34271c8ce1" {
@@ -685,11 +720,11 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if lastfile.LicenseConcluded != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseConcluded)
 	}
-	if len(lastfile.LicenseInfoInFile) != 1 {
-		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFile))
+	if len(lastfile.LicenseInfoInFiles) != 1 {
+		t.Errorf("expected %v, got %v", 1, len(lastfile.LicenseInfoInFiles))
 	} else {
-		if lastfile.LicenseInfoInFile[0] != "NOASSERTION" {
-			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFile[0])
+		if lastfile.LicenseInfoInFiles[0] != "NOASSERTION" {
+			t.Errorf("expected %v, got %v", "NOASSERTION", lastfile.LicenseInfoInFiles[0])
 		}
 	}
 	if lastfile.FileCopyrightText != "NOASSERTION" {
@@ -751,7 +786,7 @@ func TestBuild2_2CanIgnoreFiles(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	pkg := doc.Packages[spdx.ElementID("Package-project1")]
+	pkg := doc.Packages[0]
 	if pkg == nil {
 		t.Fatalf("expected non-nil pkg, got nil")
 	}
@@ -760,31 +795,31 @@ func TestBuild2_2CanIgnoreFiles(t *testing.T) {
 	}
 
 	want := "./dontscan.txt"
-	got := pkg.Files[spdx.ElementID("File0")].FileName
+	got := pkg.Files[0].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File1")].FileName
+	got = pkg.Files[1].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./keep.txt"
-	got = pkg.Files[spdx.ElementID("File2")].FileName
+	got = pkg.Files[2].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/dontscan.txt"
-	got = pkg.Files[spdx.ElementID("File3")].FileName
+	got = pkg.Files[3].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}
 
 	want = "./subdir/keep/keep.txt"
-	got = pkg.Files[spdx.ElementID("File4")].FileName
+	got = pkg.Files[4].FileName
 	if want != got {
 		t.Errorf("expected %v, got %v", want, got)
 	}

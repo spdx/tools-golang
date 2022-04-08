@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/jsonsaver"
+	"github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/tvloader"
 )
 
@@ -57,7 +57,7 @@ func main() {
 	defer w.Close()
 
 	// try to save the document to disk as an SPDX json file, version 2.2
-	err = jsonsaver.Save2_2(doc, w)
+	err = spdx_json.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return
