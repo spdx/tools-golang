@@ -75,7 +75,8 @@ func ProcessPackageInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 			case common.PackageVerificationCode:
 				newPackage.PackageVerificationCode.Value = value
 			case common.PackageVerificationCodeExcludedFiles:
-				newPackage.PackageVerificationCode.ExcludedFiles = append(newPackage.PackageVerificationCode.ExcludedFiles, value)
+				excludedFiles := strings.Split(value, "\n")
+				newPackage.PackageVerificationCode.ExcludedFiles = append(newPackage.PackageVerificationCode.ExcludedFiles, excludedFiles...)
 			case common.PackageSourceInfo:
 				newPackage.PackageSourceInfo = value
 			case common.PackageLicenseDeclared:

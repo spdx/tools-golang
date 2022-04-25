@@ -7,7 +7,6 @@ const (
 	SheetNameFileInfo             = "Per File Info"
 	SheetNameRelationships        = "Relationships"
 	SheetNameAnnotations          = "Annotations"
-	SheetNameReviewers            = "Reviewers"
 	SheetNameSnippets             = "Snippets"
 	SheetNameExternalRefs         = "External Refs"
 )

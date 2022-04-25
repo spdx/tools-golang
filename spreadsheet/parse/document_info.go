@@ -22,11 +22,11 @@ func ProcessDocumentInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 			}
 
 			switch columnsByIndex[columnIndex] {
-			case common.SPDXVersion:
+			case common.DocumentInfoSPDXVersion:
 				doc.SPDXVersion = value
-			case common.DataLicense:
+			case common.DocumentInfoDataLicense:
 				doc.DataLicense = value
-			case common.SPDXIdentifier:
+			case common.DocumentInfoSPDXIdentifier:
 				var id spdx.DocElementID
 				err := id.FromString(value)
 				if err != nil {
@@ -34,15 +34,15 @@ func ProcessDocumentInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 				}
 
 				doc.SPDXIdentifier = id.ElementRefID
-			case common.LicenseListVersion:
+			case common.DocumentInfoLicenseListVersion:
 				doc.CreationInfo.LicenseListVersion = value
-			case common.DocumentName:
+			case common.DocumentInfoDocumentName:
 				doc.DocumentName = value
-			case common.DocumentNamespace:
+			case common.DocumentInfoDocumentNamespace:
 				doc.DocumentNamespace = value
-			case common.DocumentComment:
+			case common.DocumentInfoDocumentComment:
 				doc.DocumentComment = value
-			case common.ExternalDocumentReferences:
+			case common.DocumentInfoExternalDocumentReferences:
 				externalDocRef := spdx.ExternalDocumentRef2_2{}
 				err := externalDocRef.FromString(value)
 				if err != nil {
@@ -50,11 +50,11 @@ func ProcessDocumentInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 				}
 
 				doc.ExternalDocumentReferences = append(doc.ExternalDocumentReferences, externalDocRef)
-			case common.Created:
+			case common.DocumentInfoCreated:
 				doc.CreationInfo.Created = value
-			case common.CreatorComment:
+			case common.DocumentInfoCreatorComment:
 				doc.CreationInfo.CreatorComment = value
-			case common.Creator:
+			case common.DocumentInfoCreator:
 				creator := spdx.Creator{}
 				err := creator.FromString(value)
 				if err != nil {

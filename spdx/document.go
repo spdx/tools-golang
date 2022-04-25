@@ -42,7 +42,7 @@ type ExternalDocumentRef2_2 struct {
 // Returns true if the object is valid, returns false and an error if it is invalid.
 func (e ExternalDocumentRef2_1) Validate() error {
 	if err := e.Checksum.Validate(); err != nil {
-		return fmt.Errorf("invalid Checksum in DocElementID: %w", err)
+		return fmt.Errorf("invalid Checksum in External Document Reference: %w", err)
 	}
 
 	if e.DocumentRefID.Validate() != nil || e.URI == "" {
@@ -56,7 +56,7 @@ func (e ExternalDocumentRef2_1) Validate() error {
 // Returns true if the object is valid, returns false and an error if it is invalid.
 func (e ExternalDocumentRef2_2) Validate() error {
 	if err := e.Checksum.Validate(); err != nil {
-		return fmt.Errorf("invalid Checksum in DocElementID: %w", err)
+		return fmt.Errorf("invalid Checksum in External Document Reference: %w", err)
 	}
 
 	if e.DocumentRefID.Validate() != nil || e.URI == "" {

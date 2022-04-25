@@ -85,14 +85,13 @@ func ProcessPerFileInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 			case common.FileInfoFileComment:
 				newFile.FileComment = value
 			case common.FileInfoFileDependencies:
-				newFile.FileDependencies = strings.Split(value, ", ")
+				// ignored
 			case common.FileInfoAttributionText:
 				newFile.FileAttributionTexts = strings.Split(value, ", ")
 			}
 		}
 
 		// TODO: validate?
-		doc.Files = append(doc.Files, &newFile)
 
 		// add this file to the associated package, if it is associated with a package
 		if associatedPackageSPDXID != "" {
@@ -102,6 +101,8 @@ func ProcessPerFileInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 					break
 				}
 			}
+		} else {
+			doc.Files = append(doc.Files, &newFile)
 		}
 	}
 

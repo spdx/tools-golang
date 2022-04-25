@@ -3,6 +3,7 @@
 package spdx_xls
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/google/go-cmp/cmp"
 	"os"
@@ -32,36 +33,27 @@ func TestLoad2_2(t *testing.T) {
 	}
 }
 
-// func TestWrite2_2(t *testing.T) {
-// 	w := &bytes.Buffer{}
-// 	// get a copy of the handwritten struct so we don't mutate it on accident
-// 	handwrittenExample := want
-// 	if err := Save2_2(&handwrittenExample, w); err != nil {
-// 		t.Errorf("Save2_2() error = %v", err.Error())
-// 		return
-// 	}
-//
-// 	// we should be able to parse what the writer wrote, and it should be identical to the original handwritten struct
-// 	parsedDoc, err := Load2_2(bytes.NewReader(w.Bytes()))
-// 	if err != nil {
-// 		t.Errorf("failed to parse written document: %v", err.Error())
-// 		return
-// 	}
-//
-// 	changes, err := diff.Diff(parsedDoc, &handwrittenExample)
-// 	if err != nil {
-// 		t.Errorf("failed to diff written doc and original doc: %v", err.Error())
-// 		return
-// 	}
-//
-// 	if len(changes) != 0 {
-// 		for _, change := range changes {
-// 			t.Errorf("(%+v) %+v should be %+v\n", change.Path, change.From, change.To)
-// 		}
-//
-// 		return
-// 	}
-// }
+func TestWrite2_2(t *testing.T) {
+	w := &bytes.Buffer{}
+	// get a copy of the handwritten struct so we don't mutate it on accident
+	handwrittenExample := want
+	if err := Save2_2(&handwrittenExample, w); err != nil {
+		t.Errorf("Save2_2() error = %v", err.Error())
+		return
+	}
+
+	// we should be able to parse what the writer wrote, and it should be identical to the original handwritten struct
+	parsedDoc, err := Load2_2(bytes.NewReader(w.Bytes()))
+	if err != nil {
+		t.Errorf("failed to parse written document: %v", err.Error())
+		return
+	}
+
+	if cmp.Equal(handwrittenExample, parsedDoc) {
+		t.Errorf("Got incorrect struct after writing and re-parsing XLSX example")
+		return
+	}
+}
 
 // want is handwritten translation of the official example xls SPDX v2.2 document into a Go struct.
 // We expect that the result of parsing the official document should be this value.
@@ -345,40 +337,6 @@ var want = spdx.Document2_2{
 	},
 	Files: []*spdx.File2_2{
 		{
-			FileSPDXIdentifier: "CommonsLangSrc",
-			Checksums: []spdx.Checksum{
-				{
-					Algorithm: "SHA1",
-					Value:     "c2b4e1c67a2d28fced849ee1bb76e7391b93f125",
-				},
-			},
-			FileComment:        "This file is used by Jena",
-			FileCopyrightText:  "Copyright 2001-2011 The Apache Software Foundation",
-			FileContributors:   []string{"Apache Software Foundation"},
-			FileName:           "./lib-source/commons-lang3-3.1-sources.jar",
-			FileTypes:          []string{"ARCHIVE"},
-			LicenseConcluded:   "Apache-2.0",
-			LicenseInfoInFiles: []string{"Apache-2.0"},
-			FileNotice:         "Apache Commons Lang\nCopyright 2001-2011 The Apache Software Foundation\n\nThis product includes software developed by\nThe Apache Software Foundation (http://www.apache.org/).\n\nThis product includes software from the Spring Framework,\nunder the Apache License 2.0 (see: StringUtils.containsWhitespace())",
-		},
-		{
-			FileSPDXIdentifier: "JenaLib",
-			Checksums: []spdx.Checksum{
-				{
-					Algorithm: "SHA1",
-					Value:     "3ab4e1c67a2d28fced849ee1bb76e7391b93f125",
-				},
-			},
-			FileComment:        "This file belongs to Jena",
-			FileCopyrightText:  "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP",
-			FileContributors:   []string{"Apache Software Foundation", "Hewlett Packard Inc."},
-			FileName:           "./lib-source/jena-2.6.3-sources.jar",
-			FileTypes:          []string{"ARCHIVE"},
-			LicenseComments:    "This license is used by Jena",
-			LicenseConcluded:   "LicenseRef-1",
-			LicenseInfoInFiles: []string{"LicenseRef-1"},
-		},
-		{
 			FileSPDXIdentifier: "File",
 			Annotations: []spdx.Annotation2_2{
 				{
@@ -411,31 +369,6 @@ var want = spdx.Document2_2{
 			LicenseConcluded:   "(LGPL-2.0-only OR LicenseRef-2)",
 			LicenseInfoInFiles: []string{"GPL-2.0-only", "LicenseRef-2"},
 			FileNotice:         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the �Software�), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED �AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-		},
-		{
-			FileName:           "./src/org/spdx/parser/DOAPProject.java",
-			FileSPDXIdentifier: "DoapSource",
-			FileTypes: []string{
-				"SOURCE",
-			},
-			Checksums: []spdx.Checksum{
-				{
-					Algorithm: "SHA1",
-					Value:     "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
-				},
-			},
-			LicenseConcluded: "Apache-2.0",
-			LicenseInfoInFiles: []string{
-				"Apache-2.0",
-			},
-			FileCopyrightText: "Copyright 2010, 2011 Source Auditor Inc.",
-			FileContributors: []string{
-				"Protecode Inc.",
-				"SPDX Technical Team Members",
-				"Open Logic Inc.",
-				"Source Auditor Inc.",
-				"Black Duck Software In.c",
-			},
 		},
 	},
 	Snippets: []spdx.Snippet2_2{
