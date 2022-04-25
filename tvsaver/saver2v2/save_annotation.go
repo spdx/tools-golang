@@ -19,7 +19,7 @@ func renderAnnotation2_2(ann *spdx.Annotation2_2, w io.Writer) error {
 	if ann.AnnotationType != "" {
 		fmt.Fprintf(w, "AnnotationType: %s\n", ann.AnnotationType)
 	}
-	annIDStr := spdx.RenderDocElementID(ann.AnnotationSPDXIdentifier)
+	annIDStr := ann.AnnotationSPDXIdentifier.String()
 	if annIDStr != "SPDXRef-" {
 		fmt.Fprintf(w, "SPDXREF: %s\n", annIDStr)
 	}

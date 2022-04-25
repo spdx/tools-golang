@@ -61,7 +61,7 @@ func TestWrite2_2(t *testing.T) {
 var want = spdx.Document2_2{
 	DataLicense:       "CC0-1.0",
 	SPDXVersion:       "SPDX-2.2",
-	SPDXIdentifier:    "SPDXRef-DOCUMENT",
+	SPDXIdentifier:    "DOCUMENT",
 	DocumentName:      "SPDX-Tools-v2.0",
 	DocumentNamespace: "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
 	CreationInfo: &spdx.CreationInfo2_2{
@@ -77,7 +77,7 @@ var want = spdx.Document2_2{
 	DocumentComment: "This document was created using SPDX 2.0 using licenses from the web site.",
 	ExternalDocumentReferences: []spdx.ExternalDocumentRef2_2{
 		{
-			DocumentRefID: "DocumentRef-spdx-tool-1.2",
+			DocumentRefID: spdx.MakeDocElementID("spdx-tool-1.2", ""),
 			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
 			Checksum: spdx.Checksum{
 				Algorithm: spdx.SHA1,
@@ -148,7 +148,7 @@ var want = spdx.Document2_2{
 	Packages: []*spdx.Package2_2{
 		{
 			PackageName:           "glibc",
-			PackageSPDXIdentifier: "SPDXRef-Package",
+			PackageSPDXIdentifier: "Package",
 			PackageVersion:        "2.11.1",
 			PackageFileName:       "glibc-2.11.1.tar.gz",
 			PackageSupplier: &spdx.Supplier{
@@ -223,7 +223,7 @@ var want = spdx.Document2_2{
 			},
 		},
 		{
-			PackageSPDXIdentifier:   "SPDXRef-fromDoap-1",
+			PackageSPDXIdentifier:   "fromDoap-1",
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "NOASSERTION",
 			FilesAnalyzed:           false,
@@ -234,7 +234,7 @@ var want = spdx.Document2_2{
 		},
 		{
 			PackageName:             "Jena",
-			PackageSPDXIdentifier:   "SPDXRef-fromDoap-0",
+			PackageSPDXIdentifier:   "fromDoap-0",
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz",
 			PackageExternalReferences: []*spdx.PackageExternalReference2_2{
@@ -251,7 +251,7 @@ var want = spdx.Document2_2{
 			PackageVersion:          "3.12.0",
 		},
 		{
-			PackageSPDXIdentifier: "SPDXRef-Saxon",
+			PackageSPDXIdentifier: "Saxon",
 			PackageChecksums: []spdx.Checksum{
 				{
 					Algorithm: "SHA1",
@@ -274,7 +274,7 @@ var want = spdx.Document2_2{
 	Files: []*spdx.File2_2{
 		{
 			FileName:           "./src/org/spdx/parser/DOAPProject.java",
-			FileSPDXIdentifier: "SPDXRef-DoapSource",
+			FileSPDXIdentifier: "DoapSource",
 			FileTypes: []string{
 				"SOURCE",
 			},
@@ -298,7 +298,7 @@ var want = spdx.Document2_2{
 			},
 		},
 		{
-			FileSPDXIdentifier: "SPDXRef-CommonsLangSrc",
+			FileSPDXIdentifier: "CommonsLangSrc",
 			Checksums: []spdx.Checksum{
 				{
 					Algorithm: "SHA1",
@@ -315,7 +315,7 @@ var want = spdx.Document2_2{
 			FileNotice:         "Apache Commons Lang\nCopyright 2001-2011 The Apache Software Foundation\n\nThis product includes software developed by\nThe Apache Software Foundation (http://www.apache.org/).\n\nThis product includes software from the Spring Framework,\nunder the Apache License 2.0 (see: StringUtils.containsWhitespace())",
 		},
 		{
-			FileSPDXIdentifier: "SPDXRef-JenaLib",
+			FileSPDXIdentifier: "JenaLib",
 			Checksums: []spdx.Checksum{
 				{
 					Algorithm: "SHA1",
@@ -332,7 +332,7 @@ var want = spdx.Document2_2{
 			LicenseInfoInFiles: []string{"LicenseRef-1"},
 		},
 		{
-			FileSPDXIdentifier: "SPDXRef-File",
+			FileSPDXIdentifier: "File",
 			Annotations: []spdx.Annotation2_2{
 				{
 					Annotator: spdx.Annotator{
@@ -367,27 +367,27 @@ var want = spdx.Document2_2{
 	},
 	Snippets: []spdx.Snippet2_2{
 		{
-			SnippetSPDXIdentifier:         "SPDXRef-Snippet",
-			SnippetFromFileSPDXIdentifier: "SPDXRef-DoapSource",
+			SnippetSPDXIdentifier:         "Snippet",
+			SnippetFromFileSPDXIdentifier: "DoapSource",
 			Ranges: []spdx.SnippetRange{
 				{
 					StartPointer: spdx.SnippetRangePointer{
 						Offset:             310,
-						FileSPDXIdentifier: "SPDXRef-DoapSource",
+						FileSPDXIdentifier: "DoapSource",
 					},
 					EndPointer: spdx.SnippetRangePointer{
 						Offset:             420,
-						FileSPDXIdentifier: "SPDXRef-DoapSource",
+						FileSPDXIdentifier: "DoapSource",
 					},
 				},
 				{
 					StartPointer: spdx.SnippetRangePointer{
 						LineNumber:         5,
-						FileSPDXIdentifier: "SPDXRef-DoapSource",
+						FileSPDXIdentifier: "DoapSource",
 					},
 					EndPointer: spdx.SnippetRangePointer{
 						LineNumber:         23,
-						FileSPDXIdentifier: "SPDXRef-DoapSource",
+						FileSPDXIdentifier: "DoapSource",
 					},
 				},
 			},

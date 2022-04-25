@@ -15,22 +15,29 @@ type Supplier struct {
 	SupplierType string
 }
 
-// UnmarshalJSON takes a supplier in the typical one-line format and parses it into a Supplier struct.
-// This function is also used when unmarshalling YAML
-func (s *Supplier) UnmarshalJSON(data []byte) error {
-	// the value is just a string presented as a slice of bytes
-	supplierStr := string(data)
-	supplierStr = strings.Trim(supplierStr, "\"")
+// Validate verifies that all the required fields are present.
+// Returns an error if the object is invalid.
+func (s Supplier) Validate() error {
+	// SupplierType is allowed to be empty if Supplier is "NOASSERTION"
+	if s.Supplier == "" || (s.SupplierType == "" && s.Supplier != "NOASSERTION") {
+		return fmt.Errorf("invalid Supplier, missing fields. %+v", s)
+	}
 
-	if supplierStr == "NOASSERTION" {
-		s.Supplier = supplierStr
+	return nil
+}
+
+// FromString parses a string into a Supplier.
+// These stings take the form: "<SupplierType>: <Supplier>"
+func (s *Supplier) FromString(value string) error {
+	if value == "NOASSERTION" {
+		s.Supplier = value
 		return nil
 	}
 
-	supplierFields := strings.SplitN(supplierStr, ": ", 2)
+	supplierFields := strings.SplitN(value, ": ", 2)
 
 	if len(supplierFields) != 2 {
-		return fmt.Errorf("failed to parse Supplier '%s'", supplierStr)
+		return fmt.Errorf("failed to parse Supplier '%s'", value)
 	}
 
 	s.SupplierType = supplierFields[0]
@@ -39,16 +46,33 @@ func (s *Supplier) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// String converts the Supplier to a string in the form "<SupplierType>: <Supplier>"
+func (s Supplier) String() string {
+	if s.Supplier == "NOASSERTION" {
+		return s.Supplier
+	}
+
+	return fmt.Sprintf("%s: %s", s.SupplierType, s.Supplier)
+}
+
+// UnmarshalJSON takes a supplier in the typical one-line format and parses it into a Supplier struct.
+// This function is also used when unmarshalling YAML
+func (s *Supplier) UnmarshalJSON(data []byte) error {
+	// the value is just a string presented as a slice of bytes
+	supplierStr := string(data)
+	supplierStr = strings.Trim(supplierStr, "\"")
+
+	return s.FromString(supplierStr)
+}
+
 // MarshalJSON converts the receiver into a slice of bytes representing a Supplier in string form.
 // This function is also used when marshalling to YAML
 func (s Supplier) MarshalJSON() ([]byte, error) {
-	if s.Supplier == "NOASSERTION" {
-		return json.Marshal(s.Supplier)
-	} else if s.SupplierType != "" && s.Supplier != "" {
-		return json.Marshal(fmt.Sprintf("%s: %s", s.SupplierType, s.Supplier))
+	if err := s.Validate(); err != nil {
+		return nil, err
 	}
 
-	return []byte{}, fmt.Errorf("failed to marshal invalid Supplier: %+v", s)
+	return json.Marshal(s.String())
 }
 
 type Originator struct {
@@ -58,6 +82,46 @@ type Originator struct {
 	OriginatorType string
 }
 
+// Validate verifies that all the required fields are present.
+// Returns an error if the object is invalid.
+func (o Originator) Validate() error {
+	// Originator is allowed to be empty if Originator is "NOASSERTION"
+	if o.Originator == "" || (o.OriginatorType == "" && o.Originator != "NOASSERTION") {
+		return fmt.Errorf("invalid Originator, missing fields. %+v", o)
+	}
+
+	return nil
+}
+
+// FromString parses a string into a Originator.
+// These stings take the form: "<OriginatorType>: <Originator>"
+func (o *Originator) FromString(value string) error {
+	if value == "NOASSERTION" {
+		o.Originator = value
+		return nil
+	}
+
+	fields := strings.SplitN(value, ": ", 2)
+
+	if len(fields) != 2 {
+		return fmt.Errorf("failed to parse Originator '%s'", value)
+	}
+
+	o.OriginatorType = fields[0]
+	o.Originator = fields[1]
+
+	return nil
+}
+
+// String converts the Originator to a string in the form "<OriginatorType>: <Originator>"
+func (o Originator) String() string {
+	if o.Originator == "NOASSERTION" {
+		return o.Originator
+	}
+
+	return fmt.Sprintf("%s: %s", o.OriginatorType, o.Originator)
+}
+
 // UnmarshalJSON takes an originator in the typical one-line format and parses it into an Originator struct.
 // This function is also used when unmarshalling YAML
 func (o *Originator) UnmarshalJSON(data []byte) error {
@@ -65,33 +129,17 @@ func (o *Originator) UnmarshalJSON(data []byte) error {
 	originatorStr := string(data)
 	originatorStr = strings.Trim(originatorStr, "\"")
 
-	if originatorStr == "NOASSERTION" {
-		o.Originator = originatorStr
-		return nil
-	}
-
-	originatorFields := strings.SplitN(originatorStr, ": ", 2)
-
-	if len(originatorFields) != 2 {
-		return fmt.Errorf("failed to parse Originator '%s'", originatorStr)
-	}
-
-	o.OriginatorType = originatorFields[0]
-	o.Originator = originatorFields[1]
-
-	return nil
+	return o.FromString(originatorStr)
 }
 
 // MarshalJSON converts the receiver into a slice of bytes representing an Originator in string form.
 // This function is also used when marshalling to YAML
 func (o Originator) MarshalJSON() ([]byte, error) {
-	if o.Originator == "NOASSERTION" {
-		return json.Marshal(o.Originator)
-	} else if o.Originator != "" {
-		return json.Marshal(fmt.Sprintf("%s: %s", o.OriginatorType, o.Originator))
+	if err := o.Validate(); err != nil {
+		return nil, err
 	}
 
-	return []byte{}, nil
+	return json.Marshal(o.String())
 }
 
 type PackageVerificationCode struct {

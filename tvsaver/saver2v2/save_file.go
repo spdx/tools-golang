@@ -15,7 +15,7 @@ func renderFile2_2(f *spdx.File2_2, w io.Writer) error {
 		fmt.Fprintf(w, "FileName: %s\n", f.FileName)
 	}
 	if f.FileSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.FileSPDXIdentifier))
+		fmt.Fprintf(w, "SPDXID: %s\n", f.FileSPDXIdentifier)
 	}
 	for _, s := range f.FileTypes {
 		fmt.Fprintf(w, "FileType: %s\n", s)

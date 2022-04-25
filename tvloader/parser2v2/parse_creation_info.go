@@ -102,7 +102,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 // ===== Helper functions =====
 
-func extractExternalDocumentReference(value string) (string, string, string, string, error) {
+func extractExternalDocumentReference(value string) (spdx.DocElementID, string, string, string, error) {
 	sp := strings.Split(value, " ")
 	// remove any that are just whitespace
 	keepSp := []string{}
@@ -113,42 +113,33 @@ func extractExternalDocumentReference(value string) (string, string, string, str
 		}
 	}
 
-	var documentRefID, uri, alg, checksum string
+	var documentRefID spdx.DocElementID
+	var uri, alg, checksum string
 
 	// now, should have 4 items (or 3, if Alg and Checksum were joined)
 	// and should be able to map them
 	if len(keepSp) == 4 {
-		documentRefID = keepSp[0]
+		documentRefID = spdx.MakeDocElementID(keepSp[0], "")
 		uri = keepSp[1]
 		alg = keepSp[2]
 		// check that colon is present for alg, and remove it
 		if !strings.HasSuffix(alg, ":") {
-			return "", "", "", "", fmt.Errorf("algorithm does not end with colon")
+			return documentRefID, "", "", "", fmt.Errorf("algorithm does not end with colon")
 		}
 		alg = strings.TrimSuffix(alg, ":")
 		checksum = keepSp[3]
 	} else if len(keepSp) == 3 {
-		documentRefID = keepSp[0]
+		documentRefID = spdx.MakeDocElementID(keepSp[0], "")
 		uri = keepSp[1]
 		// split on colon into alg and checksum
 		parts := strings.SplitN(keepSp[2], ":", 2)
 		if len(parts) != 2 {
-			return "", "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
+			return documentRefID, "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
 		}
 		alg = parts[0]
 		checksum = parts[1]
 	} else {
-		return "", "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
-	}
-
-	// additionally, we should be able to parse the first element as a
-	// DocumentRef- ID string, and we should remove that prefix
-	if !strings.HasPrefix(documentRefID, "DocumentRef-") {
-		return "", "", "", "", fmt.Errorf("expected first element to have DocumentRef- prefix")
-	}
-	documentRefID = strings.TrimPrefix(documentRefID, "DocumentRef-")
-	if documentRefID == "" {
-		return "", "", "", "", fmt.Errorf("document identifier has nothing after prefix")
+		return documentRefID, "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
 	}
 
 	return documentRefID, uri, alg, checksum, nil

@@ -16,11 +16,18 @@ type Creator struct {
 	CreatorType string
 }
 
-// UnmarshalJSON takes an annotator in the typical one-line format and parses it into a Creator struct.
-// This function is also used when unmarshalling YAML
-func (c *Creator) UnmarshalJSON(data []byte) error {
-	str := string(data)
-	str = strings.Trim(str, "\"")
+// Validate verifies that all the required fields are present.
+// Returns an error if the object is invalid.
+func (c Creator) Validate() error {
+	if c.CreatorType == "" || c.Creator == "" {
+		return fmt.Errorf("invalid Creator, missing fields. %+v", c)
+	}
+
+	return nil
+}
+
+// FromString takes a Creator in the typical one-line format and parses it into a Creator struct.
+func (c *Creator) FromString(str string) error {
 	fields := strings.SplitN(str, ": ", 2)
 
 	if len(fields) != 2 {
@@ -33,14 +40,27 @@ func (c *Creator) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// String converts the Creator into a string.
+func (c Creator) String() string {
+	return fmt.Sprintf("%s: %s", c.CreatorType, c.Creator)
+}
+
+// UnmarshalJSON takes a Creator in the typical one-line string format and parses it into a Creator struct.
+func (c *Creator) UnmarshalJSON(data []byte) error {
+	str := string(data)
+	str = strings.Trim(str, "\"")
+
+	return c.FromString(str)
+}
+
 // MarshalJSON converts the receiver into a slice of bytes representing a Creator in string form.
 // This function is also used with marshalling to YAML
 func (c Creator) MarshalJSON() ([]byte, error) {
-	if c.Creator != "" {
-		return json.Marshal(fmt.Sprintf("%s: %s", c.CreatorType, c.Creator))
+	if err := c.Validate(); err != nil {
+		return nil, err
 	}
 
-	return []byte{}, nil
+	return json.Marshal(c.String())
 }
 
 // CreationInfo2_1 is a Document Creation Information section of an
@@ -48,7 +68,7 @@ func (c Creator) MarshalJSON() ([]byte, error) {
 type CreationInfo2_1 struct {
 	// 2.7: License List Version
 	// Cardinality: optional, one
-	LicenseListVersion string `json:"licenseListVersion"`
+	LicenseListVersion string `json:"licenseListVersion,omitempty"`
 
 	// 2.8: Creators: may have multiple keys for Person, Organization
 	//      and/or Tool
@@ -61,7 +81,7 @@ type CreationInfo2_1 struct {
 
 	// 2.10: Creator Comment
 	// Cardinality: optional, one
-	CreatorComment string `json:"comment"`
+	CreatorComment string `json:"comment,omitempty"`
 }
 
 // CreationInfo2_2 is a Document Creation Information section of an

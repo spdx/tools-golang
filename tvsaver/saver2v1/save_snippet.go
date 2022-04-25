@@ -11,9 +11,9 @@ import (
 
 func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
 	if sn.SnippetSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SnippetSPDXID: %s\n", spdx.RenderElementID(sn.SnippetSPDXIdentifier))
+		fmt.Fprintf(w, "SnippetSPDXID: %s\n", sn.SnippetSPDXIdentifier)
 	}
-	snFromFileIDStr := spdx.RenderElementID(sn.SnippetFromFileSPDXIdentifier)
+	snFromFileIDStr := sn.SnippetFromFileSPDXIdentifier.String()
 	if snFromFileIDStr != "" {
 		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", snFromFileIDStr)
 	}

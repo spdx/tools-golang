@@ -14,17 +14,22 @@ type Annotator struct {
 	AnnotatorType string
 }
 
-// UnmarshalJSON takes an annotator in the typical one-line format and parses it into an Annotator struct.
-// This function is also used when unmarshalling YAML
-func (a *Annotator) UnmarshalJSON(data []byte) error {
-	// annotator will simply be a string
-	annotatorStr := string(data)
-	annotatorStr = strings.Trim(annotatorStr, "\"")
+// Validate verifies that all the required fields are present.
+// Returns an error if the object is invalid.
+func (a Annotator) Validate() error {
+	if a.Annotator == "" || a.AnnotatorType == "" {
+		return fmt.Errorf("invalid Annotator, missing fields. %+v", a)
+	}
 
-	annotatorFields := strings.SplitN(annotatorStr, ": ", 2)
+	return nil
+}
+
+// FromString parses an Annotator string into an Annotator struct.
+func (a *Annotator) FromString(value string) error {
+	annotatorFields := strings.SplitN(value, ": ", 2)
 
 	if len(annotatorFields) != 2 {
-		return fmt.Errorf("failed to parse Annotator '%s'", annotatorStr)
+		return fmt.Errorf("failed to parse Annotator '%s'", value)
 	}
 
 	a.AnnotatorType = annotatorFields[0]
@@ -33,14 +38,29 @@ func (a *Annotator) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// String converts the receiver into a string.
+func (a Annotator) String() string {
+	return fmt.Sprintf("%s: %s", a.AnnotatorType, a.Annotator)
+}
+
+// UnmarshalJSON takes an annotator in the typical one-line format and parses it into an Annotator struct.
+// This function is also used when unmarshalling YAML
+func (a *Annotator) UnmarshalJSON(data []byte) error {
+	// annotator will simply be a string
+	annotatorStr := string(data)
+	annotatorStr = strings.Trim(annotatorStr, "\"")
+
+	return a.FromString(annotatorStr)
+}
+
 // MarshalJSON converts the receiver into a slice of bytes representing an Annotator in string form.
 // This function is also used when marshalling to YAML
 func (a Annotator) MarshalJSON() ([]byte, error) {
-	if a.Annotator != "" {
-		return json.Marshal(fmt.Sprintf("%s: %s", a.AnnotatorType, a.Annotator))
+	if err := a.Validate(); err != nil {
+		return nil, err
 	}
 
-	return []byte{}, nil
+	return json.Marshal(a.String())
 }
 
 // Annotation2_1 is an Annotation section of an SPDX Document for version 2.1 of the spec.
