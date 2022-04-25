@@ -1,0 +1,26 @@
+package common
+
+const (
+	PackageName                          = "Package Name"
+	PackageSPDXIdentifier                = "SPDX Identifier"
+	PackageVersion                       = "Package Version"
+	PackageFileName                      = "Package FileName"
+	PackageSupplier                      = "Package Supplier"
+	PackageOriginator                    = "Package Originator"
+	PackageHomePage                      = "Home Page"
+	PackageDownloadLocation              = "Package Download Location"
+	PackageChecksum                      = "Package Checksum"
+	PackageVerificationCode              = "Package Verification Code"
+	PackageVerificationCodeExcludedFiles = "Verification Code Excluded Files"
+	PackageSourceInfo                    = "Source Info"
+	PackageLicenseDeclared               = "License Declared"
+	PackageLicenseConcluded              = "License Concluded"
+	PackageLicenseInfoFromFiles          = "License Info From Files"
+	PackageLicenseComments               = "License Comments"
+	PackageCopyrightText                 = "Package Copyright Text"
+	PackageSummary                       = "Summary"
+	PackageDescription                   = "Description"
+	PackageAttributionText               = "Attribution Text"
+	PackageFilesAnalyzed                 = "Files Analyzed"
+	PackageComments                      = "Comments"
+)

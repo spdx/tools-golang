@@ -27,6 +27,7 @@ tools-golang provides the following packages:
 * *tvsaver* - tag-value document saver
 * *rdfloader* - RDF document loader
 * *json* - JSON document parser and writer
+* *spreadsheet* - Spreadsheet (XLS/XLSX) parser and writer
 * *yaml* - YAML document parser and writer
 * *builder* - builds "empty" SPDX document (with hashes) for directory contents
 * *idsearcher* - searches for [SPDX short-form IDs](https://spdx.org/ids/) and builds SPDX document
