@@ -23,6 +23,35 @@ const (
 	MD6    ChecksumAlgorithm = "MD6"
 )
 
+// Validate verifies that the ChecksumAlgorithm is valid (i.e. that it is one of the known checksum types)
+func (c ChecksumAlgorithm) Validate() error {
+	validChecksumAlgorithms := []ChecksumAlgorithm{
+		SHA224,
+		SHA1,
+		SHA256,
+		SHA384,
+		SHA512,
+		MD2,
+		MD4,
+		MD5,
+		MD6,
+	}
+
+	var found bool
+	for _, alg := range validChecksumAlgorithms {
+		if c == alg {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return fmt.Errorf("checksum algorithm %s is not supported", c)
+	}
+
+	return nil
+}
+
 // Checksum provides a unique identifier to match analysis information on each specific file in a package.
 // The Algorithm field describes the ChecksumAlgorithm used and the Value represents the file checksum
 type Checksum struct {
