@@ -28,7 +28,7 @@ func RenderDocument2_2(doc *spdx.Document2_2, w io.Writer) error {
 		fmt.Fprintf(w, "DataLicense: %s\n", doc.DataLicense)
 	}
 	if doc.SPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(doc.SPDXIdentifier))
+		fmt.Fprintf(w, "SPDXID: %s\n", doc.SPDXIdentifier)
 	}
 	if doc.DocumentName != "" {
 		fmt.Fprintf(w, "DocumentName: %s\n", doc.DocumentName)
@@ -38,10 +38,10 @@ func RenderDocument2_2(doc *spdx.Document2_2, w io.Writer) error {
 	}
 	// print EDRs in order sorted by identifier
 	sort.Slice(doc.ExternalDocumentReferences, func(i, j int) bool {
-		return doc.ExternalDocumentReferences[i].DocumentRefID < doc.ExternalDocumentReferences[j].DocumentRefID
+		return doc.ExternalDocumentReferences[i].DocumentRefID.DocumentRefID < doc.ExternalDocumentReferences[j].DocumentRefID.DocumentRefID
 	})
 	for _, edr := range doc.ExternalDocumentReferences {
-		fmt.Fprintf(w, "ExternalDocumentRef: DocumentRef-%s %s %s:%s\n",
+		fmt.Fprintf(w, "ExternalDocumentRef: %s %s %s:%s\n",
 			edr.DocumentRefID, edr.URI, edr.Checksum.Algorithm, edr.Checksum.Value)
 	}
 	if doc.DocumentComment != "" {

@@ -2,6 +2,13 @@
 
 package spdx
 
+import (
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+)
+
 type SnippetRangePointer struct {
 	// 5.3: Snippet Byte Range: [start byte]:[end byte]
 	// Cardinality: mandatory, one
@@ -17,6 +24,50 @@ type SnippetRangePointer struct {
 type SnippetRange struct {
 	StartPointer SnippetRangePointer `json:"startPointer"`
 	EndPointer   SnippetRangePointer `json:"endPointer"`
+}
+
+func (s SnippetRange) Validate() error {
+	if s.StartPointer.Offset == 0 && s.StartPointer.LineNumber == 0 &&
+		s.EndPointer.Offset == 0 && s.EndPointer.LineNumber == 0 {
+		return errors.New("no range info present in SnippetRange")
+	}
+
+	return nil
+}
+
+func (s SnippetRange) String() string {
+	if s.EndPointer.Offset != 0 {
+		return fmt.Sprintf("%d:%d", s.StartPointer.Offset, s.EndPointer.Offset)
+	}
+
+	return fmt.Sprintf("%d:%d", s.StartPointer.LineNumber, s.EndPointer.LineNumber)
+}
+
+func (s *SnippetRange) FromString(value string, isByteRange bool) error {
+	strValues := strings.Split(value, ":")
+	if len(strValues) != 2 {
+		return fmt.Errorf("invalid SnippetRange: %s", value)
+	}
+
+	values := make([]int, 2)
+	for ii, value := range strValues {
+		valueInt, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return fmt.Errorf("couldn't parse integer from SnippetRange value '%s': %v", value, err.Error())
+		}
+
+		values[ii] = int(valueInt)
+	}
+
+	if isByteRange {
+		s.StartPointer.Offset = values[0]
+		s.EndPointer.Offset = values[1]
+	} else {
+		s.StartPointer.LineNumber = values[0]
+		s.EndPointer.LineNumber = values[1]
+	}
+
+	return nil
 }
 
 // Snippet2_1 is a Snippet section of an SPDX Document for version 2.1 of the spec.

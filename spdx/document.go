@@ -3,13 +3,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 package spdx
 
+import (
+	"fmt"
+	"strings"
+)
+
 // ExternalDocumentRef2_1 is a reference to an external SPDX document
 // as defined in section 2.6 for version 2.1 of the spec.
 type ExternalDocumentRef2_1 struct {
 	// DocumentRefID is the ID string defined in the start of the
 	// reference. It should _not_ contain the "DocumentRef-" part
 	// of the mandatory ID string.
-	DocumentRefID string `json:"externalDocumentId"`
+	DocumentRefID DocElementID `json:"externalDocumentId"`
 
 	// URI is the URI defined for the external document
 	URI string `json:"spdxDocument"`
@@ -24,13 +29,99 @@ type ExternalDocumentRef2_2 struct {
 	// DocumentRefID is the ID string defined in the start of the
 	// reference. It should _not_ contain the "DocumentRef-" part
 	// of the mandatory ID string.
-	DocumentRefID string `json:"externalDocumentId"`
+	DocumentRefID DocElementID `json:"externalDocumentId"`
 
 	// URI is the URI defined for the external document
 	URI string `json:"spdxDocument"`
 
 	// Checksum is the actual hash data
 	Checksum Checksum `json:"checksum"`
+}
+
+// Validate verifies that all the required fields are present.
+// Returns true if the object is valid, returns false and an error if it is invalid.
+func (e ExternalDocumentRef2_1) Validate() error {
+	if err := e.Checksum.Validate(); err != nil {
+		return fmt.Errorf("invalid Checksum in DocElementID: %w", err)
+	}
+
+	if e.DocumentRefID.Validate() != nil || e.URI == "" {
+		return fmt.Errorf("invalid DocElementID, missing fields. %+v", e)
+	}
+
+	return nil
+}
+
+// Validate verifies that all the required fields are present.
+// Returns true if the object is valid, returns false and an error if it is invalid.
+func (e ExternalDocumentRef2_2) Validate() error {
+	if err := e.Checksum.Validate(); err != nil {
+		return fmt.Errorf("invalid Checksum in DocElementID: %w", err)
+	}
+
+	if e.DocumentRefID.Validate() != nil || e.URI == "" {
+		return fmt.Errorf("invalid DocElementID, missing fields. %+v", e)
+	}
+
+	return nil
+}
+
+// String converts a ExternalDocumentRef2_1 object to a string.
+// These strings take the form: "<DocumentRefID> <URI> <Checksum>"
+func (e ExternalDocumentRef2_1) String() string {
+	return fmt.Sprintf("%s %s %s", e.DocumentRefID, e.URI, e.Checksum)
+}
+
+// String converts a ExternalDocumentRef2_2 object to a string.
+// These strings take the form: "<DocumentRefID> <URI> <Checksum>"
+func (e ExternalDocumentRef2_2) String() string {
+	return fmt.Sprintf("%s %s %s", e.DocumentRefID, e.URI, e.Checksum)
+}
+
+// FromString parses a string into a spdx.ExternalDocumentRef2_1.
+// These strings take the following form: "<DocumentRefID> <URI> <Checksum>"
+func (e *ExternalDocumentRef2_1) FromString(value string) error {
+	fields := strings.SplitN(value, " ", 3)
+	if len(fields) != 3 {
+		return fmt.Errorf("invalid external document reference: %s", value)
+	}
+
+	e.DocumentRefID = MakeDocElementID(fields[0], "")
+	e.URI = fields[1]
+
+	// the checksum is special and needs further processing
+	var checksum Checksum
+	err := checksum.FromString(fields[2])
+	if err != nil {
+		return err
+	}
+
+	e.Checksum = checksum
+
+	return nil
+}
+
+// FromString parses a string into a spdx.ExternalDocumentRef2_2.
+// These strings take the following form: "<DocumentRefID> <URI> <Checksum>"
+func (e *ExternalDocumentRef2_2) FromString(value string) error {
+	fields := strings.SplitN(value, " ", 3)
+	if len(fields) != 3 {
+		return fmt.Errorf("invalid external document reference: %s", value)
+	}
+
+	e.DocumentRefID = MakeDocElementID(fields[0], "")
+	e.URI = fields[1]
+
+	// the checksum is special and needs further processing
+	var checksum Checksum
+	err := checksum.FromString(fields[2])
+	if err != nil {
+		return err
+	}
+
+	e.Checksum = checksum
+
+	return nil
 }
 
 // Document2_1 is an SPDX Document for version 2.1 of the spec.

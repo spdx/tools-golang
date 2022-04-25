@@ -2,6 +2,11 @@
 
 package spdx
 
+import (
+	"fmt"
+	"strings"
+)
+
 // ChecksumAlgorithm represents the algorithm used to generate the file checksum in the Checksum struct.
 type ChecksumAlgorithm string
 
@@ -23,4 +28,35 @@ const (
 type Checksum struct {
 	Algorithm ChecksumAlgorithm `json:"algorithm"`
 	Value     string            `json:"checksumValue"`
+}
+
+// FromString parses a Checksum string into a spdx.Checksum.
+// These strings take the following form:
+// SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
+func (c *Checksum) FromString(value string) error {
+	fields := strings.Split(value, ": ")
+	if len(fields) != 2 {
+		return fmt.Errorf("invalid checksum: %s", value)
+	}
+
+	c.Algorithm = ChecksumAlgorithm(fields[0])
+	c.Value = fields[1]
+
+	return nil
+}
+
+// String converts the Checksum to its string form.
+// e.g. "SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759"
+func (c Checksum) String() string {
+	return fmt.Sprintf("%s: %s", c.Algorithm, c.Value)
+}
+
+// Validate verifies that all the required fields are present.
+// Returns an error if the object is invalid.
+func (c Checksum) Validate() error {
+	if c.Algorithm == "" || c.Value == "" {
+		return fmt.Errorf("invalid checksum, missing field(s). %+v", c)
+	}
+
+	return nil
 }
