@@ -13,15 +13,18 @@ func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
 	if sn.SnippetSPDXIdentifier != "" {
 		fmt.Fprintf(w, "SnippetSPDXID: %s\n", spdx.RenderElementID(sn.SnippetSPDXIdentifier))
 	}
-	snFromFileIDStr := spdx.RenderDocElementID(sn.SnippetFromFileSPDXIdentifier)
+	snFromFileIDStr := spdx.RenderElementID(sn.SnippetFromFileSPDXIdentifier)
 	if snFromFileIDStr != "" {
 		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", snFromFileIDStr)
 	}
-	if sn.SnippetByteRangeStart != 0 && sn.SnippetByteRangeEnd != 0 {
-		fmt.Fprintf(w, "SnippetByteRange: %d:%d\n", sn.SnippetByteRangeStart, sn.SnippetByteRangeEnd)
-	}
-	if sn.SnippetLineRangeStart != 0 && sn.SnippetLineRangeEnd != 0 {
-		fmt.Fprintf(w, "SnippetLineRange: %d:%d\n", sn.SnippetLineRangeStart, sn.SnippetLineRangeEnd)
+
+	for _, snippetRange := range sn.Ranges {
+		if snippetRange.StartPointer.Offset != 0 && snippetRange.EndPointer.Offset != 0 {
+			fmt.Fprintf(w, "SnippetByteRange: %d:%d\n", snippetRange.StartPointer.Offset, snippetRange.EndPointer.Offset)
+		}
+		if snippetRange.StartPointer.LineNumber != 0 && snippetRange.EndPointer.LineNumber != 0 {
+			fmt.Fprintf(w, "SnippetLineRange: %d:%d\n", snippetRange.StartPointer.LineNumber, snippetRange.EndPointer.LineNumber)
+		}
 	}
 	if sn.SnippetLicenseConcluded != "" {
 		fmt.Fprintf(w, "SnippetLicenseConcluded: %s\n", sn.SnippetLicenseConcluded)

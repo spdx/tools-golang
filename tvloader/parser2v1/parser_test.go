@@ -24,14 +24,14 @@ func TestParser2_1CanParseTagValues(t *testing.T) {
 	if err != nil {
 		t.Errorf("got error when calling ParseTagValues: %v", err)
 	}
-	if doc.CreationInfo.SPDXVersion != "SPDX-2.1" {
-		t.Errorf("expected SPDXVersion to be SPDX-2.1, got %v", doc.CreationInfo.SPDXVersion)
+	if doc.SPDXVersion != "SPDX-2.1" {
+		t.Errorf("expected SPDXVersion to be SPDX-2.1, got %v", doc.SPDXVersion)
 	}
-	if doc.CreationInfo.DataLicense != "CC0-1.0" {
-		t.Errorf("expected DataLicense to be CC0-1.0, got %v", doc.CreationInfo.DataLicense)
+	if doc.DataLicense != "CC0-1.0" {
+		t.Errorf("expected DataLicense to be CC0-1.0, got %v", doc.DataLicense)
 	}
-	if doc.CreationInfo.SPDXIdentifier != "DOCUMENT" {
-		t.Errorf("expected SPDXIdentifier to be DOCUMENT, got %v", doc.CreationInfo.SPDXIdentifier)
+	if doc.SPDXIdentifier != "DOCUMENT" {
+		t.Errorf("expected SPDXIdentifier to be DOCUMENT, got %v", doc.SPDXIdentifier)
 	}
 
 }
@@ -55,18 +55,6 @@ func TestParser2_1HasDocumentAfterCallToParseFirstTag(t *testing.T) {
 	}
 	if parser.doc == nil {
 		t.Errorf("doc is still nil after parsing first pair")
-	}
-}
-
-// ===== Parser start state change tests =====
-func TestParser2_1StartMovesToCreationInfoStateAfterParsingFirstTag(t *testing.T) {
-	parser := tvParser2_1{}
-	err := parser.parsePair2_1("SPDXVersion", "b")
-	if err != nil {
-		t.Errorf("got error when calling parsePair2_1: %v", err)
-	}
-	if parser.st != psCreationInfo2_1 {
-		t.Errorf("parser is in state %v, expected %v", parser.st, psCreationInfo2_1)
 	}
 }
 

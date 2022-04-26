@@ -40,8 +40,14 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	}
 	pkg.PackageSPDXIdentifier = eId // 3.2
 
-	if existingPkg := parser.doc.Packages[eId]; existingPkg != nil {
-		pkg = existingPkg
+	// check if we already have a package initialized for this ID
+	existingPackageIndex := -1
+	for ii, existingPkg := range parser.doc.Packages {
+		if existingPkg != nil && existingPkg.PackageSPDXIdentifier == eId {
+			existingPackageIndex = ii
+			pkg = existingPkg
+			break
+		}
 	}
 
 	// iterate over all the triples associated with the provided package packageNode.
@@ -150,7 +156,12 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 		}
 	}
 
-	parser.doc.Packages[pkg.PackageSPDXIdentifier] = pkg
+	if existingPackageIndex != -1 {
+		parser.doc.Packages[existingPackageIndex] = pkg
+	} else {
+		parser.doc.Packages = append(parser.doc.Packages, pkg)
+	}
+
 	return pkg, nil
 }
 
@@ -199,10 +210,10 @@ func (parser *rdfParser2_2) setPackageVerificationCode(pkg *spdx.Package2_2, nod
 		switch subTriple.Predicate.ID {
 		case SPDX_PACKAGE_VERIFICATION_CODE_VALUE:
 			// cardinality: exactly 1
-			pkg.PackageVerificationCode = subTriple.Object.ID
+			pkg.PackageVerificationCode.Value = subTriple.Object.ID
 		case SPDX_PACKAGE_VERIFICATION_CODE_EXCLUDED_FILE:
 			// cardinality: min 0
-			pkg.PackageVerificationCodeExcludedFile = subTriple.Object.ID
+			pkg.PackageVerificationCode.ExcludedFiles = append(pkg.PackageVerificationCode.ExcludedFiles, subTriple.Object.ID)
 		case RDF_TYPE:
 			// cardinality: exactly 1
 			continue
@@ -217,9 +228,9 @@ func (parser *rdfParser2_2) setPackageVerificationCode(pkg *spdx.Package2_2, nod
 // file to indicate the file is associated with a package
 func (parser *rdfParser2_2) setFileToPackage(pkg *spdx.Package2_2, file *spdx.File2_2) {
 	if pkg.Files == nil {
-		pkg.Files = map[spdx.ElementID]*spdx.File2_2{}
+		pkg.Files = []*spdx.File2_2{}
 	}
-	pkg.Files[file.FileSPDXIdentifier] = file
+	pkg.Files = append(pkg.Files, file)
 	parser.assocWithPackage[file.FileSPDXIdentifier] = true
 }
 
@@ -228,22 +239,27 @@ func (parser *rdfParser2_2) setFileToPackage(pkg *spdx.Package2_2, file *spdx.Fi
 //    value: [NOASSERTION | [Person | Organization]: string]
 func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 	value = strings.TrimSpace(value)
+	supplier := &spdx.Supplier{}
 	if strings.ToUpper(value) == "NOASSERTION" {
-		pkg.PackageSupplierNOASSERTION = true
+		supplier.Supplier = "NOASSERTION"
+		pkg.PackageSupplier = supplier
 		return nil
 	}
+
 	subKey, subValue, err := ExtractSubs(value, ":")
 	if err != nil {
 		return fmt.Errorf("package supplier must be of the form NOASSERTION or [Person|Organization]: string. found: %s", value)
 	}
 	switch subKey {
-	case "Person":
-		pkg.PackageSupplierPerson = subValue
-	case "Organization":
-		pkg.PackageSupplierOrganization = subValue
+	case "Person", "Organization":
+		supplier.Supplier = subValue
+		supplier.SupplierType = subKey
 	default:
 		return fmt.Errorf("unknown supplier %s", subKey)
 	}
+
+	pkg.PackageSupplier = supplier
+
 	return nil
 }
 
@@ -252,23 +268,27 @@ func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 //    value: [NOASSERTION | [Person | Organization]: string]
 func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 	value = strings.TrimSpace(value)
+	originator := &spdx.Originator{}
 	if strings.ToUpper(value) == "NOASSERTION" {
-		pkg.PackageOriginatorNOASSERTION = true
+		originator.Originator = "NOASSERTION"
+		pkg.PackageOriginator = originator
 		return nil
 	}
+
 	subKey, subValue, err := ExtractSubs(value, ":")
 	if err != nil {
-		return fmt.Errorf("package originator must be of the form NOASSERTION or [Person|Organization]: string. found: %s", value)
+		return fmt.Errorf("package Originator must be of the form NOASSERTION or [Person|Organization]: string. found: %s", value)
+	}
+	switch subKey {
+	case "Person", "Organization":
+		originator.Originator = subValue
+		originator.OriginatorType = subKey
+	default:
+		return fmt.Errorf("unknown Originator %s", subKey)
 	}
 
-	switch subKey {
-	case "Person":
-		pkg.PackageOriginatorPerson = subValue
-	case "Organization":
-		pkg.PackageOriginatorOrganization = subValue
-	default:
-		return fmt.Errorf("originator can be either a Person or Organization. found %s", subKey)
-	}
+	pkg.PackageOriginator = originator
+
 	return nil
 }
 
@@ -302,12 +322,11 @@ func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordf
 		return fmt.Errorf("error getting checksum algorithm and value from %v", node)
 	}
 	if pkg.PackageChecksums == nil {
-		pkg.PackageChecksums = make(map[spdx.ChecksumAlgorithm]spdx.Checksum)
+		pkg.PackageChecksums = make([]spdx.Checksum, 0, 1)
 	}
 	switch checksumAlgorithm {
 	case spdx.MD5, spdx.SHA1, spdx.SHA256:
-		algorithm := spdx.ChecksumAlgorithm(checksumAlgorithm)
-		pkg.PackageChecksums[algorithm] = spdx.Checksum{Algorithm: algorithm, Value: checksumValue}
+		pkg.PackageChecksums = append(pkg.PackageChecksums, spdx.Checksum{Algorithm: checksumAlgorithm, Value: checksumValue})
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)
 	}

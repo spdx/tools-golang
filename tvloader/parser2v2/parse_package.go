@@ -45,47 +45,51 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		parser.pkg.PackageSPDXIdentifier = eID
 		if parser.doc.Packages == nil {
-			parser.doc.Packages = map[spdx.ElementID]*spdx.Package2_2{}
+			parser.doc.Packages = []*spdx.Package2_2{}
 		}
-		parser.doc.Packages[eID] = parser.pkg
+		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 	case "PackageVersion":
 		parser.pkg.PackageVersion = value
 	case "PackageFileName":
 		parser.pkg.PackageFileName = value
 	case "PackageSupplier":
+		supplier := &spdx.Supplier{Supplier: value}
 		if value == "NOASSERTION" {
-			parser.pkg.PackageSupplierNOASSERTION = true
+			parser.pkg.PackageSupplier = supplier
 			break
 		}
+
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
 			return err
 		}
 		switch subkey {
-		case "Person":
-			parser.pkg.PackageSupplierPerson = subvalue
-		case "Organization":
-			parser.pkg.PackageSupplierOrganization = subvalue
+		case "Person", "Organization":
+			supplier.Supplier = subvalue
+			supplier.SupplierType = subkey
 		default:
 			return fmt.Errorf("unrecognized PackageSupplier type %v", subkey)
 		}
+		parser.pkg.PackageSupplier = supplier
 	case "PackageOriginator":
+		originator := &spdx.Originator{Originator: value}
 		if value == "NOASSERTION" {
-			parser.pkg.PackageOriginatorNOASSERTION = true
+			parser.pkg.PackageOriginator = originator
 			break
 		}
+
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
 			return err
 		}
 		switch subkey {
-		case "Person":
-			parser.pkg.PackageOriginatorPerson = subvalue
-		case "Organization":
-			parser.pkg.PackageOriginatorOrganization = subvalue
+		case "Person", "Organization":
+			originator.Originator = subvalue
+			originator.OriginatorType = subkey
 		default:
 			return fmt.Errorf("unrecognized PackageOriginator type %v", subkey)
 		}
+		parser.pkg.PackageOriginator = originator
 	case "PackageDownloadLocation":
 		parser.pkg.PackageDownloadLocation = value
 	case "FilesAnalyzed":
@@ -96,21 +100,19 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			parser.pkg.FilesAnalyzed = true
 		}
 	case "PackageVerificationCode":
-		code, excludesFileName := extractCodeAndExcludes(value)
-		parser.pkg.PackageVerificationCode = code
-		parser.pkg.PackageVerificationCodeExcludedFile = excludesFileName
+		parser.pkg.PackageVerificationCode = extractCodeAndExcludes(value)
 	case "PackageChecksum":
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
 			return err
 		}
 		if parser.pkg.PackageChecksums == nil {
-			parser.pkg.PackageChecksums = make(map[spdx.ChecksumAlgorithm]spdx.Checksum, 9)
+			parser.pkg.PackageChecksums = []spdx.Checksum{}
 		}
-		switch subkey {
+		switch spdx.ChecksumAlgorithm(subkey) {
 		case spdx.SHA1, spdx.SHA256, spdx.MD5:
 			algorithm := spdx.ChecksumAlgorithm(subkey)
-			parser.pkg.PackageChecksums[algorithm] = spdx.Checksum{Algorithm: algorithm, Value: subvalue}
+			parser.pkg.PackageChecksums = append(parser.pkg.PackageChecksums, spdx.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
@@ -186,13 +188,13 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 
 // ===== Helper functions =====
 
-func extractCodeAndExcludes(value string) (string, string) {
+func extractCodeAndExcludes(value string) spdx.PackageVerificationCode {
 	// FIXME this should probably be done using regular expressions instead
 	// split by paren + word "excludes:"
 	sp := strings.SplitN(value, "(excludes:", 2)
 	if len(sp) < 2 {
 		// not found; return the whole string as just the code
-		return value, ""
+		return spdx.PackageVerificationCode{Value: value, ExcludedFiles: []string{}}
 	}
 
 	// if we're here, code is in first part and excludes filename is in
@@ -200,7 +202,7 @@ func extractCodeAndExcludes(value string) (string, string) {
 	code := strings.TrimSpace(sp[0])
 	parsedSp := strings.SplitN(sp[1], ")", 2)
 	fileName := strings.TrimSpace(parsedSp[0])
-	return code, fileName
+	return spdx.PackageVerificationCode{Value: code, ExcludedFiles: []string{fileName}}
 }
 
 func extractPackageExternalReference(value string) (string, string, string, error) {

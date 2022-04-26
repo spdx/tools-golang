@@ -12,8 +12,7 @@ import (
 // ===== Annotation section Saver tests =====
 func TestSaver2_1AnnotationSavesTextForPerson(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "John Doe",
-		AnnotatorType:            "Person",
+		Annotator:                spdx.Annotator{AnnotatorType: "Person", Annotator: "John Doe"},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
 		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
@@ -45,8 +44,7 @@ AnnotationComment: This is an annotation about the SPDX document
 
 func TestSaver2_1AnnotationSavesTextForOrganization(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "John Doe, Inc.",
-		AnnotatorType:            "Organization",
+		Annotator:                spdx.Annotator{AnnotatorType: "Organization", Annotator: "John Doe, Inc."},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
 		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
@@ -78,8 +76,7 @@ AnnotationComment: This is an annotation about the SPDX document
 
 func TestSaver2_1AnnotationSavesTextForTool(t *testing.T) {
 	ann := &spdx.Annotation2_1{
-		Annotator:                "magictool-1.1",
-		AnnotatorType:            "Tool",
+		Annotator:                spdx.Annotator{AnnotatorType: "Tool", Annotator: "magictool-1.1"},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
 		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),

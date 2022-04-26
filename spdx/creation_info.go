@@ -2,146 +2,85 @@
 
 package spdx
 
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
+// Creator is a wrapper around the Creator SPDX field. The SPDX field contains two values, which requires special
+// handling in order to marshal/unmarshal it to/from Go data types.
+type Creator struct {
+	Creator string
+	// CreatorType should be one of "Person", "Organization", or "Tool"
+	CreatorType string
+}
+
+// UnmarshalJSON takes an annotator in the typical one-line format and parses it into a Creator struct.
+// This function is also used when unmarshalling YAML
+func (c *Creator) UnmarshalJSON(data []byte) error {
+	str := string(data)
+	str = strings.Trim(str, "\"")
+	fields := strings.SplitN(str, ": ", 2)
+
+	if len(fields) != 2 {
+		return fmt.Errorf("failed to parse Creator '%s'", str)
+	}
+
+	c.CreatorType = fields[0]
+	c.Creator = fields[1]
+
+	return nil
+}
+
+// MarshalJSON converts the receiver into a slice of bytes representing a Creator in string form.
+// This function is also used with marshalling to YAML
+func (c Creator) MarshalJSON() ([]byte, error) {
+	if c.Creator != "" {
+		return json.Marshal(fmt.Sprintf("%s: %s", c.CreatorType, c.Creator))
+	}
+
+	return []byte{}, nil
+}
+
 // CreationInfo2_1 is a Document Creation Information section of an
 // SPDX Document for version 2.1 of the spec.
 type CreationInfo2_1 struct {
-
-	// 2.1: SPDX Version; should be in the format "SPDX-2.1"
-	// Cardinality: mandatory, one
-	SPDXVersion string
-
-	// 2.2: Data License; should be "CC0-1.0"
-	// Cardinality: mandatory, one
-	DataLicense string
-
-	// 2.3: SPDX Identifier; should be "DOCUMENT" to represent
-	//      mandatory identifier of SPDXRef-DOCUMENT
-	// Cardinality: mandatory, one
-	SPDXIdentifier ElementID
-
-	// 2.4: Document Name
-	// Cardinality: mandatory, one
-	DocumentName string
-
-	// 2.5: Document Namespace
-	// Cardinality: mandatory, one
-	DocumentNamespace string
-
-	// 2.6: External Document References
-	// Cardinality: optional, one or many
-	ExternalDocumentReferences map[string]ExternalDocumentRef2_1
-
 	// 2.7: License List Version
 	// Cardinality: optional, one
-	LicenseListVersion string
+	LicenseListVersion string `json:"licenseListVersion"`
 
 	// 2.8: Creators: may have multiple keys for Person, Organization
 	//      and/or Tool
 	// Cardinality: mandatory, one or many
-	CreatorPersons       []string
-	CreatorOrganizations []string
-	CreatorTools         []string
+	Creators []Creator `json:"creators"`
 
 	// 2.9: Created: data format YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: mandatory, one
-	Created string
+	Created string `json:"created"`
 
 	// 2.10: Creator Comment
 	// Cardinality: optional, one
-	CreatorComment string
-
-	// 2.11: Document Comment
-	// Cardinality: optional, one
-	DocumentComment string
-}
-
-// ExternalDocumentRef2_1 is a reference to an external SPDX document
-// as defined in section 2.6 for version 2.1 of the spec.
-type ExternalDocumentRef2_1 struct {
-
-	// DocumentRefID is the ID string defined in the start of the
-	// reference. It should _not_ contain the "DocumentRef-" part
-	// of the mandatory ID string.
-	DocumentRefID string
-
-	// URI is the URI defined for the external document
-	URI string
-
-	// Alg is the type of hash algorithm used, e.g. "SHA1", "SHA256"
-	Alg string
-
-	// Checksum is the actual hash data
-	Checksum string
+	CreatorComment string `json:"comment"`
 }
 
 // CreationInfo2_2 is a Document Creation Information section of an
 // SPDX Document for version 2.2 of the spec.
 type CreationInfo2_2 struct {
-
-	// 2.1: SPDX Version; should be in the format "SPDX-2.2"
-	// Cardinality: mandatory, one
-	SPDXVersion string
-
-	// 2.2: Data License; should be "CC0-1.0"
-	// Cardinality: mandatory, one
-	DataLicense string
-
-	// 2.3: SPDX Identifier; should be "DOCUMENT" to represent
-	//      mandatory identifier of SPDXRef-DOCUMENT
-	// Cardinality: mandatory, one
-	SPDXIdentifier ElementID
-
-	// 2.4: Document Name
-	// Cardinality: mandatory, one
-	DocumentName string
-
-	// 2.5: Document Namespace
-	// Cardinality: mandatory, one
-	DocumentNamespace string
-
-	// 2.6: External Document References
-	// Cardinality: optional, one or many
-	ExternalDocumentReferences map[string]ExternalDocumentRef2_2
-
 	// 2.7: License List Version
 	// Cardinality: optional, one
-	LicenseListVersion string
+	LicenseListVersion string `json:"licenseListVersion"`
 
 	// 2.8: Creators: may have multiple keys for Person, Organization
 	//      and/or Tool
 	// Cardinality: mandatory, one or many
-	CreatorPersons       []string
-	CreatorOrganizations []string
-	CreatorTools         []string
+	Creators []Creator `json:"creators"`
 
 	// 2.9: Created: data format YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: mandatory, one
-	Created string
+	Created string `json:"created"`
 
 	// 2.10: Creator Comment
 	// Cardinality: optional, one
-	CreatorComment string
-
-	// 2.11: Document Comment
-	// Cardinality: optional, one
-	DocumentComment string
-}
-
-// ExternalDocumentRef2_2 is a reference to an external SPDX document
-// as defined in section 2.6 for version 2.2 of the spec.
-type ExternalDocumentRef2_2 struct {
-
-	// DocumentRefID is the ID string defined in the start of the
-	// reference. It should _not_ contain the "DocumentRef-" part
-	// of the mandatory ID string.
-	DocumentRefID string
-
-	// URI is the URI defined for the external document
-	URI string
-
-	// Alg is the type of hash algorithm used, e.g. "SHA1", "SHA256"
-	Alg string
-
-	// Checksum is the actual hash data
-	Checksum string
+	CreatorComment string `json:"comment"`
 }
