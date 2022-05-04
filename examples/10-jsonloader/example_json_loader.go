@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *jsonparser2v2*
+// Example for: *json*
 
 // This example demonstrates loading an SPDX JSON document from disk into memory,
-// and then logging some of the attributes to the console.
+// and then logging some attributes to the console.
 // Run project: go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json
 package main
 

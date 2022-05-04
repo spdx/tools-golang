@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *tvloader*, *jsonsaver*
+// Example for: *tvloader*, *json*
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // and re-saving it to a different json file on disk.
