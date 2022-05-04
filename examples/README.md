@@ -73,7 +73,7 @@ and then printing the corresponding spdx struct for the document.
 
 ## 8-jsontotv
 
-*jsonloader*, *tvsaver*
+*json*, *tvsaver*
 
 This example demonstrates loading an SPDX json from disk into memory
 and then re-saving it to a different file on disk in tag-value format.
@@ -81,7 +81,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 ## 9-tvtojson
 
-*jsonsaver*, *tvloader*
+*json*, *tvloader*
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in json format.
@@ -89,8 +89,32 @@ and then re-saving it to a different file on disk in json format.
 
 ## 10-jsonloader
 
-*jsonloader*
+*json*
 
 This example demonstrates loading an SPDX json from disk into memory
 and then logging some of the attributes to the console.
 #### Run project: *go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json*
+
+## 11-yamltotv
+
+*yaml*
+
+This example demonstrates loading an SPDX yaml from disk into memory
+and then re-saving it to a different file on disk in tag-value format.
+#### Run project: *go run exampleyamltotv.go ../sample-docs/yaml/SPDXYAMLExample-2.2.spdx.yaml test.spdx*
+
+## 12-tvtoyaml
+
+*yaml*
+
+This example demonstrates loading an SPDX tag-value from disk into memory
+and then re-saving it to a different file on disk in yaml format.
+#### Run project: *go run exampletvtoyaml.go ../sample-docs/tv/hello.spdx example.yaml*
+
+## 13-yamlloader
+
+*yaml*
+
+This example demonstrates loading an SPDX yaml from disk into memory
+and then logging some of the attributes to the console.
+#### Run project: *go run exampleYAMLLoader.go ../sample-docs/yaml/SPDXYAMLExample-2.2.spdx.yaml*
