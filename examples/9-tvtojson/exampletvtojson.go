@@ -22,7 +22,7 @@ func main() {
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <spdx-file-in> <json-file-out>\n", args[0])
 		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
-		fmt.Printf("  save it out to <json-file-out>.\n")
+		fmt.Printf("  save it out to JSON <json-file-out>.\n")
 		return
 	}
 
@@ -56,7 +56,7 @@ func main() {
 	}
 	defer w.Close()
 
-	// try to save the document to disk as an SPDX json file, version 2.2
+	// try to save the document to disk as JSON file
 	err = spdx_json.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)

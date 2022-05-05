@@ -45,7 +45,7 @@ func main() {
 	// if we got here, the file is now loaded into memory.
 	fmt.Printf("Successfully loaded %s\n", args[1])
 
-	// we can now save it back to disk, using jsonsaver.
+	// we can now save it back to disk, using yaml.
 
 	// create a new file for writing
 	fileOut := args[2]
@@ -56,7 +56,7 @@ func main() {
 	}
 	defer w.Close()
 
-	// try to save the document to disk as an SPDX json file, version 2.2
+	// try to save the document to disk as an YAML file
 	err = spdx_yaml.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)

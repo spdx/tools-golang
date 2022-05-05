@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *yaml*
+// Example for: *yaml* *tvsaver*
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // and re-saving it to a different file on disk.
@@ -10,6 +10,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/tvsaver"
 	"github.com/spdx/tools-golang/yaml"
 	"os"
 )
@@ -20,7 +21,7 @@ func main() {
 	args := os.Args
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <yaml-file-in> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 tag-value file <yaml-file-in>, and\n")
+		fmt.Printf("  Load YAML file <yaml-file-in>, and\n")
 		fmt.Printf("  save it out to <spdx-file-out>.\n")
 		return
 	}
@@ -34,7 +35,7 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a yaml file, version 2.2
+	// try to load the SPDX file's contents as a YAML file
 	doc, err := spdx_yaml.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", fileIn, err)
@@ -56,17 +57,11 @@ func main() {
 	defer w.Close()
 
 	// try to save the document to disk as an SPDX tag-value file, version 2.2
-	err = spdx_yaml.Save2_2(doc, w)
+	err = tvsaver.Save2_2(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return
 	}
-
-	//err = tvsaver.Save2_2(doc, w)
-	//if err != nil {
-	//	fmt.Printf("Error while saving %v: %v", fileOut, err)
-	//	return
-	//}
 
 	// it worked
 	fmt.Printf("Successfully saved %s\n", fileOut)
