@@ -105,7 +105,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 ## 12-tvtoyaml
 
-*yaml*
+*yaml* *tvloader*
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in yaml format.
