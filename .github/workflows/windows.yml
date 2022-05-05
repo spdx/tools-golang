@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+
+name: build_windows
+on: [push, pull_request]
+jobs:
+  tests:
+    runs-on:  windows-2019 
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.14'
+      - name: Run tests
+        run: go test -v -covermode=count -coverprofile=profile.cov ./...
+      - name: Send coverage report to coveralls
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
