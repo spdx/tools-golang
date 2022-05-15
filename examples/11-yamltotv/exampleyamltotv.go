@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *json*, *tvsaver*
+// Example for: *yaml* *tvsaver*
 
-// This example demonstrates loading an SPDX json from disk into memory,
-// and then re-saving it to a different file on disk in tag-value format .
-// Run project: go run examplejsontotv.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json example.spdx
+// This example demonstrates loading an SPDX tag-value file from disk into memory,
+// and re-saving it to a different file on disk.
+// Run project: go run exampleyamltotv.go ../sample-docs/yaml/SPDXYAMLExample-2.2.spdx.yaml test.spdx
+
 package main
 
 import (
 	"fmt"
-	"os"
-
-	"github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/tvsaver"
+	"github.com/spdx/tools-golang/yaml"
+	"os"
 )
 
 func main() {
@@ -20,8 +20,8 @@ func main() {
 	// check that we've received the right number of arguments
 	args := os.Args
 	if len(args) != 3 {
-		fmt.Printf("Usage: %v <json-file-in> <spdx-file-out>\n", args[0])
-		fmt.Printf("  Load JSON file <json-file-in>, and\n")
+		fmt.Printf("Usage: %v <yaml-file-in> <spdx-file-out>\n", args[0])
+		fmt.Printf("  Load YAML file <yaml-file-in>, and\n")
 		fmt.Printf("  save it out to <spdx-file-out>.\n")
 		return
 	}
@@ -35,17 +35,17 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := spdx_json.Load2_2(r)
+	// try to load the SPDX file's contents as a YAML file
+	doc, err := spdx_yaml.Load2_2(r)
 	if err != nil {
-		fmt.Printf("Error while parsing %v: %v", args[1], err)
+		fmt.Printf("Error while parsing %v: %v", fileIn, err)
 		return
 	}
 
 	// if we got here, the file is now loaded into memory.
-	fmt.Printf("Successfully loaded %s\n", args[1])
+	fmt.Printf("Successfully loaded %s\n", fileIn)
 
-	// we can now save it back to disk, using tvsaver.
+	// we can now save it back to disk, using spdx_yaml, but tvsaver work also.
 
 	// create a new file for writing
 	fileOut := args[2]

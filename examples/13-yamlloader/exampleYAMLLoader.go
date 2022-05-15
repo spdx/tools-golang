@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *json*
+// Example for: *yaml*
 
-// This example demonstrates loading an SPDX JSON document from disk into memory,
+// This example demonstrates loading an SPDX YAML document from disk into memory,
 // and then logging some attributes to the console.
-// Run project: go run example_json_loader.go ../sample-docs/json/SPDXJSONExample-v2.2.spdx.json
+// Run project: go run exampleYAMLLoader.go ../sample-docs/yaml/SPDXYAMLExample-2.2.spdx.yaml
 package main
 
 import (
@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spdx/tools-golang/json"
+	"github.com/spdx/tools-golang/yaml"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	defer r.Close()
 
 	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := spdx_json.Load2_2(r)
+	doc, err := spdx_yaml.Load2_2(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return
