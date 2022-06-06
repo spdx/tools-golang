@@ -11,7 +11,8 @@ import (
 )
 
 func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (pkg *spdx.Package2_2, err error) {
-	pkg = &spdx.Package2_2{} // new package which will be returned
+	truthy := true
+	pkg = &spdx.Package2_2{FilesAnalyzed: &truthy} // new package which will be returned
 
 	currState := parser.cache[packageNode.ID]
 	if currState == nil {
@@ -310,10 +311,14 @@ func setDocumentLocationFromURI(pkg *spdx.Package2_2, locationURI string) error 
 
 // sets the FilesAnalyzed attribute to the given package
 // boolValue is a string of type "true" or "false"
-func setFilesAnalyzed(pkg *spdx.Package2_2, boolValue string) (err error) {
-	pkg.IsFilesAnalyzedTagPresent = true
-	pkg.FilesAnalyzed, err = boolFromString(boolValue)
-	return err
+func setFilesAnalyzed(pkg *spdx.Package2_2, boolValue string) error {
+	value, err := boolFromString(boolValue)
+	if err != nil {
+		return err
+	}
+
+	pkg.FilesAnalyzed = &value
+	return nil
 }
 
 func (parser *rdfParser2_2) setPackageChecksum(pkg *spdx.Package2_2, node *gordfParser.Node) error {

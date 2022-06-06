@@ -32,11 +32,8 @@ func TestBuilder2_1CanBuildPackageSection(t *testing.T) {
 	if pkg.PackageDownloadLocation != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
 	}
-	if pkg.FilesAnalyzed != true {
+	if *pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
-	}
-	if pkg.IsFilesAnalyzedTagPresent != true {
-		t.Errorf("expected %v, got %v", true, pkg.IsFilesAnalyzedTagPresent)
 	}
 	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {
 		t.Errorf("expected %v, got %v", wantVerificationCode, pkg.PackageVerificationCode)

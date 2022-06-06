@@ -54,9 +54,9 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
 		parser.st = psPackage2_2
+		truthy := true
 		parser.pkg = &spdx.Package2_2{
-			FilesAnalyzed:             true,
-			IsFilesAnalyzedTagPresent: false,
+			FilesAnalyzed: &truthy,
 		}
 		return parser.parsePairFromPackage2_2(tag, value)
 	// tag for going on to _unpackaged_ file section

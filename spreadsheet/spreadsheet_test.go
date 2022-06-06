@@ -55,6 +55,9 @@ func TestWrite2_2(t *testing.T) {
 	}
 }
 
+var truthy = true
+var falsy = false
+
 // want is handwritten translation of the official example xls SPDX v2.2 document into a Go struct.
 // We expect that the result of parsing the official document should be this value.
 // We expect that the result of writing this struct should match the official example document.
@@ -153,7 +156,7 @@ var want = spdx.Document2_2{
 			PackageSPDXIdentifier:   "fromDoap-1",
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "NOASSERTION",
-			FilesAnalyzed:           false,
+			FilesAnalyzed:           &falsy,
 			PackageHomePage:         "http://commons.apache.org/proper/commons-lang/",
 			PackageLicenseConcluded: "NOASSERTION",
 			PackageLicenseDeclared:  "NOASSERTION",
@@ -173,7 +176,7 @@ var want = spdx.Document2_2{
 				OriginatorType: "Organization",
 			},
 			PackageDownloadLocation: "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
-			FilesAnalyzed:           true,
+			FilesAnalyzed:           &truthy,
 			PackageVerificationCode: spdx.PackageVerificationCode{
 				Value:         "d6a770ba38583ed4bb4525bd96e50461655d2758",
 				ExcludedFiles: []string{"./package.spdx"},
@@ -308,7 +311,7 @@ var want = spdx.Document2_2{
 					Locator:  "pkg:maven/org.apache.jena/apache-jena@3.12.0",
 				},
 			},
-			FilesAnalyzed:           false,
+			FilesAnalyzed:           &falsy,
 			PackageHomePage:         "http://www.openjena.org/",
 			PackageLicenseConcluded: "NOASSERTION",
 			PackageLicenseDeclared:  "NOASSERTION",
@@ -325,7 +328,7 @@ var want = spdx.Document2_2{
 			PackageCopyrightText:    "Copyright Saxonica Ltd",
 			PackageDescription:      "The Saxon package is a collection of tools for processing XML documents.",
 			PackageDownloadLocation: "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download",
-			FilesAnalyzed:           false,
+			FilesAnalyzed:           &falsy,
 			PackageHomePage:         "http://saxon.sourceforge.net/",
 			PackageLicenseComments:  "Other versions available for a commercial license",
 			PackageLicenseConcluded: "MPL-1.0",

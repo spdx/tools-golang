@@ -31,11 +31,8 @@ func TestParser2_2CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
 	}
 	// and the package should default to true for FilesAnalyzed
-	if parser.pkg.FilesAnalyzed != true {
+	if *parser.pkg.FilesAnalyzed != true {
 		t.Errorf("expected FilesAnalyzed to default to true, got false")
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != false {
-		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
 	}
 	// and the package should NOT be in the SPDX Document's map of packages,
 	// because it doesn't have an SPDX identifier yet

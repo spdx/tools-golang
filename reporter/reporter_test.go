@@ -11,8 +11,9 @@ import (
 
 // ===== 2.1 Reporter top-level function tests =====
 func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
+	truthy := true
 	pkg := &spdx.Package2_1{
-		FilesAnalyzed: true,
+		FilesAnalyzed: &truthy,
 		Files: []*spdx.File2_1{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
@@ -54,8 +55,9 @@ func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
 }
 
 func Test2_1ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
+	falsy := false
 	pkg := &spdx.Package2_1{
-		FilesAnalyzed: false,
+		FilesAnalyzed: &falsy,
 	}
 
 	// render as buffer of bytes
@@ -69,8 +71,9 @@ func Test2_1ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
 // ===== 2.1 Utility functions =====
 
 func Test2_1CanGetCountsOfLicenses(t *testing.T) {
+	truthy := true
 	pkg := &spdx.Package2_1{
-		FilesAnalyzed: true,
+		FilesAnalyzed: &truthy,
 		Files: []*spdx.File2_1{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
@@ -135,8 +138,9 @@ func Test2_1NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
 
 // ===== 2.2 Reporter top-level function tests =====
 func Test2_2ReporterCanMakeReportFromPackage(t *testing.T) {
+	truthy := true
 	pkg := &spdx.Package2_2{
-		FilesAnalyzed: true,
+		FilesAnalyzed: &truthy,
 		Files: []*spdx.File2_2{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
@@ -178,8 +182,9 @@ func Test2_2ReporterCanMakeReportFromPackage(t *testing.T) {
 }
 
 func Test2_2ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
+	falsy := false
 	pkg := &spdx.Package2_2{
-		FilesAnalyzed: false,
+		FilesAnalyzed: &falsy,
 	}
 
 	// render as buffer of bytes
@@ -193,8 +198,9 @@ func Test2_2ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
 // ===== 2.2 Utility functions =====
 
 func Test2_2CanGetCountsOfLicenses(t *testing.T) {
+	truthy := true
 	pkg := &spdx.Package2_2{
-		FilesAnalyzed: true,
+		FilesAnalyzed: &truthy,
 		Files: []*spdx.File2_2{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},

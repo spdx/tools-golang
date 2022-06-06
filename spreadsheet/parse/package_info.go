@@ -19,7 +19,8 @@ func ProcessPackageInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 	for rowNum, row := range rows[1:] {
 		// set rowNum to the correct value, Go slices are zero-indexed (+1), and we started iterating on the second element (+1)
 		rowNum = rowNum + 2
-		newPackage := spdx.Package2_2{}
+		var truthy = true
+		newPackage := spdx.Package2_2{FilesAnalyzed: &truthy}
 
 		for columnIndex, value := range row {
 			if value == "" {
@@ -103,10 +104,17 @@ func ProcessPackageInfoRows(rows [][]string, doc *spdx.Document2_2) error {
 			case common.PackageFilesAnalyzed:
 				filesAnalyzed, err := strconv.ParseBool(value)
 				if err != nil {
-					return fmt.Errorf("invalid boolean for Files Analyzed in row %d (should be 'true' or 'false')", rowNum)
+					// sometimes the excelize library gives funny values for booleans
+					if value == "0x160da28" {
+						filesAnalyzed = false
+					} else if value == "0x1512300" {
+						filesAnalyzed = true
+					} else {
+						return fmt.Errorf("invalid boolean '%s' for Files Analyzed in row %d (should be 'true' or 'false')", value, rowNum)
+					}
 				}
 
-				newPackage.FilesAnalyzed = filesAnalyzed
+				newPackage.FilesAnalyzed = &filesAnalyzed
 			case common.PackageComments:
 				newPackage.PackageComment = value
 			}

@@ -59,12 +59,12 @@ func BuildPackageSection2_2(packageName string, dirRoot string, pathsIgnore []st
 	}
 
 	// now build the package section
+	truthy := true
 	pkg := &spdx.Package2_2{
 		PackageName:                 packageName,
 		PackageSPDXIdentifier:       spdx.ElementID(fmt.Sprintf("Package-%s", packageName)),
 		PackageDownloadLocation:     "NOASSERTION",
-		FilesAnalyzed:               true,
-		IsFilesAnalyzedTagPresent:   true,
+		FilesAnalyzed:               &truthy,
 		PackageVerificationCode:     code,
 		PackageLicenseConcluded:     "NOASSERTION",
 		PackageLicenseInfoFromFiles: []string{},

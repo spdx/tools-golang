@@ -116,13 +116,13 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 		FileCopyrightText: "NOASSERTION",
 	}
 
+	truthy := true
 	// create Packages
 	p1 := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -140,11 +140,10 @@ func Test2_1DifferCanCreateDiffPairs(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_1{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p2",
+		PackageSPDXIdentifier:   spdx.ElementID("p2"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -355,13 +354,13 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FileCopyrightText: "NOASSERTION",
 	}
 
+	truthy := true
 	// create Packages
 	p1 := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -379,11 +378,10 @@ func Test2_1DifferCanCreateDiffStructuredResults(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_1{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p2",
+		PackageSPDXIdentifier:   spdx.ElementID("p2"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -638,13 +636,13 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 		FileCopyrightText: "NOASSERTION",
 	}
 
+	truthy := true
 	// create Packages
 	p1 := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -662,11 +660,10 @@ func Test2_2DifferCanCreateDiffPairs(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_2{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p2",
+		PackageSPDXIdentifier:   spdx.ElementID("p2"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -909,13 +906,13 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 		FileCopyrightText: "NOASSERTION",
 	}
 
+	truthy := true
 	// create Packages
 	p1 := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "abc123abc123"},
 		PackageLicenseConcluded: "NOASSERTION",
@@ -933,11 +930,10 @@ func Test2_2DifferCanCreateDiffStructuredResults(t *testing.T) {
 		},
 	}
 	p2 := &spdx.Package2_2{
-		PackageName:               "p2",
-		PackageSPDXIdentifier:     spdx.ElementID("p2"),
-		PackageDownloadLocation:   "NOASSERTION",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p2",
+		PackageSPDXIdentifier:   spdx.ElementID("p2"),
+		PackageDownloadLocation: "NOASSERTION",
+		FilesAnalyzed:           &truthy,
 		// fake the verification code for present purposes
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "def456def456"},
 		PackageLicenseConcluded: "NOASSERTION",

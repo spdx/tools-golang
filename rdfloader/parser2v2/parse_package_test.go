@@ -758,10 +758,7 @@ func Test_setFilesAnalyzed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !pkg.IsFilesAnalyzedTagPresent {
-		t.Errorf("should've set IsFilesAnalyzedTagPresent, got: %t", pkg.IsFilesAnalyzedTagPresent)
-	}
-	if !pkg.FilesAnalyzed {
-		t.Errorf("expected: %t, got: %t", true, pkg.FilesAnalyzed)
+	if !*pkg.FilesAnalyzed {
+		t.Errorf("expected: %t, got: %t", true, *pkg.FilesAnalyzed)
 	}
 }

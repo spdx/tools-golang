@@ -24,9 +24,9 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			if parser.pkg != nil && parser.pkg.PackageSPDXIdentifier == nullSpdxElementId2_2 {
 				return fmt.Errorf("package with PackageName %s does not have SPDX identifier", parser.pkg.PackageName)
 			}
+			truthy := true
 			parser.pkg = &spdx.Package2_2{
-				FilesAnalyzed:             true,
-				IsFilesAnalyzedTagPresent: false,
+				FilesAnalyzed: &truthy,
 			}
 		}
 		parser.pkg.PackageName = value
@@ -93,11 +93,9 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 	case "PackageDownloadLocation":
 		parser.pkg.PackageDownloadLocation = value
 	case "FilesAnalyzed":
-		parser.pkg.IsFilesAnalyzedTagPresent = true
 		if value == "false" {
-			parser.pkg.FilesAnalyzed = false
-		} else if value == "true" {
-			parser.pkg.FilesAnalyzed = true
+			falsy := false
+			parser.pkg.FilesAnalyzed = &falsy
 		}
 	case "PackageVerificationCode":
 		parser.pkg.PackageVerificationCode = extractCodeAndExcludes(value)

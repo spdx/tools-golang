@@ -186,9 +186,7 @@ type Package2_1 struct {
 
 	// 3.8: FilesAnalyzed
 	// Cardinality: optional, one; default value is "true" if omitted
-	FilesAnalyzed bool `json:"filesAnalyzed,omitempty"`
-	// NOT PART OF SPEC: did FilesAnalyzed tag appear?
-	IsFilesAnalyzedTagPresent bool `json:"-"`
+	FilesAnalyzed *bool `json:"filesAnalyzed,omitempty"`
 
 	// 3.9: Package Verification Code
 	PackageVerificationCode PackageVerificationCode `json:"packageVerificationCode"`
@@ -306,9 +304,7 @@ type Package2_2 struct {
 
 	// 3.8: FilesAnalyzed
 	// Cardinality: optional, one; default value is "true" if omitted
-	FilesAnalyzed bool `json:"filesAnalyzed,omitempty"`
-	// NOT PART OF SPEC: did FilesAnalyzed tag appear?
-	IsFilesAnalyzedTagPresent bool
+	FilesAnalyzed *bool `json:"filesAnalyzed,omitempty"`
 
 	// 3.9: Package Verification Code
 	PackageVerificationCode PackageVerificationCode `json:"packageVerificationCode"`
@@ -374,6 +370,44 @@ type Package2_2 struct {
 	Files []*File2_2
 
 	Annotations []Annotation2_2 `json:"annotations"`
+}
+
+// UnmarshalJSON unmarshalls a Package2_1 as usual, but performs some additional processing around the FilesAnalyzed field.
+// Per the spec, this field can be omitted from a package, which should be interpreted as "true".
+// This function is also used when unmarshalling YAML
+func (p *Package2_1) UnmarshalJSON(data []byte) error {
+	// define a type alias to get default unmarshalling behavior
+	type package2_1_copy *Package2_1
+	if err := json.Unmarshal(data, (package2_1_copy)(p)); err != nil {
+		return err
+	}
+
+	// do additional processing
+	if p.FilesAnalyzed == nil {
+		truthy := true
+		p.FilesAnalyzed = &truthy
+	}
+
+	return nil
+}
+
+// UnmarshalJSON unmarshalls a Package2_2 as usual, but performs some additional processing around the FilesAnalyzed field.
+// Per the spec, this field can be omitted from a package, which should be interpreted as "true".
+// This function is also used when unmarshalling YAML
+func (p *Package2_2) UnmarshalJSON(data []byte) error {
+	// define a type alias to get default unmarshalling behavior
+	type package2_2_copy *Package2_2
+	if err := json.Unmarshal(data, (package2_2_copy)(p)); err != nil {
+		return err
+	}
+
+	// do additional processing
+	if p.FilesAnalyzed == nil {
+		truthy := true
+		p.FilesAnalyzed = &truthy
+	}
+
+	return nil
 }
 
 // PackageExternalReference2_2 is an External Reference to additional info

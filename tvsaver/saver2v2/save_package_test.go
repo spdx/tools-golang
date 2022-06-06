@@ -9,6 +9,9 @@ import (
 	"github.com/spdx/tools-golang/spdx"
 )
 
+var truthy = true
+var falsy = false
+
 // ===== Package section Saver tests =====
 func TestSaver2_2PackageSavesTextCombo1(t *testing.T) {
 	// include package external refs
@@ -49,15 +52,14 @@ multi-line external ref comment`,
 	}
 
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageVersion:            "0.1.0",
-		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
-		PackageOriginator:         &spdx.Originator{Originator: "John Doe", OriginatorType: "Person"},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageVersion:          "0.1.0",
+		PackageFileName:         "p1-0.1.0-master.tar.gz",
+		PackageSupplier:         &spdx.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
+		PackageOriginator:       &spdx.Originator{Originator: "John Doe", OriginatorType: "Person"},
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &truthy,
 		PackageVerificationCode: spdx.PackageVerificationCode{
 			Value:         "0123456789abcdef0123456789abcdef01234567",
 			ExcludedFiles: []string{"p1-0.1.0.spdx"},
@@ -156,16 +158,15 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 	// PackageVerificationCodeExcludedFile is empty
 
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageVersion:            "0.1.0",
-		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{Supplier: "NOASSERTION"},
-		PackageOriginator:         &spdx.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: false,
-		PackageVerificationCode:   spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageVersion:          "0.1.0",
+		PackageFileName:         "p1-0.1.0-master.tar.gz",
+		PackageSupplier:         &spdx.Supplier{Supplier: "NOASSERTION"},
+		PackageOriginator:       &spdx.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &truthy,
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
 		PackageChecksums: []spdx.Checksum{
 			{
 				Algorithm: spdx.SHA1,
@@ -205,6 +206,7 @@ PackageFileName: p1-0.1.0-master.tar.gz
 PackageSupplier: NOASSERTION
 PackageOriginator: Organization: John Doe, Inc.
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
+FilesAnalyzed: true
 PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
@@ -247,15 +249,14 @@ func TestSaver2_2PackageSavesTextCombo3(t *testing.T) {
 	// three PackageAttributionTexts, one with multi-line text
 
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageVersion:            "0.1.0",
-		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{Supplier: "John Doe", SupplierType: "Person"},
-		PackageOriginator:         &spdx.Originator{Originator: "NOASSERTION"},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             false,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageVersion:          "0.1.0",
+		PackageFileName:         "p1-0.1.0-master.tar.gz",
+		PackageSupplier:         &spdx.Supplier{Supplier: "John Doe", SupplierType: "Person"},
+		PackageOriginator:       &spdx.Originator{Originator: "NOASSERTION"},
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &falsy,
 		// NOTE that verification code MUST be omitted from output
 		// since FilesAnalyzed is false
 		PackageVerificationCode: spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
@@ -306,12 +307,16 @@ PackageSupplier: Person: John Doe
 PackageOriginator: NOASSERTION
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 FilesAnalyzed: false
+PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
 PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
 PackageHomePage: http://example.com/p1
 PackageSourceInfo: this is a source comment
 PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseInfoFromFiles: Apache-1.1
+PackageLicenseInfoFromFiles: Apache-2.0
+PackageLicenseInfoFromFiles: GPL-2.0-or-later
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageLicenseComments: this is a license comment(s)
 PackageCopyrightText: Copyright (c) John Doe, Inc.
@@ -341,11 +346,10 @@ which goes across two lines</text>
 
 func TestSaver2_2PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             false,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &falsy,
 		// NOTE that verification code MUST be omitted from output,
 		// even if present in model, since FilesAnalyzed is false
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -366,6 +370,9 @@ SPDXID: SPDXRef-p1
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 FilesAnalyzed: false
 PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseInfoFromFiles: Apache-1.1
+PackageLicenseInfoFromFiles: Apache-2.0
+PackageLicenseInfoFromFiles: GPL-2.0-or-later
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageCopyrightText: Copyright (c) John Doe, Inc.
 
@@ -415,11 +422,10 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 	}
 
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             false,
-		IsFilesAnalyzedTagPresent: true,
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &falsy,
 		// NOTE that verification code MUST be omitted from output,
 		// even if present in model, since FilesAnalyzed is false
 		PackageLicenseConcluded: "GPL-2.0-or-later",
@@ -444,6 +450,9 @@ SPDXID: SPDXRef-p1
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 FilesAnalyzed: false
 PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseInfoFromFiles: Apache-1.1
+PackageLicenseInfoFromFiles: Apache-2.0
+PackageLicenseInfoFromFiles: GPL-2.0-or-later
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageCopyrightText: Copyright (c) John Doe, Inc.
 
@@ -479,12 +488,11 @@ FileCopyrightText: Copyright (c) John Doe
 
 func TestSaver2_2PackageWrapsMultiLine(t *testing.T) {
 	pkg := &spdx.Package2_2{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             false,
-		IsFilesAnalyzedTagPresent: true,
-		PackageLicenseConcluded:   "GPL-2.0-or-later",
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &falsy,
+		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-1.1",
 			"Apache-2.0",
@@ -501,6 +509,9 @@ SPDXID: SPDXRef-p1
 PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 FilesAnalyzed: false
 PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseInfoFromFiles: Apache-1.1
+PackageLicenseInfoFromFiles: Apache-2.0
+PackageLicenseInfoFromFiles: GPL-2.0-or-later
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
 Copyright Jane Doe</text>

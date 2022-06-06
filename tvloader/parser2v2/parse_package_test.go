@@ -50,11 +50,8 @@ func TestParser2_2PackageStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
 	}
 	// and the package should default to true for FilesAnalyzed
-	if parser.pkg.FilesAnalyzed != true {
+	if !*parser.pkg.FilesAnalyzed {
 		t.Errorf("expected FilesAnalyzed to default to true, got false")
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != false {
-		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
 	}
 	// and the Document's Packages should still be of size 1 and have pkgOld only
 	if parser.doc.Packages[0] != pkgOld {
@@ -97,11 +94,8 @@ func TestParser2_2PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 		t.Errorf("expected package name %s, got %s", pkgName, parser.pkg.PackageName)
 	}
 	// and the package should default to true for FilesAnalyzed
-	if parser.pkg.FilesAnalyzed != true {
+	if !*parser.pkg.FilesAnalyzed {
 		t.Errorf("expected FilesAnalyzed to default to true, got false")
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != false {
-		t.Errorf("expected IsFilesAnalyzedTagPresent to default to false, got true")
 	}
 	// and the Document's Packages should be of size 0, because the prior was
 	// unpackaged files and this one won't be added until an SPDXID is seen
@@ -248,7 +242,7 @@ func TestParser2_2CanParsePackageTags(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// should not yet be in Packages map, b/c no SPDX identifier
@@ -324,11 +318,8 @@ func TestParser2_2CanParsePackageTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.FilesAnalyzed != false {
+	if *parser.pkg.FilesAnalyzed {
 		t.Errorf("got %v for FilesAnalyzed", parser.pkg.FilesAnalyzed)
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != true {
-		t.Errorf("got %v for IsFilesAnalyzedTagPresent", parser.pkg.IsFilesAnalyzedTagPresent)
 	}
 
 	// Package Verification Code
@@ -846,7 +837,7 @@ func TestParser2_2FailsIfInvalidSPDXIDInPackageSection(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -865,7 +856,7 @@ func TestParser2_2FailsIfInvalidPackageSupplierFormat(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -884,7 +875,7 @@ func TestParser2_2FailsIfUnknownPackageSupplierType(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -903,7 +894,7 @@ func TestParser2_2FailsIfInvalidPackageOriginatorFormat(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -922,7 +913,7 @@ func TestParser2_2FailsIfUnknownPackageOriginatorType(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -941,7 +932,7 @@ func TestParser2_2SetsFilesAnalyzedTagsCorrectly(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -954,11 +945,8 @@ func TestParser2_2SetsFilesAnalyzedTagsCorrectly(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	if parser.pkg.FilesAnalyzed != true {
+	if !*parser.pkg.FilesAnalyzed {
 		t.Errorf("expected %v, got %v", true, parser.pkg.FilesAnalyzed)
-	}
-	if parser.pkg.IsFilesAnalyzedTagPresent != true {
-		t.Errorf("expected %v, got %v", true, parser.pkg.IsFilesAnalyzedTagPresent)
 	}
 }
 
@@ -966,7 +954,7 @@ func TestParser2_2FailsIfInvalidPackageChecksumFormat(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -985,7 +973,7 @@ func TestParser2_2FailsIfInvalidPackageChecksumType(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -1004,7 +992,7 @@ func TestParser2_2FailsIfInvalidExternalRefFormat(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name
@@ -1023,7 +1011,7 @@ func TestParser2_2FailsIfExternalRefCommentBeforeExternalRef(t *testing.T) {
 	parser := tvParser2_2{
 		doc: &spdx.Document2_2{Packages: []*spdx.Package2_2{}},
 		st:  psPackage2_2,
-		pkg: &spdx.Package2_2{},
+		pkg: &spdx.Package2_2{FilesAnalyzed: &truthy},
 	}
 
 	// start with Package Name

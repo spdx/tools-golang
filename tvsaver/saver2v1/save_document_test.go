@@ -87,14 +87,14 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 		FileCopyrightText:  "Copyright (c) Jane Doe LLC",
 	}
 
+	truthy := true
 	pkgWith := &spdx.Package2_1{
-		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
-		FilesAnalyzed:             true,
-		IsFilesAnalyzedTagPresent: true,
-		PackageVerificationCode:   spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
-		PackageLicenseConcluded:   "GPL-2.0-or-later AND BSD-3-Clause AND WTFPL",
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   spdx.ElementID("p1"),
+		PackageDownloadLocation: "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		FilesAnalyzed:           &truthy,
+		PackageVerificationCode: spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageLicenseConcluded: "GPL-2.0-or-later AND BSD-3-Clause AND WTFPL",
 		PackageLicenseInfoFromFiles: []string{
 			"Apache-2.0",
 			"GPL-2.0-or-later",

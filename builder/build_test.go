@@ -84,7 +84,7 @@ func TestBuild2_1CreatesDocument(t *testing.T) {
 	if pkg.PackageDownloadLocation != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
 	}
-	if pkg.FilesAnalyzed != true {
+	if *pkg.FilesAnalyzed != true {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
 	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {
@@ -495,7 +495,7 @@ func TestBuild2_2CreatesDocument(t *testing.T) {
 	if pkg.PackageDownloadLocation != "NOASSERTION" {
 		t.Errorf("expected %v, got %v", "NOASSERTION", pkg.PackageDownloadLocation)
 	}
-	if pkg.FilesAnalyzed != true {
+	if !*pkg.FilesAnalyzed {
 		t.Errorf("expected %v, got %v", true, pkg.FilesAnalyzed)
 	}
 	if pkg.PackageVerificationCode.Value != wantVerificationCode.Value {

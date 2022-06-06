@@ -19,8 +19,8 @@ import (
 // io.Writer, and outputs to the io.Writer a tabulated count of
 // the number of Files for each unique LicenseConcluded in the set.
 func Generate2_1(pkg *spdx.Package2_1, w io.Writer) error {
-	if pkg.FilesAnalyzed == false {
-		return fmt.Errorf("Package FilesAnalyzed is false")
+	if pkg.FilesAnalyzed != nil && !*pkg.FilesAnalyzed {
+		return fmt.Errorf("package FilesAnalyzed is false")
 	}
 	totalFound, totalNotFound, foundCounts := countLicenses2_1(pkg)
 
@@ -82,7 +82,7 @@ func countLicenses2_1(pkg *spdx.Package2_1) (int, int, map[string]int) {
 // io.Writer, and outputs to the io.Writer a tabulated count of
 // the number of Files for each unique LicenseConcluded in the set.
 func Generate2_2(pkg *spdx.Package2_2, w io.Writer) error {
-	if pkg.FilesAnalyzed == false {
+	if pkg.FilesAnalyzed != nil && !*pkg.FilesAnalyzed {
 		return fmt.Errorf("Package FilesAnalyzed is false")
 	}
 	totalFound, totalNotFound, foundCounts := countLicenses2_2(pkg)

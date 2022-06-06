@@ -83,7 +83,7 @@ func main() {
 		pkgID := pkg.PackageSPDXIdentifier
 
 		// check whether the package had its files analyzed
-		if !pkg.FilesAnalyzed {
+		if pkg.FilesAnalyzed != nil && !*pkg.FilesAnalyzed {
 			fmt.Printf("Package %s (%s) had FilesAnalyzed: false\n", string(pkgID), pkg.PackageName)
 			continue
 		}
