@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-package spdx
+package common
 
 // ChecksumAlgorithm represents the algorithm used to generate the file checksum in the Checksum struct.
 type ChecksumAlgorithm string
