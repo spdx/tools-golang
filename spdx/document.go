@@ -5,6 +5,7 @@ package spdx
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 	"strings"
 )
 
@@ -78,25 +79,60 @@ func (e ExternalDocumentRef2_2) String() string {
 	return fmt.Sprintf("%s %s %s", e.DocumentRefID, e.URI, e.Checksum)
 }
 
+func extractExternalDocumentReference(value string) (DocElementID, string, string, string, error) {
+	sp := strings.Split(value, " ")
+	// remove any that are just whitespace
+	keepSp := []string{}
+	for _, s := range sp {
+		ss := strings.TrimSpace(s)
+		if ss != "" {
+			keepSp = append(keepSp, ss)
+		}
+	}
+
+	var documentRefID DocElementID
+	var uri, alg, checksum string
+
+	// now, should have 4 items (or 3, if Alg and Checksum were joined)
+	// and should be able to map them
+	if len(keepSp) == 4 {
+		documentRefID = MakeDocElementID(keepSp[0], "")
+		uri = keepSp[1]
+		alg = keepSp[2]
+		// check that colon is present for alg, and remove it
+		if !strings.HasSuffix(alg, ":") {
+			return documentRefID, "", "", "", fmt.Errorf("algorithm does not end with colon")
+		}
+		alg = strings.TrimSuffix(alg, ":")
+		checksum = keepSp[3]
+	} else if len(keepSp) == 3 {
+		documentRefID = MakeDocElementID(keepSp[0], "")
+		uri = keepSp[1]
+		// split on colon into alg and checksum
+		var err error
+		alg, checksum, err = utils.ExtractSubs(keepSp[2])
+		if err != nil {
+			return documentRefID, "", "", "", err
+		}
+	} else {
+		return documentRefID, "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
+	}
+
+	return documentRefID, uri, alg, checksum, nil
+}
+
 // FromString parses a string into a spdx.ExternalDocumentRef2_1.
 // These strings take the following form: "<DocumentRefID> <URI> <Checksum>"
 func (e *ExternalDocumentRef2_1) FromString(value string) error {
-	fields := strings.SplitN(value, " ", 3)
-	if len(fields) != 3 {
-		return fmt.Errorf("invalid external document reference: %s", value)
-	}
-
-	e.DocumentRefID = MakeDocElementID(fields[0], "")
-	e.URI = fields[1]
-
-	// the checksum is special and needs further processing
-	var checksum Checksum
-	err := checksum.FromString(fields[2])
+	documentRefID, uri, alg, checksum, err := extractExternalDocumentReference(value)
 	if err != nil {
 		return err
 	}
 
-	e.Checksum = checksum
+	e.DocumentRefID = documentRefID
+	e.URI = uri
+	e.Checksum.Algorithm = ChecksumAlgorithm(alg)
+	e.Checksum.Value = checksum
 
 	return nil
 }
@@ -104,22 +140,15 @@ func (e *ExternalDocumentRef2_1) FromString(value string) error {
 // FromString parses a string into a spdx.ExternalDocumentRef2_2.
 // These strings take the following form: "<DocumentRefID> <URI> <Checksum>"
 func (e *ExternalDocumentRef2_2) FromString(value string) error {
-	fields := strings.SplitN(value, " ", 3)
-	if len(fields) != 3 {
-		return fmt.Errorf("invalid external document reference: %s", value)
-	}
-
-	e.DocumentRefID = MakeDocElementID(fields[0], "")
-	e.URI = fields[1]
-
-	// the checksum is special and needs further processing
-	var checksum Checksum
-	err := checksum.FromString(fields[2])
+	documentRefID, uri, alg, checksum, err := extractExternalDocumentReference(value)
 	if err != nil {
 		return err
 	}
 
-	e.Checksum = checksum
+	e.DocumentRefID = documentRefID
+	e.URI = uri
+	e.Checksum.Algorithm = ChecksumAlgorithm(alg)
+	e.Checksum.Value = checksum
 
 	return nil
 }

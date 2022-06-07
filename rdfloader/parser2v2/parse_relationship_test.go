@@ -18,7 +18,7 @@ func Test_getReferenceFromURI(t *testing.T) {
 	if ref.DocumentRefID != "" {
 		t.Errorf("reference's documentRefID should've been empty, found %s", ref.DocumentRefID)
 	}
-	if ref.ElementRefID != "NOASSERTION" {
+	if ref.SpecialID != "NOASSERTION" {
 		t.Errorf("mismatching elementRefID. Found %s, expected %s", ref.ElementRefID, "NOASSERTION")
 	}
 
@@ -30,7 +30,7 @@ func Test_getReferenceFromURI(t *testing.T) {
 	if ref.DocumentRefID != "" {
 		t.Errorf("reference's documentRefID should've been empty, found %s", ref.DocumentRefID)
 	}
-	if ref.ElementRefID != "NONE" {
+	if ref.SpecialID != "NONE" {
 		t.Errorf("mismatching elementRefID. Found %s, expected %s", ref.ElementRefID, "NONE")
 	}
 

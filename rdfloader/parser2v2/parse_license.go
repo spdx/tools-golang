@@ -7,6 +7,7 @@ import (
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/gordf/rdfwriter"
+	"strconv"
 	"strings"
 )
 
@@ -37,7 +38,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	parser.cache[node.ID].Color = GREY
 
 	// setting state color to black when we're done parsing this node.
-	defer func(){parser.cache[node.ID].Color = BLACK}()
+	defer func() { parser.cache[node.ID].Color = BLACK }()
 
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
 	if len(associatedTriples) == 0 {
@@ -256,7 +257,7 @@ func (parser *rdfParser2_2) getLicenseFromNode(node *gordfParser.Node) (lic Lice
 		value := triple.Object.ID
 		switch triple.Predicate.ID {
 		case SPDX_IS_OSI_APPROVED:
-			lic.isOsiApproved, err = boolFromString(value)
+			lic.isOsiApproved, err = strconv.ParseBool(value)
 			if err != nil {
 				return lic, fmt.Errorf("error parsing isOsiApproved attribute of a License: %v", err)
 			}
@@ -269,12 +270,12 @@ func (parser *rdfParser2_2) getLicenseFromNode(node *gordfParser.Node) (lic Lice
 		case SPDX_STANDARD_LICENSE_HEADER_TEMPLATE:
 			lic.standardLicenseHeaderTemplate = value
 		case SPDX_IS_DEPRECATED_LICENSE_ID:
-			lic.isDeprecatedLicenseID, err = boolFromString(value)
+			lic.isDeprecatedLicenseID, err = strconv.ParseBool(value)
 			if err != nil {
 				return lic, fmt.Errorf("error parsing isDeprecatedLicenseId attribute of a License: %v", err)
 			}
 		case SPDX_IS_FSF_LIBRE:
-			lic.isFsfLibre, err = boolFromString(value)
+			lic.isFsfLibre, err = strconv.ParseBool(value)
 			if err != nil {
 				return lic, fmt.Errorf("error parsing isFsfLibre attribute of a License: %v", err)
 			}

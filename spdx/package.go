@@ -3,8 +3,11 @@
 package spdx
 
 import (
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
+	"sort"
 	"strings"
 )
 
@@ -34,14 +37,13 @@ func (s *Supplier) FromString(value string) error {
 		return nil
 	}
 
-	supplierFields := strings.SplitN(value, ": ", 2)
-
-	if len(supplierFields) != 2 {
-		return fmt.Errorf("failed to parse Supplier '%s'", value)
+	supplierType, supplier, err := utils.ExtractSubs(value)
+	if err != nil {
+		return err
 	}
 
-	s.SupplierType = supplierFields[0]
-	s.Supplier = supplierFields[1]
+	s.SupplierType = supplierType
+	s.Supplier = supplier
 
 	return nil
 }
@@ -101,14 +103,13 @@ func (o *Originator) FromString(value string) error {
 		return nil
 	}
 
-	fields := strings.SplitN(value, ": ", 2)
-
-	if len(fields) != 2 {
-		return fmt.Errorf("failed to parse Originator '%s'", value)
+	originatorType, originator, err := utils.ExtractSubs(value)
+	if err != nil {
+		return err
 	}
 
-	o.OriginatorType = fields[0]
-	o.Originator = fields[1]
+	o.OriginatorType = originatorType
+	o.Originator = originator
 
 	return nil
 }
@@ -393,4 +394,82 @@ type PackageExternalReference2_2 struct {
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
 	ExternalRefComment string `json:"comment"`
+}
+
+// MakePackageVerificationCode2_1 takes a slice of files and an optional filename
+// for an "excludes" file, and returns a Package Verification Code calculated
+// according to SPDX spec version 2.1, section 3.9.4.
+func MakePackageVerificationCode2_1(files []*File2_1, excludeFile string) (PackageVerificationCode, error) {
+	// create slice of strings - unsorted SHA1s for all files
+	shas := []string{}
+	for i, f := range files {
+		if f == nil {
+			return PackageVerificationCode{}, fmt.Errorf("got nil file for identifier %v", i)
+		}
+		if f.FileName != excludeFile {
+			// find the SHA1 hash, if present
+			for _, checksum := range f.Checksums {
+				if checksum.Algorithm == SHA1 {
+					shas = append(shas, checksum.Value)
+				}
+			}
+		}
+	}
+
+	// sort the strings
+	sort.Strings(shas)
+
+	// concatenate them into one string, with no trailing separators
+	shasConcat := strings.Join(shas, "")
+
+	// and get its SHA1 value
+	hsha1 := sha1.New()
+	hsha1.Write([]byte(shasConcat))
+	bs := hsha1.Sum(nil)
+
+	code := PackageVerificationCode{
+		Value:         fmt.Sprintf("%x", bs),
+		ExcludedFiles: []string{excludeFile},
+	}
+
+	return code, nil
+}
+
+// MakePackageVerificationCode2_2 takes a slice of files and an optional filename
+// for an "excludes" file, and returns a Package Verification Code calculated
+// according to SPDX spec version 2.2, section 3.9.4.
+func MakePackageVerificationCode2_2(files []*File2_2, excludeFile string) (PackageVerificationCode, error) {
+	// create slice of strings - unsorted SHA1s for all files
+	shas := []string{}
+	for i, f := range files {
+		if f == nil {
+			return PackageVerificationCode{}, fmt.Errorf("got nil file for identifier %v", i)
+		}
+		if f.FileName != excludeFile {
+			// find the SHA1 hash, if present
+			for _, checksum := range f.Checksums {
+				if checksum.Algorithm == SHA1 {
+					shas = append(shas, checksum.Value)
+				}
+			}
+		}
+	}
+
+	// sort the strings
+	sort.Strings(shas)
+
+	// concatenate them into one string, with no trailing separators
+	shasConcat := strings.Join(shas, "")
+
+	// and get its SHA1 value
+	hsha1 := sha1.New()
+	hsha1.Write([]byte(shasConcat))
+	bs := hsha1.Sum(nil)
+
+	code := PackageVerificationCode{
+		Value:         fmt.Sprintf("%x", bs),
+		ExcludedFiles: []string{excludeFile},
+	}
+
+	return code, nil
 }

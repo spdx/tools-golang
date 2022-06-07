@@ -30,16 +30,24 @@ func (e ElementID) String() string {
 
 // FromString parses an SPDX Identifier string into an ElementID.
 // These strings take the form: "SPDXRef-some-identifier"
-func (e *ElementID) FromString(idStr string) error {
-	idFields := strings.SplitN(idStr, "SPDXRef-", 2)
-	switch len(idFields) {
-	case 2:
-		// "SPDXRef-" prefix was present
-		*e = ElementID(idFields[1])
-	case 1:
-		// prefix was not present
-		*e = ElementID(idFields[0])
+func (e *ElementID) FromString(value string) error {
+	// check prefix to confirm it's got the right prefix for element IDs
+	if !strings.HasPrefix(value, "SPDXRef-") {
+		return fmt.Errorf("missing SPDXRef- prefix for element identifier")
 	}
+
+	// make sure no colons are present
+	if strings.Contains(value, ":") {
+		return fmt.Errorf("invalid colon in element identifier")
+	}
+
+	// trim the prefix and confirm non-empty
+	eltRefID := strings.TrimPrefix(value, "SPDXRef-")
+	if eltRefID == "" {
+		return fmt.Errorf("element identifier has nothing after prefix")
+	}
+
+	*e = ElementID(eltRefID)
 
 	return nil
 }
@@ -67,13 +75,14 @@ func (e ElementID) MarshalJSON() ([]byte, error) {
 // DocElementID represents an SPDX element identifier that could be defined
 // in a different SPDX document, and therefore could have a "DocumentRef-"
 // portion, such as Relationships and Annotations.
+//
+// DocumentRefID is used to reference other documents. This will be an empty string for elements defined in the
+// present document. This value should not contain the 'DocumentRef-' prefix.
+//
 // ElementID is used for attributes in which a "DocumentRef-" portion cannot
 // appear, such as a Package or File definition (since it is necessarily
-// being defined in the present document).
-// DocumentRefID will be an empty string for elements defined in the
-// present document.
-// DocElementIDs should NOT contain the mandatory 'DocumentRef-' or
-// 'SPDXRef-' portions.
+// being defined in the present document). This value should not contain the 'SPDXRef-' prefix.
+//
 // SpecialID is used ONLY if the DocElementID matches a defined set of
 // permitted special values for a particular field, e.g. "NONE" or
 // "NOASSERTION" for the right-hand side of Relationships. If SpecialID
@@ -112,6 +121,11 @@ func (d *DocElementID) FromString(idStr string) error {
 		// strip out the "DocumentRef-" so we can get the value
 		idFields = strings.SplitN(idStr, "DocumentRef-", 2)
 		idStr = idFields[1]
+
+		// edge case - no text after DocumentRef, for example: DocumentRef-:SPDXRef-package
+		if strings.HasPrefix(idFields[1], ":") {
+			return fmt.Errorf("invalid DocumentRef '%s'", idStr)
+		}
 
 		// an SPDXRef can appear after a DocumentRef, separated by a colon
 		idFields = strings.SplitN(idStr, ":", 2)

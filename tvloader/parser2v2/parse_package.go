@@ -4,6 +4,7 @@ package parser2v2
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -39,11 +40,10 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		parser.st = psOtherLicense2_2
 		return parser.parsePairFromOtherLicense2_2(tag, value)
 	case "SPDXID":
-		eID, err := extractElementID(value)
+		err := parser.pkg.PackageSPDXIdentifier.FromString(value)
 		if err != nil {
 			return err
 		}
-		parser.pkg.PackageSPDXIdentifier = eID
 		if parser.doc.Packages == nil {
 			parser.doc.Packages = []*spdx.Package2_2{}
 		}
@@ -59,7 +59,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			break
 		}
 
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			break
 		}
 
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}
@@ -102,7 +102,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 	case "PackageVerificationCode":
 		parser.pkg.PackageVerificationCode = extractCodeAndExcludes(value)
 	case "PackageChecksum":
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}

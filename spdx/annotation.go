@@ -5,6 +5,7 @@ package spdx
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 	"strings"
 )
 
@@ -26,14 +27,13 @@ func (a Annotator) Validate() error {
 
 // FromString parses an Annotator string into an Annotator struct.
 func (a *Annotator) FromString(value string) error {
-	annotatorFields := strings.SplitN(value, ": ", 2)
-
-	if len(annotatorFields) != 2 {
-		return fmt.Errorf("failed to parse Annotator '%s'", value)
+	annotatorType, annotator, err := utils.ExtractSubs(value)
+	if err != nil {
+		return err
 	}
 
-	a.AnnotatorType = annotatorFields[0]
-	a.Annotator = annotatorFields[1]
+	a.AnnotatorType = annotatorType
+	a.Annotator = annotator
 
 	return nil
 }

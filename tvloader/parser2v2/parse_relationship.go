@@ -29,19 +29,16 @@ func (parser *tvParser2_2) parsePairForRelationship2_2(tag string, value string)
 			return fmt.Errorf("invalid relationship format for %s", value)
 		}
 
-		aID, err := extractDocElementID(strings.TrimSpace(rp[0]))
+		err := parser.rln.RefA.FromString(strings.TrimSpace(rp[0]))
 		if err != nil {
 			return err
 		}
-		parser.rln.RefA = aID
 		parser.rln.Relationship = strings.TrimSpace(rp[1])
-		// NONE and NOASSERTION are permitted on right side
-		permittedSpecial := []string{"NONE", "NOASSERTION"}
-		bID, err := extractDocElementSpecial(strings.TrimSpace(rp[2]), permittedSpecial)
+		err = parser.rln.RefB.FromString(strings.TrimSpace(rp[2]))
 		if err != nil {
 			return err
 		}
-		parser.rln.RefB = bID
+
 		return nil
 	}
 

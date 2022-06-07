@@ -6,6 +6,7 @@ import (
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/utils"
 )
 
 func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node) (err error) {
@@ -14,7 +15,7 @@ func (parser *rdfParser2_2) parseSpdxDocumentNode(spdxDocNode *gordfParser.Node)
 
 	// parse the document header information (SPDXID and document namespace)
 	// the Subject.ID is of type baseURI#spdxID
-	baseUri, offset, err := ExtractSubs(spdxDocNode.ID, "#")
+	baseUri, offset, err := utils.ExtractSubsWithSeparator(spdxDocNode.ID, "#")
 	if err != nil {
 		return err
 	}

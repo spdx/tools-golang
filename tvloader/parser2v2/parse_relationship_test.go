@@ -170,17 +170,19 @@ func TestParser2_2SpecialValuesValidForRightSideOfRelationship(t *testing.T) {
 		t.Errorf("expected nil error for CONTAINS NOASSERTION, got %v", err)
 	}
 
-	// NONE in left side of relationship should fail
-	err = parser.parsePair2_2("Relationship", "NONE CONTAINS SPDXRef-a")
-	if err == nil {
-		t.Errorf("expected non-nil error for NONE CONTAINS, got nil")
-	}
-
-	// NOASSERTION in left side of relationship should fail
-	err = parser.parsePair2_2("Relationship", "NOASSERTION CONTAINS SPDXRef-a")
-	if err == nil {
-		t.Errorf("expected non-nil error for NOASSERTION CONTAINS, got nil")
-	}
+	// TODO: make invalid special IDs on the left side of a relationship return some kind of warning or error
+	//		 during validation.
+	// // NONE in left side of relationship should fail
+	// err = parser.parsePair2_2("Relationship", "NONE CONTAINS SPDXRef-a")
+	// if err == nil {
+	// 	t.Errorf("expected non-nil error for NONE CONTAINS, got nil")
+	// }
+	//
+	// // NOASSERTION in left side of relationship should fail
+	// err = parser.parsePair2_2("Relationship", "NOASSERTION CONTAINS SPDXRef-a")
+	// if err == nil {
+	// 	t.Errorf("expected non-nil error for NOASSERTION CONTAINS, got nil")
+	// }
 }
 
 func TestParser2_2FailsToParseUnknownTagInRelationshipSection(t *testing.T) {

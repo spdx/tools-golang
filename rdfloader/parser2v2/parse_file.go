@@ -189,7 +189,7 @@ func (parser *rdfParser2_2) setUnpackagedFiles() {
 func setFileIdentifier(idURI string, file *spdx.File2_2) (err error) {
 	idURI = strings.TrimSpace(idURI)
 	uriFragment := getLastPartOfURI(idURI)
-	file.FileSPDXIdentifier, err = ExtractElementID(uriFragment)
+	err = file.FileSPDXIdentifier.FromString(uriFragment)
 	if err != nil {
 		return fmt.Errorf("error setting file identifier: %s", err)
 	}

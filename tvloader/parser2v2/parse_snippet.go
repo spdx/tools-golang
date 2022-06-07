@@ -4,6 +4,7 @@ package parser2v2
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 	"strconv"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -18,7 +19,7 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
 		parser.snippet = &spdx.Snippet2_2{}
-		eID, err := extractElementID(value)
+		err := parser.snippet.SnippetSPDXIdentifier.FromString(value)
 		if err != nil {
 			return err
 		}
@@ -27,9 +28,8 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 			if parser.file.Snippets == nil {
 				parser.file.Snippets = map[spdx.ElementID]*spdx.Snippet2_2{}
 			}
-			parser.file.Snippets[eID] = parser.snippet
+			parser.file.Snippets[parser.snippet.SnippetSPDXIdentifier] = parser.snippet
 		}
-		parser.snippet.SnippetSPDXIdentifier = eID
 	// tag for creating new file section and going back to parsing File
 	case "FileName":
 		parser.st = psFile2_2
@@ -47,13 +47,14 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 		return parser.parsePairFromOtherLicense2_2(tag, value)
 	// tags for snippet data
 	case "SnippetFromFileSPDXID":
-		deID, err := extractDocElementID(value)
+		var deID spdx.DocElementID
+		err := deID.FromString(value)
 		if err != nil {
 			return err
 		}
 		parser.snippet.SnippetFromFileSPDXIdentifier = deID.ElementRefID
 	case "SnippetByteRange":
-		byteStart, byteEnd, err := extractSubs(value)
+		byteStart, byteEnd, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}
@@ -72,7 +73,7 @@ func (parser *tvParser2_2) parsePairFromSnippet2_2(tag string, value string) err
 		byteRange := spdx.SnippetRange{StartPointer: spdx.SnippetRangePointer{Offset: bIntStart}, EndPointer: spdx.SnippetRangePointer{Offset: bIntEnd}}
 		parser.snippet.Ranges = append(parser.snippet.Ranges, byteRange)
 	case "SnippetLineRange":
-		lineStart, lineEnd, err := extractSubs(value)
+		lineStart, lineEnd, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}

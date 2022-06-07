@@ -6,6 +6,7 @@ import (
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/utils"
 )
 
 // Cardinality: Mandatory, one.
@@ -36,7 +37,7 @@ func (parser *rdfParser2_2) parseCreationInfoFromNode(ci *spdx.CreationInfo2_2, 
 }
 
 func setCreator(creatorStr string, ci *spdx.CreationInfo2_2) error {
-	entityType, entity, err := ExtractSubs(creatorStr, ":")
+	entityType, entity, err := utils.ExtractSubs(creatorStr)
 	if err != nil {
 		return fmt.Errorf("error setting creator of a creation info: %s", err)
 	}

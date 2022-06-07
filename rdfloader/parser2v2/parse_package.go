@@ -4,6 +4,8 @@ package parser2v2
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
+	"strconv"
 	"strings"
 
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
@@ -34,16 +36,16 @@ func (parser *rdfParser2_2) getPackageFromNode(packageNode *gordfParser.Node) (p
 	defer func() { parser.cache[packageNode.ID].Color = BLACK }()
 
 	// setting the SPDXIdentifier for the package.
-	eId, err := ExtractElementID(getLastPartOfURI(packageNode.ID))
+	// 3.2
+	err = pkg.PackageSPDXIdentifier.FromString(getLastPartOfURI(packageNode.ID))
 	if err != nil {
 		return nil, fmt.Errorf("error extracting elementID of a package identifier: %v", err)
 	}
-	pkg.PackageSPDXIdentifier = eId // 3.2
 
 	// check if we already have a package initialized for this ID
 	existingPackageIndex := -1
 	for ii, existingPkg := range parser.doc.Packages {
-		if existingPkg != nil && existingPkg.PackageSPDXIdentifier == eId {
+		if existingPkg != nil && existingPkg.PackageSPDXIdentifier == pkg.PackageSPDXIdentifier {
 			existingPackageIndex = ii
 			pkg = existingPkg
 			break
@@ -246,7 +248,7 @@ func setPackageSupplier(pkg *spdx.Package2_2, value string) error {
 		return nil
 	}
 
-	subKey, subValue, err := ExtractSubs(value, ":")
+	subKey, subValue, err := utils.ExtractSubs(value)
 	if err != nil {
 		return fmt.Errorf("package supplier must be of the form NOASSERTION or [Person|Organization]: string. found: %s", value)
 	}
@@ -275,7 +277,7 @@ func setPackageOriginator(pkg *spdx.Package2_2, value string) error {
 		return nil
 	}
 
-	subKey, subValue, err := ExtractSubs(value, ":")
+	subKey, subValue, err := utils.ExtractSubs(value)
 	if err != nil {
 		return fmt.Errorf("package Originator must be of the form NOASSERTION or [Person|Organization]: string. found: %s", value)
 	}
@@ -312,7 +314,7 @@ func setDocumentLocationFromURI(pkg *spdx.Package2_2, locationURI string) error 
 // boolValue is a string of type "true" or "false"
 func setFilesAnalyzed(pkg *spdx.Package2_2, boolValue string) (err error) {
 	pkg.IsFilesAnalyzedTagPresent = true
-	pkg.FilesAnalyzed, err = boolFromString(boolValue)
+	pkg.FilesAnalyzed, err = strconv.ParseBool(boolValue)
 	return err
 }
 

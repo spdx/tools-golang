@@ -5,7 +5,6 @@ package parser2v1
 
 import (
 	"fmt"
-
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/tvloader/reader"
 )
@@ -70,24 +69,19 @@ func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error
 	case "DataLicense":
 		parser.doc.DataLicense = value
 	case "SPDXID":
-		eID, err := extractElementID(value)
+		err := parser.doc.SPDXIdentifier.FromString(value)
 		if err != nil {
 			return err
 		}
-		parser.doc.SPDXIdentifier = eID
 	case "DocumentName":
 		parser.doc.DocumentName = value
 	case "DocumentNamespace":
 		parser.doc.DocumentNamespace = value
 	case "ExternalDocumentRef":
-		documentRefID, uri, alg, checksum, err := extractExternalDocumentReference(value)
+		var edr spdx.ExternalDocumentRef2_1
+		err := edr.FromString(value)
 		if err != nil {
 			return err
-		}
-		edr := spdx.ExternalDocumentRef2_1{
-			DocumentRefID: documentRefID,
-			URI:           uri,
-			Checksum:      spdx.Checksum{Algorithm: spdx.ChecksumAlgorithm(alg), Value: checksum},
 		}
 		parser.doc.ExternalDocumentReferences = append(parser.doc.ExternalDocumentReferences, edr)
 	case "DocumentComment":

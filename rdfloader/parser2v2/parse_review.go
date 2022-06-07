@@ -6,6 +6,7 @@ import (
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/utils"
 )
 
 func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) error {
@@ -24,7 +25,7 @@ func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) er
 		case SPDX_REVIEWER:
 			// cardinality: max 1
 			var err error
-			review.ReviewerType, review.Reviewer, err = ExtractSubs(triple.Object.ID, ":")
+			review.ReviewerType, review.Reviewer, err = utils.ExtractSubs(triple.Object.ID)
 			if err != nil {
 				return fmt.Errorf("error parsing reviewer: %v", err)
 			}

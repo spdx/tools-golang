@@ -5,6 +5,7 @@ package spdx
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 	"strings"
 )
 
@@ -28,14 +29,13 @@ func (c Creator) Validate() error {
 
 // FromString takes a Creator in the typical one-line format and parses it into a Creator struct.
 func (c *Creator) FromString(str string) error {
-	fields := strings.SplitN(str, ": ", 2)
-
-	if len(fields) != 2 {
-		return fmt.Errorf("failed to parse Creator '%s'", str)
+	creatorType, creator, err := utils.ExtractSubs(str)
+	if err != nil {
+		return err
 	}
 
-	c.CreatorType = fields[0]
-	c.Creator = fields[1]
+	c.CreatorType = creatorType
+	c.Creator = creator
 
 	return nil
 }

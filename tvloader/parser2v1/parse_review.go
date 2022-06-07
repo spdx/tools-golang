@@ -4,6 +4,7 @@ package parser2v1
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -14,7 +15,7 @@ func (parser *tvParser2_1) parsePairFromReview2_1(tag string, value string) erro
 	case "Reviewer":
 		parser.rev = &spdx.Review2_1{}
 		parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}

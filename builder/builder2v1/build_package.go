@@ -52,7 +52,7 @@ func BuildPackageSection2_1(packageName string, dirRoot string, pathsIgnore []st
 		fileNumber++
 	}
 	// get the verification code
-	code, err := utils.GetVerificationCode2_1(files, "")
+	code, err := spdx.MakePackageVerificationCode2_1(files, "")
 	if err != nil {
 		return nil, err
 	}

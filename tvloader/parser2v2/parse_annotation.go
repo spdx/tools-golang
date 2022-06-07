@@ -4,6 +4,7 @@ package parser2v2
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 )
 
 func (parser *tvParser2_2) parsePairForAnnotation2_2(tag string, value string) error {
@@ -13,7 +14,7 @@ func (parser *tvParser2_2) parsePairForAnnotation2_2(tag string, value string) e
 
 	switch tag {
 	case "Annotator":
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}
@@ -28,11 +29,10 @@ func (parser *tvParser2_2) parsePairForAnnotation2_2(tag string, value string) e
 	case "AnnotationType":
 		parser.ann.AnnotationType = value
 	case "SPDXREF":
-		deID, err := extractDocElementID(value)
+		err := parser.ann.AnnotationSPDXIdentifier.FromString(value)
 		if err != nil {
 			return err
 		}
-		parser.ann.AnnotationSPDXIdentifier = deID
 	case "AnnotationComment":
 		parser.ann.AnnotationComment = value
 	default:

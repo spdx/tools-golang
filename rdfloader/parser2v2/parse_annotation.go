@@ -7,6 +7,7 @@ import (
 	"fmt"
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/utils"
 )
 
 // creates a new instance of annotation and sets the annotation attributes
@@ -54,7 +55,7 @@ func setAnnotationToParser(parser *rdfParser2_2, annotation *spdx.Annotation2_2)
 
 // annotator is of type [Person|Organization|Tool]:String
 func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) error {
-	subkey, subvalue, err := ExtractSubs(annotatorString, ":")
+	subkey, subvalue, err := utils.ExtractSubs(annotatorString)
 	if err != nil {
 		return err
 	}

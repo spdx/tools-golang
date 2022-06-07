@@ -4,6 +4,7 @@ package parser2v1
 
 import (
 	"fmt"
+	"github.com/spdx/tools-golang/utils"
 
 	"github.com/spdx/tools-golang/spdx"
 )
@@ -43,11 +44,10 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 		return parser.parsePairFromOtherLicense2_1(tag, value)
 	// tags for file data
 	case "SPDXID":
-		eID, err := extractElementID(value)
+		err := parser.file.FileSPDXIdentifier.FromString(value)
 		if err != nil {
 			return err
 		}
-		parser.file.FileSPDXIdentifier = eID
 		if parser.pkg == nil {
 			if parser.doc.Files == nil {
 				parser.doc.Files = []*spdx.File2_1{}
@@ -62,7 +62,7 @@ func (parser *tvParser2_1) parsePairFromFile2_1(tag string, value string) error 
 	case "FileType":
 		parser.file.FileTypes = append(parser.file.FileTypes, value)
 	case "FileChecksum":
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}

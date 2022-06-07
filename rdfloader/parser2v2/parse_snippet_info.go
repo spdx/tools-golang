@@ -31,7 +31,11 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 			if err != nil {
 				return nil, err
 			}
-			docElemID, err := ExtractDocElementID(getLastPartOfURI(siTriple.Object.ID))
+			var docElemID spdx.DocElementID
+			err = docElemID.FromString(getLastPartOfURI(siTriple.Object.ID))
+			if err != nil {
+				return nil, err
+			}
 			si.SnippetFromFileSPDXIdentifier = docElemID.ElementRefID
 		case SPDX_RANGE:
 			// cardinality: min 1
@@ -189,7 +193,7 @@ func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet 
 
 func setSnippetID(uri string, si *spdx.Snippet2_2) (err error) {
 	fragment := getLastPartOfURI(uri)
-	si.SnippetSPDXIdentifier, err = ExtractElementID(fragment)
+	err = si.SnippetSPDXIdentifier.FromString(fragment)
 	if err != nil {
 		return fmt.Errorf("error setting snippet identifier: %v", uri)
 	}

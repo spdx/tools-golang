@@ -4,7 +4,7 @@ package spdx
 
 import (
 	"fmt"
-	"strings"
+	"github.com/spdx/tools-golang/utils"
 )
 
 // ChecksumAlgorithm represents the algorithm used to generate the file checksum in the Checksum struct.
@@ -34,13 +34,13 @@ type Checksum struct {
 // These strings take the following form:
 // SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
 func (c *Checksum) FromString(value string) error {
-	fields := strings.Split(value, ": ")
-	if len(fields) != 2 {
-		return fmt.Errorf("invalid checksum: %s", value)
+	algorithm, value, err := utils.ExtractSubs(value)
+	if err != nil {
+		return err
 	}
 
-	c.Algorithm = ChecksumAlgorithm(fields[0])
-	c.Value = fields[1]
+	c.Algorithm = ChecksumAlgorithm(algorithm)
+	c.Value = value
 
 	return nil
 }

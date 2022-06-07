@@ -40,7 +40,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 	parser.cache[triple.Object.ID].Color = GREY
 
 	// setting state color to black to indicate when we're done parsing this node.
-	defer func(){parser.cache[triple.Object.ID].Color = BLACK}();
+	defer func() { parser.cache[triple.Object.ID].Color = BLACK }()
 
 	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
@@ -112,7 +112,7 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 	case SPDX_SPDX_ELEMENT:
 		// it shouldn't be associated with any other triple.
 		// it must be a uri reference.
-		reln.RefB, err = ExtractDocElementID(getLastPartOfURI(triple.Subject.ID))
+		err = reln.RefB.FromString(getLastPartOfURI(triple.Subject.ID))
 		if err != nil {
 			return err
 		}
@@ -124,15 +124,10 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 
 // references like RefA and RefB of any relationship
 func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
+	var docElementID spdx.DocElementID
 	fragment := getLastPartOfURI(uri)
-	switch strings.ToLower(strings.TrimSpace(fragment)) {
-	case "noassertion", "none":
-		return spdx.DocElementID{
-			DocumentRefID: "",
-			ElementRefID:  spdx.ElementID(strings.ToUpper(fragment)),
-		}, nil
-	}
-	return ExtractDocElementID(fragment)
+	err := docElementID.FromString(fragment)
+	return docElementID, err
 }
 
 // note: relationshipType is case sensitive.

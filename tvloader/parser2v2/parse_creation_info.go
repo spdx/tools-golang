@@ -4,9 +4,8 @@ package parser2v2
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/utils"
 )
 
 func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string) error {
@@ -25,7 +24,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 	case "LicenseListVersion":
 		ci.LicenseListVersion = value
 	case "Creator":
-		subkey, subvalue, err := extractSubs(value)
+		subkey, subvalue, err := utils.ExtractSubs(value)
 		if err != nil {
 			return err
 		}
@@ -98,49 +97,4 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 	}
 
 	return nil
-}
-
-// ===== Helper functions =====
-
-func extractExternalDocumentReference(value string) (spdx.DocElementID, string, string, string, error) {
-	sp := strings.Split(value, " ")
-	// remove any that are just whitespace
-	keepSp := []string{}
-	for _, s := range sp {
-		ss := strings.TrimSpace(s)
-		if ss != "" {
-			keepSp = append(keepSp, ss)
-		}
-	}
-
-	var documentRefID spdx.DocElementID
-	var uri, alg, checksum string
-
-	// now, should have 4 items (or 3, if Alg and Checksum were joined)
-	// and should be able to map them
-	if len(keepSp) == 4 {
-		documentRefID = spdx.MakeDocElementID(keepSp[0], "")
-		uri = keepSp[1]
-		alg = keepSp[2]
-		// check that colon is present for alg, and remove it
-		if !strings.HasSuffix(alg, ":") {
-			return documentRefID, "", "", "", fmt.Errorf("algorithm does not end with colon")
-		}
-		alg = strings.TrimSuffix(alg, ":")
-		checksum = keepSp[3]
-	} else if len(keepSp) == 3 {
-		documentRefID = spdx.MakeDocElementID(keepSp[0], "")
-		uri = keepSp[1]
-		// split on colon into alg and checksum
-		parts := strings.SplitN(keepSp[2], ":", 2)
-		if len(parts) != 2 {
-			return documentRefID, "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
-		}
-		alg = parts[0]
-		checksum = parts[1]
-	} else {
-		return documentRefID, "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
-	}
-
-	return documentRefID, uri, alg, checksum, nil
 }
