@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
-func renderOtherLicense2_1(ol *spdx.OtherLicense2_1, w io.Writer) error {
+func renderOtherLicense2_1(ol *v2_1.OtherLicense, w io.Writer) error {
 	if ol.LicenseIdentifier != "" {
 		fmt.Fprintf(w, "LicenseID: %s\n", ol.LicenseIdentifier)
 	}

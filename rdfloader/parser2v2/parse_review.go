@@ -4,12 +4,13 @@ package parser2v2
 
 import (
 	"fmt"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func (parser *rdfParser2_2) setReviewFromNode(reviewedNode *gordfParser.Node) error {
-	review := spdx.Review2_2{}
+	review := v2_2.Review{}
 	for _, triple := range parser.nodeToTriples(reviewedNode) {
 		switch triple.Predicate.ID {
 		case RDF_TYPE:

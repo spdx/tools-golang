@@ -5,14 +5,14 @@ package parser2v2
 import (
 	"fmt"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func (parser *tvParser2_2) parsePairFromReview2_2(tag string, value string) error {
 	switch tag {
 	// tag for creating new review section
 	case "Reviewer":
-		parser.rev = &spdx.Review2_2{}
+		parser.rev = &v2_2.Review{}
 		parser.doc.Reviews = append(parser.doc.Reviews, parser.rev)
 		subkey, subvalue, err := extractSubs(value)
 		if err != nil {
@@ -37,14 +37,14 @@ func (parser *tvParser2_2) parsePairFromReview2_2(tag string, value string) erro
 		parser.rev.ReviewComment = value
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
-		parser.rln = &spdx.Relationship2_2{}
+		parser.rln = &v2_2.Relationship{}
 		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
 		return parser.parsePairForRelationship2_2(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_2(tag, value)
 	// for annotation tags, pass along but don't change state
 	case "Annotator":
-		parser.ann = &spdx.Annotation2_2{}
+		parser.ann = &v2_2.Annotation{}
 		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
 		return parser.parsePairForAnnotation2_2(tag, value)
 	case "AnnotationDate":

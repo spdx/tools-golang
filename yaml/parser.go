@@ -5,13 +5,13 @@ package spdx_yaml
 import (
 	"bytes"
 	"io"
-	"sigs.k8s.io/yaml"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
+	"sigs.k8s.io/yaml"
 )
 
 // Load2_2 takes in an io.Reader and returns an SPDX document.
-func Load2_2(content io.Reader) (*spdx.Document2_2, error) {
+func Load2_2(content io.Reader) (*v2_2.Document, error) {
 	// convert io.Reader to a slice of bytes and call the parser
 	buf := new(bytes.Buffer)
 	_, err := buf.ReadFrom(content)
@@ -19,7 +19,7 @@ func Load2_2(content io.Reader) (*spdx.Document2_2, error) {
 		return nil, err
 	}
 
-	var doc spdx.Document2_2
+	var doc v2_2.Document
 	err = yaml.Unmarshal(buf.Bytes(), &doc)
 	if err != nil {
 		return nil, err

@@ -3,10 +3,12 @@
 package parser2v2
 
 import (
-	"github.com/spdx/gordf/rdfwriter"
-	"github.com/spdx/tools-golang/spdx"
 	"reflect"
 	"testing"
+
+	"github.com/spdx/gordf/rdfwriter"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func Test_getReferenceFromURI(t *testing.T) {
@@ -81,20 +83,20 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln := &spdx.Relationship2_2{}
+	reln := &v2_2.Relationship{}
 	triple := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_PACKAGE)[0]
 	err := parser.parseRelatedElementFromTriple(reln, triple)
 	if err != nil {
 		t.Errorf("error parsing a valid example")
 	}
-	expectedRefA := spdx.DocElementID{
+	expectedRefA := common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "",
 	}
 	if !reflect.DeepEqual(expectedRefA, reln.RefA) {
 		t.Errorf("expected %+v, found %+v", expectedRefA, reln.RefA)
 	}
-	expectedRefB := spdx.DocElementID{
+	expectedRefB := common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "Saxon",
 	}
@@ -110,7 +112,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln = &spdx.Relationship2_2{}
+	reln = &v2_2.Relationship{}
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_PACKAGE)[0]
 	err = parser.parseRelatedElementFromTriple(reln, triple)
 	if err == nil {
@@ -125,20 +127,20 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln = &spdx.Relationship2_2{}
+	reln = &v2_2.Relationship{}
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0]
 	err = parser.parseRelatedElementFromTriple(reln, triple)
 	if err != nil {
 		t.Errorf("error parsing a valid example")
 	}
-	expectedRefA = spdx.DocElementID{
+	expectedRefA = common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "",
 	}
 	if !reflect.DeepEqual(expectedRefA, reln.RefA) {
 		t.Errorf("expected %+v, found %+v", expectedRefA, reln.RefA)
 	}
-	expectedRefB = spdx.DocElementID{
+	expectedRefB = common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "Saxon",
 	}
@@ -154,7 +156,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln = &spdx.Relationship2_2{}
+	reln = &v2_2.Relationship{}
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0]
 	err = parser.parseRelatedElementFromTriple(reln, triple)
 	if err == nil {
@@ -169,20 +171,20 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln = &spdx.Relationship2_2{}
+	reln = &v2_2.Relationship{}
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_SPDX_ELEMENT)[0]
 	err = parser.parseRelatedElementFromTriple(reln, triple)
 	if err != nil {
 		t.Errorf("error parsing a valid example")
 	}
-	expectedRefA = spdx.DocElementID{
+	expectedRefA = common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "",
 	}
 	if !reflect.DeepEqual(expectedRefA, reln.RefA) {
 		t.Errorf("expected %+v, found %+v", expectedRefA, reln.RefA)
 	}
-	expectedRefB = spdx.DocElementID{
+	expectedRefB = common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "File",
 	}
@@ -198,7 +200,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 			</spdx:relatedSpdxElement>
 		</spdx:Relationship>
 	`)
-	reln = &spdx.Relationship2_2{}
+	reln = &v2_2.Relationship{}
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_SPDX_ELEMENT)[0]
 	err = parser.parseRelatedElementFromTriple(reln, triple)
 	if err == nil {
@@ -374,14 +376,14 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 	if reln.Relationship != expectedRelnType {
 		t.Errorf("expected %s, found %s", expectedRelnType, reln.Relationship)
 	}
-	expectedRefA := spdx.DocElementID{
+	expectedRefA := common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "File",
 	}
 	if !reflect.DeepEqual(expectedRefA, reln.RefA) {
 		t.Errorf("expected %+v, found %+v", expectedRefA, reln.RefA)
 	}
-	expectedRefB := spdx.DocElementID{
+	expectedRefB := common.DocElementID{
 		DocumentRefID: "",
 		ElementRefID:  "Saxon",
 	}

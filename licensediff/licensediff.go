@@ -4,7 +4,8 @@
 package licensediff
 
 import (
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // LicensePair is a result set where we are talking about two license strings,
@@ -16,7 +17,7 @@ type LicensePair struct {
 
 // MakePairs2_1 essentially just consolidates all files and LicenseConcluded
 // strings into a single data structure.
-func MakePairs2_1(p1 *spdx.Package2_1, p2 *spdx.Package2_1) (map[string]LicensePair, error) {
+func MakePairs2_1(p1 *v2_1.Package, p2 *v2_1.Package) (map[string]LicensePair, error) {
 	pairs := map[string]LicensePair{}
 
 	// first, go through and add all files/licenses from p1
@@ -44,7 +45,7 @@ func MakePairs2_1(p1 *spdx.Package2_1, p2 *spdx.Package2_1) (map[string]LicenseP
 
 // MakePairs2_2 essentially just consolidates all files and LicenseConcluded
 // strings into a single data structure.
-func MakePairs2_2(p1 *spdx.Package2_2, p2 *spdx.Package2_2) (map[string]LicensePair, error) {
+func MakePairs2_2(p1 *v2_2.Package, p2 *v2_2.Package) (map[string]LicensePair, error) {
 	pairs := map[string]LicensePair{}
 
 	// first, go through and add all files/licenses from p1

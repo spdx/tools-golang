@@ -10,7 +10,8 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== 2.1 Reporter functions =====
@@ -18,7 +19,7 @@ import (
 // Generate2_1 takes a Package whose Files have been analyzed and an
 // io.Writer, and outputs to the io.Writer a tabulated count of
 // the number of Files for each unique LicenseConcluded in the set.
-func Generate2_1(pkg *spdx.Package2_1, w io.Writer) error {
+func Generate2_1(pkg *v2_1.Package, w io.Writer) error {
 	if pkg.FilesAnalyzed == false {
 		return fmt.Errorf("Package FilesAnalyzed is false")
 	}
@@ -56,7 +57,7 @@ func Generate2_1(pkg *spdx.Package2_1, w io.Writer) error {
 	return nil
 }
 
-func countLicenses2_1(pkg *spdx.Package2_1) (int, int, map[string]int) {
+func countLicenses2_1(pkg *v2_1.Package) (int, int, map[string]int) {
 	if pkg == nil || pkg.Files == nil {
 		return 0, 0, nil
 	}
@@ -81,7 +82,7 @@ func countLicenses2_1(pkg *spdx.Package2_1) (int, int, map[string]int) {
 // Generate2_2 takes a Package whose Files have been analyzed and an
 // io.Writer, and outputs to the io.Writer a tabulated count of
 // the number of Files for each unique LicenseConcluded in the set.
-func Generate2_2(pkg *spdx.Package2_2, w io.Writer) error {
+func Generate2_2(pkg *v2_2.Package, w io.Writer) error {
 	if pkg.FilesAnalyzed == false {
 		return fmt.Errorf("Package FilesAnalyzed is false")
 	}
@@ -119,7 +120,7 @@ func Generate2_2(pkg *spdx.Package2_2, w io.Writer) error {
 	return nil
 }
 
-func countLicenses2_2(pkg *spdx.Package2_2) (int, int, map[string]int) {
+func countLicenses2_2(pkg *v2_2.Package) (int, int, map[string]int) {
 	if pkg == nil || pkg.Files == nil {
 		return 0, 0, nil
 	}

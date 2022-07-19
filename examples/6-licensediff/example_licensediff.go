@@ -13,10 +13,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/spdx/tools-golang/spdx"
 	"os"
 
 	"github.com/spdx/tools-golang/licensediff"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 	"github.com/spdx/tools-golang/spdxlib"
 	"github.com/spdx/tools-golang/tvloader"
 )
@@ -87,7 +87,7 @@ func main() {
 	for _, pkgID := range pkgIDsFirst {
 		fmt.Printf("================================\n")
 
-		var p1, p2 *spdx.Package2_2
+		var p1, p2 *v2_2.Package
 		var okFirst, okSecond bool
 		for _, pkg := range docFirst.Packages {
 			if pkg.PackageSPDXIdentifier == pkgID {
@@ -139,7 +139,7 @@ func main() {
 	// now report if there are any package IDs in the second set that aren't
 	// in the first
 	for _, pkgID := range pkgIDsSecond {
-		var p2 *spdx.Package2_2
+		var p2 *v2_2.Package
 		var okFirst, okSecond bool
 		for _, pkg := range docSecond.Packages {
 			if pkg.PackageSPDXIdentifier == pkgID {

@@ -4,13 +4,13 @@ package parser2v1
 import (
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== Annotation section tests =====
 func TestParser2_1FailsIfAnnotationNotSet(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePairForAnnotation2_1("Annotator", "Person: John Doe (jdoe@example.com)")
@@ -21,7 +21,7 @@ func TestParser2_1FailsIfAnnotationNotSet(t *testing.T) {
 
 func TestParser2_1FailsIfAnnotationTagUnknown(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	// start with valid annotator
@@ -38,7 +38,7 @@ func TestParser2_1FailsIfAnnotationTagUnknown(t *testing.T) {
 
 func TestParser2_1FailsIfAnnotationFieldsWithoutAnnotation(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("AnnotationDate", "2018-09-15T17:25:00Z")
@@ -61,7 +61,7 @@ func TestParser2_1FailsIfAnnotationFieldsWithoutAnnotation(t *testing.T) {
 
 func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -121,7 +121,7 @@ func TestParser2_1CanParseAnnotationTags(t *testing.T) {
 
 func TestParser2_1FailsIfAnnotatorInvalid(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("Annotator", "John Doe (jdoe@example.com)")
@@ -132,7 +132,7 @@ func TestParser2_1FailsIfAnnotatorInvalid(t *testing.T) {
 
 func TestParser2_1FailsIfAnnotatorTypeInvalid(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("Annotator", "Human: John Doe (jdoe@example.com)")
@@ -143,7 +143,7 @@ func TestParser2_1FailsIfAnnotatorTypeInvalid(t *testing.T) {
 
 func TestParser2_1FailsIfAnnotationRefInvalid(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	// start with valid annotator

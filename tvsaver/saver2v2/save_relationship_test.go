@@ -6,14 +6,15 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== Relationship section Saver tests =====
 func TestSaver2_2RelationshipSavesText(t *testing.T) {
-	rln := &spdx.Relationship2_2{
-		RefA:                spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:                spdx.MakeDocElementID("", "2"),
+	rln := &v2_2.Relationship{
+		RefA:                common.MakeDocElementID("", "DOCUMENT"),
+		RefB:                common.MakeDocElementID("", "2"),
 		Relationship:        "DESCRIBES",
 		RelationshipComment: "this is a comment",
 	}
@@ -39,9 +40,9 @@ RelationshipComment: this is a comment
 }
 
 func TestSaver2_2RelationshipOmitsOptionalFieldsIfEmpty(t *testing.T) {
-	rln := &spdx.Relationship2_2{
-		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:         spdx.MakeDocElementID("", "2"),
+	rln := &v2_2.Relationship{
+		RefA:         common.MakeDocElementID("", "DOCUMENT"),
+		RefB:         common.MakeDocElementID("", "2"),
 		Relationship: "DESCRIBES",
 	}
 
@@ -64,9 +65,9 @@ func TestSaver2_2RelationshipOmitsOptionalFieldsIfEmpty(t *testing.T) {
 }
 
 func TestSaver2_2RelationshipCanHaveNONEOnRight(t *testing.T) {
-	rln := &spdx.Relationship2_2{
-		RefA:         spdx.MakeDocElementID("", "PackageA"),
-		RefB:         spdx.MakeDocElementSpecial("NONE"),
+	rln := &v2_2.Relationship{
+		RefA:         common.MakeDocElementID("", "PackageA"),
+		RefB:         common.MakeDocElementSpecial("NONE"),
 		Relationship: "DEPENDS_ON",
 	}
 
@@ -89,9 +90,9 @@ func TestSaver2_2RelationshipCanHaveNONEOnRight(t *testing.T) {
 }
 
 func TestSaver2_2RelationshipCanHaveNOASSERTIONOnRight(t *testing.T) {
-	rln := &spdx.Relationship2_2{
-		RefA:         spdx.MakeDocElementID("", "PackageA"),
-		RefB:         spdx.MakeDocElementSpecial("NOASSERTION"),
+	rln := &v2_2.Relationship{
+		RefA:         common.MakeDocElementID("", "PackageA"),
+		RefB:         common.MakeDocElementSpecial("NOASSERTION"),
 		Relationship: "DEPENDS_ON",
 	}
 
@@ -114,9 +115,9 @@ func TestSaver2_2RelationshipCanHaveNOASSERTIONOnRight(t *testing.T) {
 }
 
 func TestSaver2_2RelationshipWrapsCommentMultiLine(t *testing.T) {
-	rln := &spdx.Relationship2_2{
-		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:         spdx.MakeDocElementID("", "2"),
+	rln := &v2_2.Relationship{
+		RefA:         common.MakeDocElementID("", "DOCUMENT"),
+		RefB:         common.MakeDocElementID("", "2"),
 		Relationship: "DESCRIBES",
 		RelationshipComment: `this is a
 multi-line comment`,

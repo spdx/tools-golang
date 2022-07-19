@@ -12,7 +12,7 @@ import (
 	"os"
 
 	"github.com/spdx/tools-golang/tvloader"
-	"github.com/spdx/tools-golang/yaml"
+	spdx_yaml "github.com/spdx/tools-golang/yaml"
 )
 
 func main() {

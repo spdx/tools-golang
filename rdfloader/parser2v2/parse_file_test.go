@@ -10,7 +10,8 @@ import (
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	rdfloader2 "github.com/spdx/gordf/rdfloader/xmlreader"
 	gordfWriter "github.com/spdx/gordf/rdfwriter"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // content is the tags within the rdf:RDF tag
@@ -143,9 +144,9 @@ func Test_rdfParser2_2_setUnpackagedFiles(t *testing.T) {
 	// unpackaged files are the files which are not associated with any package
 	// file associated with a package sets parser.assocWithPackage[fileID] to true.
 	rdfParser, _ := parserFromBodyContent(``)
-	file1 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file1")}
-	file2 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file2")}
-	file3 := &spdx.File2_2{FileSPDXIdentifier: spdx.ElementID("file3")}
+	file1 := &v2_2.File{FileSPDXIdentifier: common.ElementID("file1")}
+	file2 := &v2_2.File{FileSPDXIdentifier: common.ElementID("file2")}
+	file3 := &v2_2.File{FileSPDXIdentifier: common.ElementID("file3")}
 
 	// setting files to the document as if it were to be set when it was parsed using triples.
 	rdfParser.files[file1.FileSPDXIdentifier] = file1
@@ -174,7 +175,7 @@ func Test_rdfParser2_2_setUnpackagedFiles(t *testing.T) {
 }
 
 func Test_setFileIdentifier(t *testing.T) {
-	file := &spdx.File2_2{}
+	file := &v2_2.File{}
 
 	// TestCase 1: valid example
 	err := setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
@@ -201,7 +202,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file := &spdx.File2_2{}
+	file := &v2_2.File{}
 	err := parser.setFileChecksumFromNode(file, checksumNode)
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
@@ -209,15 +210,15 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	checksumValue := "d2356e0fe1c0b85285d83c6b2ad51b5f"
 	for _, checksum := range file.Checksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != "" {
 				t.Errorf("incorrectly set sha1, should've been empty")
 			}
-		case spdx.SHA256:
+		case common.SHA256:
 			if checksum.Value != "" {
 				t.Errorf("incorrectly set sha256, should've been empty")
 			}
-		case spdx.MD5:
+		case common.MD5:
 			if checksum.Value != checksumValue {
 				t.Errorf("wrong checksum value for md5. Expected: %s, found: %s", checksumValue, checksum.Value)
 			}
@@ -232,22 +233,22 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file = &spdx.File2_2{}
+	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
 	for _, checksum := range file.Checksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != checksumValue {
 				t.Errorf("wrong checksum value for sha1. Expected: %s, found: %s", checksumValue, checksum.Value)
 			}
-		case spdx.SHA256:
+		case common.SHA256:
 			if checksum.Value != "" {
 				t.Errorf("incorrectly set sha256, should've been empty")
 			}
-		case spdx.MD5:
+		case common.MD5:
 			if checksum.Value != checksumValue {
 				t.Errorf("incorrectly set md5, should've been empty")
 			}
@@ -262,22 +263,22 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file = &spdx.File2_2{}
+	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
 	if err != nil {
 		t.Errorf("error parsing a valid checksum node")
 	}
 	for _, checksum := range file.Checksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != checksumValue {
 				t.Errorf("incorrectly set sha1, should've been empty")
 			}
-		case spdx.SHA256:
+		case common.SHA256:
 			if checksum.Value != checksumValue {
 				t.Errorf("wrong checksum value for sha256. Expected: %s, found: %s", checksumValue, checksum.Value)
 			}
-		case spdx.MD5:
+		case common.MD5:
 			if checksum.Value != checksumValue {
 				t.Errorf("incorrectly set md5, should've been empty")
 			}
@@ -291,7 +292,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file = &spdx.File2_2{}
+	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
 	if err == nil {
 		t.Errorf("should've raised an error parsing an invalid checksum node")
@@ -305,7 +306,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file = &spdx.File2_2{}
+	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
 	if err == nil {
 		t.Errorf("should've raised an error parsing an invalid checksum node")
@@ -319,7 +320,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 		</spdx:Checksum>
     `)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
-	file = &spdx.File2_2{}
+	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
 	if err == nil {
 		t.Errorf("should've raised an error parsing an invalid checksum algorithm for a file")
@@ -484,7 +485,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	}
 	parser, _ = parserFromBodyContent(strings.Join(fileDefinitions, ""))
 
-	var file *spdx.File2_2
+	var file *v2_2.File
 	packageTypeTriples := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_PACKAGE)
 	for _, typeTriple := range packageTypeTriples {
 		pkg, err := parser.getPackageFromNode(typeTriple.Subject)
@@ -602,7 +603,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	for _, checksum := range file.Checksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != expectedChecksum {
 				t.Errorf("expected %s, found %s", expectedChecksum, checksum.Value)
 			}

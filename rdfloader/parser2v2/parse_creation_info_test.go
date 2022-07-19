@@ -3,28 +3,29 @@
 package parser2v2
 
 import (
-	"github.com/spdx/tools-golang/spdx"
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func Test_setCreator(t *testing.T) {
 	// TestCase 1: invalid creator (empty)
 	input := ""
-	err := setCreator(input, &spdx.CreationInfo2_2{})
+	err := setCreator(input, &v2_2.CreationInfo{})
 	if err == nil {
 		t.Errorf("shoud've raised an error due to invalid input")
 	}
 
 	// TestCase 2: invalid entity type
 	input = "Company: some company"
-	err = setCreator(input, &spdx.CreationInfo2_2{})
+	err = setCreator(input, &v2_2.CreationInfo{})
 	if err == nil {
 		t.Errorf("shoud've raised an error due to unknown entity type")
 	}
 
 	// TestCase 3: valid input
 	input = "Person: Jane Doe"
-	ci := &spdx.CreationInfo2_2{}
+	ci := &v2_2.CreationInfo{}
 	err = setCreator(input, ci)
 	if err != nil {
 		t.Errorf("error parsing a valid input: %v", err)
@@ -48,7 +49,7 @@ func Test_rdfParser2_2_parseCreationInfoFromNode(t *testing.T) {
 		</spdx:CreationInfo>
 	`)
 	ciNode := parser.gordfParserObj.Triples[0].Subject
-	err := parser.parseCreationInfoFromNode(&spdx.CreationInfo2_2{}, ciNode)
+	err := parser.parseCreationInfoFromNode(&v2_2.CreationInfo{}, ciNode)
 	if err == nil {
 		t.Errorf("invalid creator must raise an error")
 	}
@@ -65,7 +66,7 @@ func Test_rdfParser2_2_parseCreationInfoFromNode(t *testing.T) {
 		</spdx:CreationInfo>
 	`)
 	ciNode = parser.gordfParserObj.Triples[0].Subject
-	err = parser.parseCreationInfoFromNode(&spdx.CreationInfo2_2{}, ciNode)
+	err = parser.parseCreationInfoFromNode(&v2_2.CreationInfo{}, ciNode)
 	if err == nil {
 		t.Errorf("unknown predicate must raise an error")
 	}
@@ -80,7 +81,7 @@ func Test_rdfParser2_2_parseCreationInfoFromNode(t *testing.T) {
 		</spdx:CreationInfo>
 	`)
 	ciNode = parser.gordfParserObj.Triples[0].Subject
-	ci := &spdx.CreationInfo2_2{}
+	ci := &v2_2.CreationInfo{}
 	err = parser.parseCreationInfoFromNode(ci, ciNode)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)

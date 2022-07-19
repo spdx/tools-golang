@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spdx/tools-golang/yaml"
+	spdx_yaml "github.com/spdx/tools-golang/yaml"
 )
 
 func main() {

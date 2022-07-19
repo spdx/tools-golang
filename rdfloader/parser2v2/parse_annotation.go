@@ -5,15 +5,16 @@ package parser2v2
 import (
 	"errors"
 	"fmt"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // creates a new instance of annotation and sets the annotation attributes
 // associated with the given node.
 // The newly created annotation is appended to the doc.
 func (parser *rdfParser2_2) parseAnnotationFromNode(node *gordfParser.Node) (err error) {
-	ann := &spdx.Annotation2_2{}
+	ann := &v2_2.Annotation{}
 	for _, subTriple := range parser.nodeToTriples(node) {
 		switch subTriple.Predicate.ID {
 		case SPDX_ANNOTATOR:
@@ -41,19 +42,19 @@ func (parser *rdfParser2_2) parseAnnotationFromNode(node *gordfParser.Node) (err
 	return setAnnotationToParser(parser, ann)
 }
 
-func setAnnotationToParser(parser *rdfParser2_2, annotation *spdx.Annotation2_2) error {
+func setAnnotationToParser(parser *rdfParser2_2, annotation *v2_2.Annotation) error {
 	if parser.doc == nil {
 		return errors.New("uninitialized spdx document")
 	}
 	if parser.doc.Annotations == nil {
-		parser.doc.Annotations = []*spdx.Annotation2_2{}
+		parser.doc.Annotations = []*v2_2.Annotation{}
 	}
 	parser.doc.Annotations = append(parser.doc.Annotations, annotation)
 	return nil
 }
 
 // annotator is of type [Person|Organization|Tool]:String
-func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) error {
+func setAnnotatorFromString(annotatorString string, ann *v2_2.Annotation) error {
 	subkey, subvalue, err := ExtractSubs(annotatorString, ":")
 	if err != nil {
 		return err
@@ -67,7 +68,7 @@ func setAnnotatorFromString(annotatorString string, ann *spdx.Annotation2_2) err
 }
 
 // it can be NS_SPDX+annotationType_[review|other]
-func setAnnotationType(annType string, ann *spdx.Annotation2_2) error {
+func setAnnotationType(annType string, ann *v2_2.Annotation) error {
 	switch annType {
 	case SPDX_ANNOTATION_TYPE_OTHER:
 		ann.AnnotationType = "OTHER"

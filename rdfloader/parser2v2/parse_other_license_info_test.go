@@ -3,9 +3,10 @@
 package parser2v2
 
 import (
-	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"reflect"
 	"testing"
+
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 )
 
 func Test_rdfParser2_2_getExtractedLicensingInfoFromNode(t *testing.T) {

@@ -3,12 +3,13 @@
 package spdxlib
 
 import (
-	"github.com/spdx/tools-golang/spdx"
 	"sort"
+
+	"github.com/spdx/tools-golang/spdx/common"
 )
 
 // SortElementIDs sorts and returns the given slice of ElementIDs
-func SortElementIDs(eIDs []spdx.ElementID) []spdx.ElementID {
+func SortElementIDs(eIDs []common.ElementID) []common.ElementID {
 	sort.Slice(eIDs, func(i, j int) bool {
 		return eIDs[i] < eIDs[j]
 	})

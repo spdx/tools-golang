@@ -5,17 +5,18 @@ package builder2v1
 import (
 	"fmt"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // BuildRelationshipSection2_1 creates an SPDX Relationship (version 2.1)
 // solely for the document "DESCRIBES" package relationship, returning that
 // relationship or error if any is encountered. Arguments:
 //   - packageName: name of package / directory
-func BuildRelationshipSection2_1(packageName string) (*spdx.Relationship2_1, error) {
-	rln := &spdx.Relationship2_1{
-		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:         spdx.MakeDocElementID("", fmt.Sprintf("Package-%s", packageName)),
+func BuildRelationshipSection2_1(packageName string) (*v2_1.Relationship, error) {
+	rln := &v2_1.Relationship{
+		RefA:         common.MakeDocElementID("", "DOCUMENT"),
+		RefB:         common.MakeDocElementID("", fmt.Sprintf("Package-%s", packageName)),
 		Relationship: "DESCRIBES",
 	}
 

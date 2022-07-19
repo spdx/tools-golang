@@ -4,13 +4,13 @@ package parser2v1
 import (
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== Parser creation info state change tests =====
 func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	pkgName := "testPkg"
@@ -46,7 +46,7 @@ func TestParser2_1CIMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
 
 func TestParser2_1CIMovesToFileAfterParsingFileNameTagWithNoPackages(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("FileName", "testFile")
@@ -66,7 +66,7 @@ func TestParser2_1CIMovesToFileAfterParsingFileNameTagWithNoPackages(t *testing.
 
 func TestParser2_1CIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("LicenseID", "LicenseRef-TestLic")
@@ -80,7 +80,7 @@ func TestParser2_1CIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 
 func TestParser2_1CIMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePair2_1("Reviewer", "Person: John Doe")
@@ -94,7 +94,7 @@ func TestParser2_1CIMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 
 func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -117,7 +117,7 @@ func TestParser2_1CIStaysAfterParsingRelationshipTags(t *testing.T) {
 
 func TestParser2_1CIStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -164,7 +164,7 @@ func TestParser2_1CIStaysAfterParsingAnnotationTags(t *testing.T) {
 
 func TestParser2_1FailsParsingCreationInfoWithInvalidState(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psPackage2_1,
 	}
 	err := parser.parsePairFromCreationInfo2_1("SPDXVersion", "SPDX-2.1")
@@ -176,7 +176,7 @@ func TestParser2_1FailsParsingCreationInfoWithInvalidState(t *testing.T) {
 // ===== Creation Info section tests =====
 func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 	err := parser.parsePairFromCreationInfo2_1("LicenseListVersion", "3.9")
@@ -190,7 +190,7 @@ func TestParser2_1HasCreationInfoAfterCallToParseFirstTag(t *testing.T) {
 
 func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -281,7 +281,7 @@ func TestParser2_1CanParseCreationInfoTags(t *testing.T) {
 
 func TestParser2_1InvalidCreatorTagsFail(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -298,7 +298,7 @@ func TestParser2_1InvalidCreatorTagsFail(t *testing.T) {
 
 func TestParser2_1CreatorTagWithMultipleColonsPasses(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -310,7 +310,7 @@ func TestParser2_1CreatorTagWithMultipleColonsPasses(t *testing.T) {
 
 func TestParser2_1CIUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -322,7 +322,7 @@ func TestParser2_1CIUnknownTagFails(t *testing.T) {
 
 func TestParser2_1CICreatesRelationship(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 
@@ -340,7 +340,7 @@ func TestParser2_1CICreatesRelationship(t *testing.T) {
 
 func TestParser2_1CICreatesAnnotation(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{},
+		doc: &v2_1.Document{},
 		st:  psCreationInfo2_1,
 	}
 

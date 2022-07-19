@@ -6,16 +6,17 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== Annotation section Saver tests =====
 func TestSaver2_2AnnotationSavesTextForPerson(t *testing.T) {
-	ann := &spdx.Annotation2_2{
-		Annotator:                spdx.Annotator{AnnotatorType: "Person", Annotator: "John Doe"},
+	ann := &v2_2.Annotation{
+		Annotator:                common.Annotator{AnnotatorType: "Person", Annotator: "John Doe"},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		AnnotationSPDXIdentifier: common.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 
@@ -43,11 +44,11 @@ AnnotationComment: This is an annotation about the SPDX document
 }
 
 func TestSaver2_2AnnotationSavesTextForOrganization(t *testing.T) {
-	ann := &spdx.Annotation2_2{
-		Annotator:                spdx.Annotator{AnnotatorType: "Organization", Annotator: "John Doe, Inc."},
+	ann := &v2_2.Annotation{
+		Annotator:                common.Annotator{AnnotatorType: "Organization", Annotator: "John Doe, Inc."},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		AnnotationSPDXIdentifier: common.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 
@@ -75,11 +76,11 @@ AnnotationComment: This is an annotation about the SPDX document
 }
 
 func TestSaver2_2AnnotationSavesTextForTool(t *testing.T) {
-	ann := &spdx.Annotation2_2{
-		Annotator:                spdx.Annotator{AnnotatorType: "Tool", Annotator: "magictool-1.1"},
+	ann := &v2_2.Annotation{
+		Annotator:                common.Annotator{AnnotatorType: "Tool", Annotator: "magictool-1.1"},
 		AnnotationDate:           "2018-10-10T17:52:00Z",
 		AnnotationType:           "REVIEW",
-		AnnotationSPDXIdentifier: spdx.MakeDocElementID("", "DOCUMENT"),
+		AnnotationSPDXIdentifier: common.MakeDocElementID("", "DOCUMENT"),
 		AnnotationComment:        "This is an annotation about the SPDX document",
 	}
 

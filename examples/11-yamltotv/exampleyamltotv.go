@@ -10,9 +10,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/spdx/tools-golang/tvsaver"
-	"github.com/spdx/tools-golang/yaml"
 	"os"
+
+	"github.com/spdx/tools-golang/tvsaver"
+	spdx_yaml "github.com/spdx/tools-golang/yaml"
 )
 
 func main() {

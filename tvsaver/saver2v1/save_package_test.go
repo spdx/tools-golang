@@ -6,7 +6,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== Package section Saver tests =====
@@ -17,7 +18,7 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 	// PackageVerificationCodeExcludedFile has string
 
 	// NOTE, this is an entirely made up CPE and the format is likely invalid
-	per1 := &spdx.PackageExternalReference2_1{
+	per1 := &v2_1.PackageExternalReference{
 		Category:           "SECURITY",
 		RefType:            "cpe22Type",
 		Locator:            "cpe:/a:john_doe_inc:p1:0.1.0",
@@ -25,7 +26,7 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 	}
 
 	// NOTE, this is an entirely made up NPM
-	per2 := &spdx.PackageExternalReference2_1{
+	per2 := &v2_1.PackageExternalReference{
 		Category: "PACKAGE-MANAGER",
 		RefType:  "npm",
 		Locator:  "p1@0.1.0",
@@ -33,38 +34,38 @@ func TestSaver2_1PackageSavesTextCombo1(t *testing.T) {
 multi-line external ref comment`,
 	}
 
-	per3 := &spdx.PackageExternalReference2_1{
+	per3 := &v2_1.PackageExternalReference{
 		Category: "OTHER",
 		RefType:  "anything",
 		Locator:  "anything-without-spaces-can-go-here",
 		// no ExternalRefComment for this one
 	}
 
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageVersion:            "0.1.0",
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
-		PackageOriginator:         &spdx.Originator{Originator: "John Doe", OriginatorType: "Person"},
+		PackageSupplier:           &common.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
+		PackageOriginator:         &common.Originator{Originator: "John Doe", OriginatorType: "Person"},
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
-		PackageVerificationCode: spdx.PackageVerificationCode{
+		PackageVerificationCode: common.PackageVerificationCode{
 			Value:         "0123456789abcdef0123456789abcdef01234567",
 			ExcludedFiles: []string{"p1-0.1.0.spdx"},
 		},
-		PackageChecksums: []spdx.Checksum{
+		PackageChecksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 			{
-				Algorithm: spdx.SHA256,
+				Algorithm: common.SHA256,
 				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 			},
 			{
-				Algorithm: spdx.MD5,
+				Algorithm: common.MD5,
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
@@ -82,7 +83,7 @@ multi-line external ref comment`,
 		PackageSummary:         "this is a summary comment",
 		PackageDescription:     "this is a description comment",
 		PackageComment:         "this is a comment comment",
-		PackageExternalReferences: []*spdx.PackageExternalReference2_1{
+		PackageExternalReferences: []*v2_1.PackageExternalReference{
 			per1,
 			per2,
 			per3,
@@ -143,28 +144,28 @@ func TestSaver2_1PackageSavesTextCombo2(t *testing.T) {
 	// FilesAnalyzed true, IsFilesAnalyzedTagPresent false
 	// PackageVerificationCodeExcludedFile is empty
 
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageVersion:            "0.1.0",
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{Supplier: "NOASSERTION"},
-		PackageOriginator:         &spdx.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
+		PackageSupplier:           &common.Supplier{Supplier: "NOASSERTION"},
+		PackageOriginator:         &common.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: false,
-		PackageVerificationCode:   spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
-		PackageChecksums: []spdx.Checksum{
+		PackageVerificationCode:   common.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageChecksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 			{
-				Algorithm: spdx.SHA256,
+				Algorithm: common.SHA256,
 				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 			},
 			{
-				Algorithm: spdx.MD5,
+				Algorithm: common.MD5,
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
@@ -231,30 +232,30 @@ func TestSaver2_1PackageSavesTextCombo3(t *testing.T) {
 	// FilesAnalyzed false, IsFilesAnalyzedTagPresent true
 	// PackageVerificationCodeExcludedFile is empty
 
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageVersion:            "0.1.0",
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
-		PackageSupplier:           &spdx.Supplier{Supplier: "John Doe", SupplierType: "Person"},
-		PackageOriginator:         &spdx.Originator{Originator: "NOASSERTION"},
+		PackageSupplier:           &common.Supplier{Supplier: "John Doe", SupplierType: "Person"},
+		PackageOriginator:         &common.Originator{Originator: "NOASSERTION"},
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output
 		// since FilesAnalyzed is false
-		PackageVerificationCode: spdx.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
-		PackageChecksums: []spdx.Checksum{
+		PackageVerificationCode: common.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
+		PackageChecksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 			{
-				Algorithm: spdx.SHA256,
+				Algorithm: common.SHA256,
 				Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 			},
 			{
-				Algorithm: spdx.MD5,
+				Algorithm: common.MD5,
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
@@ -315,9 +316,9 @@ PackageComment: this is a comment comment
 }
 
 func TestSaver2_1PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
@@ -361,12 +362,12 @@ PackageCopyrightText: Copyright (c) John Doe, Inc.
 }
 
 func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
-	f1 := &spdx.File2_1{
+	f1 := &v2_1.File{
 		FileName:           "/tmp/whatever1.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1231"),
-		Checksums: []spdx.Checksum{
+		FileSPDXIdentifier: common.ElementID("File1231"),
+		Checksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
 			},
 		},
@@ -375,12 +376,12 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 		FileCopyrightText:  "Copyright (c) Jane Doe",
 	}
 
-	f2 := &spdx.File2_1{
+	f2 := &v2_1.File{
 		FileName:           "/tmp/whatever2.txt",
-		FileSPDXIdentifier: spdx.ElementID("File1232"),
-		Checksums: []spdx.Checksum{
+		FileSPDXIdentifier: common.ElementID("File1232"),
+		Checksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     "85ed0817af83a24ad8da68c2b5094de69833983d",
 			},
 		},
@@ -389,9 +390,9 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 		FileCopyrightText:  "Copyright (c) John Doe",
 	}
 
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
@@ -407,7 +408,7 @@ func TestSaver2_1PackageSavesFilesIfPresent(t *testing.T) {
 		},
 		PackageLicenseDeclared: "Apache-2.0 OR GPL-2.0-or-later",
 		PackageCopyrightText:   "Copyright (c) John Doe, Inc.",
-		Files: []*spdx.File2_1{
+		Files: []*v2_1.File{
 			f1,
 			f2,
 		},
@@ -453,9 +454,9 @@ FileCopyrightText: Copyright (c) John Doe
 }
 
 func TestSaver2_1PackageWrapsCopyrightMultiLine(t *testing.T) {
-	pkg := &spdx.Package2_1{
+	pkg := &v2_1.Package{
 		PackageName:               "p1",
-		PackageSPDXIdentifier:     spdx.ElementID("p1"),
+		PackageSPDXIdentifier:     common.ElementID("p1"),
 		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,

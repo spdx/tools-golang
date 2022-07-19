@@ -6,12 +6,12 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== Other License section Saver tests =====
 func TestSaver2_2OtherLicenseSavesText(t *testing.T) {
-	ol := &spdx.OtherLicense2_2{
+	ol := &v2_2.OtherLicense{
 		LicenseIdentifier: "LicenseRef-1",
 		ExtractedText: `License 1 text
 blah blah blah
@@ -51,7 +51,7 @@ LicenseComment: this is a license comment
 }
 
 func TestSaver2_2OtherLicenseOmitsOptionalFieldsIfEmpty(t *testing.T) {
-	ol := &spdx.OtherLicense2_2{
+	ol := &v2_2.OtherLicense{
 		LicenseIdentifier: "LicenseRef-1",
 		ExtractedText: `License 1 text
 blah blah blah

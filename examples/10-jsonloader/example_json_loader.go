@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spdx/tools-golang/json"
+	spdx_json "github.com/spdx/tools-golang/json"
 )
 
 func main() {

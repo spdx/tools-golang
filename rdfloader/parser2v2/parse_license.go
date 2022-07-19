@@ -5,9 +5,10 @@ package parser2v2
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/gordf/rdfwriter"
-	"strings"
 )
 
 // AnyLicense is a baseClass for all the licenses
@@ -37,7 +38,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	parser.cache[node.ID].Color = GREY
 
 	// setting state color to black when we're done parsing this node.
-	defer func(){parser.cache[node.ID].Color = BLACK}()
+	defer func() { parser.cache[node.ID].Color = BLACK }()
 
 	associatedTriples := rdfwriter.FilterTriples(parser.gordfParserObj.Triples, &node.ID, nil, nil)
 	if len(associatedTriples) == 0 {

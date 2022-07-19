@@ -6,14 +6,15 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== Relationship section Saver tests =====
 func TestSaver2_1RelationshipSavesText(t *testing.T) {
-	rln := &spdx.Relationship2_1{
-		RefA:                spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:                spdx.MakeDocElementID("", "2"),
+	rln := &v2_1.Relationship{
+		RefA:                common.MakeDocElementID("", "DOCUMENT"),
+		RefB:                common.MakeDocElementID("", "2"),
 		Relationship:        "DESCRIBES",
 		RelationshipComment: "this is a comment",
 	}
@@ -39,9 +40,9 @@ RelationshipComment: this is a comment
 }
 
 func TestSaver2_1RelationshipOmitsOptionalFieldsIfEmpty(t *testing.T) {
-	rln := &spdx.Relationship2_1{
-		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:         spdx.MakeDocElementID("", "2"),
+	rln := &v2_1.Relationship{
+		RefA:         common.MakeDocElementID("", "DOCUMENT"),
+		RefB:         common.MakeDocElementID("", "2"),
 		Relationship: "DESCRIBES",
 	}
 
@@ -64,9 +65,9 @@ func TestSaver2_1RelationshipOmitsOptionalFieldsIfEmpty(t *testing.T) {
 }
 
 func TestSaver2_1RelationshipWrapsCommentMultiLine(t *testing.T) {
-	rln := &spdx.Relationship2_1{
-		RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-		RefB:         spdx.MakeDocElementID("", "2"),
+	rln := &v2_1.Relationship{
+		RefA:         common.MakeDocElementID("", "DOCUMENT"),
+		RefB:         common.MakeDocElementID("", "2"),
 		Relationship: "DESCRIBES",
 		RelationshipComment: `this is a
 multi-line comment`,

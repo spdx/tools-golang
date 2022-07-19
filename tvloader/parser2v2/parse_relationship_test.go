@@ -4,13 +4,13 @@ package parser2v2
 import (
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== Relationship section tests =====
 func TestParser2_2FailsIfRelationshipNotSet(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 	err := parser.parsePairForRelationship2_2("Relationship", "SPDXRef-A CONTAINS SPDXRef-B")
@@ -21,7 +21,7 @@ func TestParser2_2FailsIfRelationshipNotSet(t *testing.T) {
 
 func TestParser2_2FailsIfRelationshipCommentWithoutRelationship(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 	err := parser.parsePair2_2("RelationshipComment", "comment whatever")
@@ -32,7 +32,7 @@ func TestParser2_2FailsIfRelationshipCommentWithoutRelationship(t *testing.T) {
 
 func TestParser2_2CanParseRelationshipTags(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -64,7 +64,7 @@ func TestParser2_2CanParseRelationshipTags(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsNoValueFail(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -78,7 +78,7 @@ func TestParser2_2InvalidRelationshipTagsNoValueFail(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsOneValueFail(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -92,7 +92,7 @@ func TestParser2_2InvalidRelationshipTagsOneValueFail(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsTwoValuesFail(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -106,7 +106,7 @@ func TestParser2_2InvalidRelationshipTagsTwoValuesFail(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsThreeValuesSucceed(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -120,7 +120,7 @@ func TestParser2_2InvalidRelationshipTagsThreeValuesSucceed(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsFourValuesFail(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -134,7 +134,7 @@ func TestParser2_2InvalidRelationshipTagsFourValuesFail(t *testing.T) {
 
 func TestParser2_2InvalidRelationshipTagsInvalidRefIDs(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -154,7 +154,7 @@ func TestParser2_2InvalidRelationshipTagsInvalidRefIDs(t *testing.T) {
 
 func TestParser2_2SpecialValuesValidForRightSideOfRelationship(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 
@@ -185,7 +185,7 @@ func TestParser2_2SpecialValuesValidForRightSideOfRelationship(t *testing.T) {
 
 func TestParser2_2FailsToParseUnknownTagInRelationshipSection(t *testing.T) {
 	parser := tvParser2_2{
-		doc: &spdx.Document2_2{},
+		doc: &v2_2.Document{},
 		st:  psCreationInfo2_2,
 	}
 

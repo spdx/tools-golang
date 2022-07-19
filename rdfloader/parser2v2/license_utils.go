@@ -4,9 +4,10 @@ package parser2v2
 
 import (
 	"fmt"
-	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
 	"strings"
+
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	"github.com/spdx/tools-golang/spdx/common"
 )
 
 /* util methods for licenses and checksums below:*/
@@ -26,7 +27,7 @@ func getLicenseStringFromURI(uri string) string {
 // returns the checksum algorithm and it's value
 // In the newer versions, these two strings will be bound to a single checksum struct
 // whose pointer will be returned.
-func (parser *rdfParser2_2) getChecksumFromNode(checksumNode *gordfParser.Node) (algorithm spdx.ChecksumAlgorithm, value string, err error) {
+func (parser *rdfParser2_2) getChecksumFromNode(checksumNode *gordfParser.Node) (algorithm common.ChecksumAlgorithm, value string, err error) {
 	var checksumValue, checksumAlgorithm string
 	for _, checksumTriple := range parser.nodeToTriples(checksumNode) {
 		switch checksumTriple.Predicate.ID {
@@ -46,7 +47,7 @@ func (parser *rdfParser2_2) getChecksumFromNode(checksumNode *gordfParser.Node) 
 			return
 		}
 	}
-	return spdx.ChecksumAlgorithm(checksumAlgorithm), checksumValue, nil
+	return common.ChecksumAlgorithm(checksumAlgorithm), checksumValue, nil
 }
 
 func getAlgorithmFromURI(algorithmURI string) (checksumAlgorithm string, err error) {

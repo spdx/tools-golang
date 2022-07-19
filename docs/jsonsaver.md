@@ -4,7 +4,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 The SPDX document is converted to map[string]interface{} and then the entire map is converted to JSON using a single json.MarshalIndent function call. The saver uses temporary memory to store all the files (Packaged and Unpackaged) together in a single data structure in order to comply with the JSON schema defined by SPDX.
 
-spdx.Document2_2 => map[string]interface{} => JSON
+v2_2.Document => map[string]interface{} => JSON
 
 ## Some Key Points
 

@@ -2,9 +2,9 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ## Usage
 
-A json.Unmarshal function on the spdx.Document2_2 struct is defined so that when the JSON is unmarshalled, the function is called and the JSON can be processed in a custom way. Then a new map[string]interface{} is defined which temporarily holds the unmarshalled JSON. The map is then parsed into the spdx.Document2_2 using functions defined for each different section.
+A json.Unmarshal function on the v2_2.Document struct is defined so that when the JSON is unmarshalled, the function is called and the JSON can be processed in a custom way. Then a new map[string]interface{} is defined which temporarily holds the unmarshalled JSON. The map is then parsed into the v2_2.Document using functions defined for each different section.
 
-JSON => map[string]interface{} => spdx.Document2_2
+JSON => map[string]interface{} => v2_2.Document
 
 ## Some Key Points 
 

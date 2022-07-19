@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
-func renderRelationship2_1(rln *spdx.Relationship2_1, w io.Writer) error {
-	rlnAStr := spdx.RenderDocElementID(rln.RefA)
-	rlnBStr := spdx.RenderDocElementID(rln.RefB)
+func renderRelationship2_1(rln *v2_1.Relationship, w io.Writer) error {
+	rlnAStr := common.RenderDocElementID(rln.RefA)
+	rlnBStr := common.RenderDocElementID(rln.RefB)
 	if rlnAStr != "SPDXRef-" && rlnBStr != "SPDXRef-" && rln.Relationship != "" {
 		fmt.Fprintf(w, "Relationship: %s %s %s\n", rlnAStr, rln.Relationship, rlnBStr)
 	}

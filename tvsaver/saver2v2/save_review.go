@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
-func renderReview2_2(rev *spdx.Review2_2, w io.Writer) error {
+func renderReview2_2(rev *v2_2.Review, w io.Writer) error {
 	if rev.Reviewer != "" && rev.ReviewerType != "" {
 		fmt.Fprintf(w, "Reviewer: %s: %s\n", rev.ReviewerType, rev.Reviewer)
 	}

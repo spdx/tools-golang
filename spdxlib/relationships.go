@@ -2,12 +2,16 @@
 
 package spdxlib
 
-import "github.com/spdx/tools-golang/spdx"
+import (
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
+)
 
 // FilterRelationships2_1 returns a slice of Element IDs returned by the given filter closure. The closure is passed
 // one relationship at a time, and it can return an ElementID or nil.
-func FilterRelationships2_1(doc *spdx.Document2_1, filter func(*spdx.Relationship2_1) *spdx.ElementID) ([]spdx.ElementID, error) {
-	elementIDs := []spdx.ElementID{}
+func FilterRelationships2_1(doc *v2_1.Document, filter func(*v2_1.Relationship) *common.ElementID) ([]common.ElementID, error) {
+	elementIDs := []common.ElementID{}
 
 	for _, relationship := range doc.Relationships {
 		if id := filter(relationship); id != nil {
@@ -20,8 +24,8 @@ func FilterRelationships2_1(doc *spdx.Document2_1, filter func(*spdx.Relationshi
 
 // FilterRelationships2_2 returns a slice of Element IDs returned by the given filter closure. The closure is passed
 // one relationship at a time, and it can return an ElementID or nil.
-func FilterRelationships2_2(doc *spdx.Document2_2, filter func(*spdx.Relationship2_2) *spdx.ElementID) ([]spdx.ElementID, error) {
-	elementIDs := []spdx.ElementID{}
+func FilterRelationships2_2(doc *v2_2.Document, filter func(*v2_2.Relationship) *common.ElementID) ([]common.ElementID, error) {
+	elementIDs := []common.ElementID{}
 
 	for _, relationship := range doc.Relationships {
 		if id := filter(relationship); id != nil {

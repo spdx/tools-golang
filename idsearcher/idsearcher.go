@@ -14,7 +14,8 @@ import (
 	"strings"
 
 	"github.com/spdx/tools-golang/builder"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 	"github.com/spdx/tools-golang/utils"
 )
 
@@ -50,7 +51,7 @@ type Config2_1 struct {
 //   - dirRoot: path to directory to be analyzed
 //   - namespacePrefix: URI representing a prefix for the
 //     namespace with which the SPDX Document will be associated
-func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1) (*spdx.Document2_1, error) {
+func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1) (*v2_1.Document, error) {
 	// first, build the Document using builder
 	bconfig := &builder.Config2_1{
 		NamespacePrefix: idconfig.NamespacePrefix,
@@ -174,7 +175,7 @@ type Config2_2 struct {
 //   - dirRoot: path to directory to be analyzed
 //   - namespacePrefix: URI representing a prefix for the
 //     namespace with which the SPDX Document will be associated
-func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2) (*spdx.Document2_2, error) {
+func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2) (*v2_2.Document, error) {
 	// first, build the Document using builder
 	bconfig := &builder.Config2_2{
 		NamespacePrefix: idconfig.NamespacePrefix,

@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
-func renderAnnotation2_1(ann *spdx.Annotation2_1, w io.Writer) error {
+func renderAnnotation2_1(ann *v2_1.Annotation, w io.Writer) error {
 	if ann.Annotator.Annotator != "" && ann.Annotator.AnnotatorType != "" {
 		fmt.Fprintf(w, "Annotator: %s: %s\n", ann.Annotator.AnnotatorType, ann.Annotator.Annotator)
 	}
@@ -19,7 +20,7 @@ func renderAnnotation2_1(ann *spdx.Annotation2_1, w io.Writer) error {
 	if ann.AnnotationType != "" {
 		fmt.Fprintf(w, "AnnotationType: %s\n", ann.AnnotationType)
 	}
-	annIDStr := spdx.RenderDocElementID(ann.AnnotationSPDXIdentifier)
+	annIDStr := common.RenderDocElementID(ann.AnnotationSPDXIdentifier)
 	if annIDStr != "SPDXRef-" {
 		fmt.Fprintf(w, "SPDXREF: %s\n", annIDStr)
 	}

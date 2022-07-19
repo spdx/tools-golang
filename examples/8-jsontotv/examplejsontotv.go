@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spdx/tools-golang/json"
+	spdx_json "github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/tvsaver"
 )
 

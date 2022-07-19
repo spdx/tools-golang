@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) error {
@@ -17,7 +18,7 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId2_1 {
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
-		parser.snippet = &spdx.Snippet2_1{}
+		parser.snippet = &v2_1.Snippet{}
 		eID, err := extractElementID(value)
 		if err != nil {
 			return err
@@ -25,7 +26,7 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		// FIXME: how should we handle where not associated with current file?
 		if parser.file != nil {
 			if parser.file.Snippets == nil {
-				parser.file.Snippets = map[spdx.ElementID]*spdx.Snippet2_1{}
+				parser.file.Snippets = map[common.ElementID]*v2_1.Snippet{}
 			}
 			parser.file.Snippets[eID] = parser.snippet
 		}
@@ -67,9 +68,9 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		}
 
 		if parser.snippet.Ranges == nil {
-			parser.snippet.Ranges = []spdx.SnippetRange{}
+			parser.snippet.Ranges = []common.SnippetRange{}
 		}
-		byteRange := spdx.SnippetRange{StartPointer: spdx.SnippetRangePointer{Offset: bIntStart}, EndPointer: spdx.SnippetRangePointer{Offset: bIntEnd}}
+		byteRange := common.SnippetRange{StartPointer: common.SnippetRangePointer{Offset: bIntStart}, EndPointer: common.SnippetRangePointer{Offset: bIntEnd}}
 		parser.snippet.Ranges = append(parser.snippet.Ranges, byteRange)
 	case "SnippetLineRange":
 		lineStart, lineEnd, err := extractSubs(value)
@@ -86,9 +87,9 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		}
 
 		if parser.snippet.Ranges == nil {
-			parser.snippet.Ranges = []spdx.SnippetRange{}
+			parser.snippet.Ranges = []common.SnippetRange{}
 		}
-		lineRange := spdx.SnippetRange{StartPointer: spdx.SnippetRangePointer{LineNumber: lInttStart}, EndPointer: spdx.SnippetRangePointer{LineNumber: lInttEnd}}
+		lineRange := common.SnippetRange{StartPointer: common.SnippetRangePointer{LineNumber: lInttStart}, EndPointer: common.SnippetRangePointer{LineNumber: lInttEnd}}
 		parser.snippet.Ranges = append(parser.snippet.Ranges, lineRange)
 	case "SnippetLicenseConcluded":
 		parser.snippet.SnippetLicenseConcluded = value
@@ -104,14 +105,14 @@ func (parser *tvParser2_1) parsePairFromSnippet2_1(tag string, value string) err
 		parser.snippet.SnippetName = value
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
-		parser.rln = &spdx.Relationship2_1{}
+		parser.rln = &v2_1.Relationship{}
 		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
 		return parser.parsePairForRelationship2_1(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_1(tag, value)
 	// for annotation tags, pass along but don't change state
 	case "Annotator":
-		parser.ann = &spdx.Annotation2_1{}
+		parser.ann = &v2_1.Annotation{}
 		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
 		return parser.parsePairForAnnotation2_1(tag, value)
 	case "AnnotationDate":
