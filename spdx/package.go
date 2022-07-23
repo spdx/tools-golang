@@ -8,6 +8,24 @@ import (
 	"strings"
 )
 
+const (
+	CategorySecurity       = "SECURITY"
+	CategoryPackageManager = "PACKAGE-MANAGER"
+	CategoryOther          = "OTHER"
+	CategoryPersistentId   = "PERSISTENT-ID"
+
+	TypeSecurityCPE22Type = "cpe22Type"
+	TypeSecurityCPE23Type = "cpe23Type"
+
+	TypePackageManagerMavenCentral = "maven-central"
+	TypePackageManagerNpm          = "npm"
+	TypePackageManagerNuGet        = "nuget"
+	TypePackageManagerBower        = "bower"
+	TypePackageManagerPURL         = "purl"
+
+	TypePersistentIdSwh = "swh"
+)
+
 type Supplier struct {
 	// can be "NOASSERTION"
 	Supplier string
@@ -331,7 +349,7 @@ type Package2_2 struct {
 // PackageExternalReference2_2 is an External Reference to additional info
 // about a Package, as defined in section 3.21 in version 2.2 of the spec.
 type PackageExternalReference2_2 struct {
-	// category is "SECURITY", "PACKAGE-MANAGER" or "OTHER"
+	// category is "SECURITY", "PACKAGE-MANAGER", "PERSISTENT-ID" or "OTHER"
 	Category string `json:"referenceCategory"`
 
 	// type is an [idstring] as defined in Appendix VI;
