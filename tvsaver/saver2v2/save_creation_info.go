@@ -4,11 +4,12 @@ package saver2v2
 
 import (
 	"fmt"
-	"github.com/spdx/tools-golang/spdx"
 	"io"
+
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
-func renderCreationInfo2_2(ci *spdx.CreationInfo2_2, w io.Writer) error {
+func renderCreationInfo2_2(ci *v2_2.CreationInfo, w io.Writer) error {
 	if ci.LicenseListVersion != "" {
 		fmt.Fprintf(w, "LicenseListVersion: %s\n", ci.LicenseListVersion)
 	}

@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string) error {
@@ -17,7 +18,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 
 	// create an SPDX Creation Info data struct if we don't have one already
 	if parser.doc.CreationInfo == nil {
-		parser.doc.CreationInfo = &spdx.CreationInfo2_2{}
+		parser.doc.CreationInfo = &v2_2.CreationInfo{}
 	}
 
 	ci := parser.doc.CreationInfo
@@ -30,7 +31,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 			return err
 		}
 
-		creator := spdx.Creator{Creator: subvalue}
+		creator := common.Creator{Creator: subvalue}
 		switch subkey {
 		case "Person", "Organization", "Tool":
 			creator.CreatorType = subkey
@@ -54,7 +55,7 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
 		}
 		parser.st = psPackage2_2
-		parser.pkg = &spdx.Package2_2{
+		parser.pkg = &v2_2.Package{
 			FilesAnalyzed:             true,
 			IsFilesAnalyzedTagPresent: false,
 		}
@@ -75,14 +76,14 @@ func (parser *tvParser2_2) parsePairFromCreationInfo2_2(tag string, value string
 		return parser.parsePairFromReview2_2(tag, value)
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
-		parser.rln = &spdx.Relationship2_2{}
+		parser.rln = &v2_2.Relationship{}
 		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
 		return parser.parsePairForRelationship2_2(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_2(tag, value)
 	// for annotation tags, pass along but don't change state
 	case "Annotator":
-		parser.ann = &spdx.Annotation2_2{}
+		parser.ann = &v2_2.Annotation{}
 		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
 		return parser.parsePairForAnnotation2_2(tag, value)
 	case "AnnotationDate":

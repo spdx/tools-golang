@@ -3,13 +3,14 @@
 package parser2v2
 
 import (
-	"github.com/spdx/tools-golang/spdx"
 	"testing"
+
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func Test_setAnnotatorFromString(t *testing.T) {
 	// TestCase 1: Empty String must raise an error
-	ann := &spdx.Annotation2_2{}
+	ann := &v2_2.Annotation{}
 	input := ""
 	err := setAnnotatorFromString(input, ann)
 	if err == nil {
@@ -17,7 +18,7 @@ func Test_setAnnotatorFromString(t *testing.T) {
 	}
 
 	// TestCase 2: Invalid annotator type
-	ann = &spdx.Annotation2_2{}
+	ann = &v2_2.Annotation{}
 	input = "Company: some_company"
 	err = setAnnotatorFromString(input, ann)
 	if err == nil {
@@ -25,7 +26,7 @@ func Test_setAnnotatorFromString(t *testing.T) {
 	}
 
 	// TestCase 3: Valid annotator
-	ann = &spdx.Annotation2_2{}
+	ann = &v2_2.Annotation{}
 	input = "Person: Rishabh"
 	err = setAnnotatorFromString(input, ann)
 	if err != nil {
@@ -40,7 +41,7 @@ func Test_setAnnotatorFromString(t *testing.T) {
 }
 
 func Test_setAnnotationType(t *testing.T) {
-	ann := &spdx.Annotation2_2{}
+	ann := &v2_2.Annotation{}
 	// TestCase 1: invalid input (empty annotationType)
 	err := setAnnotationType("", ann)
 	if err == nil {
@@ -76,7 +77,7 @@ func Test_setAnnotationToParser(t *testing.T) {
 	// TestCase 1: doc is nil (must raise an error)
 	parser, _ := parserFromBodyContent(``)
 	parser.doc = nil
-	err := setAnnotationToParser(parser, &spdx.Annotation2_2{})
+	err := setAnnotationToParser(parser, &v2_2.Annotation{})
 	if err == nil {
 		t.Errorf("empty doc should've raised an error")
 	}
@@ -85,7 +86,7 @@ func Test_setAnnotationToParser(t *testing.T) {
 	//			   list and append the input to it.
 	parser, _ = parserFromBodyContent(``)
 	parser.doc.Annotations = nil
-	err = setAnnotationToParser(parser, &spdx.Annotation2_2{})
+	err = setAnnotationToParser(parser, &v2_2.Annotation{})
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}

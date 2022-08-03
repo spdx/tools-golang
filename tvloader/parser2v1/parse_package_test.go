@@ -4,7 +4,8 @@ package parser2v1
 import (
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== Parser package section state change tests =====
@@ -13,9 +14,9 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	pkgOldName := "p1"
 
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: pkgOldName, PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: pkgOldName, PackageSPDXIdentifier: "p1"},
 	}
 	pkgOld := parser.pkg
 	parser.doc.Packages = append(parser.doc.Packages, pkgOld)
@@ -62,7 +63,7 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 	// pkg is nil, so that Files appearing before the first PackageName tag
 	// are added to Files instead of Packages
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psFile2_1,
 		pkg: nil,
 	}
@@ -105,9 +106,9 @@ func TestParser2_1PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 
 func TestParser2_1PackageMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 	pkgCurrent := parser.pkg
@@ -128,9 +129,9 @@ func TestParser2_1PackageMovesToFileAfterParsingFileNameTag(t *testing.T) {
 
 func TestParser2_1PackageMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -145,9 +146,9 @@ func TestParser2_1PackageMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.
 
 func TestParser2_1PackageMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -162,9 +163,9 @@ func TestParser2_1PackageMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 
 func TestParser2_1PackageStaysAfterParsingRelationshipTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -189,9 +190,9 @@ func TestParser2_1PackageStaysAfterParsingRelationshipTags(t *testing.T) {
 
 func TestParser2_1PackageStaysAfterParsingAnnotationTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -239,9 +240,9 @@ func TestParser2_1PackageStaysAfterParsingAnnotationTags(t *testing.T) {
 // ===== Package data section tests =====
 func TestParser2_1CanParsePackageTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// should not yet be in Packages map, b/c no SPDX identifier
@@ -349,15 +350,15 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 
 	for _, checksum := range parser.pkg.PackageChecksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != codeSha1 {
 				t.Errorf("expected %s for PackageChecksum SHA1, got %s", codeSha1, checksum.Value)
 			}
-		case spdx.SHA256:
+		case common.SHA256:
 			if checksum.Value != codeSha256 {
 				t.Errorf("expected %s for PackageChecksum SHA256, got %s", codeSha256, checksum.Value)
 			}
-		case spdx.MD5:
+		case common.MD5:
 			if checksum.Value != codeMd5 {
 				t.Errorf("expected %s for PackageChecksum MD5, got %s", codeMd5, checksum.Value)
 			}
@@ -556,9 +557,9 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 
 func TestParser2_1CanParsePackageSupplierPersonTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -574,9 +575,9 @@ func TestParser2_1CanParsePackageSupplierPersonTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageSupplierOrganizationTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -592,9 +593,9 @@ func TestParser2_1CanParsePackageSupplierOrganizationTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageSupplierNOASSERTIONTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -610,9 +611,9 @@ func TestParser2_1CanParsePackageSupplierNOASSERTIONTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageOriginatorPersonTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -628,9 +629,9 @@ func TestParser2_1CanParsePackageOriginatorPersonTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageOriginatorOrganizationTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -646,9 +647,9 @@ func TestParser2_1CanParsePackageOriginatorOrganizationTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageOriginatorNOASSERTIONTag(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -664,9 +665,9 @@ func TestParser2_1CanParsePackageOriginatorNOASSERTIONTag(t *testing.T) {
 
 func TestParser2_1CanParsePackageVerificationCodeTagWithExcludes(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -689,9 +690,9 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithExcludes(t *testing.T) {
 
 func TestParser2_1CanParsePackageVerificationCodeTagWithoutExcludes(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -712,9 +713,9 @@ func TestParser2_1CanParsePackageVerificationCodeTagWithoutExcludes(t *testing.T
 
 func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -757,9 +758,9 @@ func TestPackageExternalRefPointerChangesAfterTags(t *testing.T) {
 
 func TestParser2_1PackageCreatesRelationshipInDocument(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -777,9 +778,9 @@ func TestParser2_1PackageCreatesRelationshipInDocument(t *testing.T) {
 
 func TestParser2_1PackageCreatesAnnotationInDocument(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -797,9 +798,9 @@ func TestParser2_1PackageCreatesAnnotationInDocument(t *testing.T) {
 
 func TestParser2_1PackageUnknownTagFails(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: "p1", PackageSPDXIdentifier: "p1"},
+		pkg: &v2_1.Package{PackageName: "p1", PackageSPDXIdentifier: "p1"},
 	}
 	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 
@@ -811,9 +812,9 @@ func TestParser2_1PackageUnknownTagFails(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidSPDXIDInPackageSection(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -830,9 +831,9 @@ func TestParser2_1FailsIfInvalidSPDXIDInPackageSection(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidPackageSupplierFormat(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -849,9 +850,9 @@ func TestParser2_1FailsIfInvalidPackageSupplierFormat(t *testing.T) {
 
 func TestParser2_1FailsIfUnknownPackageSupplierType(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -868,9 +869,9 @@ func TestParser2_1FailsIfUnknownPackageSupplierType(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidPackageOriginatorFormat(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -887,9 +888,9 @@ func TestParser2_1FailsIfInvalidPackageOriginatorFormat(t *testing.T) {
 
 func TestParser2_1FailsIfUnknownPackageOriginatorType(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -906,9 +907,9 @@ func TestParser2_1FailsIfUnknownPackageOriginatorType(t *testing.T) {
 
 func TestParser2_1SetsFilesAnalyzedTagsCorrectly(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -931,9 +932,9 @@ func TestParser2_1SetsFilesAnalyzedTagsCorrectly(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidPackageChecksumFormat(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -950,9 +951,9 @@ func TestParser2_1FailsIfInvalidPackageChecksumFormat(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidPackageChecksumType(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -969,9 +970,9 @@ func TestParser2_1FailsIfInvalidPackageChecksumType(t *testing.T) {
 
 func TestParser2_1FailsIfInvalidExternalRefFormat(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -988,9 +989,9 @@ func TestParser2_1FailsIfInvalidExternalRefFormat(t *testing.T) {
 
 func TestParser2_1FailsIfExternalRefCommentBeforeExternalRef(t *testing.T) {
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{},
+		pkg: &v2_1.Package{},
 	}
 
 	// start with Package Name
@@ -1074,9 +1075,9 @@ func TestParser2_1PackageWithoutSpdxIdentifierThrowsError(t *testing.T) {
 	// More than one package, the previous package doesn't contain the SPDXID
 	pkgOldName := "p1"
 	parser := tvParser2_1{
-		doc: &spdx.Document2_1{Packages: []*spdx.Package2_1{}},
+		doc: &v2_1.Document{Packages: []*v2_1.Package{}},
 		st:  psPackage2_1,
-		pkg: &spdx.Package2_1{PackageName: pkgOldName},
+		pkg: &v2_1.Package{PackageName: pkgOldName},
 	}
 	pkgOld := parser.pkg
 	parser.doc.Packages = append(parser.doc.Packages, pkgOld)

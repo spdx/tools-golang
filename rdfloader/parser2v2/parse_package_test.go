@@ -7,14 +7,15 @@ import (
 	"testing"
 
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func Test_setPackageSupplier(t *testing.T) {
 	var err error
 
 	// TestCase 1: no assertion must set PackageSupplierNOASSERTION field to true
-	pkg := &spdx.Package2_2{}
+	pkg := &v2_2.Package{}
 	err = setPackageSupplier(pkg, "NOASSERTION")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -25,7 +26,7 @@ func Test_setPackageSupplier(t *testing.T) {
 
 	// TestCase 2: lower-case noassertion must also set the
 	// PackageSupplierNOASSERTION to true.
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setPackageSupplier(pkg, "noassertion")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -35,7 +36,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	}
 
 	// TestCase 3: invalid input without colon separator. must raise an error
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	input := "string without colon separator"
 	err = setPackageSupplier(pkg, input)
 	if err == nil {
@@ -43,7 +44,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	}
 
 	// TestCase 4: Valid Person
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	personName := "Rishabh Bhatnagar"
 	input = "Person: " + personName
 	err = setPackageSupplier(pkg, input)
@@ -55,7 +56,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	}
 
 	// TestCase 5: Valid Organization
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	orgName := "SPDX"
 	input = "Organization: " + orgName
 	err = setPackageSupplier(pkg, input)
@@ -67,7 +68,7 @@ func Test_setPackageSupplier(t *testing.T) {
 	}
 
 	// TestCase 6: Invalid EntityType
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	input = "InvalidEntity: entity"
 	err = setPackageSupplier(pkg, input)
 	if err == nil {
@@ -79,7 +80,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	var err error
 
 	// TestCase 1: no assertion must set PackageSupplierNOASSERTION field to true
-	pkg := &spdx.Package2_2{}
+	pkg := &v2_2.Package{}
 	err = setPackageOriginator(pkg, "NOASSERTION")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -90,7 +91,7 @@ func Test_setPackageOriginator(t *testing.T) {
 
 	// TestCase 2: lower-case noassertion must also set the
 	// PackageOriginatorNOASSERTION to true.
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setPackageOriginator(pkg, "noassertion")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -100,7 +101,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	}
 
 	// TestCase 3: invalid input without colon separator. must raise an error
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	input := "string without colon separator"
 	err = setPackageOriginator(pkg, input)
 	if err == nil {
@@ -108,7 +109,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	}
 
 	// TestCase 4: Valid Person
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	personName := "Rishabh Bhatnagar"
 	input = "Person: " + personName
 	err = setPackageOriginator(pkg, input)
@@ -120,7 +121,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	}
 
 	// TestCase 5: Valid Organization
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	orgName := "SPDX"
 	input = "Organization: " + orgName
 	err = setPackageOriginator(pkg, input)
@@ -132,7 +133,7 @@ func Test_setPackageOriginator(t *testing.T) {
 	}
 
 	// TestCase 6: Invalid EntityType
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	input = "InvalidEntity: entity"
 	err = setPackageOriginator(pkg, input)
 	if err == nil {
@@ -143,19 +144,19 @@ func Test_setPackageOriginator(t *testing.T) {
 func Test_rdfParser2_2_setPackageVerificationCode(t *testing.T) {
 	var parser *rdfParser2_2
 	var node *gordfParser.Node
-	var pkg *spdx.Package2_2
+	var pkg *v2_2.Package
 	var err error
 
 	// TestCase 1: invalid predicate must raise an error
 	parser, _ = parserFromBodyContent(`
-		<spdx:PackageVerificationCode>
+		<spdx.PackageVerificationCode>
 			<spdx:invalidPredicate />
 			<spdx:packageVerificationCodeValue>cbceb8b5689b75a584efe35587b5d41bd48820ce</spdx:packageVerificationCodeValue>
 			<spdx:packageVerificationCodeExcludedFile>./package.spdx</spdx:packageVerificationCodeExcludedFile>
-		</spdx:PackageVerificationCode>
+		</spdx.PackageVerificationCode>
 	`)
 	node = parser.gordfParserObj.Triples[0].Subject
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = parser.setPackageVerificationCode(pkg, node)
 	if err == nil {
 		t.Errorf("expected an error due to invalid predicate, got <nil>")
@@ -163,13 +164,13 @@ func Test_rdfParser2_2_setPackageVerificationCode(t *testing.T) {
 
 	// TestCase 2: valid input
 	parser, _ = parserFromBodyContent(`
-		<spdx:PackageVerificationCode>
+		<spdx.PackageVerificationCode>
 			<spdx:packageVerificationCodeValue>cbceb8b5689b75a584efe35587b5d41bd48820ce</spdx:packageVerificationCodeValue>
 			<spdx:packageVerificationCodeExcludedFile>./package.spdx</spdx:packageVerificationCodeExcludedFile>
-		</spdx:PackageVerificationCode>
+		</spdx.PackageVerificationCode>
 	`)
 	node = parser.gordfParserObj.Triples[0].Subject
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = parser.setPackageVerificationCode(pkg, node)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -185,7 +186,7 @@ func Test_rdfParser2_2_setPackageVerificationCode(t *testing.T) {
 }
 
 func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
-	var extRef *spdx.PackageExternalReference2_2
+	var extRef *v2_2.PackageExternalReference
 	var err error
 	var parser *rdfParser2_2
 	var node *gordfParser.Node
@@ -239,7 +240,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error parsing a valid example: %v", err)
 	}
-	expectedExtRef := &spdx.PackageExternalReference2_2{
+	expectedExtRef := &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
 		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "SECURITY",
@@ -265,7 +266,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error parsing a valid example: %v", err)
 	}
-	expectedExtRef = &spdx.PackageExternalReference2_2{
+	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
 		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "PACKAGE-MANAGER",
@@ -291,7 +292,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error parsing a valid example: %v", err)
 	}
-	expectedExtRef = &spdx.PackageExternalReference2_2{
+	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
 		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "OTHER",
@@ -503,10 +504,10 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 			<spdx:downloadLocation rdf:resource="http://spdx.org/rdf/terms#noassertion" />
 			<spdx:filesAnalyzed>true</spdx:filesAnalyzed>
 			<spdx:packageVerificationCode>
-                <spdx:PackageVerificationCode>
+                <spdx.PackageVerificationCode>
                     <spdx:packageVerificationCodeValue>cbceb8b5689b75a584efe35587b5d41bd48820ce</spdx:packageVerificationCodeValue>
 					<spdx:packageVerificationCodeExcludedFile>./package.spdx</spdx:packageVerificationCodeExcludedFile>
-                </spdx:PackageVerificationCode>
+                </spdx.PackageVerificationCode>
             </spdx:packageVerificationCode>
 			<spdx:checksum>
                 <spdx:Checksum>
@@ -564,14 +565,14 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 }
 
 func Test_rdfParser2_2_setFileToPackage(t *testing.T) {
-	var pkg *spdx.Package2_2
-	var file *spdx.File2_2
+	var pkg *v2_2.Package
+	var file *v2_2.File
 	var parser *rdfParser2_2
 
 	// TestCase 1: setting to a nil files attribute shouldn't panic.
 	parser, _ = parserFromBodyContent(``)
-	pkg = &spdx.Package2_2{}
-	file = &spdx.File2_2{}
+	pkg = &v2_2.Package{}
+	file = &v2_2.File{}
 	parser.setFileToPackage(pkg, file)
 	if len(pkg.Files) != 1 {
 		t.Errorf("expected given package to have one file after setting, got %d", len(pkg.Files))
@@ -584,7 +585,7 @@ func Test_rdfParser2_2_setFileToPackage(t *testing.T) {
 func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 	var parser *rdfParser2_2
 	var node *gordfParser.Node
-	var pkg *spdx.Package2_2
+	var pkg *v2_2.Package
 	var expectedChecksumValue string
 	var err error
 
@@ -595,7 +596,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 		</spdx:Checksum>
 	`)
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
 	if err == nil {
@@ -609,7 +610,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha384"/>
 		</spdx:Checksum>
 	`)
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
 	if err == nil {
@@ -623,7 +624,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
 		</spdx:Checksum>
 	`)
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
 	if err != nil {
@@ -633,7 +634,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	for _, checksum := range pkg.PackageChecksums {
 		switch checksum.Algorithm {
-		case spdx.SHA1:
+		case common.SHA1:
 			if checksum.Value != expectedChecksumValue {
 				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
 			}
@@ -647,7 +648,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
 		</spdx:Checksum>
 	`)
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
 	if err != nil {
@@ -656,7 +657,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
 	for _, checksum := range pkg.PackageChecksums {
 		switch checksum.Algorithm {
-		case spdx.SHA256:
+		case common.SHA256:
 			if checksum.Value != expectedChecksumValue {
 				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
 			}
@@ -670,7 +671,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
 		</spdx:Checksum>
 	`)
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
 	if err != nil {
@@ -679,7 +680,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 	expectedChecksumValue = "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
 	for _, checksum := range pkg.PackageChecksums {
 		switch checksum.Algorithm {
-		case spdx.MD5:
+		case common.MD5:
 			if checksum.Value != expectedChecksumValue {
 				t.Errorf("expected %v, got: %v", expectedChecksumValue, checksum.Value)
 			}
@@ -688,14 +689,14 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 }
 
 func Test_setDocumentLocationFromURI(t *testing.T) {
-	var pkg *spdx.Package2_2
+	var pkg *v2_2.Package
 	var expectedDocumentLocation, gotDocumentLocation string
 	var inputURI string
 	var err error
 
 	// TestCase 1: NOASSERTION
 	inputURI = SPDX_NOASSERTION_SMALL
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setDocumentLocationFromURI(pkg, inputURI)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -708,7 +709,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 
 	// TestCase 2: NONE
 	inputURI = SPDX_NONE_CAPS
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setDocumentLocationFromURI(pkg, inputURI)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -721,7 +722,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 
 	// TestCase 3: valid uri
 	inputURI = "https://www.gnu.org/software/texinfo/"
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setDocumentLocationFromURI(pkg, inputURI)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -734,7 +735,7 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 
 	// TestCase 3: invalid uri
 	inputURI = " "
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setDocumentLocationFromURI(pkg, inputURI)
 	if err == nil {
 		t.Fatalf("expected an error due to invalid uri, got %v", err)
@@ -742,18 +743,18 @@ func Test_setDocumentLocationFromURI(t *testing.T) {
 }
 
 func Test_setFilesAnalyzed(t *testing.T) {
-	var pkg *spdx.Package2_2
+	var pkg *v2_2.Package
 	var err error
 
 	// TestCase 1: not a valid bool value:
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setFilesAnalyzed(pkg, "no")
 	if err == nil {
 		t.Errorf("expected an error due to invalid bool input, got %v", err)
 	}
 
 	// TestCase 2: valid input
-	pkg = &spdx.Package2_2{}
+	pkg = &v2_2.Package{}
 	err = setFilesAnalyzed(pkg, "true")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

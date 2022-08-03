@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) error {
@@ -24,7 +25,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			if parser.pkg != nil && parser.pkg.PackageSPDXIdentifier == nullSpdxElementId2_2 {
 				return fmt.Errorf("package with PackageName %s does not have SPDX identifier", parser.pkg.PackageName)
 			}
-			parser.pkg = &spdx.Package2_2{
+			parser.pkg = &v2_2.Package{
 				FilesAnalyzed:             true,
 				IsFilesAnalyzedTagPresent: false,
 			}
@@ -45,7 +46,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		parser.pkg.PackageSPDXIdentifier = eID
 		if parser.doc.Packages == nil {
-			parser.doc.Packages = []*spdx.Package2_2{}
+			parser.doc.Packages = []*v2_2.Package{}
 		}
 		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
 	case "PackageVersion":
@@ -53,7 +54,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 	case "PackageFileName":
 		parser.pkg.PackageFileName = value
 	case "PackageSupplier":
-		supplier := &spdx.Supplier{Supplier: value}
+		supplier := &common.Supplier{Supplier: value}
 		if value == "NOASSERTION" {
 			parser.pkg.PackageSupplier = supplier
 			break
@@ -72,7 +73,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		}
 		parser.pkg.PackageSupplier = supplier
 	case "PackageOriginator":
-		originator := &spdx.Originator{Originator: value}
+		originator := &common.Originator{Originator: value}
 		if value == "NOASSERTION" {
 			parser.pkg.PackageOriginator = originator
 			break
@@ -107,12 +108,12 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 			return err
 		}
 		if parser.pkg.PackageChecksums == nil {
-			parser.pkg.PackageChecksums = []spdx.Checksum{}
+			parser.pkg.PackageChecksums = []common.Checksum{}
 		}
-		switch spdx.ChecksumAlgorithm(subkey) {
-		case spdx.SHA1, spdx.SHA256, spdx.MD5:
-			algorithm := spdx.ChecksumAlgorithm(subkey)
-			parser.pkg.PackageChecksums = append(parser.pkg.PackageChecksums, spdx.Checksum{Algorithm: algorithm, Value: subvalue})
+		switch common.ChecksumAlgorithm(subkey) {
+		case common.SHA1, common.SHA256, common.MD5:
+			algorithm := common.ChecksumAlgorithm(subkey)
+			parser.pkg.PackageChecksums = append(parser.pkg.PackageChecksums, common.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:
 			return fmt.Errorf("got unknown checksum type %s", subkey)
 		}
@@ -139,7 +140,7 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 	case "PackageAttributionText":
 		parser.pkg.PackageAttributionTexts = append(parser.pkg.PackageAttributionTexts, value)
 	case "ExternalRef":
-		parser.pkgExtRef = &spdx.PackageExternalReference2_2{}
+		parser.pkgExtRef = &v2_2.PackageExternalReference{}
 		parser.pkg.PackageExternalReferences = append(parser.pkg.PackageExternalReferences, parser.pkgExtRef)
 		category, refType, locator, err := extractPackageExternalReference(value)
 		if err != nil {
@@ -157,14 +158,14 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 		parser.pkgExtRef = nil
 	// for relationship tags, pass along but don't change state
 	case "Relationship":
-		parser.rln = &spdx.Relationship2_2{}
+		parser.rln = &v2_2.Relationship{}
 		parser.doc.Relationships = append(parser.doc.Relationships, parser.rln)
 		return parser.parsePairForRelationship2_2(tag, value)
 	case "RelationshipComment":
 		return parser.parsePairForRelationship2_2(tag, value)
 	// for annotation tags, pass along but don't change state
 	case "Annotator":
-		parser.ann = &spdx.Annotation2_2{}
+		parser.ann = &v2_2.Annotation{}
 		parser.doc.Annotations = append(parser.doc.Annotations, parser.ann)
 		return parser.parsePairForAnnotation2_2(tag, value)
 	case "AnnotationDate":
@@ -188,13 +189,13 @@ func (parser *tvParser2_2) parsePairFromPackage2_2(tag string, value string) err
 
 // ===== Helper functions =====
 
-func extractCodeAndExcludes(value string) spdx.PackageVerificationCode {
+func extractCodeAndExcludes(value string) common.PackageVerificationCode {
 	// FIXME this should probably be done using regular expressions instead
 	// split by paren + word "excludes:"
 	sp := strings.SplitN(value, "(excludes:", 2)
 	if len(sp) < 2 {
 		// not found; return the whole string as just the code
-		return spdx.PackageVerificationCode{Value: value, ExcludedFiles: []string{}}
+		return common.PackageVerificationCode{Value: value, ExcludedFiles: []string{}}
 	}
 
 	// if we're here, code is in first part and excludes filename is in
@@ -202,7 +203,7 @@ func extractCodeAndExcludes(value string) spdx.PackageVerificationCode {
 	code := strings.TrimSpace(sp[0])
 	parsedSp := strings.SplitN(sp[1], ")", 2)
 	fileName := strings.TrimSpace(parsedSp[0])
-	return spdx.PackageVerificationCode{Value: code, ExcludedFiles: []string{fileName}}
+	return common.PackageVerificationCode{Value: code, ExcludedFiles: []string{fileName}}
 }
 
 func extractPackageExternalReference(value string) (string, string, string, error) {

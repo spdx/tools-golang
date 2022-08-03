@@ -3,15 +3,16 @@
 package rdfloader
 
 import (
+	"io"
+
 	"github.com/spdx/gordf/rdfloader"
 	"github.com/spdx/tools-golang/rdfloader/parser2v2"
-	"github.com/spdx/tools-golang/spdx"
-	"io"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // Takes in a file Reader and returns the pertaining spdx document
 // or the error if any is encountered while setting the doc.
-func Load2_2(content io.Reader) (*spdx.Document2_2, error) {
+func Load2_2(content io.Reader) (*v2_2.Document, error) {
 	var rdfParserObj, err = rdfloader.LoadFromReaderObject(content)
 	if err != nil {
 		return nil, err

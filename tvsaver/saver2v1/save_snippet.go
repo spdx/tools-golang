@@ -6,14 +6,15 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
-func renderSnippet2_1(sn *spdx.Snippet2_1, w io.Writer) error {
+func renderSnippet2_1(sn *v2_1.Snippet, w io.Writer) error {
 	if sn.SnippetSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SnippetSPDXID: %s\n", spdx.RenderElementID(sn.SnippetSPDXIdentifier))
+		fmt.Fprintf(w, "SnippetSPDXID: %s\n", common.RenderElementID(sn.SnippetSPDXIdentifier))
 	}
-	snFromFileIDStr := spdx.RenderElementID(sn.SnippetFromFileSPDXIdentifier)
+	snFromFileIDStr := common.RenderElementID(sn.SnippetFromFileSPDXIdentifier)
 	if snFromFileIDStr != "" {
 		fmt.Fprintf(w, "SnippetFromFileSPDXID: %s\n", snFromFileIDStr)
 	}

@@ -5,9 +5,11 @@ package parser2v2
 import (
 	"errors"
 	"fmt"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	gordfWriter "github.com/spdx/gordf/rdfwriter"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // returns a new instance of rdfParser2_2 given the gordf object and nodeToTriples mapping
@@ -15,18 +17,18 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 	parser := rdfParser2_2{
 		gordfParserObj:      gordfParserObj,
 		nodeStringToTriples: nodeToTriples,
-		doc: &spdx.Document2_2{
-			ExternalDocumentReferences: []spdx.ExternalDocumentRef2_2{},
-			CreationInfo:               &spdx.CreationInfo2_2{},
-			Packages:                   []*spdx.Package2_2{},
-			Files:                      []*spdx.File2_2{},
-			OtherLicenses:              []*spdx.OtherLicense2_2{},
-			Relationships:              []*spdx.Relationship2_2{},
-			Annotations:                []*spdx.Annotation2_2{},
-			Reviews:                    []*spdx.Review2_2{},
+		doc: &v2_2.Document{
+			ExternalDocumentReferences: []v2_2.ExternalDocumentRef{},
+			CreationInfo:               &v2_2.CreationInfo{},
+			Packages:                   []*v2_2.Package{},
+			Files:                      []*v2_2.File{},
+			OtherLicenses:              []*v2_2.OtherLicense{},
+			Relationships:              []*v2_2.Relationship{},
+			Annotations:                []*v2_2.Annotation{},
+			Reviews:                    []*v2_2.Review{},
 		},
-		files:            map[spdx.ElementID]*spdx.File2_2{},
-		assocWithPackage: map[spdx.ElementID]bool{},
+		files:            map[common.ElementID]*v2_2.File{},
+		assocWithPackage: map[common.ElementID]bool{},
 		cache:            map[string]*nodeState{},
 	}
 	return &parser
@@ -34,7 +36,7 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 
 // main function which takes in a gordfParser and returns
 // a spdxDocument model or the error encountered while parsing it
-func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*spdx.Document2_2, error) {
+func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*v2_2.Document, error) {
 	// nodeToTriples is a mapping from a node to list of triples.
 	// for every node in the set of subjects of all the triples,
 	// it provides a list of triples that are associated with that subject node.

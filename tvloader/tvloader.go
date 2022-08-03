@@ -6,7 +6,8 @@ package tvloader
 import (
 	"io"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 	"github.com/spdx/tools-golang/tvloader/parser2v1"
 	"github.com/spdx/tools-golang/tvloader/parser2v2"
 	"github.com/spdx/tools-golang/tvloader/reader"
@@ -14,7 +15,7 @@ import (
 
 // Load2_1 takes an io.Reader and returns a fully-parsed SPDX Document
 // (version 2.1) if parseable, or error if any error is encountered.
-func Load2_1(content io.Reader) (*spdx.Document2_1, error) {
+func Load2_1(content io.Reader) (*v2_1.Document, error) {
 	tvPairs, err := reader.ReadTagValues(content)
 	if err != nil {
 		return nil, err
@@ -30,7 +31,7 @@ func Load2_1(content io.Reader) (*spdx.Document2_1, error) {
 
 // Load2_2 takes an io.Reader and returns a fully-parsed SPDX Document
 // (version 2.2) if parseable, or error if any error is encountered.
-func Load2_2(content io.Reader) (*spdx.Document2_2, error) {
+func Load2_2(content io.Reader) (*v2_2.Document, error) {
 	tvPairs, err := reader.ReadTagValues(content)
 	if err != nil {
 		return nil, err

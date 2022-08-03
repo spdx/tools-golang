@@ -8,15 +8,16 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
-func renderPackage2_2(pkg *spdx.Package2_2, w io.Writer) error {
+func renderPackage2_2(pkg *v2_2.Package, w io.Writer) error {
 	if pkg.PackageName != "" {
 		fmt.Fprintf(w, "PackageName: %s\n", pkg.PackageName)
 	}
 	if pkg.PackageSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(pkg.PackageSPDXIdentifier))
+		fmt.Fprintf(w, "SPDXID: %s\n", common.RenderElementID(pkg.PackageSPDXIdentifier))
 	}
 	if pkg.PackageVersion != "" {
 		fmt.Fprintf(w, "PackageVersion: %s\n", pkg.PackageVersion)

@@ -3,26 +3,27 @@
 package parser2v2
 
 import (
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 type tvParser2_2 struct {
 	// document into which data is being parsed
-	doc *spdx.Document2_2
+	doc *v2_2.Document
 
 	// current parser state
 	st tvParserState2_2
 
 	// current SPDX item being filled in, if any
-	pkg       *spdx.Package2_2
-	pkgExtRef *spdx.PackageExternalReference2_2
-	file      *spdx.File2_2
-	fileAOP   *spdx.ArtifactOfProject2_2
-	snippet   *spdx.Snippet2_2
-	otherLic  *spdx.OtherLicense2_2
-	rln       *spdx.Relationship2_2
-	ann       *spdx.Annotation2_2
-	rev       *spdx.Review2_2
+	pkg       *v2_2.Package
+	pkgExtRef *v2_2.PackageExternalReference
+	file      *v2_2.File
+	fileAOP   *v2_2.ArtifactOfProject
+	snippet   *v2_2.Snippet
+	otherLic  *v2_2.OtherLicense
+	rln       *v2_2.Relationship
+	ann       *v2_2.Annotation
+	rev       *v2_2.Review
 	// don't need creation info pointer b/c only one,
 	// and we can get to it via doc.CreationInfo
 }
@@ -53,4 +54,4 @@ const (
 	psReview2_2
 )
 
-const nullSpdxElementId2_2 = spdx.ElementID("")
+const nullSpdxElementId2_2 = common.ElementID("")

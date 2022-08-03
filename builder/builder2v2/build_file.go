@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 	"github.com/spdx/tools-golang/utils"
 )
 
@@ -15,7 +16,7 @@ import (
 //   - filePath: path to file, relative to prefix
 //   - prefix: relative directory for filePath
 //   - fileNumber: integer index (unique within package) to use in identifier
-func BuildFileSection2_2(filePath string, prefix string, fileNumber int) (*spdx.File2_2, error) {
+func BuildFileSection2_2(filePath string, prefix string, fileNumber int) (*v2_2.File, error) {
 	// build the full file path
 	p := filepath.Join(prefix, filePath)
 
@@ -29,20 +30,20 @@ func BuildFileSection2_2(filePath string, prefix string, fileNumber int) (*spdx.
 	i := fmt.Sprintf("File%d", fileNumber)
 
 	// now build the File section
-	f := &spdx.File2_2{
+	f := &v2_2.File{
 		FileName:           filePath,
-		FileSPDXIdentifier: spdx.ElementID(i),
-		Checksums: []spdx.Checksum{
+		FileSPDXIdentifier: common.ElementID(i),
+		Checksums: []common.Checksum{
 			{
-				Algorithm: spdx.SHA1,
+				Algorithm: common.SHA1,
 				Value:     ssha1,
 			},
 			{
-				Algorithm: spdx.SHA256,
+				Algorithm: common.SHA256,
 				Value:     ssha256,
 			},
 			{
-				Algorithm: spdx.MD5,
+				Algorithm: common.MD5,
 				Value:     smd5,
 			},
 		},

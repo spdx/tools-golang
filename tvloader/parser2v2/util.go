@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
 )
 
 // used to extract key / value from embedded substrings
@@ -26,7 +26,7 @@ func extractSubs(value string) (string, string, error) {
 
 // used to extract DocumentRef and SPDXRef values from an SPDX Identifier
 // which can point either to this document or to a different one
-func extractDocElementID(value string) (spdx.DocElementID, error) {
+func extractDocElementID(value string) (common.DocElementID, error) {
 	docRefID := ""
 	idStr := value
 
@@ -36,16 +36,16 @@ func extractDocElementID(value string) (spdx.DocElementID, error) {
 		strs := strings.Split(idStr, ":")
 		// should be exactly two, part before and part after
 		if len(strs) < 2 {
-			return spdx.DocElementID{}, fmt.Errorf("no colon found although DocumentRef- prefix present")
+			return common.DocElementID{}, fmt.Errorf("no colon found although DocumentRef- prefix present")
 		}
 		if len(strs) > 2 {
-			return spdx.DocElementID{}, fmt.Errorf("more than one colon found")
+			return common.DocElementID{}, fmt.Errorf("more than one colon found")
 		}
 
 		// trim the prefix and confirm non-empty
 		docRefID = strings.TrimPrefix(strs[0], "DocumentRef-")
 		if docRefID == "" {
-			return spdx.DocElementID{}, fmt.Errorf("document identifier has nothing after prefix")
+			return common.DocElementID{}, fmt.Errorf("document identifier has nothing after prefix")
 		}
 		// and use remainder for element ID parsing
 		idStr = strs[1]
@@ -53,24 +53,24 @@ func extractDocElementID(value string) (spdx.DocElementID, error) {
 
 	// check prefix to confirm it's got the right prefix for element IDs
 	if !strings.HasPrefix(idStr, "SPDXRef-") {
-		return spdx.DocElementID{}, fmt.Errorf("missing SPDXRef- prefix for element identifier")
+		return common.DocElementID{}, fmt.Errorf("missing SPDXRef- prefix for element identifier")
 	}
 
 	// make sure no colons are present
 	if strings.Contains(idStr, ":") {
 		// we know this means there was no DocumentRef- prefix, because
 		// we would have handled multiple colons above if it was
-		return spdx.DocElementID{}, fmt.Errorf("invalid colon in element identifier")
+		return common.DocElementID{}, fmt.Errorf("invalid colon in element identifier")
 	}
 
 	// trim the prefix and confirm non-empty
 	eltRefID := strings.TrimPrefix(idStr, "SPDXRef-")
 	if eltRefID == "" {
-		return spdx.DocElementID{}, fmt.Errorf("element identifier has nothing after prefix")
+		return common.DocElementID{}, fmt.Errorf("element identifier has nothing after prefix")
 	}
 
 	// we're good
-	return spdx.DocElementID{DocumentRefID: docRefID, ElementRefID: spdx.ElementID(eltRefID)}, nil
+	return common.DocElementID{DocumentRefID: docRefID, ElementRefID: common.ElementID(eltRefID)}, nil
 }
 
 // used to extract SPDXRef values from an SPDX Identifier, OR "special" strings
@@ -79,11 +79,11 @@ func extractDocElementID(value string) (spdx.DocElementID, error) {
 // "NONE" and "NOASSERTION" are permitted. If the value does not match one of
 // the specified permitted values, it will fall back to the ordinary
 // DocElementID extractor.
-func extractDocElementSpecial(value string, permittedSpecial []string) (spdx.DocElementID, error) {
+func extractDocElementSpecial(value string, permittedSpecial []string) (common.DocElementID, error) {
 	// check value against special set first
 	for _, sp := range permittedSpecial {
 		if sp == value {
-			return spdx.DocElementID{SpecialID: sp}, nil
+			return common.DocElementID{SpecialID: sp}, nil
 		}
 	}
 	// not found, fall back to regular search
@@ -93,23 +93,23 @@ func extractDocElementSpecial(value string, permittedSpecial []string) (spdx.Doc
 // used to extract SPDXRef values only from an SPDX Identifier which can point
 // to this document only. Use extractDocElementID for parsing IDs that can
 // refer either to this document or a different one.
-func extractElementID(value string) (spdx.ElementID, error) {
+func extractElementID(value string) (common.ElementID, error) {
 	// check prefix to confirm it's got the right prefix for element IDs
 	if !strings.HasPrefix(value, "SPDXRef-") {
-		return spdx.ElementID(""), fmt.Errorf("missing SPDXRef- prefix for element identifier")
+		return common.ElementID(""), fmt.Errorf("missing SPDXRef- prefix for element identifier")
 	}
 
 	// make sure no colons are present
 	if strings.Contains(value, ":") {
-		return spdx.ElementID(""), fmt.Errorf("invalid colon in element identifier")
+		return common.ElementID(""), fmt.Errorf("invalid colon in element identifier")
 	}
 
 	// trim the prefix and confirm non-empty
 	eltRefID := strings.TrimPrefix(value, "SPDXRef-")
 	if eltRefID == "" {
-		return spdx.ElementID(""), fmt.Errorf("element identifier has nothing after prefix")
+		return common.ElementID(""), fmt.Errorf("element identifier has nothing after prefix")
 	}
 
 	// we're good
-	return spdx.ElementID(eltRefID), nil
+	return common.ElementID(eltRefID), nil
 }

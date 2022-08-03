@@ -5,11 +5,13 @@ package spdx_yaml
 import (
 	"bytes"
 	"fmt"
-	"github.com/google/go-cmp/cmp"
 	"os"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/google/go-cmp/cmp"
+
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 func TestLoad2_2(t *testing.T) {
@@ -58,15 +60,15 @@ func TestWrite2_2(t *testing.T) {
 // want is handwritten translation of the official example YAML SPDX v2.2 document into a Go struct.
 // We expect that the result of parsing the official document should be this value.
 // We expect that the result of writing this struct should match the official example document.
-var want = spdx.Document2_2{
+var want = v2_2.Document{
 	DataLicense:       "CC0-1.0",
 	SPDXVersion:       "SPDX-2.2",
 	SPDXIdentifier:    "SPDXRef-DOCUMENT",
 	DocumentName:      "SPDX-Tools-v2.0",
 	DocumentNamespace: "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
-	CreationInfo: &spdx.CreationInfo2_2{
+	CreationInfo: &v2_2.CreationInfo{
 		LicenseListVersion: "3.9",
-		Creators: []spdx.Creator{
+		Creators: []common.Creator{
 			{CreatorType: "Tool", Creator: "LicenseFind-1.0"},
 			{CreatorType: "Organization", Creator: "ExampleCodeInspect ()"},
 			{CreatorType: "Person", Creator: "Jane Doe ()"},
@@ -75,17 +77,17 @@ var want = spdx.Document2_2{
 		CreatorComment: "This package has been shipped in source and binary form.\nThe binaries were created with gcc 4.5.1 and expect to link to\ncompatible system run time libraries.",
 	},
 	DocumentComment: "This document was created using SPDX 2.0 using licenses from the web site.",
-	ExternalDocumentReferences: []spdx.ExternalDocumentRef2_2{
+	ExternalDocumentReferences: []v2_2.ExternalDocumentRef{
 		{
 			DocumentRefID: "DocumentRef-spdx-tool-1.2",
 			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
-			Checksum: spdx.Checksum{
-				Algorithm: spdx.SHA1,
+			Checksum: common.Checksum{
+				Algorithm: common.SHA1,
 				Value:     "d6a770ba38583ed4bb4525bd96e50461655d2759",
 			},
 		},
 	},
-	OtherLicenses: []*spdx.OtherLicense2_2{
+	OtherLicenses: []*v2_2.OtherLicense{
 		{
 			LicenseIdentifier: "LicenseRef-1",
 			ExtractedText:     "/*\n * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions\n * are met:\n * 1. Redistributions of source code must retain the above copyright\n *    notice, this list of conditions and the following disclaimer.\n * 2. Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n * 3. The name of the author may not be used to endorse or promote products\n *    derived from this software without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n*/",
@@ -116,9 +118,9 @@ var want = spdx.Document2_2{
 			LicenseComment: "This is tye CyperNeko License",
 		},
 	},
-	Annotations: []*spdx.Annotation2_2{
+	Annotations: []*v2_2.Annotation{
 		{
-			Annotator: spdx.Annotator{
+			Annotator: common.Annotator{
 				Annotator:     "Jane Doe ()",
 				AnnotatorType: "Person",
 			},
@@ -127,7 +129,7 @@ var want = spdx.Document2_2{
 			AnnotationComment: "Document level annotation",
 		},
 		{
-			Annotator: spdx.Annotator{
+			Annotator: common.Annotator{
 				Annotator:     "Joe Reviewer",
 				AnnotatorType: "Person",
 			},
@@ -136,7 +138,7 @@ var want = spdx.Document2_2{
 			AnnotationComment: "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
 		},
 		{
-			Annotator: spdx.Annotator{
+			Annotator: common.Annotator{
 				Annotator:     "Suzanne Reviewer",
 				AnnotatorType: "Person",
 			},
@@ -145,27 +147,27 @@ var want = spdx.Document2_2{
 			AnnotationComment: "Another example reviewer.",
 		},
 	},
-	Packages: []*spdx.Package2_2{
+	Packages: []*v2_2.Package{
 		{
 			PackageName:           "glibc",
 			PackageSPDXIdentifier: "SPDXRef-Package",
 			PackageVersion:        "2.11.1",
 			PackageFileName:       "glibc-2.11.1.tar.gz",
-			PackageSupplier: &spdx.Supplier{
+			PackageSupplier: &common.Supplier{
 				Supplier:     "Jane Doe (jane.doe@example.com)",
 				SupplierType: "Person",
 			},
-			PackageOriginator: &spdx.Originator{
+			PackageOriginator: &common.Originator{
 				Originator:     "ExampleCodeInspect (contact@example.com)",
 				OriginatorType: "Organization",
 			},
 			PackageDownloadLocation: "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
 			FilesAnalyzed:           true,
-			PackageVerificationCode: spdx.PackageVerificationCode{
+			PackageVerificationCode: common.PackageVerificationCode{
 				Value:         "d6a770ba38583ed4bb4525bd96e50461655d2758",
 				ExcludedFiles: []string{"./package.spdx"},
 			},
-			PackageChecksums: []spdx.Checksum{
+			PackageChecksums: []common.Checksum{
 				{
 					Algorithm: "MD5",
 					Value:     "624c1abb3664f4b35547e7c73864ad24",
@@ -193,7 +195,7 @@ var want = spdx.Document2_2{
 			PackageSummary:         "GNU C library.",
 			PackageDescription:     "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
 			PackageComment:         "",
-			PackageExternalReferences: []*spdx.PackageExternalReference2_2{
+			PackageExternalReferences: []*v2_2.PackageExternalReference{
 				{
 					Category: "SECURITY",
 					RefType:  "cpe23Type",
@@ -210,9 +212,9 @@ var want = spdx.Document2_2{
 				"The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.",
 			},
 			Files: nil,
-			Annotations: []spdx.Annotation2_2{
+			Annotations: []v2_2.Annotation{
 				{
-					Annotator: spdx.Annotator{
+					Annotator: common.Annotator{
 						Annotator:     "Package Commenter",
 						AnnotatorType: "Person",
 					},
@@ -237,7 +239,7 @@ var want = spdx.Document2_2{
 			PackageSPDXIdentifier:   "SPDXRef-fromDoap-0",
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz",
-			PackageExternalReferences: []*spdx.PackageExternalReference2_2{
+			PackageExternalReferences: []*v2_2.PackageExternalReference{
 				{
 					Category: "PACKAGE_MANAGER",
 					RefType:  "purl",
@@ -252,7 +254,7 @@ var want = spdx.Document2_2{
 		},
 		{
 			PackageSPDXIdentifier: "SPDXRef-Saxon",
-			PackageChecksums: []spdx.Checksum{
+			PackageChecksums: []common.Checksum{
 				{
 					Algorithm: "SHA1",
 					Value:     "85ed0817af83a24ad8da68c2b5094de69833983c",
@@ -271,14 +273,14 @@ var want = spdx.Document2_2{
 			PackageVersion:          "8.8",
 		},
 	},
-	Files: []*spdx.File2_2{
+	Files: []*v2_2.File{
 		{
 			FileName:           "./src/org/spdx/parser/DOAPProject.java",
 			FileSPDXIdentifier: "SPDXRef-DoapSource",
 			FileTypes: []string{
 				"SOURCE",
 			},
-			Checksums: []spdx.Checksum{
+			Checksums: []common.Checksum{
 				{
 					Algorithm: "SHA1",
 					Value:     "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
@@ -299,7 +301,7 @@ var want = spdx.Document2_2{
 		},
 		{
 			FileSPDXIdentifier: "SPDXRef-CommonsLangSrc",
-			Checksums: []spdx.Checksum{
+			Checksums: []common.Checksum{
 				{
 					Algorithm: "SHA1",
 					Value:     "c2b4e1c67a2d28fced849ee1bb76e7391b93f125",
@@ -316,7 +318,7 @@ var want = spdx.Document2_2{
 		},
 		{
 			FileSPDXIdentifier: "SPDXRef-JenaLib",
-			Checksums: []spdx.Checksum{
+			Checksums: []common.Checksum{
 				{
 					Algorithm: "SHA1",
 					Value:     "3ab4e1c67a2d28fced849ee1bb76e7391b93f125",
@@ -333,9 +335,9 @@ var want = spdx.Document2_2{
 		},
 		{
 			FileSPDXIdentifier: "SPDXRef-File",
-			Annotations: []spdx.Annotation2_2{
+			Annotations: []v2_2.Annotation{
 				{
-					Annotator: spdx.Annotator{
+					Annotator: common.Annotator{
 						Annotator:     "File Commenter",
 						AnnotatorType: "Person",
 					},
@@ -344,7 +346,7 @@ var want = spdx.Document2_2{
 					AnnotationComment: "File level annotation",
 				},
 			},
-			Checksums: []spdx.Checksum{
+			Checksums: []common.Checksum{
 				{
 					Algorithm: "SHA1",
 					Value:     "d6a770ba38583ed4bb4525bd96e50461655d2758",
@@ -365,27 +367,27 @@ var want = spdx.Document2_2{
 			FileNotice:         "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the �Software�), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED �AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
 		},
 	},
-	Snippets: []spdx.Snippet2_2{
+	Snippets: []v2_2.Snippet{
 		{
 			SnippetSPDXIdentifier:         "SPDXRef-Snippet",
 			SnippetFromFileSPDXIdentifier: "SPDXRef-DoapSource",
-			Ranges: []spdx.SnippetRange{
+			Ranges: []common.SnippetRange{
 				{
-					StartPointer: spdx.SnippetRangePointer{
+					StartPointer: common.SnippetRangePointer{
 						Offset:             310,
 						FileSPDXIdentifier: "SPDXRef-DoapSource",
 					},
-					EndPointer: spdx.SnippetRangePointer{
+					EndPointer: common.SnippetRangePointer{
 						Offset:             420,
 						FileSPDXIdentifier: "SPDXRef-DoapSource",
 					},
 				},
 				{
-					StartPointer: spdx.SnippetRangePointer{
+					StartPointer: common.SnippetRangePointer{
 						LineNumber:         5,
 						FileSPDXIdentifier: "SPDXRef-DoapSource",
 					},
-					EndPointer: spdx.SnippetRangePointer{
+					EndPointer: common.SnippetRangePointer{
 						LineNumber:         23,
 						FileSPDXIdentifier: "SPDXRef-DoapSource",
 					},
@@ -399,50 +401,50 @@ var want = spdx.Document2_2{
 			SnippetName:             "from linux kernel",
 		},
 	},
-	Relationships: []*spdx.Relationship2_2{
+	Relationships: []*v2_2.Relationship{
 		{
-			RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-			RefB:         spdx.MakeDocElementID("", "Package"),
+			RefA:         common.MakeDocElementID("", "DOCUMENT"),
+			RefB:         common.MakeDocElementID("", "Package"),
 			Relationship: "CONTAINS",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-			RefB:         spdx.MakeDocElementID("spdx-tool-1.2", "ToolsElement"),
+			RefA:         common.MakeDocElementID("", "DOCUMENT"),
+			RefB:         common.MakeDocElementID("spdx-tool-1.2", "ToolsElement"),
 			Relationship: "COPY_OF",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-			RefB:         spdx.MakeDocElementID("", "File"),
+			RefA:         common.MakeDocElementID("", "DOCUMENT"),
+			RefB:         common.MakeDocElementID("", "File"),
 			Relationship: "DESCRIBES",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "DOCUMENT"),
-			RefB:         spdx.MakeDocElementID("", "Package"),
+			RefA:         common.MakeDocElementID("", "DOCUMENT"),
+			RefB:         common.MakeDocElementID("", "Package"),
 			Relationship: "DESCRIBES",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "Package"),
-			RefB:         spdx.MakeDocElementID("", "JenaLib"),
+			RefA:         common.MakeDocElementID("", "Package"),
+			RefB:         common.MakeDocElementID("", "JenaLib"),
 			Relationship: "CONTAINS",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "Package"),
-			RefB:         spdx.MakeDocElementID("", "Saxon"),
+			RefA:         common.MakeDocElementID("", "Package"),
+			RefB:         common.MakeDocElementID("", "Saxon"),
 			Relationship: "DYNAMIC_LINK",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "CommonsLangSrc"),
-			RefB:         spdx.MakeDocElementSpecial("NOASSERTION"),
+			RefA:         common.MakeDocElementID("", "CommonsLangSrc"),
+			RefB:         common.MakeDocElementSpecial("NOASSERTION"),
 			Relationship: "GENERATED_FROM",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "JenaLib"),
-			RefB:         spdx.MakeDocElementID("", "Package"),
+			RefA:         common.MakeDocElementID("", "JenaLib"),
+			RefB:         common.MakeDocElementID("", "Package"),
 			Relationship: "CONTAINS",
 		},
 		{
-			RefA:         spdx.MakeDocElementID("", "File"),
-			RefB:         spdx.MakeDocElementID("", "fromDoap-0"),
+			RefA:         common.MakeDocElementID("", "File"),
+			RefB:         common.MakeDocElementID("", "fromDoap-0"),
 			Relationship: "GENERATED_FROM",
 		},
 	},

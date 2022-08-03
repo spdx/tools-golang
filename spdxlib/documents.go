@@ -3,15 +3,18 @@ package spdxlib
 
 import (
 	"fmt"
-	"github.com/spdx/tools-golang/spdx"
+
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ValidateDocument2_1 returns an error if the Document is found to be invalid, or nil if the Document is valid.
 // Currently, this only verifies that all Element IDs mentioned in Relationships exist in the Document as either a
 // Package or an UnpackagedFile.
-func ValidateDocument2_1(doc *spdx.Document2_1) error {
+func ValidateDocument2_1(doc *v2_1.Document) error {
 	// cache a map of valid package IDs for quick lookups
-	validElementIDs := make(map[spdx.ElementID]bool)
+	validElementIDs := make(map[common.ElementID]bool)
 	for _, docPackage := range doc.Packages {
 		validElementIDs[docPackage.PackageSPDXIdentifier] = true
 	}
@@ -21,7 +24,7 @@ func ValidateDocument2_1(doc *spdx.Document2_1) error {
 	}
 
 	// add the Document element ID
-	validElementIDs[spdx.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
+	validElementIDs[common.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
 
 	for _, relationship := range doc.Relationships {
 		if !validElementIDs[relationship.RefA.ElementRefID] {
@@ -39,9 +42,9 @@ func ValidateDocument2_1(doc *spdx.Document2_1) error {
 // ValidateDocument2_2 returns an error if the Document is found to be invalid, or nil if the Document is valid.
 // Currently, this only verifies that all Element IDs mentioned in Relationships exist in the Document as either a
 // Package or an UnpackagedFile.
-func ValidateDocument2_2(doc *spdx.Document2_2) error {
+func ValidateDocument2_2(doc *v2_2.Document) error {
 	// cache a map of package IDs for quick lookups
-	validElementIDs := make(map[spdx.ElementID]bool)
+	validElementIDs := make(map[common.ElementID]bool)
 	for _, docPackage := range doc.Packages {
 		validElementIDs[docPackage.PackageSPDXIdentifier] = true
 	}
@@ -51,7 +54,7 @@ func ValidateDocument2_2(doc *spdx.Document2_2) error {
 	}
 
 	// add the Document element ID
-	validElementIDs[spdx.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
+	validElementIDs[common.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
 
 	for _, relationship := range doc.Relationships {
 		if !validElementIDs[relationship.RefA.ElementRefID] {

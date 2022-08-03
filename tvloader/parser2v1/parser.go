@@ -6,13 +6,14 @@ package parser2v1
 import (
 	"fmt"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 	"github.com/spdx/tools-golang/tvloader/reader"
 )
 
 // ParseTagValues takes a list of (tag, value) pairs, parses it and returns
 // a pointer to a parsed SPDX Document.
-func ParseTagValues(tvs []reader.TagValuePair) (*spdx.Document2_1, error) {
+func ParseTagValues(tvs []reader.TagValuePair) (*v2_1.Document, error) {
 	parser := tvParser2_1{}
 	for _, tv := range tvs {
 		err := parser.parsePair2_1(tv.Tag, tv.Value)
@@ -59,8 +60,8 @@ func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error
 
 	// create an SPDX Document data struct if we don't have one already
 	if parser.doc == nil {
-		parser.doc = &spdx.Document2_1{
-			ExternalDocumentReferences: []spdx.ExternalDocumentRef2_1{},
+		parser.doc = &v2_1.Document{
+			ExternalDocumentReferences: []v2_1.ExternalDocumentRef{},
 		}
 	}
 
@@ -84,10 +85,10 @@ func (parser *tvParser2_1) parsePairFromStart2_1(tag string, value string) error
 		if err != nil {
 			return err
 		}
-		edr := spdx.ExternalDocumentRef2_1{
+		edr := v2_1.ExternalDocumentRef{
 			DocumentRefID: documentRefID,
 			URI:           uri,
-			Checksum:      spdx.Checksum{Algorithm: spdx.ChecksumAlgorithm(alg), Value: checksum},
+			Checksum:      common.Checksum{Algorithm: common.ChecksumAlgorithm(alg), Value: checksum},
 		}
 		parser.doc.ExternalDocumentReferences = append(parser.doc.ExternalDocumentReferences, edr)
 	case "DocumentComment":

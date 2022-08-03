@@ -7,15 +7,16 @@ import (
 	"io"
 	"sort"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
-func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
+func renderFile2_1(f *v2_1.File, w io.Writer) error {
 	if f.FileName != "" {
 		fmt.Fprintf(w, "FileName: %s\n", f.FileName)
 	}
 	if f.FileSPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(f.FileSPDXIdentifier))
+		fmt.Fprintf(w, "SPDXID: %s\n", common.RenderElementID(f.FileSPDXIdentifier))
 	}
 	for _, s := range f.FileTypes {
 		fmt.Fprintf(w, "FileType: %s\n", s)
@@ -68,7 +69,7 @@ func renderFile2_1(f *spdx.File2_1, w io.Writer) error {
 	}
 	sort.Strings(snippetKeys)
 	for _, sID := range snippetKeys {
-		s := f.Snippets[spdx.ElementID(sID)]
+		s := f.Snippets[common.ElementID(sID)]
 		renderSnippet2_1(s, w)
 	}
 

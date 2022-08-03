@@ -6,14 +6,15 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== Creation Info section Saver tests =====
 func TestSaver2_2CISavesText(t *testing.T) {
-	ci := &spdx.CreationInfo2_2{
+	ci := &v2_2.CreationInfo{
 		LicenseListVersion: "3.9",
-		Creators: []spdx.Creator{
+		Creators: []common.Creator{
 			{Creator: "John Doe", CreatorType: "Person"},
 			{Creator: "Jane Doe (janedoe@example.com)", CreatorType: "Person"},
 			{Creator: "John Doe, Inc.", CreatorType: "Organization"},
@@ -56,8 +57,8 @@ CreatorComment: this is a creator comment
 
 func TestSaver2_2CIOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	// --- need at least one creator; do first for Persons ---
-	ci1 := &spdx.CreationInfo2_2{
-		Creators: []spdx.Creator{
+	ci1 := &v2_2.CreationInfo{
+		Creators: []common.Creator{
 			{Creator: "John Doe", CreatorType: "Person"},
 		},
 		Created: "2018-10-10T06:20:00Z",
@@ -83,8 +84,8 @@ Created: 2018-10-10T06:20:00Z
 	}
 
 	// --- need at least one creator; now switch to organization ---
-	ci2 := &spdx.CreationInfo2_2{
-		Creators: []spdx.Creator{
+	ci2 := &v2_2.CreationInfo{
+		Creators: []common.Creator{
 			{Creator: "John Doe, Inc.", CreatorType: "Organization"},
 		},
 		Created: "2018-10-10T06:20:00Z",

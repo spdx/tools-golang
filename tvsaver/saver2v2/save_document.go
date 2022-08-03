@@ -9,14 +9,15 @@ import (
 	"io"
 	"sort"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // RenderDocument2_2 is the main entry point to take an SPDX in-memory
 // Document (version 2.2), and render it to the received io.Writer.
 // It is only exported in order to be available to the tvsaver package,
 // and typically does not need to be called by client code.
-func RenderDocument2_2(doc *spdx.Document2_2, w io.Writer) error {
+func RenderDocument2_2(doc *v2_2.Document, w io.Writer) error {
 	if doc.CreationInfo == nil {
 		return fmt.Errorf("Document had nil CreationInfo section")
 	}
@@ -28,7 +29,7 @@ func RenderDocument2_2(doc *spdx.Document2_2, w io.Writer) error {
 		fmt.Fprintf(w, "DataLicense: %s\n", doc.DataLicense)
 	}
 	if doc.SPDXIdentifier != "" {
-		fmt.Fprintf(w, "SPDXID: %s\n", spdx.RenderElementID(doc.SPDXIdentifier))
+		fmt.Fprintf(w, "SPDXID: %s\n", common.RenderElementID(doc.SPDXIdentifier))
 	}
 	if doc.DocumentName != "" {
 		fmt.Fprintf(w, "DocumentName: %s\n", doc.DocumentName)

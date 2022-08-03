@@ -4,16 +4,18 @@ package parser2v2
 
 import (
 	"fmt"
+	"strconv"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/gordf/rdfwriter"
-	"github.com/spdx/tools-golang/spdx"
-	"strconv"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // Snippet Information
 // Cardinality: Optional, Many
-func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.Node) (si *spdx.Snippet2_2, err error) {
-	si = &spdx.Snippet2_2{}
+func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.Node) (si *v2_2.Snippet, err error) {
+	si = &v2_2.Snippet{}
 
 	err = setSnippetID(node.ID, si)
 	if err != nil {
@@ -72,14 +74,14 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 }
 
 // given is the id of the file, sets the snippet to the file in parser.
-func (parser *rdfParser2_2) setSnippetToFileWithID(snippet *spdx.Snippet2_2, fileID spdx.ElementID) error {
+func (parser *rdfParser2_2) setSnippetToFileWithID(snippet *v2_2.Snippet, fileID common.ElementID) error {
 	if parser.files[fileID] == nil {
 		return fmt.Errorf("snippet refers to an undefined file with ID: %s", fileID)
 	}
 
 	// initializing snippet of the files if it is not defined already
 	if parser.files[fileID].Snippets == nil {
-		parser.files[fileID].Snippets = map[spdx.ElementID]*spdx.Snippet2_2{}
+		parser.files[fileID].Snippets = map[common.ElementID]*v2_2.Snippet{}
 	}
 
 	// setting the snippet to the file.
@@ -88,7 +90,7 @@ func (parser *rdfParser2_2) setSnippetToFileWithID(snippet *spdx.Snippet2_2, fil
 	return nil
 }
 
-func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *spdx.Snippet2_2) error {
+func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *v2_2.Snippet) error {
 	// for a range object, we can have only 3 associated triples:
 	//		node -> RDF_TYPE     -> Object
 	//      node -> startPointer -> Object
@@ -132,9 +134,9 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 		return fmt.Errorf("start and end range type doesn't match")
 	}
 
-	si.Ranges = []spdx.SnippetRange{{
-		StartPointer: spdx.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
-		EndPointer:   spdx.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
+	si.Ranges = []common.SnippetRange{{
+		StartPointer: common.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
+		EndPointer:   common.SnippetRangePointer{FileSPDXIdentifier: si.SnippetFromFileSPDXIdentifier},
 	}}
 
 	if startRangeType == LINE_RANGE {
@@ -147,7 +149,7 @@ func (parser *rdfParser2_2) setSnippetRangeFromNode(node *gordfParser.Node, si *
 	return nil
 }
 
-func (parser *rdfParser2_2) getPointerFromNode(node *gordfParser.Node, si *spdx.Snippet2_2) (rt RangeType, number int, err error) {
+func (parser *rdfParser2_2) getPointerFromNode(node *gordfParser.Node, si *v2_2.Snippet) (rt RangeType, number int, err error) {
 	for _, triple := range parser.nodeToTriples(node) {
 		switch triple.Predicate.ID {
 		case RDF_TYPE:
@@ -172,7 +174,7 @@ func (parser *rdfParser2_2) getPointerFromNode(node *gordfParser.Node, si *spdx.
 	return
 }
 
-func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet *spdx.Snippet2_2) error {
+func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet *v2_2.Snippet) error {
 	// reference is supposed to be either a resource reference to an already
 	// defined or a new file. Unfortunately, I didn't find field where this can be set in the tools-golang data model.
 	// todo: set this reference to the snippet
@@ -187,7 +189,7 @@ func (parser *rdfParser2_2) parseRangeReference(node *gordfParser.Node, snippet 
 	return nil
 }
 
-func setSnippetID(uri string, si *spdx.Snippet2_2) (err error) {
+func setSnippetID(uri string, si *v2_2.Snippet) (err error) {
 	fragment := getLastPartOfURI(uri)
 	si.SnippetSPDXIdentifier, err = ExtractElementID(fragment)
 	if err != nil {

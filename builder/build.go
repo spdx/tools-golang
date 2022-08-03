@@ -6,9 +6,12 @@ package builder
 
 import (
 	"fmt"
+
 	"github.com/spdx/tools-golang/builder/builder2v1"
 	"github.com/spdx/tools-golang/builder/builder2v2"
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // ===== 2.1 builder =====
@@ -48,7 +51,7 @@ type Config2_1 struct {
 //   - packageName: name of package / directory
 //   - dirRoot: path to directory to be analyzed
 //   - config: Config object
-func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Document2_1, error) {
+func Build2_1(packageName string, dirRoot string, config *Config2_1) (*v2_1.Document, error) {
 	// build Package section first -- will include Files and make the
 	// package verification code available
 	pkg, err := builder2v1.BuildPackageSection2_1(packageName, dirRoot, config.PathsIgnored)
@@ -66,15 +69,15 @@ func Build2_1(packageName string, dirRoot string, config *Config2_1) (*spdx.Docu
 		return nil, err
 	}
 
-	doc := &spdx.Document2_1{
+	doc := &v2_1.Document{
 		SPDXVersion:       "SPDX-2.1",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
+		SPDXIdentifier:    common.ElementID("DOCUMENT"),
 		DocumentName:      packageName,
 		DocumentNamespace: fmt.Sprintf("%s%s-%s", config.NamespacePrefix, packageName, pkg.PackageVerificationCode),
 		CreationInfo:      ci,
-		Packages:          []*spdx.Package2_1{pkg},
-		Relationships:     []*spdx.Relationship2_1{rln},
+		Packages:          []*v2_1.Package{pkg},
+		Relationships:     []*v2_1.Relationship{rln},
 	}
 
 	return doc, nil
@@ -117,7 +120,7 @@ type Config2_2 struct {
 //   - packageName: name of package / directory
 //   - dirRoot: path to directory to be analyzed
 //   - config: Config object
-func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Document2_2, error) {
+func Build2_2(packageName string, dirRoot string, config *Config2_2) (*v2_2.Document, error) {
 	// build Package section first -- will include Files and make the
 	// package verification code available
 	pkg, err := builder2v2.BuildPackageSection2_2(packageName, dirRoot, config.PathsIgnored)
@@ -135,15 +138,15 @@ func Build2_2(packageName string, dirRoot string, config *Config2_2) (*spdx.Docu
 		return nil, err
 	}
 
-	doc := &spdx.Document2_2{
+	doc := &v2_2.Document{
 		SPDXVersion:       "SPDX-2.2",
 		DataLicense:       "CC0-1.0",
-		SPDXIdentifier:    spdx.ElementID("DOCUMENT"),
+		SPDXIdentifier:    common.ElementID("DOCUMENT"),
 		DocumentName:      packageName,
 		DocumentNamespace: fmt.Sprintf("%s%s-%s", config.NamespacePrefix, packageName, pkg.PackageVerificationCode),
 		CreationInfo:      ci,
-		Packages:          []*spdx.Package2_2{pkg},
-		Relationships:     []*spdx.Relationship2_2{rln},
+		Packages:          []*v2_2.Package{pkg},
+		Relationships:     []*v2_2.Relationship{rln},
 	}
 
 	return doc, nil

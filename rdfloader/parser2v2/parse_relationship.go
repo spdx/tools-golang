@@ -4,10 +4,12 @@ package parser2v2
 
 import (
 	"fmt"
+	"strings"
+
 	gordfParser "github.com/spdx/gordf/rdfloader/parser"
 	"github.com/spdx/gordf/rdfwriter"
-	"github.com/spdx/tools-golang/spdx"
-	"strings"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
 // parsing the relationship that exists in the rdf document.
@@ -15,7 +17,7 @@ import (
 // parsing the relationship appends the relationship to the current document's
 // Relationships Slice.
 func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err error) {
-	reln := spdx.Relationship2_2{}
+	reln := v2_2.Relationship{}
 
 	reln.RefA, err = getReferenceFromURI(triple.Subject.ID)
 	if err != nil {
@@ -40,7 +42,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 	parser.cache[triple.Object.ID].Color = GREY
 
 	// setting state color to black to indicate when we're done parsing this node.
-	defer func(){parser.cache[triple.Object.ID].Color = BLACK}();
+	defer func() { parser.cache[triple.Object.ID].Color = BLACK }()
 
 	for _, subTriple := range parser.nodeToTriples(triple.Object) {
 		switch subTriple.Predicate.ID {
@@ -85,7 +87,7 @@ func (parser *rdfParser2_2) parseRelationship(triple *gordfParser.Triple) (err e
 	return nil
 }
 
-func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationship2_2, triple *gordfParser.Triple) error {
+func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *v2_2.Relationship, triple *gordfParser.Triple) error {
 	// iterate over relatedElement Type and check which SpdxElement it is.
 	var err error
 	switch triple.Object.ID {
@@ -94,7 +96,7 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 		if err != nil {
 			return fmt.Errorf("error setting a file: %v", err)
 		}
-		reln.RefB = spdx.DocElementID{
+		reln.RefB = common.DocElementID{
 			DocumentRefID: "",
 			ElementRefID:  file.FileSPDXIdentifier,
 		}
@@ -104,7 +106,7 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 		if err != nil {
 			return fmt.Errorf("error setting a package inside a relationship: %v", err)
 		}
-		reln.RefB = spdx.DocElementID{
+		reln.RefB = common.DocElementID{
 			DocumentRefID: "",
 			ElementRefID:  pkg.PackageSPDXIdentifier,
 		}
@@ -123,13 +125,13 @@ func (parser *rdfParser2_2) parseRelatedElementFromTriple(reln *spdx.Relationshi
 }
 
 // references like RefA and RefB of any relationship
-func getReferenceFromURI(uri string) (spdx.DocElementID, error) {
+func getReferenceFromURI(uri string) (common.DocElementID, error) {
 	fragment := getLastPartOfURI(uri)
 	switch strings.ToLower(strings.TrimSpace(fragment)) {
 	case "noassertion", "none":
-		return spdx.DocElementID{
+		return common.DocElementID{
 			DocumentRefID: "",
-			ElementRefID:  spdx.ElementID(strings.ToUpper(fragment)),
+			ElementRefID:  common.ElementID(strings.ToUpper(fragment)),
 		}, nil
 	}
 	return ExtractDocElementID(fragment)

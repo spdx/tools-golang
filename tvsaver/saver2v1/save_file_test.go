@@ -6,22 +6,23 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx"
+	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2_1"
 )
 
 // ===== File section Saver tests =====
 func TestSaver2_1FileSavesText(t *testing.T) {
-	f := &spdx.File2_1{
+	f := &v2_1.File{
 		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
+		FileSPDXIdentifier: common.ElementID("File123"),
 		FileTypes: []string{
 			"TEXT",
 			"DOCUMENTATION",
 		},
-		Checksums: []spdx.Checksum{
-			{Algorithm: spdx.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
-			{Algorithm: spdx.SHA256, Value: "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"},
-			{Algorithm: spdx.MD5, Value: "624c1abb3664f4b35547e7c73864ad24"},
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
+			{Algorithm: common.SHA256, Value: "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"},
+			{Algorithm: common.MD5, Value: "624c1abb3664f4b35547e7c73864ad24"},
 		},
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFiles: []string{
@@ -30,20 +31,20 @@ func TestSaver2_1FileSavesText(t *testing.T) {
 		},
 		LicenseComments:   "this is a license comment(s)",
 		FileCopyrightText: "Copyright (c) Jane Doe",
-		ArtifactOfProjects: []*spdx.ArtifactOfProject2_1{
-			&spdx.ArtifactOfProject2_1{
+		ArtifactOfProjects: []*v2_1.ArtifactOfProject{
+			&v2_1.ArtifactOfProject{
 				Name:     "project1",
 				HomePage: "http://example.com/1/",
 				URI:      "http://example.com/1/uri.whatever",
 			},
-			&spdx.ArtifactOfProject2_1{
+			&v2_1.ArtifactOfProject{
 				Name: "project2",
 			},
-			&spdx.ArtifactOfProject2_1{
+			&v2_1.ArtifactOfProject{
 				Name:     "project3",
 				HomePage: "http://example.com/3/",
 			},
-			&spdx.ArtifactOfProject2_1{
+			&v2_1.ArtifactOfProject{
 				Name: "project4",
 				URI:  "http://example.com/4/uri.whatever",
 			},
@@ -105,32 +106,32 @@ FileDependency: g.txt
 }
 
 func TestSaver2_1FileSavesSnippetsAlso(t *testing.T) {
-	sn1 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet19"),
-		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File123").ElementRefID,
-		Ranges:                        []spdx.SnippetRange{{StartPointer: spdx.SnippetRangePointer{Offset: 17}, EndPointer: spdx.SnippetRangePointer{Offset: 209}}},
+	sn1 := &v2_1.Snippet{
+		SnippetSPDXIdentifier:         common.ElementID("Snippet19"),
+		SnippetFromFileSPDXIdentifier: common.MakeDocElementID("", "File123").ElementRefID,
+		Ranges:                        []common.SnippetRange{{StartPointer: common.SnippetRangePointer{Offset: 17}, EndPointer: common.SnippetRangePointer{Offset: 209}}},
 		SnippetLicenseConcluded:       "GPL-2.0-or-later",
 		SnippetCopyrightText:          "Copyright (c) John Doe 20x6",
 	}
 
-	sn2 := &spdx.Snippet2_1{
-		SnippetSPDXIdentifier:         spdx.ElementID("Snippet20"),
-		SnippetFromFileSPDXIdentifier: spdx.MakeDocElementID("", "File123").ElementRefID,
-		Ranges:                        []spdx.SnippetRange{{StartPointer: spdx.SnippetRangePointer{Offset: 268}, EndPointer: spdx.SnippetRangePointer{Offset: 309}}},
+	sn2 := &v2_1.Snippet{
+		SnippetSPDXIdentifier:         common.ElementID("Snippet20"),
+		SnippetFromFileSPDXIdentifier: common.MakeDocElementID("", "File123").ElementRefID,
+		Ranges:                        []common.SnippetRange{{StartPointer: common.SnippetRangePointer{Offset: 268}, EndPointer: common.SnippetRangePointer{Offset: 309}}},
 		SnippetLicenseConcluded:       "WTFPL",
 		SnippetCopyrightText:          "NOASSERTION",
 	}
 
-	sns := map[spdx.ElementID]*spdx.Snippet2_1{
-		spdx.ElementID("Snippet19"): sn1,
-		spdx.ElementID("Snippet20"): sn2,
+	sns := map[common.ElementID]*v2_1.Snippet{
+		common.ElementID("Snippet19"): sn1,
+		common.ElementID("Snippet20"): sn2,
 	}
 
-	f := &spdx.File2_1{
+	f := &v2_1.File{
 		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		Checksums: []spdx.Checksum{
-			{Algorithm: spdx.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
+		FileSPDXIdentifier: common.ElementID("File123"),
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
 		},
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFiles: []string{
@@ -177,11 +178,11 @@ SnippetCopyrightText: NOASSERTION
 }
 
 func TestSaver2_1FileOmitsOptionalFieldsIfEmpty(t *testing.T) {
-	f := &spdx.File2_1{
+	f := &v2_1.File{
 		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		Checksums: []spdx.Checksum{
-			{Algorithm: spdx.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
+		FileSPDXIdentifier: common.ElementID("File123"),
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
 		},
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFiles: []string{
@@ -215,11 +216,11 @@ FileCopyrightText: Copyright (c) Jane Doe
 }
 
 func TestSaver2_1FileWrapsCopyrightMultiLine(t *testing.T) {
-	f := &spdx.File2_1{
+	f := &v2_1.File{
 		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		Checksums: []spdx.Checksum{
-			{Algorithm: spdx.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
+		FileSPDXIdentifier: common.ElementID("File123"),
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
 		},
 		LicenseConcluded: "Apache-2.0",
 		LicenseInfoInFiles: []string{
@@ -255,11 +256,11 @@ Copyright (c) John Doe</text>
 }
 
 func TestSaver2_1FileWrapsCommentsAndNoticesMultiLine(t *testing.T) {
-	f := &spdx.File2_1{
+	f := &v2_1.File{
 		FileName:           "/tmp/whatever.txt",
-		FileSPDXIdentifier: spdx.ElementID("File123"),
-		Checksums: []spdx.Checksum{
-			{Algorithm: spdx.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
+		FileSPDXIdentifier: common.ElementID("File123"),
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA1, Value: "85ed0817af83a24ad8da68c2b5094de69833983c"},
 		},
 		LicenseComments: `this is a
 multi-line license comment`,

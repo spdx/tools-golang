@@ -3,10 +3,11 @@
 package parser2v2
 
 import (
-	gordfParser "github.com/spdx/gordf/rdfloader/parser"
-	"github.com/spdx/tools-golang/spdx"
 	"reflect"
 	"testing"
+
+	gordfParser "github.com/spdx/gordf/rdfloader/parser"
+	"github.com/spdx/tools-golang/spdx/common"
 )
 
 func Test_getLastPartOfURI(t *testing.T) {
@@ -223,7 +224,7 @@ func helperForExtractDocElementID(t *testing.T, tst string, wantErr bool, wantDo
 			t.Errorf("testing %v: want %v for DocumentRefID, got %v", tst, wantDoc, deID.DocumentRefID)
 		}
 	}
-	if deID.ElementRefID != spdx.ElementID(wantElt) {
+	if deID.ElementRefID != common.ElementID(wantElt) {
 		if wantElt == "" {
 			t.Errorf("testing %v: want emptyString for ElementRefID, got %v", tst, deID.ElementRefID)
 		} else {
@@ -259,7 +260,7 @@ func helperForExtractElementID(t *testing.T, tst string, wantErr bool, wantElt s
 	if err == nil && wantErr == true {
 		t.Errorf("testing %v: expected non-nil error, got nil", tst)
 	}
-	if eID != spdx.ElementID(wantElt) {
+	if eID != common.ElementID(wantElt) {
 		if wantElt == "" {
 			t.Errorf("testing %v: want emptyString for ElementRefID, got %v", tst, eID)
 		} else {
