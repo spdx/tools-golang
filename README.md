@@ -88,3 +88,7 @@ provided and may be used under the Creative Commons Attribution
 This `README.md` file is documentation:
 
 `SPDX-License-Identifier: CC-BY-4.0`
+
+## Security
+
+For security policy and reporting security issues, please refer to [SECURITY.md](SECURITY.md)
