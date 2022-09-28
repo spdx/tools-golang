@@ -200,7 +200,7 @@ func extractCodeAndExcludes(value string) common.PackageVerificationCode {
 	return common.PackageVerificationCode{Value: code, ExcludedFiles: []string{fileName}}
 }
 
-func extractPackageExternalReference(value string) (string, common.ReferenceType, string, error) {
+func extractPackageExternalReference(value string) (string, string, string, error) {
 	sp := strings.Split(value, " ")
 	// remove any that are just whitespace
 	keepSp := []string{}
@@ -214,5 +214,5 @@ func extractPackageExternalReference(value string) (string, common.ReferenceType
 	if len(keepSp) != 3 {
 		return "", "", "", fmt.Errorf("expected 3 elements, got %d", len(keepSp))
 	}
-	return keepSp[0], common.ReferenceType(keepSp[1]), keepSp[2], nil
+	return keepSp[0], keepSp[1], keepSp[2], nil
 }

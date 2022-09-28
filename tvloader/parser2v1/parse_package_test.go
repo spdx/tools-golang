@@ -482,7 +482,7 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	ref1Comment := "this is comment #1"
 	ref2 := "OTHER LocationRef-acmeforge acmecorp/acmenator/4.1.3alpha"
 	ref2Category := "OTHER"
-	ref2Type := common.Ref2Type
+	ref2Type := "LocationRef-acmeforge"
 	ref2Locator := "acmecorp/acmenator/4.1.3alpha"
 	ref2Comment := "this is comment #2"
 	err = parser.parsePairFromPackage2_1("ExternalRef", ref1)
