@@ -108,7 +108,7 @@ type PackageExternalReference struct {
 
 	// type is an [idstring] as defined in Appendix VI;
 	// called RefType here due to "type" being a Golang keyword
-	RefType string `json:"referenceType"`
+	RefType common.ReferenceType `json:"referenceType"`
 
 	// locator is a unique string to access the package-specific
 	// info, metadata or content within the target location
