@@ -477,7 +477,7 @@ func TestParser2_1CanParsePackageTags(t *testing.T) {
 	// Package External References and Comments
 	ref1 := "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
 	ref1Category := "SECURITY"
-	ref1Type := common.Cpe23Type
+	ref1Type := common.TypeSecurityCPE23Type
 	ref1Locator := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
 	ref1Comment := "this is comment #1"
 	ref2 := "OTHER LocationRef-acmeforge acmecorp/acmenator/4.1.3alpha"
@@ -1025,7 +1025,7 @@ func TestCanCheckAndExtractExcludesFilenameAndCode(t *testing.T) {
 func TestCanExtractPackageExternalReference(t *testing.T) {
 	ref1 := "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
 	category := "SECURITY"
-	refType := common.Cpe23Type
+	refType := common.TypeSecurityCPE23Type
 	location := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
 
 	gotCategory, gotRefType, gotLocation, err := extractPackageExternalReference(ref1)
@@ -1046,7 +1046,7 @@ func TestCanExtractPackageExternalReference(t *testing.T) {
 func TestCanExtractPackageExternalReferenceWithExtraWhitespace(t *testing.T) {
 	ref1 := "  SECURITY    \t cpe23Type   cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:* \t "
 	category := "SECURITY"
-	refType := common.Cpe23Type
+	refType := common.TypeSecurityCPE23Type
 	location := "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
 
 	gotCategory, gotRefType, gotLocation, err := extractPackageExternalReference(ref1)
