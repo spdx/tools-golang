@@ -7,20 +7,20 @@ import "github.com/spdx/tools-golang/spdx/common"
 // CreationInfo is a Document Creation Information section of an
 // SPDX Document for version 2.2 of the spec.
 type CreationInfo struct {
-	// 2.7: License List Version
+	// 6.7: License List Version
 	// Cardinality: optional, one
 	LicenseListVersion string `json:"licenseListVersion"`
 
-	// 2.8: Creators: may have multiple keys for Person, Organization
+	// 6.8: Creators: may have multiple keys for Person, Organization
 	//      and/or Tool
 	// Cardinality: mandatory, one or many
 	Creators []common.Creator `json:"creators"`
 
-	// 2.9: Created: data format YYYY-MM-DDThh:mm:ssZ
+	// 6.9: Created: data format YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: mandatory, one
 	Created string `json:"created"`
 
-	// 2.10: Creator Comment
+	// 6.10: Creator Comment
 	// Cardinality: optional, one
 	CreatorComment string `json:"comment"`
 }

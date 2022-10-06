@@ -8,16 +8,16 @@ import "github.com/spdx/tools-golang/spdx/common"
 // version 2.2 of the spec.
 type Relationship struct {
 
-	// 7.1: Relationship
+	// 11.1: Relationship
 	// Cardinality: optional, one or more; one per Relationship
 	//              one mandatory for SPDX Document with multiple packages
 	// RefA and RefB are first and second item
-	// Relationship is type from 7.1.1
+	// Relationship is type from 11.1.1
 	RefA         common.DocElementID `json:"spdxElementId"`
 	RefB         common.DocElementID `json:"relatedSpdxElement"`
 	Relationship string              `json:"relationshipType"`
 
-	// 7.2: Relationship Comment
+	// 11.2: Relationship Comment
 	// Cardinality: optional, one
 	RelationshipComment string `json:"comment,omitempty"`
 }

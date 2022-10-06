@@ -6,7 +6,7 @@ package v2_2
 import "github.com/spdx/tools-golang/spdx/common"
 
 // ExternalDocumentRef is a reference to an external SPDX document
-// as defined in section 2.6 for version 2.2 of the spec.
+// as defined in section 6.6 for version 2.2 of the spec.
 type ExternalDocumentRef struct {
 	// DocumentRefID is the ID string defined in the start of the
 	// reference. It should _not_ contain the "DocumentRef-" part
@@ -23,32 +23,32 @@ type ExternalDocumentRef struct {
 // Document is an SPDX Document for version 2.2 of the spec.
 // See https://spdx.github.io/spdx-spec/v2-draft/ (DRAFT)
 type Document struct {
-	// 2.1: SPDX Version; should be in the format "SPDX-2.2"
+	// 6.1: SPDX Version; should be in the format "SPDX-2.2"
 	// Cardinality: mandatory, one
 	SPDXVersion string `json:"spdxVersion"`
 
-	// 2.2: Data License; should be "CC0-1.0"
+	// 6.2: Data License; should be "CC0-1.0"
 	// Cardinality: mandatory, one
 	DataLicense string `json:"dataLicense"`
 
-	// 2.3: SPDX Identifier; should be "DOCUMENT" to represent
+	// 6.3: SPDX Identifier; should be "DOCUMENT" to represent
 	//      mandatory identifier of SPDXRef-DOCUMENT
 	// Cardinality: mandatory, one
 	SPDXIdentifier common.ElementID `json:"SPDXID"`
 
-	// 2.4: Document Name
+	// 6.4: Document Name
 	// Cardinality: mandatory, one
 	DocumentName string `json:"name"`
 
-	// 2.5: Document Namespace
+	// 6.5: Document Namespace
 	// Cardinality: mandatory, one
 	DocumentNamespace string `json:"documentNamespace"`
 
-	// 2.6: External Document References
+	// 6.6: External Document References
 	// Cardinality: optional, one or many
 	ExternalDocumentReferences []ExternalDocumentRef `json:"externalDocumentRefs,omitempty"`
 
-	// 2.11: Document Comment
+	// 6.11: Document Comment
 	// Cardinality: optional, one
 	DocumentComment string `json:"comment,omitempty"`
 
