@@ -41,7 +41,7 @@ type File struct {
 	// DEPRECATED in version 2.1 of spec
 	// 8.9-8.11: Artifact of Project variables (defined below)
 	// Cardinality: optional, one or many
-	ArtifactOfProjects []ArtifactOfProject `json:"artifactOfs,omitempty"`
+	ArtifactOfProjects []*ArtifactOfProject `json:"artifactOfs,omitempty"`
 
 	// 8.12: File Comment
 	// Cardinality: optional, one
