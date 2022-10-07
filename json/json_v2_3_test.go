@@ -300,6 +300,8 @@ var want2_3 = v2_3.Document{
 			PackageFileName:         "saxonB-8.8.zip",
 			PackageVersion:          "centos7.9.2009",
 			BuiltDate:               "2021-09-15T02:38:00Z",
+			ValidUntilDate:          "2022-10-15T02:38:00Z",
+			ReleaseDate:             "2021-10-15T02:38:00Z",
 		},
 	},
 	Files: []*v2_3.File{
@@ -475,6 +477,14 @@ var want2_3 = v2_3.Document{
 			RefA:         common.MakeDocElementID("", "File"),
 			RefB:         common.MakeDocElementID("", "fromDoap-0"),
 			Relationship: "GENERATED_FROM",
+		},
+	},
+	Reviews: []*v2_3.Review{
+		{
+			Reviewer:      "joe@example.com",
+			ReviewerType:  "Person",
+			ReviewDate:    "2021-11-03T05:43:21Z",
+			ReviewComment: "This is a review comment",
 		},
 	},
 }

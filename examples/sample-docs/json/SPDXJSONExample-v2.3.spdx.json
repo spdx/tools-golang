@@ -149,7 +149,9 @@
       "copyrightText": "NOASSERTION",
       "description": "The CentOS container used to run the application.",
       "primaryPackagePurpose": "CONTAINER",
-      "builtDate": "2021-09-15T02:38:00Z"
+      "releaseDate": "2021-10-15T02:38:00Z",
+      "builtDate": "2021-09-15T02:38:00Z",
+      "validUntilDate": "2022-10-15T02:38:00Z"
     }
   ],
   "files": [
