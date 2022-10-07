@@ -44,5 +44,5 @@ type Snippet struct {
 
 	// 9.11: Snippet Attribution Text
 	// Cardinality: optional, one or many
-	SnippetAttributionTexts []string `json:"-"`
+	SnippetAttributionTexts []string `json:"-" yaml:"-"`
 }

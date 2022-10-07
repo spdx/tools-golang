@@ -68,7 +68,7 @@ type File struct {
 	// Note that Snippets could be defined in a different Document! However,
 	// the only ones that _THIS_ document can contain are this ones that are
 	// defined here -- so this should just be an ElementID.
-	Snippets map[common.ElementID]*Snippet `json:"-"`
+	Snippets map[common.ElementID]*Snippet `json:"-" yaml:"-"`
 
 	Annotations []Annotation `json:"annotations,omitempty"`
 }

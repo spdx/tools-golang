@@ -21,7 +21,7 @@ type Annotation struct {
 	// 12.4: SPDX Identifier Reference
 	// Cardinality: conditional (mandatory, one) if there is an Annotation
 	// This field is not used in hierarchical data formats where the referenced element is clear, such as JSON or YAML.
-	AnnotationSPDXIdentifier common.DocElementID `json:"-"`
+	AnnotationSPDXIdentifier common.DocElementID `json:"-" yaml:"-"`
 
 	// 12.5: Annotation Comment
 	// Cardinality: conditional (mandatory, one) if there is an Annotation

@@ -101,5 +101,5 @@ type PackageVerificationCode struct {
 	// Spec also allows specifying files to exclude from the
 	// verification code algorithm; intended to enable exclusion of
 	// the SPDX document file itself.
-	ExcludedFiles []string `json:"packageVerificationCodeExcludedFiles"`
+	ExcludedFiles []string `json:"packageVerificationCodeExcludedFiles,omitempty"`
 }
