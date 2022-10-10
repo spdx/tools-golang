@@ -1143,7 +1143,7 @@ You should have received a copy of the GNU General Public License along with thi
     <spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
   </spdx:Review>
   <spdx:SpdxDocument rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT">
-    <spdx:specVersion>SPDX-2.0</spdx:specVersion>
+    <spdx:specVersion>SPDX-2.2</spdx:specVersion>
     <spdx:relationship>
       <spdx:Relationship>
         <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
