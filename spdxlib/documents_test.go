@@ -234,7 +234,7 @@ func Test2_3ValidDocumentPassesValidation(t *testing.T) {
 func Test2_3InvalidDocumentFailsValidation(t *testing.T) {
 	// set up document and some packages and relationships
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.1",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
