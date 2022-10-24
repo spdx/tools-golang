@@ -415,7 +415,7 @@ func Test2_3GetDescribedPackagesReturnsSinglePackageIfOnlyOne(t *testing.T) {
 	// set up document and one package, but no relationships
 	// b/c only one package
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.2",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
@@ -441,7 +441,7 @@ func Test2_3GetDescribedPackagesReturnsSinglePackageIfOnlyOne(t *testing.T) {
 func Test2_3FailsToGetDescribedPackagesIfMoreThanOneWithoutDescribesRelationship(t *testing.T) {
 	// set up document and multiple packages, but no DESCRIBES relationships
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.2",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
@@ -471,7 +471,7 @@ func Test2_3FailsToGetDescribedPackagesIfMoreThanOneWithoutDescribesRelationship
 func Test2_3FailsToGetDescribedPackagesIfMoreThanOneWithNilRelationships(t *testing.T) {
 	// set up document and multiple packages, but no relationships slice
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.2",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
@@ -490,7 +490,7 @@ func Test2_3FailsToGetDescribedPackagesIfMoreThanOneWithNilRelationships(t *test
 func Test2_3FailsToGetDescribedPackagesIfZeroPackagesInMap(t *testing.T) {
 	// set up document but no packages
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.2",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
@@ -506,7 +506,7 @@ func Test2_3FailsToGetDescribedPackagesIfZeroPackagesInMap(t *testing.T) {
 func Test2_3FailsToGetDescribedPackagesIfNilMap(t *testing.T) {
 	// set up document but no packages
 	doc := &v2_3.Document{
-		SPDXVersion:    "SPDX-2.2",
+		SPDXVersion:    "SPDX-2.3",
 		DataLicense:    "CC0-1.0",
 		SPDXIdentifier: common.ElementID("DOCUMENT"),
 		CreationInfo:   &v2_3.CreationInfo{},
