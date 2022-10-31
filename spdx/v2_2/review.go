@@ -7,19 +7,19 @@ package v2_2
 type Review struct {
 
 	// DEPRECATED in version 2.0 of spec
-	// 9.1: Reviewer
+	// 13.1: Reviewer
 	// Cardinality: optional, one
 	Reviewer string
 	// including AnnotatorType: one of "Person", "Organization" or "Tool"
 	ReviewerType string
 
 	// DEPRECATED in version 2.0 of spec
-	// 9.2: Review Date: YYYY-MM-DDThh:mm:ssZ
+	// 13.2: Review Date: YYYY-MM-DDThh:mm:ssZ
 	// Cardinality: conditional (mandatory, one) if there is a Reviewer
 	ReviewDate string
 
 	// DEPRECATED in version 2.0 of spec
-	// 9.3: Review Comment
+	// 13.3: Review Comment
 	// Cardinality: optional, one
 	ReviewComment string
 }

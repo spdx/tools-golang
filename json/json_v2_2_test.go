@@ -27,7 +27,7 @@ func TestLoad2_2(t *testing.T) {
 	}
 
 	// get a copy of the handwritten struct so we don't mutate it on accident
-	handwrittenExample := want
+	handwrittenExample := want2_2
 
 	if cmp.Equal(handwrittenExample, got) {
 		t.Errorf("Got incorrect struct after parsing JSON example")
@@ -38,7 +38,7 @@ func TestLoad2_2(t *testing.T) {
 func TestWrite2_2(t *testing.T) {
 	w := &bytes.Buffer{}
 	// get a copy of the handwritten struct so we don't mutate it on accident
-	handwrittenExample := want
+	handwrittenExample := want2_2
 	if err := Save2_2(&handwrittenExample, w); err != nil {
 		t.Errorf("Save2_2() error = %v", err.Error())
 		return
@@ -60,7 +60,7 @@ func TestWrite2_2(t *testing.T) {
 // want is handwritten translation of the official example JSON SPDX v2.2 document into a Go struct.
 // We expect that the result of parsing the official document should be this value.
 // We expect that the result of writing this struct should match the official example document.
-var want = v2_2.Document{
+var want2_2 = v2_2.Document{
 	DataLicense:       "CC0-1.0",
 	SPDXVersion:       "SPDX-2.2",
 	SPDXIdentifier:    "SPDXRef-DOCUMENT",
