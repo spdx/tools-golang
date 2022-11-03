@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/core"
 	"github.com/spdx/tools-golang/spdx/v2_1"
 	"github.com/spdx/tools-golang/spdx/v2_2"
 )
@@ -13,7 +14,7 @@ import (
 // ===== 2.1 Verification code functionality tests =====
 
 func TestPackage2_1CanGetVerificationCode(t *testing.T) {
-	files := []*v2_1.File{
+	filesV2_1 := []*v2_1.File{
 		{
 			FileName:           "file2.txt",
 			FileSPDXIdentifier: "File0",
@@ -41,9 +42,14 @@ func TestPackage2_1CanGetVerificationCode(t *testing.T) {
 		},
 	}
 
+	files := make([]*core.File, len(filesV2_1))
+	for i, f := range files {
+		files[i] = f.Core()
+	}
+
 	wantCode := common.PackageVerificationCode{Value: "ac924b375119c81c1f08c3e2722044bfbbdcd3dc"}
 
-	gotCode, err := GetVerificationCode2_1(files, "")
+	gotCode, err := GetVerificationCode(files, "")
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -84,7 +90,7 @@ func TestPackage2_1CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 
 	wantCode := common.PackageVerificationCode{Value: "17fab1bd18fe5c13b5d3983f1c17e5f88b8ff266"}
 
-	gotCode, err := GetVerificationCode2_1(files, "thisfile.spdx")
+	gotCode, err := GetVerificationCode(files, "thisfile.spdx")
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -108,7 +114,7 @@ func TestPackage2_1GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 		},
 	}
 
-	_, err := GetVerificationCode2_1(files, "")
+	_, err := GetVerificationCode(files, "")
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
@@ -172,7 +178,7 @@ func TestPackage2_2CanGetVerificationCode(t *testing.T) {
 
 	wantCode := common.PackageVerificationCode{Value: "ac924b375119c81c1f08c3e2722044bfbbdcd3dc"}
 
-	gotCode, err := GetVerificationCode2_2(files, "")
+	gotCode, err := GetVerificationCode(files, "")
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -238,7 +244,7 @@ func TestPackage2_2CanGetVerificationCodeIgnoringExcludesFile(t *testing.T) {
 
 	wantCode := common.PackageVerificationCode{Value: "17fab1bd18fe5c13b5d3983f1c17e5f88b8ff266"}
 
-	gotCode, err := GetVerificationCode2_2(files, "thisfile.spdx")
+	gotCode, err := GetVerificationCode(files, "thisfile.spdx")
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}
@@ -272,7 +278,7 @@ func TestPackage2_2GetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 		},
 	}
 
-	_, err := GetVerificationCode2_2(files, "")
+	_, err := GetVerificationCode(files, "")
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
