@@ -73,6 +73,7 @@ func (parser *tvParser2_3) parsePairFromFile2_3(tag string, value string) error 
 		switch common.ChecksumAlgorithm(subkey) {
 		case common.SHA1,
 			common.SHA256,
+			common.SHA512,
 			common.MD5,
 			common.SHA3_256,
 			common.SHA3_384,
