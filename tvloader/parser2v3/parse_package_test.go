@@ -341,6 +341,7 @@ func TestParser2_3CanParsePackageTags(t *testing.T) {
 		"SHA1":   "85ed0817af83a24ad8da68c2b5094de69833983c",
 		"SHA256": "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 		"SHA512": "4ced3267f5ed38df65ceebc43e97aa6c2948cc7ef3288c2e5074e7df7fab544cc93339604513ea5f65616f9ed1c48581465043c8a9b693ef20fd4fddaf25e1b9",
+		"BLAKE3": "981d32ed7aad9e408c5c36f6346c915ba11c2bd8b3e7d44902a11d7a141abdd9",
 	}
 
 	for algo, tc := range testChecksums {

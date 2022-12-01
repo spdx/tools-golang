@@ -627,7 +627,7 @@ func Test_rdfParser2_3_setPackageChecksum(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 		<spdx:Checksum>
 			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha384"/>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000"/>
 		</spdx:Checksum>
 	`)
 	pkg = &v2_3.Package{}
