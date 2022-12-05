@@ -116,5 +116,5 @@ type PackageExternalReference struct {
 
 	// 3.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
-	ExternalRefComment string `json:"comment"`
+	ExternalRefComment string `json:"comment,omitempty"`
 }
