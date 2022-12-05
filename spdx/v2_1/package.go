@@ -95,7 +95,7 @@ type Package struct {
 	PackageExternalReferences []*PackageExternalReference `json:"externalRefs,omitempty"`
 
 	// Files contained in this Package
-	Files []*File
+	Files []*File `json:"files,omitempty"`
 
 	Annotations []Annotation `json:"annotations,omitempty"`
 }

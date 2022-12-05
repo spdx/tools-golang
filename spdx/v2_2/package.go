@@ -52,7 +52,7 @@ type Package struct {
 
 	// 7.10: Package Checksum: may have keys for SHA1, SHA256 and/or MD5
 	// Cardinality: optional, one or many
-	PackageChecksums []common.Checksum `json:"checksums"`
+	PackageChecksums []common.Checksum `json:"checksums,omitempty"`
 
 	// 7.11: Package Home Page
 	// Cardinality: optional, one
@@ -108,9 +108,9 @@ type Package struct {
 	PackageAttributionTexts []string `json:"attributionTexts,omitempty"`
 
 	// Files contained in this Package
-	Files []*File
+	Files []*File `json:"files,omitempty"`
 
-	Annotations []Annotation `json:"annotations"`
+	Annotations []Annotation `json:"annotations,omitempty"`
 }
 
 // PackageExternalReference is an External Reference to additional info
