@@ -61,5 +61,5 @@ type Document struct {
 	Snippets      []Snippet       `json:"snippets"`
 
 	// DEPRECATED in version 2.0 of spec
-	Reviews []*Review
+	Reviews []*Review `json:"-"`
 }

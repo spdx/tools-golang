@@ -9,7 +9,7 @@ type Package struct {
 	// NOT PART OF SPEC
 	// flag: does this "package" contain files that were in fact "unpackaged",
 	// e.g. included directly in the Document without being in a Package?
-	IsUnpackaged bool
+	IsUnpackaged bool `json:"-"`
 
 	// 7.1: Package Name
 	// Cardinality: mandatory, one
@@ -45,7 +45,7 @@ type Package struct {
 	// Cardinality: optional, one; default value is "true" if omitted
 	FilesAnalyzed bool `json:"filesAnalyzed,omitempty"`
 	// NOT PART OF SPEC: did FilesAnalyzed tag appear?
-	IsFilesAnalyzedTagPresent bool
+	IsFilesAnalyzedTagPresent bool `json:"-"`
 
 	// 7.9: Package Verification Code
 	PackageVerificationCode common.PackageVerificationCode `json:"packageVerificationCode"`
