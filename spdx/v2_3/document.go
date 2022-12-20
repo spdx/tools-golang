@@ -44,6 +44,11 @@ type Document struct {
 	// Cardinality: mandatory, one
 	DocumentNamespace string `json:"documentNamespace"`
 
+	// 6.x: Document Descibes
+	// Cardinality: mandatory
+	// Packages, files and/or Snippets described by this SPDX document
+	DocumentDescribes []string `json:"documentDescribes"`
+
 	// 6.6: External Document References
 	// Cardinality: optional, one or many
 	ExternalDocumentReferences []ExternalDocumentRef `json:"externalDocumentRefs,omitempty"`
