@@ -264,7 +264,8 @@ func (parser *rdfParser2_3) setFileToPackage(pkg *v2_3.Package, file *v2_3.File)
 
 // given a supplierObject, sets the PackageSupplier attribute of the pkg.
 // Args:
-//    value: [NOASSERTION | [Person | Organization]: string]
+//
+//	value: [NOASSERTION | [Person | Organization]: string]
 func setPackageSupplier(pkg *v2_3.Package, value string) error {
 	value = strings.TrimSpace(value)
 	supplier := &common.Supplier{}
@@ -293,7 +294,8 @@ func setPackageSupplier(pkg *v2_3.Package, value string) error {
 
 // given a OriginatorObject, sets the PackageOriginator attribute of the pkg.
 // Args:
-//    value: [NOASSERTION | [Person | Organization]: string]
+//
+//	value: [NOASSERTION | [Person | Organization]: string]
 func setPackageOriginator(pkg *v2_3.Package, value string) error {
 	value = strings.TrimSpace(value)
 	originator := &common.Originator{}
@@ -353,7 +355,23 @@ func (parser *rdfParser2_3) setPackageChecksum(pkg *v2_3.Package, node *gordfPar
 		pkg.PackageChecksums = make([]common.Checksum, 0, 1)
 	}
 	switch checksumAlgorithm {
-	case common.MD5, common.SHA1, common.SHA256:
+	case common.SHA1,
+		common.SHA224,
+		common.SHA256,
+		common.SHA384,
+		common.SHA512,
+		common.MD2,
+		common.MD4,
+		common.MD5,
+		common.MD6,
+		common.SHA3_256,
+		common.SHA3_384,
+		common.SHA3_512,
+		common.BLAKE2b_256,
+		common.BLAKE2b_384,
+		common.BLAKE2b_512,
+		common.BLAKE3,
+		common.ADLER32:
 		pkg.PackageChecksums = append(pkg.PackageChecksums, common.Checksum{Algorithm: checksumAlgorithm, Value: checksumValue})
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)

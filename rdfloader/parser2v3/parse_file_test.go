@@ -315,7 +315,7 @@ func Test_rdfParser2_3_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 6: valid checksum algorithm which is invalid for file (like md4, md6, sha384, etc.)
 	parser, _ = parserFromBodyContent(` 
 		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha384" />
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
 		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 		</spdx:Checksum>
     `)
@@ -355,7 +355,7 @@ func Test_rdfParser2_3_getFileFromNode(t *testing.T) {
 		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:checksum>
 				<spdx:Checksum>
-					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha384" />
+					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
 					<spdx:checksumValue>0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd</spdx:checksumValue>
 				</spdx:Checksum>
 			</spdx:checksum>

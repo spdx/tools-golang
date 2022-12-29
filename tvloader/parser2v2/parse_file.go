@@ -71,7 +71,15 @@ func (parser *tvParser2_2) parsePairFromFile2_2(tag string, value string) error 
 			parser.file.Checksums = []common.Checksum{}
 		}
 		switch common.ChecksumAlgorithm(subkey) {
-		case common.SHA1, common.SHA256, common.MD5:
+		case common.SHA1,
+			common.SHA224,
+			common.SHA256,
+			common.SHA384,
+			common.SHA512,
+			common.MD2,
+			common.MD4,
+			common.MD5,
+			common.MD6:
 			algorithm := common.ChecksumAlgorithm(subkey)
 			parser.file.Checksums = append(parser.file.Checksums, common.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:

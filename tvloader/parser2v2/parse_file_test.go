@@ -2,6 +2,7 @@
 package parser2v2
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx/common"
@@ -425,41 +426,29 @@ func TestParser2_2CanParseFileTags(t *testing.T) {
 			len(parser.file.FileTypes))
 	}
 
-	// File Checksums
-	codeSha1 := "85ed0817af83a24ad8da68c2b5094de69833983c"
-	sumSha1 := "SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c"
-	codeSha256 := "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
-	sumSha256 := "SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
-	codeMd5 := "624c1abb3664f4b35547e7c73864ad24"
-	sumMd5 := "MD5: 624c1abb3664f4b35547e7c73864ad24"
-	err = parser.parsePairFromFile2_2("FileChecksum", sumSha1)
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
+	testChecksums := map[common.ChecksumAlgorithm]string{
+		"MD5":    "624c1abb3664f4b35547e7c73864ad24",
+		"SHA1":   "85ed0817af83a24ad8da68c2b5094de69833983c",
+		"SHA256": "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
+		"SHA512": "4ced3267f5ed38df65ceebc43e97aa6c2948cc7ef3288c2e5074e7df7fab544cc93339604513ea5f65616f9ed1c48581465043c8a9b693ef20fd4fddaf25e1b9",
 	}
-	err = parser.parsePairFromFile2_2("FileChecksum", sumSha256)
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	err = parser.parsePairFromFile2_2("FileChecksum", sumMd5)
-	if err != nil {
-		t.Errorf("expected nil error, got %v", err)
-	}
-	for _, checksum := range parser.file.Checksums {
-		switch checksum.Algorithm {
-		case common.SHA1:
-			if checksum.Value != codeSha1 {
-				t.Errorf("expected %s for FileChecksumSHA1, got %s", codeSha1, checksum.Value)
-			}
-		case common.SHA256:
-			if checksum.Value != codeSha256 {
-				t.Errorf("expected %s for FileChecksumSHA1, got %s", codeSha256, checksum.Value)
-			}
-		case common.MD5:
-			if checksum.Value != codeMd5 {
-				t.Errorf("expected %s for FileChecksumSHA1, got %s", codeMd5, checksum.Value)
-			}
+
+	for algo, tc := range testChecksums {
+		if err := parser.parsePairFromFile2_2(
+			"FileChecksum", fmt.Sprintf("%s: %s", algo, tc)); err != nil {
+			t.Errorf("expected error, got %v", err)
 		}
 	}
+
+	for _, checksum := range parser.file.Checksums {
+		if checksum.Value != testChecksums[checksum.Algorithm] {
+			t.Errorf(
+				"expected %s for FileChecksum%s, got %s",
+				testChecksums[checksum.Algorithm], checksum.Algorithm, checksum.Value,
+			)
+		}
+	}
+
 	// Concluded License
 	err = parser.parsePairFromFile2_2("LicenseConcluded", "Apache-2.0 OR GPL-2.0-or-later")
 	if err != nil {

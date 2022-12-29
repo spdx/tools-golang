@@ -237,7 +237,8 @@ func (parser *rdfParser2_2) setFileToPackage(pkg *v2_2.Package, file *v2_2.File)
 
 // given a supplierObject, sets the PackageSupplier attribute of the pkg.
 // Args:
-//    value: [NOASSERTION | [Person | Organization]: string]
+//
+//	value: [NOASSERTION | [Person | Organization]: string]
 func setPackageSupplier(pkg *v2_2.Package, value string) error {
 	value = strings.TrimSpace(value)
 	supplier := &common.Supplier{}
@@ -266,7 +267,8 @@ func setPackageSupplier(pkg *v2_2.Package, value string) error {
 
 // given a OriginatorObject, sets the PackageOriginator attribute of the pkg.
 // Args:
-//    value: [NOASSERTION | [Person | Organization]: string]
+//
+//	value: [NOASSERTION | [Person | Organization]: string]
 func setPackageOriginator(pkg *v2_2.Package, value string) error {
 	value = strings.TrimSpace(value)
 	originator := &common.Originator{}
@@ -326,7 +328,15 @@ func (parser *rdfParser2_2) setPackageChecksum(pkg *v2_2.Package, node *gordfPar
 		pkg.PackageChecksums = make([]common.Checksum, 0, 1)
 	}
 	switch checksumAlgorithm {
-	case common.MD5, common.SHA1, common.SHA256:
+	case common.SHA1,
+		common.SHA224,
+		common.SHA256,
+		common.SHA384,
+		common.SHA512,
+		common.MD2,
+		common.MD4,
+		common.MD5,
+		common.MD6:
 		pkg.PackageChecksums = append(pkg.PackageChecksums, common.Checksum{Algorithm: checksumAlgorithm, Value: checksumValue})
 	default:
 		return fmt.Errorf("unknown checksumAlgorithm %s while parsing a package", checksumAlgorithm)

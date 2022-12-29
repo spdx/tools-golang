@@ -111,7 +111,23 @@ func (parser *tvParser2_3) parsePairFromPackage2_3(tag string, value string) err
 			parser.pkg.PackageChecksums = []common.Checksum{}
 		}
 		switch common.ChecksumAlgorithm(subkey) {
-		case common.SHA1, common.SHA256, common.MD5:
+		case common.SHA1,
+			common.SHA224,
+			common.SHA256,
+			common.SHA384,
+			common.SHA512,
+			common.MD2,
+			common.MD4,
+			common.MD5,
+			common.MD6,
+			common.SHA3_256,
+			common.SHA3_384,
+			common.SHA3_512,
+			common.BLAKE2b_256,
+			common.BLAKE2b_384,
+			common.BLAKE2b_512,
+			common.BLAKE3,
+			common.ADLER32:
 			algorithm := common.ChecksumAlgorithm(subkey)
 			parser.pkg.PackageChecksums = append(parser.pkg.PackageChecksums, common.Checksum{Algorithm: algorithm, Value: subvalue})
 		default:
