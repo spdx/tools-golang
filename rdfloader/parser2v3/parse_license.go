@@ -67,7 +67,7 @@ func (parser *rdfParser2_3) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	case SPDX_SIMPLE_LICENSING_INFO:
 		return parser.getSimpleLicensingInfoFromNode(node)
 	}
-	return nil, fmt.Errorf("Unknown subTag (%s) found while parsing AnyLicense", nodeType)
+	return nil, fmt.Errorf("unknown subTag (%s) found while parsing AnyLicense", nodeType)
 }
 
 func (parser *rdfParser2_3) getLicenseExceptionFromNode(node *gordfParser.Node) (exception LicenseException, err error) {
