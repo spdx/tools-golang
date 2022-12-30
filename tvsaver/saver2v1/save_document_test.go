@@ -91,7 +91,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	pkgWith := &v2_1.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		PackageVerificationCode:   common.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
@@ -208,114 +208,114 @@ blah blah blah blah`,
 	}
 
 	want := bytes.NewBufferString(`SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-SPDXID: SPDXRef-DOCUMENT
-DocumentName: spdx-go-0.0.1.abcdef
-DocumentNamespace: https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever
-Creator: Person: John Doe
-Created: 2018-10-10T06:20:00Z
-
-##### Unpackaged files
-
-FileName: /tmp/whatever1.txt
-SPDXID: SPDXRef-File1231
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-LicenseConcluded: Apache-2.0
-LicenseInfoInFile: Apache-2.0
-FileCopyrightText: Copyright (c) Jane Doe
-
-FileName: /tmp/whatever2.txt
-SPDXID: SPDXRef-File1232
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
-LicenseConcluded: MIT
-LicenseInfoInFile: MIT
-FileCopyrightText: Copyright (c) John Doe
-
-##### Package: p1
-
-PackageName: p1
-SPDXID: SPDXRef-p1
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: true
-PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
-PackageLicenseConcluded: GPL-2.0-or-later AND BSD-3-Clause AND WTFPL
-PackageLicenseInfoFromFiles: Apache-2.0
-PackageLicenseInfoFromFiles: GPL-2.0-or-later
-PackageLicenseInfoFromFiles: WTFPL
-PackageLicenseInfoFromFiles: BSD-3-Clause
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-
-FileName: /tmp/another-file.txt
-SPDXID: SPDXRef-FileAnother
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983f
-LicenseConcluded: BSD-3-Clause
-LicenseInfoInFile: BSD-3-Clause
-FileCopyrightText: Copyright (c) Jane Doe LLC
-
-FileName: /tmp/file-with-snippets.txt
-SPDXID: SPDXRef-FileHasSnippets
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983e
-LicenseConcluded: GPL-2.0-or-later AND WTFPL
-LicenseInfoInFile: Apache-2.0
-LicenseInfoInFile: GPL-2.0-or-later
-LicenseInfoInFile: WTFPL
-FileCopyrightText: Copyright (c) Jane Doe
-
-SnippetSPDXID: SPDXRef-Snippet19
-SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
-SnippetByteRange: 17:209
-SnippetLicenseConcluded: GPL-2.0-or-later
-SnippetCopyrightText: Copyright (c) John Doe 20x6
-
-SnippetSPDXID: SPDXRef-Snippet20
-SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
-SnippetByteRange: 268:309
-SnippetLicenseConcluded: WTFPL
-SnippetCopyrightText: NOASSERTION
-
-##### Other Licenses
-
-LicenseID: LicenseRef-1
-ExtractedText: <text>License 1 text
-blah blah blah
-blah blah blah blah</text>
-LicenseName: License 1
-
-LicenseID: LicenseRef-2
-ExtractedText: License 2 text - this is a license that does some stuff
-LicenseName: License 2
-
-##### Relationships
-
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-p1
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File1231
-Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File1232
-
-##### Annotations
-
-Annotator: Person: John Doe
-AnnotationDate: 2018-10-10T17:52:00Z
-AnnotationType: REVIEW
-SPDXREF: SPDXRef-DOCUMENT
-AnnotationComment: This is an annotation about the SPDX document
-
-Annotator: Organization: John Doe, Inc.
-AnnotationDate: 2018-10-10T17:52:00Z
-AnnotationType: REVIEW
-SPDXREF: SPDXRef-p1
-AnnotationComment: This is an annotation about Package p1
-
-##### Reviews
-
-Reviewer: Person: John Doe
-ReviewDate: 2018-10-14T10:28:00Z
-
-Reviewer: Organization: Jane Doe LLC
-ReviewDate: 2018-10-14T10:28:00Z
-ReviewComment: I have reviewed this SPDX document and it is awesome
-
-`)
+	DataLicense: CC0-1.0
+	SPDXID: SPDXRef-DOCUMENT
+	DocumentName: spdx-go-0.0.1.abcdef
+	DocumentNamespace: https://github.com/swinslow/spdx-docs/spdx-go/spdx-go-0.0.1.abcdef.whatever
+	Creator: Person: John Doe
+	Created: 2018-10-10T06:20:00Z
+	
+	##### Unpackaged files
+	
+	FileName: /tmp/whatever1.txt
+	SPDXID: SPDXRef-File1231
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+	LicenseConcluded: Apache-2.0
+	LicenseInfoInFile: Apache-2.0
+	FileCopyrightText: Copyright (c) Jane Doe
+	
+	FileName: /tmp/whatever2.txt
+	SPDXID: SPDXRef-File1232
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
+	LicenseConcluded: MIT
+	LicenseInfoInFile: MIT
+	FileCopyrightText: Copyright (c) John Doe
+	
+	##### Package: p1
+	
+	PackageName: p1
+	SPDXID: SPDXRef-p1
+	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	FilesAnalyzed: true
+	PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
+	PackageLicenseConcluded: GPL-2.0-or-later AND BSD-3-Clause AND WTFPL
+	PackageLicenseInfoFromFiles: Apache-2.0
+	PackageLicenseInfoFromFiles: GPL-2.0-or-later
+	PackageLicenseInfoFromFiles: WTFPL
+	PackageLicenseInfoFromFiles: BSD-3-Clause
+	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+	PackageCopyrightText: Copyright (c) John Doe, Inc.
+	
+	FileName: /tmp/another-file.txt
+	SPDXID: SPDXRef-FileAnother
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983f
+	LicenseConcluded: BSD-3-Clause
+	LicenseInfoInFile: BSD-3-Clause
+	FileCopyrightText: Copyright (c) Jane Doe LLC
+	
+	FileName: /tmp/file-with-snippets.txt
+	SPDXID: SPDXRef-FileHasSnippets
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983e
+	LicenseConcluded: GPL-2.0-or-later AND WTFPL
+	LicenseInfoInFile: Apache-2.0
+	LicenseInfoInFile: GPL-2.0-or-later
+	LicenseInfoInFile: WTFPL
+	FileCopyrightText: Copyright (c) Jane Doe
+	
+	SnippetSPDXID: SPDXRef-Snippet19
+	SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
+	SnippetByteRange: 17:209
+	SnippetLicenseConcluded: GPL-2.0-or-later
+	SnippetCopyrightText: Copyright (c) John Doe 20x6
+	
+	SnippetSPDXID: SPDXRef-Snippet20
+	SnippetFromFileSPDXID: SPDXRef-FileHasSnippets
+	SnippetByteRange: 268:309
+	SnippetLicenseConcluded: WTFPL
+	SnippetCopyrightText: NOASSERTION
+	
+	##### Other Licenses
+	
+	LicenseID: LicenseRef-1
+	ExtractedText: <text>License 1 text
+	blah blah blah
+	blah blah blah blah</text>
+	LicenseName: License 1
+	
+	LicenseID: LicenseRef-2
+	ExtractedText: License 2 text - this is a license that does some stuff
+	LicenseName: License 2
+	
+	##### Relationships
+	
+	Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-p1
+	Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File1231
+	Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File1232
+	
+	##### Annotations
+	
+	Annotator: Person: John Doe
+	AnnotationDate: 2018-10-10T17:52:00Z
+	AnnotationType: REVIEW
+	SPDXREF: SPDXRef-DOCUMENT
+	AnnotationComment: This is an annotation about the SPDX document
+	
+	Annotator: Organization: John Doe, Inc.
+	AnnotationDate: 2018-10-10T17:52:00Z
+	AnnotationType: REVIEW
+	SPDXREF: SPDXRef-p1
+	AnnotationComment: This is an annotation about Package p1
+	
+	##### Reviews
+	
+	Reviewer: Person: John Doe
+	ReviewDate: 2018-10-14T10:28:00Z
+	
+	Reviewer: Organization: Jane Doe LLC
+	ReviewDate: 2018-10-14T10:28:00Z
+	ReviewComment: I have reviewed this SPDX document and it is awesome
+	
+	`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer

@@ -30,7 +30,7 @@ func TestParser2_2OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 
 	// the Document's OtherLicenses should have this one only
 	if parser.doc.OtherLicenses[0] != olic1 {
-		t.Errorf("Expected other license %v in OtherLicenses[0], got %v", olic1, parser.doc.OtherLicenses[0])
+		t.Errorf("expected other license %v in OtherLicenses[0], got %v", olic1, parser.doc.OtherLicenses[0])
 	}
 	if parser.doc.OtherLicenses[0].LicenseName != olname1 {
 		t.Errorf("expected other license name %s in OtherLicenses[0], got %s", olname1, parser.doc.OtherLicenses[0].LicenseName)
@@ -66,10 +66,10 @@ func TestParser2_2OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 	}
 	// and the Document's Other Licenses should be of size 2 and have these two
 	if len(parser.doc.OtherLicenses) != 2 {
-		t.Fatalf("Expected OtherLicenses to have len 2, got %d", len(parser.doc.OtherLicenses))
+		t.Fatalf("expected OtherLicenses to have len 2, got %d", len(parser.doc.OtherLicenses))
 	}
 	if parser.doc.OtherLicenses[0] != olic1 {
-		t.Errorf("Expected other license %v in OtherLicenses[0], got %v", olic1, parser.doc.OtherLicenses[0])
+		t.Errorf("expected other license %v in OtherLicenses[0], got %v", olic1, parser.doc.OtherLicenses[0])
 	}
 	if parser.doc.OtherLicenses[0].LicenseIdentifier != olid1 {
 		t.Errorf("expected other license ID %s in OtherLicenses[0], got %s", olid1, parser.doc.OtherLicenses[0].LicenseIdentifier)
@@ -78,7 +78,7 @@ func TestParser2_2OLStartsNewOtherLicenseAfterParsingLicenseIDTag(t *testing.T) 
 		t.Errorf("expected other license name %s in OtherLicenses[0], got %s", olname1, parser.doc.OtherLicenses[0].LicenseName)
 	}
 	if parser.doc.OtherLicenses[1] != parser.otherLic {
-		t.Errorf("Expected other license %v in OtherLicenses[1], got %v", parser.otherLic, parser.doc.OtherLicenses[1])
+		t.Errorf("expected other license %v in OtherLicenses[1], got %v", parser.otherLic, parser.doc.OtherLicenses[1])
 	}
 	if parser.doc.OtherLicenses[1].LicenseIdentifier != olid2 {
 		t.Errorf("expected other license ID %s in OtherLicenses[1], got %s", olid2, parser.doc.OtherLicenses[1].LicenseIdentifier)

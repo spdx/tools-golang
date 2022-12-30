@@ -60,7 +60,7 @@ func TestParser2_2PackageStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	}
 	// and the Document's Packages should still be of size 1 and have pkgOld only
 	if parser.doc.Packages[0] != pkgOld {
-		t.Errorf("Expected package %v, got %v", pkgOld, parser.doc.Packages[0])
+		t.Errorf("expected package %v, got %v", pkgOld, parser.doc.Packages[0])
 	}
 	if len(parser.doc.Packages) != 1 {
 		t.Errorf("expected 1 package, got %d", len(parser.doc.Packages))
@@ -77,7 +77,7 @@ func TestParser2_2PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 	}
 	// the Document's Packages should be empty
 	if len(parser.doc.Packages) != 0 {
-		t.Errorf("Expected zero packages, got %d", len(parser.doc.Packages))
+		t.Errorf("expected zero packages, got %d", len(parser.doc.Packages))
 	}
 
 	// now add a new package
@@ -108,7 +108,7 @@ func TestParser2_2PackageStartsNewPackageAfterParsingPackageNameTagWhileInUnpack
 	// and the Document's Packages should be of size 0, because the prior was
 	// unpackaged files and this one won't be added until an SPDXID is seen
 	if len(parser.doc.Packages) != 0 {
-		t.Errorf("Expected %v packages in doc, got %v", 0, len(parser.doc.Packages))
+		t.Errorf("expected %v packages in doc, got %v", 0, len(parser.doc.Packages))
 	}
 }
 
