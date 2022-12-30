@@ -51,7 +51,7 @@ func Test_rdfParser2_3_getArtifactFromNode(t *testing.T) {
 		`<spdx:File>
 					<spdx:artifactOf>
 						<doap:Project>
-							<doap:homepage>https://www.openjena.org/</doap:homepage>
+							<doap:homepage>http://www.openjena.org/</doap:homepage>
 							<doap:name>Jena</doap:name>
 						</doap:Project>
 					</spdx:artifactOf>
@@ -67,7 +67,7 @@ func Test_rdfParser2_3_getArtifactFromNode(t *testing.T) {
 	if artifact.Name != "Jena" {
 		t.Errorf("expected name of artifact: %s, found: %s", "Jena", artifact.Name)
 	}
-	expectedHomePage := "https://www.openjena.org/"
+	expectedHomePage := "http://www.openjena.org/"
 	if artifact.HomePage != expectedHomePage {
 		t.Errorf("wrong artifact homepage. Expected: %s, found: %s", expectedHomePage, artifact.HomePage)
 	}
@@ -79,8 +79,8 @@ func Test_rdfParser2_3_getArtifactFromNode(t *testing.T) {
 	rdfParser, err = parserFromBodyContent(
 		`<spdx:File>
 							<spdx:artifactOf>
-								<doap:Project rdf:about="https://subversion.apache.org/doap.rdf">
-									<doap:homepage>https://www.openjena.org/</doap:homepage>
+								<doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
+									<doap:homepage>http://www.openjena.org/</doap:homepage>
 									<doap:name>Jena</doap:name>
 								</doap:Project>
 							</spdx:artifactOf>
@@ -103,7 +103,7 @@ func Test_rdfParser2_3_getArtifactFromNode(t *testing.T) {
 		`<spdx:File>
 							<spdx:artifactOf>
 								<doap:Project rdf:about="https://subversion.apache.org/doap.rdf">
-									<doap:homepage>https://www.openjena.org/</doap:homepage>
+									<doap:homepage>http://www.openjena.org/</doap:homepage>
 									<doap:name>Jena</doap:name>
 									<doap:invalidTag rdf:ID="invalid"/>
 								</doap:Project>
@@ -123,7 +123,7 @@ func Test_rdfParser2_3_getFileTypeFromUri(t *testing.T) {
 	rdfParser, _ := parserFromBodyContent(``)
 
 	// TestCase 1: Valid fileType URI:
-	fileTypeURI := "https://spdx.org/rdf/terms#fileType_source"
+	fileTypeURI := "http://spdx.org/rdf/terms#fileType_source"
 	fileType, err := rdfParser.getFileTypeFromUri(fileTypeURI)
 	if err != nil {
 		t.Errorf("error in a valid example: %v", err)
@@ -133,7 +133,7 @@ func Test_rdfParser2_3_getFileTypeFromUri(t *testing.T) {
 	}
 
 	// TestCase 2: Invalid fileType URI format.
-	fileTypeURI = "https://spdx.org/rdf/terms#source"
+	fileTypeURI = "http://spdx.org/rdf/terms#source"
 	fileType, err = rdfParser.getFileTypeFromUri(fileTypeURI)
 	if err == nil {
 		t.Error("should've raised an error for invalid fileType")
@@ -178,7 +178,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	file := &v2_3.File{}
 
 	// TestCase 1: valid example
-	err := setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
+	err := setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
@@ -187,7 +187,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	}
 
 	// TestCase 2: invalid example
-	err = setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
+	err = setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
 	if err == nil {
 		t.Errorf("should've raised an error for an invalid example")
 	}
@@ -197,7 +197,7 @@ func Test_rdfParser2_3_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 1: md5 checksum
 	parser, _ := parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md5" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)

@@ -561,11 +561,11 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.Name != "project1" {
 		t.Errorf("expected %v, got %v", "project1", aop.Name)
 	}
-	if aop.HomePage != "https://example.com/1/" {
-		t.Errorf("expected %v, got %v", "https://example.com/1/", aop.HomePage)
+	if aop.HomePage != "http://example.com/1/" {
+		t.Errorf("expected %v, got %v", "http://example.com/1/", aop.HomePage)
 	}
-	if aop.URI != "https://example.com/1/uri.whatever" {
-		t.Errorf("expected %v, got %v", "https://example.com/1/uri.whatever", aop.URI)
+	if aop.URI != "http://example.com/1/uri.whatever" {
+		t.Errorf("expected %v, got %v", "http://example.com/1/uri.whatever", aop.URI)
 	}
 
 	aop = parser.file.ArtifactOfProjects[1]
@@ -583,8 +583,8 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.Name != "project3" {
 		t.Errorf("expected %v, got %v", "project3", aop.Name)
 	}
-	if aop.HomePage != "https://example.com/3/" {
-		t.Errorf("expected %v, got %v", "https://example.com/3/", aop.HomePage)
+	if aop.HomePage != "http://example.com/3/" {
+		t.Errorf("expected %v, got %v", "http://example.com/3/", aop.HomePage)
 	}
 	if aop.URI != "" {
 		t.Errorf("expected %v, got %v", "", aop.URI)

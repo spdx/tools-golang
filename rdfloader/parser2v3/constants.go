@@ -12,7 +12,7 @@ var (
 	NS_PTR  = "http://www.w3.org/2009/pointers#"
 	NS_DOAP = "http://usefulinc.com/ns/doap#"
 
-	// SPDX_SPEC_VERSION SPDX properties
+	// SPDX properties
 	SPDX_SPEC_VERSION                            = NS_SPDX + "specVersion"
 	SPDX_DATA_LICENSE                            = NS_SPDX + "dataLicense"
 	SPDX_NAME                                    = NS_SPDX + "name"
