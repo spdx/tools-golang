@@ -93,7 +93,7 @@ func Test_rdfParser2_3_getArtifactFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid artifactOf node: %v", err)
 	}
-	expectedURI := "https://subversion.apache.org/doap.rdf"
+	expectedURI := "http://subversion.apache.org/doap.rdf"
 	if artifact.URI != expectedURI {
 		t.Errorf("wrong artifact URI. Expected: %s, found: %s", expectedURI, artifact.URI)
 	}
