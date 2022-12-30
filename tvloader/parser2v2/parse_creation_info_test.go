@@ -413,10 +413,10 @@ func TestFailsExternalDocumentReferenceWithInvalidFormats(t *testing.T) {
 		"whoops",
 		"DocumentRef-",
 		"DocumentRef-   ",
-		"DocumentRef-spdx-tool-1.2 https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
-		"DocumentRef-spdx-tool-1.2 https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 d6a770ba38583ed4bb4525bd96e50461655d2759",
+		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+		"DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 d6a770ba38583ed4bb4525bd96e50461655d2759",
 		"DocumentRef-spdx-tool-1.2",
-		"spdx-tool-1.2 https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759",
+		"spdx-tool-1.2 htt://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759",
 	}
 	for _, refstring := range invalidRefs {
 		_, _, _, _, err := extractExternalDocumentReference(refstring)

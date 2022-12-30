@@ -521,7 +521,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/1/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/1/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -755,7 +755,7 @@ func TestFileAOPPointerChangesAfterTags(t *testing.T) {
 	curPtr := parser.fileAOP
 
 	// now, a home page; pointer should stay
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/1/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/1/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
