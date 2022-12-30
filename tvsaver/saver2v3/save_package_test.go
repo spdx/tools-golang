@@ -513,8 +513,7 @@ PackageLicenseConcluded: GPL-2.0-or-later
 PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
 PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
 Copyright Jane Doe</text>
-	
-	`)
+`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer

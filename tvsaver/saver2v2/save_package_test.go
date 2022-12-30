@@ -102,39 +102,39 @@ multi-line external ref comment`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-		SPDXID: SPDXRef-p1
-		PackageVersion: 0.1.0
-		PackageFileName: p1-0.1.0-master.tar.gz
-		PackageSupplier: Organization: John Doe, Inc.
-		PackageOriginator: Person: John Doe
-		PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-		FilesAnalyzed: true
-		PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
-		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-		PackageHomePage: http://example.com/p1
-		PackageSourceInfo: this is a source comment
-		PackageLicenseConcluded: GPL-2.0-or-later
-		PackageLicenseInfoFromFiles: Apache-1.1
-		PackageLicenseInfoFromFiles: Apache-2.0
-		PackageLicenseInfoFromFiles: GPL-2.0-or-later
-		PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-		PackageLicenseComments: this is a license comment(s)
-		PackageCopyrightText: Copyright (c) John Doe, Inc.
-		PackageSummary: this is a summary comment
-		PackageDescription: this is a description comment
-		PackageComment: this is a comment comment
-		ExternalRef: SECURITY cpe22Type cpe:/a:john_doe_inc:p1:0.1.0
-		ExternalRefComment: this is an external ref comment #1
-		ExternalRef: PACKAGE-MANAGER npm p1@0.1.0
-		ExternalRefComment: <text>this is a
-		multi-line external ref comment</text>
-		ExternalRef: PERSISTENT-ID swh swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2
-		ExternalRef: OTHER anything anything-without-spaces-can-go-here
-		PackageAttributionText: Include this notice in all advertising materials
+SPDXID: SPDXRef-p1
+PackageVersion: 0.1.0
+PackageFileName: p1-0.1.0-master.tar.gz
+PackageSupplier: Organization: John Doe, Inc.
+PackageOriginator: Person: John Doe
+PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
+FilesAnalyzed: true
+PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
+PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
+PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
+PackageHomePage: http://example.com/p1
+PackageSourceInfo: this is a source comment
+PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseInfoFromFiles: Apache-1.1
+PackageLicenseInfoFromFiles: Apache-2.0
+PackageLicenseInfoFromFiles: GPL-2.0-or-later
+PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+PackageLicenseComments: this is a license comment(s)
+PackageCopyrightText: Copyright (c) John Doe, Inc.
+PackageSummary: this is a summary comment
+PackageDescription: this is a description comment
+PackageComment: this is a comment comment
+ExternalRef: SECURITY cpe22Type cpe:/a:john_doe_inc:p1:0.1.0
+ExternalRefComment: this is an external ref comment #1
+ExternalRef: PACKAGE-MANAGER npm p1@0.1.0
+ExternalRefComment: <text>this is a
+multi-line external ref comment</text>
+ExternalRef: PERSISTENT-ID swh swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2
+ExternalRef: OTHER anything anything-without-spaces-can-go-here
+PackageAttributionText: Include this notice in all advertising materials
 		
-		`)
+`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer

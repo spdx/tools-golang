@@ -19,7 +19,7 @@ import (
 // and typically does not need to be called by client code.
 func RenderDocument2_3(doc *v2_3.Document, w io.Writer) error {
 	if doc.CreationInfo == nil {
-		return fmt.Errorf("Document had nil CreationInfo section")
+		return fmt.Errorf("document had nil CreationInfo section")
 	}
 
 	if doc.SPDXVersion != "" {
