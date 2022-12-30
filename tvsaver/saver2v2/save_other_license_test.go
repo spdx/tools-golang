@@ -18,23 +18,23 @@ blah blah blah
 blah blah blah blah`,
 		LicenseName: "License 1",
 		LicenseCrossReferences: []string{
-			"https://example.com/License1/",
-			"https://example.com/License1AnotherURL/",
+			"http://example.com/License1/",
+			"http://example.com/License1AnotherURL/",
 		},
 		LicenseComment: "this is a license comment",
 	}
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`LicenseID: LicenseRef-1
-		ExtractedText: <text>License 1 text
-		blah blah blah
-		blah blah blah blah</text>
-		LicenseName: License 1
-		LicenseCrossReference: https://example.com/License1/
-		LicenseCrossReference: https://example.com/License1AnotherURL/
-		LicenseComment: this is a license comment
+ExtractedText: <text>License 1 text	
+blah blah blah
+blah blah blah blah</text>
+LicenseName: License 1
+LicenseCrossReference: http://example.com/License1/
+LicenseCrossReference: http://example.com/License1AnotherURL/
+LicenseComment: this is a license comment
 		
-		`)
+`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer

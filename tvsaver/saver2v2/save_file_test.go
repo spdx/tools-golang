@@ -34,19 +34,19 @@ func TestSaver2_2FileSavesText(t *testing.T) {
 		ArtifactOfProjects: []*v2_2.ArtifactOfProject{
 			&v2_2.ArtifactOfProject{
 				Name:     "project1",
-				HomePage: "https://example.com/1/",
-				URI:      "https://example.com/1/uri.whatever",
+				HomePage: "http://example.com/1/",
+				URI:      "http://example.com/1/uri.whatever",
 			},
 			&v2_2.ArtifactOfProject{
 				Name: "project2",
 			},
 			&v2_2.ArtifactOfProject{
 				Name:     "project3",
-				HomePage: "https://example.com/3/",
+				HomePage: "http://example.com/3/",
 			},
 			&v2_2.ArtifactOfProject{
 				Name: "project4",
-				URI:  "https://example.com/4/uri.whatever",
+				URI:  "http://example.com/4/uri.whatever",
 			},
 		},
 		FileComment: "this is a file comment",
@@ -80,13 +80,13 @@ attribution`,
 				LicenseComments: this is a license comment(s)
 				FileCopyrightText: Copyright (c) Jane Doe
 				ArtifactOfProjectName: project1
-				ArtifactOfProjectHomePage: https://example.com/1/
-				ArtifactOfProjectURI: https://example.com/1/uri.whatever
+				ArtifactOfProjectHomePage: http://example.com/1/
+				ArtifactOfProjectURI: http://example.com/1/uri.whatever
 				ArtifactOfProjectName: project2
 				ArtifactOfProjectName: project3
-				ArtifactOfProjectHomePage: https://example.com/3/
+				ArtifactOfProjectHomePage: http://example.com/3/
 				ArtifactOfProjectName: project4
-				ArtifactOfProjectURI: https://example.com/4/uri.whatever
+				ArtifactOfProjectURI: http://example.com/4/uri.whatever
 				FileComment: this is a file comment
 				FileNotice: This file may be used under either Apache-2.0 or Apache-1.1.
 				FileContributor: John Doe jdoe@example.com
@@ -95,9 +95,9 @@ attribution`,
 				FileAttributionText: <text>multi-line
 				attribution</text>
 				FileDependency: f-1.txt
-				FileDependency: g.txt
+FileDependency: g.txt
 				
-				`)
+`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer

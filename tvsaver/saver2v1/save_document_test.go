@@ -91,7 +91,7 @@ func TestSaver2_1DocumentSavesText(t *testing.T) {
 	pkgWith := &v2_1.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		PackageVerificationCode:   common.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
@@ -235,7 +235,7 @@ blah blah blah blah`,
 	
 	PackageName: p1
 	SPDXID: SPDXRef-p1
-	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 	FilesAnalyzed: true
 	PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
 	PackageLicenseConcluded: GPL-2.0-or-later AND BSD-3-Clause AND WTFPL

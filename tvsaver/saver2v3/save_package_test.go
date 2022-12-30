@@ -490,7 +490,7 @@ func TestSaver2_3PackageWrapsMultiLine(t *testing.T) {
 	pkg := &v2_3.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		PackageLicenseConcluded:   "GPL-2.0-or-later",
@@ -506,13 +506,13 @@ Copyright Jane Doe`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-	SPDXID: SPDXRef-p1
-	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
-	FilesAnalyzed: false
-	PackageLicenseConcluded: GPL-2.0-or-later
-	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-	PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
-	Copyright Jane Doe</text>
+SPDXID: SPDXRef-p1
+PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
+FilesAnalyzed: false
+PackageLicenseConcluded: GPL-2.0-or-later
+PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
+Copyright Jane Doe</text>
 	
 	`)
 
