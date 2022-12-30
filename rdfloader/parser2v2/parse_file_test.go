@@ -20,7 +20,7 @@ func wrapIntoTemplate(content string) string {
 	header := `<rdf:RDF
 					xmlns:spdx="http://spdx.org/rdf/terms#"
 					xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-					xmlns="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
+					xmlns="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
 					xmlns:doap="http://usefulinc.com/ns/doap#"
 					xmlns:j.0="http://www.w3.org/2009/pointers#"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">`
@@ -102,7 +102,7 @@ func Test_rdfParser2_2_getArtifactFromNode(t *testing.T) {
 	rdfParser, err = parserFromBodyContent(
 		`<spdx:File>
 							<spdx:artifactOf>
-								<doap:Project rdf:about="https://subversion.apache.org/doap.rdf">
+								<doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
 									<doap:homepage>http://www.openjena.org/</doap:homepage>
 									<doap:name>Jena</doap:name>
 									<doap:invalidTag rdf:ID="invalid"/>
@@ -133,7 +133,7 @@ func Test_rdfParser2_2_getFileTypeFromUri(t *testing.T) {
 	}
 
 	// TestCase 2: Invalid fileType URI format.
-	fileTypeURI = "https://spdx.org/rdf/terms#source"
+	fileTypeURI = "http://spdx.org/rdf/terms#source"
 	fileType, err = rdfParser.getFileTypeFromUri(fileTypeURI)
 	if err == nil {
 		t.Error("should've raised an error for invalid fileType")
@@ -178,7 +178,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	file := &v2_2.File{}
 
 	// TestCase 1: valid example
-	err := setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
+	err := setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
@@ -187,7 +187,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	}
 
 	// TestCase 2: invalid example
-	err = setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
+	err = setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
 	if err == nil {
 		t.Errorf("should've raised an error for an invalid example")
 	}
@@ -197,7 +197,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 1: md5 checksum
 	parser, _ := parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md5" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)
@@ -228,7 +228,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 2: valid sha1 checksum
 	parser, _ = parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)
@@ -258,7 +258,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 3: valid sha256 checksum
 	parser, _ = parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha256" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)
@@ -301,7 +301,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 5: invalid checksum algorithm
 	parser, _ = parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md43" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md43" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)
@@ -315,7 +315,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 6: valid checksum algorithm which is invalid for file (like md4, md6, sha384, etc.)
 	parser, _ = parserFromBodyContent(` 
 			<spdx:Checksum>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
 				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
 			</spdx:Checksum>
 		`)
@@ -572,8 +572,8 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 													</spdx:annotation>
 													<spdx:relationship>
 														<spdx:Relationship>
-															<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#relationshipType_contains"/>
-															<spdx:relatedSpdxElement rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+															<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
+															<spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
 														</spdx:Relationship>
 													</spdx:relationship>
 												</spdx:File>
