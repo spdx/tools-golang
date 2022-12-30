@@ -12,7 +12,7 @@ import (
 	"github.com/spdx/tools-golang/spdx/v2_3"
 )
 
-// Takes in a file Reader and returns the pertaining spdx document
+// Load2_2 Takes in a file Reader and returns the pertaining spdx document
 // or the error if any is encountered while setting the doc.
 func Load2_2(content io.Reader) (*v2_2.Document, error) {
 	var rdfParserObj, err = rdfloader.LoadFromReaderObject(content)
@@ -24,7 +24,7 @@ func Load2_2(content io.Reader) (*v2_2.Document, error) {
 	return doc, err
 }
 
-// Takes in a file Reader and returns the pertaining spdx document
+// Load2_3 Takes in a file Reader and returns the pertaining spdx document
 // or the error if any is encountered while setting the doc.
 func Load2_3(content io.Reader) (*v2_3.Document, error) {
 	var rdfParserObj, err = rdfloader.LoadFromReaderObject(content)

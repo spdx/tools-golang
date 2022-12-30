@@ -51,12 +51,12 @@ func Test_rdfParser2_3_getChecksumFromNode(t *testing.T) {
 
 	// TestCase 2: invalid predicate
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-			<spdx:invalidPredicate />
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+				<spdx:invalidPredicate />
+			</spdx:Checksum>
+		`)
 	checksumNode = parser.gordfParserObj.Triples[0].Subject
 	_, _, err = parser.getChecksumFromNode(checksumNode)
 	if err == nil {
@@ -65,11 +65,11 @@ func Test_rdfParser2_3_getChecksumFromNode(t *testing.T) {
 
 	// TestCase 3: valid input
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+			</spdx:Checksum>
+		`)
 	checksumNode = parser.gordfParserObj.Triples[0].Subject
 	algorithm, value, err := parser.getChecksumFromNode(checksumNode)
 	if err != nil {

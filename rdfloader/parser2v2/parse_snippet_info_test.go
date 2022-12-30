@@ -114,12 +114,12 @@ func Test_rdfParser2_2_getSnippetInformationFromTriple2_2(t *testing.T) {
 									</j.0:endPointer>
 								</j.0:StartEndPointer>
 							</spdx:range>
-							<spdx:licenseInfoInSnippet rdf:resource="https://spdx.org/rdf/terms#noassertion"/>
+							<spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
 							<spdx:name>snippet test</spdx:name>
 							<spdx:copyrightText>test</spdx:copyrightText>
 							<spdx:licenseComments>comments</spdx:licenseComments>
 							<rdfs:comment>comments</rdfs:comment>
-							<spdx:licenseConcluded rdf:resource="https://spdx.org/rdf/terms#noassertion"/>
+							<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
 						</spdx:Snippet>
 					`)
 	node = parser.gordfParserObj.Triples[0].Subject

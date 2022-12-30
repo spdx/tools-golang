@@ -102,7 +102,7 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
 				<rdfs:comment>Document level annotation</rdfs:comment>
 				<spdx:annotator>Company: some company</spdx:annotator>
-				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+				<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
 			</spdx:Annotation>
 		`)
 	node := parser.gordfParserObj.Triples[0].Subject
@@ -117,7 +117,7 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
 				<rdfs:comment>Document level annotation</rdfs:comment>
 				<spdx:annotator>Person: Jane Doe</spdx:annotator>
-				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_unknown"/>
+				<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_unknown"/>
 			</spdx:Annotation>
 		`)
 	node = parser.gordfParserObj.Triples[0].Subject
@@ -132,7 +132,7 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
 				<rdfs:comment>Document level annotation</rdfs:comment>
 				<spdx:annotator>Person: Jane Doe</spdx:annotator>
-				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_unknown"/>
+				<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_unknown"/>
 				<spdx:unknownPredicate />
 			</spdx:Annotation>
 		`)
@@ -148,7 +148,7 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
 				<rdfs:comment>Document level annotation</rdfs:comment>
 				<spdx:annotator>Person: Jane Doe</spdx:annotator>
-				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+				<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
 			</spdx:Annotation>
 		`)
 	node = parser.gordfParserObj.Triples[0].Subject

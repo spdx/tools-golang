@@ -228,7 +228,7 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 												<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
 												<rdfs:comment>test annotation</rdfs:comment>
 												<spdx:annotator>Person: Rishabh Bhatnagar</spdx:annotator>
-												<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+												<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
 											</spdx:Annotation>
 										</spdx:annotation>
 									</spdx:SpdxDocument>

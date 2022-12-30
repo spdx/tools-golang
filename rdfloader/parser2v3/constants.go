@@ -6,11 +6,11 @@ import "github.com/spdx/gordf/rdfloader/parser"
 
 var (
 	// NAMESPACES
-	NS_SPDX = "https://spdx.org/rdf/terms#"
-	NS_RDFS = "https://www.w3.org/2000/01/rdf-schema#"
+	NS_SPDX = "http://spdx.org/rdf/terms#"
+	NS_RDFS = "http://www.w3.org/2000/01/rdf-schema#"
 	NS_RDF  = parser.RDFNS
-	NS_PTR  = "https://www.w3.org/2009/pointers#"
-	NS_DOAP = "https://usefulinc.com/ns/doap#"
+	NS_PTR  = "http://www.w3.org/2009/pointers#"
+	NS_DOAP = "http://usefulinc.com/ns/doap#"
 
 	// SPDX_SPEC_VERSION SPDX properties
 	SPDX_SPEC_VERSION                            = NS_SPDX + "specVersion"
