@@ -82,7 +82,7 @@ var want2_3 = v2_3.Document{
 	SPDXVersion:       "SPDX-2.3",
 	SPDXIdentifier:    "SPDXRef-DOCUMENT",
 	DocumentName:      "SPDX-Tools-v2.0",
-	DocumentNamespace: "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+	DocumentNamespace: "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
 	CreationInfo: &v2_3.CreationInfo{
 		LicenseListVersion: "3.9",
 		Creators: []common.Creator{
@@ -97,7 +97,7 @@ var want2_3 = v2_3.Document{
 	ExternalDocumentReferences: []v2_3.ExternalDocumentRef{
 		{
 			DocumentRefID: "DocumentRef-spdx-tool-1.2",
-			URI:           "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
 			Checksum: common.Checksum{
 				Algorithm: common.SHA1,
 				Value:     "d6a770ba38583ed4bb4525bd96e50461655d2759",
@@ -122,7 +122,7 @@ var want2_3 = v2_3.Document{
 			ExtractedText:          "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp",
 			LicenseComment:         "The beerware license has a couple of other standard variants.",
 			LicenseName:            "Beer-Ware License (Version 42)",
-			LicenseCrossReferences: []string{"https://people.freebsd.org/~phk/"},
+			LicenseCrossReferences: []string{"http://people.freebsd.org/~phk/"},
 		},
 		{
 			LicenseIdentifier: "LicenseRef-3",
