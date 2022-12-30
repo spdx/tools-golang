@@ -108,7 +108,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Relationship>
 				<spdx:relatedSpdxElement>
-					<spdx:Package rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
+					<spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
 				</spdx:relatedSpdxElement>
 			</spdx:Relationship>
 		`)
@@ -123,7 +123,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Relationship>
 				<spdx:relatedSpdxElement>
-					<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+					<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
 				</spdx:relatedSpdxElement>
 			</spdx:Relationship>
 		`)
@@ -152,7 +152,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Relationship>
 				<spdx:relatedSpdxElement>
-					<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
+					<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
 				</spdx:relatedSpdxElement>
 			</spdx:Relationship>
 		`)
@@ -167,7 +167,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Relationship>		
 				<spdx:relatedSpdxElement>
-					<spdx:SpdxElement rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File"/>
+					<spdx:SpdxElement rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File"/>
 				</spdx:relatedSpdxElement>
 			</spdx:Relationship>
 		`)
@@ -196,7 +196,7 @@ func Test_rdfParser2_2_parseRelatedElementFromTriple(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Relationship>		
 				<spdx:relatedSpdxElement>
-					<spdx:SpdxElement rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-:File"/>
+					<spdx:SpdxElement rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-:File"/>
 				</spdx:relatedSpdxElement>
 			</spdx:Relationship>
 		`)
@@ -229,11 +229,11 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 3: invalid RefB
 	parser, _ = parserFromBodyContent(`
-				<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+				<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 					<spdx:relationship>
 						<spdx:Relationship>
 							<spdx:relatedSpdxElement>
-								<spdx:Package rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
+								<spdx:Package rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#Saxon"/>
 							</spdx:relatedSpdxElement>
 						</spdx:Relationship>
 					</spdx:relationship>
@@ -268,11 +268,11 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 4: undefined relatedSpdxElement
 	parser, _ = parserFromBodyContent(`
-				<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+				<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 					<spdx:relationship>
 						<spdx:Relationship>
 							<spdx:relatedSpdxElement>
-								<spdx:Unknown rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+								<spdx:Unknown rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
 							</spdx:relatedSpdxElement>
 						</spdx:Relationship>
 					</spdx:relationship>
@@ -286,7 +286,7 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 6: relatedElement associated with more than one type
 	parser, _ = parserFromBodyContent(`
-					<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+					<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 						<spdx:relationship>
 							<spdx:Relationship>
 								<spdx:relatedSpdxElement>
@@ -295,7 +295,7 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 							</spdx:Relationship>
 						</spdx:relationship>
 					</spdx:File>
-					<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+					<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
 				`)
 	triple = rdfwriter.FilterTriples(parser.gordfParserObj.Triples, nil, &SPDX_RELATIONSHIP, nil)[0]
 	err = parser.parseRelationship(triple)
@@ -305,11 +305,11 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 5: unknown predicate inside a relationship
 	parser, _ = parserFromBodyContent(`
-				<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+				<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 					<spdx:relationship>
 						<spdx:Relationship>
 							<spdx:relatedSpdxElement>
-								<spdx:Unknown rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
+								<spdx:Unknown rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Saxon"/>
 							</spdx:relatedSpdxElement>
 							<spdx:unknownPredicate/>
 						</spdx:Relationship>
@@ -324,7 +324,7 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 8: Recursive relationships mustn't raise any error:
 	parser, _ = parserFromBodyContent(`
-							<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+							<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 								<spdx:relationship>
 									<spdx:Relationship rdf:about="#SPDXRef-reln">
 										<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
@@ -350,7 +350,7 @@ func Test_rdfParser2_2_parseRelationship(t *testing.T) {
 
 	// TestCase 7: completely valid example:
 	parser, _ = parserFromBodyContent(`
-					<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
+					<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File">
 						<spdx:relationship>
 							<spdx:Relationship>
 								<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>

@@ -168,7 +168,7 @@ func Test_rdfParser2_2_parseRangeReference(t *testing.T) {
 	// TestCase 2: invalid file in the reference should raise an error
 	si = &v2_2.Snippet{}
 	parser, _ = parserFromBodyContent(`
-			<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#DoapSource">
+			<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#DoapSource">
 				<spdx:fileName> test file </spdx:fileName>
 			</spdx:File>
 		`)
@@ -181,7 +181,7 @@ func Test_rdfParser2_2_parseRangeReference(t *testing.T) {
 	// TestCase 3: A valid reference must set the file to the files map of the parser.
 	si = &v2_2.Snippet{}
 	parser, _ = parserFromBodyContent(`
-			<spdx:File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource">
+			<spdx:File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource">
 				<spdx:fileName> test file </spdx:fileName>
 			</spdx:File>
 		`)
