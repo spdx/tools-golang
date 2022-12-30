@@ -107,13 +107,13 @@ multi-line external ref comment`,
 		PackageFileName: p1-0.1.0-master.tar.gz
 		PackageSupplier: Organization: John Doe, Inc.
 		PackageOriginator: Person: John Doe
-		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 		FilesAnalyzed: true
 		PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
 		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
 		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-		PackageHomePage: https://example.com/p1
+		PackageHomePage: http://example.com/p1
 		PackageSourceInfo: this is a source comment
 		PackageLicenseConcluded: GPL-2.0-or-later
 		PackageLicenseInfoFromFiles: Apache-1.1
@@ -205,12 +205,12 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 		PackageFileName: p1-0.1.0-master.tar.gz
 		PackageSupplier: NOASSERTION
 		PackageOriginator: Organization: John Doe, Inc.
-		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 		PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
 		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
 		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-		PackageHomePage: https://example.com/p1
+		PackageHomePage: http://example.com/p1
 		PackageSourceInfo: this is a source comment
 		PackageLicenseConcluded: GPL-2.0-or-later
 		PackageLicenseInfoFromFiles: Apache-1.1
@@ -305,12 +305,12 @@ which goes across two lines`,
 		PackageFileName: p1-0.1.0-master.tar.gz
 		PackageSupplier: Person: John Doe
 		PackageOriginator: NOASSERTION
-		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 		FilesAnalyzed: false
 		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
 		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-		PackageHomePage: https://example.com/p1
+		PackageHomePage: http://example.com/p1
 		PackageSourceInfo: this is a source comment
 		PackageLicenseConcluded: GPL-2.0-or-later
 		PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
@@ -364,7 +364,7 @@ func TestSaver2_2PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
 	SPDXID: SPDXRef-p1
-	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 	FilesAnalyzed: false
 	PackageLicenseConcluded: GPL-2.0-or-later
 	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
@@ -442,7 +442,7 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
 	SPDXID: SPDXRef-p1
-	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
 	FilesAnalyzed: false
 	PackageLicenseConcluded: GPL-2.0-or-later
 	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later

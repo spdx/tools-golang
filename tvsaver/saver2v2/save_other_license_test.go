@@ -26,7 +26,7 @@ blah blah blah blah`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`LicenseID: LicenseRef-1
-ExtractedText: <text>License 1 text	
+ExtractedText: <text>License 1 text
 blah blah blah
 blah blah blah blah</text>
 LicenseName: License 1
