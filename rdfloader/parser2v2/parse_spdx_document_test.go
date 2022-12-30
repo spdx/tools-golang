@@ -23,7 +23,7 @@ func Test_rdfParser2_2_getExternalDocumentRefFromNode(t *testing.T) {
 							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 						</spdx:Checksum>
 					</spdx:checksum>
-					<spdx:spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+					<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
 				</spdx:ExternalDocumentRef>
 			`)
 	node = parser.gordfParserObj.Triples[0].Subject
@@ -103,7 +103,7 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 									<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 								</spdx:Checksum>
 							</spdx:checksum>
-							<spdx:spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+							<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
 						</spdx:ExternalDocumentRef>
 				</spdx:externalDocumentRef>
 				</spdx:SpdxDocument>
