@@ -120,7 +120,7 @@ func Test_rdfParser2_2_getAnyLicenseFromNode(t *testing.T) {
 								<spdx:name>Apache License 2.0</spdx:name>
 								<spdx:licenseId>Apache-2.0</spdx:licenseId>
 								<spdx:isOsiApproved>true</spdx:isOsiApproved>
-								<rdfs:seeAlso>https://www.opensource.org/licenses/Apache-2.0</rdfs:seeAlso>
+								<rdfs:seeAlso>http://www.opensource.org/licenses/Apache-2.0</rdfs:seeAlso>
 								<spdx:licenseText>...</spdx:licenseText>
 								<spdx:standardLicenseHeader>...</spdx:standardLicenseHeader>
 						  </spdx:License>
@@ -475,7 +475,7 @@ func Test_rdfParser2_2_getLicenseFromNode(t *testing.T) {
 	// TestCase 5: everything valid:
 	parser, _ = parserFromBodyContent(`
 				<spdx:License rdf:about="http://spdx.org/licenses/GPL-3.0-or-later">
-					<rdfs:seeAlso>https://www.opensource.org/licenses/GPL-3.0</rdfs:seeAlso>
+					<rdfs:seeAlso>http://www.opensource.org/licenses/GPL-3.0</rdfs:seeAlso>
 					<spdx:isOsiApproved>true</spdx:isOsiApproved>
 					<spdx:licenseText>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</spdx:licenseText>
 					<spdx:name>GNU General Public License v3.0 or later</spdx:name>
