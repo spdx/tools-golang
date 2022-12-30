@@ -539,7 +539,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/3/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/3/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -548,7 +548,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "https://example.com/4/uri.whatever")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "http://example.com/4/uri.whatever")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -597,8 +597,8 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.HomePage != "" {
 		t.Errorf("expected %v, got %v", "", aop.HomePage)
 	}
-	if aop.URI != "https://example.com/4/uri.whatever" {
-		t.Errorf("expected %v, got %v", "https://example.com/4/uri.whatever", aop.URI)
+	if aop.URI != "http://example.com/4/uri.whatever" {
+		t.Errorf("expected %v, got %v", "http://example.com/4/uri.whatever", aop.URI)
 	}
 
 	// File Comment

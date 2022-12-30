@@ -29,7 +29,7 @@ func Test_rdfParser2_2_getSnippetInformationFromTriple2_2(t *testing.T) {
 	// TestCase 2: Invalid LicenseInfoInSnippet
 	parser, _ = parserFromBodyContent(`
 			<spdx:Snippet rdf:about="#SPDXRef-Snippet">
-				<spdx:licenseInfoInSnippet rdf:resource="https://spdx.org/licenses/Unknown"/>
+				<spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/Unknown"/>
 			</spdx:Snippet>
 		`)
 	node = parser.gordfParserObj.Triples[0].Subject
@@ -83,7 +83,7 @@ func Test_rdfParser2_2_getSnippetInformationFromTriple2_2(t *testing.T) {
 	// TestCase 5: invalid license concluded:
 	parser, _ = parserFromBodyContent(`
 			<spdx:Snippet rdf:about="#SPDXRef-Snippet">
-				<spdx:licenseConcluded rdf:resource="https://spdx.org/licenses/Unknown"/>
+				<spdx:licenseConcluded rdf:resource="http://spdx.org/licenses/Unknown"/>
 			</spdx:Snippet>
 		`)
 	node = parser.gordfParserObj.Triples[0].Subject
@@ -102,13 +102,13 @@ func Test_rdfParser2_2_getSnippetInformationFromTriple2_2(t *testing.T) {
 								<j.0:StartEndPointer>
 									<j.0:startPointer>
 										<j.0:LineCharPointer>
-											<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+											<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 											<j.0:lineNumber>420</j.0:lineNumber>
 										</j.0:LineCharPointer>
 									</j.0:startPointer>
 									<j.0:endPointer>
 										<j.0:LineCharPointer>
-											<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+											<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 											<j.0:lineNumber>310</j.0:lineNumber>
 										</j.0:LineCharPointer>
 									</j.0:endPointer>
@@ -138,7 +138,7 @@ func Test_setSnippetID(t *testing.T) {
 
 	// TestCase 2: valid input
 	si := &v2_2.Snippet{}
-	err = setSnippetID("https://spdx.org/spdxdocs/spdx-example#SPDXRef-Snippet", si)
+	err = setSnippetID("http://spdx.org/spdxdocs/spdx-example#SPDXRef-Snippet", si)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
@@ -158,7 +158,7 @@ func Test_rdfParser2_2_parseRangeReference(t *testing.T) {
 	parser, _ = parserFromBodyContent(``)
 	node = &gordfParser.Node{
 		NodeType: gordfParser.RESOURCELITERAL,
-		ID:       "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource",
+		ID:       "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource",
 	}
 	err = parser.parseRangeReference(node, si)
 	if err != nil {
@@ -289,7 +289,7 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>310</j.0:offset>
 						</j.0:LineCharPointer>
 					</j.0:startPointer>
@@ -309,13 +309,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 					<j.0:StartEndPointer>
 						<j.0:endPointer>
 							<j.0:ByteOffsetPointer>
-								<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+								<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 								<j.0:offset>420</j.0:offset>
 							</j.0:ByteOffsetPointer>
 						</j.0:endPointer>
 						<j.0:startPointer>
 							<j.0:ByteOffsetPointer>
-								<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+								<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 								<j.0:offset>310</j.0:offset>
 							</j.0:ByteOffsetPointer>
 						</j.0:startPointer>
@@ -340,13 +340,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:endPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>420</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:endPointer>
 					<j.0:endPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>310</j.0:offset>
 						</j.0:LineCharPointer>
 					</j.0:endPointer>
@@ -364,13 +364,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:endPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>420</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:endPointer>
 					<j.0:endPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>310</j.0:offset>
 						</j.0:LineCharPointer>
 					</j.0:endPointer>
@@ -388,13 +388,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>42.0</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:startPointer>
 					<j.0:endPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>310</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:endPointer>
@@ -412,13 +412,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>420</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:startPointer>
 					<j.0:endPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>31+0</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:endPointer>
@@ -436,13 +436,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>420</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:startPointer>
 					<j.0:endPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:lineNumber>310</j.0:lineNumber>
 						</j.0:LineCharPointer>
 					</j.0:endPointer>
@@ -460,13 +460,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>420</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:startPointer>
 					<j.0:endPointer>
 						<j.0:ByteOffsetPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:offset>310</j.0:offset>
 						</j.0:ByteOffsetPointer>
 					</j.0:endPointer>
@@ -484,13 +484,13 @@ func Test_rdfParser2_2_setSnippetRangeFromNode(t *testing.T) {
 				<j.0:StartEndPointer>
 					<j.0:startPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:lineNumber>420</j.0:lineNumber>
 						</j.0:LineCharPointer>
 					</j.0:startPointer>
 					<j.0:endPointer>
 						<j.0:LineCharPointer>
-							<j.0:reference rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+							<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 							<j.0:lineNumber>310</j.0:lineNumber>
 						</j.0:LineCharPointer>
 					</j.0:endPointer>

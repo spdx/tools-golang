@@ -181,7 +181,7 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 									<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
 										<spdx:specVersion>SPDX-2.1</spdx:specVersion>
-										<spdx:dataLicense rdf:resource="https://spdx.org/licenses/CC0-1.0" />
+										<spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0" />
 										<spdx:name>/test/example</spdx:name>
 										<spdx:externalDocumentRef>
 											<spdx:ExternalDocumentRef>
@@ -218,8 +218,8 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 										<spdx:hasExtractedLicensingInfo rdf:resource="https://spdx.org/licenses/CC0-1.0"/>
 										<spdx:relationship>
 											<spdx:Relationship>
-												<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#relationshipType_containedBy"/>
-												<spdx:relatedSpdxElement rdf:resource="https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-1"/>
+												<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_containedBy"/>
+												<spdx:relatedSpdxElement rdf:resource="http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-1"/>
 												<rdfs:comment></rdfs:comment>
 											</spdx:Relationship>
 										</spdx:relationship>

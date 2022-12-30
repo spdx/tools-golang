@@ -71,13 +71,13 @@ func Test_rdfParser2_2_nodeToTriples(t *testing.T) {
 	// It should allow new nodes same as the older ones to retrieve the associated triples.
 	parser, _ = parserFromBodyContent(`
 			  <spdx:Checksum rdf:about="#checksum">
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
 				<spdx:checksumValue>75068c26abbed3ad3980685bae21d7202d288317</spdx:checksumValue>
 			  </spdx:Checksum>
 		`)
 	newNode := &gordfParser.Node{
 		NodeType: gordfParser.IRI,
-		ID:       "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#checksum",
+		ID:       "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#checksum",
 	}
 	output = parser.nodeToTriples(newNode)
 

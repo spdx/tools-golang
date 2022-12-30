@@ -42,7 +42,7 @@ func TestLoadFromGoRDFParser(t *testing.T) {
 
 	// TestCase 2: invalid SpdxDocumentNode
 	parser, _ = parserFromBodyContent(`
-			<spdx:SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document">
+			<spdx:SpdxDocument rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document">
 				<spdx:invalidTag />
 			</spdx:SpdxDocument>
 		`)
@@ -105,8 +105,8 @@ func TestLoadFromGoRDFParser(t *testing.T) {
 							<spdx:fileContributor>Open Logic Inc.</spdx:fileContributor>
 							<spdx:fileName>./src/org/spdx/parser/DOAPProject.java</spdx:fileName>
 							<spdx:fileContributor>Black Duck Software In.c</spdx:fileContributor>
-							<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#fileType_source"/>
-							<spdx:licenseInfoInFile rdf:resource="https://spdx.org/licenses/Apache-2.0"/>
+							<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+							<spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
 						</spdx:File>
 					</spdx:snippetFromFile>
 				</spdx:Snippet>
