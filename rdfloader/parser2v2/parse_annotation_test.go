@@ -33,7 +33,7 @@ func Test_setAnnotatorFromString(t *testing.T) {
 		t.Errorf("unexpected error for a valid annotator")
 	}
 	if ann.Annotator.AnnotatorType != "Person" {
-		t.Errorf("wrnog annotator type: expected: %s, found: %s", "Person", ann.Annotator)
+		t.Errorf("wrong annotator type: expected: %s, found: %s", "Person", ann.Annotator)
 	}
 	if ann.Annotator.Annotator != "Rishabh" {
 		t.Errorf("wrong annotator: expected: %s, found: %s", "Rishabh", ann.Annotator)
@@ -98,13 +98,13 @@ func Test_setAnnotationToParser(t *testing.T) {
 func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 	// TestCase 1: invalid annotator must raise an error
 	parser, _ := parserFromBodyContent(`
-		<spdx:Annotation>
-			<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
-			<rdfs:comment>Document level annotation</rdfs:comment>
-			<spdx:annotator>Company: some company</spdx:annotator>
-			<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-		</spdx:Annotation>
-	`)
+			<spdx:Annotation>
+				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
+				<rdfs:comment>Document level annotation</rdfs:comment>
+				<spdx:annotator>Company: some company</spdx:annotator>
+				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+			</spdx:Annotation>
+		`)
 	node := parser.gordfParserObj.Triples[0].Subject
 	err := parser.parseAnnotationFromNode(node)
 	if err == nil {
@@ -113,13 +113,13 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 
 	// TestCase 2: wrong annotation type should raise an error
 	parser, _ = parserFromBodyContent(`
-		<spdx:Annotation>
-			<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
-			<rdfs:comment>Document level annotation</rdfs:comment>
-			<spdx:annotator>Person: Jane Doe</spdx:annotator>
-			<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_unknown"/>
-		</spdx:Annotation>
-	`)
+			<spdx:Annotation>
+				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
+				<rdfs:comment>Document level annotation</rdfs:comment>
+				<spdx:annotator>Person: Jane Doe</spdx:annotator>
+				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_unknown"/>
+			</spdx:Annotation>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseAnnotationFromNode(node)
 	if err == nil {
@@ -128,14 +128,14 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 
 	// TestCase 3: unknown predicate should also raise an error
 	parser, _ = parserFromBodyContent(`
-		<spdx:Annotation>
-			<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
-			<rdfs:comment>Document level annotation</rdfs:comment>
-			<spdx:annotator>Person: Jane Doe</spdx:annotator>
-			<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_unknown"/>
-			<spdx:unknownPredicate />
-		</spdx:Annotation>
-	`)
+			<spdx:Annotation>
+				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
+				<rdfs:comment>Document level annotation</rdfs:comment>
+				<spdx:annotator>Person: Jane Doe</spdx:annotator>
+				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_unknown"/>
+				<spdx:unknownPredicate />
+			</spdx:Annotation>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseAnnotationFromNode(node)
 	if err == nil {
@@ -144,13 +144,13 @@ func Test_rdfParser2_2_parseAnnotationFromNode(t *testing.T) {
 
 	// TestCase 4: completely valid annotation
 	parser, _ = parserFromBodyContent(`
-		<spdx:Annotation>
-			<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
-			<rdfs:comment>Document level annotation</rdfs:comment>
-			<spdx:annotator>Person: Jane Doe</spdx:annotator>
-			<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-		</spdx:Annotation>
-	`)
+			<spdx:Annotation>
+				<spdx:annotationDate>2010-01-29T18:30:22Z</spdx:annotationDate>
+				<rdfs:comment>Document level annotation</rdfs:comment>
+				<spdx:annotator>Person: Jane Doe</spdx:annotator>
+				<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+			</spdx:Annotation>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseAnnotationFromNode(node)
 	if err != nil {

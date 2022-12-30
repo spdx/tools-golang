@@ -45,13 +45,13 @@ CreatorComment: this is a creator comment
 	var got bytes.Buffer
 	err := renderCreationInfo2_3(ci, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -74,13 +74,13 @@ Created: 2018-10-10T06:20:00Z
 	var got1 bytes.Buffer
 	err := renderCreationInfo2_3(ci1, &got1)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c1 := bytes.Compare(want1.Bytes(), got1.Bytes())
 	if c1 != 0 {
-		t.Errorf("Expected %v, got %v", want1.String(), got1.String())
+		t.Errorf("expected %v, got %v", want1.String(), got1.String())
 	}
 
 	// --- need at least one creator; now switch to organization ---
@@ -101,12 +101,12 @@ Created: 2018-10-10T06:20:00Z
 	var got2 bytes.Buffer
 	err = renderCreationInfo2_3(ci2, &got2)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c2 := bytes.Compare(want2.Bytes(), got2.Bytes())
 	if c2 != 0 {
-		t.Errorf("Expected %v, got %v", want2.String(), got2.String())
+		t.Errorf("expected %v, got %v", want2.String(), got2.String())
 	}
 }

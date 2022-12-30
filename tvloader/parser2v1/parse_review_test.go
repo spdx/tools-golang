@@ -33,10 +33,10 @@ func TestParser2_1ReviewStartsNewReviewAfterParsingReviewerTag(t *testing.T) {
 
 	// the Document's Reviews should have this one only
 	if len(parser.doc.Reviews) != 1 {
-		t.Errorf("Expected only one review, got %d", len(parser.doc.Reviews))
+		t.Errorf("expected only one review, got %d", len(parser.doc.Reviews))
 	}
 	if parser.doc.Reviews[0] != r1 {
-		t.Errorf("Expected review %v in Reviews[0], got %v", r1, parser.doc.Reviews[0])
+		t.Errorf("expected review %v in Reviews[0], got %v", r1, parser.doc.Reviews[0])
 	}
 	if parser.doc.Reviews[0].Reviewer != rev1 {
 		t.Errorf("expected review name %s in Reviews[0], got %s", rev1, parser.doc.Reviews[0].Reviewer)
@@ -63,16 +63,16 @@ func TestParser2_1ReviewStartsNewReviewAfterParsingReviewerTag(t *testing.T) {
 	}
 	// and the Document's reviews should be of size 2 and have these two
 	if len(parser.doc.Reviews) != 2 {
-		t.Fatalf("Expected Reviews to have len 2, got %d", len(parser.doc.Reviews))
+		t.Fatalf("expected Reviews to have len 2, got %d", len(parser.doc.Reviews))
 	}
 	if parser.doc.Reviews[0] != r1 {
-		t.Errorf("Expected review %v in Reviews[0], got %v", r1, parser.doc.Reviews[0])
+		t.Errorf("expected review %v in Reviews[0], got %v", r1, parser.doc.Reviews[0])
 	}
 	if parser.doc.Reviews[0].Reviewer != rev1 {
 		t.Errorf("expected reviewer name %s in Reviews[0], got %s", rev1, parser.doc.Reviews[0].Reviewer)
 	}
 	if parser.doc.Reviews[1] != parser.rev {
-		t.Errorf("Expected review %v in Reviews[1], got %v", parser.rev, parser.doc.Reviews[1])
+		t.Errorf("expected review %v in Reviews[1], got %v", parser.rev, parser.doc.Reviews[1])
 	}
 	if parser.doc.Reviews[1].Reviewer != rev2 {
 		t.Errorf("expected reviewer name %s in Reviews[1], got %s", rev2, parser.doc.Reviews[1].Reviewer)

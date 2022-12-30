@@ -16,7 +16,7 @@ a newline in it</text>`
 	got := textify(s)
 
 	if want != got {
-		t.Errorf("Expected %s, got %s", want, got)
+		t.Errorf("expected %s, got %s", want, got)
 	}
 }
 
@@ -27,6 +27,6 @@ func TestTextifyDoesNotWrapsStringWithNoNewline(t *testing.T) {
 	got := textify(s)
 
 	if want != got {
-		t.Errorf("Expected %s, got %s", want, got)
+		t.Errorf("expected %s, got %s", want, got)
 	}
 }

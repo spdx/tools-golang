@@ -2,8 +2,8 @@ SPDXVersion: SPDX-2.3
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-SPDXRef-DOCUMENT
 DocumentName: SPDX-Tools-v2.0
-DocumentNamespace: http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
-ExternalDocumentRef: DocumentRef-DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+ExternalDocumentRef: DocumentRef-DocumentRef-spdx-tool-1.2 https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759
 DocumentComment: This document was created using SPDX 2.0 using licenses from the web site.
 LicenseListVersion: 3.9
 Creator: Tool: LicenseFind-1.0
@@ -28,7 +28,7 @@ FileNotice: <text>Apache Commons Lang
 Copyright 2001-2011 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 This product includes software from the Spring Framework,
 under the Apache License 2.0 (see: StringUtils.containsWhitespace())</text>
@@ -105,12 +105,12 @@ PackageVersion: 2.11.1
 PackageFileName: glibc-2.11.1.tar.gz
 PackageSupplier: Person: Jane Doe (jane.doe@example.com)
 PackageOriginator: Organization: ExampleCodeInspect (contact@example.com)
-PackageDownloadLocation: http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz
+PackageDownloadLocation: https://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz
 PackageVerificationCode: d6a770ba38583ed4bb4525bd96e50461655d2758 (excludes: ./package.spdx)
 PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-PackageHomePage: http://ftp.gnu.org/gnu/glibc
+PackageHomePage: https://ftp.gnu.org/gnu/glibc
 PackageSourceInfo: uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.
 PackageLicenseConcluded: (LGPL-2.0-only OR LicenseRef-3)
 PackageLicenseInfoFromFiles: GPL-2.0-only
@@ -122,7 +122,7 @@ PackageCopyrightText: Copyright 2008-2010 John Smith
 PackageSummary: GNU C library.
 PackageDescription: The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.
 ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*
-ExternalRef: OTHER http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge acmecorp/acmenator/4.1.3-alpha
+ExternalRef: OTHER https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge acmecorp/acmenator/4.1.3-alpha
 ExternalRefComment: This is the external ref for Acme
 PackageAttributionText: The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.
 
@@ -135,7 +135,7 @@ PackageFileName: saxonB-8.8.zip
 PackageDownloadLocation: https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download
 FilesAnalyzed: false
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-PackageHomePage: http://saxon.sourceforge.net/
+PackageHomePage: https://saxon.sourceforge.net/
 PackageLicenseConcluded: MPL-1.0
 PackageLicenseDeclared: MPL-1.0
 PackageLicenseComments: Other versions available for a commercial license
@@ -149,7 +149,7 @@ SPDXID: SPDXRef-SPDXRef-fromDoap-0
 PackageVersion: 3.12.0
 PackageDownloadLocation: https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz
 FilesAnalyzed: false
-PackageHomePage: http://www.openjena.org/
+PackageHomePage: https://www.openjena.org/
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseDeclared: NOASSERTION
 PackageCopyrightText: NOASSERTION
@@ -161,7 +161,7 @@ PackageName: Apache Commons Lang
 SPDXID: SPDXRef-SPDXRef-fromDoap-1
 PackageDownloadLocation: NOASSERTION
 FilesAnalyzed: false
-PackageHomePage: http://commons.apache.org/proper/commons-lang/
+PackageHomePage: https://commons.apache.org/proper/commons-lang/
 PackageLicenseDeclared: NOASSERTION
 PackageCopyrightText: NOASSERTION
 
@@ -239,7 +239,7 @@ ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42):
 phk@FreeBSD.ORG wrote this file. As long as you retain this notice you
 can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>
 LicenseName: Beer-Ware License (Version 42)
-LicenseCrossReference: http://people.freebsd.org/~phk/
+LicenseCrossReference: https://people.freebsd.org/~phk/
 LicenseComment: The beerware license has a couple of other standard variants.
 
 LicenseID: LicenseRef-3
@@ -287,8 +287,8 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text>
 LicenseName: CyberNeko License
-LicenseCrossReference: http://people.apache.org/~andyc/neko/LICENSE
-LicenseCrossReference: http://justasample.url.com
+LicenseCrossReference: https://people.apache.org/~andyc/neko/LICENSE
+LicenseCrossReference: https://justasample.url.com
 LicenseComment: This is tye CyperNeko License
 
 ##### Relationships

@@ -103,13 +103,13 @@ FileDependency: g.txt
 	var got bytes.Buffer
 	err := renderFile2_3(f, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -175,13 +175,13 @@ SnippetCopyrightText: NOASSERTION
 	var got bytes.Buffer
 	err := renderFile2_3(f, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -213,13 +213,13 @@ FileCopyrightText: Copyright (c) Jane Doe
 	var got bytes.Buffer
 	err := renderFile2_3(f, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -253,13 +253,13 @@ Copyright (c) John Doe</text>
 	var got bytes.Buffer
 	err := renderFile2_3(f, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -303,12 +303,12 @@ under either Apache-2.0 or Apache-1.1.</text>
 	var got bytes.Buffer
 	err := renderFile2_3(f, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

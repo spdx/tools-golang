@@ -26,10 +26,10 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 
 	// the File's Snippets should have this one only
 	if len(parser.file.Snippets) != 1 {
-		t.Errorf("Expected len(Snippets) to be 1, got %d", len(parser.file.Snippets))
+		t.Errorf("expected len(Snippets) to be 1, got %d", len(parser.file.Snippets))
 	}
 	if parser.file.Snippets["s1"] != s1 {
-		t.Errorf("Expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
+		t.Errorf("expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
 	}
 	if parser.file.Snippets["s1"].SnippetSPDXIdentifier != sid1 {
 		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SnippetSPDXIdentifier)
@@ -54,16 +54,16 @@ func TestParser2_1SnippetStartsNewSnippetAfterParsingSnippetSPDXIDTag(t *testing
 	}
 	// and the File's Snippets should be of size 2 and have these two
 	if len(parser.file.Snippets) != 2 {
-		t.Errorf("Expected len(Snippets) to be 2, got %d", len(parser.file.Snippets))
+		t.Errorf("expected len(Snippets) to be 2, got %d", len(parser.file.Snippets))
 	}
 	if parser.file.Snippets["s1"] != s1 {
-		t.Errorf("Expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
+		t.Errorf("expected snippet %v in Snippets[s1], got %v", s1, parser.file.Snippets["s1"])
 	}
 	if parser.file.Snippets["s1"].SnippetSPDXIdentifier != sid1 {
 		t.Errorf("expected snippet ID %s in Snippets[s1], got %s", sid1, parser.file.Snippets["s1"].SnippetSPDXIdentifier)
 	}
 	if parser.file.Snippets["s2"] != parser.snippet {
-		t.Errorf("Expected snippet %v in Snippets[s2], got %v", parser.snippet, parser.file.Snippets["s2"])
+		t.Errorf("expected snippet %v in Snippets[s2], got %v", parser.snippet, parser.file.Snippets["s2"])
 	}
 	if parser.file.Snippets["s2"].SnippetSPDXIdentifier != "s2" {
 		t.Errorf("expected snippet ID %s in Snippets[s2], got %s", "s2", parser.file.Snippets["s2"].SnippetSPDXIdentifier)
@@ -112,35 +112,35 @@ func TestParser2_1SnippetStartsNewPackageAfterParsingPackageNameTag(t *testing.T
 	// and the Document's Packages should still be of size 1 b/c no SPDX
 	// identifier has been seen yet
 	if len(parser.doc.Packages) != 1 {
-		t.Errorf("Expected len(Packages) to be 1, got %d", len(parser.doc.Packages))
+		t.Errorf("expected len(Packages) to be 1, got %d", len(parser.doc.Packages))
 	}
 	if parser.doc.Packages[0] != p1 {
-		t.Errorf("Expected package %v in Packages[package1], got %v", p1, parser.doc.Packages[0])
+		t.Errorf("expected package %v in Packages[package1], got %v", p1, parser.doc.Packages[0])
 	}
 	if parser.doc.Packages[0].PackageName != "package1" {
 		t.Errorf("expected package name %s in Packages[package1], got %s", "package1", parser.doc.Packages[0].PackageName)
 	}
 	// and the first Package's Files should be of size 1 and have f1 only
 	if len(parser.doc.Packages[0].Files) != 1 {
-		t.Errorf("Expected 1 file in Packages[package1].Files, got %d", len(parser.doc.Packages[0].Files))
+		t.Errorf("expected 1 file in Packages[package1].Files, got %d", len(parser.doc.Packages[0].Files))
 	}
 	if parser.doc.Packages[0].Files[0] != f1 {
-		t.Errorf("Expected file %v in Files[f1], got %v", f1, parser.doc.Packages[0].Files[0])
+		t.Errorf("expected file %v in Files[f1], got %v", f1, parser.doc.Packages[0].Files[0])
 	}
 	if parser.doc.Packages[0].Files[0].FileName != "f1.txt" {
 		t.Errorf("expected file name %s in Files[f1], got %s", "f1.txt", parser.doc.Packages[0].Files[0].FileName)
 	}
 	// and the new Package should have no files
 	if len(parser.pkg.Files) != 0 {
-		t.Errorf("Expected no files in Packages[1].Files, got %d", len(parser.pkg.Files))
+		t.Errorf("expected no files in Packages[1].Files, got %d", len(parser.pkg.Files))
 	}
 	// and the current file should be nil
 	if parser.file != nil {
-		t.Errorf("Expected nil for parser.file, got %v", parser.file)
+		t.Errorf("expected nil for parser.file, got %v", parser.file)
 	}
 	// and the current snippet should be nil
 	if parser.snippet != nil {
-		t.Errorf("Expected nil for parser.snippet, got %v", parser.snippet)
+		t.Errorf("expected nil for parser.snippet, got %v", parser.snippet)
 	}
 }
 
@@ -183,17 +183,17 @@ func TestParser2_1SnippetMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	// and the Package's Files should still be of size 1 since we haven't seen
 	// an SPDX identifier yet for this new file
 	if len(parser.pkg.Files) != 1 {
-		t.Errorf("Expected len(Files) to be 1, got %d", len(parser.pkg.Files))
+		t.Errorf("expected len(Files) to be 1, got %d", len(parser.pkg.Files))
 	}
 	if parser.pkg.Files[0] != f1 {
-		t.Errorf("Expected file %v in Files[f1], got %v", f1, parser.pkg.Files[0])
+		t.Errorf("expected file %v in Files[f1], got %v", f1, parser.pkg.Files[0])
 	}
 	if parser.pkg.Files[0].FileName != f1Name {
 		t.Errorf("expected file name %s in Files[f1], got %s", f1Name, parser.pkg.Files[0].FileName)
 	}
 	// and the current snippet should be nil
 	if parser.snippet != nil {
-		t.Errorf("Expected nil for parser.snippet, got %v", parser.snippet)
+		t.Errorf("expected nil for parser.snippet, got %v", parser.snippet)
 	}
 }
 

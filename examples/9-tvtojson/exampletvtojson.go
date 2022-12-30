@@ -30,7 +30,7 @@ func main() {
 	fileIn := args[1]
 	r, err := os.Open(fileIn)
 	if err != nil {
-		fmt.Printf("Error while opening %v for reading: %v", fileIn, err)
+		fmt.Printf("error while opening %v for reading: %v", fileIn, err)
 		return
 	}
 	defer r.Close()
@@ -38,7 +38,7 @@ func main() {
 	// try to load the SPDX file's contents as a tag-value file, version 2.2
 	doc, err := tvloader.Load2_2(r)
 	if err != nil {
-		fmt.Printf("Error while parsing %v: %v", args[1], err)
+		fmt.Printf("error while parsing %v: %v", args[1], err)
 		return
 	}
 
@@ -51,7 +51,7 @@ func main() {
 	fileOut := args[2]
 	w, err := os.Create(fileOut)
 	if err != nil {
-		fmt.Printf("Error while opening %v for writing: %v", fileOut, err)
+		fmt.Printf("error while opening %v for writing: %v", fileOut, err)
 		return
 	}
 	defer w.Close()
@@ -59,7 +59,7 @@ func main() {
 	// try to save the document to disk as JSON file
 	err = spdx_json.Save2_2(doc, w)
 	if err != nil {
-		fmt.Printf("Error while saving %v: %v", fileOut, err)
+		fmt.Printf("error while saving %v: %v", fileOut, err)
 		return
 	}
 

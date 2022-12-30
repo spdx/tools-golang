@@ -30,7 +30,7 @@ func TestLoad2_2(t *testing.T) {
 	handwrittenExample := want2_2
 
 	if cmp.Equal(handwrittenExample, got) {
-		t.Errorf("Got incorrect struct after parsing JSON example")
+		t.Errorf("got incorrect struct after parsing JSON example")
 		return
 	}
 }
@@ -52,7 +52,7 @@ func TestWrite2_2(t *testing.T) {
 	}
 
 	if cmp.Equal(handwrittenExample, parsedDoc) {
-		t.Errorf("Got incorrect struct after writing and re-parsing JSON example")
+		t.Errorf("got incorrect struct after writing and re-parsing JSON example")
 		return
 	}
 }
@@ -65,7 +65,7 @@ var want2_2 = v2_2.Document{
 	SPDXVersion:       "SPDX-2.2",
 	SPDXIdentifier:    "SPDXRef-DOCUMENT",
 	DocumentName:      "SPDX-Tools-v2.0",
-	DocumentNamespace: "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+	DocumentNamespace: "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
 	CreationInfo: &v2_2.CreationInfo{
 		LicenseListVersion: "3.9",
 		Creators: []common.Creator{
@@ -80,7 +80,7 @@ var want2_2 = v2_2.Document{
 	ExternalDocumentReferences: []v2_2.ExternalDocumentRef{
 		{
 			DocumentRefID: "DocumentRef-spdx-tool-1.2",
-			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+			URI:           "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
 			Checksum: common.Checksum{
 				Algorithm: common.SHA1,
 				Value:     "d6a770ba38583ed4bb4525bd96e50461655d2759",
@@ -105,7 +105,7 @@ var want2_2 = v2_2.Document{
 			ExtractedText:          "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp",
 			LicenseComment:         "The beerware license has a couple of other standard variants.",
 			LicenseName:            "Beer-Ware License (Version 42)",
-			LicenseCrossReferences: []string{"http://people.freebsd.org/~phk/"},
+			LicenseCrossReferences: []string{"https://people.freebsd.org/~phk/"},
 		},
 		{
 			LicenseIdentifier: "LicenseRef-3",
@@ -161,7 +161,7 @@ var want2_2 = v2_2.Document{
 				Originator:     "ExampleCodeInspect (contact@example.com)",
 				OriginatorType: "Organization",
 			},
-			PackageDownloadLocation: "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
+			PackageDownloadLocation: "https://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
 			FilesAnalyzed:           true,
 			PackageVerificationCode: common.PackageVerificationCode{
 				Value:         "d6a770ba38583ed4bb4525bd96e50461655d2758",
@@ -181,7 +181,7 @@ var want2_2 = v2_2.Document{
 					Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 				},
 			},
-			PackageHomePage:         "http://ftp.gnu.org/gnu/glibc",
+			PackageHomePage:         "https://ftp.gnu.org/gnu/glibc",
 			PackageSourceInfo:       "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.",
 			PackageLicenseConcluded: "(LGPL-2.0-only OR LicenseRef-3)",
 			PackageLicenseInfoFromFiles: []string{
@@ -203,7 +203,7 @@ var want2_2 = v2_2.Document{
 				},
 				{
 					Category:           "OTHER",
-					RefType:            "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge",
+					RefType:            "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge",
 					Locator:            "acmecorp/acmenator/4.1.3-alpha",
 					ExternalRefComment: "This is the external ref for Acme",
 				},
@@ -229,7 +229,7 @@ var want2_2 = v2_2.Document{
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "NOASSERTION",
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://commons.apache.org/proper/commons-lang/",
+			PackageHomePage:         "https://commons.apache.org/proper/commons-lang/",
 			PackageLicenseConcluded: "NOASSERTION",
 			PackageLicenseDeclared:  "NOASSERTION",
 			PackageName:             "Apache Commons Lang",
@@ -247,7 +247,7 @@ var want2_2 = v2_2.Document{
 				},
 			},
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://www.openjena.org/",
+			PackageHomePage:         "https://www.openjena.org/",
 			PackageLicenseConcluded: "NOASSERTION",
 			PackageLicenseDeclared:  "NOASSERTION",
 			PackageVersion:          "3.12.0",
@@ -264,7 +264,7 @@ var want2_2 = v2_2.Document{
 			PackageDescription:      "The Saxon package is a collection of tools for processing XML documents.",
 			PackageDownloadLocation: "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download",
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://saxon.sourceforge.net/",
+			PackageHomePage:         "https://saxon.sourceforge.net/",
 			PackageLicenseComments:  "Other versions available for a commercial license",
 			PackageLicenseConcluded: "MPL-1.0",
 			PackageLicenseDeclared:  "MPL-1.0",

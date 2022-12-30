@@ -56,7 +56,7 @@ multi-line external ref comment`,
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
 		PackageSupplier:           &common.Supplier{SupplierType: "Organization", Supplier: "John Doe, Inc."},
 		PackageOriginator:         &common.Originator{Originator: "John Doe", OriginatorType: "Person"},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		PackageVerificationCode: common.PackageVerificationCode{
@@ -77,7 +77,7 @@ multi-line external ref comment`,
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-		PackageHomePage:         "http://example.com/p1",
+		PackageHomePage:         "https://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
@@ -102,51 +102,51 @@ multi-line external ref comment`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageVersion: 0.1.0
-PackageFileName: p1-0.1.0-master.tar.gz
-PackageSupplier: Organization: John Doe, Inc.
-PackageOriginator: Person: John Doe
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: true
-PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
-PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-PackageHomePage: http://example.com/p1
-PackageSourceInfo: this is a source comment
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseInfoFromFiles: Apache-1.1
-PackageLicenseInfoFromFiles: Apache-2.0
-PackageLicenseInfoFromFiles: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageLicenseComments: this is a license comment(s)
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-PackageSummary: this is a summary comment
-PackageDescription: this is a description comment
-PackageComment: this is a comment comment
-ExternalRef: SECURITY cpe22Type cpe:/a:john_doe_inc:p1:0.1.0
-ExternalRefComment: this is an external ref comment #1
-ExternalRef: PACKAGE-MANAGER npm p1@0.1.0
-ExternalRefComment: <text>this is a
-multi-line external ref comment</text>
-ExternalRef: PERSISTENT-ID swh swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2
-ExternalRef: OTHER anything anything-without-spaces-can-go-here
-PackageAttributionText: Include this notice in all advertising materials
-
-`)
+		SPDXID: SPDXRef-p1
+		PackageVersion: 0.1.0
+		PackageFileName: p1-0.1.0-master.tar.gz
+		PackageSupplier: Organization: John Doe, Inc.
+		PackageOriginator: Person: John Doe
+		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		FilesAnalyzed: true
+		PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567 (excludes: p1-0.1.0.spdx)
+		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
+		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
+		PackageHomePage: https://example.com/p1
+		PackageSourceInfo: this is a source comment
+		PackageLicenseConcluded: GPL-2.0-or-later
+		PackageLicenseInfoFromFiles: Apache-1.1
+		PackageLicenseInfoFromFiles: Apache-2.0
+		PackageLicenseInfoFromFiles: GPL-2.0-or-later
+		PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+		PackageLicenseComments: this is a license comment(s)
+		PackageCopyrightText: Copyright (c) John Doe, Inc.
+		PackageSummary: this is a summary comment
+		PackageDescription: this is a description comment
+		PackageComment: this is a comment comment
+		ExternalRef: SECURITY cpe22Type cpe:/a:john_doe_inc:p1:0.1.0
+		ExternalRefComment: this is an external ref comment #1
+		ExternalRef: PACKAGE-MANAGER npm p1@0.1.0
+		ExternalRefComment: <text>this is a
+		multi-line external ref comment</text>
+		ExternalRef: PERSISTENT-ID swh swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2
+		ExternalRef: OTHER anything anything-without-spaces-can-go-here
+		PackageAttributionText: Include this notice in all advertising materials
+		
+		`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -163,7 +163,7 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
 		PackageSupplier:           &common.Supplier{Supplier: "NOASSERTION"},
 		PackageOriginator:         &common.Originator{OriginatorType: "Organization", Originator: "John Doe, Inc."},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: false,
 		PackageVerificationCode:   common.PackageVerificationCode{Value: "0123456789abcdef0123456789abcdef01234567"},
@@ -181,7 +181,7 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-		PackageHomePage:         "http://example.com/p1",
+		PackageHomePage:         "https://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
 		PackageLicenseInfoFromFiles: []string{
@@ -200,43 +200,43 @@ func TestSaver2_2PackageSavesTextCombo2(t *testing.T) {
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageVersion: 0.1.0
-PackageFileName: p1-0.1.0-master.tar.gz
-PackageSupplier: NOASSERTION
-PackageOriginator: Organization: John Doe, Inc.
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
-PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-PackageHomePage: http://example.com/p1
-PackageSourceInfo: this is a source comment
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseInfoFromFiles: Apache-1.1
-PackageLicenseInfoFromFiles: Apache-2.0
-PackageLicenseInfoFromFiles: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageLicenseComments: this is a license comment(s)
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-PackageSummary: this is a summary comment
-PackageDescription: this is a description comment
-PackageComment: this is a comment comment
-PackageAttributionText: Include this notice in all advertising materials
-
-`)
+		SPDXID: SPDXRef-p1
+		PackageVersion: 0.1.0
+		PackageFileName: p1-0.1.0-master.tar.gz
+		PackageSupplier: NOASSERTION
+		PackageOriginator: Organization: John Doe, Inc.
+		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		PackageVerificationCode: 0123456789abcdef0123456789abcdef01234567
+		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
+		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
+		PackageHomePage: https://example.com/p1
+		PackageSourceInfo: this is a source comment
+		PackageLicenseConcluded: GPL-2.0-or-later
+		PackageLicenseInfoFromFiles: Apache-1.1
+		PackageLicenseInfoFromFiles: Apache-2.0
+		PackageLicenseInfoFromFiles: GPL-2.0-or-later
+		PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+		PackageLicenseComments: this is a license comment(s)
+		PackageCopyrightText: Copyright (c) John Doe, Inc.
+		PackageSummary: this is a summary comment
+		PackageDescription: this is a description comment
+		PackageComment: this is a comment comment
+		PackageAttributionText: Include this notice in all advertising materials
+		
+		`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -254,7 +254,7 @@ func TestSaver2_2PackageSavesTextCombo3(t *testing.T) {
 		PackageFileName:           "p1-0.1.0-master.tar.gz",
 		PackageSupplier:           &common.Supplier{Supplier: "John Doe", SupplierType: "Person"},
 		PackageOriginator:         &common.Originator{Originator: "NOASSERTION"},
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output
@@ -274,7 +274,7 @@ func TestSaver2_2PackageSavesTextCombo3(t *testing.T) {
 				Value:     "624c1abb3664f4b35547e7c73864ad24",
 			},
 		},
-		PackageHomePage:         "http://example.com/p1",
+		PackageHomePage:         "https://example.com/p1",
 		PackageSourceInfo:       "this is a source comment",
 		PackageLicenseConcluded: "GPL-2.0-or-later",
 		// NOTE that license info from files MUST be omitted from output
@@ -300,43 +300,43 @@ which goes across two lines`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageVersion: 0.1.0
-PackageFileName: p1-0.1.0-master.tar.gz
-PackageSupplier: Person: John Doe
-PackageOriginator: NOASSERTION
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: false
-PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
-PackageHomePage: http://example.com/p1
-PackageSourceInfo: this is a source comment
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageLicenseComments: this is a license comment(s)
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-PackageSummary: this is a summary comment
-PackageDescription: this is a description comment
-PackageComment: this is a comment comment
-PackageAttributionText: Include this notice in all advertising materials
-PackageAttributionText: and also this notice
-PackageAttributionText: <text>and this multi-line notice
-which goes across two lines</text>
-
-`)
+		SPDXID: SPDXRef-p1
+		PackageVersion: 0.1.0
+		PackageFileName: p1-0.1.0-master.tar.gz
+		PackageSupplier: Person: John Doe
+		PackageOriginator: NOASSERTION
+		PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+		FilesAnalyzed: false
+		PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+		PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
+		PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
+		PackageHomePage: https://example.com/p1
+		PackageSourceInfo: this is a source comment
+		PackageLicenseConcluded: GPL-2.0-or-later
+		PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+		PackageLicenseComments: this is a license comment(s)
+		PackageCopyrightText: Copyright (c) John Doe, Inc.
+		PackageSummary: this is a summary comment
+		PackageDescription: this is a description comment
+		PackageComment: this is a comment comment
+		PackageAttributionText: Include this notice in all advertising materials
+		PackageAttributionText: and also this notice
+		PackageAttributionText: <text>and this multi-line notice
+		which goes across two lines</text>
+		
+		`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -344,7 +344,7 @@ func TestSaver2_2PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 	pkg := &v2_2.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output,
@@ -363,26 +363,26 @@ func TestSaver2_2PackageSaveOmitsOptionalFieldsIfEmpty(t *testing.T) {
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: false
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-
-`)
+	SPDXID: SPDXRef-p1
+	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	FilesAnalyzed: false
+	PackageLicenseConcluded: GPL-2.0-or-later
+	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+	PackageCopyrightText: Copyright (c) John Doe, Inc.
+	
+	`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -418,7 +418,7 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 	pkg := &v2_2.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		// NOTE that verification code MUST be omitted from output,
@@ -441,40 +441,40 @@ func TestSaver2_2PackageSavesFilesIfPresent(t *testing.T) {
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: false
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageCopyrightText: Copyright (c) John Doe, Inc.
-
-FileName: /tmp/whatever1.txt
-SPDXID: SPDXRef-File1231
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-LicenseConcluded: Apache-2.0
-LicenseInfoInFile: Apache-2.0
-FileCopyrightText: Copyright (c) Jane Doe
-
-FileName: /tmp/whatever2.txt
-SPDXID: SPDXRef-File1232
-FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
-LicenseConcluded: MIT
-LicenseInfoInFile: MIT
-FileCopyrightText: Copyright (c) John Doe
-
-`)
+	SPDXID: SPDXRef-p1
+	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	FilesAnalyzed: false
+	PackageLicenseConcluded: GPL-2.0-or-later
+	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+	PackageCopyrightText: Copyright (c) John Doe, Inc.
+	
+	FileName: /tmp/whatever1.txt
+	SPDXID: SPDXRef-File1231
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
+	LicenseConcluded: Apache-2.0
+	LicenseInfoInFile: Apache-2.0
+	FileCopyrightText: Copyright (c) Jane Doe
+	
+	FileName: /tmp/whatever2.txt
+	SPDXID: SPDXRef-File1232
+	FileChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983d
+	LicenseConcluded: MIT
+	LicenseInfoInFile: MIT
+	FileCopyrightText: Copyright (c) John Doe
+	
+	`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -482,7 +482,7 @@ func TestSaver2_2PackageWrapsMultiLine(t *testing.T) {
 	pkg := &v2_2.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		PackageLicenseConcluded:   "GPL-2.0-or-later",
@@ -498,26 +498,26 @@ Copyright Jane Doe`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: false
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
-Copyright Jane Doe</text>
-
-`)
+	SPDXID: SPDXRef-p1
+	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	FilesAnalyzed: false
+	PackageLicenseConcluded: GPL-2.0-or-later
+	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+	PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
+	Copyright Jane Doe</text>
+	
+	`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_2(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

@@ -40,13 +40,13 @@ LicenseComment: this is a license comment
 	var got bytes.Buffer
 	err := renderOtherLicense2_3(ol, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -72,12 +72,12 @@ LicenseName: License 1
 	var got bytes.Buffer
 	err := renderOtherLicense2_3(ol, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

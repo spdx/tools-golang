@@ -66,7 +66,7 @@ func boolFromString(boolString string) (bool, error) {
 
 /* Function Below this line is taken from the tvloader/parser2v2/utils.go */
 
-// used to extract DocumentRef and SPDXRef values from an SPDX Identifier
+// ExtractDocElementID used to extract DocumentRef and SPDXRef values from an SPDX Identifier
 // which can point either to this document or to a different one
 func ExtractDocElementID(value string) (common.DocElementID, error) {
 	docRefID := ""
@@ -115,7 +115,7 @@ func ExtractDocElementID(value string) (common.DocElementID, error) {
 	return common.DocElementID{DocumentRefID: docRefID, ElementRefID: common.ElementID(eltRefID)}, nil
 }
 
-// used to extract SPDXRef values only from an SPDX Identifier which can point
+// ExtractElementID used to extract SPDXRef values only from an SPDX Identifier which can point
 // to this document only. Use extractDocElementID for parsing IDs that can
 // refer either to this document or a different one.
 func ExtractElementID(value string) (common.ElementID, error) {
@@ -139,7 +139,7 @@ func ExtractElementID(value string) (common.ElementID, error) {
 	return common.ElementID(eltRefID), nil
 }
 
-// used to extract key / value from embedded substrings
+// ExtractSubs used to extract key / value from embedded substrings
 // returns subkey, subvalue, nil if no error, or "", "", error otherwise
 func ExtractSubs(value string, sep string) (string, string, error) {
 	// parse the value to see if it's a valid subvalue format

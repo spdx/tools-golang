@@ -31,7 +31,7 @@ func main() {
 	filename := args[1]
 	r, err := os.Open(filename)
 	if err != nil {
-		fmt.Printf("Error while opening %v for reading: %v", filename, err)
+		fmt.Printf("error while opening %v for reading: %v", filename, err)
 		return
 	}
 	defer r.Close()
@@ -39,7 +39,7 @@ func main() {
 	// try to load the SPDX file's contents as a tag-value file, version 2.2
 	doc, err := tvloader.Load2_2(r)
 	if err != nil {
-		fmt.Printf("Error while parsing %v: %v", filename, err)
+		fmt.Printf("error while parsing %v: %v", filename, err)
 		return
 	}
 
@@ -58,7 +58,7 @@ func main() {
 	// check whether the SPDX file has at least one package that it describes
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if err != nil {
-		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
+		fmt.Printf("unable to get describe packages from SPDX document: %v\n", err)
 		return
 	}
 

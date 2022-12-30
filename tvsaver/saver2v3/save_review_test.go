@@ -29,13 +29,13 @@ ReviewComment: this is a review comment
 	var got bytes.Buffer
 	err := renderReview2_3(rev, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -56,13 +56,13 @@ ReviewDate: 2018-10-14T10:28:00Z
 	var got bytes.Buffer
 	err := renderReview2_3(rev, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -87,12 +87,12 @@ multi-line review comment</text>
 	var got bytes.Buffer
 	err := renderReview2_3(rev, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

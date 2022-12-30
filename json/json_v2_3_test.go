@@ -47,7 +47,7 @@ func TestLoad2_3(t *testing.T) {
 	handwrittenExample := want2_3
 
 	if cmp.Equal(handwrittenExample, got) {
-		t.Errorf("Got incorrect struct after parsing JSON example")
+		t.Errorf("got incorrect struct after parsing JSON example")
 		return
 	}
 }
@@ -69,7 +69,7 @@ func TestWrite2_3(t *testing.T) {
 	}
 
 	if cmp.Equal(handwrittenExample, parsedDoc) {
-		t.Errorf("Got incorrect struct after writing and re-parsing JSON example")
+		t.Errorf("got incorrect struct after writing and re-parsing JSON example")
 		return
 	}
 }
@@ -82,7 +82,7 @@ var want2_3 = v2_3.Document{
 	SPDXVersion:       "SPDX-2.3",
 	SPDXIdentifier:    "SPDXRef-DOCUMENT",
 	DocumentName:      "SPDX-Tools-v2.0",
-	DocumentNamespace: "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+	DocumentNamespace: "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
 	CreationInfo: &v2_3.CreationInfo{
 		LicenseListVersion: "3.9",
 		Creators: []common.Creator{
@@ -97,7 +97,7 @@ var want2_3 = v2_3.Document{
 	ExternalDocumentReferences: []v2_3.ExternalDocumentRef{
 		{
 			DocumentRefID: "DocumentRef-spdx-tool-1.2",
-			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+			URI:           "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
 			Checksum: common.Checksum{
 				Algorithm: common.SHA1,
 				Value:     "d6a770ba38583ed4bb4525bd96e50461655d2759",
@@ -122,15 +122,15 @@ var want2_3 = v2_3.Document{
 			ExtractedText:          "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp",
 			LicenseComment:         "The beerware license has a couple of other standard variants.",
 			LicenseName:            "Beer-Ware License (Version 42)",
-			LicenseCrossReferences: []string{"http://people.freebsd.org/~phk/"},
+			LicenseCrossReferences: []string{"https://people.freebsd.org/~phk/"},
 		},
 		{
 			LicenseIdentifier: "LicenseRef-3",
 			ExtractedText:     "The CyberNeko Software License, Version 1.0\n\n \n(C) Copyright 2002-2005, Andy Clark.  All rights reserved.\n \nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions\nare met:\n\n1. Redistributions of source code must retain the above copyright\n   notice, this list of conditions and the following disclaimer. \n\n2. Redistributions in binary form must reproduce the above copyright\n   notice, this list of conditions and the following disclaimer in\n   the documentation and/or other materials provided with the\n   distribution.\n\n3. The end-user documentation included with the redistribution,\n   if any, must include the following acknowledgment:  \n     \"This product includes software developed by Andy Clark.\"\n   Alternately, this acknowledgment may appear in the software itself,\n   if and wherever such third-party acknowledgments normally appear.\n\n4. The names \"CyberNeko\" and \"NekoHTML\" must not be used to endorse\n   or promote products derived from this software without prior \n   written permission. For written permission, please contact \n   andyc@cyberneko.net.\n\n5. Products derived from this software may not be called \"CyberNeko\",\n   nor may \"CyberNeko\" appear in their name, without prior written\n   permission of the author.\n\nTHIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED\nWARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\nOF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS\nBE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, \nOR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT \nOF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR \nBUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, \nWHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE \nOR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, \nEVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
 			LicenseName:       "CyberNeko License",
 			LicenseCrossReferences: []string{
-				"http://people.apache.org/~andyc/neko/LICENSE",
-				"http://justasample.url.com",
+				"https://people.apache.org/~andyc/neko/LICENSE",
+				"https://justasample.url.com",
 			},
 			LicenseComment: "This is tye CyperNeko License",
 		},
@@ -178,7 +178,7 @@ var want2_3 = v2_3.Document{
 				Originator:     "ExampleCodeInspect (contact@example.com)",
 				OriginatorType: "Organization",
 			},
-			PackageDownloadLocation: "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
+			PackageDownloadLocation: "https://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
 			FilesAnalyzed:           true,
 			PackageVerificationCode: &common.PackageVerificationCode{
 				Value:         "d6a770ba38583ed4bb4525bd96e50461655d2758",
@@ -198,7 +198,7 @@ var want2_3 = v2_3.Document{
 					Value:     "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd",
 				},
 			},
-			PackageHomePage:         "http://ftp.gnu.org/gnu/glibc",
+			PackageHomePage:         "https://ftp.gnu.org/gnu/glibc",
 			PackageSourceInfo:       "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.",
 			PackageLicenseConcluded: "(LGPL-2.0-only OR LicenseRef-3)",
 			PackageLicenseInfoFromFiles: []string{
@@ -220,7 +220,7 @@ var want2_3 = v2_3.Document{
 				},
 				{
 					Category:           "OTHER",
-					RefType:            "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge",
+					RefType:            "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#LocationRef-acmeforge",
 					Locator:            "acmecorp/acmenator/4.1.3-alpha",
 					ExternalRefComment: "This is the external ref for Acme",
 				},
@@ -246,7 +246,7 @@ var want2_3 = v2_3.Document{
 			PackageCopyrightText:    "NOASSERTION",
 			PackageDownloadLocation: "NOASSERTION",
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://commons.apache.org/proper/commons-lang/",
+			PackageHomePage:         "https://commons.apache.org/proper/commons-lang/",
 			PackageLicenseDeclared:  "NOASSERTION",
 			PackageName:             "Apache Commons Lang",
 		},
@@ -263,7 +263,7 @@ var want2_3 = v2_3.Document{
 				},
 			},
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://www.openjena.org/",
+			PackageHomePage:         "https://www.openjena.org/",
 			PackageLicenseConcluded: "NOASSERTION",
 			PackageLicenseDeclared:  "NOASSERTION",
 			PackageVersion:          "3.12.0",
@@ -280,7 +280,7 @@ var want2_3 = v2_3.Document{
 			PackageDescription:      "The Saxon package is a collection of tools for processing XML documents.",
 			PackageDownloadLocation: "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download",
 			FilesAnalyzed:           false,
-			PackageHomePage:         "http://saxon.sourceforge.net/",
+			PackageHomePage:         "https://saxon.sourceforge.net/",
 			PackageLicenseComments:  "Other versions available for a commercial license",
 			PackageLicenseConcluded: "MPL-1.0",
 			PackageLicenseDeclared:  "MPL-1.0",

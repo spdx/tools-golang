@@ -18,12 +18,12 @@ import (
 // pads the content with the enclosing rdf:RDF tag
 func wrapIntoTemplate(content string) string {
 	header := `<rdf:RDF
-        xmlns:spdx="http://spdx.org/rdf/terms#"
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-        xmlns="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
-        xmlns:doap="http://usefulinc.com/ns/doap#"
-        xmlns:j.0="http://www.w3.org/2009/pointers#"
-        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">`
+					xmlns:spdx="https://spdx.org/rdf/terms#"
+					xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+					xmlns="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
+					xmlns:doap="https://usefulinc.com/ns/doap#"
+					xmlns:j.0="http://www.w3.org/2009/pointers#"
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">`
 	footer := `</rdf:RDF>`
 	return header + content + footer
 }
@@ -49,13 +49,13 @@ func Test_rdfParser2_2_getArtifactFromNode(t *testing.T) {
 	// TestCase 1: artifactOf without project URI
 	rdfParser, err := parserFromBodyContent(
 		`<spdx:File>
-			<spdx:artifactOf>
-				<doap:Project>
-					<doap:homepage>http://www.openjena.org/</doap:homepage>
-					<doap:name>Jena</doap:name>
-				</doap:Project>
-			</spdx:artifactOf>
-		</spdx:File>`)
+					<spdx:artifactOf>
+						<doap:Project>
+							<doap:homepage>https://www.openjena.org/</doap:homepage>
+							<doap:name>Jena</doap:name>
+						</doap:Project>
+					</spdx:artifactOf>
+				</spdx:File>`)
 	if err != nil {
 		t.Errorf("unexpected error while parsing a valid example: %v", err)
 	}
@@ -78,13 +78,13 @@ func Test_rdfParser2_2_getArtifactFromNode(t *testing.T) {
 	// TestCase 2: artifactOf with a Project URI
 	rdfParser, err = parserFromBodyContent(
 		`<spdx:File>
-			<spdx:artifactOf>
-				<doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
-					<doap:homepage>http://www.openjena.org/</doap:homepage>
-					<doap:name>Jena</doap:name>
-				</doap:Project>
-			</spdx:artifactOf>
-		</spdx:File>`)
+							<spdx:artifactOf>
+								<doap:Project rdf:about="https://subversion.apache.org/doap.rdf">
+									<doap:homepage>https://www.openjena.org/</doap:homepage>
+									<doap:name>Jena</doap:name>
+								</doap:Project>
+							</spdx:artifactOf>
+						</spdx:File>`)
 	if err != nil {
 		t.Errorf("unexpected error while parsing a valid example: %v", err)
 	}
@@ -93,7 +93,7 @@ func Test_rdfParser2_2_getArtifactFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid artifactOf node: %v", err)
 	}
-	expectedURI := "http://subversion.apache.org/doap.rdf"
+	expectedURI := "https://subversion.apache.org/doap.rdf"
 	if artifact.URI != expectedURI {
 		t.Errorf("wrong artifact URI. Expected: %s, found: %s", expectedURI, artifact.URI)
 	}
@@ -101,14 +101,14 @@ func Test_rdfParser2_2_getArtifactFromNode(t *testing.T) {
 	// TestCase 3: artifactOf with unknown predicate
 	rdfParser, err = parserFromBodyContent(
 		`<spdx:File>
-			<spdx:artifactOf>
-				<doap:Project rdf:about="http://subversion.apache.org/doap.rdf">
-					<doap:homepage>http://www.openjena.org/</doap:homepage>
-					<doap:name>Jena</doap:name>
-					<doap:invalidTag rdf:ID="invalid"/>
-				</doap:Project>
-			</spdx:artifactOf>
-		</spdx:File>`)
+							<spdx:artifactOf>
+								<doap:Project rdf:about="https://subversion.apache.org/doap.rdf">
+									<doap:homepage>https://www.openjena.org/</doap:homepage>
+									<doap:name>Jena</doap:name>
+									<doap:invalidTag rdf:ID="invalid"/>
+								</doap:Project>
+							</spdx:artifactOf>
+						</spdx:File>`)
 	if err != nil {
 		t.Errorf("unexpected error while parsing a valid example: %v", err)
 	}
@@ -133,7 +133,7 @@ func Test_rdfParser2_2_getFileTypeFromUri(t *testing.T) {
 	}
 
 	// TestCase 2: Invalid fileType URI format.
-	fileTypeURI = "http://spdx.org/rdf/terms#source"
+	fileTypeURI = "https://spdx.org/rdf/terms#source"
 	fileType, err = rdfParser.getFileTypeFromUri(fileTypeURI)
 	if err == nil {
 		t.Error("should've raised an error for invalid fileType")
@@ -178,7 +178,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	file := &v2_2.File{}
 
 	// TestCase 1: valid example
-	err := setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
+	err := setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129", file)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
@@ -187,7 +187,7 @@ func Test_setFileIdentifier(t *testing.T) {
 	}
 
 	// TestCase 2: invalid example
-	err = setFileIdentifier("http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
+	err = setFileIdentifier("https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#129", file)
 	if err == nil {
 		t.Errorf("should've raised an error for an invalid example")
 	}
@@ -196,11 +196,11 @@ func Test_setFileIdentifier(t *testing.T) {
 func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 	// TestCase 1: md5 checksum
 	parser, _ := parserFromBodyContent(` 
-		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5" />
-		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
-		</spdx:Checksum>
-    `)
+			<spdx:Checksum>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md5" />
+				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
+			</spdx:Checksum>
+		`)
 	checksumNode := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
 	file := &v2_2.File{}
 	err := parser.setFileChecksumFromNode(file, checksumNode)
@@ -227,11 +227,11 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 
 	// TestCase 2: valid sha1 checksum
 	parser, _ = parserFromBodyContent(` 
-		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
-		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
-		</spdx:Checksum>
-    `)
+			<spdx:Checksum>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
+			</spdx:Checksum>
+		`)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
 	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
@@ -257,11 +257,11 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 
 	// TestCase 3: valid sha256 checksum
 	parser, _ = parserFromBodyContent(` 
-		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256" />
-		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
-		</spdx:Checksum>
-    `)
+			<spdx:Checksum>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha256" />
+				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
+			</spdx:Checksum>
+		`)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
 	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
@@ -300,11 +300,11 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 
 	// TestCase 5: invalid checksum algorithm
 	parser, _ = parserFromBodyContent(` 
-		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md43" />
-		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
-		</spdx:Checksum>
-    `)
+			<spdx:Checksum>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md43" />
+				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
+			</spdx:Checksum>
+		`)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
 	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
@@ -314,11 +314,11 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 
 	// TestCase 6: valid checksum algorithm which is invalid for file (like md4, md6, sha384, etc.)
 	parser, _ = parserFromBodyContent(` 
-		<spdx:Checksum>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
-		    <spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
-		</spdx:Checksum>
-    `)
+			<spdx:Checksum>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
+				<spdx:checksumValue>d2356e0fe1c0b85285d83c6b2ad51b5f</spdx:checksumValue>
+			</spdx:Checksum>
+		`)
 	checksumNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_CHECKSUM_CAPITALIZED)[0].Subject
 	file = &v2_2.File{}
 	err = parser.setFileChecksumFromNode(file, checksumNode)
@@ -330,7 +330,7 @@ func Test_rdfParser2_2_setFileChecksumFromNode(t *testing.T) {
 func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	// TestCase 1: file with invalid id
 	parser, _ := parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gzspdx.rdf#item177"/>
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gzspdx.rdf#item177"/>
 	`)
 	fileNode := gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	_, err := parser.getFileFromNode(fileNode)
@@ -340,10 +340,10 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 2: invalid fileType
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-			<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#source"/>
-		</spdx:File>
-	`)
+			<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+				<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#source"/>
+			</spdx:File>
+		`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	_, err = parser.getFileFromNode(fileNode)
 	if err == nil {
@@ -352,10 +352,10 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 3: invalid file checksum
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:checksum>
 				<spdx:Checksum>
-					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
+					<spdx:algorithm rdf:resource="htts://spdx.org/rdf/terms#checksumAlgorithm_sha2000" />
 					<spdx:checksumValue>0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd</spdx:checksumValue>
 				</spdx:Checksum>
 			</spdx:checksum>
@@ -370,7 +370,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	// TestCase 4: invalid license concluded
 	parser, _ = parserFromBodyContent(`
 		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-			<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#invalid_license" />
+			<spdx:licenseConcluded rdf:resource="https://spdx.org/rdf/terms#invalid_license" />
 		</spdx:File>
 	`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
@@ -381,7 +381,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 5: invalid artifactOf attribute
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:artifactOf>
 				<doap:Project>
 					<doap:unknown_tag />
@@ -398,10 +398,10 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 6: invalid file dependency
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-			<spdx:fileDependency rdf:resource="http://spdx.org/spdxdocs/spdx-example#CommonsLangSrc"/>
-		</spdx:File>
-	`)
+			<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+				<spdx:fileDependency rdf:resource="https://spdx.org/spdxdocs/spdx-example#CommonsLangSrc"/>
+			</spdx:File>
+		`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	_, err = parser.getFileFromNode(fileNode)
 	if err == nil {
@@ -410,7 +410,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 7: invalid annotation with unknown predicate
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:annotation>
 				<spdx:Annotation>
 					<spdx:unknownAttribute />
@@ -426,10 +426,10 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 8: invalid relationship
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:relationship>
 				<spdx:Relationship>
-					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#dynamicLink"/>
+					<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#dynamicLink"/>
 				</spdx:Relationship>
 			</spdx:relationship>
 		</spdx:File>
@@ -442,7 +442,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 8: unknown predicate
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+		<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
 			<spdx:unknown />
 		</spdx:File>
 	`)
@@ -454,10 +454,10 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 9: invalid licenseInfoInFile.
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-			<spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/DC0-1.0" />
-		</spdx:File>
-	`)
+			<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+				<spdx:licenseInfoInFile rdf:resource="https://spdx.org/licenses/DC0-1.0" />
+			</spdx:File>
+		`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	_, err = parser.getFileFromNode(fileNode)
 	if err == nil {
@@ -467,21 +467,21 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	// TestCase 10: Splitting of File definition into parents of different tags mustn't create new file objects.
 	fileDefinitions := []string{
 		`<spdx:Package rdf:about="#SPDXRef-Package1">
-			<spdx:hasFile>
-				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-					<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
-					<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-				</spdx:File>
-			</spdx:hasFile>
-		</spdx:Package>`,
+					<spdx:hasFile>
+						<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+							<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
+							<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#fileType_source"/>
+						</spdx:File>
+					</spdx:hasFile>
+				</spdx:Package>`,
 		`<spdx:Package rdf:about="#SPDXRef-Package2">
-			<spdx:hasFile>
-				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-					<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-					<spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#NOASSERTION" />
-				</spdx:File>
-			</spdx:hasFile>
-		</spdx:Package>`,
+							<spdx:hasFile>
+								<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+									<spdx:licenseConcluded rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+									<spdx:licenseInfoInFile rdf:resource="https://spdx.org/rdf/terms#NOASSERTION" />
+								</spdx:File>
+							</spdx:hasFile>
+						</spdx:Package>`,
 	}
 	parser, _ = parserFromBodyContent(strings.Join(fileDefinitions, ""))
 
@@ -519,65 +519,65 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 
 	// TestCase 12: checking if recursive dependencies are resolved.
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="#SPDXRef-ParentFile">
-			<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-			<spdx:fileDependency>
-				<spdx:File rdf:about="#SPDXRef-ChildFile">
-					<spdx:fileDependency>
-						<spdx:File rdf:about="#SPDXRef-ParentFile">
-							<spdx:fileName>ParentFile</spdx:fileName>
-						</spdx:File>
-					</spdx:fileDependency>
-				</spdx:File>
-			</spdx:fileDependency>
-		</spdx:File>
-	`)
+			<spdx:File rdf:about="#SPDXRef-ParentFile">
+				<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#fileType_source"/>
+				<spdx:fileDependency>
+					<spdx:File rdf:about="#SPDXRef-ChildFile">
+						<spdx:fileDependency>
+							<spdx:File rdf:about="#SPDXRef-ParentFile">
+								<spdx:fileName>ParentFile</spdx:fileName>
+							</spdx:File>
+						</spdx:fileDependency>
+					</spdx:File>
+				</spdx:fileDependency>
+			</spdx:File>
+		`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	file, err = parser.getFileFromNode(fileNode)
 
 	// TestCase 11: all valid attribute and it's values.
 	parser, _ = parserFromBodyContent(`
-		<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-			<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
-			<spdx:name/>
-			<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-			<spdx:checksum>
-				<spdx:Checksum>
-					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
-					<spdx:checksumValue>0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd</spdx:checksumValue>
-				</spdx:Checksum>
-			</spdx:checksum>
-			<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-			<spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#NOASSERTION" />
-			<spdx:licenseComments>no comments</spdx:licenseComments>
-			<spdx:copyrightText>from spdx file</spdx:copyrightText>
-			<spdx:artifactOf>
-				<doap:Project>
-					<doap:homepage>http://www.openjena.org/</doap:homepage>
-					<doap:name>Jena</doap:name>
-				</doap:Project>
-			</spdx:artifactOf>
-			<rdfs:comment>no comments</rdfs:comment>
-			<spdx:noticeText rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
-			<spdx:fileContributor>Some Organization</spdx:fileContributor>
-			<spdx:fileDependency rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
-			<spdx:attributionText>attribution text</spdx:attributionText>
-			<spdx:annotation>
-				<spdx:Annotation>
-					<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
-					<rdfs:comment>File level annotation copied from a spdx document</rdfs:comment>
-					<spdx:annotator>Person: File Commenter</spdx:annotator>
-					<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-				</spdx:Annotation>
-			</spdx:annotation>
-			<spdx:relationship>
-				<spdx:Relationship>
-					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_contains"/>
-					<spdx:relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
-				</spdx:Relationship>
-			</spdx:relationship>
-		</spdx:File>
-	`)
+												<spdx:File rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+													<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
+													<spdx:name/>
+													<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#fileType_source"/>
+													<spdx:checksum>
+														<spdx:Checksum>
+															<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+															<spdx:checksumValue>0a3a0e1ab72b7c132f5021c538a7a3ea6d539bcd</spdx:checksumValue>
+														</spdx:Checksum>
+													</spdx:checksum>
+													<spdx:licenseConcluded rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+													<spdx:licenseInfoInFile rdf:resource="https://spdx.org/rdf/terms#NOASSERTION" />
+													<spdx:licenseComments>no comments</spdx:licenseComments>
+													<spdx:copyrightText>from spdx file</spdx:copyrightText>
+													<spdx:artifactOf>
+														<doap:Project>
+															<doap:homepage>https://www.openjena.org/</doap:homepage>
+															<doap:name>Jena</doap:name>
+														</doap:Project>
+													</spdx:artifactOf>
+													<rdfs:comment>no comments</rdfs:comment>
+													<spdx:noticeText rdf:resource="https://spdx.org/rdf/terms#noassertion"/>
+													<spdx:fileContributor>Some Organization</spdx:fileContributor>
+													<spdx:fileDependency rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-CommonsLangSrc"/>
+													<spdx:attributionText>attribution text</spdx:attributionText>
+													<spdx:annotation>
+														<spdx:Annotation>
+															<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
+															<rdfs:comment>File level annotation copied from a spdx document</rdfs:comment>
+															<spdx:annotator>Person: File Commenter</spdx:annotator>
+															<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+														</spdx:Annotation>
+													</spdx:annotation>
+													<spdx:relationship>
+														<spdx:Relationship>
+															<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#relationshipType_contains"/>
+															<spdx:relatedSpdxElement rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+														</spdx:Relationship>
+													</spdx:relationship>
+												</spdx:File>
+											`)
 	fileNode = gordfWriter.FilterTriples(parser.gordfParserObj.Triples, nil, &RDF_TYPE, &SPDX_FILE)[0].Subject
 	file, err = parser.getFileFromNode(fileNode)
 	if err != nil {
@@ -637,7 +637,7 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 		t.Errorf("given file should have 1 artifactOfProjects attribute. found %d", n)
 	}
 	artifactOf := file.ArtifactOfProjects[0]
-	expectedHomePage := "http://www.openjena.org/"
+	expectedHomePage := "https://www.openjena.org/"
 	if artifactOf.HomePage != expectedHomePage {
 		t.Errorf("expected %s, found %s", expectedHomePage, artifactOf.HomePage)
 	}

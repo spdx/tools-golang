@@ -148,13 +148,13 @@ PackageAttributionText: Include this notice in all advertising materials
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -238,13 +238,13 @@ PackageAttributionText: Include this notice in all advertising materials
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -338,13 +338,13 @@ which goes across two lines</text>
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -384,13 +384,13 @@ PackageCopyrightText: Copyright (c) John Doe, Inc.
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -476,13 +476,13 @@ FileCopyrightText: Copyright (c) John Doe
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -490,7 +490,7 @@ func TestSaver2_3PackageWrapsMultiLine(t *testing.T) {
 	pkg := &v2_3.Package{
 		PackageName:               "p1",
 		PackageSPDXIdentifier:     common.ElementID("p1"),
-		PackageDownloadLocation:   "http://example.com/p1/p1-0.1.0-master.tar.gz",
+		PackageDownloadLocation:   "https://example.com/p1/p1-0.1.0-master.tar.gz",
 		FilesAnalyzed:             false,
 		IsFilesAnalyzedTagPresent: true,
 		PackageLicenseConcluded:   "GPL-2.0-or-later",
@@ -506,26 +506,26 @@ Copyright Jane Doe`,
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`PackageName: p1
-SPDXID: SPDXRef-p1
-PackageDownloadLocation: http://example.com/p1/p1-0.1.0-master.tar.gz
-FilesAnalyzed: false
-PackageLicenseConcluded: GPL-2.0-or-later
-PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
-PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
-Copyright Jane Doe</text>
-
-`)
+	SPDXID: SPDXRef-p1
+	PackageDownloadLocation: https://example.com/p1/p1-0.1.0-master.tar.gz
+	FilesAnalyzed: false
+	PackageLicenseConcluded: GPL-2.0-or-later
+	PackageLicenseDeclared: Apache-2.0 OR GPL-2.0-or-later
+	PackageCopyrightText: <text>Copyright (c) John Doe, Inc.
+	Copyright Jane Doe</text>
+	
+	`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderPackage2_3(pkg, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

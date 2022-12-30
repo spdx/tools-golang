@@ -8,7 +8,7 @@ import (
 
 func TestNewParser2_2(t *testing.T) {
 	// testing if the attributes are initialised well and no top-level is left uninitialized.
-	// primarily, checking if all the maps are initialized because
+	// primarily, checking if all the maps are initialised because
 	// uninitialized slices are by default slices of length 0
 	p, _ := parserFromBodyContent(``)
 	parser := NewParser2_2(p.gordfParserObj, p.nodeStringToTriples)
@@ -42,10 +42,10 @@ func TestLoadFromGoRDFParser(t *testing.T) {
 
 	// TestCase 2: invalid SpdxDocumentNode
 	parser, _ = parserFromBodyContent(`
-		<spdx:SpdxDocument rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document">
-			<spdx:invalidTag />
-		</spdx:SpdxDocument>
-	`)
+			<spdx:SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document">
+				<spdx:invalidTag />
+			</spdx:SpdxDocument>
+		`)
 	_, err = LoadFromGoRDFParser(parser.gordfParserObj)
 	if err == nil {
 		t.Errorf("expected an error because of absence of SpdxDocument node, got %v", err)
@@ -94,23 +94,23 @@ func TestLoadFromGoRDFParser(t *testing.T) {
 
 	// TestCase 5: everything valid:
 	parser, _ = parserFromBodyContent(`
-		<spdx:SpdxDocument rdf:about="#SPDXRef-Document"/>
-		<spdx:Snippet rdf:about="#SPDXRef-Snippet">
-			<spdx:name>from linux kernel</spdx:name>
-			<spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
-			<spdx:licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</spdx:licenseComments>
-			<spdx:snippetFromFile>
-				<spdx:File rdf:about="#SPDXRef-DoapSource">
-					<spdx:copyrightText>Copyright 2010, 2011 Source Auditor Inc.</spdx:copyrightText>
-					<spdx:fileContributor>Open Logic Inc.</spdx:fileContributor>
-					<spdx:fileName>./src/org/spdx/parser/DOAPProject.java</spdx:fileName>
-					<spdx:fileContributor>Black Duck Software In.c</spdx:fileContributor>
-					<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-					<spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-				</spdx:File>
-			</spdx:snippetFromFile>
-		</spdx:Snippet>
-	`)
+				<spdx:SpdxDocument rdf:about="#SPDXRef-Document"/>
+				<spdx:Snippet rdf:about="#SPDXRef-Snippet">
+					<spdx:name>from linux kernel</spdx:name>
+					<spdx:copyrightText>Copyright 2008-2010 John Smith</spdx:copyrightText>
+					<spdx:licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</spdx:licenseComments>
+					<spdx:snippetFromFile>
+						<spdx:File rdf:about="#SPDXRef-DoapSource">
+							<spdx:copyrightText>Copyright 2010, 2011 Source Auditor Inc.</spdx:copyrightText>
+							<spdx:fileContributor>Open Logic Inc.</spdx:fileContributor>
+							<spdx:fileName>./src/org/spdx/parser/DOAPProject.java</spdx:fileName>
+							<spdx:fileContributor>Black Duck Software In.c</spdx:fileContributor>
+							<spdx:fileType rdf:resource="https://spdx.org/rdf/terms#fileType_source"/>
+							<spdx:licenseInfoInFile rdf:resource="https://spdx.org/licenses/Apache-2.0"/>
+						</spdx:File>
+					</spdx:snippetFromFile>
+				</spdx:Snippet>
+			`)
 	_, err = LoadFromGoRDFParser(parser.gordfParserObj)
 	if err != nil {
 		t.Errorf("error parsing a valid example: %v", err)

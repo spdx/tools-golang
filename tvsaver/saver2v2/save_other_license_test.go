@@ -18,35 +18,35 @@ blah blah blah
 blah blah blah blah`,
 		LicenseName: "License 1",
 		LicenseCrossReferences: []string{
-			"http://example.com/License1/",
-			"http://example.com/License1AnotherURL/",
+			"https://example.com/License1/",
+			"https://example.com/License1AnotherURL/",
 		},
 		LicenseComment: "this is a license comment",
 	}
 
 	// what we want to get, as a buffer of bytes
 	want := bytes.NewBufferString(`LicenseID: LicenseRef-1
-ExtractedText: <text>License 1 text
-blah blah blah
-blah blah blah blah</text>
-LicenseName: License 1
-LicenseCrossReference: http://example.com/License1/
-LicenseCrossReference: http://example.com/License1AnotherURL/
-LicenseComment: this is a license comment
-
-`)
+		ExtractedText: <text>License 1 text
+		blah blah blah
+		blah blah blah blah</text>
+		LicenseName: License 1
+		LicenseCrossReference: https://example.com/License1/
+		LicenseCrossReference: https://example.com/License1AnotherURL/
+		LicenseComment: this is a license comment
+		
+		`)
 
 	// render as buffer of bytes
 	var got bytes.Buffer
 	err := renderOtherLicense2_2(ol, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }
 
@@ -72,12 +72,12 @@ LicenseName: License 1
 	var got bytes.Buffer
 	err := renderOtherLicense2_2(ol, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
+		t.Errorf("expected %v, got %v", want.String(), got.String())
 	}
 }

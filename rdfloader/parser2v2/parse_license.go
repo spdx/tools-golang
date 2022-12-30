@@ -30,7 +30,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	} else if currState.Color == GREY {
 		// we have already started parsing this license node.
 		// We have a cyclic dependency!
-		return nil, errors.New("Couldn't parse license: found a cyclic dependency on " + node.ID)
+		return nil, errors.New("couldn't parse license: found a cyclic dependency on " + node.ID)
 	}
 
 	// setting color of the state to grey to indicate that we've started to
@@ -67,7 +67,7 @@ func (parser *rdfParser2_2) getAnyLicenseFromNode(node *gordfParser.Node) (AnyLi
 	case SPDX_SIMPLE_LICENSING_INFO:
 		return parser.getSimpleLicensingInfoFromNode(node)
 	}
-	return nil, fmt.Errorf("Unknown subTag (%s) found while parsing AnyLicense", nodeType)
+	return nil, fmt.Errorf("unknown subTag (%s) found while parsing AnyLicense", nodeType)
 }
 
 func (parser *rdfParser2_2) getLicenseExceptionFromNode(node *gordfParser.Node) (exception LicenseException, err error) {

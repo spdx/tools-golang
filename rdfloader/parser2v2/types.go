@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
+// Package parser2v2 SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 // copied from tvloader/parser2v2/types.go
 package parser2v2
 
@@ -105,7 +105,7 @@ type WithExceptionOperator struct {
 	licenseException LicenseException
 }
 
-// custom LicenseType to provide support for licences of
+// SpecialLicense custom LicenseType to provide support for licences of
 // type Noassertion, None and customLicenses
 type SpecialLicense struct {
 	AnyLicenseInfo

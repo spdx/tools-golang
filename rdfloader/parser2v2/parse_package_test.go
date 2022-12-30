@@ -193,14 +193,14 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 1: invalid reference category
 	parser, _ = parserFromBodyContent(`
-		<spdx:ExternalRef>
-			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-			<spdx:referenceType>
-				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-			</spdx:referenceType>
-			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_invalid"/>
-		</spdx:ExternalRef>
-	`)
+				<spdx:ExternalRef>
+					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+					<spdx:referenceType>
+						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+					</spdx:referenceType>
+					<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_invalid"/>
+				</spdx:ExternalRef>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err == nil {
@@ -209,15 +209,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 2: invalid predicate
 	parser, _ = parserFromBodyContent(`
-		<spdx:ExternalRef>
-			<spdx:unknownPredicate />
-			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-			<spdx:referenceType>
-				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-			</spdx:referenceType>
-			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
-		</spdx:ExternalRef>
-	`)
+				<spdx:ExternalRef>
+					<spdx:unknownPredicate />
+					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+					<spdx:referenceType>
+						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+					</spdx:referenceType>
+					<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_security"/>
+				</spdx:ExternalRef>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err == nil {
@@ -226,15 +226,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 3: valid example (referenceCategory_security)
 	parser, _ = parserFromBodyContent(`
-		<spdx:ExternalRef>
-			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-			<spdx:referenceType>
-				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-			</spdx:referenceType>
-			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
-			<rdfs:comment>comment</rdfs:comment>
-		</spdx:ExternalRef>
-	`)
+				<spdx:ExternalRef>
+					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+					<spdx:referenceType>
+						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+					</spdx:referenceType>
+					<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_security"/>
+					<rdfs:comment>comment</rdfs:comment>
+				</spdx:ExternalRef>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -242,7 +242,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef := &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "http://spdx.org/rdf/references/cpe23Type",
+		RefType:            "https://spdx.org/rdf/references/cpe23Type",
 		Category:           "SECURITY",
 		ExternalRefComment: "comment",
 	}
@@ -252,15 +252,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 4: valid example (referenceCategory_packageManager)
 	parser, _ = parserFromBodyContent(`
-		<spdx:ExternalRef>
-			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-			<spdx:referenceType>
-				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-			</spdx:referenceType>
-			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
-			<rdfs:comment>comment</rdfs:comment>
-		</spdx:ExternalRef>
-	`)
+				<spdx:ExternalRef>
+					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+					<spdx:referenceType>
+						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+					</spdx:referenceType>
+					<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_packageManager"/>
+					<rdfs:comment>comment</rdfs:comment>
+				</spdx:ExternalRef>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -268,7 +268,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "http://spdx.org/rdf/references/cpe23Type",
+		RefType:            "https://spdx.org/rdf/references/cpe23Type",
 		Category:           "PACKAGE-MANAGER",
 		ExternalRefComment: "comment",
 	}
@@ -278,15 +278,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 5: valid example (referenceCategory_other)
 	parser, _ = parserFromBodyContent(`
-		<spdx:ExternalRef>
-			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-			<spdx:referenceType>
-				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-			</spdx:referenceType>
-			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
-			<rdfs:comment>comment</rdfs:comment>
-		</spdx:ExternalRef>
-	`)
+				<spdx:ExternalRef>
+					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+					<spdx:referenceType>
+						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+					</spdx:referenceType>
+					<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_other"/>
+					<rdfs:comment>comment</rdfs:comment>
+				</spdx:ExternalRef>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -294,7 +294,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "http://spdx.org/rdf/references/cpe23Type",
+		RefType:            "https://spdx.org/rdf/references/cpe23Type",
 		Category:           "OTHER",
 		ExternalRefComment: "comment",
 	}
@@ -310,7 +310,7 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 
 	// TestCase 1: invalid elementId
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#upload2">
+		<spdx:Package rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9#upload2">
             <spdx:name>time-1.9.tar.gz</spdx:name>
 		</spdx:Package>
 	`)
@@ -322,10 +322,10 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 
 	// TestCase 2: Invalid License Concluded must raise an error:
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-            <spdx:licenseConcluded rdf:resource="http://spdx.org/licenses/IPL-3.0"/>
-		</spdx:Package>
-	`)
+			<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+				<spdx:licenseConcluded rdf:resource="https://spdx.org/licenses/IPL-3.0"/>
+			</spdx:Package>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getPackageFromNode(node)
 	if err == nil {
@@ -334,10 +334,10 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 
 	// TestCase 2: Invalid License Declared must raise an error:
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-            <spdx:licenseDeclared rdf:resource="http://spdx.org/licenses/IPL-3.0"/>
-		</spdx:Package>
-	`)
+			<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+				<spdx:licenseDeclared rdf:resource="https://spdx.org/licenses/IPL-3.0"/>
+			</spdx:Package>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getPackageFromNode(node)
 	if err == nil {
@@ -346,18 +346,18 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 
 	// TestCase 3: Invalid ExternalRef
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-			<spdx:externalRef>			
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_invalid"/>
-				</spdx:ExternalRef>
-			</spdx:externalRef>
-		</spdx:Package>
-	`)
+				<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+					<spdx:externalRef>			
+						<spdx:ExternalRef>
+							<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+							<spdx:referenceType>
+								<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+							</spdx:referenceType>
+							<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_invalid"/>
+						</spdx:ExternalRef>
+					</spdx:externalRef>
+				</spdx:Package>
+			`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getPackageFromNode(node)
 	if err == nil {
@@ -464,20 +464,20 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 	// TestCase 8: Checking if packages can handle cyclic dependencies:
 	// Simulating a smallest possible cycle: package related to itself.
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-			<spdx:name>Test Package</spdx:name>
-			<spdx:relationship>
-			    <spdx:Relationship>
-					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes" />
-					<spdx:relatedSpdxElement>
-						<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-							<spdx:versionInfo>1.1.1</spdx:versionInfo>
-						</spdx:Package>
-					</spdx:relatedSpdxElement>
-				</spdx:Relationship>
-			</spdx:relationship>
-		</spdx:Package>
-	`)
+			<spdx:Package rdf:about="https://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+				<spdx:name>Test Package</spdx:name>
+				<spdx:relationship>
+					<spdx:Relationship>
+						<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#relationshipType_describes" />
+						<spdx:relatedSpdxElement>
+							<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+								<spdx:versionInfo>1.1.1</spdx:versionInfo>
+							</spdx:Package>
+						</spdx:relatedSpdxElement>
+					</spdx:Relationship>
+				</spdx:relationship>
+			</spdx:Package>
+		`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	pkg, err = parser.getPackageFromNode(node)
 	if err != nil {
@@ -495,68 +495,68 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 
 	// TestCase 9: everything valid
 	parser, _ = parserFromBodyContent(`
-		<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
-			<spdx:name>Test Package</spdx:name>
-			<spdx:versionInfo>1.1.1</spdx:versionInfo>
-			<spdx:packageFileName>time-1.9.tar.gz</spdx:packageFileName>
-			<spdx:supplier>Person: Jane Doe (jane.doe@example.com)</spdx:supplier>
-			<spdx:originator>Organization: SPDX</spdx:originator>
-			<spdx:downloadLocation rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-			<spdx:filesAnalyzed>true</spdx:filesAnalyzed>
-			<spdx:packageVerificationCode>
-                <spdx.PackageVerificationCode>
-                    <spdx:packageVerificationCodeValue>cbceb8b5689b75a584efe35587b5d41bd48820ce</spdx:packageVerificationCodeValue>
-					<spdx:packageVerificationCodeExcludedFile>./package.spdx</spdx:packageVerificationCodeExcludedFile>
-                </spdx.PackageVerificationCode>
-            </spdx:packageVerificationCode>
-			<spdx:checksum>
-                <spdx:Checksum>
-					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
-					<spdx:checksumValue>75068c26abbed3ad3980685bae21d7202d288317</spdx:checksumValue>
-                </spdx:Checksum>
-            </spdx:checksum>
-			<doap:homepage>http://www.openjena.org/</doap:homepage>
-			<spdx:sourceInfo>uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.</spdx:sourceInfo>
-			<spdx:licenseConcluded>
-                <spdx:DisjunctiveLicenseSet>
-					<spdx:member rdf:resource="http://spdx.org/licenses/Nokia"/>
-					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
-                </spdx:DisjunctiveLicenseSet>
-            </spdx:licenseConcluded>
-			<spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-			<spdx:licenseDeclared rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-			<spdx:licenseComments>Other versions available for a commercial license</spdx:licenseComments>
-			<spdx:copyrightText rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-			<spdx:summary> Package for Testing </spdx:summary>
-			<spdx:description> Some tags are taken from other spdx autogenerated files </spdx:description>
-			<rdfs:comment>no comments</rdfs:comment>
-			<spdx:externalRef>
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
-				</spdx:ExternalRef>
-			</spdx:externalRef>
-			<spdx:hasFile rdf:resource="http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129" />
-			<spdx:relationship>
-			    <spdx:Relationship>
-					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes" />
-					<spdx:relatedSpdxElement rdf:resource="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2" />
-				</spdx:Relationship>
-			</spdx:relationship>
-			<spdx:attributionText>attribution text</spdx:attributionText>
-			<spdx:annotation>
-				<spdx:Annotation>
-					<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
-					<rdfs:comment>Package level annotation</rdfs:comment>
-					<spdx:annotator>Person: Package Commenter</spdx:annotator>
-					<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-				</spdx:Annotation>
-			</spdx:annotation>
-		</spdx:Package>
-	`)
+															<spdx:Package rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2">
+																<spdx:name>Test Package</spdx:name>
+																<spdx:versionInfo>1.1.1</spdx:versionInfo>
+																<spdx:packageFileName>time-1.9.tar.gz</spdx:packageFileName>
+																<spdx:supplier>Person: Jane Doe (jane.doe@example.com)</spdx:supplier>
+																<spdx:originator>Organization: SPDX</spdx:originator>
+																<spdx:downloadLocation rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+																<spdx:filesAnalyzed>true</spdx:filesAnalyzed>
+																<spdx:packageVerificationCode>
+																	<spdx.PackageVerificationCode>
+																		<spdx:packageVerificationCodeValue>cbceb8b5689b75a584efe35587b5d41bd48820ce</spdx:packageVerificationCodeValue>
+																		<spdx:packageVerificationCodeExcludedFile>./package.spdx</spdx:packageVerificationCodeExcludedFile>
+																	</spdx.PackageVerificationCode>
+																</spdx:packageVerificationCode>
+																<spdx:checksum>
+																	<spdx:Checksum>
+																		<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+																		<spdx:checksumValue>75068c26abbed3ad3980685bae21d7202d288317</spdx:checksumValue>
+																	</spdx:Checksum>
+																</spdx:checksum>
+																<doap:homepage>https://www.openjena.org/</doap:homepage>
+																<spdx:sourceInfo>uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.</spdx:sourceInfo>
+																<spdx:licenseConcluded>
+																	<spdx:DisjunctiveLicenseSet>
+																		<spdx:member rdf:resource="https://spdx.org/licenses/Nokia"/>
+																		<spdx:member rdf:resource="https://spdx.org/licenses/LGPL-2.0"/>
+																	</spdx:DisjunctiveLicenseSet>
+																</spdx:licenseConcluded>
+																<spdx:licenseInfoFromFiles rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+																<spdx:licenseDeclared rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+																<spdx:licenseComments>Other versions available for a commercial license</spdx:licenseComments>
+																<spdx:copyrightText rdf:resource="https://spdx.org/rdf/terms#noassertion" />
+																<spdx:summary> Package for Testing </spdx:summary>
+																<spdx:description> Some tags are taken from other spdx autogenerated files </spdx:description>
+																<rdfs:comment>no comments</rdfs:comment>
+																<spdx:externalRef>
+																	<spdx:ExternalRef>
+																		<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+																		<spdx:referenceType>
+																			<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+																		</spdx:referenceType>
+																		<spdx:referenceCategory rdf:resource="https://spdx.org/rdf/terms#referenceCategory_security"/>
+																	</spdx:ExternalRef>
+																</spdx:externalRef>
+																<spdx:hasFile rdf:resource="https://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-129" />
+																<spdx:relationship>
+																	<spdx:Relationship>
+																		<spdx:relationshipType rdf:resource="https://spdx.org/rdf/terms#relationshipType_describes" />
+																		<spdx:relatedSpdxElement rdf:resource="http://anupam-VirtualBox/repo/SPDX2_time-1.9#SPDXRef-upload2" />
+																	</spdx:Relationship>
+																</spdx:relationship>
+																<spdx:attributionText>attribution text</spdx:attributionText>
+																<spdx:annotation>
+																	<spdx:Annotation>
+																		<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
+																		<rdfs:comment>Package level annotation</rdfs:comment>
+																		<spdx:annotator>Person: Package Commenter</spdx:annotator>
+																		<spdx:annotationType rdf:resource="https://spdx.org/rdf/terms#annotationType_other"/>
+																	</spdx:Annotation>
+																</spdx:annotation>
+															</spdx:Package>
+														`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getPackageFromNode(node)
 	if err != nil {
@@ -591,11 +591,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 1: invalid checksum algorithm
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+			</spdx:Checksum>
+		`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -605,11 +605,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 1: valid checksum algorithm which is invalid for package
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha2000"/>
+			</spdx:Checksum>
+		`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -619,11 +619,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 2: valid checksum (sha1)
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+			</spdx:Checksum>
+		`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -643,11 +643,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 3: valid checksum (sha256)
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
+			</spdx:Checksum>
+		`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -666,11 +666,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 4: valid checksum (md5)
 	parser, _ = parserFromBodyContent(`
-		<spdx:Checksum>
-			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
-		</spdx:Checksum>
-	`)
+			<spdx:Checksum>
+				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
+			</spdx:Checksum>
+		`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)

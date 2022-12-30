@@ -30,7 +30,7 @@ func main() {
 	fileIn := args[1]
 	r, err := os.Open(fileIn)
 	if err != nil {
-		fmt.Printf("Error while opening %v for reading: %v", fileIn, err)
+		fmt.Printf("error while opening %v for reading: %v", fileIn, err)
 		return
 	}
 	defer r.Close()
@@ -38,7 +38,7 @@ func main() {
 	// try to load the SPDX file's contents as a json file, version 2.2
 	doc, err := spdx_json.Load2_2(r)
 	if err != nil {
-		fmt.Printf("Error while parsing %v: %v", args[1], err)
+		fmt.Printf("error while parsing %v: %v", args[1], err)
 		return
 	}
 

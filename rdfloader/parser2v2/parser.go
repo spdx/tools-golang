@@ -12,7 +12,7 @@ import (
 	"github.com/spdx/tools-golang/spdx/v2_2"
 )
 
-// returns a new instance of rdfParser2_2 given the gordf object and nodeToTriples mapping
+// NewParser2_2 returns a new instance of rdfParser2_2 given the gordf object and nodeToTriples mapping
 func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][]*gordfParser.Triple) *rdfParser2_2 {
 	parser := rdfParser2_2{
 		gordfParserObj:      gordfParserObj,
@@ -34,7 +34,7 @@ func NewParser2_2(gordfParserObj *gordfParser.Parser, nodeToTriples map[string][
 	return &parser
 }
 
-// main function which takes in a gordfParser and returns
+// LoadFromGoRDFParser main function which takes in a gordfParser and returns
 // a spdxDocument model or the error encountered while parsing it
 func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*v2_2.Document, error) {
 	// nodeToTriples is a mapping from a node to list of triples.
@@ -75,7 +75,7 @@ func LoadFromGoRDFParser(gordfParserObj *gordfParser.Parser) (*v2_2.Document, er
 		default:
 			continue
 			// because in rdf it is quite possible that the root node is an
-			// element that has been used in the some other element as a child
+			// element that has been used in some other element as a child
 		}
 	}
 

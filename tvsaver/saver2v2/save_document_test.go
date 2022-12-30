@@ -321,13 +321,13 @@ ReviewComment: I have reviewed this SPDX document and it is awesome
 	var got bytes.Buffer
 	err := RenderDocument2_2(doc, &got)
 	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
+		t.Errorf("expected nil error, got %v", err)
 	}
 
 	// check that they match
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
-		t.Errorf("Expected {{{%v}}}, got {{{%v}}}", want.String(), got.String())
+		t.Errorf("expected {{{%v}}}, got {{{%v}}}", want.String(), got.String())
 	}
 
 }
@@ -338,6 +338,6 @@ func TestSaver2_2DocumentReturnsErrorIfNilCreationInfo(t *testing.T) {
 	var got bytes.Buffer
 	err := RenderDocument2_2(doc, &got)
 	if err == nil {
-		t.Errorf("Expected error, got nil")
+		t.Errorf("expected error, got nil")
 	}
 }

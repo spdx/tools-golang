@@ -176,7 +176,7 @@ func (parser *rdfParser2_2) getArtifactFromNode(node *gordfParser.Node) (*v2_2.A
 
 // TODO: check if the filetype is valid.
 func (parser *rdfParser2_2) getFileTypeFromUri(uri string) (string, error) {
-	// fileType is given as a uri. for example: http://spdx.org/rdf/terms#fileType_text
+	// fileType is given as a uri. for example: https://spdx.org/rdf/terms#fileType_text
 	lastPart := getLastPartOfURI(uri)
 	if !strings.HasPrefix(lastPart, "fileType_") {
 		return "", fmt.Errorf("fileType Uri must begin with fileTYpe_. found: %s", lastPart)

@@ -1,12 +1,12 @@
 SPDXVersion: SPDX-2.2
 DataLicense: CC0-1.0
-DocumentNamespace: http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 DocumentName: SPDX-Tools-v2.0
 SPDXID: SPDXRef-DOCUMENT
 DocumentComment: <text>This document was created using SPDX 2.0 using licenses from the web site.</text>
 
 ## External Document References
-ExternalDocumentRef: DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
+ExternalDocumentRef: DocumentRef-spdx-tool-1.2 https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
 ## Creation Information
 Creator: Tool: LicenseFind-1.0
 Creator: Organization: ExampleCodeInspect ()
@@ -74,12 +74,12 @@ PackageVersion: 2.11.1
 PackageFileName: glibc-2.11.1.tar.gz
 PackageSupplier: Person: Jane Doe (jane.doe@example.com)
 PackageOriginator: Organization: ExampleCodeInspect (contact@example.com)
-PackageDownloadLocation: http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz
+PackageDownloadLocation: https://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz
 PackageVerificationCode: d6a770ba38583ed4bb4525bd96e50461655d2758(./package.spdx)
 PackageChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
 PackageChecksum: SHA256: 11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd
-PackageHomePage: http://ftp.gnu.org/gnu/glibc
+PackageHomePage: https://ftp.gnu.org/gnu/glibc
 PackageSourceInfo: <text>uses glibc-2_11-branch from git://sourceware.org/git/glibc.git.</text>
 PackageLicenseConcluded: (LGPL-2.0-only OR LicenseRef-3)
 ## License information from files
@@ -118,7 +118,7 @@ FileNotice: <text>Apache Commons Lang
 Copyright 2001-2011 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation (https://www.apache.org/).
 
 This product includes software from the Spring Framework,
 under the Apache License 2.0 (see: StringUtils.containsWhitespace())</text>
@@ -157,7 +157,7 @@ FileContributor: Black Duck Software In.c
 PackageName: Apache Commons Lang
 SPDXID: SPDXRef-fromDoap-1
 PackageDownloadLocation: NOASSERTION
-PackageHomePage: http://commons.apache.org/proper/commons-lang/
+PackageHomePage: https://commons.apache.org/proper/commons-lang/
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseDeclared: NOASSERTION
 PackageCopyrightText: <text>NOASSERTION</text>
@@ -168,7 +168,7 @@ PackageName: Jena
 SPDXID: SPDXRef-fromDoap-0
 PackageVersion: 3.12.0
 PackageDownloadLocation: https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz
-PackageHomePage: http://www.openjena.org/
+PackageHomePage: https://www.openjena.org/
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseDeclared: NOASSERTION
 PackageCopyrightText: <text>NOASSERTION</text>
@@ -182,7 +182,7 @@ PackageVersion: 8.8
 PackageFileName: saxonB-8.8.zip
 PackageDownloadLocation: https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download
 PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c
-PackageHomePage: http://saxon.sourceforge.net/
+PackageHomePage: https://saxon.sourceforge.net/
 PackageLicenseConcluded: MPL-1.0
 PackageLicenseDeclared: MPL-1.0
 PackageLicenseComments: <text>Other versions available for a commercial license</text>
@@ -276,7 +276,7 @@ ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42):
 phk@FreeBSD.ORG wrote this file. As long as you retain this notice you
 can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>
 LicenseName: Beer-Ware License (Version 42)
-LicenseCrossReference:  http://people.freebsd.org/~phk/
+LicenseCrossReference:  https://people.freebsd.org/~phk/
 LicenseComment: The beerware license has a couple of other standard variants.
 
 LicenseID: LicenseRef-3
@@ -324,6 +324,6 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text>
 LicenseName: CyberNeko License
-LicenseCrossReference: http://people.apache.org/~andyc/neko/LICENSE, http://justasample.url.com
+LicenseCrossReference: https://people.apache.org/~andyc/neko/LICENSE, https://justasample.url.com
 LicenseComment: <text>This is tye CyperNeko License</text>
 

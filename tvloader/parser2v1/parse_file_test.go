@@ -187,7 +187,7 @@ func TestParser2_1FileStartsNewPackageAfterParsingPackageNameTag(t *testing.T) {
 	}
 	// and the new Package should have no files
 	if len(parser.pkg.Files) != 0 {
-		t.Errorf("Expected no files in pkg.Files, got %d", len(parser.pkg.Files))
+		t.Errorf("expected no files in pkg.Files, got %d", len(parser.pkg.Files))
 	}
 	// and the Document's Packages should still be of size 1 and not have this
 	// new one, because no SPDX identifier has been seen yet
@@ -195,24 +195,24 @@ func TestParser2_1FileStartsNewPackageAfterParsingPackageNameTag(t *testing.T) {
 		t.Fatalf("expected 1 package, got %d", len(parser.doc.Packages))
 	}
 	if parser.doc.Packages[0] != p1 {
-		t.Errorf("Expected package %v in Packages[package1], got %v", p1, parser.doc.Packages[0])
+		t.Errorf("expected package %v in Packages[package1], got %v", p1, parser.doc.Packages[0])
 	}
 	if parser.doc.Packages[0].PackageName != p1Name {
 		t.Errorf("expected package name %s in Packages[package1], got %s", p1Name, parser.doc.Packages[0].PackageName)
 	}
 	// and the first Package's Files should be of size 1 and have f1 only
 	if len(parser.doc.Packages[0].Files) != 1 {
-		t.Errorf("Expected 1 file in Packages[package1].Files, got %d", len(parser.doc.Packages[0].Files))
+		t.Errorf("expected 1 file in Packages[package1].Files, got %d", len(parser.doc.Packages[0].Files))
 	}
 	if parser.doc.Packages[0].Files[0] != f1 {
-		t.Errorf("Expected file %v in Files[f1], got %v", f1, parser.doc.Packages[0].Files[0])
+		t.Errorf("expected file %v in Files[f1], got %v", f1, parser.doc.Packages[0].Files[0])
 	}
 	if parser.doc.Packages[0].Files[0].FileName != f1Name {
 		t.Errorf("expected file name %s in Files[f1], got %s", f1Name, parser.doc.Packages[0].Files[0].FileName)
 	}
 	// and the current file should be nil
 	if parser.file != nil {
-		t.Errorf("Expected nil for parser.file, got %v", parser.file)
+		t.Errorf("expected nil for parser.file, got %v", parser.file)
 	}
 }
 
@@ -521,11 +521,11 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/1/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/1/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "http://example.com/1/uri.whatever")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "https://example.com/1/uri.whatever")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -539,7 +539,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/3/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/3/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -548,7 +548,7 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "http://example.com/4/uri.whatever")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "https://example.com/4/uri.whatever")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -561,11 +561,11 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.Name != "project1" {
 		t.Errorf("expected %v, got %v", "project1", aop.Name)
 	}
-	if aop.HomePage != "http://example.com/1/" {
-		t.Errorf("expected %v, got %v", "http://example.com/1/", aop.HomePage)
+	if aop.HomePage != "https://example.com/1/" {
+		t.Errorf("expected %v, got %v", "https://example.com/1/", aop.HomePage)
 	}
-	if aop.URI != "http://example.com/1/uri.whatever" {
-		t.Errorf("expected %v, got %v", "http://example.com/1/uri.whatever", aop.URI)
+	if aop.URI != "https://example.com/1/uri.whatever" {
+		t.Errorf("expected %v, got %v", "https://example.com/1/uri.whatever", aop.URI)
 	}
 
 	aop = parser.file.ArtifactOfProjects[1]
@@ -583,8 +583,8 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.Name != "project3" {
 		t.Errorf("expected %v, got %v", "project3", aop.Name)
 	}
-	if aop.HomePage != "http://example.com/3/" {
-		t.Errorf("expected %v, got %v", "http://example.com/3/", aop.HomePage)
+	if aop.HomePage != "https://example.com/3/" {
+		t.Errorf("expected %v, got %v", "https://example.com/3/", aop.HomePage)
 	}
 	if aop.URI != "" {
 		t.Errorf("expected %v, got %v", "", aop.URI)
@@ -597,8 +597,8 @@ func TestParser2_1CanParseFileTags(t *testing.T) {
 	if aop.HomePage != "" {
 		t.Errorf("expected %v, got %v", "", aop.HomePage)
 	}
-	if aop.URI != "http://example.com/4/uri.whatever" {
-		t.Errorf("expected %v, got %v", "http://example.com/4/uri.whatever", aop.URI)
+	if aop.URI != "https://example.com/4/uri.whatever" {
+		t.Errorf("expected %v, got %v", "https://example.com/4/uri.whatever", aop.URI)
 	}
 
 	// File Comment
@@ -755,7 +755,7 @@ func TestFileAOPPointerChangesAfterTags(t *testing.T) {
 	curPtr := parser.fileAOP
 
 	// now, a home page; pointer should stay
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "http://example.com/1/")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectHomePage", "https://example.com/1/")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}
@@ -764,7 +764,7 @@ func TestFileAOPPointerChangesAfterTags(t *testing.T) {
 	}
 
 	// a URI; pointer should stay
-	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "http://example.com/1/uri.whatever")
+	err = parser.parsePairFromFile2_1("ArtifactOfProjectURI", "https://example.com/1/uri.whatever")
 	if err != nil {
 		t.Errorf("expected nil error, got %v", err)
 	}

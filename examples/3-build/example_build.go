@@ -89,7 +89,7 @@ func main() {
 	//   - the config object we just defined.
 	doc, err := builder.Build2_2(packageName, packageRootDir, config)
 	if err != nil {
-		fmt.Printf("Error while building document: %v\n", err)
+		fmt.Printf("error while building document: %v\n", err)
 		return
 	}
 
@@ -103,14 +103,14 @@ func main() {
 	// create a new file for writing
 	w, err := os.Create(fileOut)
 	if err != nil {
-		fmt.Printf("Error while opening %v for writing: %v\n", fileOut, err)
+		fmt.Printf("error while opening %v for writing: %v\n", fileOut, err)
 		return
 	}
 	defer w.Close()
 
 	err = tvsaver.Save2_2(doc, w)
 	if err != nil {
-		fmt.Printf("Error while saving %v: %v", fileOut, err)
+		fmt.Printf("error while saving %v: %v", fileOut, err)
 		return
 	}
 

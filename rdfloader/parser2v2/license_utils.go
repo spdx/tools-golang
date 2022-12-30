@@ -80,12 +80,12 @@ func mapLicensesToStrings(licences []AnyLicenseInfo) []string {
 
 /****** Type Functions ******/
 
-// TODO: should probably add brackets while linearizing a nested license.
+// ToLicenseString TODO: should probably add brackets while linearizing a nested license.
 func (lic ConjunctiveLicenseSet) ToLicenseString() string {
 	return strings.Join(mapLicensesToStrings(lic.members), " AND ")
 }
 
-// TODO: should probably add brackets while linearizing a nested license.
+// ToLicenseString TODO: should probably add brackets while linearizing a nested license.
 func (lic DisjunctiveLicenseSet) ToLicenseString() string {
 	return strings.Join(mapLicensesToStrings(lic.members), " OR ")
 }
