@@ -226,8 +226,8 @@ func Test_rdfParser2_2_getConjunctiveLicenseSetFromNode(t *testing.T) {
 	// TestCase 1: invalid license member
 	parser, _ = parserFromBodyContent(`
 				<spdx:ConjunctiveLicenseSet>
-					<spdx:member rdf:resource="https://spdx.org/licenses/Unknown"/>
-					<spdx:member rdf:resource="https://spdx.org/licenses/LGPL-2.0"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/Unknown"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
 				</spdx:ConjunctiveLicenseSet>
 			`)
 	licenseNode = parser.gordfParserObj.Triples[0].Subject
@@ -239,8 +239,8 @@ func Test_rdfParser2_2_getConjunctiveLicenseSetFromNode(t *testing.T) {
 	// TestCase 2: invalid predicate in the licenseSet.
 	parser, _ = parserFromBodyContent(`
 				<spdx:ConjunctiveLicenseSet>
-					<spdx:member rdf:resource="https://spdx.org/licenses/CC0-1.0"/>
-					<spdx:member rdf:resource="https://spdx.org/licenses/LGPL-2.0"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
 					<spdx:unknownTag />
 				</spdx:ConjunctiveLicenseSet>
 			`)
@@ -283,8 +283,8 @@ func Test_rdfParser2_2_getDisjunctiveLicenseSetFromNode(t *testing.T) {
 	// TestCase 1: invalid license member
 	parser, _ = parserFromBodyContent(`
 				<spdx:DisjunctiveLicenseSet>
-					<spdx:member rdf:resource="https://spdx.org/licenses/Unknown"/>
-					<spdx:member rdf:resource="https://spdx.org/licenses/LGPL-2.0"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/Unknown"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
 				</spdx:DisjunctiveLicenseSet>
 			`)
 	licenseNode = parser.gordfParserObj.Triples[0].Subject
@@ -296,8 +296,8 @@ func Test_rdfParser2_2_getDisjunctiveLicenseSetFromNode(t *testing.T) {
 	// TestCase 2: invalid predicate in the licenseSet.
 	parser, _ = parserFromBodyContent(`
 				<spdx:DisjunctiveLicenseSet>
-					<spdx:member rdf:resource="https://spdx.org/licenses/Unknown"/>
-					<spdx:member rdf:resource="https://spdx.org/licenses/LGPL-2.0"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/Unknown"/>
+					<spdx:member rdf:resource="http://spdx.org/licenses/LGPL-2.0"/>
 					<spdx:unknownTag />
 				</spdx:DisjunctiveLicenseSet>
 			`)
@@ -371,7 +371,7 @@ func Test_rdfParser2_2_getLicenseExceptionFromNode(t *testing.T) {
 	// TestCase 1: invalid value for rdf:seeAlso
 	parser, _ = parserFromBodyContent(`
 			<spdx:LicenseException>
-				<rdfs:seeAlso rdf:resource="https://www.opensource.org/licenses/GPL-3.0"/>
+				<rdfs:seeAlso rdf:resource="http://www.opensource.org/licenses/GPL-3.0"/>
 				<spdx:example>no example</spdx:example>
 				<spdx:licenseExceptionId>Libtool-exception</spdx:licenseExceptionId>
 				<rdfs:comment>no comments</rdfs:comment>
@@ -384,7 +384,7 @@ func Test_rdfParser2_2_getLicenseExceptionFromNode(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error while parsing a valid licenseException")
 	}
-	expectedCrossReference := "https://www.opensource.org/licenses/GPL-3.0"
+	expectedCrossReference := "http://www.opensource.org/licenses/GPL-3.0"
 	if licenseException.seeAlso != expectedCrossReference {
 		t.Errorf("expected: %s, found: %s", expectedCrossReference, licenseException.seeAlso)
 	}
@@ -474,7 +474,7 @@ func Test_rdfParser2_2_getLicenseFromNode(t *testing.T) {
 
 	// TestCase 5: everything valid:
 	parser, _ = parserFromBodyContent(`
-				<spdx:License rdf:about="https://spdx.org/licenses/GPL-3.0-or-later">
+				<spdx:License rdf:about="http://spdx.org/licenses/GPL-3.0-or-later">
 					<rdfs:seeAlso>https://www.opensource.org/licenses/GPL-3.0</rdfs:seeAlso>
 					<spdx:isOsiApproved>true</spdx:isOsiApproved>
 					<spdx:licenseText>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</spdx:licenseText>
@@ -492,7 +492,7 @@ func Test_rdfParser2_2_getLicenseFromNode(t *testing.T) {
 	if err != nil {
 		t.Errorf("error parsing a valid input: %v", err)
 	}
-	expectedSeeAlso := "https://www.opensource.org/licenses/GPL-3.0"
+	expectedSeeAlso := "http://www.opensource.org/licenses/GPL-3.0"
 	if len(license.seeAlso) != 1 {
 		t.Fatalf("expected seeAlso to have 1 element, got %d", len(license.seeAlso))
 	}
@@ -796,7 +796,7 @@ func Test_rdfParser2_2_getWithExceptionOperatorFromNode(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:WithExceptionOperator>
 				<spdx:member>
-					<spdx:License rdf:about="https://spdx.org/licenses/GPL-2.0-or-later">
+					<spdx:License rdf:about="http://spdx.org/licenses/GPL-2.0-or-later">
 						<spdx:unknownTag />
 					</spdx:License>
 				</spdx:member>
@@ -812,7 +812,7 @@ func Test_rdfParser2_2_getWithExceptionOperatorFromNode(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:WithExceptionOperator>
 				<spdx:member>
-					<spdx:License rdf:about="https://spdx.org/licenses/GPL-2.0-or-later"/>
+					<spdx:License rdf:about="http://spdx.org/licenses/GPL-2.0-or-later"/>
 				</spdx:member>
 				<spdx:licenseException>
 					<spdx:LicenseException>
@@ -834,7 +834,7 @@ func Test_rdfParser2_2_getWithExceptionOperatorFromNode(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:WithExceptionOperator>
 				<spdx:member>
-					<spdx:License rdf:about="https://spdx.org/licenses/GPL-2.0-or-later"/>
+					<spdx:License rdf:about="http://spdx.org/licenses/GPL-2.0-or-later"/>
 				</spdx:member>
 				<spdx:licenseException>
 					<spdx:LicenseException>
