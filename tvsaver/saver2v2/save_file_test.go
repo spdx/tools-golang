@@ -96,6 +96,7 @@ FileAttributionText: <text>multi-line
 attribution</text>
 FileDependency: f-1.txt
 FileDependency: g.txt
+
 `)
 
 	// render as buffer of bytes

@@ -33,7 +33,7 @@ LicenseName: License 1
 LicenseCrossReference: http://example.com/License1/
 LicenseCrossReference: http://example.com/License1AnotherURL/
 LicenseComment: this is a license comment
-		
+
 `)
 
 	// render as buffer of bytes
