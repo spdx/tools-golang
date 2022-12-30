@@ -196,7 +196,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 				<spdx:ExternalRef>
 					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
 					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
 					</spdx:referenceType>
 					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_invalid"/>
 				</spdx:ExternalRef>
@@ -213,7 +213,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 					<spdx:unknownPredicate />
 					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
 					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
 					</spdx:referenceType>
 					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
 				</spdx:ExternalRef>
@@ -229,7 +229,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 				<spdx:ExternalRef>
 					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
 					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
 					</spdx:referenceType>
 					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
 					<rdfs:comment>comment</rdfs:comment>
@@ -242,7 +242,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef := &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "https://spdx.org/rdf/references/cpe23Type",
+		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "SECURITY",
 		ExternalRefComment: "comment",
 	}
@@ -255,7 +255,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 				<spdx:ExternalRef>
 					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
 					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
 					</spdx:referenceType>
 					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
 					<rdfs:comment>comment</rdfs:comment>
@@ -268,7 +268,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "https://spdx.org/rdf/references/cpe23Type",
+		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "PACKAGE-MANAGER",
 		ExternalRefComment: "comment",
 	}
@@ -281,7 +281,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 				<spdx:ExternalRef>
 					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
 					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="https://spdx.org/rdf/references/cpe23Type"/>
+						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
 					</spdx:referenceType>
 					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
 					<rdfs:comment>comment</rdfs:comment>
@@ -294,7 +294,7 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 	}
 	expectedExtRef = &v2_2.PackageExternalReference{
 		Locator:            "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-		RefType:            "https://spdx.org/rdf/references/cpe23Type",
+		RefType:            "http://spdx.org/rdf/references/cpe23Type",
 		Category:           "OTHER",
 		ExternalRefComment: "comment",
 	}
@@ -592,7 +592,7 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 			<spdx:Checksum>
 				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 			</spdx:Checksum>
 		`)
 	pkg = &v2_2.Package{}

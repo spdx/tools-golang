@@ -20,7 +20,7 @@ func Test_rdfParser2_2_getExternalDocumentRefFromNode(t *testing.T) {
 					<spdx:checksum>
 						<spdx:Checksum>
 							<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-							<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 						</spdx:Checksum>
 					</spdx:checksum>
 					<spdx:spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
@@ -100,7 +100,7 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 							<spdx:checksum>
 								<spdx:Checksum>
 									<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-									<spdx:algorithm rdf:resource="https://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+									<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
 								</spdx:Checksum>
 							</spdx:checksum>
 							<spdx:spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
