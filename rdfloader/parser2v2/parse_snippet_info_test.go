@@ -58,7 +58,7 @@ func Test_rdfParser2_2_getSnippetInformationFromTriple2_2(t *testing.T) {
 	parser, _ = parserFromBodyContent(`
 		<spdx:Snippet rdf:about="#SPDXRef-Snippet">
 			<spdx:snippetFromFile>
-				<spdx:File rdf:resource="https://anupam-VirtualBox/spdx.rdf#item8" />
+				<spdx:File rdf:resource="http://anupam-VirtualBox/spdx.rdf#item8" />
 			</spdx:snippetFromFile>
 		</spdx:Snippet>
 	`)

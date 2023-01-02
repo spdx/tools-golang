@@ -563,6 +563,7 @@ func Test_rdfParser2_2_getPackageFromNode(t *testing.T) {
 		t.Errorf("error parsing a valid package: %v", err)
 	}
 }
+
 func Test_rdfParser2_2_setFileToPackage(t *testing.T) {
 	var pkg *v2_2.Package
 	var file *v2_2.File
