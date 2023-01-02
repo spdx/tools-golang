@@ -467,21 +467,21 @@ func Test_rdfParser2_2_getFileFromNode(t *testing.T) {
 	// TestCase 10: Splitting of File definition into parents of different tags mustn't create new file objects.
 	fileDefinitions := []string{
 		`<spdx:Package rdf:about="#SPDXRef-Package1">
-					<spdx:hasFile>
-						<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-							<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
-							<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
-						</spdx:File>
-					</spdx:hasFile>
-				</spdx:Package>`,
+			<spdx:hasFile>
+				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+					<spdx:fileName>time-1.9/ChangeLog</spdx:fileName>
+					<spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+				</spdx:File>
+			</spdx:hasFile>
+		</spdx:Package>`,
 		`<spdx:Package rdf:about="#SPDXRef-Package2">
-							<spdx:hasFile>
-								<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
-									<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
-									<spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#NOASSERTION" />
-								</spdx:File>
-							</spdx:hasFile>
-						</spdx:Package>`,
+			<spdx:hasFile>
+				<spdx:File rdf:about="http://anupam-VirtualBox/repo/SPDX2_time-1.9.tar.gz_1535120734-spdx.rdf#SPDXRef-item177">
+					<spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+					<spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#NOASSERTION" />
+				</spdx:File>
+			</spdx:hasFile>
+		</spdx:Package>`,
 	}
 	parser, _ = parserFromBodyContent(strings.Join(fileDefinitions, ""))
 
