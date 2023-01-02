@@ -70,11 +70,11 @@ func Test_rdfParser2_2_nodeToTriples(t *testing.T) {
 	// TestCase 2: node should be addressable based on the node content and not the pointer.
 	// It should allow new nodes same as the older ones to retrieve the associated triples.
 	parser, _ = parserFromBodyContent(`
-			  <spdx:Checksum rdf:about="#checksum">
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
-				<spdx:checksumValue>75068c26abbed3ad3980685bae21d7202d288317</spdx:checksumValue>
-			  </spdx:Checksum>
-		`)
+		  <spdx:Checksum rdf:about="#checksum">
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+			<spdx:checksumValue>75068c26abbed3ad3980685bae21d7202d288317</spdx:checksumValue>
+		  </spdx:Checksum>
+	`)
 	newNode := &gordfParser.Node{
 		NodeType: gordfParser.IRI,
 		ID:       "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#checksum",
@@ -83,7 +83,7 @@ func Test_rdfParser2_2_nodeToTriples(t *testing.T) {
 
 	// The output must have 3 triples:
 	// 1. newNode rdf:type Checksum
-	// 2. newNode spdx:algorithm https://spdx.org/rdf/terms#checksumAlgorithm_sha1
+	// 2. newNode spdx:algorithm http://spdx.org/rdf/terms#checksumAlgorithm_sha1
 	// 3. newNode spdx:checksumValue 75068c26abbed3ad3980685bae21d7202d288317
 	if len(output) != 3 {
 		t.Errorf("expected output to have 3 triples, got %d", len(output))
@@ -154,11 +154,11 @@ func Test_getNodeTypeFromTriples(t *testing.T) {
 		},
 		Object: &gordfParser.Node{
 			NodeType: gordfParser.IRI,
-			ID:       "https://spdx.org/rdf/terms#Checksum",
+			ID:       "http://spdx.org/rdf/terms#Checksum",
 		},
 	}
 	triples = append(triples, typeTriple)
-	expectedNodeType = "https://spdx.org/rdf/terms#Checksum"
+	expectedNodeType = "http://spdx.org/rdf/terms#Checksum"
 	nodeType, err = getNodeTypeFromTriples(triples, node)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -176,7 +176,7 @@ func Test_getNodeTypeFromTriples(t *testing.T) {
 		},
 		Object: &gordfParser.Node{
 			NodeType: gordfParser.IRI,
-			ID:       "https://spdx.org/rdf/terms#Snippet",
+			ID:       "http://spdx.org/rdf/terms#Snippet",
 		},
 	}
 	triples = append(triples, typeTriple)

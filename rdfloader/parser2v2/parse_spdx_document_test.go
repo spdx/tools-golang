@@ -15,17 +15,17 @@ func Test_rdfParser2_2_getExternalDocumentRefFromNode(t *testing.T) {
 
 	// TestCase 1: invalid checksum
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalDocumentRef>
-					<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
-					<spdx:checksum>
-						<spdx:Checksum>
-							<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
-						</spdx:Checksum>
-					</spdx:checksum>
-					<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
-				</spdx:ExternalDocumentRef>
-			`)
+		<spdx:ExternalDocumentRef>
+			<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
+			<spdx:checksum>
+				<spdx:Checksum>
+					<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
+					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+				</spdx:Checksum>
+			</spdx:checksum>
+			<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+		</spdx:ExternalDocumentRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getExternalDocumentRefFromNode(node)
 	if err == nil {
@@ -46,17 +46,17 @@ func Test_rdfParser2_2_getExternalDocumentRefFromNode(t *testing.T) {
 
 	// TestCase 3: valid example
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalDocumentRef>
-					<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
-					<spdx:checksum>
-						<spdx:Checksum>
-							<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
-						</spdx:Checksum>
-					</spdx:checksum>
-					<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
-				</spdx:ExternalDocumentRef>
-			`)
+		<spdx:ExternalDocumentRef>
+			<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
+			<spdx:checksum>
+				<spdx:Checksum>
+					<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
+					<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
+				</spdx:Checksum>
+			</spdx:checksum>
+			<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+		</spdx:ExternalDocumentRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getExternalDocumentRefFromNode(node)
 	if err != nil {
@@ -71,8 +71,8 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 
 	// TestCase 1: invalid spdx id of the document
 	parser, _ = parserFromBodyContent(`
-			<spdx:SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document"/>
-		`)
+		<spdx:SpdxDocument rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301/Document"/>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseSpdxDocumentNode(node)
 	if err == nil {
@@ -81,10 +81,10 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 
 	// TestCase 2: erroneous dataLicense
 	parser, _ = parserFromBodyContent(`
-			<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
-				<spdx:dataLicense rdf:resource="https://spdx.org/rdf/terms#Unknown" />
-			</spdx:SpdxDocument>
-		`)
+		<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
+			<spdx:dataLicense rdf:resource="http://spdx.org/rdf/terms#Unknown" />
+		</spdx:SpdxDocument>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseSpdxDocumentNode(node)
 	if err == nil {
@@ -93,21 +93,21 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 
 	// TestCase 3: invalid external document ref
 	parser, _ = parserFromBodyContent(`
-				<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
-					<spdx:externalDocumentRef>
-						<spdx:ExternalDocumentRef>
-							<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
-							<spdx:checksum>
-								<spdx:Checksum>
-									<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-									<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
-								</spdx:Checksum>
-							</spdx:checksum>
-							<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
-						</spdx:ExternalDocumentRef>
-				</spdx:externalDocumentRef>
-				</spdx:SpdxDocument>
-			`)
+		<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
+			<spdx:externalDocumentRef>
+				<spdx:ExternalDocumentRef>
+					<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
+					<spdx:checksum>
+						<spdx:Checksum>
+							<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
+							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+						</spdx:Checksum>
+					</spdx:checksum>
+					<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+				</spdx:ExternalDocumentRef>
+        </spdx:externalDocumentRef>
+		</spdx:SpdxDocument>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseSpdxDocumentNode(node)
 	if err == nil {
@@ -116,12 +116,12 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 
 	// TestCase 4: invalid package
 	parser, _ = parserFromBodyContent(`
-			<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
-				<spdx:describesPackage>
-					<spdx:Package rdf:about="https://www.spdx.org/spdxdocs/8f141b09-1138-4fc5-aecb-fc10d9ac1eed#SPDX-1"/>
-				</spdx:describesPackage>
-			</spdx:SpdxDocument>
-		`)
+		<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
+			<spdx:describesPackage>
+				<spdx:Package rdf:about="http://www.spdx.org/spdxdocs/8f141b09-1138-4fc5-aecb-fc10d9ac1eed#SPDX-1"/>
+			</spdx:describesPackage>
+		</spdx:SpdxDocument>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseSpdxDocumentNode(node)
 	if err == nil {
@@ -179,60 +179,60 @@ func Test_rdfParser2_2_parseSpdxDocumentNode(t *testing.T) {
 
 	// TestCase 7: everything valid
 	parser, _ = parserFromBodyContent(`
-									<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
-										<spdx:specVersion>SPDX-2.1</spdx:specVersion>
-										<spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0" />
-										<spdx:name>/test/example</spdx:name>
-										<spdx:externalDocumentRef>
-											<spdx:ExternalDocumentRef>
-												<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
-												<spdx:checksum>
-													<spdx:Checksum>
-														<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
-														<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-													</spdx:Checksum>
-												</spdx:checksum>
-												<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
-											</spdx:ExternalDocumentRef>
-										</spdx:externalDocumentRef>	
-										<spdx:creationInfo>
-											<spdx:CreationInfo>
-												<spdx:licenseListVersion>2.6</spdx:licenseListVersion>
-												<spdx:creator>Person: spdx (y)</spdx:creator>
-												<spdx:creator>Organization: </spdx:creator>
-												<spdx:creator>Tool: spdx2</spdx:creator>
-												<spdx:created>2018-08-24T19:55:34Z</spdx:created>
-											</spdx:CreationInfo>
-										</spdx:creationInfo>
-										<rdfs:comment>test</rdfs:comment>
-										<spdx:reviewed>
-											<spdx:Review>
-												<rdfs:comment>Another example reviewer.</rdfs:comment>
-												<spdx:reviewDate>2011-03-13T00:00:00Z</spdx:reviewDate>
-												<spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
-											</spdx:Review>
-										</spdx:reviewed>
-										<spdx:describesPackage>
-											<spdx:Package rdf:about="#SPDXRef-1"/>
-										</spdx:describesPackage>
-										<spdx:hasExtractedLicensingInfo rdf:resource="https://spdx.org/licenses/CC0-1.0"/>
-										<spdx:relationship>
-											<spdx:Relationship>
-												<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_containedBy"/>
-												<spdx:relatedSpdxElement rdf:resource="http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-1"/>
-												<rdfs:comment></rdfs:comment>
-											</spdx:Relationship>
-										</spdx:relationship>
-										<spdx:annotation>
-											<spdx:Annotation>
-												<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
-												<rdfs:comment>test annotation</rdfs:comment>
-												<spdx:annotator>Person: Rishabh Bhatnagar</spdx:annotator>
-												<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
-											</spdx:Annotation>
-										</spdx:annotation>
-									</spdx:SpdxDocument>
-								`)
+		<spdx:SpdxDocument rdf:about="#SPDXRef-Document">
+			<spdx:specVersion>SPDX-2.1</spdx:specVersion>
+    		<spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0" />
+			<spdx:name>/test/example</spdx:name>
+			<spdx:externalDocumentRef>
+				<spdx:ExternalDocumentRef>
+					<spdx:externalDocumentId>DocumentRef-spdx-tool-1.2</spdx:externalDocumentId>
+					<spdx:checksum>
+						<spdx:Checksum>
+							<spdx:checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</spdx:checksumValue>
+							<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+						</spdx:Checksum>
+					</spdx:checksum>
+					<spdx:spdxDocument rdf:resource="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+				</spdx:ExternalDocumentRef>
+			</spdx:externalDocumentRef>	
+			<spdx:creationInfo>
+			    <spdx:CreationInfo>
+					<spdx:licenseListVersion>2.6</spdx:licenseListVersion>
+					<spdx:creator>Person: spdx (y)</spdx:creator>
+					<spdx:creator>Organization: </spdx:creator>
+					<spdx:creator>Tool: spdx2</spdx:creator>
+					<spdx:created>2018-08-24T19:55:34Z</spdx:created>
+			    </spdx:CreationInfo>
+			</spdx:creationInfo>
+    		<rdfs:comment>test</rdfs:comment>
+			<spdx:reviewed>
+				<spdx:Review>
+					<rdfs:comment>Another example reviewer.</rdfs:comment>
+					<spdx:reviewDate>2011-03-13T00:00:00Z</spdx:reviewDate>
+					<spdx:reviewer>Person: Suzanne Reviewer</spdx:reviewer>
+				</spdx:Review>
+	        </spdx:reviewed>
+			<spdx:describesPackage>
+				<spdx:Package rdf:about="#SPDXRef-1"/>
+			</spdx:describesPackage>
+			<spdx:hasExtractedLicensingInfo rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+			<spdx:relationship>
+				<spdx:Relationship>
+					<spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_containedBy"/>
+					<spdx:relatedSpdxElement rdf:resource="http://spdx.org/documents/spdx-toolsv2.1.7-SNAPSHOT#SPDXRef-1"/>
+					<rdfs:comment></rdfs:comment>
+				</spdx:Relationship>
+			</spdx:relationship>
+			<spdx:annotation>
+				<spdx:Annotation>
+					<spdx:annotationDate>2011-01-29T18:30:22Z</spdx:annotationDate>
+					<rdfs:comment>test annotation</rdfs:comment>
+					<spdx:annotator>Person: Rishabh Bhatnagar</spdx:annotator>
+					<spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_other"/>
+				</spdx:Annotation>
+			</spdx:annotation>
+		</spdx:SpdxDocument>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.parseSpdxDocumentNode(node)
 	if err != nil {

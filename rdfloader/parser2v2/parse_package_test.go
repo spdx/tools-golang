@@ -193,14 +193,14 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 1: invalid reference category
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_invalid"/>
-				</spdx:ExternalRef>
-			`)
+		<spdx:ExternalRef>
+			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+			<spdx:referenceType>
+				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
+			</spdx:referenceType>
+			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_invalid"/>
+		</spdx:ExternalRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err == nil {
@@ -209,15 +209,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 2: invalid predicate
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalRef>
-					<spdx:unknownPredicate />
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
-				</spdx:ExternalRef>
-			`)
+		<spdx:ExternalRef>
+			<spdx:unknownPredicate />
+			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+			<spdx:referenceType>
+				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
+			</spdx:referenceType>
+			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
+		</spdx:ExternalRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err == nil {
@@ -226,15 +226,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 3: valid example (referenceCategory_security)
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
-					<rdfs:comment>comment</rdfs:comment>
-				</spdx:ExternalRef>
-			`)
+		<spdx:ExternalRef>
+			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+			<spdx:referenceType>
+				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
+			</spdx:referenceType>
+			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_security"/>
+			<rdfs:comment>comment</rdfs:comment>
+		</spdx:ExternalRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -252,15 +252,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 4: valid example (referenceCategory_packageManager)
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
-					<rdfs:comment>comment</rdfs:comment>
-				</spdx:ExternalRef>
-			`)
+		<spdx:ExternalRef>
+			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+			<spdx:referenceType>
+				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
+			</spdx:referenceType>
+			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
+			<rdfs:comment>comment</rdfs:comment>
+		</spdx:ExternalRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -278,15 +278,15 @@ func Test_rdfParser2_2_getPackageExternalRef(t *testing.T) {
 
 	// TestCase 5: valid example (referenceCategory_other)
 	parser, _ = parserFromBodyContent(`
-				<spdx:ExternalRef>
-					<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
-					<spdx:referenceType>
-						<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
-					</spdx:referenceType>
-					<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
-					<rdfs:comment>comment</rdfs:comment>
-				</spdx:ExternalRef>
-			`)
+		<spdx:ExternalRef>
+			<spdx:referenceLocator>cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*</spdx:referenceLocator>
+			<spdx:referenceType>
+				<spdx:ReferenceType rdf:about="http://spdx.org/rdf/references/cpe23Type"/>
+			</spdx:referenceType>
+			<spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
+			<rdfs:comment>comment</rdfs:comment>
+		</spdx:ExternalRef>
+	`)
 	node = parser.gordfParserObj.Triples[0].Subject
 	extRef, err = parser.getPackageExternalRef(node)
 	if err != nil {
@@ -590,11 +590,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 1: invalid checksum algorithm
 	parser, _ = parserFromBodyContent(`
-			<spdx:Checksum>
-				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
-			</spdx:Checksum>
-		`)
+		<spdx:Checksum>
+			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha999"/>
+		</spdx:Checksum>
+	`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -604,11 +604,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 1: valid checksum algorithm which is invalid for package
 	parser, _ = parserFromBodyContent(`
-			<spdx:Checksum>
-				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000"/>
-			</spdx:Checksum>
-		`)
+		<spdx:Checksum>
+			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha2000"/>
+		</spdx:Checksum>
+	`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -618,11 +618,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 2: valid checksum (sha1)
 	parser, _ = parserFromBodyContent(`
-			<spdx:Checksum>
-				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-			</spdx:Checksum>
-		`)
+		<spdx:Checksum>
+			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+		</spdx:Checksum>
+	`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -642,11 +642,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 3: valid checksum (sha256)
 	parser, _ = parserFromBodyContent(`
-			<spdx:Checksum>
-				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
-			</spdx:Checksum>
-		`)
+		<spdx:Checksum>
+			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha256"/>
+		</spdx:Checksum>
+	`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
@@ -665,11 +665,11 @@ func Test_rdfParser2_2_setPackageChecksum(t *testing.T) {
 
 	// TestCase 4: valid checksum (md5)
 	parser, _ = parserFromBodyContent(`
-			<spdx:Checksum>
-				<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
-				<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
-			</spdx:Checksum>
-		`)
+		<spdx:Checksum>
+			<spdx:checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</spdx:checksumValue>
+			<spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5"/>
+		</spdx:Checksum>
+	`)
 	pkg = &v2_2.Package{}
 	node = parser.gordfParserObj.Triples[0].Subject
 	err = parser.setPackageChecksum(pkg, node)
