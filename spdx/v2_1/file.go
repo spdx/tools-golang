@@ -66,7 +66,7 @@ type File struct {
 	// defined here -- so this should just be an ElementID.
 	Snippets map[common.ElementID]*Snippet `json:"-"`
 
-	Annotations []Annotation `json:"annotations"`
+	Annotations []Annotation `json:"annotations,omitempty"`
 }
 
 // ArtifactOfProject is a DEPRECATED collection of data regarding
