@@ -50,13 +50,6 @@ tools-golang doesn't currently do any of the following:
 We are working towards adding functionality for all of these. Code contributions
 are welcome!
 
-## Requirements
-
-tools-golang uses https://github.com/spdx/gordf to manage RDF input and output.
-
-Other than that, tools-golang does not require anything outside the Go standard
-library.
-
 ## Documentation
 
 SPDX tools-golang documentation is available on the pkg.go.dev website at https://pkg.go.dev/github.com/spdx/tools-golang.
