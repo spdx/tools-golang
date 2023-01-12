@@ -11,9 +11,9 @@ Go programs to work with [SPDX®](https://spdx.dev/) files.
 
 ## Recent news
 
-2022-04-03: **v0.3.0**: added support for saving SPDX JSON files as well as
-other improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md)
-for full details.
+2022-01-11: **v0.4.0**: added support for SPDX v2.3 and YAML, as well as other
+improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md) for full
+details.  
 
 ## What it does
 

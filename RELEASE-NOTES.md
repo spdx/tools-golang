@@ -2,6 +2,36 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Release Notes for spdx/tools-golang
 
+## 0.4.0
+
+0.4.0 released on 2022-01-11
+
+### New Features and Enhancements
+* SPDX v2.3 support #164
+* YAML support #134
+* Add reference types enumerables to SPDX pkg definition #162 #163
+* Expand hash algorithm support to include all valid SPDX 2.2 and 2.3 algorithms #173
+
+### Bug fixes
+* JSON encoding and decoding not properly handling SPDXRef- prefixes #170
+
+### Documentation and Cleanup
+* Overhaul structs, refactor JSON parser and saver #133 
+* YAML documentation and JSON documentation fixes #141 
+* Convert SPDX structs to versioned pkgs #146
+* Ensure consistency between JSON struct tags across different SPDX versions #174
+* Add Security.md for handling of security issues #154
+* Update build workflow to go 1.18 #148
+
+### Contributors
+* @ianling 
+* @CatalinStratu
+* @lumjjb 
+* @pxp928 
+* @kzantow 
+* @puerco 
+* @jedevc 
+
 ## 0.3.0
 
 0.3.0 released on: 2022-04-03
