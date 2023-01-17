@@ -1,6 +1,6 @@
 SPDXVersion: SPDX-2.3
 DataLicense: CC0-1.0
-SPDXID: SPDXRef-SPDXRef-DOCUMENT
+SPDXID: SPDXRef-DOCUMENT
 DocumentName: SPDX-Tools-v2.0
 DocumentNamespace: http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 ExternalDocumentRef: DocumentRef-DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759
@@ -17,7 +17,7 @@ compatible system run time libraries.</text>
 ##### Unpackaged files
 
 FileName: ./lib-source/commons-lang3-3.1-sources.jar
-SPDXID: SPDXRef-SPDXRef-CommonsLangSrc
+SPDXID: SPDXRef-CommonsLangSrc
 FileType: ARCHIVE
 FileChecksum: SHA1: c2b4e1c67a2d28fced849ee1bb76e7391b93f125
 LicenseConcluded: Apache-2.0
@@ -35,7 +35,7 @@ under the Apache License 2.0 (see: StringUtils.containsWhitespace())</text>
 FileContributor: Apache Software Foundation
 
 FileName: ./src/org/spdx/parser/DOAPProject.java
-SPDXID: SPDXRef-SPDXRef-DoapSource
+SPDXID: SPDXRef-DoapSource
 FileType: SOURCE
 FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 LicenseConcluded: Apache-2.0
@@ -48,7 +48,7 @@ FileContributor: Source Auditor Inc.
 FileContributor: Black Duck Software In.c
 
 FileName: ./package/foo.c
-SPDXID: SPDXRef-SPDXRef-File
+SPDXID: SPDXRef-File
 FileType: SOURCE
 FileChecksum: SHA1: d6a770ba38583ed4bb4525bd96e50461655d2758
 FileChecksum: MD5: 624c1abb3664f4b35547e7c73864ad24
@@ -70,7 +70,7 @@ FileContributor: Modified by Paul Mundt lethal@linux-sh.org
 FileContributor: IBM Corporation
 
 FileName: ./lib-source/jena-2.6.3-sources.jar
-SPDXID: SPDXRef-SPDXRef-JenaLib
+SPDXID: SPDXRef-JenaLib
 FileType: ARCHIVE
 FileChecksum: SHA1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
 LicenseConcluded: LicenseRef-1
@@ -84,7 +84,7 @@ FileContributor: Hewlett Packard Inc.
 ##### Package: centos
 
 PackageName: centos
-SPDXID: SPDXRef-SPDXRef-CentOS-7
+SPDXID: SPDXRef-CentOS-7
 PackageVersion: centos7.9.2009
 PackageFileName: saxonB-8.8.zip
 PackageDownloadLocation: NOASSERTION
@@ -100,7 +100,7 @@ PackageDescription: The CentOS container used to run the application.
 ##### Package: glibc
 
 PackageName: glibc
-SPDXID: SPDXRef-SPDXRef-Package
+SPDXID: SPDXRef-Package
 PackageVersion: 2.11.1
 PackageFileName: glibc-2.11.1.tar.gz
 PackageSupplier: Person: Jane Doe (jane.doe@example.com)
@@ -129,7 +129,7 @@ PackageAttributionText: The GNU C Library is free software.  See the file COPYIN
 ##### Package: Saxon
 
 PackageName: Saxon
-SPDXID: SPDXRef-SPDXRef-Saxon
+SPDXID: SPDXRef-Saxon
 PackageVersion: 8.8
 PackageFileName: saxonB-8.8.zip
 PackageDownloadLocation: https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download
@@ -145,7 +145,7 @@ PackageDescription: The Saxon package is a collection of tools for processing XM
 ##### Package: Jena
 
 PackageName: Jena
-SPDXID: SPDXRef-SPDXRef-fromDoap-0
+SPDXID: SPDXRef-fromDoap-0
 PackageVersion: 3.12.0
 PackageDownloadLocation: https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz
 FilesAnalyzed: false
@@ -158,10 +158,11 @@ ExternalRef: PACKAGE-MANAGER purl pkg:maven/org.apache.jena/apache-jena@3.12.0
 ##### Package: Apache Commons Lang
 
 PackageName: Apache Commons Lang
-SPDXID: SPDXRef-SPDXRef-fromDoap-1
+SPDXID: SPDXRef-fromDoap-1
 PackageDownloadLocation: NOASSERTION
 FilesAnalyzed: false
 PackageHomePage: http://commons.apache.org/proper/commons-lang/
+PackageLicenseConcluded: NOASSERTION
 PackageLicenseDeclared: NOASSERTION
 PackageCopyrightText: NOASSERTION
 
@@ -294,6 +295,7 @@ LicenseComment: This is tye CyperNeko License
 ##### Relationships
 
 Relationship: SPDXRef-DOCUMENT CONTAINS SPDXRef-Package
+RelationshipComment: A relationship comment
 Relationship: SPDXRef-DOCUMENT COPY_OF DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File
 Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
@@ -319,10 +321,4 @@ Annotator: Person: Suzanne Reviewer
 AnnotationDate: 2011-03-13T00:00:00Z
 AnnotationType: REVIEW
 AnnotationComment: Another example reviewer.
-
-##### Reviews
-
-Reviewer: Person: joe@example.com
-ReviewDate: 2021-11-03T05:43:21Z
-ReviewComment: This is a review comment
 

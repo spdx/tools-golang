@@ -72,8 +72,7 @@
         {
           "referenceCategory": "SECURITY",
           "referenceType": "cpe23Type",
-          "referenceLocator": "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*",
-          "comment": ""
+          "referenceLocator": "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
         },
         {
           "referenceCategory": "OTHER",
@@ -99,6 +98,7 @@
       "SPDXID": "SPDXRef-fromDoap-1",
       "downloadLocation": "NOASSERTION",
       "homepage": "http://commons.apache.org/proper/commons-lang/",
+      "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
       "copyrightText": "NOASSERTION"
     },
@@ -115,8 +115,7 @@
         {
           "referenceCategory": "PACKAGE-MANAGER",
           "referenceType": "purl",
-          "referenceLocator": "pkg:maven/org.apache.jena/apache-jena@3.12.0",
-          "comment": ""
+          "referenceLocator": "pkg:maven/org.apache.jena/apache-jena@3.12.0"
         }
       ]
     },
@@ -304,7 +303,8 @@
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
       "relatedSpdxElement": "SPDXRef-Package",
-      "relationshipType": "CONTAINS"
+      "relationshipType": "CONTAINS",
+      "comment": "A relationship comment"
     },
     {
       "spdxElementId": "SPDXRef-DOCUMENT",

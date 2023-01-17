@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *reporter*, *tvloader*
+// Example for: *reporter*, *tagvalue*
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // generating a basic report listing counts of the concluded licenses for its
@@ -14,7 +14,7 @@ import (
 
 	"github.com/spdx/tools-golang/reporter"
 	"github.com/spdx/tools-golang/spdxlib"
-	"github.com/spdx/tools-golang/tvloader"
+	"github.com/spdx/tools-golang/tagvalue"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 	args := os.Args
 	if len(args) != 2 {
 		fmt.Printf("Usage: %v <spdx-file-in>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
+		fmt.Printf("  Load SPDX tag-value file <spdx-file-in>, and\n")
 		fmt.Printf("  generate and print a report of its concluded licenses.\n")
 		return
 	}
@@ -37,8 +37,8 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a tag-value file, version 2.2
-	doc, err := tvloader.Load2_2(r)
+	// try to load the SPDX file's contents as a tag-value file
+	doc, err := tagvalue.Read(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filename, err)
 		return
@@ -48,7 +48,7 @@ func main() {
 	fmt.Printf("Successfully loaded %s\n\n", filename)
 
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
+	pkgIDs, err := spdxlib.GetDescribedPackageIDs(doc)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
 		return
@@ -91,7 +91,7 @@ func main() {
 		// values, sorted by # of occurrences
 		fmt.Printf("============================\n")
 		fmt.Printf("Package %s (%s)\n", string(pkgID), pkg.PackageName)
-		err = reporter.Generate2_2(pkg, os.Stdout)
+		err = reporter.Generate(pkg, os.Stdout)
 		if err != nil {
 			fmt.Printf("Error while generating report: %v\n", err)
 		}

@@ -7,7 +7,6 @@ package idsearcher
 import (
 	"bufio"
 	"fmt"
-	"github.com/spdx/tools-golang/spdx/v2_3"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -15,17 +14,14 @@ import (
 	"strings"
 
 	"github.com/spdx/tools-golang/builder"
-	"github.com/spdx/tools-golang/spdx/v2_1"
-	"github.com/spdx/tools-golang/spdx/v2_2"
+	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/utils"
 )
 
-// ===== 2.1 Searcher functions =====
-
-// Config2_1 is a collection of configuration settings for docbuilder
-// (for version 2.1 SPDX Documents). A few mandatory fields are set here
-// so that they can be repeatedly reused in multiple calls to Build2_1.
-type Config2_1 struct {
+// Config is a collection of configuration settings for docbuilder.
+// A few mandatory fields are set here
+// so that they can be repeatedly reused in multiple calls to Build.
+type Config struct {
 	// NamespacePrefix should be a URI representing a prefix for the
 	// namespace with which the SPDX Document will be associated.
 	// It will be used in the DocumentNamespace field in the CreationInfo
@@ -45,270 +41,22 @@ type Config2_1 struct {
 	SearcherPathsIgnored []string
 }
 
-// BuildIDsDocument2_1 creates an SPDX Document (version 2.1) and searches for
+// BuildIDsDocument creates an SPDX Document and searches for
 // short-form IDs in each file, filling in license fields as appropriate. It
 // returns that document or error if any is encountered. Arguments:
 //   - packageName: name of package / directory
 //   - dirRoot: path to directory to be analyzed
 //   - namespacePrefix: URI representing a prefix for the
 //     namespace with which the SPDX Document will be associated
-func BuildIDsDocument2_1(packageName string, dirRoot string, idconfig *Config2_1) (*v2_1.Document, error) {
+func BuildIDsDocument(packageName string, dirRoot string, idconfig *Config) (*spdx.Document, error) {
 	// first, build the Document using builder
-	bconfig := &builder.Config2_1{
+	bconfig := &builder.Config{
 		NamespacePrefix: idconfig.NamespacePrefix,
 		CreatorType:     "Tool",
 		Creator:         "github.com/spdx/tools-golang/idsearcher",
 		PathsIgnored:    idconfig.BuilderPathsIgnored,
 	}
-	doc, err := builder.Build2_1(packageName, dirRoot, bconfig)
-	if err != nil {
-		return nil, err
-	}
-	if doc == nil {
-		return nil, fmt.Errorf("builder returned nil Document")
-	}
-	if doc.Packages == nil {
-		return nil, fmt.Errorf("builder returned nil Packages map")
-	}
-	if len(doc.Packages) != 1 {
-		return nil, fmt.Errorf("builder returned %d Packages", len(doc.Packages))
-	}
-
-	// now, walk through each file and find its licenses (if any)
-	pkg := doc.Packages[0]
-	if pkg == nil {
-		return nil, fmt.Errorf("builder returned nil Package")
-	}
-	if pkg.Files == nil {
-		return nil, fmt.Errorf("builder returned nil Files in Package")
-	}
-	licsForPackage := map[string]int{}
-	for _, f := range pkg.Files {
-		// start by initializing / clearing values
-		f.LicenseInfoInFiles = []string{"NOASSERTION"}
-		f.LicenseConcluded = "NOASSERTION"
-
-		// check whether the searcher should ignore this file
-		if utils.ShouldIgnore(f.FileName, idconfig.SearcherPathsIgnored) {
-			continue
-		}
-
-		fPath := filepath.Join(dirRoot, f.FileName)
-		// FIXME this is not preferable -- ignoring error
-		ids, _ := searchFileIDs(fPath)
-		// FIXME for now, proceed onwards with whatever IDs we obtained.
-		// FIXME instead of ignoring the error, should probably either log it,
-		// FIXME and/or enable the caller to configure what should happen.
-
-		// separate out for this file's licenses
-		licsForFile := map[string]int{}
-		licsParens := []string{}
-		for _, lid := range ids {
-			// get individual elements and add for file and package
-			licElements := getIndividualLicenses(lid)
-			for _, elt := range licElements {
-				licsForFile[elt] = 1
-				licsForPackage[elt] = 1
-			}
-			// parenthesize if needed and add to slice for joining
-			licsParens = append(licsParens, makeElement(lid))
-		}
-
-		// OK -- now we can fill in the file's details, or NOASSERTION if none
-		if len(licsForFile) > 0 {
-			f.LicenseInfoInFiles = []string{}
-			for lic := range licsForFile {
-				f.LicenseInfoInFiles = append(f.LicenseInfoInFiles, lic)
-			}
-			sort.Strings(f.LicenseInfoInFiles)
-			// avoid adding parens and joining for single-ID items
-			if len(licsParens) == 1 {
-				f.LicenseConcluded = ids[0]
-			} else {
-				f.LicenseConcluded = strings.Join(licsParens, " AND ")
-			}
-		}
-	}
-
-	// and finally, we can fill in the package's details
-	if len(licsForPackage) == 0 {
-		pkg.PackageLicenseInfoFromFiles = []string{"NOASSERTION"}
-	} else {
-		pkg.PackageLicenseInfoFromFiles = []string{}
-		for lic := range licsForPackage {
-			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, lic)
-		}
-		sort.Strings(pkg.PackageLicenseInfoFromFiles)
-	}
-
-	return doc, nil
-}
-
-// ===== 2.2 Searcher functions =====
-
-// Config2_2 is a collection of configuration settings for docbuilder
-// (for version 2.2 SPDX Documents). A few mandatory fields are set here
-// so that they can be repeatedly reused in multiple calls to Build2_2.
-type Config2_2 struct {
-	// NamespacePrefix should be a URI representing a prefix for the
-	// namespace with which the SPDX Document will be associated.
-	// It will be used in the DocumentNamespace field in the CreationInfo
-	// section, followed by the per-Document package name and a random UUID.
-	NamespacePrefix string
-
-	// BuilderPathsIgnored lists certain paths to be omitted from the built
-	// document. Each string should be a path, relative to the package's
-	// dirRoot, to a specific file or (for all files in a directory) ending
-	// in a slash. Prefix the string with "**" to omit all instances of that
-	// file / directory, regardless of where it is in the file tree.
-	BuilderPathsIgnored []string
-
-	// SearcherPathsIgnored lists certain paths that should not be searched
-	// by idsearcher, even if those paths have Files present. It uses the
-	// same format as BuilderPathsIgnored.
-	SearcherPathsIgnored []string
-}
-
-// BuildIDsDocument2_2 creates an SPDX Document (version 2.2) and searches for
-// short-form IDs in each file, filling in license fields as appropriate. It
-// returns that document or error if any is encountered. Arguments:
-//   - packageName: name of package / directory
-//   - dirRoot: path to directory to be analyzed
-//   - namespacePrefix: URI representing a prefix for the
-//     namespace with which the SPDX Document will be associated
-func BuildIDsDocument2_2(packageName string, dirRoot string, idconfig *Config2_2) (*v2_2.Document, error) {
-	// first, build the Document using builder
-	bconfig := &builder.Config2_2{
-		NamespacePrefix: idconfig.NamespacePrefix,
-		CreatorType:     "Tool",
-		Creator:         "github.com/spdx/tools-golang/idsearcher",
-		PathsIgnored:    idconfig.BuilderPathsIgnored,
-	}
-	doc, err := builder.Build2_2(packageName, dirRoot, bconfig)
-	if err != nil {
-		return nil, err
-	}
-	if doc == nil {
-		return nil, fmt.Errorf("builder returned nil Document")
-	}
-	if doc.Packages == nil {
-		return nil, fmt.Errorf("builder returned nil Packages map")
-	}
-	if len(doc.Packages) != 1 {
-		return nil, fmt.Errorf("builder returned %d Packages", len(doc.Packages))
-	}
-
-	// now, walk through each file and find its licenses (if any)
-	pkg := doc.Packages[0]
-	if pkg == nil {
-		return nil, fmt.Errorf("builder returned nil Package")
-	}
-	if pkg.Files == nil {
-		return nil, fmt.Errorf("builder returned nil Files in Package")
-	}
-	licsForPackage := map[string]int{}
-	for _, f := range pkg.Files {
-		// start by initializing / clearing values
-		f.LicenseInfoInFiles = []string{"NOASSERTION"}
-		f.LicenseConcluded = "NOASSERTION"
-
-		// check whether the searcher should ignore this file
-		if utils.ShouldIgnore(f.FileName, idconfig.SearcherPathsIgnored) {
-			continue
-		}
-
-		fPath := filepath.Join(dirRoot, f.FileName)
-		// FIXME this is not preferable -- ignoring error
-		ids, _ := searchFileIDs(fPath)
-		// FIXME for now, proceed onwards with whatever IDs we obtained.
-		// FIXME instead of ignoring the error, should probably either log it,
-		// FIXME and/or enable the caller to configure what should happen.
-
-		// separate out for this file's licenses
-		licsForFile := map[string]int{}
-		licsParens := []string{}
-		for _, lid := range ids {
-			// get individual elements and add for file and package
-			licElements := getIndividualLicenses(lid)
-			for _, elt := range licElements {
-				licsForFile[elt] = 1
-				licsForPackage[elt] = 1
-			}
-			// parenthesize if needed and add to slice for joining
-			licsParens = append(licsParens, makeElement(lid))
-		}
-
-		// OK -- now we can fill in the file's details, or NOASSERTION if none
-		if len(licsForFile) > 0 {
-			f.LicenseInfoInFiles = []string{}
-			for lic := range licsForFile {
-				f.LicenseInfoInFiles = append(f.LicenseInfoInFiles, lic)
-			}
-			sort.Strings(f.LicenseInfoInFiles)
-			// avoid adding parens and joining for single-ID items
-			if len(licsParens) == 1 {
-				f.LicenseConcluded = ids[0]
-			} else {
-				f.LicenseConcluded = strings.Join(licsParens, " AND ")
-			}
-		}
-	}
-
-	// and finally, we can fill in the package's details
-	if len(licsForPackage) == 0 {
-		pkg.PackageLicenseInfoFromFiles = []string{"NOASSERTION"}
-	} else {
-		pkg.PackageLicenseInfoFromFiles = []string{}
-		for lic := range licsForPackage {
-			pkg.PackageLicenseInfoFromFiles = append(pkg.PackageLicenseInfoFromFiles, lic)
-		}
-		sort.Strings(pkg.PackageLicenseInfoFromFiles)
-	}
-
-	return doc, nil
-}
-
-// ===== 2.3 Searcher functions =====
-
-// Config2_3 is a collection of configuration settings for docbuilder
-// (for version 2.3 SPDX Documents). A few mandatory fields are set here
-// so that they can be repeatedly reused in multiple calls to Build2_3.
-type Config2_3 struct {
-	// NamespacePrefix should be a URI representing a prefix for the
-	// namespace with which the SPDX Document will be associated.
-	// It will be used in the DocumentNamespace field in the CreationInfo
-	// section, followed by the per-Document package name and a random UUID.
-	NamespacePrefix string
-
-	// BuilderPathsIgnored lists certain paths to be omitted from the built
-	// document. Each string should be a path, relative to the package's
-	// dirRoot, to a specific file or (for all files in a directory) ending
-	// in a slash. Prefix the string with "**" to omit all instances of that
-	// file / directory, regardless of where it is in the file tree.
-	BuilderPathsIgnored []string
-
-	// SearcherPathsIgnored lists certain paths that should not be searched
-	// by idsearcher, even if those paths have Files present. It uses the
-	// same format as BuilderPathsIgnored.
-	SearcherPathsIgnored []string
-}
-
-// BuildIDsDocument2_3 creates an SPDX Document (version 2.3) and searches for
-// short-form IDs in each file, filling in license fields as appropriate. It
-// returns that document or error if any is encountered. Arguments:
-//   - packageName: name of package / directory
-//   - dirRoot: path to directory to be analyzed
-//   - namespacePrefix: URI representing a prefix for the
-//     namespace with which the SPDX Document will be associated
-func BuildIDsDocument2_3(packageName string, dirRoot string, idconfig *Config2_3) (*v2_3.Document, error) {
-	// first, build the Document using builder
-	bconfig := &builder.Config2_3{
-		NamespacePrefix: idconfig.NamespacePrefix,
-		CreatorType:     "Tool",
-		Creator:         "github.com/spdx/tools-golang/idsearcher",
-		PathsIgnored:    idconfig.BuilderPathsIgnored,
-	}
-	doc, err := builder.Build2_3(packageName, dirRoot, bconfig)
+	doc, err := builder.Build(packageName, dirRoot, bconfig)
 	if err != nil {
 		return nil, err
 	}
