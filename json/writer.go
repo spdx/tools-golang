@@ -25,7 +25,7 @@ func Save2_2(doc *v2_2.Document, w io.Writer) error {
 	return nil
 }
 
-// Save2_3 takes an SPDX Document (version 2.2) and an io.Writer, and writes the document to the writer in JSON format.
+// Save2_3 takes an SPDX Document (version 2.3) and an io.Writer, and writes the document to the writer in JSON format.
 func Save2_3(doc *v2_3.Document, w io.Writer) error {
 	buf, err := json.Marshal(doc)
 	if err != nil {
