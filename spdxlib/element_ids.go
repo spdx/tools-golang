@@ -5,7 +5,7 @@ package spdxlib
 import (
 	"sort"
 
-	"github.com/spdx/tools-golang/spdx/common"
+	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
 // SortElementIDs sorts and returns the given slice of ElementIDs

@@ -8,7 +8,7 @@ within the example's subdirectory.
 
 ## 1-load/
 
-*tvloader*, *spdx*
+*tagvalue*, *spdx*
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and printing some of its contents to standard output.
@@ -16,7 +16,7 @@ and printing some of its contents to standard output.
 
 ## 2-load-save/
 
-*tvloader*, *tvsaver*
+*tagvalue*, *tagvalue*
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 and re-saving it to a different file on disk.
@@ -24,7 +24,7 @@ and re-saving it to a different file on disk.
 
 ## 3-build/
 
-*builder*, *tvsaver*
+*builder*, *tagvalue*
 
 This example demonstrates building an 'empty' SPDX document in memory that
 corresponds to a given directory's contents, including all files with their
@@ -33,7 +33,7 @@ hashes and the package's verification code, and saving the document to disk.
 
 ## 4-search/
 
-*idsearcher*, *tvsaver*
+*idsearcher*, *tagvalue*
 
 This example demonstrates building an SPDX document for a directory's contents
 (implicitly using *builder*); searching through that directory for [SPDX
@@ -43,7 +43,7 @@ Package and File license fields; and saving the resulting document to disk.
 
 ## 5-report/
 
-*reporter*, *tvloader*
+*reporter*, *tagvalue*
 
 This example demonstrates loading an SPDX tag-value file from disk into memory,
 generating a basic report listing counts of the concluded licenses for its
@@ -52,7 +52,7 @@ files, and printing the report to standard output.
 
 ## 6-licensediff
 
-*licensediff*, *tvloader*
+*licensediff*, *tagvalue*
 
 This example demonstrates loading two SPDX tag-value files from disk into
 memory, and generating a diff of the concluded licenses for Files in Packages
@@ -73,7 +73,7 @@ and then printing the corresponding spdx struct for the document.
 
 ## 8-jsontotv
 
-*json*, *tvsaver*
+*json*, *tagvalue*
 
 This example demonstrates loading an SPDX json from disk into memory
 and then re-saving it to a different file on disk in tag-value format.
@@ -81,7 +81,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 ## 9-tvtojson
 
-*json*, *tvloader*
+*json*, *tagvalue*
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in json format.
@@ -97,7 +97,7 @@ and then logging some of the attributes to the console.
 
 ## 11-yamltotv
 
-*yaml* *tvsaver*
+*yaml* *tagvalue*
 
 This example demonstrates loading an SPDX yaml from disk into memory
 and then re-saving it to a different file on disk in tag-value format.
@@ -105,7 +105,7 @@ and then re-saving it to a different file on disk in tag-value format.
 
 ## 12-tvtoyaml
 
-*yaml* *tvloader*
+*yaml* *tagvalue*
 
 This example demonstrates loading an SPDX tag-value from disk into memory
 and then re-saving it to a different file on disk in yaml format.

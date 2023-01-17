@@ -12,7 +12,7 @@ import (
 	"os"
 	"strings"
 
-	spdx_json "github.com/spdx/tools-golang/json"
+	"github.com/spdx/tools-golang/json"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	args := os.Args
 	if len(args) != 2 {
 		fmt.Printf("Usage: %v <json-file-in>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 JSON file <spdx-file-in>, and\n")
+		fmt.Printf("  Load SPDX JSON file <spdx-file-in>, and\n")
 		fmt.Printf("  print portions of its creation info data.\n")
 		return
 	}
@@ -35,8 +35,8 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a json file, version 2.2
-	doc, err := spdx_json.Load2_2(r)
+	// try to load the SPDX file's contents as a json file
+	doc, err := json.Read(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return

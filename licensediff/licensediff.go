@@ -4,9 +4,7 @@
 package licensediff
 
 import (
-	"github.com/spdx/tools-golang/spdx/v2_1"
-	"github.com/spdx/tools-golang/spdx/v2_2"
-	"github.com/spdx/tools-golang/spdx/v2_3"
+	"github.com/spdx/tools-golang/spdx"
 )
 
 // LicensePair is a result set where we are talking about two license strings,
@@ -16,65 +14,9 @@ type LicensePair struct {
 	Second string
 }
 
-// MakePairs2_1 essentially just consolidates all files and LicenseConcluded
+// MakePairs essentially just consolidates all files and LicenseConcluded
 // strings into a single data structure.
-func MakePairs2_1(p1 *v2_1.Package, p2 *v2_1.Package) (map[string]LicensePair, error) {
-	pairs := map[string]LicensePair{}
-
-	// first, go through and add all files/licenses from p1
-	for _, f := range p1.Files {
-		pair := LicensePair{First: f.LicenseConcluded, Second: ""}
-		pairs[f.FileName] = pair
-	}
-
-	// now, go through all files/licenses from p2. If already
-	// present, add as .second; if not, create new pair
-	for _, f := range p2.Files {
-		firstLic := ""
-		existingPair, ok := pairs[f.FileName]
-		if ok {
-			// already present; update it
-			firstLic = existingPair.First
-		}
-		// now, update what's there, either way
-		pair := LicensePair{First: firstLic, Second: f.LicenseConcluded}
-		pairs[f.FileName] = pair
-	}
-
-	return pairs, nil
-}
-
-// MakePairs2_2 essentially just consolidates all files and LicenseConcluded
-// strings into a single data structure.
-func MakePairs2_2(p1 *v2_2.Package, p2 *v2_2.Package) (map[string]LicensePair, error) {
-	pairs := map[string]LicensePair{}
-
-	// first, go through and add all files/licenses from p1
-	for _, f := range p1.Files {
-		pair := LicensePair{First: f.LicenseConcluded, Second: ""}
-		pairs[f.FileName] = pair
-	}
-
-	// now, go through all files/licenses from p2. If already
-	// present, add as .second; if not, create new pair
-	for _, f := range p2.Files {
-		firstLic := ""
-		existingPair, ok := pairs[f.FileName]
-		if ok {
-			// already present; update it
-			firstLic = existingPair.First
-		}
-		// now, update what's there, either way
-		pair := LicensePair{First: firstLic, Second: f.LicenseConcluded}
-		pairs[f.FileName] = pair
-	}
-
-	return pairs, nil
-}
-
-// MakePairs2_3 essentially just consolidates all files and LicenseConcluded
-// strings into a single data structure.
-func MakePairs2_3(p1 *v2_3.Package, p2 *v2_3.Package) (map[string]LicensePair, error) {
+func MakePairs(p1 *spdx.Package, p2 *spdx.Package) (map[string]LicensePair, error) {
 	pairs := map[string]LicensePair{}
 
 	// first, go through and add all files/licenses from p1

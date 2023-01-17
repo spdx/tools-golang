@@ -6,16 +6,13 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/spdx/tools-golang/spdx/v2_1"
-	"github.com/spdx/tools-golang/spdx/v2_2"
-	"github.com/spdx/tools-golang/spdx/v2_3"
+	"github.com/spdx/tools-golang/spdx"
 )
 
-// ===== 2.1 Reporter top-level function tests =====
-func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
-	pkg := &v2_1.Package{
+func TestReporterCanMakeReportFromPackage(t *testing.T) {
+	pkg := &spdx.Package{
 		FilesAnalyzed: true,
-		Files: []*v2_1.File{
+		Files: []*spdx.File{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
 			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
@@ -43,7 +40,7 @@ func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
 
 	// render as buffer of bytes
 	var got bytes.Buffer
-	err := Generate2_1(pkg, &got)
+	err := Generate(pkg, &got)
 	if err != nil {
 		t.Errorf("Expected nil error, got %v", err)
 	}
@@ -55,262 +52,14 @@ func Test2_1ReporterCanMakeReportFromPackage(t *testing.T) {
 	}
 }
 
-func Test2_1ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
-	pkg := &v2_1.Package{
+func TestReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
+	pkg := &spdx.Package{
 		FilesAnalyzed: false,
 	}
 
 	// render as buffer of bytes
 	var got bytes.Buffer
-	err := Generate2_1(pkg, &got)
-	if err == nil {
-		t.Errorf("Expected non-nil error, got nil")
-	}
-}
-
-// ===== 2.1 Utility functions =====
-
-func Test2_1CanGetCountsOfLicenses(t *testing.T) {
-	pkg := &v2_1.Package{
-		FilesAnalyzed: true,
-		Files: []*v2_1.File{
-			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
-		},
-	}
-
-	totalFound, totalNotFound, foundCounts := countLicenses2_1(pkg)
-	if totalFound != 9 {
-		t.Errorf("expected %v, got %v", 9, totalFound)
-	}
-	if totalNotFound != 3 {
-		t.Errorf("expected %v, got %v", 3, totalNotFound)
-	}
-	if len(foundCounts) != 2 {
-		t.Fatalf("expected %v, got %v", 2, len(foundCounts))
-	}
-
-	// foundCounts is a map of license ID to count of licenses
-	// confirm that the results are as expected
-	if foundCounts["GPL-2.0-only"] != 5 {
-		t.Errorf("expected %v, got %v", 5, foundCounts["GPL-2.0-only"])
-	}
-	if foundCounts["MIT"] != 4 {
-		t.Errorf("expected %v, got %v", 4, foundCounts["MIT"])
-	}
-}
-
-func Test2_1NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
-	totalFound, totalNotFound, foundCounts := countLicenses2_1(nil)
-	if totalFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalFound)
-	}
-	if totalNotFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalNotFound)
-	}
-	if len(foundCounts) != 0 {
-		t.Fatalf("expected %v, got %v", 0, len(foundCounts))
-	}
-
-	pkg := &v2_1.Package{}
-	totalFound, totalNotFound, foundCounts = countLicenses2_1(pkg)
-	if totalFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalFound)
-	}
-	if totalNotFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalNotFound)
-	}
-	if len(foundCounts) != 0 {
-		t.Fatalf("expected %v, got %v", 0, len(foundCounts))
-	}
-}
-
-// ===== 2.2 Reporter top-level function tests =====
-func Test2_2ReporterCanMakeReportFromPackage(t *testing.T) {
-	pkg := &v2_2.Package{
-		FilesAnalyzed: true,
-		Files: []*v2_2.File{
-			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
-		},
-	}
-
-	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`   9  License found
-   3  License not found
-  12  TOTAL
-
-  5  GPL-2.0-only
-  4  MIT
-  9  TOTAL FOUND
-`)
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	err := Generate2_2(pkg, &got)
-	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
-	}
-
-	// check that they match
-	c := bytes.Compare(want.Bytes(), got.Bytes())
-	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
-	}
-}
-
-func Test2_2ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
-	pkg := &v2_2.Package{
-		FilesAnalyzed: false,
-	}
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	err := Generate2_2(pkg, &got)
-	if err == nil {
-		t.Errorf("Expected non-nil error, got nil")
-	}
-}
-
-// ===== 2.2 Utility functions =====
-
-func Test2_2CanGetCountsOfLicenses(t *testing.T) {
-	pkg := &v2_2.Package{
-		FilesAnalyzed: true,
-		Files: []*v2_2.File{
-			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
-		},
-	}
-
-	totalFound, totalNotFound, foundCounts := countLicenses2_2(pkg)
-	if totalFound != 9 {
-		t.Errorf("expected %v, got %v", 9, totalFound)
-	}
-	if totalNotFound != 3 {
-		t.Errorf("expected %v, got %v", 3, totalNotFound)
-	}
-	if len(foundCounts) != 2 {
-		t.Fatalf("expected %v, got %v", 2, len(foundCounts))
-	}
-
-	// foundCounts is a map of license ID to count of licenses
-	// confirm that the results are as expected
-	if foundCounts["GPL-2.0-only"] != 5 {
-		t.Errorf("expected %v, got %v", 5, foundCounts["GPL-2.0-only"])
-	}
-	if foundCounts["MIT"] != 4 {
-		t.Errorf("expected %v, got %v", 4, foundCounts["MIT"])
-	}
-}
-
-func Test2_2NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
-	totalFound, totalNotFound, foundCounts := countLicenses2_2(nil)
-	if totalFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalFound)
-	}
-	if totalNotFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalNotFound)
-	}
-	if len(foundCounts) != 0 {
-		t.Fatalf("expected %v, got %v", 0, len(foundCounts))
-	}
-
-	pkg := &v2_2.Package{}
-	totalFound, totalNotFound, foundCounts = countLicenses2_2(pkg)
-	if totalFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalFound)
-	}
-	if totalNotFound != 0 {
-		t.Errorf("expected %v, got %v", 0, totalNotFound)
-	}
-	if len(foundCounts) != 0 {
-		t.Fatalf("expected %v, got %v", 0, len(foundCounts))
-	}
-}
-
-// ===== 2.3 Reporter top-level function tests =====
-func Test2_3ReporterCanMakeReportFromPackage(t *testing.T) {
-	pkg := &v2_3.Package{
-		FilesAnalyzed: true,
-		Files: []*v2_3.File{
-			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File3", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File4", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File5", LicenseConcluded: "NOASSERTION"},
-			{FileSPDXIdentifier: "File6", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File7", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File8", LicenseConcluded: "MIT"},
-			{FileSPDXIdentifier: "File9", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File10", LicenseConcluded: "GPL-2.0-only"},
-			{FileSPDXIdentifier: "File11", LicenseConcluded: "NOASSERTION"},
-		},
-	}
-
-	// what we want to get, as a buffer of bytes
-	want := bytes.NewBufferString(`   9  License found
-   3  License not found
-  12  TOTAL
-
-  5  GPL-2.0-only
-  4  MIT
-  9  TOTAL FOUND
-`)
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	err := Generate2_3(pkg, &got)
-	if err != nil {
-		t.Errorf("Expected nil error, got %v", err)
-	}
-
-	// check that they match
-	c := bytes.Compare(want.Bytes(), got.Bytes())
-	if c != 0 {
-		t.Errorf("Expected %v, got %v", want.String(), got.String())
-	}
-}
-
-func Test2_3ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
-	pkg := &v2_3.Package{
-		FilesAnalyzed: false,
-	}
-
-	// render as buffer of bytes
-	var got bytes.Buffer
-	err := Generate2_3(pkg, &got)
+	err := Generate(pkg, &got)
 	if err == nil {
 		t.Errorf("Expected non-nil error, got nil")
 	}
@@ -318,10 +67,10 @@ func Test2_3ReporterReturnsErrorIfPackageFilesNotAnalyzed(t *testing.T) {
 
 // ===== 2.3 Utility functions =====
 
-func Test2_3CanGetCountsOfLicenses(t *testing.T) {
-	pkg := &v2_3.Package{
+func TestCanGetCountsOfLicenses(t *testing.T) {
+	pkg := &spdx.Package{
 		FilesAnalyzed: true,
-		Files: []*v2_3.File{
+		Files: []*spdx.File{
 			{FileSPDXIdentifier: "File0", LicenseConcluded: "MIT"},
 			{FileSPDXIdentifier: "File1", LicenseConcluded: "NOASSERTION"},
 			{FileSPDXIdentifier: "File2", LicenseConcluded: "MIT"},
@@ -337,7 +86,7 @@ func Test2_3CanGetCountsOfLicenses(t *testing.T) {
 		},
 	}
 
-	totalFound, totalNotFound, foundCounts := countLicenses2_3(pkg)
+	totalFound, totalNotFound, foundCounts := countLicenses(pkg)
 	if totalFound != 9 {
 		t.Errorf("expected %v, got %v", 9, totalFound)
 	}
@@ -358,8 +107,8 @@ func Test2_3CanGetCountsOfLicenses(t *testing.T) {
 	}
 }
 
-func Test2_3NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
-	totalFound, totalNotFound, foundCounts := countLicenses2_3(nil)
+func TestNilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
+	totalFound, totalNotFound, foundCounts := countLicenses(nil)
 	if totalFound != 0 {
 		t.Errorf("expected %v, got %v", 0, totalFound)
 	}
@@ -370,8 +119,8 @@ func Test2_3NilPackageReturnsZeroCountsOfLicenses(t *testing.T) {
 		t.Fatalf("expected %v, got %v", 0, len(foundCounts))
 	}
 
-	pkg := &v2_3.Package{}
-	totalFound, totalNotFound, foundCounts = countLicenses2_3(pkg)
+	pkg := &spdx.Package{}
+	totalFound, totalNotFound, foundCounts = countLicenses(pkg)
 	if totalFound != 0 {
 		t.Errorf("expected %v, got %v", 0, totalFound)
 	}

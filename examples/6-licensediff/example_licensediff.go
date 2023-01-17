@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *licensediff*, *tvloader*
+// Example for: *licensediff*, *tagvalue*
 
 // This example demonstrates loading two SPDX tag-value files from disk into
 // memory, and generating a diff of the concluded licenses for Files in
@@ -16,9 +16,9 @@ import (
 	"os"
 
 	"github.com/spdx/tools-golang/licensediff"
-	"github.com/spdx/tools-golang/spdx/v2_2"
+	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdxlib"
-	"github.com/spdx/tools-golang/tvloader"
+	"github.com/spdx/tools-golang/tagvalue"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	args := os.Args
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <spdx-file-first> <spdx-file-second>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 tag-value files <spdx-file-first> and <spdx-file-second>,\n")
+		fmt.Printf("  Load SPDX tag-value files <spdx-file-first> and <spdx-file-second>,\n")
 		fmt.Printf("  run a diff between their concluded licenses, and print basic results.\n")
 		return
 	}
@@ -41,14 +41,14 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the first SPDX file's contents as a tag-value file, version 2.2
-	docFirst, err := tvloader.Load2_2(r)
+	// try to load the first SPDX file's contents as a tag-value file
+	docFirst, err := tagvalue.Read(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filenameFirst, err)
 		return
 	}
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDsFirst, err := spdxlib.GetDescribedPackageIDs2_2(docFirst)
+	pkgIDsFirst, err := spdxlib.GetDescribedPackageIDs(docFirst)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from first SPDX document: %v\n", err)
 		return
@@ -66,14 +66,14 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the second SPDX file's contents as a tag-value file, version 2.2
-	docSecond, err := tvloader.Load2_2(r)
+	// try to load the second SPDX file's contents as a tag-value file
+	docSecond, err := tagvalue.Read(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", filenameSecond, err)
 		return
 	}
 	// check whether the SPDX file has at least one package that it describes
-	pkgIDsSecond, err := spdxlib.GetDescribedPackageIDs2_2(docSecond)
+	pkgIDsSecond, err := spdxlib.GetDescribedPackageIDs(docSecond)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from second SPDX document: %v\n", err)
 		return
@@ -87,7 +87,7 @@ func main() {
 	for _, pkgID := range pkgIDsFirst {
 		fmt.Printf("================================\n")
 
-		var p1, p2 *v2_2.Package
+		var p1, p2 *spdx.Package
 		var okFirst, okSecond bool
 		for _, pkg := range docFirst.Packages {
 			if pkg.PackageSPDXIdentifier == pkgID {
@@ -116,7 +116,7 @@ func main() {
 		}
 
 		// now, run a diff between the two
-		pairs, err := licensediff.MakePairs2_2(p1, p2)
+		pairs, err := licensediff.MakePairs(p1, p2)
 		if err != nil {
 			fmt.Printf("  Error generating licensediff pairs: %v\n", err)
 			continue
@@ -139,7 +139,7 @@ func main() {
 	// now report if there are any package IDs in the second set that aren't
 	// in the first
 	for _, pkgID := range pkgIDsSecond {
-		var p2 *v2_2.Package
+		var p2 *spdx.Package
 		var okFirst, okSecond bool
 		for _, pkg := range docSecond.Packages {
 			if pkg.PackageSPDXIdentifier == pkgID {

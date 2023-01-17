@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
-// Example for: *tvloader*, *json*
+// Example for: *tagvalue*, *json*
 
 // This example demonstrates loading an SPDX tag-value file from disk into memory,
 // and re-saving it to a different json file on disk.
@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"os"
 
-	spdx_json "github.com/spdx/tools-golang/json"
-	"github.com/spdx/tools-golang/tvloader"
+	"github.com/spdx/tools-golang/json"
+	"github.com/spdx/tools-golang/tagvalue"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	args := os.Args
 	if len(args) != 3 {
 		fmt.Printf("Usage: %v <spdx-file-in> <json-file-out>\n", args[0])
-		fmt.Printf("  Load SPDX 2.2 tag-value file <spdx-file-in>, and\n")
+		fmt.Printf("  Load SPDX tag-value file <spdx-file-in>, and\n")
 		fmt.Printf("  save it out to JSON <json-file-out>.\n")
 		return
 	}
@@ -35,8 +35,8 @@ func main() {
 	}
 	defer r.Close()
 
-	// try to load the SPDX file's contents as a tag-value file, version 2.2
-	doc, err := tvloader.Load2_2(r)
+	// try to load the SPDX file's contents as a tag-value file
+	doc, err := tagvalue.Read(r)
 	if err != nil {
 		fmt.Printf("Error while parsing %v: %v", args[1], err)
 		return
@@ -57,7 +57,7 @@ func main() {
 	defer w.Close()
 
 	// try to save the document to disk as JSON file
-	err = spdx_json.Save2_2(doc, w)
+	err = json.Write(doc, w)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return
