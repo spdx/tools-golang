@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/anchore/go-struct-converter"
 	"github.com/stretchr/testify/require"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -2114,7 +2113,9 @@ func Test_ConvertSPDXDocuments(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			outType := reflect.TypeOf(test.expected)
 			outInstance := reflect.New(outType).Interface()
-			err := converter.Convert(test.source, outInstance)
+
+			// convert the start document to the target document using the conversion chain
+			err := Document(test.source, outInstance)
 			if err != nil {
 				t.Fatalf("error converting: %v", err)
 			}
