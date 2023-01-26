@@ -78,6 +78,18 @@ func TestParserCIMovesToOtherLicenseAfterParsingLicenseIDTag(t *testing.T) {
 	}
 }
 
+func TestParserCIMovesToOtherLicenseAfterParsingDocumentTag(t *testing.T) {
+	parser := tvParser{
+		doc: &spdx.Document{},
+		st:  psCreationInfo,
+	}
+	err := parser.parsePairFromCreationInfo("DocumentComment", "doccomment")
+	if err != nil {
+		t.Errorf("got error when calling parsePair: %v", err)
+	}
+
+}
+
 func TestParserCIMovesToReviewAfterParsingReviewerTag(t *testing.T) {
 	parser := tvParser{
 		doc: &spdx.Document{},
