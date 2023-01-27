@@ -94,6 +94,8 @@ func (parser *tvParser) parsePairFromCreationInfo(tag string, value string) erro
 		return parser.parsePairForAnnotation(tag, value)
 	case "AnnotationComment":
 		return parser.parsePairForAnnotation(tag, value)
+	case "DocumentComment":
+		return parser.parsePairForDocument(tag, value)
 	default:
 		return fmt.Errorf("received unknown tag %v in CreationInfo section", tag)
 	}
