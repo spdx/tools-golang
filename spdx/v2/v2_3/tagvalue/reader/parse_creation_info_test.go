@@ -425,3 +425,14 @@ func TestFailsExternalDocumentReferenceWithInvalidFormats(t *testing.T) {
 		}
 	}
 }
+func TestParserForDocumentComment(t *testing.T) {
+	parser := tvParser{
+		doc: &spdx.Document{},
+		st:  psCreationInfo,
+	}
+
+	err := parser.parsePair("DocumentComment", "document comment")
+	if err != nil {
+		t.Errorf("got error when calling parsePair: %v", err)
+	}
+}
