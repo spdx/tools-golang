@@ -4,6 +4,10 @@ package common
 
 // Constants for various string types
 const (
+	CategorySecurity       = "SECURITY"
+	CategoryPackageManager = "PACKAGE-MANAGER"
+	TypePersistentIdSwh    = "swh"
+
 	// F.2 Security types
 	TypeSecurityCPE23Type string = "cpe23Type"
 	TypeSecurityCPE22Type string = "cpe22Type"
