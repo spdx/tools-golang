@@ -3,6 +3,7 @@
 package utils
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -223,4 +224,9 @@ func TestFilesystemExcludesForIgnoredPaths(t *testing.T) {
 		t.Errorf("incorrect for %v, ignoring %v", fileName, pathsIgnored)
 	}
 
+}
+func FuzzShouldIgnore(f *testing.F) {
+	f.Fuzz(func(t *testing.T, fileName string, pathsIgnored string) {
+		ShouldIgnore(fileName, strings.Fields(pathsIgnored))
+	})
 }
