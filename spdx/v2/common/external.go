@@ -4,11 +4,9 @@ package common
 
 // Constants for various string types
 const (
-	CategorySecurity       = "SECURITY"
-	CategoryPackageManager = "PACKAGE-MANAGER"
-	TypePersistentIdSwh    = "swh"
 
 	// F.2 Security types
+	CategorySecurity      string = "SECURITY"
 	TypeSecurityCPE23Type string = "cpe23Type"
 	TypeSecurityCPE22Type string = "cpe22Type"
 	TypeSecurityAdvisory  string = "advisory"
@@ -17,11 +15,16 @@ const (
 	TypeSecuritySwid      string = "swid"
 
 	// F.3 Package-Manager types
+	CategoryPackageManager         string = "PACKAGE-MANAGER"
 	TypePackageManagerMavenCentral string = "maven-central"
 	TypePackageManagerNpm          string = "npm"
 	TypePackageManagerNuGet        string = "nuget"
 	TypePackageManagerBower        string = "bower"
 	TypePackageManagerPURL         string = "purl"
+	// F.4 Persistent-Id types
+	CategoryPersistentId   string = "PERSISTENT-ID"
+	TypePersistentIdSwh    string = "swh"
+	TypePersistentIdGitoid string = "gitoid"
 
 	// 11.1 Relationship field types
 	TypeRelationshipDescribe                  string = "DESCRIBES"
