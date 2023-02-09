@@ -64,6 +64,7 @@ const (
 
 const (
 	// F.2 Security types
+	CatagorySecurity  = common.CategorySecurity
 	SecurityCPE23Type = common.TypeSecurityCPE23Type
 	SecurityCPE22Type = common.TypeSecurityCPE22Type
 	SecurityAdvisory  = common.TypeSecurityAdvisory
@@ -72,11 +73,17 @@ const (
 	SecuritySwid      = common.TypeSecuritySwid
 
 	// F.3 Package-Manager types
+	CategoryPackageManager     = common.CategoryPackageManager
 	PackageManagerMavenCentral = common.TypePackageManagerMavenCentral
 	PackageManagerNpm          = common.TypePackageManagerNpm
 	PackageManagerNuGet        = common.TypePackageManagerNuGet
 	PackageManagerBower        = common.TypePackageManagerBower
 	PackageManagerPURL         = common.TypePackageManagerPURL
+
+	// F.4 Persistent-Id types
+	CategoryPersistentId   = common.CategoryPersistentId
+	TypePersistentIdSwh    = common.TypePersistentIdSwh
+	TypePersistentIdGitoid = common.TypePersistentIdGitoid
 
 	// 11.1 Relationship field types
 	RelationshipDescribes                 = common.TypeRelationshipDescribe
