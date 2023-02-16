@@ -185,6 +185,9 @@ func FuzzPackageCanGetVerificationCode(f *testing.F) {
 			},
 		}
 
-		GetVerificationCode(files, "")
+		_, err := GetVerificationCode(files, "")
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
 }

@@ -1,10 +1,11 @@
-
 .PHONY: test
-test : unit fuzz
+test: unit fuzz
+
 .PHONY: unit
-unit :
+unit:
 	go test -v -covermode=count -coverprofile=profile.cov ./...
+
 .PHONY: fuzz
-fuzz :
-	go test -v -cover -fuzz=FuzzShouldIgnore ./utils -fuzztime=10s
-	go test -v -cover -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=10s
+fuzz:
+	go test -v -run=Fuzz -fuzz=FuzzShouldIgnore ./utils -fuzztime=10s
+	go test -v -run=Fuzz -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=10s
