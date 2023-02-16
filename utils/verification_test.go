@@ -3,6 +3,7 @@
 package utils
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx"
@@ -169,4 +170,24 @@ func TestPackageGetVerificationCodeFailsIfNilFileInSlice(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}
+}
+func FuzzPackageCanGetVerificationCode(f *testing.F) {
+	f.Fuzz(func(t *testing.T, filename string, fileSPDXIdentifier string, checksums string) {
+		checks := []common.Checksum{}
+		for _, check := range strings.Fields(checksums) {
+			checks = append(checks, common.Checksum{Algorithm: common.SHA1, Value: check})
+		}
+		files := []*spdx.File{
+			{
+				FileName:           filename,
+				FileSPDXIdentifier: common.ElementID(fileSPDXIdentifier),
+				Checksums:          checks,
+			},
+		}
+
+		_, err := GetVerificationCode(files, "")
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
 }
