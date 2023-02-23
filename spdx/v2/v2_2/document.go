@@ -4,7 +4,7 @@
 package v2_2
 
 import (
-	"github.com/anchore/go-struct-converter"
+	converter "github.com/anchore/go-struct-converter"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
@@ -69,6 +69,10 @@ type Document struct {
 
 	// DEPRECATED in version 2.0 of spec
 	Reviews []*Review `json:"-"`
+
+	// DocumentDescribes is part of JSON spec to list relationships.
+	// This field should ONLY be used when exporting an SPDX document
+	DocumentDescribesJSON []string `json:"documentDescribes,omitempty"`
 }
 
 func (d *Document) ConvertFrom(_ interface{}) error {

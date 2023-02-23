@@ -37,3 +37,32 @@ func ValidateDocument(doc *spdx.Document) error {
 
 	return nil
 }
+
+// PopulateJsonSchemaFields populates the JSON schema specific fields (such as those providing a convenience fields aliasing
+// relationships (like documentDescribes that represents all identifiers identified by the document).
+func PopulateJsonSchemaFields(doc *spdx.Document) error {
+	// TODO: do the same for other similar JSON schema fields like "hasFiles"
+	documentDescribes := []string{}
+	for _, r := range doc.Relationships {
+		switch r.Relationship {
+		case common.TypeRelationshipDescribe:
+			if r.RefA.ElementRefID == doc.SPDXIdentifier {
+				documentDescribes = append(documentDescribes, common.RenderDocElementID(r.RefB))
+			}
+		case common.TypeRelationshipDescribeBy:
+			if r.RefB.ElementRefID == doc.SPDXIdentifier {
+				documentDescribes = append(documentDescribes, common.RenderDocElementID(r.RefA))
+			}
+		}
+	}
+
+	doc.DocumentDescribesJSON = documentDescribes
+
+	return nil
+}
+
+// StripJsonSchemaFields strips the JSON schema specific fields
+func StripJsonSchemaFields(doc *spdx.Document) error {
+	doc.DocumentDescribesJSON = nil
+	return nil
+}

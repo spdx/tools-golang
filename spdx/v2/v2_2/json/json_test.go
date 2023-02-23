@@ -31,7 +31,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	if !cmp.Equal(want, got) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got))
+		t.Errorf("got incorrect struct after parsing JSON example: %s", cmp.Diff(want, got))
 		return
 	}
 }

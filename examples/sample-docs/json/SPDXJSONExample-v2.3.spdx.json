@@ -3,6 +3,7 @@
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
   "name": "SPDX-Tools-v2.0",
+  "documentDescribes" : [ "SPDXRef-File", "SPDXRef-Package" ],
   "documentNamespace": "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
   "externalDocumentRefs": [
     {

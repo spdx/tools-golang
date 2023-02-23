@@ -7,6 +7,7 @@ import (
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdxlib"
 )
 
 // Copy provides a deep copy of the example
@@ -16,6 +17,21 @@ func Copy() spdx.Document {
 	if err != nil {
 		panic(fmt.Errorf("unable to convert example doc: %w", err))
 	}
+	return out
+}
+
+// TvCopy provides a deep copy of the example for TV format (minus JSON schema fields)
+func TvCopy() spdx.Document {
+	out := spdx.Document{}
+	err := converter.Convert(example, &out)
+	if err != nil {
+		panic(fmt.Errorf("unable to convert example doc: %w", err))
+	}
+	err = spdxlib.StripJsonSchemaFields(&out)
+	if err != nil {
+		panic(fmt.Errorf("unable to strip JSON fields: %w", err))
+	}
+
 	return out
 }
 
@@ -426,6 +442,10 @@ var example = spdx.Document{
 			RefB:         common.MakeDocElementID("", "fromDoap-0"),
 			Relationship: "GENERATED_FROM",
 		},
+	},
+	DocumentDescribesJSON: []string{
+		common.RenderDocElementID(common.MakeDocElementID("", "File")),
+		common.RenderDocElementID(common.MakeDocElementID("", "Package")),
 	},
 	// omitted: Reviews: []*spdx.Review{
 	//	{

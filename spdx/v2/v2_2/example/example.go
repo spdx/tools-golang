@@ -19,6 +19,16 @@ func Copy() spdx.Document {
 	return out
 }
 
+// TvCopy provides a deep copy of the example for TV format (minus JSON schema fields)
+func TvCopy() spdx.Document {
+	out := spdx.Document{}
+	err := converter.Convert(example, &out)
+	if err != nil {
+		panic(fmt.Errorf("unable to convert example doc: %w", err))
+	}
+	return out
+}
+
 // Example is handwritten translation of an official example SPDX document into a Go struct.
 // We expect that the result of parsing the official document should be this value.
 // We expect that the result of writing this struct should match the official example document.
@@ -409,5 +419,9 @@ var example = spdx.Document{
 			RefB:         common.MakeDocElementID("", "fromDoap-0"),
 			Relationship: "GENERATED_FROM",
 		},
+	},
+	DocumentDescribesJSON: []string{
+		common.RenderDocElementID(common.MakeDocElementID("", "File")),
+		common.RenderDocElementID(common.MakeDocElementID("", "Package")),
 	},
 }

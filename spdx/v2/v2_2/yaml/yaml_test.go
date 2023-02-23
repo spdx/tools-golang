@@ -40,7 +40,7 @@ func Test_Write(t *testing.T) {
 	want := example.Copy()
 
 	w := &bytes.Buffer{}
-	if err := yaml.Write(want, w); err != nil {
+	if err := yaml.Write(&want, w); err != nil {
 		t.Errorf("Save() error = %v", err.Error())
 		return
 	}

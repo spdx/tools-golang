@@ -22,7 +22,7 @@ var update = *flag.Bool("update-snapshots", false, "update the example snapshot"
 func Test_Read(t *testing.T) {
 	fileName := "../../../../examples/sample-docs/tv/SPDXTagExample-v2.3.spdx"
 
-	want := example.Copy()
+	want := example.TvCopy()
 
 	if update {
 		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
@@ -61,7 +61,7 @@ func Test_Read(t *testing.T) {
 }
 
 func Test_ReadWrite(t *testing.T) {
-	want := example.Copy()
+	want := example.TvCopy()
 
 	w := &bytes.Buffer{}
 	// get a copy of the handwritten struct so we don't mutate it on accident
