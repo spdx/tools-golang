@@ -23,6 +23,9 @@ func TestValidDocumentPassesValidation(t *testing.T) {
 			{PackageName: "pkg4", PackageSPDXIdentifier: "p4"},
 			{PackageName: "pkg5", PackageSPDXIdentifier: "p5"},
 		},
+		Files: []*spdx.File{
+			{FileName: "file1", FileSPDXIdentifier: "f1"},
+		},
 		Relationships: []*spdx.Relationship{
 			{
 				RefA:         common.MakeDocElementID("", "DOCUMENT"),
@@ -88,6 +91,26 @@ func TestInvalidDocumentFailsValidation(t *testing.T) {
 	}
 
 	err := ValidateDocument(doc)
+	if err == nil {
+		t.Fatalf("expected non-nil error, got nil")
+	}
+
+	doc = &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+
+		Relationships: []*spdx.Relationship{
+			{
+				RefA:         common.MakeDocElementID("", "p1"),
+				RefB:         common.MakeDocElementID("", "p99"),
+				Relationship: "DEPENDS_ON",
+			},
+		},
+	}
+
+	err = ValidateDocument(doc)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
 	}

@@ -64,7 +64,7 @@ const (
 
 const (
 	// F.2 Security types
-	CatagorySecurity  = common.CategorySecurity
+	CategorySecurity  = common.CategorySecurity
 	SecurityCPE23Type = common.TypeSecurityCPE23Type
 	SecurityCPE22Type = common.TypeSecurityCPE22Type
 	SecurityAdvisory  = common.TypeSecurityAdvisory
