@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/require"
 
 	"github.com/spdx/tools-golang/json"
@@ -51,8 +52,8 @@ func Test_Read(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got))
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
+		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
 		return
 	}
 }
@@ -75,8 +76,8 @@ func Test_Write(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got) {
-		t.Errorf("got incorrect struct after writing and re-parsing JSON example: %s", cmp.Diff(want, got))
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
+		t.Errorf("got incorrect struct after writing and re-parsing JSON example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
 		return
 	}
 }

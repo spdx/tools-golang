@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_3"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3/example"
@@ -46,8 +47,8 @@ func Test_Read(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got))
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
+		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
 		return
 	}
 }
@@ -70,8 +71,8 @@ func Test_Write(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got) {
-		t.Errorf("got incorrect struct after writing and re-parsing YAML example: %s", cmp.Diff(want, got))
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
+		t.Errorf("got incorrect struct after writing and re-parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
 		return
 	}
 }
