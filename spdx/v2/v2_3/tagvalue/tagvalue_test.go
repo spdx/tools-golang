@@ -85,6 +85,7 @@ func Test_ReadWrite(t *testing.T) {
 }
 
 var ignores = []cmp.Option{
+	cmpopts.IgnoreUnexported(spdx.Package{}),
 	cmpopts.IgnoreFields(spdx.Document{}, "Snippets"),
 	cmpopts.IgnoreFields(spdx.File{}, "Annotations"),
 	cmpopts.IgnoreFields(spdx.Package{}, "IsFilesAnalyzedTagPresent", "Annotations"),

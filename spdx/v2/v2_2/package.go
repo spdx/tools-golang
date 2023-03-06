@@ -3,6 +3,8 @@
 package v2_2
 
 import (
+	"encoding/json"
+
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
@@ -113,7 +115,36 @@ type Package struct {
 	Files []*File `json:"files,omitempty"`
 
 	Annotations []Annotation `json:"annotations,omitempty"`
+
+	// this field is only used when decoding JSON to translate the hasFiles
+	// property to relationships
+	hasFiles []common.DocElementID
 }
+
+func (p *Package) UnmarshalJSON(b []byte) error {
+	type pkg Package
+	type extras struct {
+		HasFiles []common.DocElementID `json:"hasFiles"`
+	}
+
+	var p2 pkg
+	if err := json.Unmarshal(b, &p2); err != nil {
+		return err
+	}
+
+	var e extras
+	if err := json.Unmarshal(b, &e); err != nil {
+		return err
+	}
+
+	*p = Package(p2)
+
+	p.hasFiles = e.HasFiles
+
+	return nil
+}
+
+var _ json.Unmarshaler = (*Package)(nil)
 
 // PackageExternalReference is an External Reference to additional info
 // about a Package, as defined in section 7.21 in version 2.2 of the spec.

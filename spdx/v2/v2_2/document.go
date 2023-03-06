@@ -4,6 +4,8 @@
 package v2_2
 
 import (
+	"encoding/json"
+
 	"github.com/anchore/go-struct-converter"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
@@ -77,3 +79,52 @@ func (d *Document) ConvertFrom(_ interface{}) error {
 }
 
 var _ converter.ConvertFrom = (*Document)(nil)
+
+func (d *Document) UnmarshalJSON(b []byte) error {
+	type doc Document
+	type extras struct {
+		DocumentDescribes []common.DocElementID `json:"documentDescribes"`
+	}
+
+	var d2 doc
+	if err := json.Unmarshal(b, &d2); err != nil {
+		return err
+	}
+
+	var e extras
+	if err := json.Unmarshal(b, &e); err != nil {
+		return err
+	}
+
+	*d = Document(d2)
+
+	// build relationships for documentDescribes field
+	for _, id := range e.DocumentDescribes {
+		d.Relationships = append(d.Relationships, &Relationship{
+			RefA: common.DocElementID{
+				ElementRefID: d.SPDXIdentifier,
+			},
+			RefB:         id,
+			Relationship: common.TypeRelationshipDescribe,
+		})
+	}
+
+	// build relationships for package hasFiles field
+	for _, p := range d.Packages {
+		for _, f := range p.hasFiles {
+			d.Relationships = append(d.Relationships, &Relationship{
+				RefA: common.DocElementID{
+					ElementRefID: p.PackageSPDXIdentifier,
+				},
+				RefB:         f,
+				Relationship: common.TypeRelationshipContains,
+			})
+		}
+
+		p.hasFiles = nil
+	}
+
+	return nil
+}
+
+var _ json.Unmarshaler = (*Document)(nil)
