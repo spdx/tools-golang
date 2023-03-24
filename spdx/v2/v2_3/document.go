@@ -6,7 +6,7 @@ package v2_3
 import (
 	"encoding/json"
 
-	"github.com/anchore/go-struct-converter"
+	converter "github.com/anchore/go-struct-converter"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )

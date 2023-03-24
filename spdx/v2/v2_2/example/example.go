@@ -203,7 +203,7 @@ var example = spdx.Document{
 			PackageDownloadLocation: "https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz",
 			PackageExternalReferences: []*spdx.PackageExternalReference{
 				{
-					Category: "PACKAGE_MANAGER",
+					Category: "PACKAGE-MANAGER",
 					RefType:  "purl",
 					Locator:  "pkg:maven/org.apache.jena/apache-jena@3.12.0",
 				},
