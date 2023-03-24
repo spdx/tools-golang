@@ -4,6 +4,7 @@ package v2_2
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
@@ -164,3 +165,20 @@ type PackageExternalReference struct {
 	// Cardinality: conditional (optional, one) for each External Reference
 	ExternalRefComment string `json:"comment,omitempty"`
 }
+
+func (r *PackageExternalReference) UnmarshalJSON(b []byte) error {
+	type ref PackageExternalReference
+
+	var r2 ref
+	if err := json.Unmarshal(b, &r2); err != nil {
+		return err
+	}
+
+	r2.Category = strings.ReplaceAll(r2.Category, "_", "-")
+
+	*r = PackageExternalReference(r2)
+
+	return nil
+}
+
+var _ json.Unmarshaler = (*PackageExternalReference)(nil)
