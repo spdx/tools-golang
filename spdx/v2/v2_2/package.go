@@ -4,6 +4,7 @@ package v2_2
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
@@ -163,4 +164,33 @@ type PackageExternalReference struct {
 	// 7.22: Package External Reference Comment
 	// Cardinality: conditional (optional, one) for each External Reference
 	ExternalRefComment string `json:"comment,omitempty"`
+}
+
+var _ json.Unmarshaler = (*PackageExternalReference)(nil)
+
+func (r *PackageExternalReference) UnmarshalJSON(b []byte) error {
+	type ref PackageExternalReference
+	var rr ref
+	if err := json.Unmarshal(b, &rr); err != nil {
+		return err
+	}
+
+	*r = PackageExternalReference(rr)
+	r.Category = strings.ReplaceAll(r.Category, "_", "-")
+
+	return nil
+}
+
+var _ json.Marshaler = (*PackageExternalReference)(nil)
+
+// We output as the JSON type enums since in v2.2.0 the JSON schema
+// spec only had enums with _ (e.g. PACKAGE_MANAGER)
+func (r *PackageExternalReference) MarshalJSON() ([]byte, error) {
+	type ref PackageExternalReference
+	var rr ref
+
+	rr = ref(*r)
+	rr.Category = strings.ReplaceAll(rr.Category, "-", "_")
+
+	return json.Marshal(&rr)
 }

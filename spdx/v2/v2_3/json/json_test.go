@@ -184,3 +184,140 @@ func Test_ShorthandFields(t *testing.T) {
 		},
 	}, doc)
 }
+
+func Test_JsonEnums(t *testing.T) {
+	contents := `{
+        "spdxVersion": "SPDX-2.3",
+        "dataLicense": "CC0-1.0",
+        "SPDXID": "SPDXRef-DOCUMENT",
+        "name": "SPDX-Tools-v2.0",
+        "documentDescribes": [
+            "SPDXRef-Container"
+        ],
+        "packages": [
+            {
+                "name": "Container",
+                "SPDXID": "SPDXRef-Container"
+            },
+            {
+                "name": "Package-1",
+                "SPDXID": "SPDXRef-Package-1",
+                "versionInfo": "1.1.1",
+                "externalRefs": [{
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:somepkg/ns/name1",
+                    "referenceType": "purl"
+                }]
+            },
+            {
+                "name": "Package-2",
+                "SPDXID": "SPDXRef-Package-2",
+                "versionInfo": "2.2.2",
+                "externalRefs": [{
+                    "referenceCategory": "PACKAGE-MANAGER",
+                    "referenceLocator": "pkg:somepkg/ns/name2",
+                    "referenceType": "purl"
+                }]
+            },
+            {
+                "name": "Package-3",
+                "SPDXID": "SPDXRef-Package-3",
+                "versionInfo": "3.3.3",
+                "externalRefs": [{
+                    "referenceCategory": "PERSISTENT_ID",
+                    "referenceLocator": "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+                    "referenceType": "gitoid"
+                }]
+            },
+            {
+                "name": "Package-4",
+                "SPDXID": "SPDXRef-Package-4",
+                "versionInfo": "4.4.4",
+                "externalRefs": [{
+                    "referenceCategory": "PERSISTENT-ID",
+                    "referenceLocator": "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+                    "referenceType": "gitoid"
+                }]
+            }
+        ]
+    }`
+
+	doc := spdx.Document{}
+	err := json.ReadInto(strings.NewReader(contents), &doc)
+
+	require.NoError(t, err)
+
+	id := func(s string) common.DocElementID {
+		return common.DocElementID{
+			ElementRefID: common.ElementID(s),
+		}
+	}
+
+	require.Equal(t, spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: "DOCUMENT",
+		DocumentName:   "SPDX-Tools-v2.0",
+		Packages: []*spdx.Package{
+			{
+				PackageName:           "Container",
+				PackageSPDXIdentifier: "Container",
+			},
+			{
+				PackageName:           "Package-1",
+				PackageSPDXIdentifier: "Package-1",
+				PackageVersion:        "1.1.1",
+				PackageExternalReferences: []*spdx.PackageExternalReference{
+					{
+						Category: common.CategoryPackageManager,
+						RefType:  common.TypePackageManagerPURL,
+						Locator:  "pkg:somepkg/ns/name1",
+					},
+				},
+			},
+			{
+				PackageName:           "Package-2",
+				PackageSPDXIdentifier: "Package-2",
+				PackageVersion:        "2.2.2",
+				PackageExternalReferences: []*spdx.PackageExternalReference{
+					{
+						Category: common.CategoryPackageManager,
+						RefType:  common.TypePackageManagerPURL,
+						Locator:  "pkg:somepkg/ns/name2",
+					},
+				},
+			},
+			{
+				PackageName:           "Package-3",
+				PackageSPDXIdentifier: "Package-3",
+				PackageVersion:        "3.3.3",
+				PackageExternalReferences: []*spdx.PackageExternalReference{
+					{
+						Category: common.CategoryPersistentId,
+						RefType:  common.TypePersistentIdGitoid,
+						Locator:  "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+					},
+				},
+			},
+			{
+				PackageName:           "Package-4",
+				PackageSPDXIdentifier: "Package-4",
+				PackageVersion:        "4.4.4",
+				PackageExternalReferences: []*spdx.PackageExternalReference{
+					{
+						Category: common.CategoryPersistentId,
+						RefType:  common.TypePersistentIdGitoid,
+						Locator:  "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+					},
+				},
+			},
+		},
+		Relationships: []*spdx.Relationship{
+			{
+				RefA:         id("DOCUMENT"),
+				RefB:         id("Container"),
+				Relationship: common.TypeRelationshipDescribe,
+			},
+		},
+	}, doc)
+}
