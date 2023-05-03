@@ -61,6 +61,11 @@ func Test_Read(t *testing.T) {
 func Test_Write(t *testing.T) {
 	want := example.Copy()
 
+	// we always output FilesAnalyzed, even though we handle reading files where it is omitted
+	for _, p := range want.Packages {
+		p.IsFilesAnalyzedTagPresent = true
+	}
+
 	w := &bytes.Buffer{}
 
 	if err := json.Write(&want, w); err != nil {
@@ -143,16 +148,19 @@ func Test_ShorthandFields(t *testing.T) {
 			{
 				PackageName:           "Container",
 				PackageSPDXIdentifier: "Container",
+				FilesAnalyzed:         true,
 			},
 			{
 				PackageName:           "Package-1",
 				PackageSPDXIdentifier: "Package-1",
 				PackageVersion:        "1.1.1",
+				FilesAnalyzed:         true,
 			},
 			{
 				PackageName:           "Package-2",
 				PackageSPDXIdentifier: "Package-2",
 				PackageVersion:        "2.2.2",
+				FilesAnalyzed:         true,
 			},
 		},
 		Files: []*spdx.File{
@@ -262,6 +270,7 @@ func Test_JsonEnums(t *testing.T) {
 			{
 				PackageName:           "Container",
 				PackageSPDXIdentifier: "Container",
+				FilesAnalyzed:         true,
 			},
 			{
 				PackageName:           "Package-1",
@@ -274,6 +283,7 @@ func Test_JsonEnums(t *testing.T) {
 						Locator:  "pkg:somepkg/ns/name1",
 					},
 				},
+				FilesAnalyzed: true,
 			},
 			{
 				PackageName:           "Package-2",
@@ -286,6 +296,7 @@ func Test_JsonEnums(t *testing.T) {
 						Locator:  "pkg:somepkg/ns/name2",
 					},
 				},
+				FilesAnalyzed: true,
 			},
 			{
 				PackageName:           "Package-3",
@@ -298,6 +309,7 @@ func Test_JsonEnums(t *testing.T) {
 						Locator:  "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
 					},
 				},
+				FilesAnalyzed: true,
 			},
 			{
 				PackageName:           "Package-4",
@@ -310,6 +322,7 @@ func Test_JsonEnums(t *testing.T) {
 						Locator:  "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
 					},
 				},
+				FilesAnalyzed: true,
 			},
 		},
 		Relationships: []*spdx.Relationship{

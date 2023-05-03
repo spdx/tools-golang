@@ -97,6 +97,7 @@
       "name": "Apache Commons Lang",
       "SPDXID": "SPDXRef-fromDoap-1",
       "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
       "homepage": "http://commons.apache.org/proper/commons-lang/",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -125,6 +126,7 @@
       "versionInfo": "8.8",
       "packageFileName": "saxonB-8.8.zip",
       "downloadLocation": "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download",
+      "filesAnalyzed": false,
       "checksums": [
         {
           "algorithm": "SHA1",
