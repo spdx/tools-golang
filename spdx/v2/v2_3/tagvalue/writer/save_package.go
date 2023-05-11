@@ -54,8 +54,8 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 	if pkg.ValidUntilDate != "" {
 		fmt.Fprintf(w, "ValidUntilDate: %s\n", pkg.ValidUntilDate)
 	}
-	if pkg.FilesAnalyzed == true {
-		if pkg.IsFilesAnalyzedTagPresent == true {
+	if pkg.FilesAnalyzed {
+		if pkg.IsFilesAnalyzedTagPresent {
 			fmt.Fprintf(w, "FilesAnalyzed: true\n")
 		}
 	} else {
@@ -82,7 +82,7 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 	if pkg.PackageLicenseConcluded != "" {
 		fmt.Fprintf(w, "PackageLicenseConcluded: %s\n", pkg.PackageLicenseConcluded)
 	}
-	if pkg.FilesAnalyzed == true {
+	if pkg.FilesAnalyzed {
 		for _, s := range pkg.PackageLicenseInfoFromFiles {
 			fmt.Fprintf(w, "PackageLicenseInfoFromFiles: %s\n", s)
 		}

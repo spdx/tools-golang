@@ -42,14 +42,14 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 	if pkg.PackageDownloadLocation != "" {
 		fmt.Fprintf(w, "PackageDownloadLocation: %s\n", pkg.PackageDownloadLocation)
 	}
-	if pkg.FilesAnalyzed == true {
-		if pkg.IsFilesAnalyzedTagPresent == true {
+	if pkg.FilesAnalyzed {
+		if pkg.IsFilesAnalyzedTagPresent {
 			fmt.Fprintf(w, "FilesAnalyzed: true\n")
 		}
 	} else {
 		fmt.Fprintf(w, "FilesAnalyzed: false\n")
 	}
-	if pkg.PackageVerificationCode.Value != "" && pkg.FilesAnalyzed == true {
+	if pkg.PackageVerificationCode.Value != "" && pkg.FilesAnalyzed {
 		if len(pkg.PackageVerificationCode.ExcludedFiles) == 0 {
 			fmt.Fprintf(w, "PackageVerificationCode: %s\n", pkg.PackageVerificationCode.Value)
 		} else {
@@ -70,7 +70,7 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 	if pkg.PackageLicenseConcluded != "" {
 		fmt.Fprintf(w, "PackageLicenseConcluded: %s\n", pkg.PackageLicenseConcluded)
 	}
-	if pkg.FilesAnalyzed == true {
+	if pkg.FilesAnalyzed {
 		for _, s := range pkg.PackageLicenseInfoFromFiles {
 			fmt.Fprintf(w, "PackageLicenseInfoFromFiles: %s\n", s)
 		}

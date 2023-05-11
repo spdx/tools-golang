@@ -71,7 +71,7 @@ func getAlgorithmFromURI(algorithmURI string) (checksumAlgorithm string, err err
 // from a list of licenses, it returns a
 // list of string representation of those licenses.
 func mapLicensesToStrings(licences []AnyLicenseInfo) []string {
-	res := make([]string, len(licences), len(licences))
+	res := make([]string, len(licences))
 	for i, lic := range licences {
 		res[i] = lic.ToLicenseString()
 	}
