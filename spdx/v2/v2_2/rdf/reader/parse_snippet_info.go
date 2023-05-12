@@ -34,6 +34,9 @@ func (parser *rdfParser2_2) getSnippetInformationFromNode2_2(node *gordfParser.N
 				return nil, err
 			}
 			docElemID, err := ExtractDocElementID(getLastPartOfURI(siTriple.Object.ID))
+			if err != nil {
+				return nil, err
+			}
 			si.SnippetFromFileSPDXIdentifier = docElemID.ElementRefID
 		case SPDX_RANGE:
 			// cardinality: min 1

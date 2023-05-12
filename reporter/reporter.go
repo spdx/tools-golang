@@ -17,7 +17,7 @@ import (
 // io.Writer, and outputs to the io.Writer a tabulated count of
 // the number of Files for each unique LicenseConcluded in the set.
 func Generate(pkg *spdx.Package, w io.Writer) error {
-	if pkg.FilesAnalyzed == false {
+	if !pkg.FilesAnalyzed {
 		return fmt.Errorf("Package FilesAnalyzed is false")
 	}
 	totalFound, totalNotFound, foundCounts := countLicenses(pkg)
@@ -29,10 +29,10 @@ func Generate(pkg *spdx.Package, w io.Writer) error {
 	fmt.Fprintf(wr, "%d\t  TOTAL\n", totalFound+totalNotFound)
 	fmt.Fprintf(wr, "\n")
 
-	counts := []struct {
+	var counts []struct {
 		lic   string
 		count int
-	}{}
+	}
 	for k, v := range foundCounts {
 		var entry struct {
 			lic   string
