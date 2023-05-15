@@ -23,3 +23,18 @@ func Write(doc common.AnyDocument, w io.Writer) error {
 
 	return nil
 }
+
+// WriteMultiline takes an SPDX Document and an io.Writer, and writes the document to the writer in JSON format with indents (multiline format).
+func WriteMultiline(doc common.AnyDocument, w io.Writer) error {
+	buf, err := json.MarshalIndent(doc, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	_, err = w.Write(buf)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
