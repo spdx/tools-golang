@@ -53,7 +53,7 @@ type Package struct {
 	IsFilesAnalyzedTagPresent bool `json:"-"`
 
 	// 7.9: Package Verification Code
-	PackageVerificationCode common.PackageVerificationCode `json:"packageVerificationCode"`
+	PackageVerificationCode common.PackageVerificationCode `json:"packageVerificationCode,omitempty"`
 
 	// 7.10: Package Checksum: may have keys for SHA1, SHA256, SHA512 and/or MD5
 	// Cardinality: optional, one or many
