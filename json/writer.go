@@ -9,32 +9,25 @@ import (
 	"github.com/spdx/tools-golang/spdx/common"
 )
 
-// Write takes an SPDX Document and an io.Writer, and writes the document to the writer in JSON format.
-func Write(doc common.AnyDocument, w io.Writer) error {
-	buf, err := json.Marshal(doc)
-	if err != nil {
-		return err
-	}
+type WriteOption func(*json.Encoder)
 
-	_, err = w.Write(buf)
-	if err != nil {
-		return err
+func Indent(indent string) WriteOption {
+	return func(e *json.Encoder) {
+		e.SetIndent("", indent)
 	}
-
-	return nil
 }
 
-// WriteMultiline takes an SPDX Document and an io.Writer, and writes the document to the writer in JSON format with indents (multiline format).
-func WriteMultiline(doc common.AnyDocument, w io.Writer) error {
-	buf, err := json.MarshalIndent(doc, "", "  ")
-	if err != nil {
-		return err
+func EscapeHTML(escape bool) WriteOption {
+	return func(e *json.Encoder) {
+		e.SetEscapeHTML(escape)
 	}
+}
 
-	_, err = w.Write(buf)
-	if err != nil {
-		return err
+// Write takes an SPDX Document and an io.Writer, and writes the document to the writer in JSON format.
+func Write(doc common.AnyDocument, w io.Writer, opts ...WriteOption) error {
+	e := json.NewEncoder(w)
+	for _, opt := range opts {
+		opt(e)
 	}
-
-	return nil
+	return e.Encode(doc)
 }

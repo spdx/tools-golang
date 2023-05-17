@@ -81,29 +81,6 @@ func Test_Write(t *testing.T) {
 		return
 	}
 }
-func Test_MultilineWrite(t *testing.T) {
-	want := example.Copy()
-
-	w := &bytes.Buffer{}
-
-	if err := json.WriteMultiline(&want, w); err != nil {
-		t.Errorf("Write() error = %v", err.Error())
-		return
-	}
-
-	// we should be able to parse what the writer wrote, and it should be identical to the original struct we wrote
-	var got spdx.Document
-	err := json.ReadInto(bytes.NewReader(w.Bytes()), &got)
-	if err != nil {
-		t.Errorf("failed to parse written document: %v", err.Error())
-		return
-	}
-
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after writing and re-parsing JSON example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
-		return
-	}
-}
 
 func Test_ShorthandFields(t *testing.T) {
 	contents := `{

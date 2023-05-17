@@ -56,8 +56,16 @@ func main() {
 	}
 	defer w.Close()
 
+	var opt []json.WriteOption
+	// you can use WriteOption to change JSON format
+	// uncomment the following code to test it
+	/*
+		opt = append(opt, json.Indent(" "))      // to create multiline json
+		opt = append(opt, json.EscapeHTML(true)) // to escape HTML characters
+	*/
+
 	// try to save the document to disk as JSON file
-	err = json.Write(doc, w)
+	err = json.Write(doc, w, opt...)
 	if err != nil {
 		fmt.Printf("Error while saving %v: %v", fileOut, err)
 		return
