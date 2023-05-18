@@ -86,8 +86,8 @@ type Package struct {
 	PackageLicenseComments string `json:"licenseComments,omitempty"`
 
 	// 7.17: Copyright Text: copyright notice(s) text, "NONE" or "NOASSERTION"
-	// Cardinality: mandatory, one
-	PackageCopyrightText string `json:"copyrightText"`
+	// Cardinality: optional, zero or one
+	PackageCopyrightText string `json:"copyrightText,omitempty"`
 
 	// 7.18: Package Summary Description
 	// Cardinality: optional, one
