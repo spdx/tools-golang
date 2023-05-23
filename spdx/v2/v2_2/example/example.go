@@ -374,6 +374,16 @@ var example = spdx.Document{
 			Relationship: "CONTAINS",
 		},
 		{
+			RefA:         common.MakeDocElementID("", "Package"),
+			RefB:         common.MakeDocElementID("", "CommonsLangSrc"),
+			Relationship: "CONTAINS",
+		},
+		{
+			RefA:         common.MakeDocElementID("", "Package"),
+			RefB:         common.MakeDocElementID("", "DoapSource"),
+			Relationship: "CONTAINS",
+		},
+		{
 			RefA:         common.MakeDocElementID("", "DOCUMENT"),
 			RefB:         common.MakeDocElementID("spdx-tool-1.2", "ToolsElement"),
 			Relationship: "COPY_OF",
