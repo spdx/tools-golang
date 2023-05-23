@@ -309,6 +309,7 @@ packages:
 - SPDXID: SPDXRef-fromDoap-1
   copyrightText: NOASSERTION
   downloadLocation: NOASSERTION
+  filesAnalyzed: false
   homepage: http://commons.apache.org/proper/commons-lang/
   licenseConcluded: NOASSERTION
   licenseDeclared: NOASSERTION
@@ -331,6 +332,7 @@ packages:
     checksumValue: 85ed0817af83a24ad8da68c2b5094de69833983c
   copyrightText: Copyright Saxonica Ltd
   description: The Saxon package is a collection of tools for processing XML documents.
+  filesAnalyzed: false
   downloadLocation: https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download
   homepage: http://saxon.sourceforge.net/
   licenseComments: Other versions available for a commercial license

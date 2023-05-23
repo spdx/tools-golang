@@ -92,7 +92,7 @@ PrimaryPackagePurpose: CONTAINER
 ReleaseDate: 2021-10-15T02:38:00Z
 BuiltDate: 2021-09-15T02:38:00Z
 ValidUntilDate: 2022-10-15T02:38:00Z
-FilesAnalyzed: false
+FilesAnalyzed: true
 PackageHomePage: https://www.centos.org/
 PackageCopyrightText: NOASSERTION
 PackageDescription: The CentOS container used to run the application.
@@ -148,7 +148,7 @@ PackageName: Jena
 SPDXID: SPDXRef-fromDoap-0
 PackageVersion: 3.12.0
 PackageDownloadLocation: https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz
-FilesAnalyzed: false
+FilesAnalyzed: true
 PackageHomePage: http://www.openjena.org/
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseDeclared: NOASSERTION

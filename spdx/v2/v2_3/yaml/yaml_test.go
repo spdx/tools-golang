@@ -56,6 +56,11 @@ func Test_Read(t *testing.T) {
 func Test_Write(t *testing.T) {
 	want := example.Copy()
 
+	// we always output FilesAnalyzed, even though we handle reading files where it is omitted
+	for _, p := range want.Packages {
+		p.IsFilesAnalyzedTagPresent = true
+	}
+
 	w := &bytes.Buffer{}
 
 	if err := yaml.Write(&want, w); err != nil {
