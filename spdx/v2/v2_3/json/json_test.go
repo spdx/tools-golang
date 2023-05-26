@@ -4,6 +4,7 @@ package json
 
 import (
 	"bytes"
+	jsonenc "encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -52,8 +53,8 @@ func Test_Read(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing JSON example: %s", diff)
 		return
 	}
 }
@@ -81,8 +82,8 @@ func Test_Write(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after writing and re-parsing JSON example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing JSON example: %s", diff)
 		return
 	}
 }
@@ -139,7 +140,7 @@ func Test_ShorthandFields(t *testing.T) {
 		}
 	}
 
-	require.Equal(t, spdx.Document{
+	want := spdx.Document{
 		SPDXVersion:    spdx.Version,
 		DataLicense:    spdx.DataLicense,
 		SPDXIdentifier: "DOCUMENT",
@@ -190,7 +191,135 @@ func Test_ShorthandFields(t *testing.T) {
 				Relationship: common.TypeRelationshipContains,
 			},
 		},
-	}, doc)
+	}
+
+	if diff := cmp.Diff(want, doc, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing JSON example: %s", diff)
+		return
+	}
+}
+
+func Test_ShorthandFieldsNoDuplicates(t *testing.T) {
+	contents := `{
+		"spdxVersion": "SPDX-2.3",
+		"dataLicense": "CC0-1.0",
+		"SPDXID": "SPDXRef-DOCUMENT",
+		"name": "SPDX-Tools-v2.0",
+		"documentDescribes": [
+			"SPDXRef-Container"
+		],
+		"packages": [
+			{
+				"name": "Container",
+				"SPDXID": "SPDXRef-Container"
+			},
+			{
+				"name": "Package-1",
+				"SPDXID": "SPDXRef-Package-1",
+				"versionInfo": "1.1.1",
+				"hasFiles": [
+					"SPDXRef-File-1",
+					"SPDXRef-File-2"
+				]
+			},
+			{
+				"name": "Package-2",
+				"SPDXID": "SPDXRef-Package-2",
+				"versionInfo": "2.2.2"
+			}
+		],
+		"files": [
+			{
+				"fileName": "./f1",
+				"SPDXID": "SPDXRef-File-1"
+			},
+			{
+				"fileName": "./f2",
+				"SPDXID": "SPDXRef-File-2"
+			}
+		],
+		"relationships": [
+		  {
+		   "spdxElementId": "SPDXRef-Package-1",
+		   "relationshipType": "CONTAINS",
+		   "relatedSpdxElement": "SPDXRef-File-1"
+		  },
+		  {
+		   "spdxElementId": "SPDXRef-Package-1",
+		   "relationshipType": "CONTAINS",
+		   "relatedSpdxElement": "SPDXRef-File-2"
+		  }
+		]
+	}`
+
+	doc := spdx.Document{}
+	err := json.ReadInto(strings.NewReader(contents), &doc)
+
+	require.NoError(t, err)
+
+	id := func(s string) common.DocElementID {
+		return common.DocElementID{
+			ElementRefID: common.ElementID(s),
+		}
+	}
+
+	want := spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: "DOCUMENT",
+		DocumentName:   "SPDX-Tools-v2.0",
+		Packages: []*spdx.Package{
+			{
+				PackageName:           "Container",
+				PackageSPDXIdentifier: "Container",
+				FilesAnalyzed:         true,
+			},
+			{
+				PackageName:           "Package-1",
+				PackageSPDXIdentifier: "Package-1",
+				PackageVersion:        "1.1.1",
+				FilesAnalyzed:         true,
+			},
+			{
+				PackageName:           "Package-2",
+				PackageSPDXIdentifier: "Package-2",
+				PackageVersion:        "2.2.2",
+				FilesAnalyzed:         true,
+			},
+		},
+		Files: []*spdx.File{
+			{
+				FileName:           "./f1",
+				FileSPDXIdentifier: "File-1",
+			},
+			{
+				FileName:           "./f2",
+				FileSPDXIdentifier: "File-2",
+			},
+		},
+		Relationships: []*spdx.Relationship{
+			{
+				RefA:         id("DOCUMENT"),
+				RefB:         id("Container"),
+				Relationship: common.TypeRelationshipDescribe,
+			},
+			{
+				RefA:         id("Package-1"),
+				RefB:         id("File-1"),
+				Relationship: common.TypeRelationshipContains,
+			},
+			{
+				RefA:         id("Package-1"),
+				RefB:         id("File-2"),
+				Relationship: common.TypeRelationshipContains,
+			},
+		},
+	}
+
+	if diff := cmp.Diff(want, doc, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing JSON example: %s", diff)
+		return
+	}
 }
 
 func Test_JsonEnums(t *testing.T) {
@@ -333,4 +462,10 @@ func Test_JsonEnums(t *testing.T) {
 			},
 		},
 	}, doc)
+}
+
+func relationshipLess(a, b *spdx.Relationship) bool {
+	aStr, _ := jsonenc.Marshal(a)
+	bStr, _ := jsonenc.Marshal(b)
+	return string(aStr) < string(bStr)
 }

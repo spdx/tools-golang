@@ -4,6 +4,7 @@ package yaml
 
 import (
 	"bytes"
+	jsonenc "encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -47,8 +48,8 @@ func Test_Read(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing YAML example: %s", diff)
 		return
 	}
 }
@@ -76,8 +77,14 @@ func Test_Write(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after writing and re-parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing YAML example: %s", diff)
 		return
 	}
+}
+
+func relationshipLess(a, b *spdx.Relationship) bool {
+	aStr, _ := jsonenc.Marshal(a)
+	bStr, _ := jsonenc.Marshal(b)
+	return string(aStr) < string(bStr)
 }

@@ -4,6 +4,7 @@ package yaml
 
 import (
 	"bytes"
+	jsonenc "encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -11,7 +12,6 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/spdx/tools-golang/spdx/v2/common"
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_2"
 	"github.com/spdx/tools-golang/spdx/v2/v2_2/example"
 	"github.com/spdx/tools-golang/yaml"
@@ -19,34 +19,6 @@ import (
 
 func Test_Read(t *testing.T) {
 	want := example.Copy()
-
-	want.Relationships = append(want.Relationships, []*spdx.Relationship{
-		{
-			RefA:         common.DocElementID{ElementRefID: "DOCUMENT"},
-			RefB:         common.DocElementID{ElementRefID: "File"},
-			Relationship: "DESCRIBES",
-		},
-		{
-			RefA:         common.DocElementID{ElementRefID: "DOCUMENT"},
-			RefB:         common.DocElementID{ElementRefID: "Package"},
-			Relationship: "DESCRIBES",
-		},
-		{
-			RefA:         common.DocElementID{ElementRefID: "Package"},
-			RefB:         common.DocElementID{ElementRefID: "CommonsLangSrc"},
-			Relationship: "CONTAINS",
-		},
-		{
-			RefA:         common.DocElementID{ElementRefID: "Package"},
-			RefB:         common.DocElementID{ElementRefID: "JenaLib"},
-			Relationship: "CONTAINS",
-		},
-		{
-			RefA:         common.DocElementID{ElementRefID: "Package"},
-			RefB:         common.DocElementID{ElementRefID: "DoapSource"},
-			Relationship: "CONTAINS",
-		},
-	}...)
 
 	file, err := os.Open("../../../../examples/sample-docs/yaml/SPDXYAMLExample-2.2.spdx.yaml")
 	if err != nil {
@@ -60,8 +32,8 @@ func Test_Read(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after parsing YAML example: %s", diff)
 		return
 	}
 }
@@ -88,8 +60,14 @@ func Test_Write(t *testing.T) {
 		return
 	}
 
-	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(spdx.Package{})) {
-		t.Errorf("got incorrect struct after writing and re-parsing YAML example: %s", cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{})))
+	if diff := cmp.Diff(want, got, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
+		t.Errorf("got incorrect struct after writing and re-parsing YAML example: %s", diff)
 		return
 	}
+}
+
+func relationshipLess(a, b *spdx.Relationship) bool {
+	aStr, _ := jsonenc.Marshal(a)
+	bStr, _ := jsonenc.Marshal(b)
+	return string(aStr) < string(bStr)
 }
