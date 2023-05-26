@@ -194,7 +194,7 @@ func Test_ShorthandFields(t *testing.T) {
 	}
 
 	if diff := cmp.Diff(want, doc, cmpopts.IgnoreUnexported(spdx.Package{}), cmpopts.SortSlices(relationshipLess)); len(diff) > 0 {
-		t.Errorf("got incorrect struct after parsing JSON example: %s", cmp.Diff(want, doc, cmpopts.IgnoreUnexported(spdx.Package{})))
+		t.Errorf("got incorrect struct after parsing JSON example: %s", diff)
 		return
 	}
 }
