@@ -227,9 +227,9 @@ func Test_ShorthandFieldsNoDuplicates(t *testing.T) {
 		   "relatedSpdxElement": "SPDXRef-File-1"
 		  },
 		  {
-		   "spdxElementId": "SPDXRef-Package-1",
-		   "relationshipType": "CONTAINS",
-		   "relatedSpdxElement": "SPDXRef-File-2"
+		   "spdxElementId": "SPDXRef-File-2",
+		   "relationshipType": "CONTAINED_BY",
+		   "relatedSpdxElement": "SPDXRef-Package-1"
 		  }
 		]
 	}`
@@ -291,9 +291,9 @@ func Test_ShorthandFieldsNoDuplicates(t *testing.T) {
 				Relationship: common.TypeRelationshipContains,
 			},
 			{
-				RefA:         id("Package-1"),
-				RefB:         id("File-2"),
-				Relationship: common.TypeRelationshipContains,
+				RefA:         id("File-2"),
+				RefB:         id("Package-1"),
+				Relationship: common.TypeRelationshipContainedBy,
 			},
 		},
 	}
