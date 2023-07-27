@@ -1,0 +1,1225 @@
+{
+  "SPDXID" : "SPDXRef-DOCUMENT",
+  "spdxVersion" : "SPDX-2.3",
+  "creationInfo" : {
+    "created" : "2023-07-18T12:27:48Z",
+    "creators" : [ "Person: Gary O'Neall", "Tool: spdx-maven-plugin" ],
+    "licenseListVersion" : "3.21"
+  },
+  "name" : "tools-java",
+  "dataLicense" : "CC0-1.0",
+  "documentDescribes" : [ "SPDXRef-8" ],
+  "documentNamespace" : "test",
+  "packages" : [ {
+    "SPDXID" : "SPDXRef-7",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "A Java implementation of the JSON Schema specification",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "https://github.com/java-json-tools/json-schema-validator",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "json-schema-validator",
+    "summary" : "A Java implementation of the JSON Schema specification",
+    "versionInfo" : "2.2.14"
+  }, {
+    "SPDXID" : "SPDXRef-8",
+    "copyrightText" : "NOASSERTION",
+    "description" : "SPDX Command Line Tools using the Spdx-Java-Library",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : true,
+    "homepage" : "https://spdx.dev/",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseDeclared" : "Apache-2.0",
+    "licenseInfoFromFiles" : [ "Apache-2.0", "(Apache-2.0 AND Apache-2.0)" ],
+    "name" : "tools-java",
+    "originator" : "Organization: Linux Foundation",
+    "packageFileName" : "tools-java.jar",
+    "packageVerificationCode" : {
+      "packageVerificationCodeValue" : "1756534e119a2fb5f683eb4ed0d7ecf253aa06ed"
+    },
+    "primaryPackagePurpose" : "LIBRARY",
+    "hasFiles" : [ "SPDXRef-28", "SPDXRef-28", "SPDXRef-29", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37", "SPDXRef-28", "SPDXRef-29", "SPDXRef-61", "SPDXRef-24", "SPDXRef-44", "SPDXRef-16", "SPDXRef-39", "SPDXRef-51", "SPDXRef-57", "SPDXRef-13", "SPDXRef-59", "SPDXRef-22", "SPDXRef-17", "SPDXRef-69", "SPDXRef-14", "SPDXRef-21", "SPDXRef-11", "SPDXRef-32", "SPDXRef-18", "SPDXRef-19", "SPDXRef-36", "SPDXRef-42", "SPDXRef-27", "SPDXRef-58", "SPDXRef-54", "SPDXRef-50", "SPDXRef-64", "SPDXRef-34", "SPDXRef-38", "SPDXRef-15", "SPDXRef-25", "SPDXRef-35", "SPDXRef-31", "SPDXRef-56", "SPDXRef-66", "SPDXRef-68", "SPDXRef-53", "SPDXRef-55", "SPDXRef-33", "SPDXRef-62", "SPDXRef-67", "SPDXRef-47", "SPDXRef-40", "SPDXRef-60", "SPDXRef-9", "SPDXRef-20", "SPDXRef-46", "SPDXRef-23", "SPDXRef-43", "SPDXRef-52", "SPDXRef-65", "SPDXRef-10", "SPDXRef-41", "SPDXRef-12", "SPDXRef-48", "SPDXRef-49", "SPDXRef-30", "SPDXRef-26", "SPDXRef-63", "SPDXRef-45", "SPDXRef-37" ],
+    "summary" : "SPDX Command Line Tools using the Spdx-Java-Library",
+    "supplier" : "Organization: SPDX",
+    "versionInfo" : "1.1.8-SNAPSHOT"
+  }, {
+    "SPDXID" : "SPDXRef-3",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "Storage for SPDX documents utilizing Jackson Databind.\nThis store supports serializing and deserializing files in JSON, YAML and XML formats.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "http://spdx.org",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "spdx-jackson-store",
+    "originator" : "Organization:SPDX",
+    "summary" : "Storage for SPDX documents utilizing Jackson Databind.\nThis store supports serializing and deserializing files in JSON, YAML and XML formats.",
+    "versionInfo" : "1.1.6"
+  }, {
+    "SPDXID" : "SPDXRef-4",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "Commons XMLSchema is a light weight schema object model that can be used to manipulate or\n        generate XML schema.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "NOASSERTION",
+    "name" : "XmlSchema Core",
+    "summary" : "Commons XMLSchema is a light weight schema object model that can be used to manipulate or\n        generate XML schema."
+  }, {
+    "SPDXID" : "SPDXRef-5",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "Stores SPDX documents in Microsoft Excel formats.  Supports both XLS and XLSX file types.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "http://github.com/spdx/spdx-spreadsheet-store",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "spdx-spreadsheet-store",
+    "originator" : "Organization:SPDX",
+    "summary" : "Stores SPDX documents in Microsoft Excel formats.  Supports both XLS and XLSX file types.",
+    "versionInfo" : "1.1.6"
+  }, {
+    "SPDXID" : "SPDXRef-6",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "SPDX store that supports serializing and deserializing SPDX tag/value files.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "http://maven.apache.org",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "spdx-tagvalue-store",
+    "originator" : "Organization:SPDX",
+    "summary" : "SPDX store that supports serializing and deserializing SPDX tag/value files.",
+    "versionInfo" : "1.1.6"
+  }, {
+    "SPDXID" : "SPDXRef-0",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "JUnit is a unit testing framework for Java, created by Erich Gamma and Kent Beck.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "http://junit.org",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "EPL-1.0",
+    "name" : "JUnit",
+    "originator" : "Organization:JUnit",
+    "summary" : "JUnit is a unit testing framework for Java, created by Erich Gamma and Kent Beck.",
+    "versionInfo" : "4.13.1"
+  }, {
+    "SPDXID" : "SPDXRef-1",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "Java library which implements the Java object model for SPDX and provides useful helper functions.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "https://github.com/spdx/Spdx-Java-Library",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "java-spdx-library",
+    "originator" : "Organization:SPDX",
+    "summary" : "Java library which implements the Java object model for SPDX and provides useful helper functions.",
+    "versionInfo" : "1.1.6"
+  }, {
+    "SPDXID" : "SPDXRef-2",
+    "copyrightText" : "UNSPECIFIED",
+    "description" : "This Java library implements an RDF store implementing the SPDX Java Library Storage Interface using an underlying RDF store.",
+    "downloadLocation" : "NOASSERTION",
+    "filesAnalyzed" : false,
+    "homepage" : "https://github.com/spdx/spdx-java-rdf-store",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "Apache-2.0",
+    "name" : "spdx-rdf-store",
+    "originator" : "Organization:SPDX",
+    "summary" : "This Java library implements an RDF store implementing the SPDX Java Library Storage Interface using an underlying RDF store.",
+    "versionInfo" : "1.1.6"
+  } ],
+  "files" : [ {
+    "SPDXID" : "SPDXRef-9",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "75ed20e7ec6452af57334a09123e7367745aeb29"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/InvalidFileNameException.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-50",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a288e48e5d3f168d44ca6ac0b988fe870bee7356"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/AbstractFileCompareSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-51",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "3984937747f7908fd3f6ce3688ce90c81df00b03"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/package-info.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-58",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "3b22a88678cd3e413388b151cd81b98d470bf859"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxToolsHelper.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-59",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "66684743d721070b231425c14d92370c6a54b887"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxConverterException.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-56",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "ec2cb0867ce69112b1a4f043106c33333e6fdd42"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxVerificationException.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-57",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "cd1a11b5ff387b299f71962e4a766fb0456b981c"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxConverter.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-54",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "cec35ac4ee225d8af074687dd1c0d010d0a705b8"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxViewer.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-55",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0b69b5f38bad9b2c0e7ac039c2d4db98f363a7f2"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/Verify.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-52",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "e175b5c8fc68c0aca5688fa25c3bf450959cd728"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/GenerateVerificationCode.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-53",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "71b94d742f022df3df565d0b9b2e18a36286dfaa"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/RdfSchemaToJsonSchema.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-61",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "f189abcf851acbcd00a7e709a55d04553dc2d120"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/test/java/org/spdx/tools/schema/OwlToXSDTest.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-62",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "ef0e779f7111d38eecab07e3bb324eec34b04874"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/test/java/org/spdx/tools/CompareSpdxDocsTest.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-60",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "83f5363f812499640be247838ab3e11ce52395ec"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/test/java/org/spdx/tools/VerifyTest.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-69",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a27f4a6ee333a76569eb266bc44be7052798a69e"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/resources/project.properties",
+    "fileTypes" : [ "OTHER" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-67",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "74b78d4536ba3333490f5691785c2090a89ee7cb"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./resources/spdx-schema-v2.3.json",
+    "fileTypes" : [ "OTHER" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-68",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./LICENSE",
+    "fileTypes" : [ "OTHER" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-65",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "6656403ea25de02923edc47cfe4c53511265bac6"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./resources/log4j2.xml",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-66",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a44823d7dd9a2e250e71587c326f4d558d4f0e63"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./resources/spdx-schema-v2.2.json",
+    "fileTypes" : [ "OTHER" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-63",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "470797430952b1812ceef11e9532005bf4d41311"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/test/java/org/spdx/tools/SpdxConverterTest.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-64",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "74a0a937cbb05f5ec30e05dae25eda82fc02bf65"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/test/java/org/spdx/tools/GenerateVerificationCodeTest.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-18",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "8243f50e7f6b7528be71b1e9b3b17d7ff5f509b1"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/OwlToXsd.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-19",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "3d26f3f89de160abdda66a660851c315199f43d0"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/package-info.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-16",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "37cc11c4b3ef94f1220863dac95e14a0283b91da"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/OwlToJsonSchema.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-17",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "7677c8030c2c1f6745feeaf749cc5ca1a2adb6d4"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/OwlToJsonContext.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-14",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "7c48b20e78280d6e4468a7b052d4d8ed79331b60"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/AbstractOwlRdfConverter.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-15",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "b2efd916737460752161d18259dd44205c805cbd"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/schema/SchemaException.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-12",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "4cdb1350de4ebfb409a52b060b2b92a344b88a7b"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/OnlineToolException.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-13",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a89650ca925131ce60bf16f35a9ce41c687862ad"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/RdfSchemaToXsd.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-10",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "916573baaf241c117c5fbc4bd073fb2e01c53af8"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/CompareSpdxDocs.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-11",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "7327e9256c3f56f2d5c2e9541b0db6f08652cd5c"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/SpdxVersion.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-29",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0a20188fd7d23f04a6b49b3ec534a3a1a95d70b1"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileLicenseCommentsSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-27",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "af9597d94516646e0d5e5b1172b18395899dfc9f"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileSpdxIdSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-28",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "58660e158461b307c467b951d5683084cb62b3a4"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileAnnotationSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-25",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0481c8bf901e478ae104dd9aa0284405c38a7a97"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileLicenseInfoSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-26",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a4c63213a4f59ec211663ee61da6c2c94e89abba"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/MultiDocumentSpreadsheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-23",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "f835c384afa248312c0946e4f13b3cc0e32e4b2b"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/MatchingStandardLicenses.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-24",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "17bbb8d99da76391e01095b8a0e6e9d6cc66e66c"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/AbstractSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-21",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "1924821b7ccde0331876e81774b8a5f7b489ce63"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/CONTRIBUTING.md",
+    "fileTypes" : [ "DOCUMENTATION" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-22",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "93c732d4f0c5034c328b0e54d1308141accb49f4"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/Main.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for (Apache-2.0 AND Apache-2.0)",
+    "licenseConcluded" : "(Apache-2.0 AND Apache-2.0)",
+    "licenseInfoInFiles" : [ "(Apache-2.0 AND Apache-2.0)" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-20",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "d5b96882e61d24546c1d3d2506df18505d4aab33"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/RdfSchemaToJsonContext.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseComments" : "This file contains SPDX-License-Identifiers for Apache-2.0",
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-38",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "9c259c1206a610a0d77ac299954a3b626ea358fc"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileContributorsSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-39",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "21577125874bb922a240a9c4fcbfc12981a95913"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/ExternalReferencesSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-36",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "713525527c9fad700b15ea8bce870d8b7bc86fce"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileChecksumSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-37",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "6c354e336609486b4e990234b7aa5ad6084348ec"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileConcludedSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-34",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "06585cd8b3a035447c134a3019f7f48f43ec5dc1"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/CompareHelper.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-35",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "a7a527c1a96fecdfcc4a513d592c8a65e2023865"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/DocumentSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-32",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "594adaa68dbbfd931038e1a713cc3bf585e551dd"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileCommentSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-33",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "bd2072ce80dd7b431d7783e9682bc26318ecaf30"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/CreatorSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-30",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "f05514480ae787e48201070180e8cd975ca15be2"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileAttributionSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-31",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "85d27dd745bab5b66d7b91f4cbcce8acb7552713"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/ExtractedLicenseSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-49",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "39b587027ee2bca8cbb0bf28cb34e99c334bf532"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileCopyrightSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-40",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "6c36feef2ee0fdc7c3384c6459856e914dad7a89"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/PackageSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-47",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "b2b907f2392115239e3711b57f7e6e83a39c6136"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileRelationshipSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-48",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "f938b968211f52674cf9ea0a8ce552faa18cc505"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/DocumentRelationshipSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-45",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "22eaaefbe232d2d86de2e7c76346f536c943fae9"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/VerificationSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-46",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "3b8aaf072146d61e2fc05be588eb91b4f4b6282b"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileNoticeSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-43",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "efd0f8f7b2622bf6a08bf115f0483e04cd63759c"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/FileTypeSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-44",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "de76546db4747e66c07aa53a8c009c91ca05b34c"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/NormalizedFileNameComparator.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-41",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "feb0a1738599bb2ed347959b2a97d34544dff931"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/DocumentAnnotationSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  }, {
+    "SPDXID" : "SPDXRef-42",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "d68229fb10fe55548df04881f3d3633f3217f102"
+    } ],
+    "copyrightText" : "Copyright (c) 2020 Source Auditor Inc.",
+    "fileContributors" : [ "Gary O'Neall" ],
+    "fileName" : "./src/main/java/org/spdx/tools/compare/SnippetSheet.java",
+    "fileTypes" : [ "SOURCE" ],
+    "licenseConcluded" : "Apache-2.0",
+    "licenseInfoInFiles" : [ "Apache-2.0" ],
+    "noticeText" : "Licensed under the Apache License, Version 2.0 (the \"License\");\n\t\t  you may not use this file except in compliance with the License.\n\t\t  You may obtain a copy of the License at\n\t\t\n\t\t      http://www.apache.org/licenses/LICENSE-2.0\n\t\t\n\t\t  Unless required by applicable law or agreed to in writing, software\n\t\t  distributed under the License is distributed on an \"AS IS\" BASIS,\n\t\t  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n\t\t  See the License for the specific language governing permissions and\n\t\t  limitations under the License."
+  } ],
+  "relationships" : [ {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-0"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-1"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-2"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-3"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-4"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-5"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-6"
+  }, {
+    "spdxElementId" : "SPDXRef-8",
+    "relationshipType" : "DYNAMIC_LINK",
+    "relatedSpdxElement" : "SPDXRef-7"
+  }, {
+    "spdxElementId" : "SPDXRef-9",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-50",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-51",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-58",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-59",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-56",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-57",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-54",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-55",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-52",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-53",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-61",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-62",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-60",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-69",
+    "relationshipType" : "CONTAINED_BY",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-67",
+    "relationshipType" : "CONTAINED_BY",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-68",
+    "relationshipType" : "CONTAINED_BY",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-65",
+    "relationshipType" : "CONTAINED_BY",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-66",
+    "relationshipType" : "CONTAINED_BY",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-63",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-64",
+    "relationshipType" : "TEST_CASE_OF",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-18",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-19",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-16",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-17",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-14",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-15",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-12",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-13",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-10",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-11",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-29",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-27",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-28",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-25",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-26",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-23",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-24",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-21",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-22",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-20",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-38",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-39",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-36",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-37",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-34",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-35",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-32",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-33",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-30",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-31",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-49",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-40",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-47",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-48",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-45",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-46",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-43",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-44",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-41",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  }, {
+    "spdxElementId" : "SPDXRef-42",
+    "relationshipType" : "GENERATES",
+    "relatedSpdxElement" : "SPDXRef-8"
+  } ]
+}
