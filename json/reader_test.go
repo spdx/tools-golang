@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// TestRead tests that the SPDX Reader can still parse json documents correctly
+// this protects against any of the custom unmarshalling code breaking given a new change set
 func TestRead(t *testing.T) {
 	tt := []struct {
 		filename string
