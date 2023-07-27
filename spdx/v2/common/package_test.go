@@ -24,6 +24,11 @@ func TestOriginator_UnmarshalJSON(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name:    "valid originator with email",
+			data:    []byte("\"Organization: ExampleCodeInspect (contact@example.com)\""),
+			wantErr: false,
+		},
+		{
 			name:    "invalid originator with no type",
 			data:    []byte("\"John Doe\""),
 			wantErr: true,
