@@ -2,11 +2,13 @@ package json_test
 
 import (
 	"bytes"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/spdx/common"
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_3"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_Write(t *testing.T) {

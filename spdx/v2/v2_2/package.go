@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"strings"
 
+	"github.com/spdx/tools-golang/json/marshal"
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
@@ -199,5 +200,5 @@ func (r *PackageExternalReference) MarshalJSON() ([]byte, error) {
 	rr = ref(*r)
 	rr.Category = strings.ReplaceAll(rr.Category, "-", "_")
 
-	return json.Marshal(&rr)
+	return marshal.JSON(&rr)
 }
