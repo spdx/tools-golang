@@ -1,6 +1,11 @@
 .PHONY: test
 test: unit fuzz
 
+.PHONY: format
+format:
+	gofmt -w .
+	gosimports -w -local github.com/spdx .
+
 .PHONY: unit
 unit:
 	go test -v -covermode=count -coverprofile=profile.cov ./...

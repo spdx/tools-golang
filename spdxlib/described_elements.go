@@ -12,9 +12,9 @@ import (
 
 // GetDescribedPackageIDs returns a slice of ElementIDs for all Packages
 // in this Document that it "describes," according to SPDX rules:
-// - If the document has only one Package, its ID is returned.
-// - If the document has 2+ Packages, it returns the IDs of those that have
-//   a DESCRIBES (or DESCRIBED_BY) relationship to this DOCUMENT.
+//   - If the document has only one Package, its ID is returned.
+//   - If the document has 2+ Packages, it returns the IDs of those that have
+//     a DESCRIBES (or DESCRIBED_BY) relationship to this DOCUMENT.
 func GetDescribedPackageIDs(doc *spdx.Document) ([]common.ElementID, error) {
 	// if nil Packages map or zero packages in it, return empty slice
 	if doc.Packages == nil {

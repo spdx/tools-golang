@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/spdx/tools-golang/json/marshal"
 )
 
 func Test_DocElementIDEncoding(t *testing.T) {
@@ -50,7 +52,7 @@ func Test_DocElementIDEncoding(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := json.Marshal(test.value)
+			result, err := marshal.JSON(test.value)
 			switch {
 			case !test.err && err != nil:
 				t.Fatalf("unexpected error: %v", err)
@@ -167,7 +169,7 @@ func Test_ElementIDEncoding(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := json.Marshal(test.value)
+			result, err := marshal.JSON(test.value)
 			switch {
 			case !test.err && err != nil:
 				t.Fatalf("unexpected error: %v", err)
@@ -255,7 +257,7 @@ func Test_ElementIDStructEncoding(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := json.Marshal(test.value)
+			result, err := marshal.JSON(test.value)
 			switch {
 			case !test.err && err != nil:
 				t.Fatalf("unexpected error: %v", err)

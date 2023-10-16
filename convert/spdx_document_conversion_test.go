@@ -3,12 +3,12 @@
 package convert
 
 import (
-	"encoding/json"
 	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/spdx/tools-golang/json/marshal"
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdx/v2/common"
 	"github.com/spdx/tools-golang/spdx/v2/v2_1"
@@ -2128,7 +2128,7 @@ func Test_ConvertSPDXDocuments(t *testing.T) {
 }
 
 func toJSON(data interface{}) string {
-	bytes, err := json.Marshal(data)
+	bytes, err := marshal.JSON(data)
 	if err != nil {
 		panic(err)
 	}
