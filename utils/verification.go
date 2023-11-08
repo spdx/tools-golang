@@ -44,9 +44,14 @@ func GetVerificationCode(files []*spdx.File, excludeFile string) (common.Package
 	hsha1.Write([]byte(shasConcat))
 	bs := hsha1.Sum(nil)
 
+	var excludedFiles []string
+	if excludeFile != "" {
+		excludedFiles = []string{excludeFile}
+	}
+
 	code := common.PackageVerificationCode{
 		Value:         fmt.Sprintf("%x", bs),
-		ExcludedFiles: []string{excludeFile},
+		ExcludedFiles: excludedFiles,
 	}
 
 	return code, nil
