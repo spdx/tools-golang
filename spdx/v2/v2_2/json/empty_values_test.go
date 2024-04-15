@@ -12,7 +12,7 @@ func Test_omitsAppropriateProperties(t *testing.T) {
 	tests := []struct {
 		name     string
 		pkg      spdx.Package
-		validate func(t *testing.T, got string)
+		validate func(t *testing.T, got map[string]interface{})
 	}{
 		{
 			name: "include packageVerificationCode exclusions",
@@ -21,7 +21,7 @@ func Test_omitsAppropriateProperties(t *testing.T) {
 					ExcludedFiles: []string{},
 				},
 			},
-			validate: func(t *testing.T, got string) {
+			validate: func(t *testing.T, got map[string]interface{}) {
 				require.Contains(t, got, "packageVerificationCode")
 			},
 		},
@@ -32,7 +32,7 @@ func Test_omitsAppropriateProperties(t *testing.T) {
 					Value: "1234",
 				},
 			},
-			validate: func(t *testing.T, got string) {
+			validate: func(t *testing.T, got map[string]interface{}) {
 				require.Contains(t, got, "packageVerificationCode")
 			},
 		},
@@ -41,7 +41,7 @@ func Test_omitsAppropriateProperties(t *testing.T) {
 			pkg: spdx.Package{
 				PackageVerificationCode: common.PackageVerificationCode{},
 			},
-			validate: func(t *testing.T, got string) {
+			validate: func(t *testing.T, got map[string]interface{}) {
 				require.NotContains(t, got, "packageVerificationCode")
 			},
 		},
@@ -51,7 +51,10 @@ func Test_omitsAppropriateProperties(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got, err := json.Marshal(test.pkg)
 			require.NoError(t, err)
-			test.validate(t, string(got))
+			var unmarshalled map[string]interface{}
+			err = json.Unmarshal(got, &unmarshalled)
+			require.NoError(t, err)
+			test.validate(t, unmarshalled)
 		})
 	}
 }

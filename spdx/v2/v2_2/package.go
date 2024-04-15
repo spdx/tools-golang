@@ -132,8 +132,10 @@ func (p Package) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	// remove empty packageVerificationCode entries -- required by 2.2 JSON schema but
-	// omitempty has no effect since it is a non-comparable struct and not a pointer
+	// remove empty packageVerificationCode entries -- required by SPDX 2.2 but
+	// omitempty has no effect since it is a non-comparable struct and not a pointer, so we
+	// manually check to determine if there is a valid value to output and omit the field if not
+	// see: https://spdx.github.io/spdx-spec/v2.2.2/package-information/#79-package-verification-code-field
 	if p.PackageVerificationCode.Value == "" && p.PackageVerificationCode.ExcludedFiles == nil {
 		var values map[string]interface{}
 		err = json.Unmarshal(data, &values)
