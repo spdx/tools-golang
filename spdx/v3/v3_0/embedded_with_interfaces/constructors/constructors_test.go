@@ -10,7 +10,6 @@ import (
 func Test_makeAnSpdxDocument(t *testing.T) {
 	// creating new documents: 2 packages found from 1 file with 2 relationships
 
-	// must call setters
 	pkg1, _ := NewPackage(PackageProps{
 		SpdxID:         "package-1",
 		Name:           "package-1",

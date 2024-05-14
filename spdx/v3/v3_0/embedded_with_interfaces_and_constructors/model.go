@@ -177,7 +177,6 @@ type ElementCollectionImpl struct {
 }
 
 var _ ElementCollection = (*ElementCollectionImpl)(nil)
-var _ Element = (*ElementCollectionImpl)(nil)
 
 func (p *ElementCollectionImpl) ProfileConformance() ProfileIdentifierType {
 	return p.profileConformance
@@ -229,7 +228,6 @@ type RelationshipImpl struct {
 }
 
 var _ Relationship = (*RelationshipImpl)(nil)
-var _ Element = (*RelationshipImpl)(nil)
 
 func (e *RelationshipImpl) RelationshipType() RelationshipType {
 	return e.relationshipType
