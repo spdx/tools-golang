@@ -1,6 +1,6 @@
 module github.com/spdx/tools-golang
 
-go 1.13
+go 1.18
 
 require (
 	github.com/anchore/go-struct-converter v0.0.0-20221118182256-c68fdcfa2092
