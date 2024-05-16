@@ -2,8 +2,9 @@ package v3_0_e_test
 
 import (
 	"fmt"
-	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0/embedded_with_interfaces"
 	"testing"
+
+	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0/embedded_with_interfaces"
 )
 
 func Test_makeAnSpdxDocument(t *testing.T) {
