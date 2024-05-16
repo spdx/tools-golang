@@ -44,9 +44,9 @@ func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []strin
 		newFilePatch := ""
 		if osType == "windows" {
 			if strings.HasPrefix(fp, dirRoot) {
-				newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+				newFilePatch = filepath.FromSlash(".\\" + fp[dirRootLen:])
 			} else {
-				newFilePatch = filepath.FromSlash("." + fp)
+				newFilePatch = filepath.FromSlash(".\\" + fp)
 			}
 		} else {
 			newFilePatch = filepath.FromSlash("./" + fp)
