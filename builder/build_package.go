@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"strings"
 
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdx/v2/common"
@@ -42,7 +43,11 @@ func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []strin
 	for _, fp := range filepaths {
 		newFilePatch := ""
 		if osType == "windows" {
-			newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+			if strings.HasPrefix(fp, dirRoot) {
+				newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
+			} else {
+				newFilePatch = filepath.FromSlash("." + fp)
+			}
 		} else {
 			newFilePatch = filepath.FromSlash("./" + fp)
 		}
