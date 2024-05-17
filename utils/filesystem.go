@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -17,12 +18,13 @@ import (
 // GetAllFilePaths takes a path to a directory (including an optional slice of
 // path patterns to ignore), and returns a slice of relative paths to all files
 // in that directory and its subdirectories (excluding those that are ignored).
+// These paths are always normalized to use URI-like forward-slashes but begin with /
 func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 	// paths is a _pointer_ to a slice -- not just a slice.
 	// this is so that it can be appropriately modified by append
 	// in the sub-function.
 	paths := &[]string{}
-	prefix := strings.TrimSuffix(dirRoot, "/")
+	prefix := strings.TrimSuffix(filepath.ToSlash(dirRoot), "/")
 
 	err := filepath.Walk(dirRoot, func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
@@ -37,6 +39,7 @@ func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 			return nil
 		}
 
+		path = filepath.ToSlash(path)
 		shortPath := strings.TrimPrefix(path, prefix)
 
 		// don't include path if it should be ignored
@@ -55,7 +58,7 @@ func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 // GetHashesForFilePath takes a path to a file on disk, and returns
 // SHA1, SHA256 and MD5 hashes for that file as strings.
 func GetHashesForFilePath(p string) (string, string, string, error) {
-	f, err := os.Open(p)
+	f, err := os.Open(filepath.FromSlash(p))
 	if err != nil {
 		return "", "", "", err
 	}
@@ -82,11 +85,11 @@ func GetHashesForFilePath(p string) (string, string, string, error) {
 // and determines whether that file should be ignored because it matches
 // any of those patterns.
 func ShouldIgnore(fileName string, pathsIgnored []string) bool {
-	fDirs, fFile := filepath.Split(fileName)
+	fDirs, fFile := path.Split(fileName)
 
 	for _, pattern := range pathsIgnored {
 		// split into dir(s) and filename
-		patternDirs, patternFile := filepath.Split(pattern)
+		patternDirs, patternFile := path.Split(pattern)
 		patternDirStars := strings.HasPrefix(patternDirs, "**")
 		if patternDirStars {
 			patternDirs = patternDirs[2:]
