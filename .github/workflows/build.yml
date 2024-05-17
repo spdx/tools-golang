@@ -2,17 +2,29 @@
 
 name: build
 on: [push, pull_request]
+env:
+  go-version: '1.18'
 jobs:
   tests:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.18'
+          go-version: ${{ env.go-version }}
       - name: Run tests
         run: make test
       - name: Send coverage report to coveralls
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: profile.cov
+
+  windows-tests:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.go-version }}
+      - name: Run tests
+        run: make test
