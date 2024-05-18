@@ -4,9 +4,23 @@ name: build
 on: [push, pull_request]
 jobs:
   tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.18'
+      - name: Run tests
+        run: make test
+      - name: Send coverage report to coveralls
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: profile.cov
+
+  tests-latest:
     strategy:
       matrix:
-        go-version: ['1.18', 'stable']
+        go-version: ['stable']
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -16,8 +30,3 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Run tests
         run: make test
-      - name: Send coverage report to coveralls
-        uses: shogo82148/actions-goveralls@v1
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go-version == 'stable' }}
-        with:
-          path-to-profile: profile.cov
