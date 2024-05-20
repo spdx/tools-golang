@@ -48,6 +48,10 @@ func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []strin
 			} else {
 				newFilePatch = filepath.FromSlash(".\\" + fp)
 			}
+
+			if strings.HasPrefix(".\\\\", newFilePatch) {
+				newFilePatch = fmt.Sprintf(".\\%s", newFilePatch[3:])
+			}
 		} else {
 			newFilePatch = filepath.FromSlash("./" + fp)
 		}
