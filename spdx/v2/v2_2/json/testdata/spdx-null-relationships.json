@@ -1,0 +1,56 @@
+{
+    "files": [ {
+        "fileName": "./Microsoft.CSharp.dll",
+        "SPDXID": "SPDXRef-File--Microsoft.CSharp.dll-E226415EEA8ABBBA041A635582440F75E873395C",
+        "checksums": [
+            {
+                "algorithm": "SHA256",
+                "checksumValue": "696b0b0d6ac06e620efd58db6f5f2e15fa2c9b91ddf8774ab8768c958d593254"
+            },
+            {
+                "algorithm": "SHA1",
+                "checksumValue": "e226415eea8abbba041a635582440f75e873395c"
+            }
+        ],
+        "licenseConcluded": "NOASSERTION",
+        "licenseInfoInFile": [
+            "NOASSERTION"
+        ],
+        "copyrightText": "NOASSERTION"
+    }],
+    "packages": [
+        {
+            "name": "read-pkg",
+            "SPDXID": "SPDXRef-Package-read-pkg-1.1.0-30839A4052AC42B4E1CAB4B52EBC7DE7B94BB36D",
+            "versionInfo": "1.1.0"
+        },
+        {
+            "name": "read-pkg",
+            "SPDXID": "SPDXRef-Package-read-pkg-1.1.0-30839A4052AC42B4E1CAB4B52EBC7DE7B94BB36D",
+            "versionInfo": "1.1.0"
+        }
+    ],
+    "relationships": [
+        null,
+        {
+
+        },
+        null,
+        {
+
+        },
+        null
+    ],
+    "spdxVersion": "SPDX-2.2",
+    "dataLicense": "CC0-1.0",
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "name": "Coordinated Packages 229170",
+    "documentNamespace": "https://sbom.microsoft/1:2QSF7qZlbE-F7QrUJlEo7g:pHp_nUFvDUijZ4LrJ4RhoQ/696:229170/F8kPc6dwY0WXD1Rkc2z6cg",
+    "creationInfo": {
+        "created": "2021-12-08T21:06:16Z",
+        "creators": [
+            "Organization: Microsoft",
+            "Tool: Microsoft.SBOMTool-2.0.88"
+        ]
+    }
+}
