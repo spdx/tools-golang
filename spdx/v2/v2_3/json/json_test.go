@@ -88,6 +88,25 @@ func Test_Write(t *testing.T) {
 	}
 }
 
+func Test_nullRelationships(t *testing.T) {
+	file, err := os.Open("testdata/spdx-null-relationships.json")
+	if err != nil {
+		panic(fmt.Errorf("error opening File: %s", err))
+	}
+
+	var got spdx.Document
+	err = json.ReadInto(file, &got)
+	if err != nil {
+		t.Errorf("json.parser.Load() error = %v", err)
+		return
+	}
+
+	require.Len(t, got.Relationships, 2)
+	for _, r := range got.Relationships {
+		require.NotNil(t, r)
+	}
+}
+
 func Test_ShorthandFields(t *testing.T) {
 	contents := `{
 		"spdxVersion": "SPDX-2.3",
