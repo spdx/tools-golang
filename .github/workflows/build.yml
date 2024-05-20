@@ -3,7 +3,7 @@
 name: build
 on: [push, pull_request]
 jobs:
-  tests:
+  tests: # this is the only required check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,7 @@ jobs:
         with:
           path-to-profile: profile.cov
 
-  tests-latest:
+  test-platforms:
     strategy:
       matrix:
         go-version: ['stable']

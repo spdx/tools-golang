@@ -18,7 +18,7 @@ import (
 func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []string) (*spdx.Package, error) {
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
-	relativePaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
+	shortPaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
 
 	if err != nil {
 		return nil, err
@@ -26,10 +26,10 @@ func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []strin
 
 	files := []*spdx.File{}
 	fileNumber := 0
-	for _, filePath := range relativePaths {
-		// SPDX spec says file names should generally start with ./
+	for _, shortPath := range shortPaths {
+		// SPDX spec says file names should generally start with ./ and the shortPath already starts with /
 		// see: https://spdx.github.io/spdx-spec/v2.3/file-information/#81-file-name-field
-		relativePath := "." + filePath
+		relativePath := "." + shortPath
 		newFile, err := BuildFileSection(relativePath, dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
