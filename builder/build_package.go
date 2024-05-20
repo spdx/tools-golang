@@ -4,9 +4,6 @@ package builder
 
 import (
 	"fmt"
-	"path/filepath"
-	"regexp"
-	"runtime"
 
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdx/v2/common"
@@ -21,32 +18,19 @@ import (
 func BuildPackageSection(packageName string, dirRoot string, pathsIgnore []string) (*spdx.Package, error) {
 	// build the file section first, so we'll have it available
 	// for calculating the package verification code
-	filepaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
-	osType := runtime.GOOS
+	shortPaths, err := utils.GetAllFilePaths(dirRoot, pathsIgnore)
 
 	if err != nil {
 		return nil, err
 	}
 
-	re, ok := regexp.Compile("/+")
-	if ok != nil {
-		return nil, err
-	}
-	dirRootLen := 0
-	if osType == "windows" {
-		dirRootLen = len(dirRoot)
-	}
-
 	files := []*spdx.File{}
 	fileNumber := 0
-	for _, fp := range filepaths {
-		newFilePatch := ""
-		if osType == "windows" {
-			newFilePatch = filepath.FromSlash("." + fp[dirRootLen:])
-		} else {
-			newFilePatch = filepath.FromSlash("./" + fp)
-		}
-		newFile, err := BuildFileSection(re.ReplaceAllLiteralString(newFilePatch, string(filepath.Separator)), dirRoot, fileNumber)
+	for _, shortPath := range shortPaths {
+		// SPDX spec says file names should generally start with ./ and the shortPath already starts with /
+		// see: https://spdx.github.io/spdx-spec/v2.3/file-information/#81-file-name-field
+		relativePath := "." + shortPath
+		newFile, err := BuildFileSection(relativePath, dirRoot, fileNumber)
 		if err != nil {
 			return nil, err
 		}

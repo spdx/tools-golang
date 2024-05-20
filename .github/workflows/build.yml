@@ -3,10 +3,10 @@
 name: build
 on: [push, pull_request]
 jobs:
-  tests:
-    runs-on: ubuntu-20.04
+  tests: # this is the only required check
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.18'
@@ -16,3 +16,17 @@ jobs:
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: profile.cov
+
+  test-platforms:
+    strategy:
+      matrix:
+        go-version: ['stable']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Run tests
+        run: make test

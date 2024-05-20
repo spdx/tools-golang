@@ -2,10 +2,12 @@ package json
 
 import (
 	"encoding/json"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+
 	"github.com/spdx/tools-golang/spdx/v2/common"
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_2"
-	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func Test_omitsAppropriateProperties(t *testing.T) {
