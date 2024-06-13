@@ -86,11 +86,11 @@ func (o *Originator) UnmarshalJSON(data []byte) error {
 func (o Originator) MarshalJSON() ([]byte, error) {
 	if o.Originator == "NOASSERTION" {
 		return marshal.JSON(o.Originator)
-	} else if o.Originator != "" {
+	} else if o.OriginatorType != "" && o.Originator != "" {
 		return marshal.JSON(fmt.Sprintf("%s: %s", o.OriginatorType, o.Originator))
 	}
 
-	return []byte{}, nil
+	return []byte{}, fmt.Errorf("failed to marshal invalid Originator: %+v", o)
 }
 
 type PackageVerificationCode struct {
