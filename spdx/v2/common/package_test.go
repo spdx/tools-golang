@@ -45,3 +45,45 @@ func TestOriginator_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestOriginator_MarshalJSON(t *testing.T) {
+	type mock struct {
+		*Originator
+	}
+	tt := []struct {
+		name    string
+		data    Originator
+		wantErr bool
+	}{
+		{
+			name: "valid originator",
+			data: Originator{
+				Originator:     "John Doe",
+				OriginatorType: "Person",
+			},
+			wantErr: false,
+		},
+		{
+			name: "originator with no type",
+			data: Originator{
+				Originator: "John Doe",
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid originator with type but no entity",
+			data: Originator{
+				OriginatorType: "Person",
+			},
+			wantErr: true,
+		},
+	}
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := tc.data.MarshalJSON()
+			if (err != nil) != tc.wantErr {
+				t.Errorf("Originator.MarshalJSON() error = %v, wantErr %v", err, tc.wantErr)
+			}
+		})
+	}
+}
