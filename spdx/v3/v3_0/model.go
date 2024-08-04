@@ -174,7 +174,20 @@ func (c ldContext) getOrCreateInstance(currentContext *serializationContext, ins
 			})
 			return instance, err
 		case reflect.Interface:
-			return emptyValue, fmt.Errorf("unable to determine appropriate type for external IRI reference: %v", incoming)
+			// an IRI with an interface is a reference to an unknown type, so use the closest type
+			newType, found := c.findExternalReferenceType(currentContext, expectedType)
+			if found {
+				instance = reflect.New(newType)
+				// try to return the appropriately assignable instance
+				if !instance.Type().AssignableTo(expectedType) {
+					instance = instance.Elem()
+				}
+				err := c.setStructProps(currentContext, instances, instance, map[string]any{
+					ldIDProp: incoming,
+				})
+				return instance, err
+			}
+			return emptyValue, fmt.Errorf("unable to determine external reference type while populating %v for IRI reference: %v", typeName(expectedType), incoming)
 		default:
 		}
 	case map[string]any:
@@ -365,6 +378,30 @@ func (c ldContext) setSliceValue(currentContext *serializationContext, instances
 		target.Set(newSlice)
 	}
 	return errs
+}
+
+func (c ldContext) findExternalReferenceType(currentContext *serializationContext, expectedType reflect.Type) (reflect.Type, bool) {
+	tc := currentContext.typeToContext[expectedType]
+	if tc != nil {
+		return tc.typ, true
+	}
+	bestMatch := anyType
+	for t := range currentContext.typeToContext {
+		if t.Kind() != reflect.Struct {
+			continue
+		}
+		// the type with the fewest fields assignable to the target is a good candidate to be an abstract type
+		if reflect.PointerTo(t).AssignableTo(expectedType) && (bestMatch == anyType || bestMatch.NumField() > t.NumField()) {
+			bestMatch = t
+		}
+	}
+	if bestMatch != anyType {
+		currentContext.typeToContext[expectedType] = &typeContext{
+			typ: bestMatch,
+		}
+		return bestMatch, true
+	}
+	return anyType, false
 }
 
 func skipField(field reflect.StructField) bool {
