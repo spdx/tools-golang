@@ -13,7 +13,8 @@ format:
 
 .PHONY: unit
 unit:
-	go test -v -covermode=count -coverprofile=profile.cov ./...
+	go test -v -covermode=count -coverprofile=profile.cov.tmp ./...
+	cat profile.cov.tmp | grep -v /model.go > profile.cov # ignore generated model file
 
 .PHONY: fuzz
 fuzz:
