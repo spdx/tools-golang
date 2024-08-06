@@ -23,7 +23,7 @@ func Test_exportImportExport(t *testing.T) {
 			ExternalIdentifiers: []spdx.IExternalIdentifier{
 				&spdx.ExternalIdentifier{
 					ExternalIdentifierType: spdx.ExternalIdentifierType_Cpe23,
-					Identifier:             "cpe23:a:myvendor:my-product:*:*:*:*:*:*:*",
+					Identifier:             "cpe:2.3:a:myvendor:my-product:*:*:*:*:*:*:*:*",
 				},
 			},
 			ExternalRefs: nil,
