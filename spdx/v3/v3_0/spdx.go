@@ -1,105 +1,82 @@
 package v3_0
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"math/rand"
 	"reflect"
 	"time"
 )
 
 /*
-SPDX 3 models and serialization code is generated from prototype golang support for shacl2code,
-https://github.com/kzantow-anchore/shacl2code/tree/golang-bindings (with contributions from Nisha and Keith)
+SPDX 3 models and serialization code is generated from some different prototype golang support for shacl2code, in: https://github.com/kzantow-anchore/shacl2code
 
 To regenerate, use something like this command:
-.venv/bin/python -m shacl2code generate -i https://spdx.org/rdf/3.0.0/spdx-model.ttl -i https://spdx.org/rdf/3.0.0/spdx-json-serialize-annotations.ttl -x https://spdx.org/rdf/3.0.0/spdx-context.jsonld golang --package v3_0 --license MIT --output $HOME/projects/tools-golang/spdx/v3/v3_0/model.go --remap-props element=elements,extension=extensions,externalIdentifier=externalIdentifiers,externalRef=externalRefs,rootElement=rootElements
+.venv/bin/python -m shacl2code generate -i https://spdx.org/rdf/3.0.1/spdx-model.ttl -i https://spdx.org/rdf/3.0.1/spdx-json-serialize-annotations.ttl -x https://spdx.org/rdf/3.0.1/spdx-context.jsonld golang
+--package v3_0 --license MIT
+--output $HOME/projects/tools-golang/spdx/v3/v3_0/model.go
+--remap-props element=elements,extension=extensions,externalIdentifier=externalIdentifiers,externalRef=externalRefs,rootElement=rootElements
 */
 
 type Document struct {
-	creationInfo *CreationInfo
-	document     *SpdxDocument
-	graph        []any
-	ldc          ldContext
+	*SpdxDocument
+	graph []any
+	//ldc          ldContext
 }
 
-func NewDocument(creator IAgent) *Document {
+func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
 	ci := &CreationInfo{
-		Created: time.Now().Format(time.RFC3339),
-		CreatedBy: []IAgent{
-			creator,
-		},
+		Created:       time.Now(),
+		CreatedBys:    AgentList{createdBy},
+		CreatedUsings: ToolList{createdUsing},
 	}
-	creator.SetCreationInfo(ci)
 	return &Document{
-		creationInfo: ci,
-		document: &SpdxDocument{
-			CreationInfo: ci,
+		SpdxDocument: &SpdxDocument{
+			ElementCollection: ElementCollection{
+				Element: Element{
+					Name:         name,
+					CreationInfo: ci,
+				},
+				ProfileConformances: []ProfileIdentifierType{conformance},
+			},
 		},
-		graph: []any{ci, creator},
-		ldc:   ldGlobal,
+		graph: []any{ci},
+		//ldc:   ldGlobal,
 	}
 }
 
-func (d *Document) CreationInfo() ICreationInfo {
-	return d.creationInfo
+func (d *Document) Append(e ...AnyElement) {
+	d.SpdxDocument.RootElements = append(d.SpdxDocument.RootElements, e...)
+	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e...)
 }
 
-func (d *Document) AddElement(e ...IElement) {
-	d.document.RootElements = append(d.document.RootElements, e...)
-	d.document.Elements = append(d.document.Elements, e...)
-}
+//func (d *Document) ToJSON(writer io.Writer) error {
+//	if d.SpdxDocument == nil {
+//		return fmt.Errorf("no document object created")
+//	}
+//	// all IElement need to have creationInfo set...
+//	d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
+//
+//	// all IElement need to have spdxID...
+//	if makeIdGenerator != nil {
+//		idGen := makeIdGenerator(d.SpdxDocument)
+//		if d.SpdxDocument.ID == "" {
+//			d.SpdxDocument.ID = idGen(d.SpdxDocument)
+//		}
+//		d.ensureSpdxIDs(d.SpdxDocument, idGen)
+//	}
+//
+//	maps, err := d.ldc.toMaps(d.SpdxDocument)
+//	if err != nil {
+//		return err
+//	}
+//	enc := json.NewEncoder(writer)
+//	enc.SetEscapeHTML(false)
+//	enc.SetIndent("", "  ")
+//	return enc.Encode(maps)
+//}
 
-func (d *Document) GetElements() []IElement {
-	return d.document.RootElements
-}
-
-func (d *Document) Document() *SpdxDocument {
-	return d.document
-}
-
-func (d *Document) Packages() []IPackage {
-	return get[IPackage](d)
-}
-
-func (d *Document) Relationships() Relationships {
-	return Relationships{get[IRelationship](d)}
-}
-
-func (d *Document) Files() []IFile {
-	return get[IFile](d)
-}
-
-func (d *Document) ToJSON(writer io.Writer) error {
-	if d.document == nil {
-		return fmt.Errorf("no document object created")
-	}
-	// all IElement need to have creationInfo set...
-	if d.creationInfo != nil {
-		d.setCreationInfo(d.creationInfo, d.document)
-	}
-	// all IElement need to have spdxID...
-	if makeIdGenerator != nil {
-		idGen := makeIdGenerator(d.document)
-		if d.document.GetSpdxId() == "" {
-			d.document.SetSpdxId(idGen(d.document))
-		}
-		d.ensureSpdxIDs(d.document, idGen)
-	}
-
-	maps, err := d.ldc.toMaps(d.document)
-	if err != nil {
-		return err
-	}
-	enc := json.NewEncoder(writer)
-	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "  ")
-	return enc.Encode(maps)
-}
-
-func (d *Document) setCreationInfo(creationInfo ICreationInfo, doc ISpdxDocument) {
-	iCreationInfoType := reflect.TypeOf((*ICreationInfo)(nil)).Elem()
+func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
+	iCreationInfoType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
 	ci := reflect.ValueOf(creationInfo)
 	_ = visitObjectGraph(map[reflect.Value]struct{}{}, reflect.ValueOf(doc), func(v reflect.Value) error {
 		t := v.Type()
@@ -110,33 +87,43 @@ func (d *Document) setCreationInfo(creationInfo ICreationInfo, doc ISpdxDocument
 	})
 }
 
-func (d *Document) ensureSpdxIDs(doc ISpdxDocument, idGen idGenerator) {
-	iElementType := reflect.TypeOf((*IElement)(nil)).Elem()
+func (d *Document) ensureSpdxIDs(doc *SpdxDocument, idGen idGenerator) {
+	iElementType := reflect.TypeOf((*AnyElement)(nil)).Elem()
 	_ = visitObjectGraph(map[reflect.Value]struct{}{}, reflect.ValueOf(doc), func(v reflect.Value) error {
 		if v.Type().Implements(iElementType) {
-			el, ok := v.Interface().(IElement)
-			if ok && el.GetSpdxId() == "" {
-				el.SetSpdxId(idGen(el))
+			el, ok := v.Interface().(AnyElement)
+			if ok {
+				e := el.asElement()
+				if e != nil && e.ID == "" {
+					e.ID = idGen(el)
+				}
 			}
 		}
 		return nil
 	})
 }
 
-type idGenerator func(e IElement) string
+type idGenerator func(e any) string
 
-var makeIdGenerator = func(doc ISpdxDocument) idGenerator {
+var makeIdGenerator = func(doc *SpdxDocument) idGenerator {
 	nextID := map[reflect.Type]uint{}
-	return func(e IElement) string {
-		if _, ok := e.(ISpdxDocument); ok {
+	return func(e any) string {
+		if _, ok := e.(*SpdxDocument); ok {
 			return fmt.Sprintf("%v", rand.Uint64())
 		}
 		t := baseType(reflect.TypeOf(e))
 		// should these be blank nodes?
 		id := nextID[t] + 1
 		nextID[t] = id
-		return fmt.Sprintf("_:%v-%v-%v", doc.GetSpdxId(), t.Name(), id)
+		return fmt.Sprintf("_:%v-%v-%v", doc.ID, t.Name(), id)
 	}
+}
+
+func baseType(t reflect.Type) reflect.Type {
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	return t
 }
 
 func visitObjectGraph(visited map[reflect.Value]struct{}, v reflect.Value, visitor func(reflect.Value) error) error {
@@ -180,27 +167,17 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, v reflect.Value, visit
 	return nil
 }
 
-func (d *Document) FromJSON(reader io.Reader) error {
-	graph, err := d.ldc.FromJSON(reader)
-	if err != nil {
-		return err
-	}
-	d.graph = append(d.graph, graph)
-	for _, e := range graph {
-		if doc, ok := e.(*SpdxDocument); ok {
-			d.document = doc
-			return nil
-		}
-	}
-	return fmt.Errorf("no document found")
-}
-
-func get[T any](ctx *Document) []T {
-	var out []T
-	for _, i := range ctx.graph {
-		if i, ok := i.(T); ok {
-			out = append(out, i)
-		}
-	}
-	return out
-}
+//func (d *Document) FromJSON(reader io.Reader) error {
+//	graph, err := d.ldc.FromJSON(reader)
+//	if err != nil {
+//		return err
+//	}
+//	d.graph = append(d.graph, graph)
+//	for _, e := range graph {
+//		if doc, ok := e.(*SpdxDocument); ok {
+//			d.SpdxDocument = doc
+//			return nil
+//		}
+//	}
+//	return fmt.Errorf("no document found")
+//}
