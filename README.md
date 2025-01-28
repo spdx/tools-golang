@@ -9,15 +9,9 @@
 `tools-golang` is a collection of Go packages intended to make it easier for
 Go programs to work with [SPDX®](https://spdx.dev/) files.
 
-## Recent news
-
-2022-01-11: **v0.4.0**: added support for SPDX v2.3 and YAML, as well as other
-improvements and bugfixes. See [RELEASE-NOTES.md](./RELEASE-NOTES.md) for full
-details.  
-
 ## What it does
 
-tools-golang currently works with files conformant to versions 2.1 and 2.2
+tools-golang currently works with files conformant to versions 2.1, 2.2 and 2.3
 of the SPDX specification, available at: https://spdx.dev/specifications
 
 tools-golang provides the following packages:
