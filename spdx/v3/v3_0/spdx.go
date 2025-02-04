@@ -1,8 +1,6 @@
 package v3_0
 
 import (
-	"fmt"
-	"math/rand"
 	"reflect"
 	"time"
 )
@@ -19,11 +17,9 @@ To regenerate, use something like this command:
 
 type Document struct {
 	*SpdxDocument
-	graph []any
-	//ldc          ldContext
 }
 
-func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
+func NewDocument(conformance profileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
 	ci := &CreationInfo{
 		Created:       time.Now(),
 		CreatedBys:    AgentList{createdBy},
@@ -36,11 +32,10 @@ func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAg
 					Name:         name,
 					CreationInfo: ci,
 				},
-				ProfileConformances: []ProfileIdentifierType{conformance},
+				ProfileConformances: []profileIdentifierType{conformance},
 			},
 		},
-		graph: []any{ci},
-		//ldc:   ldGlobal,
+		//LDContext: LDContext(),
 	}
 }
 
@@ -49,36 +44,13 @@ func (d *Document) Append(e ...AnyElement) {
 	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e...)
 }
 
-//func (d *Document) ToJSON(writer io.Writer) error {
-//	if d.SpdxDocument == nil {
-//		return fmt.Errorf("no document object created")
-//	}
-//	// all IElement need to have creationInfo set...
-//	d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
-//
-//	// all IElement need to have spdxID...
-//	if makeIdGenerator != nil {
-//		idGen := makeIdGenerator(d.SpdxDocument)
-//		if d.SpdxDocument.ID == "" {
-//			d.SpdxDocument.ID = idGen(d.SpdxDocument)
-//		}
-//		d.ensureSpdxIDs(d.SpdxDocument, idGen)
-//	}
-//
-//	maps, err := d.ldc.toMaps(d.SpdxDocument)
-//	if err != nil {
-//		return err
-//	}
-//	enc := json.NewEncoder(writer)
-//	enc.SetEscapeHTML(false)
-//	enc.SetIndent("", "  ")
-//	return enc.Encode(maps)
-//}
-
 func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
 	iCreationInfoType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
 	ci := reflect.ValueOf(creationInfo)
 	_ = visitObjectGraph(map[reflect.Value]struct{}{}, reflect.ValueOf(doc), func(v reflect.Value) error {
+		if v.IsZero() {
+			return nil
+		}
 		t := v.Type()
 		if t.Kind() == reflect.Interface && v.IsNil() && t.Implements(iCreationInfoType) {
 			v.Set(ci)
@@ -104,20 +76,6 @@ func (d *Document) ensureSpdxIDs(doc *SpdxDocument, idGen idGenerator) {
 }
 
 type idGenerator func(e any) string
-
-var makeIdGenerator = func(doc *SpdxDocument) idGenerator {
-	nextID := map[reflect.Type]uint{}
-	return func(e any) string {
-		if _, ok := e.(*SpdxDocument); ok {
-			return fmt.Sprintf("%v", rand.Uint64())
-		}
-		t := baseType(reflect.TypeOf(e))
-		// should these be blank nodes?
-		id := nextID[t] + 1
-		nextID[t] = id
-		return fmt.Sprintf("_:%v-%v-%v", doc.ID, t.Name(), id)
-	}
-}
 
 func baseType(t reflect.Type) reflect.Type {
 	for t.Kind() == reflect.Ptr {
@@ -166,18 +124,3 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, v reflect.Value, visit
 	}
 	return nil
 }
-
-//func (d *Document) FromJSON(reader io.Reader) error {
-//	graph, err := d.ldc.FromJSON(reader)
-//	if err != nil {
-//		return err
-//	}
-//	d.graph = append(d.graph, graph)
-//	for _, e := range graph {
-//		if doc, ok := e.(*SpdxDocument); ok {
-//			d.SpdxDocument = doc
-//			return nil
-//		}
-//	}
-//	return fmt.Errorf("no document found")
-//}

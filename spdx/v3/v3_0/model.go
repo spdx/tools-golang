@@ -13,19 +13,19 @@ import (
 // A class for describing the energy consumption incurred by an AI model in
 // different stages of its lifecycle.
 type AiEnergyConsumption struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Specifies the amount of energy consumed when finetuning the AI model that is
 	// being used in the AI system.
-	AiFinetuningEnergyConsumptions AiEnergyConsumptionDescriptionList
+	AiFinetuningEnergyConsumptions AiEnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/finetuningEnergyConsumption"  iri-compact:"ai_finetuningEnergyConsumption"`
 
 	// Specifies the amount of energy consumed during inference time by an AI model
 	// that is being used in the AI system.
-	AiInferenceEnergyConsumptions AiEnergyConsumptionDescriptionList
+	AiInferenceEnergyConsumptions AiEnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/inferenceEnergyConsumption"  iri-compact:"ai_inferenceEnergyConsumption"`
 
 	// Specifies the amount of energy consumed when training the AI model that is
 	// being used in the AI system.
-	AiTrainingEnergyConsumptions AiEnergyConsumptionDescriptionList
+	AiTrainingEnergyConsumptions AiEnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/trainingEnergyConsumption"  iri-compact:"ai_trainingEnergyConsumption"`
 }
 
 func castAiEnergyConsumption(o any) *AiEnergyConsumption {
@@ -45,11 +45,6 @@ type AnyAiEnergyConsumption interface {
 
 type AiEnergyConsumptionList []AnyAiEnergyConsumption
 
-func (o *AiEnergyConsumptionList) Append(values ...AnyAiEnergyConsumption) {
-	*o = append(*o, values...)
-}
-func (o *AiEnergyConsumptionList) Remove(value AnyAiEnergyConsumption) { remove(o, value) }
-
 func (o *AiEnergyConsumptionList) AiEnergyConsumptionIter() iter.Seq2[AnyAiEnergyConsumption, *AiEnergyConsumption] {
 	return typeIter(*o, castAiEnergyConsumption)
 }
@@ -57,12 +52,12 @@ func (o *AiEnergyConsumptionList) AiEnergyConsumptionIter() iter.Seq2[AnyAiEnerg
 // The class that helps note down the quantity of energy consumption and the unit
 // used for measurement.
 type AiEnergyConsumptionDescription struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Represents the energy quantity.
-	AiEnergyQuantity float64
+	AiEnergyQuantity float64 `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyQuantity"  iri-compact:"ai_energyQuantity"`
 	// Specifies the unit in which energy is measured.
-	AiEnergyUnit AiEnergyUnitType
+	AiEnergyUnit aiEnergyUnitType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyUnit"  iri-compact:"ai_energyUnit"`
 }
 
 func castAiEnergyConsumptionDescription(o any) *AiEnergyConsumptionDescription {
@@ -82,77 +77,70 @@ type AnyAiEnergyConsumptionDescription interface {
 
 type AiEnergyConsumptionDescriptionList []AnyAiEnergyConsumptionDescription
 
-func (o *AiEnergyConsumptionDescriptionList) Append(values ...AnyAiEnergyConsumptionDescription) {
-	*o = append(*o, values...)
-}
-func (o *AiEnergyConsumptionDescriptionList) Remove(value AnyAiEnergyConsumptionDescription) {
-	remove(o, value)
-}
-
 func (o *AiEnergyConsumptionDescriptionList) AiEnergyConsumptionDescriptionIter() iter.Seq2[AnyAiEnergyConsumptionDescription, *AiEnergyConsumptionDescription] {
 	return typeIter(*o, castAiEnergyConsumptionDescription)
 }
 
 // Specifies the unit of energy consumption.
-type AiEnergyUnitType struct {
-	ID string
+type aiEnergyUnitType struct {
+	ID string `iri:"@id"`
 }
 
 // Kilowatt-hour.
-var AiEnergyUnitType_KilowattHour = AiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/kilowattHour"}
+var AiEnergyUnitType_KilowattHour = aiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/kilowattHour"}
 
 // Megajoule.
-var AiEnergyUnitType_Megajoule = AiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/megajoule"}
+var AiEnergyUnitType_Megajoule = aiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/megajoule"}
 
 // Any other units of energy measurement.
-var AiEnergyUnitType_Other = AiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/other"}
+var AiEnergyUnitType_Other = aiEnergyUnitType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType/other"}
 
 // Specifies the safety risk level.
-type AiSafetyRiskAssessmentType struct {
-	ID string
+type aiSafetyRiskAssessmentType struct {
+	ID string `iri:"@id"`
 }
 
 // The second-highest level of risk posed by an AI system.
-var AiSafetyRiskAssessmentType_High = AiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/high"}
+var AiSafetyRiskAssessmentType_High = aiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/high"}
 
 // Low/no risk is posed by an AI system.
-var AiSafetyRiskAssessmentType_Low = AiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/low"}
+var AiSafetyRiskAssessmentType_Low = aiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/low"}
 
 // The third-highest level of risk posed by an AI system.
-var AiSafetyRiskAssessmentType_Medium = AiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/medium"}
+var AiSafetyRiskAssessmentType_Medium = aiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/medium"}
 
 // The highest level of risk posed by an AI system.
-var AiSafetyRiskAssessmentType_Serious = AiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/serious"}
+var AiSafetyRiskAssessmentType_Serious = aiSafetyRiskAssessmentType{ID: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/serious"}
 
 // Specifies the type of an annotation.
-type AnnotationType struct {
-	ID string
+type annotationType struct {
+	ID string `iri:"@id"`
 }
 
 // Used to store extra information about an Element which is not part of a review (e.g. extra information provided during the creation of the Element).
-var AnnotationType_Other = AnnotationType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType/other"}
+var AnnotationType_Other = annotationType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType/other"}
 
 // Used when someone reviews the Element.
-var AnnotationType_Review = AnnotationType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType/review"}
+var AnnotationType_Review = annotationType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType/review"}
 
 // Provides information about the creation of the Element.
 type CreationInfo struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Provide consumers with comments by the creator of the Element about the
 	// Element.
-	Comment string
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment"  iri-compact:"comment"`
 	// Identifies when the Element was originally created.
-	Created time.Time
+	Created time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/created"  iri-compact:"created"`
 	// Identifies who or what created the Element.
-	CreatedBys AgentList
+	CreatedBys AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/createdBy"  iri-compact:"createdBy"`
 
 	// Identifies the tooling that was used during the creation of the Element.
-	CreatedUsings ToolList
+	CreatedUsings ToolList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/createdUsing"  iri-compact:"createdUsing"`
 
 	// Provides a reference number that can be used to understand how to parse and
 	// interpret an Element.
-	SpecVersion string
+	SpecVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/specVersion"  iri-compact:"specVersion"`
 }
 
 func castCreationInfo(o any) *CreationInfo {
@@ -172,21 +160,18 @@ type AnyCreationInfo interface {
 
 type CreationInfoList []AnyCreationInfo
 
-func (o *CreationInfoList) Append(values ...AnyCreationInfo) { *o = append(*o, values...) }
-func (o *CreationInfoList) Remove(value AnyCreationInfo)     { remove(o, value) }
-
 func (o *CreationInfoList) CreationInfoIter() iter.Seq2[AnyCreationInfo, *CreationInfo] {
 	return typeIter(*o, castCreationInfo)
 }
 
 // A key with an associated value.
 type DictionaryEntry struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// A key used in a generic key-value pair.
-	Key string
+	Key string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/key"  iri-compact:"key"`
 	// A value used in a generic key-value pair.
-	Value string
+	Value string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/value"  iri-compact:"value"`
 }
 
 func castDictionaryEntry(o any) *DictionaryEntry {
@@ -206,43 +191,40 @@ type AnyDictionaryEntry interface {
 
 type DictionaryEntryList []AnyDictionaryEntry
 
-func (o *DictionaryEntryList) Append(values ...AnyDictionaryEntry) { *o = append(*o, values...) }
-func (o *DictionaryEntryList) Remove(value AnyDictionaryEntry)     { remove(o, value) }
-
 func (o *DictionaryEntryList) DictionaryEntryIter() iter.Seq2[AnyDictionaryEntry, *DictionaryEntry] {
 	return typeIter(*o, castDictionaryEntry)
 }
 
 // Base domain class from which all other SPDX-3.0 domain classes derive.
 type Element struct {
-	ID string
+	ID string `iri:"@id" iri-compact:"spdxId"`
 
 	// Provide consumers with comments by the creator of the Element about the
 	// Element.
-	Comment string
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment"  iri-compact:"comment"`
 	// Provides information about the creation of the Element.
-	CreationInfo AnyCreationInfo
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo"  iri-compact:"creationInfo"`
 
 	// Provides a detailed description of the Element.
-	Description string
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description"  iri-compact:"description"`
 	// Specifies an Extension characterization of some aspect of an Element.
-	Extensions ExtensionExtensionList
+	Extensions ExtensionExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension"  iri-compact:"extension"`
 
 	// Provides a reference to a resource outside the scope of SPDX-3.0 content
 	// that uniquely identifies an Element.
-	ExternalIdentifiers ExternalIdentifierList
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier"  iri-compact:"externalIdentifier"`
 
 	// Points to a resource outside the scope of the SPDX-3.0 content
 	// that provides additional characteristics of an Element.
-	ExternalRefs ExternalRefList
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef"  iri-compact:"externalRef"`
 
 	// Identifies the name of an Element as designated by the creator.
-	Name string
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name"  iri-compact:"name"`
 	// A short description of an Element.
-	Summary string
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary"  iri-compact:"summary"`
 	// Provides an IntegrityMethod with which the integrity of an Element can be
 	// asserted.
-	VerifiedUsings IntegrityMethodList
+	VerifiedUsings IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing"  iri-compact:"verifiedUsing"`
 }
 
 func castElement(o any) *Element {
@@ -261,9 +243,6 @@ type AnyElement interface {
 }
 
 type ElementList []AnyElement
-
-func (o *ElementList) Append(values ...AnyElement) { *o = append(*o, values...) }
-func (o *ElementList) Remove(value AnyElement)     { remove(o, value) }
 
 func (o *ElementList) ElementIter() iter.Seq2[AnyElement, *Element] { return typeIter(*o, castElement) }
 func (o *ElementList) ElementCollectionIter() iter.Seq2[AnyElement, *ElementCollection] {
@@ -412,13 +391,13 @@ type ElementCollection struct {
 	Element
 
 	// Refers to one or more Elements that are part of an ElementCollection.
-	Elements ElementList
+	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element"  iri-compact:"element"`
 
 	// Describes one a profile which the creator of this ElementCollection intends to
 	// conform to.
-	ProfileConformances []ProfileIdentifierType
+	ProfileConformances []profileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance"  iri-compact:"profileConformance"`
 	// This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
-	RootElements ElementList
+	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement"  iri-compact:"rootElement"`
 }
 
 func castElementCollection(o any) *ElementCollection {
@@ -439,9 +418,6 @@ type AnyElementCollection interface {
 
 type ElementCollectionList []AnyElementCollection
 
-func (o *ElementCollectionList) Append(values ...AnyElementCollection) { *o = append(*o, values...) }
-func (o *ElementCollectionList) Remove(value AnyElementCollection)     { remove(o, value) }
-
 func (o *ElementCollectionList) ElementCollectionIter() iter.Seq2[AnyElementCollection, *ElementCollection] {
 	return typeIter(*o, castElementCollection)
 }
@@ -460,19 +436,19 @@ func (o *ElementCollectionList) SoftwareSbomIter() iter.Seq2[AnyElementCollectio
 
 // A reference to a resource identifier defined outside the scope of SPDX-3.0 content that uniquely identifies an Element.
 type ExternalIdentifier struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Provide consumers with comments by the creator of the Element about the
 	// Element.
-	Comment string
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment"  iri-compact:"comment"`
 	// Specifies the type of the external identifier.
-	ExternalIdentifierType ExternalIdentifierType
+	ExternalIdentifierType externalIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifierType"  iri-compact:"externalIdentifierType"`
 	// Uniquely identifies an external element.
-	Identifier string
+	Identifier string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/identifier"  iri-compact:"identifier"`
 	// Provides the location for more information regarding an external identifier.
-	IdentifierLocators []string
+	IdentifierLocators []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/identifierLocator"  iri-compact:"identifierLocator"`
 	// An entity that is authorized to issue identification credentials.
-	IssuingAuthority string
+	IssuingAuthority string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/issuingAuthority"  iri-compact:"issuingAuthority"`
 }
 
 func castExternalIdentifier(o any) *ExternalIdentifier {
@@ -492,68 +468,65 @@ type AnyExternalIdentifier interface {
 
 type ExternalIdentifierList []AnyExternalIdentifier
 
-func (o *ExternalIdentifierList) Append(values ...AnyExternalIdentifier) { *o = append(*o, values...) }
-func (o *ExternalIdentifierList) Remove(value AnyExternalIdentifier)     { remove(o, value) }
-
 func (o *ExternalIdentifierList) ExternalIdentifierIter() iter.Seq2[AnyExternalIdentifier, *ExternalIdentifier] {
 	return typeIter(*o, castExternalIdentifier)
 }
 
 // Specifies the type of an external identifier.
-type ExternalIdentifierType struct {
-	ID string
+type externalIdentifierType struct {
+	ID string `iri:"@id"`
 }
 
 // [Common Platform Enumeration Specification 2.2](https://cpe.mitre.org/files/cpe-specification_2.2.pdf)
-var ExternalIdentifierType_Cpe22 = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cpe22"}
+var ExternalIdentifierType_Cpe22 = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cpe22"}
 
 // [Common Platform Enumeration: Naming Specification Version 2.3](https://csrc.nist.gov/publications/detail/nistir/7695/final)
-var ExternalIdentifierType_Cpe23 = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cpe23"}
+var ExternalIdentifierType_Cpe23 = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cpe23"}
 
 // Common Vulnerabilities and Exposures identifiers, an identifier for a specific software flaw defined within the official CVE Dictionary and that conforms to the [CVE specification](https://csrc.nist.gov/glossary/term/cve_id).
-var ExternalIdentifierType_Cve = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cve"}
+var ExternalIdentifierType_Cve = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/cve"}
 
 // Email address, as defined in [RFC 3696](https://datatracker.ietf.org/doc/rfc3986/) Section 3.
-var ExternalIdentifierType_Email = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/email"}
+var ExternalIdentifierType_Email = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/email"}
 
 // [Gitoid](https://www.iana.org/assignments/uri-schemes/prov/gitoid), stands for [Git Object ID](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects). A gitoid of type blob is a unique hash of a binary artifact. A gitoid may represent either an [Artifact Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-identifier-types) for the software artifact or an [Input Manifest Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#input-manifest-identifier) for the software artifact's associated [Artifact Input Manifest](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-input-manifest); this ambiguity exists because the Artifact Input Manifest is itself an artifact, and the gitoid of that artifact is its valid identifier. Gitoids calculated on software artifacts (Snippet, File, or Package Elements) should be recorded in the SPDX 3.0 SoftwareArtifact's contentIdentifier property. Gitoids calculated on the Artifact Input Manifest (Input Manifest Identifier) should be recorded in the SPDX 3.0 Element's externalIdentifier property. See [OmniBOR Specification](https://github.com/omnibor/spec/), a minimalistic specification for describing software [Artifact Dependency Graphs](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-dependency-graph-adg).
-var ExternalIdentifierType_Gitoid = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/gitoid"}
+var ExternalIdentifierType_Gitoid = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/gitoid"}
 
 // Used when the type does not match any of the other options.
-var ExternalIdentifierType_Other = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/other"}
+var ExternalIdentifierType_Other = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/other"}
 
 // Package URL, as defined in the corresponding [Annex](../../../annexes/pkg-url-specification.md) of this specification.
-var ExternalIdentifierType_PackageUrl = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/packageUrl"}
+var ExternalIdentifierType_PackageUrl = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/packageUrl"}
 
 // Used when there is a security related identifier of unspecified type.
-var ExternalIdentifierType_SecurityOther = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/securityOther"}
+var ExternalIdentifierType_SecurityOther = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/securityOther"}
 
 // SoftWare Hash IDentifier, a persistent intrinsic identifier for digital artifacts, such as files, trees (also known as directories or folders), commits, and other objects typically found in version control systems. The format of the identifiers is defined in the [SWHID specification](https://www.swhid.org/specification/v1.1/4.Syntax) (ISO/IEC DIS 18670). They typically look like `swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2`.
-var ExternalIdentifierType_Swhid = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/swhid"}
+var ExternalIdentifierType_Swhid = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/swhid"}
 
 // Concise Software Identification (CoSWID) tag, as defined in [RFC 9393](https://datatracker.ietf.org/doc/rfc9393/) Section 2.3.
-var ExternalIdentifierType_Swid = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/swid"}
+var ExternalIdentifierType_Swid = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/swid"}
 
 // [Uniform Resource Identifier (URI) Schemes](https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml). The scheme used in order to locate a resource.
-var ExternalIdentifierType_UrlScheme = ExternalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/urlScheme"}
+var ExternalIdentifierType_UrlScheme = externalIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/urlScheme"}
 
 // A map of Element identifiers that are used within an SpdxDocument but defined
 // external to that SpdxDocument.
 type ExternalMap struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Artifact representing a serialization instance of SPDX data containing the
 	// definition of a particular Element.
-	DefiningArtifact AnyArtifact
+	DefiningArtifact AnyArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Core/definingArtifact"  iri-compact:"definingArtifact"`
 
 	// Identifies an external Element used within an SpdxDocument but defined
 	// external to that SpdxDocument.
-	ExternalSpdxId string
+	ExternalSpdxId string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalSpdxId"  iri-compact:"externalSpdxId"`
 	// Provides an indication of where to retrieve an external Element.
-	LocationHint string
+	LocationHint string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locationHint"  iri-compact:"locationHint"`
 	// Provides an IntegrityMethod with which the integrity of an Element can be
 	// asserted.
-	VerifiedUsings IntegrityMethodList
+	VerifiedUsings IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing"  iri-compact:"verifiedUsing"`
 }
 
 func castExternalMap(o any) *ExternalMap {
@@ -573,26 +546,23 @@ type AnyExternalMap interface {
 
 type ExternalMapList []AnyExternalMap
 
-func (o *ExternalMapList) Append(values ...AnyExternalMap) { *o = append(*o, values...) }
-func (o *ExternalMapList) Remove(value AnyExternalMap)     { remove(o, value) }
-
 func (o *ExternalMapList) ExternalMapIter() iter.Seq2[AnyExternalMap, *ExternalMap] {
 	return typeIter(*o, castExternalMap)
 }
 
 // A reference to a resource outside the scope of SPDX-3.0 content related to an Element.
 type ExternalRef struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Provide consumers with comments by the creator of the Element about the
 	// Element.
-	Comment string
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment"  iri-compact:"comment"`
 	// Provides information about the content type of an Element or a Property.
-	ContentType string
+	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType"  iri-compact:"contentType"`
 	// Specifies the type of the external reference.
-	ExternalRefType ExternalRefType
+	ExternalRefType externalRefType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRefType"  iri-compact:"externalRefType"`
 	// Provides the location of an external reference.
-	Locators []string
+	Locators []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locator"  iri-compact:"locator"`
 }
 
 func castExternalRef(o any) *ExternalRef {
@@ -612,226 +582,223 @@ type AnyExternalRef interface {
 
 type ExternalRefList []AnyExternalRef
 
-func (o *ExternalRefList) Append(values ...AnyExternalRef) { *o = append(*o, values...) }
-func (o *ExternalRefList) Remove(value AnyExternalRef)     { remove(o, value) }
-
 func (o *ExternalRefList) ExternalRefIter() iter.Seq2[AnyExternalRef, *ExternalRef] {
 	return typeIter(*o, castExternalRef)
 }
 
 // Specifies the type of an external reference.
-type ExternalRefType struct {
-	ID string
+type externalRefType struct {
+	ID string `iri:"@id"`
 }
 
 // A reference to an alternative download location.
-var ExternalRefType_AltDownloadLocation = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/altDownloadLocation"}
+var ExternalRefType_AltDownloadLocation = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/altDownloadLocation"}
 
 // A reference to an alternative web page.
-var ExternalRefType_AltWebPage = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/altWebPage"}
+var ExternalRefType_AltWebPage = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/altWebPage"}
 
 // A reference to binary artifacts related to a package.
-var ExternalRefType_BinaryArtifact = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/binaryArtifact"}
+var ExternalRefType_BinaryArtifact = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/binaryArtifact"}
 
 // A reference to a Bower package. The package locator format, looks like `package#version`, is defined in the "install" section of [Bower API documentation](https://bower.io/docs/api/#install).
-var ExternalRefType_Bower = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/bower"}
+var ExternalRefType_Bower = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/bower"}
 
 // A reference build metadata related to a published package.
-var ExternalRefType_BuildMeta = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/buildMeta"}
+var ExternalRefType_BuildMeta = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/buildMeta"}
 
 // A reference build system used to create or publish the package.
-var ExternalRefType_BuildSystem = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/buildSystem"}
+var ExternalRefType_BuildSystem = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/buildSystem"}
 
 // A reference to a certification report for a package from an accredited/independent body.
-var ExternalRefType_CertificationReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/certificationReport"}
+var ExternalRefType_CertificationReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/certificationReport"}
 
 // A reference to the instant messaging system used by the maintainer for a package.
-var ExternalRefType_Chat = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/chat"}
+var ExternalRefType_Chat = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/chat"}
 
 // A reference to a Software Composition Analysis (SCA) report.
-var ExternalRefType_ComponentAnalysisReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/componentAnalysisReport"}
+var ExternalRefType_ComponentAnalysisReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/componentAnalysisReport"}
 
 // [Common Weakness Enumeration](https://csrc.nist.gov/glossary/term/common_weakness_enumeration). A reference to a source of software flaw defined within the official [CWE List](https://cwe.mitre.org/data/) that conforms to the [CWE specification](https://cwe.mitre.org/).
-var ExternalRefType_Cwe = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/cwe"}
+var ExternalRefType_Cwe = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/cwe"}
 
 // A reference to the documentation for a package.
-var ExternalRefType_Documentation = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/documentation"}
+var ExternalRefType_Documentation = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/documentation"}
 
 // A reference to a dynamic analysis report for a package.
-var ExternalRefType_DynamicAnalysisReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/dynamicAnalysisReport"}
+var ExternalRefType_DynamicAnalysisReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/dynamicAnalysisReport"}
 
 // A reference to the End Of Sale (EOS) and/or End Of Life (EOL) information related to a package.
-var ExternalRefType_EolNotice = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/eolNotice"}
+var ExternalRefType_EolNotice = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/eolNotice"}
 
 // A reference to a export control assessment for a package.
-var ExternalRefType_ExportControlAssessment = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/exportControlAssessment"}
+var ExternalRefType_ExportControlAssessment = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/exportControlAssessment"}
 
 // A reference to funding information related to a package.
-var ExternalRefType_Funding = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/funding"}
+var ExternalRefType_Funding = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/funding"}
 
 // A reference to the issue tracker for a package.
-var ExternalRefType_IssueTracker = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/issueTracker"}
+var ExternalRefType_IssueTracker = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/issueTracker"}
 
 // A reference to additional license information related to an artifact.
-var ExternalRefType_License = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/license"}
+var ExternalRefType_License = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/license"}
 
 // A reference to the mailing list used by the maintainer for a package.
-var ExternalRefType_MailingList = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/mailingList"}
+var ExternalRefType_MailingList = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/mailingList"}
 
 // A reference to a Maven repository artifact. The artifact locator format is defined in the [Maven documentation](https://maven.apache.org/guides/mini/guide-naming-conventions.html) and looks like `groupId:artifactId[:version]`.
-var ExternalRefType_MavenCentral = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/mavenCentral"}
+var ExternalRefType_MavenCentral = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/mavenCentral"}
 
 // A reference to metrics related to package such as OpenSSF scorecards.
-var ExternalRefType_Metrics = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/metrics"}
+var ExternalRefType_Metrics = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/metrics"}
 
 // A reference to an npm package. The package locator format is defined in the [npm documentation](https://docs.npmjs.com/cli/v10/configuring-npm/package-json) and looks like `package@version`.
-var ExternalRefType_Npm = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/npm"}
+var ExternalRefType_Npm = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/npm"}
 
 // A reference to a NuGet package. The package locator format is defined in the [NuGet documentation](https://docs.nuget.org) and looks like `package/version`.
-var ExternalRefType_Nuget = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/nuget"}
+var ExternalRefType_Nuget = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/nuget"}
 
 // Used when the type does not match any of the other options.
-var ExternalRefType_Other = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/other"}
+var ExternalRefType_Other = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/other"}
 
 // A reference to a privacy assessment for a package.
-var ExternalRefType_PrivacyAssessment = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/privacyAssessment"}
+var ExternalRefType_PrivacyAssessment = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/privacyAssessment"}
 
 // A reference to additional product metadata such as reference within organization's product catalog.
-var ExternalRefType_ProductMetadata = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/productMetadata"}
+var ExternalRefType_ProductMetadata = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/productMetadata"}
 
 // A reference to a purchase order for a package.
-var ExternalRefType_PurchaseOrder = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/purchaseOrder"}
+var ExternalRefType_PurchaseOrder = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/purchaseOrder"}
 
 // A reference to a quality assessment for a package.
-var ExternalRefType_QualityAssessmentReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/qualityAssessmentReport"}
+var ExternalRefType_QualityAssessmentReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/qualityAssessmentReport"}
 
 // A reference to a published list of releases for a package.
-var ExternalRefType_ReleaseHistory = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/releaseHistory"}
+var ExternalRefType_ReleaseHistory = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/releaseHistory"}
 
 // A reference to the release notes for a package.
-var ExternalRefType_ReleaseNotes = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/releaseNotes"}
+var ExternalRefType_ReleaseNotes = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/releaseNotes"}
 
 // A reference to a risk assessment for a package.
-var ExternalRefType_RiskAssessment = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/riskAssessment"}
+var ExternalRefType_RiskAssessment = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/riskAssessment"}
 
 // A reference to a runtime analysis report for a package.
-var ExternalRefType_RuntimeAnalysisReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/runtimeAnalysisReport"}
+var ExternalRefType_RuntimeAnalysisReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/runtimeAnalysisReport"}
 
 // A reference to information assuring that the software is developed using security practices as defined by [NIST SP 800-218 Secure Software Development Framework (SSDF) Version 1.1](https://csrc.nist.gov/pubs/sp/800/218/final) or [CISA Secure Software Development Attestation Form](https://www.cisa.gov/resources-tools/resources/secure-software-development-attestation-form).
-var ExternalRefType_SecureSoftwareAttestation = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/secureSoftwareAttestation"}
+var ExternalRefType_SecureSoftwareAttestation = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/secureSoftwareAttestation"}
 
 // A reference to the security adversary model for a package.
-var ExternalRefType_SecurityAdversaryModel = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityAdversaryModel"}
+var ExternalRefType_SecurityAdversaryModel = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityAdversaryModel"}
 
 // A reference to a published security advisory (where advisory as defined per [ISO 29147:2018](https://www.iso.org/standard/72311.html)) that may affect one or more elements, e.g., vendor advisories or specific NVD entries.
-var ExternalRefType_SecurityAdvisory = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityAdvisory"}
+var ExternalRefType_SecurityAdvisory = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityAdvisory"}
 
 // A reference to the patch or source code that fixes a vulnerability.
-var ExternalRefType_SecurityFix = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityFix"}
+var ExternalRefType_SecurityFix = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityFix"}
 
 // A reference to related security information of unspecified type.
-var ExternalRefType_SecurityOther = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityOther"}
+var ExternalRefType_SecurityOther = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityOther"}
 
 // A reference to a [penetration test](https://en.wikipedia.org/wiki/Penetration_test) report for a package.
-var ExternalRefType_SecurityPenTestReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityPenTestReport"}
+var ExternalRefType_SecurityPenTestReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityPenTestReport"}
 
 // A reference to instructions for reporting newly discovered security vulnerabilities for a package.
-var ExternalRefType_SecurityPolicy = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityPolicy"}
+var ExternalRefType_SecurityPolicy = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityPolicy"}
 
 // A reference the [security threat model](https://en.wikipedia.org/wiki/Threat_model) for a package.
-var ExternalRefType_SecurityThreatModel = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityThreatModel"}
+var ExternalRefType_SecurityThreatModel = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/securityThreatModel"}
 
 // A reference to a social media channel for a package.
-var ExternalRefType_SocialMedia = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/socialMedia"}
+var ExternalRefType_SocialMedia = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/socialMedia"}
 
 // A reference to an artifact containing the sources for a package.
-var ExternalRefType_SourceArtifact = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/sourceArtifact"}
+var ExternalRefType_SourceArtifact = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/sourceArtifact"}
 
 // A reference to a static analysis report for a package.
-var ExternalRefType_StaticAnalysisReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/staticAnalysisReport"}
+var ExternalRefType_StaticAnalysisReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/staticAnalysisReport"}
 
 // A reference to the software support channel or other support information for a package.
-var ExternalRefType_Support = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/support"}
+var ExternalRefType_Support = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/support"}
 
 // A reference to a version control system related to a software artifact.
-var ExternalRefType_Vcs = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vcs"}
+var ExternalRefType_Vcs = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vcs"}
 
 // A reference to a Vulnerability Disclosure Report (VDR) which provides the software supplier's analysis and findings describing the impact (or lack of impact) that reported vulnerabilities have on packages or products in the supplier's SBOM as defined in [NIST SP 800-161 Cybersecurity Supply Chain Risk Management Practices for Systems and Organizations](https://csrc.nist.gov/pubs/sp/800/161/r1/final).
-var ExternalRefType_VulnerabilityDisclosureReport = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vulnerabilityDisclosureReport"}
+var ExternalRefType_VulnerabilityDisclosureReport = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vulnerabilityDisclosureReport"}
 
 // A reference to a Vulnerability Exploitability eXchange (VEX) statement which provides information on whether a product is impacted by a specific vulnerability in an included package and, if affected, whether there are actions recommended to remediate. See also [NTIA VEX one-page summary](https://ntia.gov/files/ntia/publications/vex_one-page_summary.pdf).
-var ExternalRefType_VulnerabilityExploitabilityAssessment = ExternalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vulnerabilityExploitabilityAssessment"}
+var ExternalRefType_VulnerabilityExploitabilityAssessment = externalRefType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType/vulnerabilityExploitabilityAssessment"}
 
 // A mathematical algorithm that maps data of arbitrary size to a bit string.
-type HashAlgorithm struct {
-	ID string
+type hashAlgorithm struct {
+	ID string `iri:"@id"`
 }
 
 // Adler-32 checksum is part of the widely used zlib compression library as defined in [RFC 1950](https://datatracker.ietf.org/doc/rfc1950/) Section 2.3.
-var HashAlgorithm_Adler32 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/adler32"}
+var HashAlgorithm_Adler32 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/adler32"}
 
 // BLAKE2b algorithm with a digest size of 256, as defined in [RFC 7693](https://datatracker.ietf.org/doc/rfc7693/) Section 4.
-var HashAlgorithm_Blake2b256 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b256"}
+var HashAlgorithm_Blake2b256 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b256"}
 
 // BLAKE2b algorithm with a digest size of 384, as defined in [RFC 7693](https://datatracker.ietf.org/doc/rfc7693/) Section 4.
-var HashAlgorithm_Blake2b384 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b384"}
+var HashAlgorithm_Blake2b384 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b384"}
 
 // BLAKE2b algorithm with a digest size of 512, as defined in [RFC 7693](https://datatracker.ietf.org/doc/rfc7693/) Section 4.
-var HashAlgorithm_Blake2b512 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b512"}
+var HashAlgorithm_Blake2b512 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake2b512"}
 
 // [BLAKE3](https://github.com/BLAKE3-team/BLAKE3-specs/blob/master/blake3.pdf)
-var HashAlgorithm_Blake3 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake3"}
+var HashAlgorithm_Blake3 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/blake3"}
 
 // [Dilithium](https://pq-crystals.org/dilithium/)
-var HashAlgorithm_CrystalsDilithium = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/crystalsDilithium"}
+var HashAlgorithm_CrystalsDilithium = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/crystalsDilithium"}
 
 // [Kyber](https://pq-crystals.org/kyber/)
-var HashAlgorithm_CrystalsKyber = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/crystalsKyber"}
+var HashAlgorithm_CrystalsKyber = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/crystalsKyber"}
 
 // [FALCON](https://falcon-sign.info/falcon.pdf)
-var HashAlgorithm_Falcon = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/falcon"}
+var HashAlgorithm_Falcon = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/falcon"}
 
 // MD2 message-digest algorithm, as defined in [RFC 1319](https://datatracker.ietf.org/doc/rfc1319/).
-var HashAlgorithm_Md2 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md2"}
+var HashAlgorithm_Md2 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md2"}
 
 // MD4 message-digest algorithm, as defined in [RFC 1186](https://datatracker.ietf.org/doc/rfc1186/).
-var HashAlgorithm_Md4 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md4"}
+var HashAlgorithm_Md4 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md4"}
 
 // MD5 message-digest algorithm, as defined in [RFC 1321](https://datatracker.ietf.org/doc/rfc1321/).
-var HashAlgorithm_Md5 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md5"}
+var HashAlgorithm_Md5 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md5"}
 
 // [MD6 hash function](https://people.csail.mit.edu/rivest/pubs/RABCx08.pdf)
-var HashAlgorithm_Md6 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md6"}
+var HashAlgorithm_Md6 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/md6"}
 
 // any hashing algorithm that does not exist in this list of entries
-var HashAlgorithm_Other = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/other"}
+var HashAlgorithm_Other = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/other"}
 
 // SHA-1, a secure hashing algorithm, as defined in [RFC 3174](https://datatracker.ietf.org/doc/rfc3174/).
-var HashAlgorithm_Sha1 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha1"}
+var HashAlgorithm_Sha1 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha1"}
 
 // SHA-2 with a digest length of 224, as defined in [RFC 3874](https://datatracker.ietf.org/doc/rfc3874/).
-var HashAlgorithm_Sha224 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha224"}
+var HashAlgorithm_Sha224 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha224"}
 
 // SHA-2 with a digest length of 256, as defined in [RFC 6234](https://datatracker.ietf.org/doc/rfc6234/).
-var HashAlgorithm_Sha256 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha256"}
+var HashAlgorithm_Sha256 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha256"}
 
 // SHA-2 with a digest length of 384, as defined in [RFC 6234](https://datatracker.ietf.org/doc/rfc6234/).
-var HashAlgorithm_Sha384 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha384"}
+var HashAlgorithm_Sha384 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha384"}
 
 // SHA-3 with a digest length of 224, as defined in [FIPS 202](https://csrc.nist.gov/pubs/fips/202/final).
-var HashAlgorithm_Sha3224 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_224"}
+var HashAlgorithm_Sha3224 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_224"}
 
 // SHA-3 with a digest length of 256, as defined in [FIPS 202](https://csrc.nist.gov/pubs/fips/202/final).
-var HashAlgorithm_Sha3256 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_256"}
+var HashAlgorithm_Sha3256 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_256"}
 
 // SHA-3 with a digest length of 384, as defined in [FIPS 202](https://csrc.nist.gov/pubs/fips/202/final).
-var HashAlgorithm_Sha3384 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_384"}
+var HashAlgorithm_Sha3384 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_384"}
 
 // SHA-3 with a digest length of 512, as defined in [FIPS 202](https://csrc.nist.gov/pubs/fips/202/final).
-var HashAlgorithm_Sha3512 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_512"}
+var HashAlgorithm_Sha3512 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha3_512"}
 
 // SHA-2 with a digest length of 512, as defined in [RFC 6234](https://datatracker.ietf.org/doc/rfc6234/).
-var HashAlgorithm_Sha512 = HashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha512"}
+var HashAlgorithm_Sha512 = hashAlgorithm{ID: "https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm/sha512"}
 
 // A concrete subclass of Element used by Individuals in the
 // Core profile.
@@ -865,20 +832,17 @@ type AnyIndividualElement interface {
 
 type IndividualElementList []AnyIndividualElement
 
-func (o *IndividualElementList) Append(values ...AnyIndividualElement) { *o = append(*o, values...) }
-func (o *IndividualElementList) Remove(value AnyIndividualElement)     { remove(o, value) }
-
 func (o *IndividualElementList) IndividualElementIter() iter.Seq2[AnyIndividualElement, *IndividualElement] {
 	return typeIter(*o, castIndividualElement)
 }
 
 // Provides an independently reproducible mechanism that permits verification of a specific Element.
 type IntegrityMethod struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Provide consumers with comments by the creator of the Element about the
 	// Element.
-	Comment string
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment"  iri-compact:"comment"`
 }
 
 func castIntegrityMethod(o any) *IntegrityMethod {
@@ -898,9 +862,6 @@ type AnyIntegrityMethod interface {
 
 type IntegrityMethodList []AnyIntegrityMethod
 
-func (o *IntegrityMethodList) Append(values ...AnyIntegrityMethod) { *o = append(*o, values...) }
-func (o *IntegrityMethodList) Remove(value AnyIntegrityMethod)     { remove(o, value) }
-
 func (o *IntegrityMethodList) IntegrityMethodIter() iter.Seq2[AnyIntegrityMethod, *IntegrityMethod] {
 	return typeIter(*o, castIntegrityMethod)
 }
@@ -915,37 +876,37 @@ func (o *IntegrityMethodList) HashIter() iter.Seq2[AnyIntegrityMethod, *Hash] {
 }
 
 // Provide an enumerated set of lifecycle phases that can provide context to relationships.
-type LifecycleScopeType struct {
-	ID string
+type lifecycleScopeType struct {
+	ID string `iri:"@id"`
 }
 
 // A relationship has specific context implications during an element's build phase, during development.
-var LifecycleScopeType_Build = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/build"}
+var LifecycleScopeType_Build = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/build"}
 
 // A relationship has specific context implications during an element's design.
-var LifecycleScopeType_Design = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/design"}
+var LifecycleScopeType_Design = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/design"}
 
 // A relationship has specific context implications during development phase of an element.
-var LifecycleScopeType_Development = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/development"}
+var LifecycleScopeType_Development = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/development"}
 
 // A relationship has other specific context information necessary to capture that the above set of enumerations does not handle.
-var LifecycleScopeType_Other = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/other"}
+var LifecycleScopeType_Other = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/other"}
 
 // A relationship has specific context implications during the execution phase of an element.
-var LifecycleScopeType_Runtime = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/runtime"}
+var LifecycleScopeType_Runtime = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/runtime"}
 
 // A relationship has specific context implications during an element's testing phase, during development.
-var LifecycleScopeType_Test = LifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/test"}
+var LifecycleScopeType_Test = lifecycleScopeType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/test"}
 
 // A mapping between prefixes and namespace partial URIs.
 type NamespaceMap struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Provides an unambiguous mechanism for conveying a URI fragment portion of an
 	// Element ID.
-	Namespace string
+	Namespace string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/namespace"  iri-compact:"namespace"`
 	// A substitute for a URI.
-	Prefix string
+	Prefix string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/prefix"  iri-compact:"prefix"`
 }
 
 func castNamespaceMap(o any) *NamespaceMap {
@@ -965,9 +926,6 @@ type AnyNamespaceMap interface {
 
 type NamespaceMapList []AnyNamespaceMap
 
-func (o *NamespaceMapList) Append(values ...AnyNamespaceMap) { *o = append(*o, values...) }
-func (o *NamespaceMapList) Remove(value AnyNamespaceMap)     { remove(o, value) }
-
 func (o *NamespaceMapList) NamespaceMapIter() iter.Seq2[AnyNamespaceMap, *NamespaceMap] {
 	return typeIter(*o, castNamespaceMap)
 }
@@ -977,12 +935,12 @@ type PackageVerificationCode struct {
 	IntegrityMethod
 
 	// Specifies the algorithm used for calculating the hash value.
-	Algorithm HashAlgorithm
+	Algorithm hashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm"  iri-compact:"algorithm"`
 	// The result of applying a hash algorithm to an Element.
-	HashValue string
+	HashValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue"  iri-compact:"hashValue"`
 	// The relative file name of a file to be excluded from the
 	// `PackageVerificationCode`.
-	PackageVerificationCodeExcludedFiles []string
+	PackageVerificationCodeExcludedFiles []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/packageVerificationCodeExcludedFile"  iri-compact:"packageVerificationCodeExcludedFile"`
 }
 
 func castPackageVerificationCode(o any) *PackageVerificationCode {
@@ -1003,23 +961,18 @@ type AnyPackageVerificationCode interface {
 
 type PackageVerificationCodeList []AnyPackageVerificationCode
 
-func (o *PackageVerificationCodeList) Append(values ...AnyPackageVerificationCode) {
-	*o = append(*o, values...)
-}
-func (o *PackageVerificationCodeList) Remove(value AnyPackageVerificationCode) { remove(o, value) }
-
 func (o *PackageVerificationCodeList) PackageVerificationCodeIter() iter.Seq2[AnyPackageVerificationCode, *PackageVerificationCode] {
 	return typeIter(*o, castPackageVerificationCode)
 }
 
 // A tuple of two positive integers that define a range.
 type PositiveIntegerRange struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// Defines the beginning of a range.
-	BeginIntegerRange int
+	BeginIntegerRange int `iri:"https://spdx.org/rdf/3.0.1/terms/Core/beginIntegerRange"  iri-compact:"beginIntegerRange"`
 	// Defines the end of a range.
-	EndIntegerRange int
+	EndIntegerRange int `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endIntegerRange"  iri-compact:"endIntegerRange"`
 }
 
 func castPositiveIntegerRange(o any) *PositiveIntegerRange {
@@ -1039,81 +992,76 @@ type AnyPositiveIntegerRange interface {
 
 type PositiveIntegerRangeList []AnyPositiveIntegerRange
 
-func (o *PositiveIntegerRangeList) Append(values ...AnyPositiveIntegerRange) {
-	*o = append(*o, values...)
-}
-func (o *PositiveIntegerRangeList) Remove(value AnyPositiveIntegerRange) { remove(o, value) }
-
 func (o *PositiveIntegerRangeList) PositiveIntegerRangeIter() iter.Seq2[AnyPositiveIntegerRange, *PositiveIntegerRange] {
 	return typeIter(*o, castPositiveIntegerRange)
 }
 
 // Categories of presence or absence.
-type PresenceType struct {
-	ID string
+type presenceType struct {
+	ID string `iri:"@id"`
 }
 
 // Indicates absence of the field.
-var PresenceType_No = PresenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/no"}
+var PresenceType_No = presenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/no"}
 
 // Makes no assertion about the field.
-var PresenceType_NoAssertion = PresenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/noAssertion"}
+var PresenceType_NoAssertion = presenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/noAssertion"}
 
 // Indicates presence of the field.
-var PresenceType_Yes = PresenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/yes"}
+var PresenceType_Yes = presenceType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/yes"}
 
 // Enumeration of the valid profiles.
-type ProfileIdentifierType struct {
-	ID string
+type profileIdentifierType struct {
+	ID string `iri:"@id"`
 }
 
 // the element follows the AI profile specification
-var ProfileIdentifierType_Ai = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/ai"}
+var ProfileIdentifierType_Ai = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/ai"}
 
 // the element follows the Build profile specification
-var ProfileIdentifierType_Build = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/build"}
+var ProfileIdentifierType_Build = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/build"}
 
 // the element follows the Core profile specification
-var ProfileIdentifierType_Core = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/core"}
+var ProfileIdentifierType_Core = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/core"}
 
 // the element follows the Dataset profile specification
-var ProfileIdentifierType_Dataset = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/dataset"}
+var ProfileIdentifierType_Dataset = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/dataset"}
 
 // the element follows the ExpandedLicensing profile specification
-var ProfileIdentifierType_ExpandedLicensing = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/expandedLicensing"}
+var ProfileIdentifierType_ExpandedLicensing = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/expandedLicensing"}
 
 // the element follows the Extension profile specification
-var ProfileIdentifierType_Extension = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/extension"}
+var ProfileIdentifierType_Extension = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/extension"}
 
 // the element follows the Lite profile specification
-var ProfileIdentifierType_Lite = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/lite"}
+var ProfileIdentifierType_Lite = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/lite"}
 
 // the element follows the Security profile specification
-var ProfileIdentifierType_Security = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/security"}
+var ProfileIdentifierType_Security = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/security"}
 
 // the element follows the SimpleLicensing profile specification
-var ProfileIdentifierType_SimpleLicensing = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/simpleLicensing"}
+var ProfileIdentifierType_SimpleLicensing = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/simpleLicensing"}
 
 // the element follows the Software profile specification
-var ProfileIdentifierType_Software = ProfileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/software"}
+var ProfileIdentifierType_Software = profileIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/software"}
 
 // Describes a relationship between one or more elements.
 type Relationship struct {
 	Element
 
 	// Provides information about the completeness of relationships.
-	Completeness RelationshipCompleteness
+	Completeness relationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness"  iri-compact:"completeness"`
 	// Specifies the time from which an element is no longer applicable / valid.
-	EndTime time.Time
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime"  iri-compact:"endTime"`
 	// References the Element on the left-hand side of a relationship.
-	From AnyElement
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from"  iri-compact:"from"`
 
 	// Information about the relationship between two Elements.
-	RelationshipType RelationshipType
+	RelationshipType relationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType"  iri-compact:"relationshipType"`
 	// Specifies the time from which an element is applicable / valid.
-	StartTime time.Time
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime"  iri-compact:"startTime"`
 	// References an Element on the right-hand side of a relationship.
-	Tos ElementList
+	Tos ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to"  iri-compact:"to"`
 }
 
 func castRelationship(o any) *Relationship {
@@ -1133,9 +1081,6 @@ type AnyRelationship interface {
 }
 
 type RelationshipList []AnyRelationship
-
-func (o *RelationshipList) Append(values ...AnyRelationship) { *o = append(*o, values...) }
-func (o *RelationshipList) Remove(value AnyRelationship)     { remove(o, value) }
 
 func (o *RelationshipList) RelationshipIter() iter.Seq2[AnyRelationship, *Relationship] {
 	return typeIter(*o, castRelationship)
@@ -1181,200 +1126,200 @@ func (o *RelationshipList) SecurityVexUnderInvestigationVulnAssessmentRelationsh
 }
 
 // Indicates whether a relationship is known to be complete, incomplete, or if no assertion is made with respect to relationship completeness.
-type RelationshipCompleteness struct {
-	ID string
+type relationshipCompleteness struct {
+	ID string `iri:"@id"`
 }
 
 // The relationship is known to be exhaustive.
-var RelationshipCompleteness_Complete = RelationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/complete"}
+var RelationshipCompleteness_Complete = relationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/complete"}
 
 // The relationship is known not to be exhaustive.
-var RelationshipCompleteness_Incomplete = RelationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/incomplete"}
+var RelationshipCompleteness_Incomplete = relationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/incomplete"}
 
 // No assertion can be made about the completeness of the relationship.
-var RelationshipCompleteness_NoAssertion = RelationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/noAssertion"}
+var RelationshipCompleteness_NoAssertion = relationshipCompleteness{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/noAssertion"}
 
 // Information about the relationship between two Elements.
-type RelationshipType struct {
-	ID string
+type relationshipType struct {
+	ID string `iri:"@id"`
 }
 
 // The `from` Vulnerability affects each `to` Element. The use of the `affects` type is constrained to `VexAffectedVulnAssessmentRelationship` classed relationships.
-var RelationshipType_Affects = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/affects"}
+var RelationshipType_Affects = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/affects"}
 
 // The `from` Element is amended by each `to` Element.
-var RelationshipType_AmendedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/amendedBy"}
+var RelationshipType_AmendedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/amendedBy"}
 
 // The `from` Element is an ancestor of each `to` Element.
-var RelationshipType_AncestorOf = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/ancestorOf"}
+var RelationshipType_AncestorOf = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/ancestorOf"}
 
 // The `from` Element is available from the additional supplier described by each `to` Element.
-var RelationshipType_AvailableFrom = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/availableFrom"}
+var RelationshipType_AvailableFrom = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/availableFrom"}
 
 // The `from` Element is a configuration applied to each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_Configures = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/configures"}
+var RelationshipType_Configures = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/configures"}
 
 // The `from` Element contains each `to` Element.
-var RelationshipType_Contains = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/contains"}
+var RelationshipType_Contains = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/contains"}
 
 // The `from` Vulnerability is coordinatedBy the `to` Agent(s) (vendor, researcher, or consumer agent).
-var RelationshipType_CoordinatedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/coordinatedBy"}
+var RelationshipType_CoordinatedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/coordinatedBy"}
 
 // The `from` Element has been copied to each `to` Element.
-var RelationshipType_CopiedTo = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/copiedTo"}
+var RelationshipType_CopiedTo = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/copiedTo"}
 
 // The `from` Agent is delegating an action to the Agent of the `to` Relationship (which must be of type invokedBy), during a LifecycleScopeType (e.g. the `to` invokedBy Relationship is being done on behalf of `from`).
-var RelationshipType_DelegatedTo = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/delegatedTo"}
+var RelationshipType_DelegatedTo = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/delegatedTo"}
 
 // The `from` Element depends on each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_DependsOn = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/dependsOn"}
+var RelationshipType_DependsOn = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/dependsOn"}
 
 // The `from` Element is a descendant of each `to` Element.
-var RelationshipType_DescendantOf = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/descendantOf"}
+var RelationshipType_DescendantOf = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/descendantOf"}
 
 // The `from` Element describes each `to` Element. To denote the root(s) of a tree of elements in a collection, the rootElement property should be used.
-var RelationshipType_Describes = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/describes"}
+var RelationshipType_Describes = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/describes"}
 
 // The `from` Vulnerability has no impact on each `to` Element. The use of the `doesNotAffect` is constrained to `VexNotAffectedVulnAssessmentRelationship` classed relationships.
-var RelationshipType_DoesNotAffect = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/doesNotAffect"}
+var RelationshipType_DoesNotAffect = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/doesNotAffect"}
 
 // The `from` archive expands out as an artifact described by each `to` Element.
-var RelationshipType_ExpandsTo = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/expandsTo"}
+var RelationshipType_ExpandsTo = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/expandsTo"}
 
 // The `from` Vulnerability has had an exploit created against it by each `to` Agent.
-var RelationshipType_ExploitCreatedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/exploitCreatedBy"}
+var RelationshipType_ExploitCreatedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/exploitCreatedBy"}
 
 // Designates a `from` Vulnerability has been fixed by the `to` Agent(s).
-var RelationshipType_FixedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/fixedBy"}
+var RelationshipType_FixedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/fixedBy"}
 
 // A `from` Vulnerability has been fixed in each `to` Element. The use of the `fixedIn` type is constrained to `VexFixedVulnAssessmentRelationship` classed relationships.
-var RelationshipType_FixedIn = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/fixedIn"}
+var RelationshipType_FixedIn = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/fixedIn"}
 
 // Designates a `from` Vulnerability was originally discovered by the `to` Agent(s).
-var RelationshipType_FoundBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/foundBy"}
+var RelationshipType_FoundBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/foundBy"}
 
 // The `from` Element generates each `to` Element.
-var RelationshipType_Generates = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/generates"}
+var RelationshipType_Generates = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/generates"}
 
 // Every `to` Element is a file added to the `from` Element (`from` hasAddedFile `to`).
-var RelationshipType_HasAddedFile = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAddedFile"}
+var RelationshipType_HasAddedFile = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAddedFile"}
 
 // Relates a `from` Vulnerability and each `to` Element with a security assessment. To be used with `VulnAssessmentRelationship` types.
-var RelationshipType_HasAssessmentFor = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAssessmentFor"}
+var RelationshipType_HasAssessmentFor = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAssessmentFor"}
 
 // Used to associate a `from` Artifact with each `to` Vulnerability.
-var RelationshipType_HasAssociatedVulnerability = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAssociatedVulnerability"}
+var RelationshipType_HasAssociatedVulnerability = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasAssociatedVulnerability"}
 
 // The `from` SoftwareArtifact is concluded by the SPDX data creator to be governed by each `to` license.
-var RelationshipType_HasConcludedLicense = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasConcludedLicense"}
+var RelationshipType_HasConcludedLicense = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasConcludedLicense"}
 
 // The `from` Element treats each `to` Element as a data file. A data file is an artifact that stores data required or optional for the `from` Element's functionality. A data file can be a database file, an index file, a log file, an AI model file, a calibration data file, a temporary file, a backup file, and more. For AI training dataset, test dataset, test artifact, configuration data, build input data, and build output data, please consider using the more specific relationship types: `trainedOn`, `testedOn`, `hasTest`, `configures`, `hasInput`, and `hasOutput`, respectively. This relationship does not imply dependency.
-var RelationshipType_HasDataFile = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDataFile"}
+var RelationshipType_HasDataFile = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDataFile"}
 
 // The `from` SoftwareArtifact was discovered to actually contain each `to` license, for example as detected by use of automated tooling.
-var RelationshipType_HasDeclaredLicense = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDeclaredLicense"}
+var RelationshipType_HasDeclaredLicense = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDeclaredLicense"}
 
 // Every `to` Element is a file deleted from the `from` Element (`from` hasDeletedFile `to`).
-var RelationshipType_HasDeletedFile = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDeletedFile"}
+var RelationshipType_HasDeletedFile = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDeletedFile"}
 
 // The `from` Element has manifest files that contain dependency information in each `to` Element.
-var RelationshipType_HasDependencyManifest = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDependencyManifest"}
+var RelationshipType_HasDependencyManifest = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDependencyManifest"}
 
 // The `from` Element is distributed as an artifact in each `to` Element (e.g. an RPM or archive file).
-var RelationshipType_HasDistributionArtifact = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDistributionArtifact"}
+var RelationshipType_HasDistributionArtifact = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDistributionArtifact"}
 
 // The `from` Element is documented by each `to` Element.
-var RelationshipType_HasDocumentation = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDocumentation"}
+var RelationshipType_HasDocumentation = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDocumentation"}
 
 // The `from` Element dynamically links in each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_HasDynamicLink = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDynamicLink"}
+var RelationshipType_HasDynamicLink = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasDynamicLink"}
 
 // Every `to` Element is considered as evidence for the `from` Element (`from` hasEvidence `to`).
-var RelationshipType_HasEvidence = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasEvidence"}
+var RelationshipType_HasEvidence = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasEvidence"}
 
 // Every `to` Element is an example for the `from` Element (`from` hasExample `to`).
-var RelationshipType_HasExample = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasExample"}
+var RelationshipType_HasExample = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasExample"}
 
 // The `from` Build was run on the `to` Element during a LifecycleScopeType period (e.g. the host that the build runs on).
-var RelationshipType_HasHost = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasHost"}
+var RelationshipType_HasHost = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasHost"}
 
 // The `from` Build has each `to` Element as an input, during a LifecycleScopeType period.
-var RelationshipType_HasInput = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasInput"}
+var RelationshipType_HasInput = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasInput"}
 
 // Every `to` Element is metadata about the `from` Element (`from` hasMetadata `to`).
-var RelationshipType_HasMetadata = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasMetadata"}
+var RelationshipType_HasMetadata = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasMetadata"}
 
 // Every `to` Element is an optional component of the `from` Element (`from` hasOptionalComponent `to`).
-var RelationshipType_HasOptionalComponent = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOptionalComponent"}
+var RelationshipType_HasOptionalComponent = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOptionalComponent"}
 
 // The `from` Element optionally depends on each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_HasOptionalDependency = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOptionalDependency"}
+var RelationshipType_HasOptionalDependency = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOptionalDependency"}
 
 // The `from` Build element generates each `to` Element as an output, during a LifecycleScopeType period.
-var RelationshipType_HasOutput = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOutput"}
+var RelationshipType_HasOutput = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasOutput"}
 
 // The `from` Element has a prerequisite on each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_HasPrerequisite = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasPrerequisite"}
+var RelationshipType_HasPrerequisite = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasPrerequisite"}
 
 // The `from` Element has a dependency on each `to` Element, dependency is not in the distributed artifact, but assumed to be provided, during a LifecycleScopeType period.
-var RelationshipType_HasProvidedDependency = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasProvidedDependency"}
+var RelationshipType_HasProvidedDependency = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasProvidedDependency"}
 
 // The `from` Element has a requirement on each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_HasRequirement = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasRequirement"}
+var RelationshipType_HasRequirement = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasRequirement"}
 
 // Every `to` Element is a specification for the `from` Element (`from` hasSpecification `to`), during a LifecycleScopeType period.
-var RelationshipType_HasSpecification = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasSpecification"}
+var RelationshipType_HasSpecification = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasSpecification"}
 
 // The `from` Element statically links in each `to` Element, during a LifecycleScopeType period.
-var RelationshipType_HasStaticLink = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasStaticLink"}
+var RelationshipType_HasStaticLink = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasStaticLink"}
 
 // Every `to` Element is a test artifact for the `from` Element (`from` hasTest `to`), during a LifecycleScopeType period.
-var RelationshipType_HasTest = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasTest"}
+var RelationshipType_HasTest = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasTest"}
 
 // Every `to` Element is a test case for the `from` Element (`from` hasTestCase `to`).
-var RelationshipType_HasTestCase = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasTestCase"}
+var RelationshipType_HasTestCase = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasTestCase"}
 
 // Every `to` Element is a variant the `from` Element (`from` hasVariant `to`).
-var RelationshipType_HasVariant = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasVariant"}
+var RelationshipType_HasVariant = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/hasVariant"}
 
 // The `from` Element was invoked by the `to` Agent, during a LifecycleScopeType period (for example, a Build element that describes a build step).
-var RelationshipType_InvokedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/invokedBy"}
+var RelationshipType_InvokedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/invokedBy"}
 
 // The `from` Element is modified by each `to` Element.
-var RelationshipType_ModifiedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/modifiedBy"}
+var RelationshipType_ModifiedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/modifiedBy"}
 
 // Every `to` Element is related to the `from` Element where the relationship type is not described by any of the SPDX relationship types (this relationship is directionless).
-var RelationshipType_Other = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/other"}
+var RelationshipType_Other = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/other"}
 
 // Every `to` Element is a packaged instance of the `from` Element (`from` packagedBy `to`).
-var RelationshipType_PackagedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/packagedBy"}
+var RelationshipType_PackagedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/packagedBy"}
 
 // Every `to` Element is a patch for the `from` Element (`from` patchedBy `to`).
-var RelationshipType_PatchedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/patchedBy"}
+var RelationshipType_PatchedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/patchedBy"}
 
 // Designates a `from` Vulnerability was made available for public use or reference by each `to` Agent.
-var RelationshipType_PublishedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/publishedBy"}
+var RelationshipType_PublishedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/publishedBy"}
 
 // Designates a `from` Vulnerability was first reported to a project, vendor, or tracking database for formal identification by each `to` Agent.
-var RelationshipType_ReportedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/reportedBy"}
+var RelationshipType_ReportedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/reportedBy"}
 
 // Designates a `from` Vulnerability's details were tracked, aggregated, and/or enriched to improve context (i.e. NVD) by each `to` Agent.
-var RelationshipType_RepublishedBy = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/republishedBy"}
+var RelationshipType_RepublishedBy = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/republishedBy"}
 
 // The `from` SpdxDocument can be found in a serialized form in each `to` Artifact.
-var RelationshipType_SerializedInArtifact = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/serializedInArtifact"}
+var RelationshipType_SerializedInArtifact = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/serializedInArtifact"}
 
 // The `from` Element has been tested on the `to` Element(s).
-var RelationshipType_TestedOn = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/testedOn"}
+var RelationshipType_TestedOn = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/testedOn"}
 
 // The `from` Element has been trained on the `to` Element(s).
-var RelationshipType_TrainedOn = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/trainedOn"}
+var RelationshipType_TrainedOn = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/trainedOn"}
 
 // The `from` Vulnerability impact is being investigated for each `to` Element. The use of the `underInvestigationFor` type is constrained to `VexUnderInvestigationVulnAssessmentRelationship` classed relationships.
-var RelationshipType_UnderInvestigationFor = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/underInvestigationFor"}
+var RelationshipType_UnderInvestigationFor = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/underInvestigationFor"}
 
 // The `from` Element uses each `to` Element as a tool, during a LifecycleScopeType period.
-var RelationshipType_UsesTool = RelationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/usesTool"}
+var RelationshipType_UsesTool = relationshipType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/usesTool"}
 
 // A collection of SPDX Elements that could potentially be serialized.
 type SpdxDocument struct {
@@ -1382,13 +1327,13 @@ type SpdxDocument struct {
 
 	// Provides the license under which the SPDX documentation of the Element can be
 	// used.
-	DataLicense AnySimplelicensingAnyLicenseInfo
+	DataLicense AnySimplelicensingAnyLicenseInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/dataLicense"  iri-compact:"dataLicense"`
 
 	// Provides an ExternalMap of Element identifiers.
-	Imports ExternalMapList
+	Imports ExternalMapList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/import"  iri-compact:"import"`
 
 	// Provides a NamespaceMap of prefixes and associated namespace partial URIs applicable to an SpdxDocument and independent of any specific serialization format or instance.
-	NamespaceMaps NamespaceMapList
+	NamespaceMaps NamespaceMapList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/namespaceMap"  iri-compact:"namespaceMap"`
 }
 
 func castSpdxDocument(o any) *SpdxDocument {
@@ -1409,38 +1354,35 @@ type AnySpdxDocument interface {
 
 type SpdxDocumentList []AnySpdxDocument
 
-func (o *SpdxDocumentList) Append(values ...AnySpdxDocument) { *o = append(*o, values...) }
-func (o *SpdxDocumentList) Remove(value AnySpdxDocument)     { remove(o, value) }
-
 func (o *SpdxDocumentList) SpdxDocumentIter() iter.Seq2[AnySpdxDocument, *SpdxDocument] {
 	return typeIter(*o, castSpdxDocument)
 }
 
 // Indicates the type of support that is associated with an artifact.
-type SupportType struct {
-	ID string
+type supportType struct {
+	ID string `iri:"@id"`
 }
 
 // in addition to being supported by the supplier, the software is known to have been deployed and is in use.  For a software as a service provider, this implies the software is now available as a service.
-var SupportType_Deployed = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/deployed"}
+var SupportType_Deployed = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/deployed"}
 
 // the artifact is in active development and is not considered ready for formal support from the supplier.
-var SupportType_Development = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/development"}
+var SupportType_Development = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/development"}
 
 // there is a defined end of support for the artifact from the supplier.  This may also be referred to as end of life. There is a validUntilDate that can be used to signal when support ends for the artifact.
-var SupportType_EndOfSupport = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/endOfSupport"}
+var SupportType_EndOfSupport = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/endOfSupport"}
 
 // the artifact has been released, and there is limited support available from the supplier. There is a validUntilDate that can provide additional information about the duration of support.
-var SupportType_LimitedSupport = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/limitedSupport"}
+var SupportType_LimitedSupport = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/limitedSupport"}
 
 // no assertion about the type of support is made.   This is considered the default if no other support type is used.
-var SupportType_NoAssertion = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/noAssertion"}
+var SupportType_NoAssertion = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/noAssertion"}
 
 // there is no support for the artifact from the supplier, consumer assumes any support obligations.
-var SupportType_NoSupport = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/noSupport"}
+var SupportType_NoSupport = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/noSupport"}
 
 // the artifact has been released, and is supported from the supplier.   There is a validUntilDate that can provide additional information about the duration of support.
-var SupportType_Support = SupportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/support"}
+var SupportType_Support = supportType{ID: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/support"}
 
 // An element of hardware and/or software utilized to carry out a particular function.
 type Tool struct {
@@ -1465,94 +1407,91 @@ type AnyTool interface {
 
 type ToolList []AnyTool
 
-func (o *ToolList) Append(values ...AnyTool) { *o = append(*o, values...) }
-func (o *ToolList) Remove(value AnyTool)     { remove(o, value) }
-
 func (o *ToolList) ToolIter() iter.Seq2[AnyTool, *Tool] { return typeIter(*o, castTool) }
 
 // Categories of confidentiality level.
-type DatasetConfidentialityLevelType struct {
-	ID string
+type datasetConfidentialityLevelType struct {
+	ID string `iri:"@id"`
 }
 
 // Data points in the dataset can be shared only with specific organizations and their clients on a need to know basis.
-var DatasetConfidentialityLevelType_Amber = DatasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/amber"}
+var DatasetConfidentialityLevelType_Amber = datasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/amber"}
 
 // Dataset may be distributed freely, without restriction.
-var DatasetConfidentialityLevelType_Clear = DatasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/clear"}
+var DatasetConfidentialityLevelType_Clear = datasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/clear"}
 
 // Dataset can be shared within a community of peers and partners.
-var DatasetConfidentialityLevelType_Green = DatasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/green"}
+var DatasetConfidentialityLevelType_Green = datasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/green"}
 
 // Data points in the dataset are highly confidential and can only be shared with named recipients.
-var DatasetConfidentialityLevelType_Red = DatasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/red"}
+var DatasetConfidentialityLevelType_Red = datasetConfidentialityLevelType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType/red"}
 
 // Availability of dataset.
-type DatasetDatasetAvailabilityType struct {
-	ID string
+type datasetDatasetAvailabilityType struct {
+	ID string `iri:"@id"`
 }
 
 // the dataset is not publicly available and can only be accessed after affirmatively accepting terms on a clickthrough webpage.
-var DatasetDatasetAvailabilityType_Clickthrough = DatasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/clickthrough"}
+var DatasetDatasetAvailabilityType_Clickthrough = datasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/clickthrough"}
 
 // the dataset is publicly available and can be downloaded directly.
-var DatasetDatasetAvailabilityType_DirectDownload = DatasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/directDownload"}
+var DatasetDatasetAvailabilityType_DirectDownload = datasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/directDownload"}
 
 // the dataset is publicly available, but not all at once, and can only be accessed through queries which return parts of the dataset.
-var DatasetDatasetAvailabilityType_Query = DatasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/query"}
+var DatasetDatasetAvailabilityType_Query = datasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/query"}
 
 // the dataset is not publicly available and an email registration is required before accessing the dataset, although without an affirmative acceptance of terms.
-var DatasetDatasetAvailabilityType_Registration = DatasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/registration"}
+var DatasetDatasetAvailabilityType_Registration = datasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/registration"}
 
 // the dataset provider is not making available the underlying data and the dataset must be reassembled, typically using the provided script for scraping the data.
-var DatasetDatasetAvailabilityType_ScrapingScript = DatasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/scrapingScript"}
+var DatasetDatasetAvailabilityType_ScrapingScript = datasetDatasetAvailabilityType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/scrapingScript"}
 
 // Enumeration of dataset types.
-type DatasetDatasetType struct {
-	ID string
+type datasetDatasetType struct {
+	ID string `iri:"@id"`
 }
 
 // data is audio based, such as a collection of music from the 80s.
-var DatasetDatasetType_Audio = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/audio"}
+var DatasetDatasetType_Audio = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/audio"}
 
 // data that is classified into a discrete number of categories, such as the eye color of a population of people.
-var DatasetDatasetType_Categorical = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/categorical"}
+var DatasetDatasetType_Categorical = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/categorical"}
 
 // data is in the form of a graph where entries are somehow related to each other through edges, such a social network of friends.
-var DatasetDatasetType_Graph = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/graph"}
+var DatasetDatasetType_Graph = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/graph"}
 
 // data is a collection of images such as pictures of animals.
-var DatasetDatasetType_Image = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/image"}
+var DatasetDatasetType_Image = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/image"}
 
 // data type is not known.
-var DatasetDatasetType_NoAssertion = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/noAssertion"}
+var DatasetDatasetType_NoAssertion = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/noAssertion"}
 
 // data consists only of numeric entries.
-var DatasetDatasetType_Numeric = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/numeric"}
+var DatasetDatasetType_Numeric = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/numeric"}
 
 // data is of a type not included in this list.
-var DatasetDatasetType_Other = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/other"}
+var DatasetDatasetType_Other = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/other"}
 
 // data is recorded from a physical sensor, such as a thermometer reading or biometric device.
-var DatasetDatasetType_Sensor = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/sensor"}
+var DatasetDatasetType_Sensor = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/sensor"}
 
 // data is stored in tabular format or retrieved from a relational database.
-var DatasetDatasetType_Structured = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/structured"}
+var DatasetDatasetType_Structured = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/structured"}
 
 // data describes the syntax or semantics of a language or text, such as a parse tree used for natural language processing.
-var DatasetDatasetType_Syntactic = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/syntactic"}
+var DatasetDatasetType_Syntactic = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/syntactic"}
 
 // data consists of unstructured text, such as a book, Wikipedia article (without images), or transcript.
-var DatasetDatasetType_Text = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/text"}
+var DatasetDatasetType_Text = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/text"}
 
 // data is recorded in an ordered sequence of timestamped entries, such as the price of a stock over the course of a day.
-var DatasetDatasetType_Timeseries = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/timeseries"}
+var DatasetDatasetType_Timeseries = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/timeseries"}
 
 // data is recorded with a timestamp for each entry, but not necessarily ordered or at specific intervals, such as when a taxi ride starts and ends.
-var DatasetDatasetType_Timestamp = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/timestamp"}
+var DatasetDatasetType_Timestamp = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/timestamp"}
 
 // data is video based, such as a collection of movie clips featuring Tom Hanks.
-var DatasetDatasetType_Video = DatasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/video"}
+var DatasetDatasetType_Video = datasetDatasetType{ID: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/video"}
 
 // Abstract class for additional text intended to be added to a License, but
 // which is not itself a standalone License.
@@ -1560,19 +1499,19 @@ type ExpandedlicensingLicenseAddition struct {
 	Element
 
 	// Identifies the full text of a LicenseAddition.
-	ExpandedlicensingAdditionText string
+	ExpandedlicensingAdditionText string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/additionText"  iri-compact:"expandedlicensing_additionText"`
 	// Specifies whether an additional text identifier has been marked as deprecated.
-	ExpandedlicensingIsDeprecatedAdditionId bool
+	ExpandedlicensingIsDeprecatedAdditionId bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId"  iri-compact:"expandedlicensing_isDeprecatedAdditionId"`
 	// Identifies all the text and metadata associated with a license in the license
 	// XML format.
-	ExpandedlicensingLicenseXml string
+	ExpandedlicensingLicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml"  iri-compact:"expandedlicensing_licenseXml"`
 	// Specifies the licenseId that is preferred to be used in place of a deprecated
 	// License or LicenseAddition.
-	ExpandedlicensingObsoletedBy string
+	ExpandedlicensingObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy"  iri-compact:"expandedlicensing_obsoletedBy"`
 	// Contains a URL where the License or LicenseAddition can be found in use.
-	ExpandedlicensingSeeAlsos []string
+	ExpandedlicensingSeeAlsos []string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso"  iri-compact:"expandedlicensing_seeAlso"`
 	// Identifies the full text of a LicenseAddition, in SPDX templating format.
-	ExpandedlicensingStandardAdditionTemplate string
+	ExpandedlicensingStandardAdditionTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardAdditionTemplate"  iri-compact:"expandedlicensing_standardAdditionTemplate"`
 }
 
 func castExpandedlicensingLicenseAddition(o any) *ExpandedlicensingLicenseAddition {
@@ -1593,13 +1532,6 @@ type AnyExpandedlicensingLicenseAddition interface {
 
 type ExpandedlicensingLicenseAdditionList []AnyExpandedlicensingLicenseAddition
 
-func (o *ExpandedlicensingLicenseAdditionList) Append(values ...AnyExpandedlicensingLicenseAddition) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingLicenseAdditionList) Remove(value AnyExpandedlicensingLicenseAddition) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingLicenseAdditionList) ExpandedlicensingLicenseAdditionIter() iter.Seq2[AnyExpandedlicensingLicenseAddition, *ExpandedlicensingLicenseAddition] {
 	return typeIter(*o, castExpandedlicensingLicenseAddition)
 }
@@ -1616,10 +1548,10 @@ type ExpandedlicensingListedLicenseException struct {
 
 	// Specifies the SPDX License List version in which this license or exception
 	// identifier was deprecated.
-	ExpandedlicensingDeprecatedVersion string
+	ExpandedlicensingDeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion"  iri-compact:"expandedlicensing_deprecatedVersion"`
 	// Specifies the SPDX License List version in which this ListedLicense or
 	// ListedLicenseException identifier was first added.
-	ExpandedlicensingListVersionAdded string
+	ExpandedlicensingListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded"  iri-compact:"expandedlicensing_listVersionAdded"`
 }
 
 func castExpandedlicensingListedLicenseException(o any) *ExpandedlicensingListedLicenseException {
@@ -1640,25 +1572,18 @@ type AnyExpandedlicensingListedLicenseException interface {
 
 type ExpandedlicensingListedLicenseExceptionList []AnyExpandedlicensingListedLicenseException
 
-func (o *ExpandedlicensingListedLicenseExceptionList) Append(values ...AnyExpandedlicensingListedLicenseException) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingListedLicenseExceptionList) Remove(value AnyExpandedlicensingListedLicenseException) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingListedLicenseExceptionList) ExpandedlicensingListedLicenseExceptionIter() iter.Seq2[AnyExpandedlicensingListedLicenseException, *ExpandedlicensingListedLicenseException] {
 	return typeIter(*o, castExpandedlicensingListedLicenseException)
 }
 
 // A property name with an associated value.
 type ExtensionCdxPropertyEntry struct {
-	ID string
+	ID string `iri:"@id"`
 
 	// A name used in a CdxPropertyEntry name-value pair.
-	ExtensionCdxPropName string
+	ExtensionCdxPropName string `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropName"  iri-compact:"extension_cdxPropName"`
 	// A value used in a CdxPropertyEntry name-value pair.
-	ExtensionCdxPropValue string
+	ExtensionCdxPropValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropValue"  iri-compact:"extension_cdxPropValue"`
 }
 
 func castExtensionCdxPropertyEntry(o any) *ExtensionCdxPropertyEntry {
@@ -1678,18 +1603,13 @@ type AnyExtensionCdxPropertyEntry interface {
 
 type ExtensionCdxPropertyEntryList []AnyExtensionCdxPropertyEntry
 
-func (o *ExtensionCdxPropertyEntryList) Append(values ...AnyExtensionCdxPropertyEntry) {
-	*o = append(*o, values...)
-}
-func (o *ExtensionCdxPropertyEntryList) Remove(value AnyExtensionCdxPropertyEntry) { remove(o, value) }
-
 func (o *ExtensionCdxPropertyEntryList) ExtensionCdxPropertyEntryIter() iter.Seq2[AnyExtensionCdxPropertyEntry, *ExtensionCdxPropertyEntry] {
 	return typeIter(*o, castExtensionCdxPropertyEntry)
 }
 
 // A characterization of some aspect of an Element that is associated with the Element in a generalized fashion.
 type ExtensionExtension struct {
-	ID string
+	ID string `iri:"@id"`
 }
 
 func castExtensionExtension(o any) *ExtensionExtension {
@@ -1709,9 +1629,6 @@ type AnyExtensionExtension interface {
 
 type ExtensionExtensionList []AnyExtensionExtension
 
-func (o *ExtensionExtensionList) Append(values ...AnyExtensionExtension) { *o = append(*o, values...) }
-func (o *ExtensionExtensionList) Remove(value AnyExtensionExtension)     { remove(o, value) }
-
 func (o *ExtensionExtensionList) ExtensionExtensionIter() iter.Seq2[AnyExtensionExtension, *ExtensionExtension] {
 	return typeIter(*o, castExtensionExtension)
 }
@@ -1720,72 +1637,72 @@ func (o *ExtensionExtensionList) ExtensionCdxPropertiesExtensionIter() iter.Seq2
 }
 
 // Specifies the CVSS base, temporal, threat, or environmental severity type.
-type SecurityCvssSeverityType struct {
-	ID string
+type securityCvssSeverityType struct {
+	ID string `iri:"@id"`
 }
 
 // When a CVSS score is between 9.0 - 10.0
-var SecurityCvssSeverityType_Critical = SecurityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/critical"}
+var SecurityCvssSeverityType_Critical = securityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/critical"}
 
 // When a CVSS score is between 7.0 - 8.9
-var SecurityCvssSeverityType_High = SecurityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/high"}
+var SecurityCvssSeverityType_High = securityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/high"}
 
 // When a CVSS score is between 0.1 - 3.9
-var SecurityCvssSeverityType_Low = SecurityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/low"}
+var SecurityCvssSeverityType_Low = securityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/low"}
 
 // When a CVSS score is between 4.0 - 6.9
-var SecurityCvssSeverityType_Medium = SecurityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/medium"}
+var SecurityCvssSeverityType_Medium = securityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/medium"}
 
 // When a CVSS score is 0.0
-var SecurityCvssSeverityType_None = SecurityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/none"}
+var SecurityCvssSeverityType_None = securityCvssSeverityType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/none"}
 
 // Specifies the exploit catalog type.
-type SecurityExploitCatalogType struct {
-	ID string
+type securityExploitCatalogType struct {
+	ID string `iri:"@id"`
 }
 
 // CISA's Known Exploited Vulnerability (KEV) Catalog
-var SecurityExploitCatalogType_Kev = SecurityExploitCatalogType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType/kev"}
+var SecurityExploitCatalogType_Kev = securityExploitCatalogType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType/kev"}
 
 // Other exploit catalogs
-var SecurityExploitCatalogType_Other = SecurityExploitCatalogType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType/other"}
+var SecurityExploitCatalogType_Other = securityExploitCatalogType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType/other"}
 
 // Specifies the SSVC decision type.
-type SecuritySsvcDecisionType struct {
-	ID string
+type securitySsvcDecisionType struct {
+	ID string `iri:"@id"`
 }
 
 // The vulnerability requires attention from the organization's internal, supervisory-level and leadership-level individuals. Necessary actions include requesting assistance or information about the vulnerability, as well as publishing a notification either internally and/or externally. Typically, internal groups would meet to determine the overall response and then execute agreed upon actions. CISA recommends remediating Act vulnerabilities as soon as possible.
-var SecuritySsvcDecisionType_Act = SecuritySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/act"}
+var SecuritySsvcDecisionType_Act = securitySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/act"}
 
 // The vulnerability requires attention from the organization's internal, supervisory-level individuals. Necessary actions include requesting assistance or information about the vulnerability, and may involve publishing a notification either internally and/or externally. CISA recommends remediating Attend vulnerabilities sooner than standard update timelines.
-var SecuritySsvcDecisionType_Attend = SecuritySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/attend"}
+var SecuritySsvcDecisionType_Attend = securitySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/attend"}
 
 // The vulnerability does not require action at this time. The organization would continue to track the vulnerability and reassess it if new information becomes available. CISA recommends remediating Track vulnerabilities within standard update timelines.
-var SecuritySsvcDecisionType_Track = SecuritySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/track"}
+var SecuritySsvcDecisionType_Track = securitySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/track"}
 
 // ("Track\*" in the SSVC spec) The vulnerability contains specific characteristics that may require closer monitoring for changes. CISA recommends remediating Track\* vulnerabilities within standard update timelines.
-var SecuritySsvcDecisionType_TrackStar = SecuritySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/trackStar"}
+var SecuritySsvcDecisionType_TrackStar = securitySsvcDecisionType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/trackStar"}
 
 // Specifies the VEX justification type.
-type SecurityVexJustificationType struct {
-	ID string
+type securityVexJustificationType struct {
+	ID string `iri:"@id"`
 }
 
 // The software is not affected because the vulnerable component is not in the product.
-var SecurityVexJustificationType_ComponentNotPresent = SecurityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/componentNotPresent"}
+var SecurityVexJustificationType_ComponentNotPresent = securityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/componentNotPresent"}
 
 // Built-in inline controls or mitigations prevent an adversary from leveraging the vulnerability.
-var SecurityVexJustificationType_InlineMitigationsAlreadyExist = SecurityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/inlineMitigationsAlreadyExist"}
+var SecurityVexJustificationType_InlineMitigationsAlreadyExist = securityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/inlineMitigationsAlreadyExist"}
 
 // The vulnerable component is present, and the component contains the vulnerable code. However, vulnerable code is used in such a way that an attacker cannot mount any anticipated attack.
-var SecurityVexJustificationType_VulnerableCodeCannotBeControlledByAdversary = SecurityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeCannotBeControlledByAdversary"}
+var SecurityVexJustificationType_VulnerableCodeCannotBeControlledByAdversary = securityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeCannotBeControlledByAdversary"}
 
 // The affected code is not reachable through the execution of the code, including non-anticipated states of the product.
-var SecurityVexJustificationType_VulnerableCodeNotInExecutePath = SecurityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeNotInExecutePath"}
+var SecurityVexJustificationType_VulnerableCodeNotInExecutePath = securityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeNotInExecutePath"}
 
 // The product is not affected because the code underlying the vulnerability is not present in the product.
-var SecurityVexJustificationType_VulnerableCodeNotPresent = SecurityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeNotPresent"}
+var SecurityVexJustificationType_VulnerableCodeNotPresent = securityVexJustificationType{ID: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/vulnerableCodeNotPresent"}
 
 // Abstract ancestor class for all vulnerability assessments
 type SecurityVulnAssessmentRelationship struct {
@@ -1793,18 +1710,18 @@ type SecurityVulnAssessmentRelationship struct {
 
 	// Identifies who or what supplied the artifact or VulnAssessmentRelationship
 	// referenced by the Element.
-	SuppliedBy AnyAgent
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy"  iri-compact:"suppliedBy"`
 
 	// Specifies an Element contained in a piece of software where a vulnerability was
 	// found.
-	SecurityAssessedElement AnySoftwareSoftwareArtifact
+	SecurityAssessedElement AnySoftwareSoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement"  iri-compact:"security_assessedElement"`
 
 	// Specifies a time when a vulnerability assessment was modified
-	SecurityModifiedTime time.Time
+	SecurityModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime"  iri-compact:"security_modifiedTime"`
 	// Specifies the time when a vulnerability was published.
-	SecurityPublishedTime time.Time
+	SecurityPublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime"  iri-compact:"security_publishedTime"`
 	// Specified the time and date when a vulnerability was withdrawn.
-	SecurityWithdrawnTime time.Time
+	SecurityWithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime"  iri-compact:"security_withdrawnTime"`
 }
 
 func castSecurityVulnAssessmentRelationship(o any) *SecurityVulnAssessmentRelationship {
@@ -1824,13 +1741,6 @@ type AnySecurityVulnAssessmentRelationship interface {
 }
 
 type SecurityVulnAssessmentRelationshipList []AnySecurityVulnAssessmentRelationship
-
-func (o *SecurityVulnAssessmentRelationshipList) Append(values ...AnySecurityVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVulnAssessmentRelationshipList) Remove(value AnySecurityVulnAssessmentRelationship) {
-	remove(o, value)
-}
 
 func (o *SecurityVulnAssessmentRelationshipList) SecurityVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVulnAssessmentRelationship, *SecurityVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVulnAssessmentRelationship)
@@ -1892,13 +1802,6 @@ type AnySimplelicensingAnyLicenseInfo interface {
 
 type SimplelicensingAnyLicenseInfoList []AnySimplelicensingAnyLicenseInfo
 
-func (o *SimplelicensingAnyLicenseInfoList) Append(values ...AnySimplelicensingAnyLicenseInfo) {
-	*o = append(*o, values...)
-}
-func (o *SimplelicensingAnyLicenseInfoList) Remove(value AnySimplelicensingAnyLicenseInfo) {
-	remove(o, value)
-}
-
 func (o *SimplelicensingAnyLicenseInfoList) SimplelicensingAnyLicenseInfoIter() iter.Seq2[AnySimplelicensingAnyLicenseInfo, *SimplelicensingAnyLicenseInfo] {
 	return typeIter(*o, castSimplelicensingAnyLicenseInfo)
 }
@@ -1939,12 +1842,12 @@ type SimplelicensingLicenseExpression struct {
 
 	// Maps a LicenseRef or AdditionRef string for a Custom License or a Custom
 	// License Addition to its URI ID.
-	SimplelicensingCustomIdToUris DictionaryEntryList
+	SimplelicensingCustomIdToUris DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/customIdToUri"  iri-compact:"simplelicensing_customIdToUri"`
 
 	// A string in the license expression format.
-	SimplelicensingLicenseExpression string
+	SimplelicensingLicenseExpression string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseExpression"  iri-compact:"simplelicensing_licenseExpression"`
 	// The version of the SPDX License List used in the license expression.
-	SimplelicensingLicenseListVersion string
+	SimplelicensingLicenseListVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseListVersion"  iri-compact:"simplelicensing_licenseListVersion"`
 }
 
 func castSimplelicensingLicenseExpression(o any) *SimplelicensingLicenseExpression {
@@ -1965,13 +1868,6 @@ type AnySimplelicensingLicenseExpression interface {
 
 type SimplelicensingLicenseExpressionList []AnySimplelicensingLicenseExpression
 
-func (o *SimplelicensingLicenseExpressionList) Append(values ...AnySimplelicensingLicenseExpression) {
-	*o = append(*o, values...)
-}
-func (o *SimplelicensingLicenseExpressionList) Remove(value AnySimplelicensingLicenseExpression) {
-	remove(o, value)
-}
-
 func (o *SimplelicensingLicenseExpressionList) SimplelicensingLicenseExpressionIter() iter.Seq2[AnySimplelicensingLicenseExpression, *SimplelicensingLicenseExpression] {
 	return typeIter(*o, castSimplelicensingLicenseExpression)
 }
@@ -1981,7 +1877,7 @@ type SimplelicensingSimpleLicensingText struct {
 	Element
 
 	// Identifies the full text of a License or Addition.
-	SimplelicensingLicenseText string
+	SimplelicensingLicenseText string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText"  iri-compact:"simplelicensing_licenseText"`
 }
 
 func castSimplelicensingSimpleLicensingText(o any) *SimplelicensingSimpleLicensingText {
@@ -2002,13 +1898,6 @@ type AnySimplelicensingSimpleLicensingText interface {
 
 type SimplelicensingSimpleLicensingTextList []AnySimplelicensingSimpleLicensingText
 
-func (o *SimplelicensingSimpleLicensingTextList) Append(values ...AnySimplelicensingSimpleLicensingText) {
-	*o = append(*o, values...)
-}
-func (o *SimplelicensingSimpleLicensingTextList) Remove(value AnySimplelicensingSimpleLicensingText) {
-	remove(o, value)
-}
-
 func (o *SimplelicensingSimpleLicensingTextList) SimplelicensingSimpleLicensingTextIter() iter.Seq2[AnySimplelicensingSimpleLicensingText, *SimplelicensingSimpleLicensingText] {
 	return typeIter(*o, castSimplelicensingSimpleLicensingText)
 }
@@ -2018,9 +1907,9 @@ type SoftwareContentIdentifier struct {
 	IntegrityMethod
 
 	// Specifies the type of the content identifier.
-	SoftwareContentIdentifierType SoftwareContentIdentifierType
+	SoftwareContentIdentifierType softwareContentIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierType"  iri-compact:"software_contentIdentifierType"`
 	// Specifies the value of the content identifier.
-	SoftwareContentIdentifierValue string
+	SoftwareContentIdentifierValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierValue"  iri-compact:"software_contentIdentifierValue"`
 }
 
 func castSoftwareContentIdentifier(o any) *SoftwareContentIdentifier {
@@ -2041,180 +1930,175 @@ type AnySoftwareContentIdentifier interface {
 
 type SoftwareContentIdentifierList []AnySoftwareContentIdentifier
 
-func (o *SoftwareContentIdentifierList) Append(values ...AnySoftwareContentIdentifier) {
-	*o = append(*o, values...)
-}
-func (o *SoftwareContentIdentifierList) Remove(value AnySoftwareContentIdentifier) { remove(o, value) }
-
 func (o *SoftwareContentIdentifierList) SoftwareContentIdentifierIter() iter.Seq2[AnySoftwareContentIdentifier, *SoftwareContentIdentifier] {
 	return typeIter(*o, castSoftwareContentIdentifier)
 }
 
 // Specifies the type of a content identifier.
-type SoftwareContentIdentifierType struct {
-	ID string
+type softwareContentIdentifierType struct {
+	ID string `iri:"@id"`
 }
 
 // [Gitoid](https://www.iana.org/assignments/uri-schemes/prov/gitoid), stands for [Git Object ID](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects). A gitoid of type blob is a unique hash of a binary artifact. A gitoid may represent either an [Artifact Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-identifier-types) for the software artifact or an [Input Manifest Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#input-manifest-identifier) for the software artifact's associated [Artifact Input Manifest](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-input-manifest); this ambiguity exists because the Artifact Input Manifest is itself an artifact, and the gitoid of that artifact is its valid identifier. Gitoids calculated on software artifacts (Snippet, File, or Package Elements) should be recorded in the SPDX 3.0 SoftwareArtifact's contentIdentifier property. Gitoids calculated on the Artifact Input Manifest (Input Manifest Identifier) should be recorded in the SPDX 3.0 Element's externalIdentifier property. See [OmniBOR Specification](https://github.com/omnibor/spec/), a minimalistic specification for describing software [Artifact Dependency Graphs](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-dependency-graph-adg).
-var SoftwareContentIdentifierType_Gitoid = SoftwareContentIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType/gitoid"}
+var SoftwareContentIdentifierType_Gitoid = softwareContentIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType/gitoid"}
 
 // SoftWare Hash IDentifier, a persistent intrinsic identifier for digital artifacts, such as files, trees (also known as directories or folders), commits, and other objects typically found in version control systems. The format of the identifiers is defined in the [SWHID specification](https://www.swhid.org/specification/v1.1/4.Syntax) (ISO/IEC DIS 18670). They typically look like `swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2`.
-var SoftwareContentIdentifierType_Swhid = SoftwareContentIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType/swhid"}
+var SoftwareContentIdentifierType_Swhid = softwareContentIdentifierType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType/swhid"}
 
 // Enumeration of the different kinds of SPDX file.
-type SoftwareFileKindType struct {
-	ID string
+type softwareFileKindType struct {
+	ID string `iri:"@id"`
 }
 
 // The file represents a directory and all content stored in that directory.
-var SoftwareFileKindType_Directory = SoftwareFileKindType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/FileKindType/directory"}
+var SoftwareFileKindType_Directory = softwareFileKindType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/FileKindType/directory"}
 
 // The file represents a single file (default).
-var SoftwareFileKindType_File = SoftwareFileKindType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/FileKindType/file"}
+var SoftwareFileKindType_File = softwareFileKindType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/FileKindType/file"}
 
 // Provides a set of values to be used to describe the common types of SBOMs that
 // tools may create.
-type SoftwareSbomType struct {
-	ID string
+type softwareSbomType struct {
+	ID string `iri:"@id"`
 }
 
 // SBOM generated through analysis of artifacts (e.g., executables, packages, containers, and virtual machine images) after its build. Such analysis generally requires a variety of heuristics. In some contexts, this may also be referred to as a "3rd party" SBOM.
-var SoftwareSbomType_Analyzed = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/analyzed"}
+var SoftwareSbomType_Analyzed = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/analyzed"}
 
 // SBOM generated as part of the process of building the software to create a releasable artifact (e.g., executable or package) from data such as source files, dependencies, built components, build process ephemeral data, and other SBOMs.
-var SoftwareSbomType_Build = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/build"}
+var SoftwareSbomType_Build = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/build"}
 
 // SBOM provides an inventory of software that is present on a system. This may be an assembly of other SBOMs that combines analysis of configuration options, and examination of execution behavior in a (potentially simulated) deployment environment.
-var SoftwareSbomType_Deployed = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/deployed"}
+var SoftwareSbomType_Deployed = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/deployed"}
 
 // SBOM of intended, planned software project or product with included components (some of which may not yet exist) for a new software artifact.
-var SoftwareSbomType_Design = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/design"}
+var SoftwareSbomType_Design = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/design"}
 
 // SBOM generated through instrumenting the system running the software, to capture only components present in the system, as well as external call-outs or dynamically loaded components. In some contexts, this may also be referred to as an "Instrumented" or "Dynamic" SBOM.
-var SoftwareSbomType_Runtime = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/runtime"}
+var SoftwareSbomType_Runtime = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/runtime"}
 
 // SBOM created directly from the development environment, source files, and included dependencies used to build an product artifact.
-var SoftwareSbomType_Source = SoftwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/source"}
+var SoftwareSbomType_Source = softwareSbomType{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/source"}
 
 // Provides information about the primary purpose of an Element.
-type SoftwareSoftwarePurpose struct {
-	ID string
+type softwareSoftwarePurpose struct {
+	ID string `iri:"@id"`
 }
 
 // The Element is a software application.
-var SoftwareSoftwarePurpose_Application = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/application"}
+var SoftwareSoftwarePurpose_Application = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/application"}
 
 // The Element is an archived collection of one or more files (.tar, .zip, etc.).
-var SoftwareSoftwarePurpose_Archive = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/archive"}
+var SoftwareSoftwarePurpose_Archive = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/archive"}
 
 // The Element is a bill of materials.
-var SoftwareSoftwarePurpose_Bom = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/bom"}
+var SoftwareSoftwarePurpose_Bom = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/bom"}
 
 // The Element is configuration data.
-var SoftwareSoftwarePurpose_Configuration = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/configuration"}
+var SoftwareSoftwarePurpose_Configuration = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/configuration"}
 
 // The Element is a container image which can be used by a container runtime application.
-var SoftwareSoftwarePurpose_Container = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/container"}
+var SoftwareSoftwarePurpose_Container = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/container"}
 
 // The Element is data.
-var SoftwareSoftwarePurpose_Data = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/data"}
+var SoftwareSoftwarePurpose_Data = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/data"}
 
 // The Element refers to a chipset, processor, or electronic board.
-var SoftwareSoftwarePurpose_Device = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/device"}
+var SoftwareSoftwarePurpose_Device = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/device"}
 
 // The Element represents software that controls hardware devices.
-var SoftwareSoftwarePurpose_DeviceDriver = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/deviceDriver"}
+var SoftwareSoftwarePurpose_DeviceDriver = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/deviceDriver"}
 
 // The Element refers to a disk image that can be written to a disk, booted in a VM, etc. A disk image typically contains most or all of the components necessary to boot, such as bootloaders, kernels, firmware, userspace, etc.
-var SoftwareSoftwarePurpose_DiskImage = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/diskImage"}
+var SoftwareSoftwarePurpose_DiskImage = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/diskImage"}
 
 // The Element is documentation.
-var SoftwareSoftwarePurpose_Documentation = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/documentation"}
+var SoftwareSoftwarePurpose_Documentation = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/documentation"}
 
 // The Element is the evidence that a specification or requirement has been fulfilled.
-var SoftwareSoftwarePurpose_Evidence = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/evidence"}
+var SoftwareSoftwarePurpose_Evidence = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/evidence"}
 
 // The Element is an Artifact that can be run on a computer.
-var SoftwareSoftwarePurpose_Executable = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/executable"}
+var SoftwareSoftwarePurpose_Executable = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/executable"}
 
 // The Element is a single file which can be independently distributed (configuration file, statically linked binary, Kubernetes deployment, etc.).
-var SoftwareSoftwarePurpose_File = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/file"}
+var SoftwareSoftwarePurpose_File = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/file"}
 
 // The Element is a file system image that can be written to a disk (or virtual) partition.
-var SoftwareSoftwarePurpose_FilesystemImage = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/filesystemImage"}
+var SoftwareSoftwarePurpose_FilesystemImage = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/filesystemImage"}
 
 // The Element provides low level control over a device's hardware.
-var SoftwareSoftwarePurpose_Firmware = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/firmware"}
+var SoftwareSoftwarePurpose_Firmware = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/firmware"}
 
 // The Element is a software framework.
-var SoftwareSoftwarePurpose_Framework = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/framework"}
+var SoftwareSoftwarePurpose_Framework = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/framework"}
 
 // The Element is used to install software on disk.
-var SoftwareSoftwarePurpose_Install = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/install"}
+var SoftwareSoftwarePurpose_Install = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/install"}
 
 // The Element is a software library.
-var SoftwareSoftwarePurpose_Library = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/library"}
+var SoftwareSoftwarePurpose_Library = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/library"}
 
 // The Element is a software manifest.
-var SoftwareSoftwarePurpose_Manifest = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/manifest"}
+var SoftwareSoftwarePurpose_Manifest = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/manifest"}
 
 // The Element is a machine learning or artificial intelligence model.
-var SoftwareSoftwarePurpose_Model = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/model"}
+var SoftwareSoftwarePurpose_Model = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/model"}
 
 // The Element is a module of a piece of software.
-var SoftwareSoftwarePurpose_Module = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/module"}
+var SoftwareSoftwarePurpose_Module = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/module"}
 
 // The Element is an operating system.
-var SoftwareSoftwarePurpose_OperatingSystem = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/operatingSystem"}
+var SoftwareSoftwarePurpose_OperatingSystem = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/operatingSystem"}
 
 // The Element doesn't fit into any of the other categories.
-var SoftwareSoftwarePurpose_Other = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/other"}
+var SoftwareSoftwarePurpose_Other = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/other"}
 
 // The Element contains a set of changes to update, fix, or improve another Element.
-var SoftwareSoftwarePurpose_Patch = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/patch"}
+var SoftwareSoftwarePurpose_Patch = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/patch"}
 
 // The Element represents a runtime environment.
-var SoftwareSoftwarePurpose_Platform = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/platform"}
+var SoftwareSoftwarePurpose_Platform = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/platform"}
 
 // The Element provides a requirement needed as input for another Element.
-var SoftwareSoftwarePurpose_Requirement = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/requirement"}
+var SoftwareSoftwarePurpose_Requirement = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/requirement"}
 
 // The Element is a single or a collection of source files.
-var SoftwareSoftwarePurpose_Source = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/source"}
+var SoftwareSoftwarePurpose_Source = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/source"}
 
 // The Element is a plan, guideline or strategy how to create, perform or analyze an application.
-var SoftwareSoftwarePurpose_Specification = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/specification"}
+var SoftwareSoftwarePurpose_Specification = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/specification"}
 
 // The Element is a test used to verify functionality on an software element.
-var SoftwareSoftwarePurpose_Test = SoftwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/test"}
+var SoftwareSoftwarePurpose_Test = softwareSoftwarePurpose{ID: "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/test"}
 
 // Class that describes a build instance of software/artifacts.
 type BuildBuild struct {
 	Element
 
 	// Property that describes the time at which a build stops.
-	BuildBuildEndTime time.Time
+	BuildBuildEndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildEndTime"  iri-compact:"build_buildEndTime"`
 	// A buildId is a locally unique identifier used by a builder to identify a unique
 	// instance of a build produced by it.
-	BuildBuildId string
+	BuildBuildId string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildId"  iri-compact:"build_buildId"`
 	// Property describing the start time of a build.
-	BuildBuildStartTime time.Time
+	BuildBuildStartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildStartTime"  iri-compact:"build_buildStartTime"`
 	// A buildType is a hint that is used to indicate the toolchain, platform, or
 	// infrastructure that the build was invoked on.
-	BuildBuildType string
+	BuildBuildType string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildType"  iri-compact:"build_buildType"`
 	// Property that describes the digest of the build configuration file used to
 	// invoke a build.
-	BuildConfigSourceDigests HashList
+	BuildConfigSourceDigests HashList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceDigest"  iri-compact:"build_configSourceDigest"`
 
 	// Property describes the invocation entrypoint of a build.
-	BuildConfigSourceEntrypoints []string
+	BuildConfigSourceEntrypoints []string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceEntrypoint"  iri-compact:"build_configSourceEntrypoint"`
 	// Property that describes the URI of the build configuration source file.
-	BuildConfigSourceUris []string
+	BuildConfigSourceUris []string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceUri"  iri-compact:"build_configSourceUri"`
 	// Property describing the session in which a build is invoked.
-	BuildEnvironments DictionaryEntryList
+	BuildEnvironments DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/environment"  iri-compact:"build_environment"`
 
 	// Property describing a parameter used in an instance of a build.
-	BuildParameters DictionaryEntryList
+	BuildParameters DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/parameter"  iri-compact:"build_parameter"`
 }
 
 func castBuildBuild(o any) *BuildBuild {
@@ -2234,9 +2118,6 @@ type AnyBuildBuild interface {
 }
 
 type BuildBuildList []AnyBuildBuild
-
-func (o *BuildBuildList) Append(values ...AnyBuildBuild) { *o = append(*o, values...) }
-func (o *BuildBuildList) Remove(value AnyBuildBuild)     { remove(o, value) }
 
 func (o *BuildBuildList) BuildBuildIter() iter.Seq2[AnyBuildBuild, *BuildBuild] {
 	return typeIter(*o, castBuildBuild)
@@ -2265,9 +2146,6 @@ type AnyAgent interface {
 
 type AgentList []AnyAgent
 
-func (o *AgentList) Append(values ...AnyAgent) { *o = append(*o, values...) }
-func (o *AgentList) Remove(value AnyAgent)     { remove(o, value) }
-
 func (o *AgentList) AgentIter() iter.Seq2[AnyAgent, *Agent] { return typeIter(*o, castAgent) }
 func (o *AgentList) OrganizationIter() iter.Seq2[AnyAgent, *Organization] {
 	return typeIter(*o, castOrganization)
@@ -2282,13 +2160,13 @@ type Annotation struct {
 	Element
 
 	// Describes the type of annotation.
-	AnnotationType AnnotationType
+	AnnotationType annotationType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/annotationType"  iri-compact:"annotationType"`
 	// Provides information about the content type of an Element or a Property.
-	ContentType string
+	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType"  iri-compact:"contentType"`
 	// Commentary on an assertion that an annotator has made.
-	Statement string
+	Statement string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/statement"  iri-compact:"statement"`
 	// An Element an annotator has made an assertion about.
-	Subject AnyElement
+	Subject AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/subject"  iri-compact:"subject"`
 }
 
 func castAnnotation(o any) *Annotation {
@@ -2309,9 +2187,6 @@ type AnyAnnotation interface {
 
 type AnnotationList []AnyAnnotation
 
-func (o *AnnotationList) Append(values ...AnyAnnotation) { *o = append(*o, values...) }
-func (o *AnnotationList) Remove(value AnyAnnotation)     { remove(o, value) }
-
 func (o *AnnotationList) AnnotationIter() iter.Seq2[AnyAnnotation, *Annotation] {
 	return typeIter(*o, castAnnotation)
 }
@@ -2321,23 +2196,23 @@ type Artifact struct {
 	Element
 
 	// Specifies the time an artifact was built.
-	BuiltTime time.Time
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime"  iri-compact:"builtTime"`
 	// Identifies from where or whom the Element originally came.
-	OriginatedBys AgentList
+	OriginatedBys AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy"  iri-compact:"originatedBy"`
 
 	// Specifies the time an artifact was released.
-	ReleaseTime time.Time
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime"  iri-compact:"releaseTime"`
 	// The name of a relevant standard that may apply to an artifact.
-	StandardNames []string
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName"  iri-compact:"standardName"`
 	// Identifies who or what supplied the artifact or VulnAssessmentRelationship
 	// referenced by the Element.
-	SuppliedBy AnyAgent
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy"  iri-compact:"suppliedBy"`
 
 	// Specifies the level of support associated with an artifact.
-	SupportLevels []SupportType
+	SupportLevels []supportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel"  iri-compact:"supportLevel"`
 	// Specifies until when the artifact can be used before its usage needs to be
 	// reassessed.
-	ValidUntilTime time.Time
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime"  iri-compact:"validUntilTime"`
 }
 
 func castArtifact(o any) *Artifact {
@@ -2357,9 +2232,6 @@ type AnyArtifact interface {
 }
 
 type ArtifactList []AnyArtifact
-
-func (o *ArtifactList) Append(values ...AnyArtifact) { *o = append(*o, values...) }
-func (o *ArtifactList) Remove(value AnyArtifact)     { remove(o, value) }
 
 func (o *ArtifactList) ArtifactIter() iter.Seq2[AnyArtifact, *Artifact] {
 	return typeIter(*o, castArtifact)
@@ -2392,7 +2264,7 @@ type Bundle struct {
 
 	// Gives information about the circumstances or unifying properties
 	// that Elements of the bundle have been assembled under.
-	Context string
+	Context string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/context"  iri-compact:"context"`
 }
 
 func castBundle(o any) *Bundle {
@@ -2413,9 +2285,6 @@ type AnyBundle interface {
 
 type BundleList []AnyBundle
 
-func (o *BundleList) Append(values ...AnyBundle) { *o = append(*o, values...) }
-func (o *BundleList) Remove(value AnyBundle)     { remove(o, value) }
-
 func (o *BundleList) BundleIter() iter.Seq2[AnyBundle, *Bundle] { return typeIter(*o, castBundle) }
 func (o *BundleList) BomIter() iter.Seq2[AnyBundle, *Bom]       { return typeIter(*o, castBom) }
 func (o *BundleList) SoftwareSbomIter() iter.Seq2[AnyBundle, *SoftwareSbom] {
@@ -2427,9 +2296,9 @@ type Hash struct {
 	IntegrityMethod
 
 	// Specifies the algorithm used for calculating the hash value.
-	Algorithm HashAlgorithm
+	Algorithm hashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm"  iri-compact:"algorithm"`
 	// The result of applying a hash algorithm to an Element.
-	HashValue string
+	HashValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue"  iri-compact:"hashValue"`
 }
 
 func castHash(o any) *Hash {
@@ -2450,9 +2319,6 @@ type AnyHash interface {
 
 type HashList []AnyHash
 
-func (o *HashList) Append(values ...AnyHash) { *o = append(*o, values...) }
-func (o *HashList) Remove(value AnyHash)     { remove(o, value) }
-
 func (o *HashList) HashIter() iter.Seq2[AnyHash, *Hash] { return typeIter(*o, castHash) }
 
 // Provide context for a relationship that occurs in the lifecycle.
@@ -2460,7 +2326,7 @@ type LifecycleScopedRelationship struct {
 	Relationship
 
 	// Capture the scope of information about a specific relationship between elements.
-	Scope LifecycleScopeType
+	Scope lifecycleScopeType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/scope"  iri-compact:"scope"`
 }
 
 func castLifecycleScopedRelationship(o any) *LifecycleScopedRelationship {
@@ -2480,13 +2346,6 @@ type AnyLifecycleScopedRelationship interface {
 }
 
 type LifecycleScopedRelationshipList []AnyLifecycleScopedRelationship
-
-func (o *LifecycleScopedRelationshipList) Append(values ...AnyLifecycleScopedRelationship) {
-	*o = append(*o, values...)
-}
-func (o *LifecycleScopedRelationshipList) Remove(value AnyLifecycleScopedRelationship) {
-	remove(o, value)
-}
 
 func (o *LifecycleScopedRelationshipList) LifecycleScopedRelationshipIter() iter.Seq2[AnyLifecycleScopedRelationship, *LifecycleScopedRelationship] {
 	return typeIter(*o, castLifecycleScopedRelationship)
@@ -2518,9 +2377,6 @@ type AnyOrganization interface {
 
 type OrganizationList []AnyOrganization
 
-func (o *OrganizationList) Append(values ...AnyOrganization) { *o = append(*o, values...) }
-func (o *OrganizationList) Remove(value AnyOrganization)     { remove(o, value) }
-
 func (o *OrganizationList) OrganizationIter() iter.Seq2[AnyOrganization, *Organization] {
 	return typeIter(*o, castOrganization)
 }
@@ -2548,9 +2404,6 @@ type AnyPerson interface {
 
 type PersonList []AnyPerson
 
-func (o *PersonList) Append(values ...AnyPerson) { *o = append(*o, values...) }
-func (o *PersonList) Remove(value AnyPerson)     { remove(o, value) }
-
 func (o *PersonList) PersonIter() iter.Seq2[AnyPerson, *Person] { return typeIter(*o, castPerson) }
 
 // A software agent.
@@ -2576,9 +2429,6 @@ type AnySoftwareAgent interface {
 
 type SoftwareAgentList []AnySoftwareAgent
 
-func (o *SoftwareAgentList) Append(values ...AnySoftwareAgent) { *o = append(*o, values...) }
-func (o *SoftwareAgentList) Remove(value AnySoftwareAgent)     { remove(o, value) }
-
 func (o *SoftwareAgentList) SoftwareAgentIter() iter.Seq2[AnySoftwareAgent, *SoftwareAgent] {
 	return typeIter(*o, castSoftwareAgent)
 }
@@ -2589,7 +2439,7 @@ type ExpandedlicensingConjunctiveLicenseSet struct {
 	SimplelicensingAnyLicenseInfo
 
 	// A license expression participating in a license set.
-	ExpandedlicensingMembers SimplelicensingAnyLicenseInfoList
+	ExpandedlicensingMembers SimplelicensingAnyLicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member"  iri-compact:"expandedlicensing_member"`
 }
 
 func castExpandedlicensingConjunctiveLicenseSet(o any) *ExpandedlicensingConjunctiveLicenseSet {
@@ -2609,13 +2459,6 @@ type AnyExpandedlicensingConjunctiveLicenseSet interface {
 }
 
 type ExpandedlicensingConjunctiveLicenseSetList []AnyExpandedlicensingConjunctiveLicenseSet
-
-func (o *ExpandedlicensingConjunctiveLicenseSetList) Append(values ...AnyExpandedlicensingConjunctiveLicenseSet) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingConjunctiveLicenseSetList) Remove(value AnyExpandedlicensingConjunctiveLicenseSet) {
-	remove(o, value)
-}
 
 func (o *ExpandedlicensingConjunctiveLicenseSetList) ExpandedlicensingConjunctiveLicenseSetIter() iter.Seq2[AnyExpandedlicensingConjunctiveLicenseSet, *ExpandedlicensingConjunctiveLicenseSet] {
 	return typeIter(*o, castExpandedlicensingConjunctiveLicenseSet)
@@ -2644,13 +2487,6 @@ type AnyExpandedlicensingCustomLicenseAddition interface {
 
 type ExpandedlicensingCustomLicenseAdditionList []AnyExpandedlicensingCustomLicenseAddition
 
-func (o *ExpandedlicensingCustomLicenseAdditionList) Append(values ...AnyExpandedlicensingCustomLicenseAddition) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingCustomLicenseAdditionList) Remove(value AnyExpandedlicensingCustomLicenseAddition) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingCustomLicenseAdditionList) ExpandedlicensingCustomLicenseAdditionIter() iter.Seq2[AnyExpandedlicensingCustomLicenseAddition, *ExpandedlicensingCustomLicenseAddition] {
 	return typeIter(*o, castExpandedlicensingCustomLicenseAddition)
 }
@@ -2661,7 +2497,7 @@ type ExpandedlicensingDisjunctiveLicenseSet struct {
 	SimplelicensingAnyLicenseInfo
 
 	// A license expression participating in a license set.
-	ExpandedlicensingMembers SimplelicensingAnyLicenseInfoList
+	ExpandedlicensingMembers SimplelicensingAnyLicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member"  iri-compact:"expandedlicensing_member"`
 }
 
 func castExpandedlicensingDisjunctiveLicenseSet(o any) *ExpandedlicensingDisjunctiveLicenseSet {
@@ -2681,13 +2517,6 @@ type AnyExpandedlicensingDisjunctiveLicenseSet interface {
 }
 
 type ExpandedlicensingDisjunctiveLicenseSetList []AnyExpandedlicensingDisjunctiveLicenseSet
-
-func (o *ExpandedlicensingDisjunctiveLicenseSetList) Append(values ...AnyExpandedlicensingDisjunctiveLicenseSet) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingDisjunctiveLicenseSetList) Remove(value AnyExpandedlicensingDisjunctiveLicenseSet) {
-	remove(o, value)
-}
 
 func (o *ExpandedlicensingDisjunctiveLicenseSetList) ExpandedlicensingDisjunctiveLicenseSetIter() iter.Seq2[AnyExpandedlicensingDisjunctiveLicenseSet, *ExpandedlicensingDisjunctiveLicenseSet] {
 	return typeIter(*o, castExpandedlicensingDisjunctiveLicenseSet)
@@ -2715,13 +2544,6 @@ type AnyExpandedlicensingExtendableLicense interface {
 }
 
 type ExpandedlicensingExtendableLicenseList []AnyExpandedlicensingExtendableLicense
-
-func (o *ExpandedlicensingExtendableLicenseList) Append(values ...AnyExpandedlicensingExtendableLicense) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingExtendableLicenseList) Remove(value AnyExpandedlicensingExtendableLicense) {
-	remove(o, value)
-}
 
 func (o *ExpandedlicensingExtendableLicenseList) ExpandedlicensingExtendableLicenseIter() iter.Seq2[AnyExpandedlicensingExtendableLicense, *ExpandedlicensingExtendableLicense] {
 	return typeIter(*o, castExpandedlicensingExtendableLicense)
@@ -2771,13 +2593,6 @@ type AnyExpandedlicensingIndividualLicensingInfo interface {
 
 type ExpandedlicensingIndividualLicensingInfoList []AnyExpandedlicensingIndividualLicensingInfo
 
-func (o *ExpandedlicensingIndividualLicensingInfoList) Append(values ...AnyExpandedlicensingIndividualLicensingInfo) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingIndividualLicensingInfoList) Remove(value AnyExpandedlicensingIndividualLicensingInfo) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingIndividualLicensingInfoList) ExpandedlicensingIndividualLicensingInfoIter() iter.Seq2[AnyExpandedlicensingIndividualLicensingInfo, *ExpandedlicensingIndividualLicensingInfo] {
 	return typeIter(*o, castExpandedlicensingIndividualLicensingInfo)
 }
@@ -2788,28 +2603,28 @@ type ExpandedlicensingLicense struct {
 
 	// Specifies whether a license or additional text identifier has been marked as
 	// deprecated.
-	ExpandedlicensingIsDeprecatedLicenseId bool
+	ExpandedlicensingIsDeprecatedLicenseId bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId"  iri-compact:"expandedlicensing_isDeprecatedLicenseId"`
 	// Specifies whether the License is listed as free by the
 	// Free Software Foundation (FSF).
-	ExpandedlicensingIsFsfLibre bool
+	ExpandedlicensingIsFsfLibre bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isFsfLibre"  iri-compact:"expandedlicensing_isFsfLibre"`
 	// Specifies whether the License is listed as approved by the
 	// Open Source Initiative (OSI).
-	ExpandedlicensingIsOsiApproved bool
+	ExpandedlicensingIsOsiApproved bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isOsiApproved"  iri-compact:"expandedlicensing_isOsiApproved"`
 	// Identifies all the text and metadata associated with a license in the license
 	// XML format.
-	ExpandedlicensingLicenseXml string
+	ExpandedlicensingLicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml"  iri-compact:"expandedlicensing_licenseXml"`
 	// Specifies the licenseId that is preferred to be used in place of a deprecated
 	// License or LicenseAddition.
-	ExpandedlicensingObsoletedBy string
+	ExpandedlicensingObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy"  iri-compact:"expandedlicensing_obsoletedBy"`
 	// Contains a URL where the License or LicenseAddition can be found in use.
-	ExpandedlicensingSeeAlsos []string
+	ExpandedlicensingSeeAlsos []string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso"  iri-compact:"expandedlicensing_seeAlso"`
 	// Provides a License author's preferred text to indicate that a file is covered
 	// by the License.
-	ExpandedlicensingStandardLicenseHeader string
+	ExpandedlicensingStandardLicenseHeader string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseHeader"  iri-compact:"expandedlicensing_standardLicenseHeader"`
 	// Identifies the full text of a License, in SPDX templating format.
-	ExpandedlicensingStandardLicenseTemplate string
+	ExpandedlicensingStandardLicenseTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseTemplate"  iri-compact:"expandedlicensing_standardLicenseTemplate"`
 	// Identifies the full text of a License or Addition.
-	SimplelicensingLicenseText string
+	SimplelicensingLicenseText string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText"  iri-compact:"simplelicensing_licenseText"`
 }
 
 func castExpandedlicensingLicense(o any) *ExpandedlicensingLicense {
@@ -2830,11 +2645,6 @@ type AnyExpandedlicensingLicense interface {
 
 type ExpandedlicensingLicenseList []AnyExpandedlicensingLicense
 
-func (o *ExpandedlicensingLicenseList) Append(values ...AnyExpandedlicensingLicense) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingLicenseList) Remove(value AnyExpandedlicensingLicense) { remove(o, value) }
-
 func (o *ExpandedlicensingLicenseList) ExpandedlicensingLicenseIter() iter.Seq2[AnyExpandedlicensingLicense, *ExpandedlicensingLicense] {
 	return typeIter(*o, castExpandedlicensingLicense)
 }
@@ -2851,10 +2661,10 @@ type ExpandedlicensingListedLicense struct {
 
 	// Specifies the SPDX License List version in which this license or exception
 	// identifier was deprecated.
-	ExpandedlicensingDeprecatedVersion string
+	ExpandedlicensingDeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion"  iri-compact:"expandedlicensing_deprecatedVersion"`
 	// Specifies the SPDX License List version in which this ListedLicense or
 	// ListedLicenseException identifier was first added.
-	ExpandedlicensingListVersionAdded string
+	ExpandedlicensingListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded"  iri-compact:"expandedlicensing_listVersionAdded"`
 }
 
 func castExpandedlicensingListedLicense(o any) *ExpandedlicensingListedLicense {
@@ -2875,13 +2685,6 @@ type AnyExpandedlicensingListedLicense interface {
 
 type ExpandedlicensingListedLicenseList []AnyExpandedlicensingListedLicense
 
-func (o *ExpandedlicensingListedLicenseList) Append(values ...AnyExpandedlicensingListedLicense) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingListedLicenseList) Remove(value AnyExpandedlicensingListedLicense) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingListedLicenseList) ExpandedlicensingListedLicenseIter() iter.Seq2[AnyExpandedlicensingListedLicense, *ExpandedlicensingListedLicense] {
 	return typeIter(*o, castExpandedlicensingListedLicense)
 }
@@ -2892,7 +2695,7 @@ type ExpandedlicensingOrLaterOperator struct {
 	ExpandedlicensingExtendableLicense
 
 	// A License participating in an 'or later' model.
-	ExpandedlicensingSubjectLicense AnyExpandedlicensingLicense
+	ExpandedlicensingSubjectLicense AnyExpandedlicensingLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectLicense"  iri-compact:"expandedlicensing_subjectLicense"`
 }
 
 func castExpandedlicensingOrLaterOperator(o any) *ExpandedlicensingOrLaterOperator {
@@ -2913,13 +2716,6 @@ type AnyExpandedlicensingOrLaterOperator interface {
 
 type ExpandedlicensingOrLaterOperatorList []AnyExpandedlicensingOrLaterOperator
 
-func (o *ExpandedlicensingOrLaterOperatorList) Append(values ...AnyExpandedlicensingOrLaterOperator) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingOrLaterOperatorList) Remove(value AnyExpandedlicensingOrLaterOperator) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingOrLaterOperatorList) ExpandedlicensingOrLaterOperatorIter() iter.Seq2[AnyExpandedlicensingOrLaterOperator, *ExpandedlicensingOrLaterOperator] {
 	return typeIter(*o, castExpandedlicensingOrLaterOperator)
 }
@@ -2930,10 +2726,10 @@ type ExpandedlicensingWithAdditionOperator struct {
 	SimplelicensingAnyLicenseInfo
 
 	// A LicenseAddition participating in a 'with addition' model.
-	ExpandedlicensingSubjectAddition AnyExpandedlicensingLicenseAddition
+	ExpandedlicensingSubjectAddition AnyExpandedlicensingLicenseAddition `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectAddition"  iri-compact:"expandedlicensing_subjectAddition"`
 
 	// A License participating in a 'with addition' model.
-	ExpandedlicensingSubjectExtendableLicense AnyExpandedlicensingExtendableLicense
+	ExpandedlicensingSubjectExtendableLicense AnyExpandedlicensingExtendableLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectExtendableLicense"  iri-compact:"expandedlicensing_subjectExtendableLicense"`
 }
 
 func castExpandedlicensingWithAdditionOperator(o any) *ExpandedlicensingWithAdditionOperator {
@@ -2954,13 +2750,6 @@ type AnyExpandedlicensingWithAdditionOperator interface {
 
 type ExpandedlicensingWithAdditionOperatorList []AnyExpandedlicensingWithAdditionOperator
 
-func (o *ExpandedlicensingWithAdditionOperatorList) Append(values ...AnyExpandedlicensingWithAdditionOperator) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingWithAdditionOperatorList) Remove(value AnyExpandedlicensingWithAdditionOperator) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingWithAdditionOperatorList) ExpandedlicensingWithAdditionOperatorIter() iter.Seq2[AnyExpandedlicensingWithAdditionOperator, *ExpandedlicensingWithAdditionOperator] {
 	return typeIter(*o, castExpandedlicensingWithAdditionOperator)
 }
@@ -2970,7 +2759,7 @@ type ExtensionCdxPropertiesExtension struct {
 	ExtensionExtension
 
 	// Provides a map of a property names to a values.
-	ExtensionCdxPropertys ExtensionCdxPropertyEntryList
+	ExtensionCdxPropertys ExtensionCdxPropertyEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxProperty"  iri-compact:"extension_cdxProperty"`
 }
 
 func castExtensionCdxPropertiesExtension(o any) *ExtensionCdxPropertiesExtension {
@@ -2991,13 +2780,6 @@ type AnyExtensionCdxPropertiesExtension interface {
 
 type ExtensionCdxPropertiesExtensionList []AnyExtensionCdxPropertiesExtension
 
-func (o *ExtensionCdxPropertiesExtensionList) Append(values ...AnyExtensionCdxPropertiesExtension) {
-	*o = append(*o, values...)
-}
-func (o *ExtensionCdxPropertiesExtensionList) Remove(value AnyExtensionCdxPropertiesExtension) {
-	remove(o, value)
-}
-
 func (o *ExtensionCdxPropertiesExtensionList) ExtensionCdxPropertiesExtensionIter() iter.Seq2[AnyExtensionCdxPropertiesExtension, *ExtensionCdxPropertiesExtension] {
 	return typeIter(*o, castExtensionCdxPropertiesExtension)
 }
@@ -3007,9 +2789,9 @@ type SecurityCvssV2VulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// Provides a numerical (0-10) representation of the severity of a vulnerability.
-	SecurityScore float64
+	SecurityScore float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score"  iri-compact:"security_score"`
 	// Specifies the CVSS vector string for a vulnerability.
-	SecurityVectorString string
+	SecurityVectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString"  iri-compact:"security_vectorString"`
 }
 
 func castSecurityCvssV2VulnAssessmentRelationship(o any) *SecurityCvssV2VulnAssessmentRelationship {
@@ -3030,13 +2812,6 @@ type AnySecurityCvssV2VulnAssessmentRelationship interface {
 
 type SecurityCvssV2VulnAssessmentRelationshipList []AnySecurityCvssV2VulnAssessmentRelationship
 
-func (o *SecurityCvssV2VulnAssessmentRelationshipList) Append(values ...AnySecurityCvssV2VulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityCvssV2VulnAssessmentRelationshipList) Remove(value AnySecurityCvssV2VulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityCvssV2VulnAssessmentRelationshipList) SecurityCvssV2VulnAssessmentRelationshipIter() iter.Seq2[AnySecurityCvssV2VulnAssessmentRelationship, *SecurityCvssV2VulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityCvssV2VulnAssessmentRelationship)
 }
@@ -3046,11 +2821,11 @@ type SecurityCvssV3VulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// Provides a numerical (0-10) representation of the severity of a vulnerability.
-	SecurityScore float64
+	SecurityScore float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score"  iri-compact:"security_score"`
 	// Specifies the CVSS qualitative severity rating of a vulnerability in relation to a piece of software.
-	SecuritySeverity SecurityCvssSeverityType
+	SecuritySeverity securityCvssSeverityType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/severity"  iri-compact:"security_severity"`
 	// Specifies the CVSS vector string for a vulnerability.
-	SecurityVectorString string
+	SecurityVectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString"  iri-compact:"security_vectorString"`
 }
 
 func castSecurityCvssV3VulnAssessmentRelationship(o any) *SecurityCvssV3VulnAssessmentRelationship {
@@ -3071,13 +2846,6 @@ type AnySecurityCvssV3VulnAssessmentRelationship interface {
 
 type SecurityCvssV3VulnAssessmentRelationshipList []AnySecurityCvssV3VulnAssessmentRelationship
 
-func (o *SecurityCvssV3VulnAssessmentRelationshipList) Append(values ...AnySecurityCvssV3VulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityCvssV3VulnAssessmentRelationshipList) Remove(value AnySecurityCvssV3VulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityCvssV3VulnAssessmentRelationshipList) SecurityCvssV3VulnAssessmentRelationshipIter() iter.Seq2[AnySecurityCvssV3VulnAssessmentRelationship, *SecurityCvssV3VulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityCvssV3VulnAssessmentRelationship)
 }
@@ -3087,11 +2855,11 @@ type SecurityCvssV4VulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// Provides a numerical (0-10) representation of the severity of a vulnerability.
-	SecurityScore float64
+	SecurityScore float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score"  iri-compact:"security_score"`
 	// Specifies the CVSS qualitative severity rating of a vulnerability in relation to a piece of software.
-	SecuritySeverity SecurityCvssSeverityType
+	SecuritySeverity securityCvssSeverityType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/severity"  iri-compact:"security_severity"`
 	// Specifies the CVSS vector string for a vulnerability.
-	SecurityVectorString string
+	SecurityVectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString"  iri-compact:"security_vectorString"`
 }
 
 func castSecurityCvssV4VulnAssessmentRelationship(o any) *SecurityCvssV4VulnAssessmentRelationship {
@@ -3112,13 +2880,6 @@ type AnySecurityCvssV4VulnAssessmentRelationship interface {
 
 type SecurityCvssV4VulnAssessmentRelationshipList []AnySecurityCvssV4VulnAssessmentRelationship
 
-func (o *SecurityCvssV4VulnAssessmentRelationshipList) Append(values ...AnySecurityCvssV4VulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityCvssV4VulnAssessmentRelationshipList) Remove(value AnySecurityCvssV4VulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityCvssV4VulnAssessmentRelationshipList) SecurityCvssV4VulnAssessmentRelationshipIter() iter.Seq2[AnySecurityCvssV4VulnAssessmentRelationship, *SecurityCvssV4VulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityCvssV4VulnAssessmentRelationship)
 }
@@ -3128,9 +2889,9 @@ type SecurityEpssVulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// The percentile of the current probability score.
-	SecurityPercentile float64
+	SecurityPercentile float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/percentile"  iri-compact:"security_percentile"`
 	// A probability score between 0 and 1 of a vulnerability being exploited.
-	SecurityProbability float64
+	SecurityProbability float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/probability"  iri-compact:"security_probability"`
 }
 
 func castSecurityEpssVulnAssessmentRelationship(o any) *SecurityEpssVulnAssessmentRelationship {
@@ -3151,13 +2912,6 @@ type AnySecurityEpssVulnAssessmentRelationship interface {
 
 type SecurityEpssVulnAssessmentRelationshipList []AnySecurityEpssVulnAssessmentRelationship
 
-func (o *SecurityEpssVulnAssessmentRelationshipList) Append(values ...AnySecurityEpssVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityEpssVulnAssessmentRelationshipList) Remove(value AnySecurityEpssVulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityEpssVulnAssessmentRelationshipList) SecurityEpssVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityEpssVulnAssessmentRelationship, *SecurityEpssVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityEpssVulnAssessmentRelationship)
 }
@@ -3167,11 +2921,11 @@ type SecurityExploitCatalogVulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// Specifies the exploit catalog type.
-	SecurityCatalogType SecurityExploitCatalogType
+	SecurityCatalogType securityExploitCatalogType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/catalogType"  iri-compact:"security_catalogType"`
 	// Describe that a CVE is known to have an exploit because it's been listed in an exploit catalog.
-	SecurityExploited bool
+	SecurityExploited bool `iri:"https://spdx.org/rdf/3.0.1/terms/Security/exploited"  iri-compact:"security_exploited"`
 	// Provides the location of an exploit catalog.
-	SecurityLocator string
+	SecurityLocator string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/locator"  iri-compact:"security_locator"`
 }
 
 func castSecurityExploitCatalogVulnAssessmentRelationship(o any) *SecurityExploitCatalogVulnAssessmentRelationship {
@@ -3192,13 +2946,6 @@ type AnySecurityExploitCatalogVulnAssessmentRelationship interface {
 
 type SecurityExploitCatalogVulnAssessmentRelationshipList []AnySecurityExploitCatalogVulnAssessmentRelationship
 
-func (o *SecurityExploitCatalogVulnAssessmentRelationshipList) Append(values ...AnySecurityExploitCatalogVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityExploitCatalogVulnAssessmentRelationshipList) Remove(value AnySecurityExploitCatalogVulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityExploitCatalogVulnAssessmentRelationshipList) SecurityExploitCatalogVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityExploitCatalogVulnAssessmentRelationship, *SecurityExploitCatalogVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityExploitCatalogVulnAssessmentRelationship)
 }
@@ -3209,7 +2956,7 @@ type SecuritySsvcVulnAssessmentRelationship struct {
 
 	// Provide the enumeration of possible decisions in the
 	// [Stakeholder-Specific Vulnerability Categorization (SSVC) decision tree](https://www.cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc).
-	SecurityDecisionType SecuritySsvcDecisionType
+	SecurityDecisionType securitySsvcDecisionType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/decisionType"  iri-compact:"security_decisionType"`
 }
 
 func castSecuritySsvcVulnAssessmentRelationship(o any) *SecuritySsvcVulnAssessmentRelationship {
@@ -3230,13 +2977,6 @@ type AnySecuritySsvcVulnAssessmentRelationship interface {
 
 type SecuritySsvcVulnAssessmentRelationshipList []AnySecuritySsvcVulnAssessmentRelationship
 
-func (o *SecuritySsvcVulnAssessmentRelationshipList) Append(values ...AnySecuritySsvcVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecuritySsvcVulnAssessmentRelationshipList) Remove(value AnySecuritySsvcVulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecuritySsvcVulnAssessmentRelationshipList) SecuritySsvcVulnAssessmentRelationshipIter() iter.Seq2[AnySecuritySsvcVulnAssessmentRelationship, *SecuritySsvcVulnAssessmentRelationship] {
 	return typeIter(*o, castSecuritySsvcVulnAssessmentRelationship)
 }
@@ -3246,9 +2986,9 @@ type SecurityVexVulnAssessmentRelationship struct {
 	SecurityVulnAssessmentRelationship
 
 	// Conveys information about how VEX status was determined.
-	SecurityStatusNotes string
+	SecurityStatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes"  iri-compact:"security_statusNotes"`
 	// Specifies the version of a VEX statement.
-	SecurityVexVersion string
+	SecurityVexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion"  iri-compact:"security_vexVersion"`
 }
 
 func castSecurityVexVulnAssessmentRelationship(o any) *SecurityVexVulnAssessmentRelationship {
@@ -3268,13 +3008,6 @@ type AnySecurityVexVulnAssessmentRelationship interface {
 }
 
 type SecurityVexVulnAssessmentRelationshipList []AnySecurityVexVulnAssessmentRelationship
-
-func (o *SecurityVexVulnAssessmentRelationshipList) Append(values ...AnySecurityVexVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVexVulnAssessmentRelationshipList) Remove(value AnySecurityVexVulnAssessmentRelationship) {
-	remove(o, value)
-}
 
 func (o *SecurityVexVulnAssessmentRelationshipList) SecurityVexVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVexVulnAssessmentRelationship, *SecurityVexVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVexVulnAssessmentRelationship)
@@ -3297,11 +3030,11 @@ type SecurityVulnerability struct {
 	Artifact
 
 	// Specifies a time when a vulnerability assessment was modified
-	SecurityModifiedTime time.Time
+	SecurityModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime"  iri-compact:"security_modifiedTime"`
 	// Specifies the time when a vulnerability was published.
-	SecurityPublishedTime time.Time
+	SecurityPublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime"  iri-compact:"security_publishedTime"`
 	// Specified the time and date when a vulnerability was withdrawn.
-	SecurityWithdrawnTime time.Time
+	SecurityWithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime"  iri-compact:"security_withdrawnTime"`
 }
 
 func castSecurityVulnerability(o any) *SecurityVulnerability {
@@ -3322,11 +3055,6 @@ type AnySecurityVulnerability interface {
 
 type SecurityVulnerabilityList []AnySecurityVulnerability
 
-func (o *SecurityVulnerabilityList) Append(values ...AnySecurityVulnerability) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVulnerabilityList) Remove(value AnySecurityVulnerability) { remove(o, value) }
-
 func (o *SecurityVulnerabilityList) SecurityVulnerabilityIter() iter.Seq2[AnySecurityVulnerability, *SecurityVulnerability] {
 	return typeIter(*o, castSecurityVulnerability)
 }
@@ -3336,19 +3064,19 @@ type SoftwareSoftwareArtifact struct {
 	Artifact
 
 	// Provides additional purpose information of the software artifact.
-	SoftwareAdditionalPurposes []SoftwareSoftwarePurpose
+	SoftwareAdditionalPurposes []softwareSoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose"  iri-compact:"software_additionalPurpose"`
 	// Provides a place for the SPDX data creator to record acknowledgement text for
 	// a software Package, File or Snippet.
-	SoftwareAttributionTexts []string
+	SoftwareAttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText"  iri-compact:"software_attributionText"`
 	// A canonical, unique, immutable identifier of the artifact content, that may be
 	// used for verifying its identity and/or integrity.
-	SoftwareContentIdentifiers SoftwareContentIdentifierList
+	SoftwareContentIdentifiers SoftwareContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier"  iri-compact:"software_contentIdentifier"`
 
 	// Identifies the text of one or more copyright notices for a software Package,
 	// File or Snippet, if any.
-	SoftwareCopyrightText string
+	SoftwareCopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText"  iri-compact:"software_copyrightText"`
 	// Provides information about the primary purpose of the software artifact.
-	SoftwarePrimaryPurpose SoftwareSoftwarePurpose
+	SoftwarePrimaryPurpose softwareSoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose"  iri-compact:"software_primaryPurpose"`
 }
 
 func castSoftwareSoftwareArtifact(o any) *SoftwareSoftwareArtifact {
@@ -3368,11 +3096,6 @@ type AnySoftwareSoftwareArtifact interface {
 }
 
 type SoftwareSoftwareArtifactList []AnySoftwareSoftwareArtifact
-
-func (o *SoftwareSoftwareArtifactList) Append(values ...AnySoftwareSoftwareArtifact) {
-	*o = append(*o, values...)
-}
-func (o *SoftwareSoftwareArtifactList) Remove(value AnySoftwareSoftwareArtifact) { remove(o, value) }
 
 func (o *SoftwareSoftwareArtifactList) SoftwareSoftwareArtifactIter() iter.Seq2[AnySoftwareSoftwareArtifact, *SoftwareSoftwareArtifact] {
 	return typeIter(*o, castSoftwareSoftwareArtifact)
@@ -3417,9 +3140,6 @@ type AnyBom interface {
 
 type BomList []AnyBom
 
-func (o *BomList) Append(values ...AnyBom) { *o = append(*o, values...) }
-func (o *BomList) Remove(value AnyBom)     { remove(o, value) }
-
 func (o *BomList) BomIter() iter.Seq2[AnyBom, *Bom] { return typeIter(*o, castBom) }
 func (o *BomList) SoftwareSbomIter() iter.Seq2[AnyBom, *SoftwareSbom] {
 	return typeIter(*o, castSoftwareSbom)
@@ -3448,13 +3168,6 @@ type AnyExpandedlicensingCustomLicense interface {
 
 type ExpandedlicensingCustomLicenseList []AnyExpandedlicensingCustomLicense
 
-func (o *ExpandedlicensingCustomLicenseList) Append(values ...AnyExpandedlicensingCustomLicense) {
-	*o = append(*o, values...)
-}
-func (o *ExpandedlicensingCustomLicenseList) Remove(value AnyExpandedlicensingCustomLicense) {
-	remove(o, value)
-}
-
 func (o *ExpandedlicensingCustomLicenseList) ExpandedlicensingCustomLicenseIter() iter.Seq2[AnyExpandedlicensingCustomLicense, *ExpandedlicensingCustomLicense] {
 	return typeIter(*o, castExpandedlicensingCustomLicense)
 }
@@ -3466,10 +3179,10 @@ type SecurityVexAffectedVulnAssessmentRelationship struct {
 
 	// Provides advise on how to mitigate or remediate a vulnerability when a VEX product
 	// is affected by it.
-	SecurityActionStatement string
+	SecurityActionStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatement"  iri-compact:"security_actionStatement"`
 	// Records the time when a recommended action was communicated in a VEX statement
 	// to mitigate a vulnerability.
-	SecurityActionStatementTime time.Time
+	SecurityActionStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatementTime"  iri-compact:"security_actionStatementTime"`
 }
 
 func castSecurityVexAffectedVulnAssessmentRelationship(o any) *SecurityVexAffectedVulnAssessmentRelationship {
@@ -3489,13 +3202,6 @@ type AnySecurityVexAffectedVulnAssessmentRelationship interface {
 }
 
 type SecurityVexAffectedVulnAssessmentRelationshipList []AnySecurityVexAffectedVulnAssessmentRelationship
-
-func (o *SecurityVexAffectedVulnAssessmentRelationshipList) Append(values ...AnySecurityVexAffectedVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVexAffectedVulnAssessmentRelationshipList) Remove(value AnySecurityVexAffectedVulnAssessmentRelationship) {
-	remove(o, value)
-}
 
 func (o *SecurityVexAffectedVulnAssessmentRelationshipList) SecurityVexAffectedVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVexAffectedVulnAssessmentRelationship, *SecurityVexAffectedVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVexAffectedVulnAssessmentRelationship)
@@ -3525,13 +3231,6 @@ type AnySecurityVexFixedVulnAssessmentRelationship interface {
 
 type SecurityVexFixedVulnAssessmentRelationshipList []AnySecurityVexFixedVulnAssessmentRelationship
 
-func (o *SecurityVexFixedVulnAssessmentRelationshipList) Append(values ...AnySecurityVexFixedVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVexFixedVulnAssessmentRelationshipList) Remove(value AnySecurityVexFixedVulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityVexFixedVulnAssessmentRelationshipList) SecurityVexFixedVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVexFixedVulnAssessmentRelationship, *SecurityVexFixedVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVexFixedVulnAssessmentRelationship)
 }
@@ -3544,13 +3243,13 @@ type SecurityVexNotAffectedVulnAssessmentRelationship struct {
 	// Explains why a VEX product is not affected by a vulnerability. It is an
 	// alternative in VexNotAffectedVulnAssessmentRelationship to the machine-readable
 	// justification label.
-	SecurityImpactStatement string
+	SecurityImpactStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatement"  iri-compact:"security_impactStatement"`
 	// Timestamp of impact statement.
-	SecurityImpactStatementTime time.Time
+	SecurityImpactStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatementTime"  iri-compact:"security_impactStatementTime"`
 	// Impact justification label to be used when linking a vulnerability to an element
 	// representing a VEX product with a VexNotAffectedVulnAssessmentRelationship
 	// relationship.
-	SecurityJustificationType SecurityVexJustificationType
+	SecurityJustificationType securityVexJustificationType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/justificationType"  iri-compact:"security_justificationType"`
 }
 
 func castSecurityVexNotAffectedVulnAssessmentRelationship(o any) *SecurityVexNotAffectedVulnAssessmentRelationship {
@@ -3570,13 +3269,6 @@ type AnySecurityVexNotAffectedVulnAssessmentRelationship interface {
 }
 
 type SecurityVexNotAffectedVulnAssessmentRelationshipList []AnySecurityVexNotAffectedVulnAssessmentRelationship
-
-func (o *SecurityVexNotAffectedVulnAssessmentRelationshipList) Append(values ...AnySecurityVexNotAffectedVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVexNotAffectedVulnAssessmentRelationshipList) Remove(value AnySecurityVexNotAffectedVulnAssessmentRelationship) {
-	remove(o, value)
-}
 
 func (o *SecurityVexNotAffectedVulnAssessmentRelationshipList) SecurityVexNotAffectedVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVexNotAffectedVulnAssessmentRelationship, *SecurityVexNotAffectedVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVexNotAffectedVulnAssessmentRelationship)
@@ -3606,13 +3298,6 @@ type AnySecurityVexUnderInvestigationVulnAssessmentRelationship interface {
 
 type SecurityVexUnderInvestigationVulnAssessmentRelationshipList []AnySecurityVexUnderInvestigationVulnAssessmentRelationship
 
-func (o *SecurityVexUnderInvestigationVulnAssessmentRelationshipList) Append(values ...AnySecurityVexUnderInvestigationVulnAssessmentRelationship) {
-	*o = append(*o, values...)
-}
-func (o *SecurityVexUnderInvestigationVulnAssessmentRelationshipList) Remove(value AnySecurityVexUnderInvestigationVulnAssessmentRelationship) {
-	remove(o, value)
-}
-
 func (o *SecurityVexUnderInvestigationVulnAssessmentRelationshipList) SecurityVexUnderInvestigationVulnAssessmentRelationshipIter() iter.Seq2[AnySecurityVexUnderInvestigationVulnAssessmentRelationship, *SecurityVexUnderInvestigationVulnAssessmentRelationship] {
 	return typeIter(*o, castSecurityVexUnderInvestigationVulnAssessmentRelationship)
 }
@@ -3622,9 +3307,9 @@ type SoftwareFile struct {
 	SoftwareSoftwareArtifact
 
 	// Provides information about the content type of an Element or a Property.
-	ContentType string
+	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType"  iri-compact:"contentType"`
 	// Describes if a given file is a directory or non-directory kind of file.
-	SoftwareFileKind SoftwareFileKindType
+	SoftwareFileKind softwareFileKindType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/fileKind"  iri-compact:"software_fileKind"`
 }
 
 func castSoftwareFile(o any) *SoftwareFile {
@@ -3645,9 +3330,6 @@ type AnySoftwareFile interface {
 
 type SoftwareFileList []AnySoftwareFile
 
-func (o *SoftwareFileList) Append(values ...AnySoftwareFile) { *o = append(*o, values...) }
-func (o *SoftwareFileList) Remove(value AnySoftwareFile)     { remove(o, value) }
-
 func (o *SoftwareFileList) SoftwareFileIter() iter.Seq2[AnySoftwareFile, *SoftwareFile] {
 	return typeIter(*o, castSoftwareFile)
 }
@@ -3659,18 +3341,18 @@ type SoftwarePackage struct {
 
 	// Identifies the download Uniform Resource Identifier for the package at the time
 	// that the document was created.
-	SoftwareDownloadLocation string
+	SoftwareDownloadLocation string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation"  iri-compact:"software_downloadLocation"`
 	// A place for the SPDX document creator to record a website that serves as the
 	// package's home page.
-	SoftwareHomePage string
+	SoftwareHomePage string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/homePage"  iri-compact:"software_homePage"`
 	// Provides a place for the SPDX data creator to record the package URL string
 	// (in accordance with the Package URL specification) for a software Package.
-	SoftwarePackageUrl string
+	SoftwarePackageUrl string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageUrl"  iri-compact:"software_packageUrl"`
 	// Identify the version of a package.
-	SoftwarePackageVersion string
+	SoftwarePackageVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageVersion"  iri-compact:"software_packageVersion"`
 	// Records any relevant background information or additional comments
 	// about the origin of the package.
-	SoftwareSourceInfo string
+	SoftwareSourceInfo string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sourceInfo"  iri-compact:"software_sourceInfo"`
 }
 
 func castSoftwarePackage(o any) *SoftwarePackage {
@@ -3691,9 +3373,6 @@ type AnySoftwarePackage interface {
 
 type SoftwarePackageList []AnySoftwarePackage
 
-func (o *SoftwarePackageList) Append(values ...AnySoftwarePackage) { *o = append(*o, values...) }
-func (o *SoftwarePackageList) Remove(value AnySoftwarePackage)     { remove(o, value) }
-
 func (o *SoftwarePackageList) SoftwarePackageIter() iter.Seq2[AnySoftwarePackage, *SoftwarePackage] {
 	return typeIter(*o, castSoftwarePackage)
 }
@@ -3709,7 +3388,7 @@ type SoftwareSbom struct {
 	Bom
 
 	// Provides information about the type of an SBOM.
-	SoftwareSbomTypes []SoftwareSbomType
+	SoftwareSbomTypes []softwareSbomType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sbomType"  iri-compact:"software_sbomType"`
 }
 
 func castSoftwareSbom(o any) *SoftwareSbom {
@@ -3730,9 +3409,6 @@ type AnySoftwareSbom interface {
 
 type SoftwareSbomList []AnySoftwareSbom
 
-func (o *SoftwareSbomList) Append(values ...AnySoftwareSbom) { *o = append(*o, values...) }
-func (o *SoftwareSbomList) Remove(value AnySoftwareSbom)     { remove(o, value) }
-
 func (o *SoftwareSbomList) SoftwareSbomIter() iter.Seq2[AnySoftwareSbom, *SoftwareSbom] {
 	return typeIter(*o, castSoftwareSbom)
 }
@@ -3743,14 +3419,14 @@ type SoftwareSnippet struct {
 
 	// Defines the byte range in the original host file that the snippet information
 	// applies to.
-	SoftwareByteRange AnyPositiveIntegerRange
+	SoftwareByteRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/byteRange"  iri-compact:"software_byteRange"`
 
 	// Defines the line range in the original host file that the snippet information
 	// applies to.
-	SoftwareLineRange AnyPositiveIntegerRange
+	SoftwareLineRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/lineRange"  iri-compact:"software_lineRange"`
 
 	// Defines the original host file that the snippet information applies to.
-	SoftwareSnippetFromFile AnySoftwareFile
+	SoftwareSnippetFromFile AnySoftwareFile `iri:"https://spdx.org/rdf/3.0.1/terms/Software/snippetFromFile"  iri-compact:"software_snippetFromFile"`
 }
 
 func castSoftwareSnippet(o any) *SoftwareSnippet {
@@ -3771,9 +3447,6 @@ type AnySoftwareSnippet interface {
 
 type SoftwareSnippetList []AnySoftwareSnippet
 
-func (o *SoftwareSnippetList) Append(values ...AnySoftwareSnippet) { *o = append(*o, values...) }
-func (o *SoftwareSnippetList) Remove(value AnySoftwareSnippet)     { remove(o, value) }
-
 func (o *SoftwareSnippetList) SoftwareSnippetIter() iter.Seq2[AnySoftwareSnippet, *SoftwareSnippet] {
 	return typeIter(*o, castSoftwareSnippet)
 }
@@ -3784,44 +3457,44 @@ type AiAIPackage struct {
 
 	// Indicates whether the system can perform a decision or action without human
 	// involvement or guidance.
-	AiAutonomyType PresenceType
+	AiAutonomyType presenceType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/autonomyType"  iri-compact:"ai_autonomyType"`
 	// Captures the domain in which the AI package can be used.
-	AiDomains []string
+	AiDomains []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/domain"  iri-compact:"ai_domain"`
 	// Indicates the amount of energy consumption incurred by an AI model.
-	AiEnergyConsumption AnyAiEnergyConsumption
+	AiEnergyConsumption AnyAiEnergyConsumption `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyConsumption"  iri-compact:"ai_energyConsumption"`
 
 	// Records a hyperparameter used to build the AI model contained in the AI
 	// package.
-	AiHyperparameters DictionaryEntryList
+	AiHyperparameters DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/hyperparameter"  iri-compact:"ai_hyperparameter"`
 
 	// Provides relevant information about the AI software, not including the model
 	// description.
-	AiInformationAboutApplication string
+	AiInformationAboutApplication string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/informationAboutApplication"  iri-compact:"ai_informationAboutApplication"`
 	// Describes relevant information about different steps of the training process.
-	AiInformationAboutTraining string
+	AiInformationAboutTraining string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/informationAboutTraining"  iri-compact:"ai_informationAboutTraining"`
 	// Captures a limitation of the AI software.
-	AiLimitation string
+	AiLimitation string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/limitation"  iri-compact:"ai_limitation"`
 	// Records the measurement of prediction quality of the AI model.
-	AiMetrics DictionaryEntryList
+	AiMetrics DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/metric"  iri-compact:"ai_metric"`
 
 	// Captures the threshold that was used for computation of a metric described in
 	// the metric field.
-	AiMetricDecisionThresholds DictionaryEntryList
+	AiMetricDecisionThresholds DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/metricDecisionThreshold"  iri-compact:"ai_metricDecisionThreshold"`
 
 	// Describes all the preprocessing steps applied to the training data before the
 	// model training.
-	AiModelDataPreprocessings []string
+	AiModelDataPreprocessings []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/modelDataPreprocessing"  iri-compact:"ai_modelDataPreprocessing"`
 	// Describes methods that can be used to explain the results from the AI model.
-	AiModelExplainabilitys []string
+	AiModelExplainabilitys []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/modelExplainability"  iri-compact:"ai_modelExplainability"`
 	// Records the results of general safety risk assessment of the AI system.
-	AiSafetyRiskAssessment AiSafetyRiskAssessmentType
+	AiSafetyRiskAssessment aiSafetyRiskAssessmentType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/safetyRiskAssessment"  iri-compact:"ai_safetyRiskAssessment"`
 	// Captures a standard that is being complied with.
-	AiStandardCompliances []string
+	AiStandardCompliances []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/standardCompliance"  iri-compact:"ai_standardCompliance"`
 	// Records the type of the model used in the AI software.
-	AiTypeOfModels []string
+	AiTypeOfModels []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/typeOfModel"  iri-compact:"ai_typeOfModel"`
 	// Records if sensitive personal information is used during model training or
 	// could be used during the inference.
-	AiUseSensitivePersonalInformation PresenceType
+	AiUseSensitivePersonalInformation presenceType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/useSensitivePersonalInformation"  iri-compact:"ai_useSensitivePersonalInformation"`
 }
 
 func castAiAIPackage(o any) *AiAIPackage {
@@ -3842,9 +3515,6 @@ type AnyAiAIPackage interface {
 
 type AiAIPackageList []AnyAiAIPackage
 
-func (o *AiAIPackageList) Append(values ...AnyAiAIPackage) { *o = append(*o, values...) }
-func (o *AiAIPackageList) Remove(value AnyAiAIPackage)     { remove(o, value) }
-
 func (o *AiAIPackageList) AiAIPackageIter() iter.Seq2[AnyAiAIPackage, *AiAIPackage] {
 	return typeIter(*o, castAiAIPackage)
 }
@@ -3854,31 +3524,31 @@ type DatasetDatasetPackage struct {
 	SoftwarePackage
 
 	// Describes the anonymization methods used.
-	DatasetAnonymizationMethodUseds []string
+	DatasetAnonymizationMethodUseds []string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/anonymizationMethodUsed"  iri-compact:"dataset_anonymizationMethodUsed"`
 	// Describes the confidentiality level of the data points contained in the dataset.
-	DatasetConfidentialityLevel DatasetConfidentialityLevelType
+	DatasetConfidentialityLevel datasetConfidentialityLevelType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/confidentialityLevel"  iri-compact:"dataset_confidentialityLevel"`
 	// Describes how the dataset was collected.
-	DatasetDataCollectionProcess string
+	DatasetDataCollectionProcess string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/dataCollectionProcess"  iri-compact:"dataset_dataCollectionProcess"`
 	// Describes the preprocessing steps that were applied to the raw data to create the given dataset.
-	DatasetDataPreprocessings []string
+	DatasetDataPreprocessings []string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/dataPreprocessing"  iri-compact:"dataset_dataPreprocessing"`
 	// The field describes the availability of a dataset.
-	DatasetDatasetAvailability DatasetDatasetAvailabilityType
+	DatasetDatasetAvailability datasetDatasetAvailabilityType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetAvailability"  iri-compact:"dataset_datasetAvailability"`
 	// Describes potentially noisy elements of the dataset.
-	DatasetDatasetNoise string
+	DatasetDatasetNoise string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetNoise"  iri-compact:"dataset_datasetNoise"`
 	// Captures the size of the dataset.
-	DatasetDatasetSize int
+	DatasetDatasetSize int `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetSize"  iri-compact:"dataset_datasetSize"`
 	// Describes the type of the given dataset.
-	DatasetDatasetTypes []DatasetDatasetType
+	DatasetDatasetTypes []datasetDatasetType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetType"  iri-compact:"dataset_datasetType"`
 	// Describes a mechanism to update the dataset.
-	DatasetDatasetUpdateMechanism string
+	DatasetDatasetUpdateMechanism string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetUpdateMechanism"  iri-compact:"dataset_datasetUpdateMechanism"`
 	// Describes if any sensitive personal information is present in the dataset.
-	DatasetHasSensitivePersonalInformation PresenceType
+	DatasetHasSensitivePersonalInformation presenceType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/hasSensitivePersonalInformation"  iri-compact:"dataset_hasSensitivePersonalInformation"`
 	// Describes what the given dataset should be used for.
-	DatasetIntendedUse string
+	DatasetIntendedUse string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/intendedUse"  iri-compact:"dataset_intendedUse"`
 	// Records the biases that the dataset is known to encompass.
-	DatasetKnownBias []string
+	DatasetKnownBias []string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/knownBias"  iri-compact:"dataset_knownBias"`
 	// Describes a sensor used for collecting the data.
-	DatasetSensors DictionaryEntryList
+	DatasetSensors DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/sensor"  iri-compact:"dataset_sensor"`
 }
 
 func castDatasetDatasetPackage(o any) *DatasetDatasetPackage {
@@ -3898,11 +3568,6 @@ type AnyDatasetDatasetPackage interface {
 }
 
 type DatasetDatasetPackageList []AnyDatasetDatasetPackage
-
-func (o *DatasetDatasetPackageList) Append(values ...AnyDatasetDatasetPackage) {
-	*o = append(*o, values...)
-}
-func (o *DatasetDatasetPackageList) Remove(value AnyDatasetDatasetPackage) { remove(o, value) }
 
 func (o *DatasetDatasetPackageList) DatasetDatasetPackageIter() iter.Seq2[AnyDatasetDatasetPackage, *DatasetDatasetPackage] {
 	return typeIter(*o, castDatasetDatasetPackage)
@@ -4307,9 +3972,11 @@ func cast[T any](value any) *T {
 	panic("invalid type cast, unknown type: " + reflect.TypeOf(t).String())
 }
 
-func As[T any](value any, f func(v *T)) {
+func As[T any, R any](value any, f func(v *T) R) R {
 	v := cast[T](value)
 	if v != nil {
-		f(v)
+		return f(v)
 	}
+	var r R
+	return r
 }

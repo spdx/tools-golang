@@ -27,7 +27,7 @@ func Test_exportImportExport(t *testing.T) {
 		}})
 
 	sbom := &spdx.SoftwareSbom{}
-	doc.RootElements.Append(sbom)
+	doc.RootElements = append(doc.RootElements, sbom)
 
 	// create a package
 
@@ -46,18 +46,18 @@ func Test_exportImportExport(t *testing.T) {
 
 	// add the packages to the sbom
 
-	sbom.RootElements.Append(pkg1, pkg2)
+	sbom.RootElements = append(sbom.RootElements, pkg1, pkg2)
 
 	// add a file
 
 	file1 := &spdx.SoftwareFile{SoftwareSoftwareArtifact: spdx.SoftwareSoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
 		Name: "/bin/bash",
 	}}}}
-	sbom.RootElements.Append(file1)
+	sbom.RootElements = append(sbom.RootElements, file1)
 
 	// add relationships
 
-	sbom.RootElements.Append(&spdx.Relationship{
+	sbom.RootElements = append(sbom.RootElements, &spdx.Relationship{
 		From:             file1,
 		RelationshipType: spdx.RelationshipType_Contains,
 		Tos: spdx.ElementList{
@@ -66,7 +66,7 @@ func Test_exportImportExport(t *testing.T) {
 		},
 	})
 
-	sbom.RootElements.Append(&spdx.Relationship{
+	sbom.RootElements = append(sbom.RootElements, &spdx.Relationship{
 		From:             pkg1,
 		RelationshipType: spdx.RelationshipType_DependsOn,
 		Tos: spdx.ElementList{
@@ -74,63 +74,23 @@ func Test_exportImportExport(t *testing.T) {
 		},
 	})
 
-	// serialize
-
-	//buf := bytes.Buffer{}
-	//err := doc.ToJSON(&buf)
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//
-	//json1 := buf.String()
-	//fmt.Printf("--------- initial JSON: ----------\n%s\n\n", json1)
-	//
-	//// deserialize to a new document
-	//
-	//doc = spdx.NewDocument(&spdx.SoftwareAgent{})
-	//err = doc.FromJSON(strings.NewReader(json1))
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//
-	//// re-serialize
-	//
-	//buf.Reset()
-	//err = doc.ToJSON(&buf)
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//json2 := buf.String()
-	//fmt.Printf("--------- reserialized JSON: ----------\n%s\n", json2)
-	//
-	//// compare original to parsed and re-encoded
-	//
-	//diff := difflib.UnifiedDiff{
-	//	A:        difflib.SplitLines(json1),
-	//	B:        difflib.SplitLines(json2),
-	//	FromFile: "Original",
-	//	ToFile:   "Current",
-	//	Context:  3,
-	//}
-	//text, _ := difflib.GetUnifiedDiffString(diff)
-	//if text != "" {
-	//	t.Errorf(text)
-	//}
-
 	// some basic usage:
 
 	var pkgs []*spdx.SoftwarePackage
 	for _, sbom := range doc.RootElements.SoftwareSbomIter() {
 		for _, rel := range sbom.RootElements.RelationshipIter() {
-			if rel.RelationshipType == spdx.RelationshipType_Contains {
-				spdx.As(rel.From, func(f *spdx.SoftwareFile) {
-					if f.Name == "/bin/bash" {
-						for _, pkg := range rel.Tos.SoftwarePackageIter() {
-							pkgs = append(pkgs, pkg)
-						}
-					}
-				})
+			if rel.RelationshipType != spdx.RelationshipType_Contains {
+				continue
 			}
+			_ = spdx.As(rel.From, func(f *spdx.SoftwareFile) any {
+				if f.Name == "/bin/bash" {
+					for _, pkg := range rel.Tos.SoftwarePackageIter() {
+						pkgs = append(pkgs, pkg)
+					}
+				}
+				return nil
+			})
+
 		}
 	}
 	if len(pkgs) != 2 {
@@ -138,77 +98,8 @@ func Test_exportImportExport(t *testing.T) {
 	}
 }
 
-func Test_aiProfile(t *testing.T) {
-	doc := spdx.NewDocument(spdx.ProfileIdentifierType_Ai, "", &spdx.SoftwareAgent{Agent: spdx.Agent{Element: spdx.Element{
-		Name:    "tools-golang",
-		Summary: "a summary",
-	}}}, nil)
-
-	aiPkg := &spdx.AiAIPackage{
-		SoftwarePackage: spdx.SoftwarePackage{SoftwareSoftwareArtifact: spdx.SoftwareSoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
-			Name: "some ai package",
-		}}}},
-		AiEnergyConsumption: &spdx.AiEnergyConsumption{
-			AiFinetuningEnergyConsumptions: spdx.AiEnergyConsumptionDescriptionList{
-				&spdx.AiEnergyConsumptionDescription{
-					AiEnergyQuantity: 1.2,
-					AiEnergyUnit:     spdx.AiEnergyUnitType_KilowattHour,
-				},
-			},
-			AiTrainingEnergyConsumptions: spdx.AiEnergyConsumptionDescriptionList{
-				&spdx.AiEnergyConsumptionDescription{
-					AiEnergyQuantity: 5032402,
-					AiEnergyUnit:     spdx.AiEnergyUnitType_KilowattHour,
-				},
-			},
-		},
-		AiTypeOfModels: []string{
-			"Llama 3 8B",
-		},
-	}
-
-	doc.RootElements.Append(aiPkg)
-
-	// serialize
-
-	//buf := bytes.Buffer{}
-	//err := doc.ToJSON(&buf)
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//
-	//json1 := buf.String()
-	//fmt.Printf("--------- initial JSON: ----------\n%s\n\n", json1)
-	//
-	//// deserialize to a new document
-	//
-	//doc = spdx.NewDocument(&spdx.SoftwareAgent{})
-	//err = doc.FromJSON(strings.NewReader(json1))
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//
-	//// re-serialize
-	//
-	//buf.Reset()
-	//err = doc.ToJSON(&buf)
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//json2 := buf.String()
-	//fmt.Printf("--------- reserialized JSON: ----------\n%s\n", json2)
-	//
-	//// compare original to parsed and re-encoded
-	//
-	//diff := difflib.UnifiedDiff{
-	//	A:        difflib.SplitLines(json1),
-	//	B:        difflib.SplitLines(json2),
-	//	FromFile: "Original",
-	//	ToFile:   "Current",
-	//	Context:  3,
-	//}
-	//text, _ := difflib.GetUnifiedDiffString(diff)
-	//if text != "" {
-	//	t.Errorf(text)
-	//}
+func newTestDocument() *spdx.Document {
+	return spdx.NewDocument(spdx.ProfileIdentifierType_Lite, "test document",
+		&spdx.SoftwareAgent{Agent: spdx.Agent{Element: spdx.Element{Name: "tools-golang-tests-agent", Summary: "a summary"}}},
+		&spdx.Tool{Element: spdx.Element{Name: "tools-golang-tests-tool"}})
 }
