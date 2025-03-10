@@ -1,8 +1,13 @@
 package v3_0
 
 import (
+	"fmt"
+	"io"
 	"reflect"
 	"time"
+
+	"github.com/davecgh/go-spew/spew"
+	"github.com/kzantow/go-ld"
 )
 
 /*
@@ -17,13 +22,19 @@ To regenerate, use something like this command:
 
 type Document struct {
 	*SpdxDocument
+	LDContext ld.Context
 }
 
-func NewDocument(conformance profileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
+func LDContext() ld.Context {
+	return context()
+}
+
+func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
 	ci := &CreationInfo{
-		Created:       time.Now(),
-		CreatedBys:    AgentList{createdBy},
-		CreatedUsings: ToolList{createdUsing},
+		SpecVersion:  "3.0.1", // TODO is there a way to ascertain this version from generated code programmatically?
+		Created:      time.Now(),
+		CreatedBy:    AgentList{createdBy},
+		CreatedUsing: ToolList{createdUsing},
 	}
 	return &Document{
 		SpdxDocument: &SpdxDocument{
@@ -32,95 +43,91 @@ func NewDocument(conformance profileIdentifierType, name string, createdBy AnyAg
 					Name:         name,
 					CreationInfo: ci,
 				},
-				ProfileConformances: []profileIdentifierType{conformance},
+				ProfileConformances: []ProfileIdentifierType{conformance},
 			},
 		},
-		//LDContext: LDContext(),
+		LDContext: context(),
 	}
+}
+
+func (d *Document) Validate(setCreationInfo bool) error {
+	if setCreationInfo {
+		// all Elements need to have creationInfo set...
+		d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
+	}
+	return ld.ValidateGraph(d.SpdxDocument)
 }
 
 func (d *Document) Append(e ...AnyElement) {
 	d.SpdxDocument.RootElements = append(d.SpdxDocument.RootElements, e...)
-	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e...)
+}
+
+// ToJSON first processes the document by:
+//   - setting each Element's CreationInfo property to the SpdxDocument's CreationInfo if nil
+//   - collecting all element references to the top-level Elements slice
+//
+// ... and after this initial processing, outputs the document as compact JSON LD,
+// including accounting for empty IDs by outputting blank node spdxId values
+func (d *Document) ToJSON(writer io.Writer) error {
+	if d.SpdxDocument == nil {
+		return fmt.Errorf("no document object created")
+	}
+
+	// all Elements need to have creationInfo set...
+	d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
+
+	// ensure the Elements
+	d.ensureAllDocumentElements()
+
+	return d.LDContext.ToJSON(writer, d.SpdxDocument)
 }
 
 func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
-	iCreationInfoType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
+	creationInfoInterfaceType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
 	ci := reflect.ValueOf(creationInfo)
-	_ = visitObjectGraph(map[reflect.Value]struct{}{}, reflect.ValueOf(doc), func(v reflect.Value) error {
-		if v.IsZero() {
-			return nil
-		}
-		t := v.Type()
-		if t.Kind() == reflect.Interface && v.IsNil() && t.Implements(iCreationInfoType) {
-			v.Set(ci)
+	_ = ld.VisitObjectGraph(doc, func(path []any, value reflect.Value) error {
+		t := value.Type()
+		if t == creationInfoInterfaceType && value.IsNil() {
+			value.Set(ci)
 		}
 		return nil
 	})
 }
 
-func (d *Document) ensureSpdxIDs(doc *SpdxDocument, idGen idGenerator) {
-	iElementType := reflect.TypeOf((*AnyElement)(nil)).Elem()
-	_ = visitObjectGraph(map[reflect.Value]struct{}{}, reflect.ValueOf(doc), func(v reflect.Value) error {
-		if v.Type().Implements(iElementType) {
-			el, ok := v.Interface().(AnyElement)
-			if ok {
-				e := el.asElement()
-				if e != nil && e.ID == "" {
-					e.ID = idGen(el)
-				}
-			}
-		}
-		return nil
-	})
-}
-
-type idGenerator func(e any) string
-
-func baseType(t reflect.Type) reflect.Type {
-	for t.Kind() == reflect.Ptr {
-		t = t.Elem()
-	}
-	return t
-}
-
-func visitObjectGraph(visited map[reflect.Value]struct{}, v reflect.Value, visitor func(reflect.Value) error) error {
-	if _, ok := visited[v]; ok {
-		return nil
-	}
-	visited[v] = struct{}{}
-	if !v.IsValid() {
-		return nil
-	}
-	err := visitor(v)
+func (d *Document) FromJSON(reader io.Reader) error {
+	graph, err := d.LDContext.FromJSON(reader)
 	if err != nil {
 		return err
 	}
-	switch v.Kind() {
-	case reflect.Interface:
-		if !v.IsNil() {
-			return visitObjectGraph(visited, v.Elem(), visitor)
-		}
-	case reflect.Pointer:
-		if v.IsNil() {
+	for _, e := range graph {
+		if doc, ok := e.(*SpdxDocument); ok {
+			d.SpdxDocument = doc
 			return nil
 		}
-		return visitObjectGraph(visited, v.Elem(), visitor)
-	case reflect.Struct:
-		for i := 0; i < v.NumField(); i++ {
-			err = visitObjectGraph(visited, v.Field(i), visitor)
-			if err != nil {
-				return err
-			}
-		}
-	case reflect.Slice:
-		for i := 0; i < v.Len(); i++ {
-			err = visitObjectGraph(visited, v.Index(i), visitor)
-			if err != nil {
-				return err
-			}
-		}
-	default:
 	}
-	return nil
+	return fmt.Errorf("no SPDX document found")
+}
+
+func (d *Document) ensureAllDocumentElements() {
+	all := map[reflect.Value]struct{}{}
+	for _, e := range d.Elements {
+		v := reflect.ValueOf(e)
+		if v.Kind() != reflect.Pointer {
+			panic("non-pointer type in elements: %v" + spew.Sdump(v))
+		}
+		all[v] = struct{}{}
+	}
+	all[reflect.ValueOf(d.SpdxDocument)] = struct{}{}
+	_ = ld.VisitObjectGraph(d.SpdxDocument, func(path []any, value reflect.Value) error {
+		if value.Kind() == reflect.Pointer {
+			if _, ok := all[value]; ok {
+				return nil
+			}
+			if e, ok := value.Interface().(AnyElement); ok {
+				all[value] = struct{}{}
+				d.Elements = append(d.Elements, e)
+			}
+		}
+		return nil
+	})
 }
