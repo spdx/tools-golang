@@ -12,6 +12,7 @@ import (
 )
 
 type AnyAIPackage interface {
+	AnyPackage
 	asAIPackage() *AIPackage
 }
 
@@ -62,6 +63,7 @@ func (o *AIPackageList) AIPackages() ld.TypeSeq[AnyAIPackage, *AIPackage] {
 }
 
 type AnyAgent interface {
+	AnyElement
 	asAgent() *Agent
 }
 
@@ -94,6 +96,7 @@ func (o *AgentList) SoftwareAgents() ld.TypeSeq[AnyAgent, *SoftwareAgent] {
 }
 
 type AnyAnnotation interface {
+	AnyElement
 	asAnnotation() *Annotation
 }
 
@@ -138,6 +141,7 @@ var AnnotationType_Review = AnnotationType{
 }
 
 type AnyArtifact interface {
+	AnyElement
 	asArtifact() *Artifact
 }
 
@@ -200,6 +204,7 @@ func (o *ArtifactList) Vulnerabilities() ld.TypeSeq[AnyArtifact, *Vulnerability]
 }
 
 type AnyBom interface {
+	AnyBundle
 	asBom() *Bom
 }
 
@@ -224,6 +229,7 @@ func (o *BomList) Sboms() ld.TypeSeq[AnyBom, *Sbom] {
 }
 
 type AnyBuild interface {
+	AnyElement
 	asBuild() *Build
 }
 
@@ -262,6 +268,7 @@ func (o *BuildList) Builds() ld.TypeSeq[AnyBuild, *Build] {
 }
 
 type AnyBundle interface {
+	AnyElementCollection
 	asBundle() *Bundle
 }
 
@@ -292,6 +299,7 @@ func (o *BundleList) Sboms() ld.TypeSeq[AnyBundle, *Sbom] {
 }
 
 type AnyCdxPropertiesExtension interface {
+	AnyExtension
 	asCdxPropertiesExtension() *CdxPropertiesExtension
 }
 
@@ -364,6 +372,7 @@ var ConfidentialityLevelType_Red = ConfidentialityLevelType{
 }
 
 type AnyConjunctiveLicenseSet interface {
+	AnyLicenseInfo
 	asConjunctiveLicenseSet() *ConjunctiveLicenseSet
 }
 
@@ -386,6 +395,7 @@ func (o *ConjunctiveLicenseSetList) ConjunctiveLicenseSets() ld.TypeSeq[AnyConju
 }
 
 type AnyContentIdentifier interface {
+	AnyIntegrityMethod
 	asContentIdentifier() *ContentIdentifier
 }
 
@@ -456,6 +466,7 @@ func (o *CreationInfoList) CreationInfos() ld.TypeSeq[AnyCreationInfo, *Creation
 }
 
 type AnyCustomLicense interface {
+	AnyLicense
 	asCustomLicense() *CustomLicense
 }
 
@@ -476,6 +487,7 @@ func (o *CustomLicenseList) CustomLicenses() ld.TypeSeq[AnyCustomLicense, *Custo
 }
 
 type AnyCustomLicenseAddition interface {
+	AnyLicenseAddition
 	asCustomLicenseAddition() *CustomLicenseAddition
 }
 
@@ -527,6 +539,7 @@ var CvssSeverityType_None = CvssSeverityType{
 }
 
 type AnyCvssV2VulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asCvssV2VulnAssessmentRelationship() *CvssV2VulnAssessmentRelationship
 }
 
@@ -551,6 +564,7 @@ func (o *CvssV2VulnAssessmentRelationshipList) CvssV2VulnAssessmentRelationships
 }
 
 type AnyCvssV3VulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asCvssV3VulnAssessmentRelationship() *CvssV3VulnAssessmentRelationship
 }
 
@@ -577,6 +591,7 @@ func (o *CvssV3VulnAssessmentRelationshipList) CvssV3VulnAssessmentRelationships
 }
 
 type AnyCvssV4VulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asCvssV4VulnAssessmentRelationship() *CvssV4VulnAssessmentRelationship
 }
 
@@ -634,6 +649,7 @@ var DatasetAvailabilityType_ScrapingScript = DatasetAvailabilityType{
 }
 
 type AnyDatasetPackage interface {
+	AnyPackage
 	asDatasetPackage() *DatasetPackage
 }
 
@@ -780,6 +796,7 @@ func (o *DictionaryEntryList) DictionaryEntries() ld.TypeSeq[AnyDictionaryEntry,
 }
 
 type AnyDisjunctiveLicenseSet interface {
+	AnyLicenseInfo
 	asDisjunctiveLicenseSet() *DisjunctiveLicenseSet
 }
 
@@ -816,7 +833,7 @@ type Element struct {
 	// Name Identifies the name of an Element as designated by the creator.
 	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Extensions Specifies an Extension characterization of some aspect of an Element.
-	Extensions []Extension `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
 	// CreationInfo Provides information about the creation of the Element.
 	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
 	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content\nthat uniquely identifies an Element.
@@ -825,8 +842,8 @@ type Element struct {
 	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
 	// Summary A short description of an Element.
 	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// VerifiedUsings Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
-	VerifiedUsings IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
 func (o *Element) asElement() *Element {
@@ -1040,6 +1057,7 @@ func (o *ElementList) WithAdditionOperators() ld.TypeSeq[AnyElement, *WithAdditi
 }
 
 type AnyElementCollection interface {
+	AnyElement
 	asElementCollection() *ElementCollection
 }
 
@@ -1153,6 +1171,7 @@ var EnergyUnitType_Other = EnergyUnitType{
 }
 
 type AnyEpssVulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asEpssVulnAssessmentRelationship() *EpssVulnAssessmentRelationship
 }
 
@@ -1193,6 +1212,7 @@ var ExploitCatalogType_Other = ExploitCatalogType{
 }
 
 type AnyExploitCatalogVulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asExploitCatalogVulnAssessmentRelationship() *ExploitCatalogVulnAssessmentRelationship
 }
 
@@ -1219,6 +1239,7 @@ func (o *ExploitCatalogVulnAssessmentRelationshipList) ExploitCatalogVulnAssessm
 }
 
 type AnyExtendableLicense interface {
+	AnyLicenseInfo
 	asExtendableLicense() *ExtendableLicense
 }
 
@@ -1254,11 +1275,30 @@ func (o *ExtendableLicenseList) OrLaterOperators() ld.TypeSeq[AnyExtendableLicen
 	return ld.NewTypeSeq(*o, castOrLaterOperator)
 }
 
+type AnyExtension interface {
+	asExtension() *Extension
+}
+
 // Extension A characterization of some aspect of an Element that is associated with the Element in a generalized fashion.
 type Extension struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
-	id string  `iri:"@id"`
+	ID string  `iri:"@id"`
 }
+
+func (o *Extension) asExtension() *Extension {
+	return o
+}
+
+type ExtensionList []AnyExtension
+
+func (o *ExtensionList) CdxPropertiesExtensions() ld.TypeSeq[AnyExtension, *CdxPropertiesExtension] {
+	return ld.NewTypeSeq(*o, castCdxPropertiesExtension)
+}
+
+func (o *ExtensionList) Extensions() ld.TypeSeq[AnyExtension, *Extension] {
+	return ld.NewTypeSeq(*o, castExtension)
+}
+
 type AnyExternalIdentifier interface {
 	asExternalIdentifier() *ExternalIdentifier
 }
@@ -1362,8 +1402,8 @@ type ExternalMap struct {
 	ExternalSpdxId ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalSpdxId" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// LocationHint Provides an indication of where to retrieve an external Element.
 	LocationHint ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locationHint" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// VerifiedUsings Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
-	VerifiedUsings IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// DefiningArtifact Artifact representing a serialization instance of SPDX data containing the\ndefinition of a particular Element.
 	DefiningArtifact AnyArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Core/definingArtifact" type:"https://spdx.org/rdf/3.0.1/terms/Core/Artifact"`
 }
@@ -1643,6 +1683,7 @@ var ExternalRefType_VulnerabilityExploitabilityAssessment = ExternalRefType{
 }
 
 type AnyFile interface {
+	AnySoftwareArtifact
 	asFile() *File
 }
 
@@ -1683,6 +1724,7 @@ var FileKindType_File = FileKindType{
 }
 
 type AnyHash interface {
+	AnyIntegrityMethod
 	asHash() *Hash
 }
 
@@ -1823,6 +1865,7 @@ var HashAlgorithm_Sha512 = HashAlgorithm{
 }
 
 type AnyIndividualElement interface {
+	AnyElement
 	asIndividualElement() *IndividualElement
 }
 
@@ -1853,6 +1896,7 @@ func (o *IndividualElementList) IndividualElements() ld.TypeSeq[AnyIndividualEle
 }
 
 type AnyIndividualLicensingInfo interface {
+	AnyLicenseInfo
 	asIndividualLicensingInfo() *IndividualLicensingInfo
 }
 
@@ -1917,6 +1961,7 @@ func (o *IntegrityMethodList) PackageVerificationCodes() ld.TypeSeq[AnyIntegrity
 }
 
 type AnyLicense interface {
+	AnyExtendableLicense
 	asLicense() *License
 }
 
@@ -1963,6 +2008,7 @@ func (o *LicenseList) ListedLicenses() ld.TypeSeq[AnyLicense, *ListedLicense] {
 }
 
 type AnyLicenseAddition interface {
+	AnyElement
 	asLicenseAddition() *LicenseAddition
 }
 
@@ -2003,6 +2049,7 @@ func (o *LicenseAdditionList) ListedLicenseExceptions() ld.TypeSeq[AnyLicenseAdd
 }
 
 type AnyLicenseExpression interface {
+	AnyLicenseInfo
 	asLicenseExpression() *LicenseExpression
 }
 
@@ -2029,6 +2076,7 @@ func (o *LicenseExpressionList) LicenseExpressions() ld.TypeSeq[AnyLicenseExpres
 }
 
 type AnyLicenseInfo interface {
+	AnyElement
 	asLicenseInfo() *LicenseInfo
 }
 
@@ -2125,6 +2173,7 @@ var LifecycleScopeType_Test = LifecycleScopeType{
 }
 
 type AnyLifecycleScopedRelationship interface {
+	AnyRelationship
 	asLifecycleScopedRelationship() *LifecycleScopedRelationship
 }
 
@@ -2147,6 +2196,7 @@ func (o *LifecycleScopedRelationshipList) LifecycleScopedRelationships() ld.Type
 }
 
 type AnyListedLicense interface {
+	AnyLicense
 	asListedLicense() *ListedLicense
 }
 
@@ -2171,6 +2221,7 @@ func (o *ListedLicenseList) ListedLicenses() ld.TypeSeq[AnyListedLicense, *Liste
 }
 
 type AnyListedLicenseException interface {
+	AnyLicenseAddition
 	asListedLicenseException() *ListedLicenseException
 }
 
@@ -2219,6 +2270,7 @@ func (o *NamespaceMapList) NamespaceMaps() ld.TypeSeq[AnyNamespaceMap, *Namespac
 }
 
 type AnyOrLaterOperator interface {
+	AnyExtendableLicense
 	asOrLaterOperator() *OrLaterOperator
 }
 
@@ -2241,6 +2293,7 @@ func (o *OrLaterOperatorList) OrLaterOperators() ld.TypeSeq[AnyOrLaterOperator, 
 }
 
 type AnyOrganization interface {
+	AnyAgent
 	asOrganization() *Organization
 }
 
@@ -2266,6 +2319,7 @@ func (o *OrganizationList) Organizations() ld.TypeSeq[AnyOrganization, *Organiza
 }
 
 type AnyPackage interface {
+	AnySoftwareArtifact
 	asPackage() *Package
 }
 
@@ -2304,6 +2358,7 @@ func (o *PackageList) Packages() ld.TypeSeq[AnyPackage, *Package] {
 }
 
 type AnyPackageVerificationCode interface {
+	AnyIntegrityMethod
 	asPackageVerificationCode() *PackageVerificationCode
 }
 
@@ -2330,6 +2385,7 @@ func (o *PackageVerificationCodeList) PackageVerificationCodes() ld.TypeSeq[AnyP
 }
 
 type AnyPerson interface {
+	AnyAgent
 	asPerson() *Person
 }
 
@@ -2451,6 +2507,7 @@ var ProfileIdentifierType_Software = ProfileIdentifierType{
 }
 
 type AnyRelationship interface {
+	AnyElement
 	asRelationship() *Relationship
 }
 
@@ -2883,6 +2940,7 @@ var SafetyRiskAssessmentType_Serious = SafetyRiskAssessmentType{
 }
 
 type AnySbom interface {
+	AnyBom
 	asSbom() *Sbom
 }
 
@@ -2941,6 +2999,7 @@ var SbomType_Source = SbomType{
 }
 
 type AnySimpleLicensingText interface {
+	AnyElement
 	asSimpleLicensingText() *SimpleLicensingText
 }
 
@@ -2963,6 +3022,7 @@ func (o *SimpleLicensingTextList) SimpleLicensingTexts() ld.TypeSeq[AnySimpleLic
 }
 
 type AnySnippet interface {
+	AnySoftwareArtifact
 	asSnippet() *Snippet
 }
 
@@ -2989,6 +3049,7 @@ func (o *SnippetList) Snippets() ld.TypeSeq[AnySnippet, *Snippet] {
 }
 
 type AnySoftwareAgent interface {
+	AnyAgent
 	asSoftwareAgent() *SoftwareAgent
 }
 
@@ -3009,6 +3070,7 @@ func (o *SoftwareAgentList) SoftwareAgents() ld.TypeSeq[AnySoftwareAgent, *Softw
 }
 
 type AnySoftwareArtifact interface {
+	AnyArtifact
 	asSoftwareArtifact() *SoftwareArtifact
 }
 
@@ -3210,6 +3272,7 @@ var SoftwarePurpose_Test = SoftwarePurpose{
 }
 
 type AnySpdxDocument interface {
+	AnyElementCollection
 	asSpdxDocument() *SpdxDocument
 }
 
@@ -3262,6 +3325,7 @@ var SsvcDecisionType_TrackStar = SsvcDecisionType{
 }
 
 type AnySsvcVulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asSsvcVulnAssessmentRelationship() *SsvcVulnAssessmentRelationship
 }
 
@@ -3325,6 +3389,7 @@ var SupportType_Support = SupportType{
 }
 
 type AnyTool interface {
+	AnyElement
 	asTool() *Tool
 }
 
@@ -3345,6 +3410,7 @@ func (o *ToolList) Tools() ld.TypeSeq[AnyTool, *Tool] {
 }
 
 type AnyVexAffectedVulnAssessmentRelationship interface {
+	AnyVexVulnAssessmentRelationship
 	asVexAffectedVulnAssessmentRelationship() *VexAffectedVulnAssessmentRelationship
 }
 
@@ -3369,6 +3435,7 @@ func (o *VexAffectedVulnAssessmentRelationshipList) VexAffectedVulnAssessmentRel
 }
 
 type AnyVexFixedVulnAssessmentRelationship interface {
+	AnyVexVulnAssessmentRelationship
 	asVexFixedVulnAssessmentRelationship() *VexFixedVulnAssessmentRelationship
 }
 
@@ -3420,6 +3487,7 @@ var VexJustificationType_VulnerableCodeNotPresent = VexJustificationType{
 }
 
 type AnyVexNotAffectedVulnAssessmentRelationship interface {
+	AnyVexVulnAssessmentRelationship
 	asVexNotAffectedVulnAssessmentRelationship() *VexNotAffectedVulnAssessmentRelationship
 }
 
@@ -3446,6 +3514,7 @@ func (o *VexNotAffectedVulnAssessmentRelationshipList) VexNotAffectedVulnAssessm
 }
 
 type AnyVexUnderInvestigationVulnAssessmentRelationship interface {
+	AnyVexVulnAssessmentRelationship
 	asVexUnderInvestigationVulnAssessmentRelationship() *VexUnderInvestigationVulnAssessmentRelationship
 }
 
@@ -3466,6 +3535,7 @@ func (o *VexUnderInvestigationVulnAssessmentRelationshipList) VexUnderInvestigat
 }
 
 type AnyVexVulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
 	asVexVulnAssessmentRelationship() *VexVulnAssessmentRelationship
 }
 
@@ -3506,6 +3576,7 @@ func (o *VexVulnAssessmentRelationshipList) VexVulnAssessmentRelationships() ld.
 }
 
 type AnyVulnAssessmentRelationship interface {
+	AnyRelationship
 	asVulnAssessmentRelationship() *VulnAssessmentRelationship
 }
 
@@ -3580,6 +3651,7 @@ func (o *VulnAssessmentRelationshipList) VulnAssessmentRelationships() ld.TypeSe
 }
 
 type AnyVulnerability interface {
+	AnyArtifact
 	asVulnerability() *Vulnerability
 }
 
@@ -3606,6 +3678,7 @@ func (o *VulnerabilityList) Vulnerabilities() ld.TypeSeq[AnyVulnerability, *Vuln
 }
 
 type AnyWithAdditionOperator interface {
+	AnyLicenseInfo
 	asWithAdditionOperator() *WithAdditionOperator
 }
 
@@ -3746,6 +3819,10 @@ func (o *ExternalIRI) asExploitCatalogVulnAssessmentRelationship() *ExploitCatal
 
 func (o *ExternalIRI) asExtendableLicense() *ExtendableLicense {
 	return castExtendableLicense(o.value)
+}
+
+func (o *ExternalIRI) asExtension() *Extension {
+	return castExtension(o.value)
 }
 
 func (o *ExternalIRI) asExternalIdentifier() *ExternalIdentifier {
@@ -4089,6 +4166,13 @@ func castExploitCatalogVulnAssessmentRelationship(o any) *ExploitCatalogVulnAsse
 func castExtendableLicense(o any) *ExtendableLicense {
 	if o, ok := o.(AnyExtendableLicense); ok {
 		return o.asExtendableLicense()
+	}
+	return nil
+}
+
+func castExtension(o any) *Extension {
+	if o, ok := o.(AnyExtension); ok {
+		return o.asExtension()
 	}
 	return nil
 }
@@ -4475,6 +4559,10 @@ func cast[T any](value any) *T {
 		}
 	case ExtendableLicense:
 		if v, ok := any(castExtendableLicense(value)).(*T); ok {
+			return v
+		}
+	case Extension:
+		if v, ok := any(castExtension(value)).(*T); ok {
 			return v
 		}
 	case ExternalIdentifier:

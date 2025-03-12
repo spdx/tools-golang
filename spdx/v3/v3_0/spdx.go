@@ -1,6 +1,8 @@
 package v3_0
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"reflect"
@@ -11,49 +13,70 @@ import (
 )
 
 /*
-SPDX 3 models and serialization code is generated from some different prototype golang support for shacl2code, in: https://github.com/kzantow-anchore/shacl2code
-
-To regenerate, use something like this command:
-.venv/bin/python -m shacl2code generate -i https://spdx.org/rdf/3.0.1/spdx-model.ttl -i https://spdx.org/rdf/3.0.1/spdx-json-serialize-annotations.ttl -x https://spdx.org/rdf/3.0.1/spdx-context.jsonld golang
---package v3_0 --license MIT
---output $HOME/projects/tools-golang/spdx/v3/v3_0/model.go
---remap-props element=elements,extension=extensions,externalIdentifier=externalIdentifiers,externalRef=externalRefs,rootElement=rootElements
+SPDX 3 models and serialization code is generated from github.com/kzantow/go-ld/cmd
+To regenerate, run: go run ./cmd
 */
 
+const Version = "3.0.1" // TODO is there a way to ascertain this version from generated code programmatically?
+
 type Document struct {
-	*SpdxDocument
+	SpdxDocument
 	LDContext ld.Context
+}
+
+func (d *Document) MarshalJSON() ([]byte, error) {
+	buf := bytes.Buffer{}
+	err := d.Write(&buf)
+	return buf.Bytes(), err
 }
 
 func LDContext() ld.Context {
 	return context()
 }
 
+func (d *Document) Write(w io.Writer) error {
+	return d.ToJSON(w)
+}
+
 func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
 	ci := &CreationInfo{
-		SpecVersion:  "3.0.1", // TODO is there a way to ascertain this version from generated code programmatically?
+		SpecVersion:  Version,
 		Created:      time.Now(),
 		CreatedBy:    AgentList{createdBy},
 		CreatedUsing: ToolList{createdUsing},
 	}
 	return &Document{
-		SpdxDocument: &SpdxDocument{
+		SpdxDocument: SpdxDocument{
 			ElementCollection: ElementCollection{
 				Element: Element{
 					Name:         name,
 					CreationInfo: ci,
 				},
-				ProfileConformances: []ProfileIdentifierType{conformance},
+				ProfileConformances: conformanceFrom(conformance),
 			},
 		},
 		LDContext: context(),
 	}
 }
 
+func conformanceFrom(conformance ProfileIdentifierType) []ProfileIdentifierType {
+	out := []ProfileIdentifierType{ProfileIdentifierType_Core}
+	switch conformance {
+	case ProfileIdentifierType_Core:
+	case ProfileIdentifierType_Software:
+		out = append(out, conformance)
+	case ProfileIdentifierType_Ai:
+		out = append(out, ProfileIdentifierType_Software, conformance)
+	case ProfileIdentifierType_Dataset:
+		out = append(out, ProfileIdentifierType_Software, ProfileIdentifierType_Ai, conformance)
+	}
+	return out
+}
+
 func (d *Document) Validate(setCreationInfo bool) error {
 	if setCreationInfo {
 		// all Elements need to have creationInfo set...
-		d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
+		d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
 	}
 	return ld.ValidateGraph(d.SpdxDocument)
 }
@@ -69,20 +92,24 @@ func (d *Document) Append(e ...AnyElement) {
 // ... and after this initial processing, outputs the document as compact JSON LD,
 // including accounting for empty IDs by outputting blank node spdxId values
 func (d *Document) ToJSON(writer io.Writer) error {
-	if d.SpdxDocument == nil {
-		return fmt.Errorf("no document object created")
-	}
-
 	// all Elements need to have creationInfo set...
-	d.setCreationInfo(d.SpdxDocument.CreationInfo, d.SpdxDocument)
+	d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
 
 	// ensure the Elements
 	d.ensureAllDocumentElements()
 
+	if d.LDContext == nil {
+		d.LDContext = context()
+	}
 	return d.LDContext.ToJSON(writer, d.SpdxDocument)
 }
 
+var _ json.Marshaler = (*Document)(nil)
+
 func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
+	if creationInfo == nil {
+		return
+	}
 	creationInfoInterfaceType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
 	ci := reflect.ValueOf(creationInfo)
 	_ = ld.VisitObjectGraph(doc, func(path []any, value reflect.Value) error {
@@ -101,7 +128,7 @@ func (d *Document) FromJSON(reader io.Reader) error {
 	}
 	for _, e := range graph {
 		if doc, ok := e.(*SpdxDocument); ok {
-			d.SpdxDocument = doc
+			d.SpdxDocument = *doc
 			return nil
 		}
 	}
