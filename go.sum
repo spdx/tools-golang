@@ -1,10 +1,10 @@
-github.com/anchore/go-struct-converter v0.0.0-20250211213226-cce56d595160 h1:r8/1fxpbDMlQO6GgQiud1uL5eAu3p/NVUmfNx95/KY8=
-github.com/anchore/go-struct-converter v0.0.0-20250211213226-cce56d595160/go.mod h1:rYqSE9HbjzpHTI74vwPvae4ZVYZd1lue2ta6xHPdblA=
+github.com/anchore/go-struct-converter v0.0.0-20250312065156-fb4bbb7d1693 h1:5mW2UozRrZkMhd6tEsN+T5tCk6XxI+qMLu4DmDTUZd4=
+github.com/anchore/go-struct-converter v0.0.0-20250312065156-fb4bbb7d1693/go.mod h1:SxEY1rkVuDSqQOnD1+G4A45wAKXPMum/a51ywvN/8o4=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
-github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
-github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
+github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/kzantow/go-ld v0.0.0-20250806021826-ebdb59bc88e7 h1:rBVkkYUZ9mUDmjp2+Y6KthUqbcSB+4kN82PZbuzYkNw=
 github.com/kzantow/go-ld v0.0.0-20250806021826-ebdb59bc88e7/go.mod h1:P7HdHSjYOcim2o9GWUj011qCd9bEOc+Bg8SeW6JKV8M=
 github.com/piprate/json-gold v0.5.1-0.20241210232033-19254b3ec65b h1:xyh6boGzDR4EpdEDe9ix1KhHNgOSiBjBocahA6FalEQ=

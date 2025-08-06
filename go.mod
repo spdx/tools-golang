@@ -3,9 +3,9 @@ module github.com/spdx/tools-golang
 go 1.23.5
 
 require (
-	github.com/anchore/go-struct-converter v0.0.0-20250211213226-cce56d595160
+	github.com/anchore/go-struct-converter v0.0.0-20250312065156-fb4bbb7d1693
 	github.com/davecgh/go-spew v1.1.1
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/kzantow/go-ld v0.0.0-20250806021826-ebdb59bc88e7
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spdx/gordf v0.0.0-20250128162952-000978ccd6fb
