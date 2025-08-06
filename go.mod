@@ -6,7 +6,7 @@ require (
 	github.com/anchore/go-struct-converter v0.0.0-20250211213226-cce56d595160
 	github.com/davecgh/go-spew v1.1.1
 	github.com/google/go-cmp v0.6.0
-	github.com/kzantow/go-ld v0.0.0-20250305231540-23fb13522625
+	github.com/kzantow/go-ld v0.0.0-20250806021826-ebdb59bc88e7
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spdx/gordf v0.0.0-20250128162952-000978ccd6fb
 	github.com/stretchr/testify v1.10.0

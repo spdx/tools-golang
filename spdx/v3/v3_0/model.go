@@ -4734,6 +4734,11 @@ func As[T any, R any](value any, fn func(v *T) R) R {
 	return r
 }
 
+// Cast provides a reference to any direct or embedded type, which can be edited directly
+func Cast[T any](value any) *T {
+	return cast[T](value)
+}
+
 func context() ld.Context {
 	return ld.NewContext().Register("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", map[string]any{"@context": map[string]any{
 		"Agent":                           "https://spdx.org/rdf/3.0.1/terms/Core/Agent",
