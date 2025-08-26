@@ -41,6 +41,10 @@ func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 
 		path = filepath.ToSlash(path)
 		shortPath := strings.TrimPrefix(path, prefix)
+		if !strings.HasPrefix(shortPath, "/") {
+			//This happens if the dirRoot is "."
+			shortPath = "/" + shortPath
+		}
 
 		// don't include path if it should be ignored
 		if pathsIgnored != nil && ShouldIgnore(shortPath, pathsIgnored) {

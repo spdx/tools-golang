@@ -42,6 +42,40 @@ func TestFilesystemCanGetSliceOfFolderContents(t *testing.T) {
 	}
 }
 
+func TestFilesystemCanGetSliceOfFolderContentsFromRelativeDir(t *testing.T) {
+	t.Chdir("../testdata/project1/")
+
+	filePaths, err := GetAllFilePaths(".", nil)
+	if err != nil {
+		t.Fatalf("expected filePaths, got error: %v", err)
+	}
+	if filePaths == nil {
+		t.Fatalf("expected non-nil filePaths, got nil")
+	}
+	// should only be 5 files
+	// symbolic link in project1/symbolic-link should be ignored
+	if len(filePaths) != 5 {
+		t.Fatalf("expected %v, got %v", 5, len(filePaths))
+	}
+
+	// should be in alphabetical order, with files prefixed with '/'
+	if filePaths[0] != "/emptyfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/emptyfile.testdata.txt", filePaths[0])
+	}
+	if filePaths[1] != "/file1.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file1.testdata.txt", filePaths[1])
+	}
+	if filePaths[2] != "/file3.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/file3.testdata.txt", filePaths[2])
+	}
+	if filePaths[3] != "/folder1/file4.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/folder1/file4.testdata.txt", filePaths[3])
+	}
+	if filePaths[4] != "/lastfile.testdata.txt" {
+		t.Errorf("expected %v, got %v", "/lastfile.testdata.txt", filePaths[4])
+	}
+}
+
 func TestFilesystemGetAllFilePathsFailsForNonExistentDirectory(t *testing.T) {
 	dirRoot := "./does/not/exist/"
 
