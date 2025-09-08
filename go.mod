@@ -8,9 +8,9 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/kzantow/go-ld v0.0.0-20250806021826-ebdb59bc88e7
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/spdx/gordf v0.0.0-20250128162952-000978ccd6fb
-	github.com/stretchr/testify v1.10.0
-	sigs.k8s.io/yaml v1.5.0
+	github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb
+	github.com/stretchr/testify v1.11.1
+	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
