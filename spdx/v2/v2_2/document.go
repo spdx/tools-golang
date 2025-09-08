@@ -7,9 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	converter "github.com/anchore/go-struct-converter"
-
 	"github.com/spdx/tools-golang/spdx/v2/common"
+	"github.com/spdx/tools-golang/spdx/v2/v2_1"
 )
 
 const Version = "SPDX-2.2"
@@ -74,12 +73,13 @@ type Document struct {
 	Reviews []*Review `json:"-"`
 }
 
-func (d *Document) ConvertFrom(_ interface{}) error {
+func From_v2_1(_ v2_1.Document, d *Document) {
 	d.SPDXVersion = Version
-	return nil
 }
 
-var _ converter.ConvertFrom = (*Document)(nil)
+func To_v2_1(_ Document, d *v2_1.Document) {
+	d.SPDXVersion = v2_1.Version
+}
 
 func (d *Document) UnmarshalJSON(b []byte) error {
 	type doc Document
