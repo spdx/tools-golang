@@ -7,7 +7,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb
 	github.com/stretchr/testify v1.11.1
-	sigs.k8s.io/yaml v1.5.0
+	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
