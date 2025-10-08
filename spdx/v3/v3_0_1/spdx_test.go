@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -22,15 +21,11 @@ import (
 
 func Test_customSerialization(t *testing.T) {
 	d := spdx.NewDocument(spdx.ProfileIdentifierType_Software, "adoc", &spdx.Person{
-		Agent: spdx.Agent{
-			Element: spdx.Element{
-				Name: "Keith",
-				ExternalIdentifiers: spdx.ExternalIdentifierList{
-					&spdx.ExternalIdentifier{
-						Type:       spdx.ExternalIdentifierType_Email,
-						Identifier: "keith@example.com",
-					},
-				},
+		Name: "Keith",
+		ExternalIdentifiers: spdx.ExternalIdentifierList{
+			&spdx.ExternalIdentifier{
+				Type:       spdx.ExternalIdentifierType_Email,
+				Identifier: "keith@example.com",
 			},
 		},
 	}, nil)
@@ -48,11 +43,7 @@ func Test_customSerialization(t *testing.T) {
 	})
 
 	a := &spdx.Person{
-		Agent: spdx.Agent{
-			Element: spdx.Element{
-				Name: "Alice",
-			},
-		},
+		Name: "Alice",
 	}
 	sbom.RootElements = append(sbom.RootElements, a)
 
@@ -135,60 +126,49 @@ func Test_validateMinList(t *testing.T) {
 
 func Test_writer(t *testing.T) {
 	d := newTestDocument()
-	pkg1 := &spdx.Package{SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
+	pkg1 := &spdx.Package{
 		Name: "the pkg 2",
-	}}}}
+	}
 	file1 := &spdx.File{
-		SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
-			Name: "a file",
-		}}},
+		Name:        "a file",
 		ContentType: "text", // validation error
 		Kind:        spdx.FileKindType{},
 	}
 	d.RootElements = spdx.ElementList{
-		&spdx.SBOM{BOM: spdx.BOM{Bundle: spdx.Bundle{ElementCollection: spdx.ElementCollection{
-			Element: spdx.Element{
-				Name: "My Bom",
-			},
+		&spdx.SBOM{
+			Name:     "My Bom",
 			Elements: spdx.ElementList{},
-		}}},
 		},
 		file1,
 		pkg1,
 		&spdx.Package{
-			SoftwareArtifact: spdx.SoftwareArtifact{
-				Artifact: spdx.Artifact{
-					Element: spdx.Element{
-						ID:          "some ID!",
-						Name:        "some name",
-						Description: "descr",
-						ExternalIdentifiers: spdx.ExternalIdentifierList{
-							&spdx.ExternalIdentifier{
-								IdentifierLocators: []ld.URI{
-									"locator1",
-									"locator2",
-								},
-								Identifier: "CVE-2024-1234",
-								Type:       spdx.ExternalIdentifierType_Cve,
-							},
-						},
-						ExternalRefs:  nil,
-						Summary:       "",
-						VerifiedUsing: nil,
+			ID:          "some ID!",
+			Name:        "some name",
+			Description: "descr",
+			ExternalIdentifiers: spdx.ExternalIdentifierList{
+				&spdx.ExternalIdentifier{
+					IdentifierLocators: []ld.URI{
+						"locator1",
+						"locator2",
 					},
-					StandardNames: []string{
-						"standard-name1",
-						"standard-name2",
-					},
-					ReleaseTime: time.Now(),
+					Identifier: "CVE-2024-1234",
+					Type:       spdx.ExternalIdentifierType_Cve,
 				},
-				AdditionalPurposes: []spdx.SoftwarePurpose{
-					spdx.SoftwarePurpose_Container,
-					spdx.SoftwarePurpose_Library,
-				},
-				PrimaryPurpose: spdx.SoftwarePurpose_Application,
-				CopyrightText:  "",
 			},
+			ExternalRefs:  nil,
+			Summary:       "",
+			VerifiedUsing: nil,
+			StandardNames: []string{
+				"standard-name1",
+				"standard-name2",
+			},
+			ReleaseTime: time.Now(),
+			AdditionalPurposes: []spdx.SoftwarePurpose{
+				spdx.SoftwarePurpose_Container,
+				spdx.SoftwarePurpose_Library,
+			},
+			PrimaryPurpose: spdx.SoftwarePurpose_Application,
+			CopyrightText:  "",
 		},
 	}
 
@@ -220,24 +200,64 @@ func Test_writer(t *testing.T) {
 	//	info.Created = info.Created.Add(time.Hour)
 	//	return nil
 	//})
-	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, append(testOpts,
-		cmpopts.IgnoreFields(spdx.Element{}, "ID"),
-		cmpopts.IgnoreFields(spdx.Element{}, "CreationInfo"),
-		cmpopts.EquateEmpty(),
-	)...)
+	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, diffOpts()...)
 	if diff != "" {
 		t.Fatal(diff)
 	}
 }
 
-var testOpts = []cmp.Option{
-	cmp.Transformer("truncate_time.Time", func(t time.Time) time.Time {
-		return t.Truncate(time.Second)
-	}),
-	// export and compare unexported fields
-	cmp.Exporter(func(r reflect.Type) bool {
-		return true
-	}),
+func diffOpts() []cmp.Option {
+	var out []cmp.Option
+	for _, t := range []any{
+		spdx.Package{},
+		spdx.AIPackage{},
+		spdx.Relationship{},
+		spdx.File{},
+		spdx.Snippet{},
+		spdx.Annotation{},
+		spdx.Tool{},
+		spdx.Person{},
+		spdx.Organization{},
+		spdx.CustomLicense{},
+		spdx.ListedLicense{},
+		spdx.SpdxDocument{},
+		spdx.SBOM{},
+	} {
+		out = append(out,
+			cmpopts.IgnoreUnexported(t),
+			cmpopts.IgnoreFields(t, "ID", "CreationInfo"),
+		)
+	}
+	for _, t := range []any{
+		spdx.SpdxDocument{},
+		spdx.SBOM{},
+		spdx.Bundle{},
+	} {
+		out = append(out,
+			cmpopts.IgnoreFields(t, "Elements"),
+		)
+	}
+	out = append(out,
+		cmp.Transformer("truncate_time.Time", func(t time.Time) time.Time {
+			return t.Truncate(time.Second)
+		}),
+		cmpopts.IgnoreFields(spdx.Document{}, "LDContext"),
+		cmpopts.IgnoreFields(spdx.CreationInfo{}, "CreatedUsing"),
+		cmpopts.EquateComparable(
+			spdx.ExternalIdentifierType{},
+			spdx.HashAlgorithm{},
+			spdx.FileKindType{},
+			spdx.SoftwarePurpose{},
+			spdx.PresenceType{},
+			spdx.SafetyRiskAssessmentType{},
+			spdx.RelationshipCompleteness{},
+			spdx.RelationshipType{},
+			spdx.AnnotationType{},
+			spdx.ProfileIdentifierType{},
+			spdx.ExternalIRI{},
+		),
+	)
+	return out
 }
 
 func Test_reader(t *testing.T) {
@@ -248,28 +268,20 @@ func Test_reader(t *testing.T) {
 	require.NoError(t, err)
 	t.Logf("sample document:\n%#v", d)
 
-	sboms := each(d.RootElements.SBOMs())
+	sboms := d.RootElements.SBOMs()
 	require.Len(t, sboms, 1)
 
-	packages := each(sboms[0].RootElements.Packages())
+	packages := sboms[0].GetRootElements().Packages()
 	require.Len(t, packages, 1)
 
-	rels := each(d.Elements.Relationships())
+	rels := d.Elements.Relationships()
 	require.Len(t, rels, 1)
 
 	// this is the only reference to the package I see:
-	p := spdx.Cast[spdx.Package](rels[0].From)
+	p := rels[0].GetFrom().(*spdx.Package)
 	require.NotNil(t, p)
 	require.NotEqual(t, time.Time{}, p.BuiltTime)
 	require.Equal(t, "my-package", p.Name)
-}
-
-func each[Element, View any](s ld.TypeSeq[Element, View]) []View {
-	var out []View
-	for _, v := range s {
-		out = append(out, v)
-	}
-	return out
 }
 
 func Test_readerExpanded(t *testing.T) {
@@ -280,20 +292,21 @@ func Test_readerExpanded(t *testing.T) {
 	require.NoError(t, err)
 	fmt.Printf("%#v\n", d)
 	for _, fi := range d.Elements.Files() {
-		println("File ID: " + fi.ID)
+		//println("File ID: " + fi.ID)
+		println("File Name: " + fi.GetName())
 	}
 
-	sboms := each(d.RootElements.SBOMs())
+	sboms := d.RootElements.SBOMs()
 	require.Len(t, sboms, 1)
 
-	packages := each(sboms[0].RootElements.Packages())
+	packages := sboms[0].GetRootElements().Packages()
 	require.Len(t, packages, 1)
 
-	rels := each(d.Elements.Relationships())
+	rels := d.Elements.Relationships()
 	require.Len(t, rels, 1)
 
 	// this is the only reference to the package I see:
-	p := spdx.Cast[spdx.Package](rels[0].From)
+	p := rels[0].GetFrom().(*spdx.Package)
 	require.NotNil(t, p)
 	require.NotEqual(t, time.Time{}, p.BuiltTime)
 	require.Equal(t, "my-package", p.Name)
@@ -323,11 +336,11 @@ func Test_exportImportExport(t *testing.T) {
 	doc := spdx.NewDocument(
 		spdx.ProfileIdentifierType_Software,
 		"My Document",
-		&spdx.SoftwareAgent{Agent: spdx.Agent{Element: spdx.Element{
+		&spdx.SoftwareAgent{
 			Name:    "tools-golang",
 			Summary: "a summary",
-		}}},
-		&spdx.Tool{Element: spdx.Element{
+		},
+		&spdx.Tool{
 			ExternalIdentifiers: spdx.ExternalIdentifierList{
 				&spdx.ExternalIdentifier{
 					Type:       spdx.ExternalIdentifierType_Cpe23,
@@ -336,7 +349,7 @@ func Test_exportImportExport(t *testing.T) {
 			},
 			ExternalRefs: nil,
 			Name:         "not-tools-golang",
-		}})
+		})
 
 	sbom := &spdx.SBOM{}
 	doc.RootElements = append(doc.RootElements, sbom)
@@ -344,9 +357,7 @@ func Test_exportImportExport(t *testing.T) {
 	// create a package
 
 	pkg1 := &spdx.Package{
-		SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
-			Name: "some-package-1",
-		}}},
+		Name:    "some-package-1",
 		Version: "1.2.3",
 	}
 
@@ -362,9 +373,9 @@ func Test_exportImportExport(t *testing.T) {
 
 	// add a file
 
-	file1 := &spdx.File{SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
+	file1 := &spdx.File{
 		Name: "/bin/bash",
-	}}}}
+	}
 	sbom.RootElements = append(sbom.RootElements, file1)
 
 	// add relationships
@@ -431,21 +442,18 @@ func Test_exportImportExport(t *testing.T) {
 
 	// some basic usage:
 
-	var pkgs []*spdx.Package
+	var pkgs []spdx.AnyPackage
 	for _, sbom := range doc.RootElements.SBOMs() {
-		for _, rel := range sbom.RootElements.Relationships() {
-			if rel.Type != spdx.RelationshipType_Contains {
+		for _, rel := range sbom.GetRootElements().Relationships() {
+			if rel.GetType() != spdx.RelationshipType_Contains {
 				continue
 			}
-			_ = spdx.As(rel.From, func(f *spdx.File) any {
-				if f.Name == "/bin/bash" {
-					for _, pkg := range rel.To.Packages() {
-						pkgs = append(pkgs, pkg)
-					}
+			f := rel.GetFrom().(*spdx.File)
+			if f.Name == "/bin/bash" {
+				for _, pkg := range rel.GetTo().Packages() {
+					pkgs = append(pkgs, pkg)
 				}
-				return nil
-			})
-
+			}
 		}
 	}
 	if len(pkgs) != 2 {
@@ -454,15 +462,13 @@ func Test_exportImportExport(t *testing.T) {
 }
 
 func Test_aiProfile(t *testing.T) {
-	doc := spdx.NewDocument(spdx.ProfileIdentifierType_Ai, "", &spdx.SoftwareAgent{Agent: spdx.Agent{Element: spdx.Element{
+	doc := spdx.NewDocument(spdx.ProfileIdentifierType_Ai, "", &spdx.SoftwareAgent{
 		Name:    "tools-golang",
 		Summary: "a summary",
-	}}}, nil)
+	}, nil)
 
 	aiPkg := &spdx.AIPackage{
-		Package: spdx.Package{SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
-			Name: "some ai package",
-		}}}},
+		Name: "some ai package",
 		EnergyConsumption: &spdx.EnergyConsumption{
 			FinetuningEnergyConsumptions: spdx.EnergyConsumptionDescriptionList{
 				&spdx.EnergyConsumptionDescription{
@@ -532,6 +538,6 @@ func Test_aiProfile(t *testing.T) {
 func newTestDocument() *spdx.Document {
 	//return spdx.NewDocument(spdx.ProfileIdentifierType_Lite, "test document",
 	return spdx.NewDocument(spdx.ProfileIdentifierType_Software, "test document",
-		&spdx.SoftwareAgent{Agent: spdx.Agent{Element: spdx.Element{Name: "tools-golang-tests-agent", Summary: "a summary"}}},
-		&spdx.Tool{Element: spdx.Element{Name: "tools-golang-tests-tool"}})
+		&spdx.SoftwareAgent{Name: "tools-golang-tests-agent", Summary: "a summary"},
+		&spdx.Tool{Name: "tools-golang-tests-tool"})
 }

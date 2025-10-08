@@ -10,6 +10,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/kzantow/go-ld"
+
 	"github.com/spdx/tools-golang/spdx/v3/internal"
 )
 
@@ -58,13 +59,9 @@ func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAg
 	}
 	return &Document{
 		SpdxDocument: SpdxDocument{
-			ElementCollection: ElementCollection{
-				Element: Element{
-					Name:         name,
-					CreationInfo: ci,
-				},
-				ProfileConformances: conformanceFrom(conformance),
-			},
+			Name:                name,
+			CreationInfo:        ci,
+			ProfileConformances: conformanceFrom(conformance),
 		},
 		LDContext: context(),
 	}

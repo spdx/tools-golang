@@ -5,7 +5,6 @@
 package v3_0_1
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/kzantow/go-ld"
@@ -13,13 +12,95 @@ import (
 
 type AnyAIPackage interface {
 	AnyPackage
-	asAIPackage() *AIPackage
+	asAIPackage()
+	GetDomains() []string
+	SetDomains([]string)
+	GetEnergyConsumption() AnyEnergyConsumption
+	SetEnergyConsumption(AnyEnergyConsumption)
+	GetModelDataPreprocessings() []string
+	SetModelDataPreprocessings([]string)
+	GetUseSensitivePersonalInformation() PresenceType
+	SetUseSensitivePersonalInformation(PresenceType)
+	GetAutonomyType() PresenceType
+	SetAutonomyType(PresenceType)
+	GetSafetyRiskAssessment() SafetyRiskAssessmentType
+	SetSafetyRiskAssessment(SafetyRiskAssessmentType)
+	GetHyperparameters() DictionaryEntryList
+	SetHyperparameters(DictionaryEntryList)
+	GetLimitation() string
+	SetLimitation(string)
+	GetModelExplainabilities() []string
+	SetModelExplainabilities([]string)
+	GetStandardCompliances() []string
+	SetStandardCompliances([]string)
+	GetMetricDecisionThresholds() DictionaryEntryList
+	SetMetricDecisionThresholds(DictionaryEntryList)
+	GetTypeOfModels() []string
+	SetTypeOfModels([]string)
+	GetInformationAboutApplication() string
+	SetInformationAboutApplication(string)
+	GetInformationAboutTraining() string
+	SetInformationAboutTraining(string)
+	GetMetrics() DictionaryEntryList
+	SetMetrics(DictionaryEntryList)
 }
 
 // AIPackage Specifies an AI package and its associated information.
 type AIPackage struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/AIPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Package
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/AIPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
+	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
+	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
+	AttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// AdditionalPurposes Provides additional purpose information of the software artifact.
+	AdditionalPurposes []SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// PrimaryPurpose Provides information about the primary purpose of the software artifact.
+	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
+	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// SourceInfo Records any relevant background information or additional comments about the origin of the package.
+	SourceInfo string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sourceInfo" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// HomePage A place for the SPDX document creator to record a website that serves as the package's home page.
+	HomePage URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/homePage" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Version Identify the version of a package.
+	Version string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// PackageURL Provides a place for the SPDX data creator to record the package URL string (in accordance with the Package URL specification) for a software Package.
+	PackageURL URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageUrl" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// DownloadLocation Identifies the download Uniform Resource Identifier for the package at the time that the document was created.
+	DownloadLocation URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// Domains Captures the domain in which the AI package can be used.
 	Domains []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/domain" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// EnergyConsumption Indicates the amount of energy consumption incurred by an AI model.
@@ -52,58 +133,501 @@ type AIPackage struct {
 	Metrics DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/metric" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 }
 
-func (o *AIPackage) asAIPackage() *AIPackage {
-	return o
+func (o *AIPackage) asAIPackage()        {}
+func (o *AIPackage) asPackage()          {}
+func (o *AIPackage) asSoftwareArtifact() {}
+func (o *AIPackage) asArtifact()         {}
+func (o *AIPackage) asElement()          {}
+func (o *AIPackage) GetDescription() string {
+	return o.Description
+}
+
+func (o *AIPackage) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *AIPackage) GetComment() string {
+	return o.Comment
+}
+
+func (o *AIPackage) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *AIPackage) GetName() string {
+	return o.Name
+}
+
+func (o *AIPackage) SetName(v string) {
+	o.Name = v
+}
+
+func (o *AIPackage) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *AIPackage) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *AIPackage) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *AIPackage) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *AIPackage) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *AIPackage) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *AIPackage) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *AIPackage) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *AIPackage) GetSummary() string {
+	return o.Summary
+}
+
+func (o *AIPackage) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *AIPackage) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *AIPackage) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *AIPackage) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *AIPackage) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *AIPackage) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *AIPackage) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *AIPackage) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *AIPackage) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *AIPackage) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *AIPackage) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *AIPackage) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *AIPackage) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *AIPackage) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *AIPackage) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *AIPackage) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *AIPackage) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *AIPackage) GetContentIdentifiers() ContentIdentifierList {
+	return o.ContentIdentifiers
+}
+
+func (o *AIPackage) SetContentIdentifiers(v ContentIdentifierList) {
+	o.ContentIdentifiers = v
+}
+
+func (o *AIPackage) GetAttributionTexts() []string {
+	return o.AttributionTexts
+}
+
+func (o *AIPackage) SetAttributionTexts(v []string) {
+	o.AttributionTexts = v
+}
+
+func (o *AIPackage) GetAdditionalPurposes() []SoftwarePurpose {
+	return o.AdditionalPurposes
+}
+
+func (o *AIPackage) SetAdditionalPurposes(v []SoftwarePurpose) {
+	o.AdditionalPurposes = v
+}
+
+func (o *AIPackage) GetPrimaryPurpose() SoftwarePurpose {
+	return o.PrimaryPurpose
+}
+
+func (o *AIPackage) SetPrimaryPurpose(v SoftwarePurpose) {
+	o.PrimaryPurpose = v
+}
+
+func (o *AIPackage) GetCopyrightText() string {
+	return o.CopyrightText
+}
+
+func (o *AIPackage) SetCopyrightText(v string) {
+	o.CopyrightText = v
+}
+
+func (o *AIPackage) GetSourceInfo() string {
+	return o.SourceInfo
+}
+
+func (o *AIPackage) SetSourceInfo(v string) {
+	o.SourceInfo = v
+}
+
+func (o *AIPackage) GetHomePage() URI {
+	return o.HomePage
+}
+
+func (o *AIPackage) SetHomePage(v URI) {
+	o.HomePage = v
+}
+
+func (o *AIPackage) GetVersion() string {
+	return o.Version
+}
+
+func (o *AIPackage) SetVersion(v string) {
+	o.Version = v
+}
+
+func (o *AIPackage) GetPackageURL() URI {
+	return o.PackageURL
+}
+
+func (o *AIPackage) SetPackageURL(v URI) {
+	o.PackageURL = v
+}
+
+func (o *AIPackage) GetDownloadLocation() URI {
+	return o.DownloadLocation
+}
+
+func (o *AIPackage) SetDownloadLocation(v URI) {
+	o.DownloadLocation = v
+}
+
+func (o *AIPackage) GetDomains() []string {
+	return o.Domains
+}
+
+func (o *AIPackage) SetDomains(v []string) {
+	o.Domains = v
+}
+
+func (o *AIPackage) GetEnergyConsumption() AnyEnergyConsumption {
+	return o.EnergyConsumption
+}
+
+func (o *AIPackage) SetEnergyConsumption(v AnyEnergyConsumption) {
+	o.EnergyConsumption = v
+}
+
+func (o *AIPackage) GetModelDataPreprocessings() []string {
+	return o.ModelDataPreprocessings
+}
+
+func (o *AIPackage) SetModelDataPreprocessings(v []string) {
+	o.ModelDataPreprocessings = v
+}
+
+func (o *AIPackage) GetUseSensitivePersonalInformation() PresenceType {
+	return o.UseSensitivePersonalInformation
+}
+
+func (o *AIPackage) SetUseSensitivePersonalInformation(v PresenceType) {
+	o.UseSensitivePersonalInformation = v
+}
+
+func (o *AIPackage) GetAutonomyType() PresenceType {
+	return o.AutonomyType
+}
+
+func (o *AIPackage) SetAutonomyType(v PresenceType) {
+	o.AutonomyType = v
+}
+
+func (o *AIPackage) GetSafetyRiskAssessment() SafetyRiskAssessmentType {
+	return o.SafetyRiskAssessment
+}
+
+func (o *AIPackage) SetSafetyRiskAssessment(v SafetyRiskAssessmentType) {
+	o.SafetyRiskAssessment = v
+}
+
+func (o *AIPackage) GetHyperparameters() DictionaryEntryList {
+	return o.Hyperparameters
+}
+
+func (o *AIPackage) SetHyperparameters(v DictionaryEntryList) {
+	o.Hyperparameters = v
+}
+
+func (o *AIPackage) GetLimitation() string {
+	return o.Limitation
+}
+
+func (o *AIPackage) SetLimitation(v string) {
+	o.Limitation = v
+}
+
+func (o *AIPackage) GetModelExplainabilities() []string {
+	return o.ModelExplainabilities
+}
+
+func (o *AIPackage) SetModelExplainabilities(v []string) {
+	o.ModelExplainabilities = v
+}
+
+func (o *AIPackage) GetStandardCompliances() []string {
+	return o.StandardCompliances
+}
+
+func (o *AIPackage) SetStandardCompliances(v []string) {
+	o.StandardCompliances = v
+}
+
+func (o *AIPackage) GetMetricDecisionThresholds() DictionaryEntryList {
+	return o.MetricDecisionThresholds
+}
+
+func (o *AIPackage) SetMetricDecisionThresholds(v DictionaryEntryList) {
+	o.MetricDecisionThresholds = v
+}
+
+func (o *AIPackage) GetTypeOfModels() []string {
+	return o.TypeOfModels
+}
+
+func (o *AIPackage) SetTypeOfModels(v []string) {
+	o.TypeOfModels = v
+}
+
+func (o *AIPackage) GetInformationAboutApplication() string {
+	return o.InformationAboutApplication
+}
+
+func (o *AIPackage) SetInformationAboutApplication(v string) {
+	o.InformationAboutApplication = v
+}
+
+func (o *AIPackage) GetInformationAboutTraining() string {
+	return o.InformationAboutTraining
+}
+
+func (o *AIPackage) SetInformationAboutTraining(v string) {
+	o.InformationAboutTraining = v
+}
+
+func (o *AIPackage) GetMetrics() DictionaryEntryList {
+	return o.Metrics
+}
+
+func (o *AIPackage) SetMetrics(v DictionaryEntryList) {
+	o.Metrics = v
 }
 
 type AIPackageList []AnyAIPackage
 
-func (o *AIPackageList) AIPackages() ld.TypeSeq[AnyAIPackage, *AIPackage] {
-	return ld.NewTypeSeq(*o, castAIPackage)
+func (v AIPackageList) AIPackages() []AnyAIPackage {
+	return ld.SliceOf[AnyAIPackage](v)
 }
 
 type AnyAgent interface {
 	AnyElement
-	asAgent() *Agent
+	asAgent()
 }
 
 // Agent represents anything with the potential to act on a system.
 type Agent struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Agent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Agent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *Agent) asAgent() *Agent {
-	return o
+func (o *Agent) asAgent()   {}
+func (o *Agent) asElement() {}
+func (o *Agent) GetDescription() string {
+	return o.Description
+}
+
+func (o *Agent) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Agent) GetComment() string {
+	return o.Comment
+}
+
+func (o *Agent) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Agent) GetName() string {
+	return o.Name
+}
+
+func (o *Agent) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Agent) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Agent) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Agent) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Agent) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Agent) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Agent) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Agent) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Agent) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Agent) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Agent) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Agent) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Agent) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 type AgentList []AnyAgent
 
-func (o *AgentList) Agents() ld.TypeSeq[AnyAgent, *Agent] {
-	return ld.NewTypeSeq(*o, castAgent)
+func (v AgentList) Agents() []AnyAgent {
+	return ld.SliceOf[AnyAgent](v)
 }
 
-func (o *AgentList) Organizations() ld.TypeSeq[AnyAgent, *Organization] {
-	return ld.NewTypeSeq(*o, castOrganization)
+func (v AgentList) Organizations() []AnyOrganization {
+	return ld.SliceOf[AnyOrganization](v)
 }
 
-func (o *AgentList) People() ld.TypeSeq[AnyAgent, *Person] {
-	return ld.NewTypeSeq(*o, castPerson)
+func (v AgentList) People() []AnyPerson {
+	return ld.SliceOf[AnyPerson](v)
 }
 
-func (o *AgentList) SoftwareAgents() ld.TypeSeq[AnyAgent, *SoftwareAgent] {
-	return ld.NewTypeSeq(*o, castSoftwareAgent)
+func (v AgentList) SoftwareAgents() []AnySoftwareAgent {
+	return ld.SliceOf[AnySoftwareAgent](v)
 }
 
 type AnyAnnotation interface {
 	AnyElement
-	asAnnotation() *Annotation
+	asAnnotation()
+	GetSubject() AnyElement
+	SetSubject(AnyElement)
+	GetContentType() string
+	SetContentType(string)
+	GetStatement() string
+	SetStatement(string)
+	GetType() AnnotationType
+	SetType(AnnotationType)
 }
 
 // Annotation An assertion made in relation to one or more elements.
 type Annotation struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Annotation" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Annotation" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// Subject An Element an annotator has made an assertion about.
 	Subject AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/subject" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
 	// ContentType Provides information about the content type of an Element or a Property.
@@ -114,14 +638,116 @@ type Annotation struct {
 	Type AnnotationType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/annotationType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType"`
 }
 
-func (o *Annotation) asAnnotation() *Annotation {
-	return o
+func (o *Annotation) asAnnotation() {}
+func (o *Annotation) asElement()    {}
+func (o *Annotation) GetDescription() string {
+	return o.Description
+}
+
+func (o *Annotation) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Annotation) GetComment() string {
+	return o.Comment
+}
+
+func (o *Annotation) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Annotation) GetName() string {
+	return o.Name
+}
+
+func (o *Annotation) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Annotation) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Annotation) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Annotation) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Annotation) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Annotation) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Annotation) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Annotation) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Annotation) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Annotation) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Annotation) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Annotation) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Annotation) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Annotation) GetSubject() AnyElement {
+	return o.Subject
+}
+
+func (o *Annotation) SetSubject(v AnyElement) {
+	o.Subject = v
+}
+
+func (o *Annotation) GetContentType() string {
+	return o.ContentType
+}
+
+func (o *Annotation) SetContentType(v string) {
+	o.ContentType = v
+}
+
+func (o *Annotation) GetStatement() string {
+	return o.Statement
+}
+
+func (o *Annotation) SetStatement(v string) {
+	o.Statement = v
+}
+
+func (o *Annotation) GetType() AnnotationType {
+	return o.Type
+}
+
+func (o *Annotation) SetType(v AnnotationType) {
+	o.Type = v
 }
 
 type AnnotationList []AnyAnnotation
 
-func (o *AnnotationList) Annotations() ld.TypeSeq[AnyAnnotation, *Annotation] {
-	return ld.NewTypeSeq(*o, castAnnotation)
+func (v AnnotationList) Annotations() []AnyAnnotation {
+	return ld.SliceOf[AnyAnnotation](v)
 }
 
 // AnnotationType Specifies the type of an annotation.
@@ -142,100 +768,258 @@ var AnnotationType_Review = AnnotationType{
 
 type AnyArtifact interface {
 	AnyElement
-	asArtifact() *Artifact
+	asArtifact()
+	GetStandardNames() []string
+	SetStandardNames([]string)
+	GetBuiltTime() time.Time
+	SetBuiltTime(time.Time)
+	GetReleaseTime() time.Time
+	SetReleaseTime(time.Time)
+	GetSupportLevels() []SupportType
+	SetSupportLevels([]SupportType)
+	GetSuppliedBy() AnyAgent
+	SetSuppliedBy(AnyAgent)
+	GetOriginatedBy() AgentList
+	SetOriginatedBy(AgentList)
+	GetValidUntilTime() time.Time
+	SetValidUntilTime(time.Time)
 }
 
 // Artifact A distinct article or unit within the digital domain.
-type Artifact struct {
-	Element
-	// StandardNames The name of a relevant standard that may apply to an artifact.
-	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// BuiltTime Specifies the time an artifact was built.
-	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// ReleaseTime Specifies the time an artifact was released.
-	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// SupportLevels Specifies the level of support associated with an artifact.
-	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
-	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
-	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
-	// OriginatedBy Identifies from where or whom the Element originally came.
-	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
-	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
-	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-}
-
-func (o *Artifact) asArtifact() *Artifact {
-	return o
-}
-
 type ArtifactList []AnyArtifact
 
-func (o *ArtifactList) AIPackages() ld.TypeSeq[AnyArtifact, *AIPackage] {
-	return ld.NewTypeSeq(*o, castAIPackage)
+func (v ArtifactList) AIPackages() []AnyAIPackage {
+	return ld.SliceOf[AnyAIPackage](v)
 }
 
-func (o *ArtifactList) Artifacts() ld.TypeSeq[AnyArtifact, *Artifact] {
-	return ld.NewTypeSeq(*o, castArtifact)
+func (v ArtifactList) Artifacts() []AnyArtifact {
+	return ld.SliceOf[AnyArtifact](v)
 }
 
-func (o *ArtifactList) DatasetPackages() ld.TypeSeq[AnyArtifact, *DatasetPackage] {
-	return ld.NewTypeSeq(*o, castDatasetPackage)
+func (v ArtifactList) DatasetPackages() []AnyDatasetPackage {
+	return ld.SliceOf[AnyDatasetPackage](v)
 }
 
-func (o *ArtifactList) Files() ld.TypeSeq[AnyArtifact, *File] {
-	return ld.NewTypeSeq(*o, castFile)
+func (v ArtifactList) Files() []AnyFile {
+	return ld.SliceOf[AnyFile](v)
 }
 
-func (o *ArtifactList) Packages() ld.TypeSeq[AnyArtifact, *Package] {
-	return ld.NewTypeSeq(*o, castPackage)
+func (v ArtifactList) Packages() []AnyPackage {
+	return ld.SliceOf[AnyPackage](v)
 }
 
-func (o *ArtifactList) Snippets() ld.TypeSeq[AnyArtifact, *Snippet] {
-	return ld.NewTypeSeq(*o, castSnippet)
+func (v ArtifactList) Snippets() []AnySnippet {
+	return ld.SliceOf[AnySnippet](v)
 }
 
-func (o *ArtifactList) SoftwareArtifacts() ld.TypeSeq[AnyArtifact, *SoftwareArtifact] {
-	return ld.NewTypeSeq(*o, castSoftwareArtifact)
+func (v ArtifactList) SoftwareArtifacts() []AnySoftwareArtifact {
+	return ld.SliceOf[AnySoftwareArtifact](v)
 }
 
-func (o *ArtifactList) Vulnerabilities() ld.TypeSeq[AnyArtifact, *Vulnerability] {
-	return ld.NewTypeSeq(*o, castVulnerability)
+func (v ArtifactList) Vulnerabilities() []AnyVulnerability {
+	return ld.SliceOf[AnyVulnerability](v)
 }
 
 type AnyBOM interface {
 	AnyBundle
-	asBOM() *BOM
+	asBOM()
 }
 
 // BOM A container for a grouping of SPDX-3.0 content characterizing details (provenence, composition, licensing, etc.) about a product.
 type BOM struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Bundle
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Elements Refers to one or more Elements that are part of an ElementCollection.
+	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
+	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
+	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
+	// Context Gives information about the circumstances or unifying properties that Elements of the bundle have been assembled under.
+	Context string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/context" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *BOM) asBOM() *BOM {
-	return o
+func (o *BOM) asBOM()               {}
+func (o *BOM) asBundle()            {}
+func (o *BOM) asElementCollection() {}
+func (o *BOM) asElement()           {}
+func (o *BOM) GetDescription() string {
+	return o.Description
+}
+
+func (o *BOM) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *BOM) GetComment() string {
+	return o.Comment
+}
+
+func (o *BOM) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *BOM) GetName() string {
+	return o.Name
+}
+
+func (o *BOM) SetName(v string) {
+	o.Name = v
+}
+
+func (o *BOM) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *BOM) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *BOM) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *BOM) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *BOM) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *BOM) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *BOM) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *BOM) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *BOM) GetSummary() string {
+	return o.Summary
+}
+
+func (o *BOM) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *BOM) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *BOM) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *BOM) GetElements() ElementList {
+	return o.Elements
+}
+
+func (o *BOM) SetElements(v ElementList) {
+	o.Elements = v
+}
+
+func (o *BOM) GetRootElements() ElementList {
+	return o.RootElements
+}
+
+func (o *BOM) SetRootElements(v ElementList) {
+	o.RootElements = v
+}
+
+func (o *BOM) GetProfileConformances() []ProfileIdentifierType {
+	return o.ProfileConformances
+}
+
+func (o *BOM) SetProfileConformances(v []ProfileIdentifierType) {
+	o.ProfileConformances = v
+}
+
+func (o *BOM) GetContext() string {
+	return o.Context
+}
+
+func (o *BOM) SetContext(v string) {
+	o.Context = v
 }
 
 type BOMList []AnyBOM
 
-func (o *BOMList) BOMs() ld.TypeSeq[AnyBOM, *BOM] {
-	return ld.NewTypeSeq(*o, castBOM)
+func (v BOMList) BOMs() []AnyBOM {
+	return ld.SliceOf[AnyBOM](v)
 }
 
-func (o *BOMList) SBOMs() ld.TypeSeq[AnyBOM, *SBOM] {
-	return ld.NewTypeSeq(*o, castSBOM)
+func (v BOMList) SBOMs() []AnySBOM {
+	return ld.SliceOf[AnySBOM](v)
 }
 
 type AnyBuild interface {
 	AnyElement
-	asBuild() *Build
+	asBuild()
+	GetBuildID() string
+	SetBuildID(string)
+	GetConfigSourceUris() []URI
+	SetConfigSourceUris([]URI)
+	GetStartTime() time.Time
+	SetStartTime(time.Time)
+	GetConfigSourceDigests() HashList
+	SetConfigSourceDigests(HashList)
+	GetParameters() DictionaryEntryList
+	SetParameters(DictionaryEntryList)
+	GetType() URI
+	SetType(URI)
+	GetConfigSourceEntrypoints() []string
+	SetConfigSourceEntrypoints([]string)
+	GetEndTime() time.Time
+	SetEndTime(time.Time)
+	GetEnvironments() DictionaryEntryList
+	SetEnvironments(DictionaryEntryList)
 }
 
 // Build Class that describes a build instance of software/artifacts.
 type Build struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Build/Build" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Build/Build" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// BuildID A buildId is a locally unique identifier used by a builder to identify a unique instance of a build produced by it.
 	BuildID string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildId" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ConfigSourceUris Property that describes the URI of the build configuration source file.
@@ -256,72 +1040,355 @@ type Build struct {
 	Environments DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/environment" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 }
 
-func (o *Build) asBuild() *Build {
-	return o
+func (o *Build) asBuild()   {}
+func (o *Build) asElement() {}
+func (o *Build) GetDescription() string {
+	return o.Description
+}
+
+func (o *Build) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Build) GetComment() string {
+	return o.Comment
+}
+
+func (o *Build) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Build) GetName() string {
+	return o.Name
+}
+
+func (o *Build) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Build) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Build) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Build) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Build) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Build) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Build) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Build) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Build) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Build) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Build) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Build) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Build) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Build) GetBuildID() string {
+	return o.BuildID
+}
+
+func (o *Build) SetBuildID(v string) {
+	o.BuildID = v
+}
+
+func (o *Build) GetConfigSourceUris() []URI {
+	return o.ConfigSourceUris
+}
+
+func (o *Build) SetConfigSourceUris(v []URI) {
+	o.ConfigSourceUris = v
+}
+
+func (o *Build) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *Build) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *Build) GetConfigSourceDigests() HashList {
+	return o.ConfigSourceDigests
+}
+
+func (o *Build) SetConfigSourceDigests(v HashList) {
+	o.ConfigSourceDigests = v
+}
+
+func (o *Build) GetParameters() DictionaryEntryList {
+	return o.Parameters
+}
+
+func (o *Build) SetParameters(v DictionaryEntryList) {
+	o.Parameters = v
+}
+
+func (o *Build) GetType() URI {
+	return o.Type
+}
+
+func (o *Build) SetType(v URI) {
+	o.Type = v
+}
+
+func (o *Build) GetConfigSourceEntrypoints() []string {
+	return o.ConfigSourceEntrypoints
+}
+
+func (o *Build) SetConfigSourceEntrypoints(v []string) {
+	o.ConfigSourceEntrypoints = v
+}
+
+func (o *Build) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *Build) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *Build) GetEnvironments() DictionaryEntryList {
+	return o.Environments
+}
+
+func (o *Build) SetEnvironments(v DictionaryEntryList) {
+	o.Environments = v
 }
 
 type BuildList []AnyBuild
 
-func (o *BuildList) Builds() ld.TypeSeq[AnyBuild, *Build] {
-	return ld.NewTypeSeq(*o, castBuild)
+func (v BuildList) Builds() []AnyBuild {
+	return ld.SliceOf[AnyBuild](v)
 }
 
 type AnyBundle interface {
 	AnyElementCollection
-	asBundle() *Bundle
+	asBundle()
+	GetContext() string
+	SetContext(string)
 }
 
 // Bundle A collection of Elements that have a shared context.
 type Bundle struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bundle" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	ElementCollection
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bundle" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Elements Refers to one or more Elements that are part of an ElementCollection.
+	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
+	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
+	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
 	// Context Gives information about the circumstances or unifying properties that Elements of the bundle have been assembled under.
 	Context string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/context" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *Bundle) asBundle() *Bundle {
-	return o
+func (o *Bundle) asBundle()            {}
+func (o *Bundle) asElementCollection() {}
+func (o *Bundle) asElement()           {}
+func (o *Bundle) GetDescription() string {
+	return o.Description
+}
+
+func (o *Bundle) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Bundle) GetComment() string {
+	return o.Comment
+}
+
+func (o *Bundle) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Bundle) GetName() string {
+	return o.Name
+}
+
+func (o *Bundle) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Bundle) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Bundle) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Bundle) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Bundle) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Bundle) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Bundle) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Bundle) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Bundle) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Bundle) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Bundle) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Bundle) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Bundle) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Bundle) GetElements() ElementList {
+	return o.Elements
+}
+
+func (o *Bundle) SetElements(v ElementList) {
+	o.Elements = v
+}
+
+func (o *Bundle) GetRootElements() ElementList {
+	return o.RootElements
+}
+
+func (o *Bundle) SetRootElements(v ElementList) {
+	o.RootElements = v
+}
+
+func (o *Bundle) GetProfileConformances() []ProfileIdentifierType {
+	return o.ProfileConformances
+}
+
+func (o *Bundle) SetProfileConformances(v []ProfileIdentifierType) {
+	o.ProfileConformances = v
+}
+
+func (o *Bundle) GetContext() string {
+	return o.Context
+}
+
+func (o *Bundle) SetContext(v string) {
+	o.Context = v
 }
 
 type BundleList []AnyBundle
 
-func (o *BundleList) BOMs() ld.TypeSeq[AnyBundle, *BOM] {
-	return ld.NewTypeSeq(*o, castBOM)
+func (v BundleList) BOMs() []AnyBOM {
+	return ld.SliceOf[AnyBOM](v)
 }
 
-func (o *BundleList) Bundles() ld.TypeSeq[AnyBundle, *Bundle] {
-	return ld.NewTypeSeq(*o, castBundle)
+func (v BundleList) Bundles() []AnyBundle {
+	return ld.SliceOf[AnyBundle](v)
 }
 
-func (o *BundleList) SBOMs() ld.TypeSeq[AnyBundle, *SBOM] {
-	return ld.NewTypeSeq(*o, castSBOM)
+func (v BundleList) SBOMs() []AnySBOM {
+	return ld.SliceOf[AnySBOM](v)
 }
 
 type AnyCdxPropertiesExtension interface {
 	AnyExtension
-	asCdxPropertiesExtension() *CdxPropertiesExtension
+	asCdxPropertiesExtension()
+	GetCdxProperties() CdxPropertyEntryList
+	SetCdxProperties(CdxPropertyEntryList)
 }
 
 // CdxPropertiesExtension A type of extension consisting of a list of name value pairs.
 type CdxPropertiesExtension struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
-	Extension
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
+	ID string  `iri:"@id"`
 	// CdxProperties Provides a map of a property names to a values.
 	CdxProperties CdxPropertyEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxProperty" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry"`
 }
 
-func (o *CdxPropertiesExtension) asCdxPropertiesExtension() *CdxPropertiesExtension {
-	return o
+func (o *CdxPropertiesExtension) asCdxPropertiesExtension() {}
+func (o *CdxPropertiesExtension) asExtension()              {}
+func (o *CdxPropertiesExtension) GetCdxProperties() CdxPropertyEntryList {
+	return o.CdxProperties
+}
+
+func (o *CdxPropertiesExtension) SetCdxProperties(v CdxPropertyEntryList) {
+	o.CdxProperties = v
 }
 
 type CdxPropertiesExtensionList []AnyCdxPropertiesExtension
 
-func (o *CdxPropertiesExtensionList) CdxPropertiesExtensions() ld.TypeSeq[AnyCdxPropertiesExtension, *CdxPropertiesExtension] {
-	return ld.NewTypeSeq(*o, castCdxPropertiesExtension)
+func (v CdxPropertiesExtensionList) CdxPropertiesExtensions() []AnyCdxPropertiesExtension {
+	return ld.SliceOf[AnyCdxPropertiesExtension](v)
 }
 
 type AnyCdxPropertyEntry interface {
-	asCdxPropertyEntry() *CdxPropertyEntry
+	asCdxPropertyEntry()
+	GetCdxPropValue() string
+	SetCdxPropValue(string)
+	GetCdxPropName() string
+	SetCdxPropName(string)
 }
 
 // CdxPropertyEntry A property name with an associated value.
@@ -334,14 +1401,27 @@ type CdxPropertyEntry struct {
 	CdxPropName string `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropName" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *CdxPropertyEntry) asCdxPropertyEntry() *CdxPropertyEntry {
-	return o
+func (o *CdxPropertyEntry) asCdxPropertyEntry() {}
+func (o *CdxPropertyEntry) GetCdxPropValue() string {
+	return o.CdxPropValue
+}
+
+func (o *CdxPropertyEntry) SetCdxPropValue(v string) {
+	o.CdxPropValue = v
+}
+
+func (o *CdxPropertyEntry) GetCdxPropName() string {
+	return o.CdxPropName
+}
+
+func (o *CdxPropertyEntry) SetCdxPropName(v string) {
+	o.CdxPropName = v
 }
 
 type CdxPropertyEntryList []AnyCdxPropertyEntry
 
-func (o *CdxPropertyEntryList) CdxPropertyEntries() ld.TypeSeq[AnyCdxPropertyEntry, *CdxPropertyEntry] {
-	return ld.NewTypeSeq(*o, castCdxPropertyEntry)
+func (v CdxPropertyEntryList) CdxPropertyEntries() []AnyCdxPropertyEntry {
+	return ld.SliceOf[AnyCdxPropertyEntry](v)
 }
 
 // ConfidentialityLevelType Categories of confidentiality level.
@@ -372,50 +1452,177 @@ var ConfidentialityLevelType_Red = ConfidentialityLevelType{
 
 type AnyConjunctiveLicenseSet interface {
 	AnyLicenseInfo
-	asConjunctiveLicenseSet() *ConjunctiveLicenseSet
+	asConjunctiveLicenseSet()
+	GetMembers() LicenseInfoList
+	SetMembers(LicenseInfoList)
 }
 
 // ConjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information where all elements apply.
 type ConjunctiveLicenseSet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ConjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseInfo
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ConjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// Members A license expression participating in a license set.
 	Members LicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
 }
 
-func (o *ConjunctiveLicenseSet) asConjunctiveLicenseSet() *ConjunctiveLicenseSet {
-	return o
+func (o *ConjunctiveLicenseSet) asConjunctiveLicenseSet() {}
+func (o *ConjunctiveLicenseSet) asLicenseInfo()           {}
+func (o *ConjunctiveLicenseSet) asElement()               {}
+func (o *ConjunctiveLicenseSet) GetDescription() string {
+	return o.Description
+}
+
+func (o *ConjunctiveLicenseSet) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *ConjunctiveLicenseSet) GetComment() string {
+	return o.Comment
+}
+
+func (o *ConjunctiveLicenseSet) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ConjunctiveLicenseSet) GetName() string {
+	return o.Name
+}
+
+func (o *ConjunctiveLicenseSet) SetName(v string) {
+	o.Name = v
+}
+
+func (o *ConjunctiveLicenseSet) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *ConjunctiveLicenseSet) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *ConjunctiveLicenseSet) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *ConjunctiveLicenseSet) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *ConjunctiveLicenseSet) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *ConjunctiveLicenseSet) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *ConjunctiveLicenseSet) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *ConjunctiveLicenseSet) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *ConjunctiveLicenseSet) GetSummary() string {
+	return o.Summary
+}
+
+func (o *ConjunctiveLicenseSet) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *ConjunctiveLicenseSet) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *ConjunctiveLicenseSet) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *ConjunctiveLicenseSet) GetMembers() LicenseInfoList {
+	return o.Members
+}
+
+func (o *ConjunctiveLicenseSet) SetMembers(v LicenseInfoList) {
+	o.Members = v
 }
 
 type ConjunctiveLicenseSetList []AnyConjunctiveLicenseSet
 
-func (o *ConjunctiveLicenseSetList) ConjunctiveLicenseSets() ld.TypeSeq[AnyConjunctiveLicenseSet, *ConjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castConjunctiveLicenseSet)
+func (v ConjunctiveLicenseSetList) ConjunctiveLicenseSets() []AnyConjunctiveLicenseSet {
+	return ld.SliceOf[AnyConjunctiveLicenseSet](v)
 }
 
 type AnyContentIdentifier interface {
 	AnyIntegrityMethod
-	asContentIdentifier() *ContentIdentifier
+	asContentIdentifier()
+	GetType() ContentIdentifierType
+	SetType(ContentIdentifierType)
+	GetValue() URI
+	SetValue(URI)
 }
 
 // ContentIdentifier A canonical, unique, immutable identifier
 type ContentIdentifier struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
-	IntegrityMethod
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
+	ID string  `iri:"@id"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Type Specifies the type of the content identifier.
 	Type ContentIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType"`
 	// Value Specifies the value of the content identifier.
 	Value URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 }
 
-func (o *ContentIdentifier) asContentIdentifier() *ContentIdentifier {
-	return o
+func (o *ContentIdentifier) asContentIdentifier() {}
+func (o *ContentIdentifier) asIntegrityMethod()   {}
+func (o *ContentIdentifier) GetComment() string {
+	return o.Comment
+}
+
+func (o *ContentIdentifier) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ContentIdentifier) GetType() ContentIdentifierType {
+	return o.Type
+}
+
+func (o *ContentIdentifier) SetType(v ContentIdentifierType) {
+	o.Type = v
+}
+
+func (o *ContentIdentifier) GetValue() URI {
+	return o.Value
+}
+
+func (o *ContentIdentifier) SetValue(v URI) {
+	o.Value = v
 }
 
 type ContentIdentifierList []AnyContentIdentifier
 
-func (o *ContentIdentifierList) ContentIdentifiers() ld.TypeSeq[AnyContentIdentifier, *ContentIdentifier] {
-	return ld.NewTypeSeq(*o, castContentIdentifier)
+func (v ContentIdentifierList) ContentIdentifiers() []AnyContentIdentifier {
+	return ld.SliceOf[AnyContentIdentifier](v)
 }
 
 // ContentIdentifierType Specifies the type of a content identifier.
@@ -435,7 +1642,17 @@ var ContentIdentifierType_Swhid = ContentIdentifierType{
 }
 
 type AnyCreationInfo interface {
-	asCreationInfo() *CreationInfo
+	asCreationInfo()
+	GetSpecVersion() string
+	SetSpecVersion(string)
+	GetCreated() time.Time
+	SetCreated(time.Time)
+	GetCreatedUsing() ToolList
+	SetCreatedUsing(ToolList)
+	GetComment() string
+	SetComment(string)
+	GetCreatedBy() AgentList
+	SetCreatedBy(AgentList)
 }
 
 // CreationInfo Provides information about the creation of the Element.
@@ -454,56 +1671,423 @@ type CreationInfo struct {
 	CreatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/createdBy" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
 }
 
-func (o *CreationInfo) asCreationInfo() *CreationInfo {
-	return o
+func (o *CreationInfo) asCreationInfo() {}
+func (o *CreationInfo) GetSpecVersion() string {
+	return o.SpecVersion
+}
+
+func (o *CreationInfo) SetSpecVersion(v string) {
+	o.SpecVersion = v
+}
+
+func (o *CreationInfo) GetCreated() time.Time {
+	return o.Created
+}
+
+func (o *CreationInfo) SetCreated(v time.Time) {
+	o.Created = v
+}
+
+func (o *CreationInfo) GetCreatedUsing() ToolList {
+	return o.CreatedUsing
+}
+
+func (o *CreationInfo) SetCreatedUsing(v ToolList) {
+	o.CreatedUsing = v
+}
+
+func (o *CreationInfo) GetComment() string {
+	return o.Comment
+}
+
+func (o *CreationInfo) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CreationInfo) GetCreatedBy() AgentList {
+	return o.CreatedBy
+}
+
+func (o *CreationInfo) SetCreatedBy(v AgentList) {
+	o.CreatedBy = v
 }
 
 type CreationInfoList []AnyCreationInfo
 
-func (o *CreationInfoList) CreationInfos() ld.TypeSeq[AnyCreationInfo, *CreationInfo] {
-	return ld.NewTypeSeq(*o, castCreationInfo)
+func (v CreationInfoList) CreationInfos() []AnyCreationInfo {
+	return ld.SliceOf[AnyCreationInfo](v)
 }
 
 type AnyCustomLicense interface {
 	AnyLicense
-	asCustomLicense() *CustomLicense
+	asCustomLicense()
 }
 
 // CustomLicense A license that is not listed on the SPDX License List.
 type CustomLicense struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	License
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedLicenseID Specifies whether a license or additional text identifier has been marked as deprecated.
+	IsDeprecatedLicenseID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
+	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// StandardLicenseHeader Provides a License author's preferred text to indicate that a file is covered by the License.
+	StandardLicenseHeader string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseHeader" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Text Identifies the full text of a License or Addition.
+	Text string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsOsiApproved Specifies whether the License is listed as approved by the Open Source Initiative (OSI).
+	IsOsiApproved bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isOsiApproved" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// Xml Identifies all the text and metadata associated with a license in the license XML format.
+	Xml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsFsfLibre Specifies whether the License is listed as free by the Free Software Foundation (FSF).
+	IsFsfLibre bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isFsfLibre" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// StandardLicenseTemplate Identifies the full text of a License, in SPDX templating format.
+	StandardLicenseTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *CustomLicense) asCustomLicense() *CustomLicense {
-	return o
+func (o *CustomLicense) asCustomLicense()     {}
+func (o *CustomLicense) asLicense()           {}
+func (o *CustomLicense) asExtendableLicense() {}
+func (o *CustomLicense) asLicenseInfo()       {}
+func (o *CustomLicense) asElement()           {}
+func (o *CustomLicense) GetDescription() string {
+	return o.Description
+}
+
+func (o *CustomLicense) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *CustomLicense) GetComment() string {
+	return o.Comment
+}
+
+func (o *CustomLicense) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CustomLicense) GetName() string {
+	return o.Name
+}
+
+func (o *CustomLicense) SetName(v string) {
+	o.Name = v
+}
+
+func (o *CustomLicense) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *CustomLicense) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *CustomLicense) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *CustomLicense) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *CustomLicense) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *CustomLicense) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *CustomLicense) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *CustomLicense) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *CustomLicense) GetSummary() string {
+	return o.Summary
+}
+
+func (o *CustomLicense) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *CustomLicense) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *CustomLicense) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *CustomLicense) GetSeeAlsos() []URI {
+	return o.SeeAlsos
+}
+
+func (o *CustomLicense) SetSeeAlsos(v []URI) {
+	o.SeeAlsos = v
+}
+
+func (o *CustomLicense) GetIsDeprecatedLicenseID() bool {
+	return o.IsDeprecatedLicenseID
+}
+
+func (o *CustomLicense) SetIsDeprecatedLicenseID(v bool) {
+	o.IsDeprecatedLicenseID = v
+}
+
+func (o *CustomLicense) GetObsoletedBy() string {
+	return o.ObsoletedBy
+}
+
+func (o *CustomLicense) SetObsoletedBy(v string) {
+	o.ObsoletedBy = v
+}
+
+func (o *CustomLicense) GetStandardLicenseHeader() string {
+	return o.StandardLicenseHeader
+}
+
+func (o *CustomLicense) SetStandardLicenseHeader(v string) {
+	o.StandardLicenseHeader = v
+}
+
+func (o *CustomLicense) GetText() string {
+	return o.Text
+}
+
+func (o *CustomLicense) SetText(v string) {
+	o.Text = v
+}
+
+func (o *CustomLicense) GetIsOsiApproved() bool {
+	return o.IsOsiApproved
+}
+
+func (o *CustomLicense) SetIsOsiApproved(v bool) {
+	o.IsOsiApproved = v
+}
+
+func (o *CustomLicense) GetXml() string {
+	return o.Xml
+}
+
+func (o *CustomLicense) SetXml(v string) {
+	o.Xml = v
+}
+
+func (o *CustomLicense) GetIsFsfLibre() bool {
+	return o.IsFsfLibre
+}
+
+func (o *CustomLicense) SetIsFsfLibre(v bool) {
+	o.IsFsfLibre = v
+}
+
+func (o *CustomLicense) GetStandardLicenseTemplate() string {
+	return o.StandardLicenseTemplate
+}
+
+func (o *CustomLicense) SetStandardLicenseTemplate(v string) {
+	o.StandardLicenseTemplate = v
 }
 
 type CustomLicenseList []AnyCustomLicense
 
-func (o *CustomLicenseList) CustomLicenses() ld.TypeSeq[AnyCustomLicense, *CustomLicense] {
-	return ld.NewTypeSeq(*o, castCustomLicense)
+func (v CustomLicenseList) CustomLicenses() []AnyCustomLicense {
+	return ld.SliceOf[AnyCustomLicense](v)
 }
 
 type AnyCustomLicenseAddition interface {
 	AnyLicenseAddition
-	asCustomLicenseAddition() *CustomLicenseAddition
+	asCustomLicenseAddition()
 }
 
 // CustomLicenseAddition A license addition that is not listed on the SPDX Exceptions List.
 type CustomLicenseAddition struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicenseAddition" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseAddition
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicenseAddition" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// AdditionText Identifies the full text of a LicenseAddition.
+	AdditionText string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/additionText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
+	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// LicenseXml Identifies all the text and metadata associated with a license in the license XML format.
+	LicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// StandardAdditionTemplate Identifies the full text of a LicenseAddition, in SPDX templating format.
+	StandardAdditionTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardAdditionTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedAdditionID Specifies whether an additional text identifier has been marked as deprecated.
+	IsDeprecatedAdditionID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
 }
 
-func (o *CustomLicenseAddition) asCustomLicenseAddition() *CustomLicenseAddition {
-	return o
+func (o *CustomLicenseAddition) asCustomLicenseAddition() {}
+func (o *CustomLicenseAddition) asLicenseAddition()       {}
+func (o *CustomLicenseAddition) asElement()               {}
+func (o *CustomLicenseAddition) GetDescription() string {
+	return o.Description
+}
+
+func (o *CustomLicenseAddition) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *CustomLicenseAddition) GetComment() string {
+	return o.Comment
+}
+
+func (o *CustomLicenseAddition) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CustomLicenseAddition) GetName() string {
+	return o.Name
+}
+
+func (o *CustomLicenseAddition) SetName(v string) {
+	o.Name = v
+}
+
+func (o *CustomLicenseAddition) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *CustomLicenseAddition) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *CustomLicenseAddition) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *CustomLicenseAddition) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *CustomLicenseAddition) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *CustomLicenseAddition) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *CustomLicenseAddition) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *CustomLicenseAddition) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *CustomLicenseAddition) GetSummary() string {
+	return o.Summary
+}
+
+func (o *CustomLicenseAddition) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *CustomLicenseAddition) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *CustomLicenseAddition) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *CustomLicenseAddition) GetAdditionText() string {
+	return o.AdditionText
+}
+
+func (o *CustomLicenseAddition) SetAdditionText(v string) {
+	o.AdditionText = v
+}
+
+func (o *CustomLicenseAddition) GetObsoletedBy() string {
+	return o.ObsoletedBy
+}
+
+func (o *CustomLicenseAddition) SetObsoletedBy(v string) {
+	o.ObsoletedBy = v
+}
+
+func (o *CustomLicenseAddition) GetLicenseXml() string {
+	return o.LicenseXml
+}
+
+func (o *CustomLicenseAddition) SetLicenseXml(v string) {
+	o.LicenseXml = v
+}
+
+func (o *CustomLicenseAddition) GetStandardAdditionTemplate() string {
+	return o.StandardAdditionTemplate
+}
+
+func (o *CustomLicenseAddition) SetStandardAdditionTemplate(v string) {
+	o.StandardAdditionTemplate = v
+}
+
+func (o *CustomLicenseAddition) GetSeeAlsos() []URI {
+	return o.SeeAlsos
+}
+
+func (o *CustomLicenseAddition) SetSeeAlsos(v []URI) {
+	o.SeeAlsos = v
+}
+
+func (o *CustomLicenseAddition) GetIsDeprecatedAdditionID() bool {
+	return o.IsDeprecatedAdditionID
+}
+
+func (o *CustomLicenseAddition) SetIsDeprecatedAdditionID(v bool) {
+	o.IsDeprecatedAdditionID = v
 }
 
 type CustomLicenseAdditionList []AnyCustomLicenseAddition
 
-func (o *CustomLicenseAdditionList) CustomLicenseAdditions() ld.TypeSeq[AnyCustomLicenseAddition, *CustomLicenseAddition] {
-	return ld.NewTypeSeq(*o, castCustomLicenseAddition)
+func (v CustomLicenseAdditionList) CustomLicenseAdditions() []AnyCustomLicenseAddition {
+	return ld.SliceOf[AnyCustomLicenseAddition](v)
 }
 
 // CvssSeverityType Specifies the CVSS base, temporal, threat, or environmental severity type.
@@ -539,38 +2123,304 @@ var CvssSeverityType_None = CvssSeverityType{
 
 type AnyCvssV2VulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asCvssV2VulnAssessmentRelationship() *CvssV2VulnAssessmentRelationship
+	asCvssV2VulnAssessmentRelationship()
+	GetVectorString() string
+	SetVectorString(string)
+	GetScore() float64
+	SetScore(float64)
 }
 
 // CvssV2VulnAssessmentRelationship Provides a CVSS version 2.0 assessment for a vulnerability.
 type CvssV2VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV2VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV2VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// VectorString Specifies the CVSS vector string for a vulnerability.
 	VectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Score Provides a numerical (0-10) representation of the severity of a vulnerability.
 	Score float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
 }
 
-func (o *CvssV2VulnAssessmentRelationship) asCvssV2VulnAssessmentRelationship() *CvssV2VulnAssessmentRelationship {
-	return o
+func (o *CvssV2VulnAssessmentRelationship) asCvssV2VulnAssessmentRelationship() {}
+func (o *CvssV2VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
+func (o *CvssV2VulnAssessmentRelationship) asRelationship()                     {}
+func (o *CvssV2VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV2VulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetVectorString() string {
+	return o.VectorString
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetVectorString(v string) {
+	o.VectorString = v
+}
+
+func (o *CvssV2VulnAssessmentRelationship) GetScore() float64 {
+	return o.Score
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetScore(v float64) {
+	o.Score = v
 }
 
 type CvssV2VulnAssessmentRelationshipList []AnyCvssV2VulnAssessmentRelationship
 
-func (o *CvssV2VulnAssessmentRelationshipList) CvssV2VulnAssessmentRelationships() ld.TypeSeq[AnyCvssV2VulnAssessmentRelationship, *CvssV2VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV2VulnAssessmentRelationship)
+func (v CvssV2VulnAssessmentRelationshipList) CvssV2VulnAssessmentRelationships() []AnyCvssV2VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV2VulnAssessmentRelationship](v)
 }
 
 type AnyCvssV3VulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asCvssV3VulnAssessmentRelationship() *CvssV3VulnAssessmentRelationship
+	asCvssV3VulnAssessmentRelationship()
+	GetScore() float64
+	SetScore(float64)
+	GetSeverity() CvssSeverityType
+	SetSeverity(CvssSeverityType)
+	GetVectorString() string
+	SetVectorString(string)
 }
 
 // CvssV3VulnAssessmentRelationship Provides a CVSS version 3 assessment for a vulnerability.
 type CvssV3VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV3VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV3VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Score Provides a numerical (0-10) representation of the severity of a vulnerability.
 	Score float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
 	// Severity Specifies the CVSS qualitative severity rating of a vulnerability in relation to a piece of software.
@@ -579,25 +2429,255 @@ type CvssV3VulnAssessmentRelationship struct {
 	VectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *CvssV3VulnAssessmentRelationship) asCvssV3VulnAssessmentRelationship() *CvssV3VulnAssessmentRelationship {
-	return o
+func (o *CvssV3VulnAssessmentRelationship) asCvssV3VulnAssessmentRelationship() {}
+func (o *CvssV3VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
+func (o *CvssV3VulnAssessmentRelationship) asRelationship()                     {}
+func (o *CvssV3VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV3VulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetScore() float64 {
+	return o.Score
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetScore(v float64) {
+	o.Score = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetSeverity() CvssSeverityType {
+	return o.Severity
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetSeverity(v CvssSeverityType) {
+	o.Severity = v
+}
+
+func (o *CvssV3VulnAssessmentRelationship) GetVectorString() string {
+	return o.VectorString
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetVectorString(v string) {
+	o.VectorString = v
 }
 
 type CvssV3VulnAssessmentRelationshipList []AnyCvssV3VulnAssessmentRelationship
 
-func (o *CvssV3VulnAssessmentRelationshipList) CvssV3VulnAssessmentRelationships() ld.TypeSeq[AnyCvssV3VulnAssessmentRelationship, *CvssV3VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV3VulnAssessmentRelationship)
+func (v CvssV3VulnAssessmentRelationshipList) CvssV3VulnAssessmentRelationships() []AnyCvssV3VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV3VulnAssessmentRelationship](v)
 }
 
 type AnyCvssV4VulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asCvssV4VulnAssessmentRelationship() *CvssV4VulnAssessmentRelationship
+	asCvssV4VulnAssessmentRelationship()
+	GetSeverity() CvssSeverityType
+	SetSeverity(CvssSeverityType)
+	GetVectorString() string
+	SetVectorString(string)
+	GetScore() float64
+	SetScore(float64)
 }
 
 // CvssV4VulnAssessmentRelationship Provides a CVSS version 4 assessment for a vulnerability.
 type CvssV4VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV4VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV4VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Severity Specifies the CVSS qualitative severity rating of a vulnerability in relation to a piece of software.
 	Severity CvssSeverityType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/severity" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType"`
 	// VectorString Specifies the CVSS vector string for a vulnerability.
@@ -606,14 +2686,198 @@ type CvssV4VulnAssessmentRelationship struct {
 	Score float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
 }
 
-func (o *CvssV4VulnAssessmentRelationship) asCvssV4VulnAssessmentRelationship() *CvssV4VulnAssessmentRelationship {
-	return o
+func (o *CvssV4VulnAssessmentRelationship) asCvssV4VulnAssessmentRelationship() {}
+func (o *CvssV4VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
+func (o *CvssV4VulnAssessmentRelationship) asRelationship()                     {}
+func (o *CvssV4VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV4VulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetSeverity() CvssSeverityType {
+	return o.Severity
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetSeverity(v CvssSeverityType) {
+	o.Severity = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetVectorString() string {
+	return o.VectorString
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetVectorString(v string) {
+	o.VectorString = v
+}
+
+func (o *CvssV4VulnAssessmentRelationship) GetScore() float64 {
+	return o.Score
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetScore(v float64) {
+	o.Score = v
 }
 
 type CvssV4VulnAssessmentRelationshipList []AnyCvssV4VulnAssessmentRelationship
 
-func (o *CvssV4VulnAssessmentRelationshipList) CvssV4VulnAssessmentRelationships() ld.TypeSeq[AnyCvssV4VulnAssessmentRelationship, *CvssV4VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV4VulnAssessmentRelationship)
+func (v CvssV4VulnAssessmentRelationshipList) CvssV4VulnAssessmentRelationships() []AnyCvssV4VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV4VulnAssessmentRelationship](v)
 }
 
 // DatasetAvailabilityType Availability of dataset.
@@ -649,13 +2913,91 @@ var DatasetAvailabilityType_ScrapingScript = DatasetAvailabilityType{
 
 type AnyDatasetPackage interface {
 	AnyPackage
-	asDatasetPackage() *DatasetPackage
+	asDatasetPackage()
+	GetConfidentialityLevel() ConfidentialityLevelType
+	SetConfidentialityLevel(ConfidentialityLevelType)
+	GetAnonymizationMethodUseds() []string
+	SetAnonymizationMethodUseds([]string)
+	GetDatasetUpdateMechanism() string
+	SetDatasetUpdateMechanism(string)
+	GetDatasetNoise() string
+	SetDatasetNoise(string)
+	GetDatasetSize() NonNegativeInt
+	SetDatasetSize(NonNegativeInt)
+	GetSensors() DictionaryEntryList
+	SetSensors(DictionaryEntryList)
+	GetIntendedUse() string
+	SetIntendedUse(string)
+	GetDataPreprocessings() []string
+	SetDataPreprocessings([]string)
+	GetKnownBias() []string
+	SetKnownBias([]string)
+	GetDatasetAvailability() DatasetAvailabilityType
+	SetDatasetAvailability(DatasetAvailabilityType)
+	GetHasSensitivePersonalInformation() PresenceType
+	SetHasSensitivePersonalInformation(PresenceType)
+	GetDataCollectionProcess() string
+	SetDataCollectionProcess(string)
+	GetDatasetTypes() []DatasetType
+	SetDatasetTypes([]DatasetType)
 }
 
 // DatasetPackage Specifies a data package and its associated information.
 type DatasetPackage struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Package
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
+	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
+	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
+	AttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// AdditionalPurposes Provides additional purpose information of the software artifact.
+	AdditionalPurposes []SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// PrimaryPurpose Provides information about the primary purpose of the software artifact.
+	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
+	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// SourceInfo Records any relevant background information or additional comments about the origin of the package.
+	SourceInfo string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sourceInfo" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// HomePage A place for the SPDX document creator to record a website that serves as the package's home page.
+	HomePage URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/homePage" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Version Identify the version of a package.
+	Version string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// PackageURL Provides a place for the SPDX data creator to record the package URL string (in accordance with the Package URL specification) for a software Package.
+	PackageURL URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageUrl" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// DownloadLocation Identifies the download Uniform Resource Identifier for the package at the time that the document was created.
+	DownloadLocation URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// ConfidentialityLevel Describes the confidentiality level of the data points contained in the dataset.
 	ConfidentialityLevel ConfidentialityLevelType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/confidentialityLevel" type:"https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType"`
 	// AnonymizationMethodUseds Describes the anonymization methods used.
@@ -684,14 +3026,327 @@ type DatasetPackage struct {
 	DatasetTypes []DatasetType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType"`
 }
 
-func (o *DatasetPackage) asDatasetPackage() *DatasetPackage {
-	return o
+func (o *DatasetPackage) asDatasetPackage()   {}
+func (o *DatasetPackage) asPackage()          {}
+func (o *DatasetPackage) asSoftwareArtifact() {}
+func (o *DatasetPackage) asArtifact()         {}
+func (o *DatasetPackage) asElement()          {}
+func (o *DatasetPackage) GetDescription() string {
+	return o.Description
+}
+
+func (o *DatasetPackage) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *DatasetPackage) GetComment() string {
+	return o.Comment
+}
+
+func (o *DatasetPackage) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *DatasetPackage) GetName() string {
+	return o.Name
+}
+
+func (o *DatasetPackage) SetName(v string) {
+	o.Name = v
+}
+
+func (o *DatasetPackage) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *DatasetPackage) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *DatasetPackage) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *DatasetPackage) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *DatasetPackage) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *DatasetPackage) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *DatasetPackage) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *DatasetPackage) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *DatasetPackage) GetSummary() string {
+	return o.Summary
+}
+
+func (o *DatasetPackage) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *DatasetPackage) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *DatasetPackage) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *DatasetPackage) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *DatasetPackage) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *DatasetPackage) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *DatasetPackage) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *DatasetPackage) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *DatasetPackage) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *DatasetPackage) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *DatasetPackage) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *DatasetPackage) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *DatasetPackage) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *DatasetPackage) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *DatasetPackage) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *DatasetPackage) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *DatasetPackage) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *DatasetPackage) GetContentIdentifiers() ContentIdentifierList {
+	return o.ContentIdentifiers
+}
+
+func (o *DatasetPackage) SetContentIdentifiers(v ContentIdentifierList) {
+	o.ContentIdentifiers = v
+}
+
+func (o *DatasetPackage) GetAttributionTexts() []string {
+	return o.AttributionTexts
+}
+
+func (o *DatasetPackage) SetAttributionTexts(v []string) {
+	o.AttributionTexts = v
+}
+
+func (o *DatasetPackage) GetAdditionalPurposes() []SoftwarePurpose {
+	return o.AdditionalPurposes
+}
+
+func (o *DatasetPackage) SetAdditionalPurposes(v []SoftwarePurpose) {
+	o.AdditionalPurposes = v
+}
+
+func (o *DatasetPackage) GetPrimaryPurpose() SoftwarePurpose {
+	return o.PrimaryPurpose
+}
+
+func (o *DatasetPackage) SetPrimaryPurpose(v SoftwarePurpose) {
+	o.PrimaryPurpose = v
+}
+
+func (o *DatasetPackage) GetCopyrightText() string {
+	return o.CopyrightText
+}
+
+func (o *DatasetPackage) SetCopyrightText(v string) {
+	o.CopyrightText = v
+}
+
+func (o *DatasetPackage) GetSourceInfo() string {
+	return o.SourceInfo
+}
+
+func (o *DatasetPackage) SetSourceInfo(v string) {
+	o.SourceInfo = v
+}
+
+func (o *DatasetPackage) GetHomePage() URI {
+	return o.HomePage
+}
+
+func (o *DatasetPackage) SetHomePage(v URI) {
+	o.HomePage = v
+}
+
+func (o *DatasetPackage) GetVersion() string {
+	return o.Version
+}
+
+func (o *DatasetPackage) SetVersion(v string) {
+	o.Version = v
+}
+
+func (o *DatasetPackage) GetPackageURL() URI {
+	return o.PackageURL
+}
+
+func (o *DatasetPackage) SetPackageURL(v URI) {
+	o.PackageURL = v
+}
+
+func (o *DatasetPackage) GetDownloadLocation() URI {
+	return o.DownloadLocation
+}
+
+func (o *DatasetPackage) SetDownloadLocation(v URI) {
+	o.DownloadLocation = v
+}
+
+func (o *DatasetPackage) GetConfidentialityLevel() ConfidentialityLevelType {
+	return o.ConfidentialityLevel
+}
+
+func (o *DatasetPackage) SetConfidentialityLevel(v ConfidentialityLevelType) {
+	o.ConfidentialityLevel = v
+}
+
+func (o *DatasetPackage) GetAnonymizationMethodUseds() []string {
+	return o.AnonymizationMethodUseds
+}
+
+func (o *DatasetPackage) SetAnonymizationMethodUseds(v []string) {
+	o.AnonymizationMethodUseds = v
+}
+
+func (o *DatasetPackage) GetDatasetUpdateMechanism() string {
+	return o.DatasetUpdateMechanism
+}
+
+func (o *DatasetPackage) SetDatasetUpdateMechanism(v string) {
+	o.DatasetUpdateMechanism = v
+}
+
+func (o *DatasetPackage) GetDatasetNoise() string {
+	return o.DatasetNoise
+}
+
+func (o *DatasetPackage) SetDatasetNoise(v string) {
+	o.DatasetNoise = v
+}
+
+func (o *DatasetPackage) GetDatasetSize() NonNegativeInt {
+	return o.DatasetSize
+}
+
+func (o *DatasetPackage) SetDatasetSize(v NonNegativeInt) {
+	o.DatasetSize = v
+}
+
+func (o *DatasetPackage) GetSensors() DictionaryEntryList {
+	return o.Sensors
+}
+
+func (o *DatasetPackage) SetSensors(v DictionaryEntryList) {
+	o.Sensors = v
+}
+
+func (o *DatasetPackage) GetIntendedUse() string {
+	return o.IntendedUse
+}
+
+func (o *DatasetPackage) SetIntendedUse(v string) {
+	o.IntendedUse = v
+}
+
+func (o *DatasetPackage) GetDataPreprocessings() []string {
+	return o.DataPreprocessings
+}
+
+func (o *DatasetPackage) SetDataPreprocessings(v []string) {
+	o.DataPreprocessings = v
+}
+
+func (o *DatasetPackage) GetKnownBias() []string {
+	return o.KnownBias
+}
+
+func (o *DatasetPackage) SetKnownBias(v []string) {
+	o.KnownBias = v
+}
+
+func (o *DatasetPackage) GetDatasetAvailability() DatasetAvailabilityType {
+	return o.DatasetAvailability
+}
+
+func (o *DatasetPackage) SetDatasetAvailability(v DatasetAvailabilityType) {
+	o.DatasetAvailability = v
+}
+
+func (o *DatasetPackage) GetHasSensitivePersonalInformation() PresenceType {
+	return o.HasSensitivePersonalInformation
+}
+
+func (o *DatasetPackage) SetHasSensitivePersonalInformation(v PresenceType) {
+	o.HasSensitivePersonalInformation = v
+}
+
+func (o *DatasetPackage) GetDataCollectionProcess() string {
+	return o.DataCollectionProcess
+}
+
+func (o *DatasetPackage) SetDataCollectionProcess(v string) {
+	o.DataCollectionProcess = v
+}
+
+func (o *DatasetPackage) GetDatasetTypes() []DatasetType {
+	return o.DatasetTypes
+}
+
+func (o *DatasetPackage) SetDatasetTypes(v []DatasetType) {
+	o.DatasetTypes = v
 }
 
 type DatasetPackageList []AnyDatasetPackage
 
-func (o *DatasetPackageList) DatasetPackages() ld.TypeSeq[AnyDatasetPackage, *DatasetPackage] {
-	return ld.NewTypeSeq(*o, castDatasetPackage)
+func (v DatasetPackageList) DatasetPackages() []AnyDatasetPackage {
+	return ld.SliceOf[AnyDatasetPackage](v)
 }
 
 // DatasetType Enumeration of dataset types.
@@ -771,7 +3426,11 @@ var DatasetType_Video = DatasetType{
 }
 
 type AnyDictionaryEntry interface {
-	asDictionaryEntry() *DictionaryEntry
+	asDictionaryEntry()
+	GetValue() string
+	SetValue(string)
+	GetKey() string
+	SetKey(string)
 }
 
 // DictionaryEntry A key with an associated value.
@@ -784,46 +3443,40 @@ type DictionaryEntry struct {
 	Key string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/key" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *DictionaryEntry) asDictionaryEntry() *DictionaryEntry {
-	return o
+func (o *DictionaryEntry) asDictionaryEntry() {}
+func (o *DictionaryEntry) GetValue() string {
+	return o.Value
+}
+
+func (o *DictionaryEntry) SetValue(v string) {
+	o.Value = v
+}
+
+func (o *DictionaryEntry) GetKey() string {
+	return o.Key
+}
+
+func (o *DictionaryEntry) SetKey(v string) {
+	o.Key = v
 }
 
 type DictionaryEntryList []AnyDictionaryEntry
 
-func (o *DictionaryEntryList) DictionaryEntries() ld.TypeSeq[AnyDictionaryEntry, *DictionaryEntry] {
-	return ld.NewTypeSeq(*o, castDictionaryEntry)
+func (v DictionaryEntryList) DictionaryEntries() []AnyDictionaryEntry {
+	return ld.SliceOf[AnyDictionaryEntry](v)
 }
 
 type AnyDisjunctiveLicenseSet interface {
 	AnyLicenseInfo
-	asDisjunctiveLicenseSet() *DisjunctiveLicenseSet
+	asDisjunctiveLicenseSet()
+	GetMembers() LicenseInfoList
+	SetMembers(LicenseInfoList)
 }
 
 // DisjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information where only one of the elements applies.
 type DisjunctiveLicenseSet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/DisjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseInfo
-	// Members A license expression participating in a license set.
-	Members LicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
-}
-
-func (o *DisjunctiveLicenseSet) asDisjunctiveLicenseSet() *DisjunctiveLicenseSet {
-	return o
-}
-
-type DisjunctiveLicenseSetList []AnyDisjunctiveLicenseSet
-
-func (o *DisjunctiveLicenseSetList) DisjunctiveLicenseSets() ld.TypeSeq[AnyDisjunctiveLicenseSet, *DisjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castDisjunctiveLicenseSet)
-}
-
-type AnyElement interface {
-	asElement() *Element
-}
-
-// Element Base domain class from which all other SPDX-3.0 domain classes derive.
-type Element struct {
-	ID string `iri:"@id"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/DisjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
 	// Description Provides a detailed description of the Element.
 	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Comment Provide consumers with comments by the creator of the Element about the Element.
@@ -842,262 +3495,370 @@ type Element struct {
 	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
 	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Members A license expression participating in a license set.
+	Members LicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
 }
 
-func (o *Element) asElement() *Element {
-	return o
+func (o *DisjunctiveLicenseSet) asDisjunctiveLicenseSet() {}
+func (o *DisjunctiveLicenseSet) asLicenseInfo()           {}
+func (o *DisjunctiveLicenseSet) asElement()               {}
+func (o *DisjunctiveLicenseSet) GetDescription() string {
+	return o.Description
 }
 
+func (o *DisjunctiveLicenseSet) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *DisjunctiveLicenseSet) GetComment() string {
+	return o.Comment
+}
+
+func (o *DisjunctiveLicenseSet) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *DisjunctiveLicenseSet) GetName() string {
+	return o.Name
+}
+
+func (o *DisjunctiveLicenseSet) SetName(v string) {
+	o.Name = v
+}
+
+func (o *DisjunctiveLicenseSet) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *DisjunctiveLicenseSet) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *DisjunctiveLicenseSet) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *DisjunctiveLicenseSet) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *DisjunctiveLicenseSet) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *DisjunctiveLicenseSet) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *DisjunctiveLicenseSet) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *DisjunctiveLicenseSet) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *DisjunctiveLicenseSet) GetSummary() string {
+	return o.Summary
+}
+
+func (o *DisjunctiveLicenseSet) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *DisjunctiveLicenseSet) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *DisjunctiveLicenseSet) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *DisjunctiveLicenseSet) GetMembers() LicenseInfoList {
+	return o.Members
+}
+
+func (o *DisjunctiveLicenseSet) SetMembers(v LicenseInfoList) {
+	o.Members = v
+}
+
+type DisjunctiveLicenseSetList []AnyDisjunctiveLicenseSet
+
+func (v DisjunctiveLicenseSetList) DisjunctiveLicenseSets() []AnyDisjunctiveLicenseSet {
+	return ld.SliceOf[AnyDisjunctiveLicenseSet](v)
+}
+
+type AnyElement interface {
+	asElement()
+	GetDescription() string
+	SetDescription(string)
+	GetComment() string
+	SetComment(string)
+	GetName() string
+	SetName(string)
+	GetExtensions() ExtensionList
+	SetExtensions(ExtensionList)
+	GetCreationInfo() AnyCreationInfo
+	SetCreationInfo(AnyCreationInfo)
+	GetExternalIdentifiers() ExternalIdentifierList
+	SetExternalIdentifiers(ExternalIdentifierList)
+	GetExternalRefs() ExternalRefList
+	SetExternalRefs(ExternalRefList)
+	GetSummary() string
+	SetSummary(string)
+	GetVerifiedUsing() IntegrityMethodList
+	SetVerifiedUsing(IntegrityMethodList)
+}
+
+// Element Base domain class from which all other SPDX-3.0 domain classes derive.
 type ElementList []AnyElement
 
-func (o *ElementList) AIPackages() ld.TypeSeq[AnyElement, *AIPackage] {
-	return ld.NewTypeSeq(*o, castAIPackage)
+func (v ElementList) AIPackages() []AnyAIPackage {
+	return ld.SliceOf[AnyAIPackage](v)
 }
 
-func (o *ElementList) Agents() ld.TypeSeq[AnyElement, *Agent] {
-	return ld.NewTypeSeq(*o, castAgent)
+func (v ElementList) Agents() []AnyAgent {
+	return ld.SliceOf[AnyAgent](v)
 }
 
-func (o *ElementList) Annotations() ld.TypeSeq[AnyElement, *Annotation] {
-	return ld.NewTypeSeq(*o, castAnnotation)
+func (v ElementList) Annotations() []AnyAnnotation {
+	return ld.SliceOf[AnyAnnotation](v)
 }
 
-func (o *ElementList) Artifacts() ld.TypeSeq[AnyElement, *Artifact] {
-	return ld.NewTypeSeq(*o, castArtifact)
+func (v ElementList) Artifacts() []AnyArtifact {
+	return ld.SliceOf[AnyArtifact](v)
 }
 
-func (o *ElementList) BOMs() ld.TypeSeq[AnyElement, *BOM] {
-	return ld.NewTypeSeq(*o, castBOM)
+func (v ElementList) BOMs() []AnyBOM {
+	return ld.SliceOf[AnyBOM](v)
 }
 
-func (o *ElementList) Builds() ld.TypeSeq[AnyElement, *Build] {
-	return ld.NewTypeSeq(*o, castBuild)
+func (v ElementList) Builds() []AnyBuild {
+	return ld.SliceOf[AnyBuild](v)
 }
 
-func (o *ElementList) Bundles() ld.TypeSeq[AnyElement, *Bundle] {
-	return ld.NewTypeSeq(*o, castBundle)
+func (v ElementList) Bundles() []AnyBundle {
+	return ld.SliceOf[AnyBundle](v)
 }
 
-func (o *ElementList) ConjunctiveLicenseSets() ld.TypeSeq[AnyElement, *ConjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castConjunctiveLicenseSet)
+func (v ElementList) ConjunctiveLicenseSets() []AnyConjunctiveLicenseSet {
+	return ld.SliceOf[AnyConjunctiveLicenseSet](v)
 }
 
-func (o *ElementList) CustomLicenses() ld.TypeSeq[AnyElement, *CustomLicense] {
-	return ld.NewTypeSeq(*o, castCustomLicense)
+func (v ElementList) CustomLicenses() []AnyCustomLicense {
+	return ld.SliceOf[AnyCustomLicense](v)
 }
 
-func (o *ElementList) CustomLicenseAdditions() ld.TypeSeq[AnyElement, *CustomLicenseAddition] {
-	return ld.NewTypeSeq(*o, castCustomLicenseAddition)
+func (v ElementList) CustomLicenseAdditions() []AnyCustomLicenseAddition {
+	return ld.SliceOf[AnyCustomLicenseAddition](v)
 }
 
-func (o *ElementList) CvssV2VulnAssessmentRelationships() ld.TypeSeq[AnyElement, *CvssV2VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV2VulnAssessmentRelationship)
+func (v ElementList) CvssV2VulnAssessmentRelationships() []AnyCvssV2VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV2VulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) CvssV3VulnAssessmentRelationships() ld.TypeSeq[AnyElement, *CvssV3VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV3VulnAssessmentRelationship)
+func (v ElementList) CvssV3VulnAssessmentRelationships() []AnyCvssV3VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV3VulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) CvssV4VulnAssessmentRelationships() ld.TypeSeq[AnyElement, *CvssV4VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV4VulnAssessmentRelationship)
+func (v ElementList) CvssV4VulnAssessmentRelationships() []AnyCvssV4VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV4VulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) DatasetPackages() ld.TypeSeq[AnyElement, *DatasetPackage] {
-	return ld.NewTypeSeq(*o, castDatasetPackage)
+func (v ElementList) DatasetPackages() []AnyDatasetPackage {
+	return ld.SliceOf[AnyDatasetPackage](v)
 }
 
-func (o *ElementList) DisjunctiveLicenseSets() ld.TypeSeq[AnyElement, *DisjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castDisjunctiveLicenseSet)
+func (v ElementList) DisjunctiveLicenseSets() []AnyDisjunctiveLicenseSet {
+	return ld.SliceOf[AnyDisjunctiveLicenseSet](v)
 }
 
-func (o *ElementList) Elements() ld.TypeSeq[AnyElement, *Element] {
-	return ld.NewTypeSeq(*o, castElement)
+func (v ElementList) Elements() []AnyElement {
+	return ld.SliceOf[AnyElement](v)
 }
 
-func (o *ElementList) ElementCollections() ld.TypeSeq[AnyElement, *ElementCollection] {
-	return ld.NewTypeSeq(*o, castElementCollection)
+func (v ElementList) ElementCollections() []AnyElementCollection {
+	return ld.SliceOf[AnyElementCollection](v)
 }
 
-func (o *ElementList) EpssVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *EpssVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castEpssVulnAssessmentRelationship)
+func (v ElementList) EpssVulnAssessmentRelationships() []AnyEpssVulnAssessmentRelationship {
+	return ld.SliceOf[AnyEpssVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) ExploitCatalogVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *ExploitCatalogVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castExploitCatalogVulnAssessmentRelationship)
+func (v ElementList) ExploitCatalogVulnAssessmentRelationships() []AnyExploitCatalogVulnAssessmentRelationship {
+	return ld.SliceOf[AnyExploitCatalogVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) ExtendableLicenses() ld.TypeSeq[AnyElement, *ExtendableLicense] {
-	return ld.NewTypeSeq(*o, castExtendableLicense)
+func (v ElementList) ExtendableLicenses() []AnyExtendableLicense {
+	return ld.SliceOf[AnyExtendableLicense](v)
 }
 
-func (o *ElementList) Files() ld.TypeSeq[AnyElement, *File] {
-	return ld.NewTypeSeq(*o, castFile)
+func (v ElementList) Files() []AnyFile {
+	return ld.SliceOf[AnyFile](v)
 }
 
-func (o *ElementList) IndividualElements() ld.TypeSeq[AnyElement, *IndividualElement] {
-	return ld.NewTypeSeq(*o, castIndividualElement)
+func (v ElementList) IndividualElements() []AnyIndividualElement {
+	return ld.SliceOf[AnyIndividualElement](v)
 }
 
-func (o *ElementList) IndividualLicensingInfos() ld.TypeSeq[AnyElement, *IndividualLicensingInfo] {
-	return ld.NewTypeSeq(*o, castIndividualLicensingInfo)
+func (v ElementList) IndividualLicensingInfos() []AnyIndividualLicensingInfo {
+	return ld.SliceOf[AnyIndividualLicensingInfo](v)
 }
 
-func (o *ElementList) Licenses() ld.TypeSeq[AnyElement, *License] {
-	return ld.NewTypeSeq(*o, castLicense)
+func (v ElementList) Licenses() []AnyLicense {
+	return ld.SliceOf[AnyLicense](v)
 }
 
-func (o *ElementList) LicenseAdditions() ld.TypeSeq[AnyElement, *LicenseAddition] {
-	return ld.NewTypeSeq(*o, castLicenseAddition)
+func (v ElementList) LicenseAdditions() []AnyLicenseAddition {
+	return ld.SliceOf[AnyLicenseAddition](v)
 }
 
-func (o *ElementList) LicenseExpressions() ld.TypeSeq[AnyElement, *LicenseExpression] {
-	return ld.NewTypeSeq(*o, castLicenseExpression)
+func (v ElementList) LicenseExpressions() []AnyLicenseExpression {
+	return ld.SliceOf[AnyLicenseExpression](v)
 }
 
-func (o *ElementList) LicenseInfos() ld.TypeSeq[AnyElement, *LicenseInfo] {
-	return ld.NewTypeSeq(*o, castLicenseInfo)
+func (v ElementList) LicenseInfos() []AnyLicenseInfo {
+	return ld.SliceOf[AnyLicenseInfo](v)
 }
 
-func (o *ElementList) LifecycleScopedRelationships() ld.TypeSeq[AnyElement, *LifecycleScopedRelationship] {
-	return ld.NewTypeSeq(*o, castLifecycleScopedRelationship)
+func (v ElementList) LifecycleScopedRelationships() []AnyLifecycleScopedRelationship {
+	return ld.SliceOf[AnyLifecycleScopedRelationship](v)
 }
 
-func (o *ElementList) ListedLicenses() ld.TypeSeq[AnyElement, *ListedLicense] {
-	return ld.NewTypeSeq(*o, castListedLicense)
+func (v ElementList) ListedLicenses() []AnyListedLicense {
+	return ld.SliceOf[AnyListedLicense](v)
 }
 
-func (o *ElementList) ListedLicenseExceptions() ld.TypeSeq[AnyElement, *ListedLicenseException] {
-	return ld.NewTypeSeq(*o, castListedLicenseException)
+func (v ElementList) ListedLicenseExceptions() []AnyListedLicenseException {
+	return ld.SliceOf[AnyListedLicenseException](v)
 }
 
-func (o *ElementList) OrLaterOperators() ld.TypeSeq[AnyElement, *OrLaterOperator] {
-	return ld.NewTypeSeq(*o, castOrLaterOperator)
+func (v ElementList) OrLaterOperators() []AnyOrLaterOperator {
+	return ld.SliceOf[AnyOrLaterOperator](v)
 }
 
-func (o *ElementList) Organizations() ld.TypeSeq[AnyElement, *Organization] {
-	return ld.NewTypeSeq(*o, castOrganization)
+func (v ElementList) Organizations() []AnyOrganization {
+	return ld.SliceOf[AnyOrganization](v)
 }
 
-func (o *ElementList) Packages() ld.TypeSeq[AnyElement, *Package] {
-	return ld.NewTypeSeq(*o, castPackage)
+func (v ElementList) Packages() []AnyPackage {
+	return ld.SliceOf[AnyPackage](v)
 }
 
-func (o *ElementList) People() ld.TypeSeq[AnyElement, *Person] {
-	return ld.NewTypeSeq(*o, castPerson)
+func (v ElementList) People() []AnyPerson {
+	return ld.SliceOf[AnyPerson](v)
 }
 
-func (o *ElementList) Relationships() ld.TypeSeq[AnyElement, *Relationship] {
-	return ld.NewTypeSeq(*o, castRelationship)
+func (v ElementList) Relationships() []AnyRelationship {
+	return ld.SliceOf[AnyRelationship](v)
 }
 
-func (o *ElementList) SBOMs() ld.TypeSeq[AnyElement, *SBOM] {
-	return ld.NewTypeSeq(*o, castSBOM)
+func (v ElementList) SBOMs() []AnySBOM {
+	return ld.SliceOf[AnySBOM](v)
 }
 
-func (o *ElementList) SimpleLicensingTexts() ld.TypeSeq[AnyElement, *SimpleLicensingText] {
-	return ld.NewTypeSeq(*o, castSimpleLicensingText)
+func (v ElementList) SimpleLicensingTexts() []AnySimpleLicensingText {
+	return ld.SliceOf[AnySimpleLicensingText](v)
 }
 
-func (o *ElementList) Snippets() ld.TypeSeq[AnyElement, *Snippet] {
-	return ld.NewTypeSeq(*o, castSnippet)
+func (v ElementList) Snippets() []AnySnippet {
+	return ld.SliceOf[AnySnippet](v)
 }
 
-func (o *ElementList) SoftwareAgents() ld.TypeSeq[AnyElement, *SoftwareAgent] {
-	return ld.NewTypeSeq(*o, castSoftwareAgent)
+func (v ElementList) SoftwareAgents() []AnySoftwareAgent {
+	return ld.SliceOf[AnySoftwareAgent](v)
 }
 
-func (o *ElementList) SoftwareArtifacts() ld.TypeSeq[AnyElement, *SoftwareArtifact] {
-	return ld.NewTypeSeq(*o, castSoftwareArtifact)
+func (v ElementList) SoftwareArtifacts() []AnySoftwareArtifact {
+	return ld.SliceOf[AnySoftwareArtifact](v)
 }
 
-func (o *ElementList) SpdxDocuments() ld.TypeSeq[AnyElement, *SpdxDocument] {
-	return ld.NewTypeSeq(*o, castSpdxDocument)
+func (v ElementList) SpdxDocuments() []AnySpdxDocument {
+	return ld.SliceOf[AnySpdxDocument](v)
 }
 
-func (o *ElementList) SsvcVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *SsvcVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castSsvcVulnAssessmentRelationship)
+func (v ElementList) SsvcVulnAssessmentRelationships() []AnySsvcVulnAssessmentRelationship {
+	return ld.SliceOf[AnySsvcVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) Tools() ld.TypeSeq[AnyElement, *Tool] {
-	return ld.NewTypeSeq(*o, castTool)
+func (v ElementList) Tools() []AnyTool {
+	return ld.SliceOf[AnyTool](v)
 }
 
-func (o *ElementList) VexAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VexAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexAffectedVulnAssessmentRelationship)
+func (v ElementList) VexAffectedVulnAssessmentRelationships() []AnyVexAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) VexFixedVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VexFixedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexFixedVulnAssessmentRelationship)
+func (v ElementList) VexFixedVulnAssessmentRelationships() []AnyVexFixedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexFixedVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) VexNotAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VexNotAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexNotAffectedVulnAssessmentRelationship)
+func (v ElementList) VexNotAffectedVulnAssessmentRelationships() []AnyVexNotAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexNotAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) VexUnderInvestigationVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VexUnderInvestigationVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexUnderInvestigationVulnAssessmentRelationship)
+func (v ElementList) VexUnderInvestigationVulnAssessmentRelationships() []AnyVexUnderInvestigationVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexUnderInvestigationVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) VexVulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VexVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexVulnAssessmentRelationship)
+func (v ElementList) VexVulnAssessmentRelationships() []AnyVexVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) VulnAssessmentRelationships() ld.TypeSeq[AnyElement, *VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVulnAssessmentRelationship)
+func (v ElementList) VulnAssessmentRelationships() []AnyVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVulnAssessmentRelationship](v)
 }
 
-func (o *ElementList) Vulnerabilities() ld.TypeSeq[AnyElement, *Vulnerability] {
-	return ld.NewTypeSeq(*o, castVulnerability)
+func (v ElementList) Vulnerabilities() []AnyVulnerability {
+	return ld.SliceOf[AnyVulnerability](v)
 }
 
-func (o *ElementList) WithAdditionOperators() ld.TypeSeq[AnyElement, *WithAdditionOperator] {
-	return ld.NewTypeSeq(*o, castWithAdditionOperator)
+func (v ElementList) WithAdditionOperators() []AnyWithAdditionOperator {
+	return ld.SliceOf[AnyWithAdditionOperator](v)
 }
 
 type AnyElementCollection interface {
 	AnyElement
-	asElementCollection() *ElementCollection
+	asElementCollection()
+	GetElements() ElementList
+	SetElements(ElementList)
+	GetRootElements() ElementList
+	SetRootElements(ElementList)
+	GetProfileConformances() []ProfileIdentifierType
+	SetProfileConformances([]ProfileIdentifierType)
 }
 
 // ElementCollection A collection of Elements, not necessarily with unifying context.
-type ElementCollection struct {
-	Element
-	// Elements Refers to one or more Elements that are part of an ElementCollection.
-	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
-	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
-	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
-	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
-	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
-}
-
-func (o *ElementCollection) asElementCollection() *ElementCollection {
-	return o
-}
-
 type ElementCollectionList []AnyElementCollection
 
-func (o *ElementCollectionList) BOMs() ld.TypeSeq[AnyElementCollection, *BOM] {
-	return ld.NewTypeSeq(*o, castBOM)
+func (v ElementCollectionList) BOMs() []AnyBOM {
+	return ld.SliceOf[AnyBOM](v)
 }
 
-func (o *ElementCollectionList) Bundles() ld.TypeSeq[AnyElementCollection, *Bundle] {
-	return ld.NewTypeSeq(*o, castBundle)
+func (v ElementCollectionList) Bundles() []AnyBundle {
+	return ld.SliceOf[AnyBundle](v)
 }
 
-func (o *ElementCollectionList) ElementCollections() ld.TypeSeq[AnyElementCollection, *ElementCollection] {
-	return ld.NewTypeSeq(*o, castElementCollection)
+func (v ElementCollectionList) ElementCollections() []AnyElementCollection {
+	return ld.SliceOf[AnyElementCollection](v)
 }
 
-func (o *ElementCollectionList) SBOMs() ld.TypeSeq[AnyElementCollection, *SBOM] {
-	return ld.NewTypeSeq(*o, castSBOM)
+func (v ElementCollectionList) SBOMs() []AnySBOM {
+	return ld.SliceOf[AnySBOM](v)
 }
 
-func (o *ElementCollectionList) SpdxDocuments() ld.TypeSeq[AnyElementCollection, *SpdxDocument] {
-	return ld.NewTypeSeq(*o, castSpdxDocument)
+func (v ElementCollectionList) SpdxDocuments() []AnySpdxDocument {
+	return ld.SliceOf[AnySpdxDocument](v)
 }
 
 type AnyEnergyConsumption interface {
-	asEnergyConsumption() *EnergyConsumption
+	asEnergyConsumption()
+	GetInferenceEnergyConsumptions() EnergyConsumptionDescriptionList
+	SetInferenceEnergyConsumptions(EnergyConsumptionDescriptionList)
+	GetTrainingEnergyConsumptions() EnergyConsumptionDescriptionList
+	SetTrainingEnergyConsumptions(EnergyConsumptionDescriptionList)
+	GetFinetuningEnergyConsumptions() EnergyConsumptionDescriptionList
+	SetFinetuningEnergyConsumptions(EnergyConsumptionDescriptionList)
 }
 
 // EnergyConsumption A class for describing the energy consumption incurred by an AI model in different stages of its lifecycle.
@@ -1112,18 +3873,43 @@ type EnergyConsumption struct {
 	FinetuningEnergyConsumptions EnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/finetuningEnergyConsumption" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription"`
 }
 
-func (o *EnergyConsumption) asEnergyConsumption() *EnergyConsumption {
-	return o
+func (o *EnergyConsumption) asEnergyConsumption() {}
+func (o *EnergyConsumption) GetInferenceEnergyConsumptions() EnergyConsumptionDescriptionList {
+	return o.InferenceEnergyConsumptions
+}
+
+func (o *EnergyConsumption) SetInferenceEnergyConsumptions(v EnergyConsumptionDescriptionList) {
+	o.InferenceEnergyConsumptions = v
+}
+
+func (o *EnergyConsumption) GetTrainingEnergyConsumptions() EnergyConsumptionDescriptionList {
+	return o.TrainingEnergyConsumptions
+}
+
+func (o *EnergyConsumption) SetTrainingEnergyConsumptions(v EnergyConsumptionDescriptionList) {
+	o.TrainingEnergyConsumptions = v
+}
+
+func (o *EnergyConsumption) GetFinetuningEnergyConsumptions() EnergyConsumptionDescriptionList {
+	return o.FinetuningEnergyConsumptions
+}
+
+func (o *EnergyConsumption) SetFinetuningEnergyConsumptions(v EnergyConsumptionDescriptionList) {
+	o.FinetuningEnergyConsumptions = v
 }
 
 type EnergyConsumptionList []AnyEnergyConsumption
 
-func (o *EnergyConsumptionList) EnergyConsumptions() ld.TypeSeq[AnyEnergyConsumption, *EnergyConsumption] {
-	return ld.NewTypeSeq(*o, castEnergyConsumption)
+func (v EnergyConsumptionList) EnergyConsumptions() []AnyEnergyConsumption {
+	return ld.SliceOf[AnyEnergyConsumption](v)
 }
 
 type AnyEnergyConsumptionDescription interface {
-	asEnergyConsumptionDescription() *EnergyConsumptionDescription
+	asEnergyConsumptionDescription()
+	GetEnergyQuantity() float64
+	SetEnergyQuantity(float64)
+	GetEnergyUnit() EnergyUnitType
+	SetEnergyUnit(EnergyUnitType)
 }
 
 // EnergyConsumptionDescription The class that helps note down the quantity of energy consumption and the unit used for measurement.
@@ -1136,14 +3922,27 @@ type EnergyConsumptionDescription struct {
 	EnergyUnit EnergyUnitType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyUnit" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType"`
 }
 
-func (o *EnergyConsumptionDescription) asEnergyConsumptionDescription() *EnergyConsumptionDescription {
-	return o
+func (o *EnergyConsumptionDescription) asEnergyConsumptionDescription() {}
+func (o *EnergyConsumptionDescription) GetEnergyQuantity() float64 {
+	return o.EnergyQuantity
+}
+
+func (o *EnergyConsumptionDescription) SetEnergyQuantity(v float64) {
+	o.EnergyQuantity = v
+}
+
+func (o *EnergyConsumptionDescription) GetEnergyUnit() EnergyUnitType {
+	return o.EnergyUnit
+}
+
+func (o *EnergyConsumptionDescription) SetEnergyUnit(v EnergyUnitType) {
+	o.EnergyUnit = v
 }
 
 type EnergyConsumptionDescriptionList []AnyEnergyConsumptionDescription
 
-func (o *EnergyConsumptionDescriptionList) EnergyConsumptionDescriptions() ld.TypeSeq[AnyEnergyConsumptionDescription, *EnergyConsumptionDescription] {
-	return ld.NewTypeSeq(*o, castEnergyConsumptionDescription)
+func (v EnergyConsumptionDescriptionList) EnergyConsumptionDescriptions() []AnyEnergyConsumptionDescription {
+	return ld.SliceOf[AnyEnergyConsumptionDescription](v)
 }
 
 // EnergyUnitType Specifies the unit of energy consumption.
@@ -1169,27 +3968,247 @@ var EnergyUnitType_Other = EnergyUnitType{
 
 type AnyEpssVulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asEpssVulnAssessmentRelationship() *EpssVulnAssessmentRelationship
+	asEpssVulnAssessmentRelationship()
+	GetProbability() float64
+	SetProbability(float64)
+	GetPercentile() float64
+	SetPercentile(float64)
 }
 
 // EpssVulnAssessmentRelationship Provides an EPSS assessment for a vulnerability.
 type EpssVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/EpssVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/EpssVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Probability A probability score between 0 and 1 of a vulnerability being exploited.
 	Probability float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/probability" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
 	// Percentile The percentile of the current probability score.
 	Percentile float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/percentile" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
 }
 
-func (o *EpssVulnAssessmentRelationship) asEpssVulnAssessmentRelationship() *EpssVulnAssessmentRelationship {
-	return o
+func (o *EpssVulnAssessmentRelationship) asEpssVulnAssessmentRelationship() {}
+func (o *EpssVulnAssessmentRelationship) asVulnAssessmentRelationship()     {}
+func (o *EpssVulnAssessmentRelationship) asRelationship()                   {}
+func (o *EpssVulnAssessmentRelationship) asElement()                        {}
+func (o *EpssVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *EpssVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *EpssVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *EpssVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *EpssVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *EpssVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *EpssVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *EpssVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *EpssVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *EpssVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *EpssVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *EpssVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *EpssVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *EpssVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *EpssVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *EpssVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *EpssVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *EpssVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *EpssVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *EpssVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *EpssVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetProbability() float64 {
+	return o.Probability
+}
+
+func (o *EpssVulnAssessmentRelationship) SetProbability(v float64) {
+	o.Probability = v
+}
+
+func (o *EpssVulnAssessmentRelationship) GetPercentile() float64 {
+	return o.Percentile
+}
+
+func (o *EpssVulnAssessmentRelationship) SetPercentile(v float64) {
+	o.Percentile = v
 }
 
 type EpssVulnAssessmentRelationshipList []AnyEpssVulnAssessmentRelationship
 
-func (o *EpssVulnAssessmentRelationshipList) EpssVulnAssessmentRelationships() ld.TypeSeq[AnyEpssVulnAssessmentRelationship, *EpssVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castEpssVulnAssessmentRelationship)
+func (v EpssVulnAssessmentRelationshipList) EpssVulnAssessmentRelationships() []AnyEpssVulnAssessmentRelationship {
+	return ld.SliceOf[AnyEpssVulnAssessmentRelationship](v)
 }
 
 // ExploitCatalogType Specifies the exploit catalog type.
@@ -1210,13 +4229,59 @@ var ExploitCatalogType_Other = ExploitCatalogType{
 
 type AnyExploitCatalogVulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asExploitCatalogVulnAssessmentRelationship() *ExploitCatalogVulnAssessmentRelationship
+	asExploitCatalogVulnAssessmentRelationship()
+	GetLocator() URI
+	SetLocator(URI)
+	GetExploited() bool
+	SetExploited(bool)
+	GetCatalogType() ExploitCatalogType
+	SetCatalogType(ExploitCatalogType)
 }
 
 // ExploitCatalogVulnAssessmentRelationship Provides an exploit assessment of a vulnerability.
 type ExploitCatalogVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Locator Provides the location of an exploit catalog.
 	Locator URI `iri:"https://spdx.org/rdf/3.0.1/terms/Security/locator" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// Exploited Describe that a CVE is known to have an exploit because it's been listed in an exploit catalog.
@@ -1225,77 +4290,255 @@ type ExploitCatalogVulnAssessmentRelationship struct {
 	CatalogType ExploitCatalogType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/catalogType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType"`
 }
 
-func (o *ExploitCatalogVulnAssessmentRelationship) asExploitCatalogVulnAssessmentRelationship() *ExploitCatalogVulnAssessmentRelationship {
-	return o
+func (o *ExploitCatalogVulnAssessmentRelationship) asExploitCatalogVulnAssessmentRelationship() {}
+func (o *ExploitCatalogVulnAssessmentRelationship) asVulnAssessmentRelationship()               {}
+func (o *ExploitCatalogVulnAssessmentRelationship) asRelationship()                             {}
+func (o *ExploitCatalogVulnAssessmentRelationship) asElement()                                  {}
+func (o *ExploitCatalogVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetLocator() URI {
+	return o.Locator
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetLocator(v URI) {
+	o.Locator = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetExploited() bool {
+	return o.Exploited
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetExploited(v bool) {
+	o.Exploited = v
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) GetCatalogType() ExploitCatalogType {
+	return o.CatalogType
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetCatalogType(v ExploitCatalogType) {
+	o.CatalogType = v
 }
 
 type ExploitCatalogVulnAssessmentRelationshipList []AnyExploitCatalogVulnAssessmentRelationship
 
-func (o *ExploitCatalogVulnAssessmentRelationshipList) ExploitCatalogVulnAssessmentRelationships() ld.TypeSeq[AnyExploitCatalogVulnAssessmentRelationship, *ExploitCatalogVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castExploitCatalogVulnAssessmentRelationship)
+func (v ExploitCatalogVulnAssessmentRelationshipList) ExploitCatalogVulnAssessmentRelationships() []AnyExploitCatalogVulnAssessmentRelationship {
+	return ld.SliceOf[AnyExploitCatalogVulnAssessmentRelationship](v)
 }
 
 type AnyExtendableLicense interface {
 	AnyLicenseInfo
-	asExtendableLicense() *ExtendableLicense
+	asExtendableLicense()
 }
 
 // ExtendableLicense Abstract class representing a License or an OrLaterOperator.
-type ExtendableLicense struct {
-	LicenseInfo
-}
-
-func (o *ExtendableLicense) asExtendableLicense() *ExtendableLicense {
-	return o
-}
-
 type ExtendableLicenseList []AnyExtendableLicense
 
-func (o *ExtendableLicenseList) CustomLicenses() ld.TypeSeq[AnyExtendableLicense, *CustomLicense] {
-	return ld.NewTypeSeq(*o, castCustomLicense)
+func (v ExtendableLicenseList) CustomLicenses() []AnyCustomLicense {
+	return ld.SliceOf[AnyCustomLicense](v)
 }
 
-func (o *ExtendableLicenseList) ExtendableLicenses() ld.TypeSeq[AnyExtendableLicense, *ExtendableLicense] {
-	return ld.NewTypeSeq(*o, castExtendableLicense)
+func (v ExtendableLicenseList) ExtendableLicenses() []AnyExtendableLicense {
+	return ld.SliceOf[AnyExtendableLicense](v)
 }
 
-func (o *ExtendableLicenseList) Licenses() ld.TypeSeq[AnyExtendableLicense, *License] {
-	return ld.NewTypeSeq(*o, castLicense)
+func (v ExtendableLicenseList) Licenses() []AnyLicense {
+	return ld.SliceOf[AnyLicense](v)
 }
 
-func (o *ExtendableLicenseList) ListedLicenses() ld.TypeSeq[AnyExtendableLicense, *ListedLicense] {
-	return ld.NewTypeSeq(*o, castListedLicense)
+func (v ExtendableLicenseList) ListedLicenses() []AnyListedLicense {
+	return ld.SliceOf[AnyListedLicense](v)
 }
 
-func (o *ExtendableLicenseList) OrLaterOperators() ld.TypeSeq[AnyExtendableLicense, *OrLaterOperator] {
-	return ld.NewTypeSeq(*o, castOrLaterOperator)
+func (v ExtendableLicenseList) OrLaterOperators() []AnyOrLaterOperator {
+	return ld.SliceOf[AnyOrLaterOperator](v)
 }
 
 type AnyExtension interface {
-	asExtension() *Extension
+	asExtension()
 }
 
 // Extension A characterization of some aspect of an Element that is associated with the Element in a generalized fashion.
-type Extension struct {
-	ID string `iri:"@id"`
-}
-
-func (o *Extension) asExtension() *Extension {
-	return o
-}
-
 type ExtensionList []AnyExtension
 
-func (o *ExtensionList) CdxPropertiesExtensions() ld.TypeSeq[AnyExtension, *CdxPropertiesExtension] {
-	return ld.NewTypeSeq(*o, castCdxPropertiesExtension)
+func (v ExtensionList) CdxPropertiesExtensions() []AnyCdxPropertiesExtension {
+	return ld.SliceOf[AnyCdxPropertiesExtension](v)
 }
 
-func (o *ExtensionList) Extensions() ld.TypeSeq[AnyExtension, *Extension] {
-	return ld.NewTypeSeq(*o, castExtension)
+func (v ExtensionList) Extensions() []AnyExtension {
+	return ld.SliceOf[AnyExtension](v)
 }
 
 type AnyExternalIdentifier interface {
-	asExternalIdentifier() *ExternalIdentifier
+	asExternalIdentifier()
+	GetIdentifier() string
+	SetIdentifier(string)
+	GetIssuingAuthority() string
+	SetIssuingAuthority(string)
+	GetComment() string
+	SetComment(string)
+	GetIdentifierLocators() []URI
+	SetIdentifierLocators([]URI)
+	GetType() ExternalIdentifierType
+	SetType(ExternalIdentifierType)
 }
 
 // ExternalIdentifier A reference to a resource identifier defined outside the scope of SPDX-3.0 content that uniquely identifies an Element.
@@ -1314,14 +4557,51 @@ type ExternalIdentifier struct {
 	Type ExternalIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType"`
 }
 
-func (o *ExternalIdentifier) asExternalIdentifier() *ExternalIdentifier {
-	return o
+func (o *ExternalIdentifier) asExternalIdentifier() {}
+func (o *ExternalIdentifier) GetIdentifier() string {
+	return o.Identifier
+}
+
+func (o *ExternalIdentifier) SetIdentifier(v string) {
+	o.Identifier = v
+}
+
+func (o *ExternalIdentifier) GetIssuingAuthority() string {
+	return o.IssuingAuthority
+}
+
+func (o *ExternalIdentifier) SetIssuingAuthority(v string) {
+	o.IssuingAuthority = v
+}
+
+func (o *ExternalIdentifier) GetComment() string {
+	return o.Comment
+}
+
+func (o *ExternalIdentifier) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ExternalIdentifier) GetIdentifierLocators() []URI {
+	return o.IdentifierLocators
+}
+
+func (o *ExternalIdentifier) SetIdentifierLocators(v []URI) {
+	o.IdentifierLocators = v
+}
+
+func (o *ExternalIdentifier) GetType() ExternalIdentifierType {
+	return o.Type
+}
+
+func (o *ExternalIdentifier) SetType(v ExternalIdentifierType) {
+	o.Type = v
 }
 
 type ExternalIdentifierList []AnyExternalIdentifier
 
-func (o *ExternalIdentifierList) ExternalIdentifiers() ld.TypeSeq[AnyExternalIdentifier, *ExternalIdentifier] {
-	return ld.NewTypeSeq(*o, castExternalIdentifier)
+func (v ExternalIdentifierList) ExternalIdentifiers() []AnyExternalIdentifier {
+	return ld.SliceOf[AnyExternalIdentifier](v)
 }
 
 // ExternalIdentifierType Specifies the type of an external identifier.
@@ -1386,7 +4666,15 @@ var ExternalIdentifierType_UrlScheme = ExternalIdentifierType{
 }
 
 type AnyExternalMap interface {
-	asExternalMap() *ExternalMap
+	asExternalMap()
+	GetExternalSpdxID() URI
+	SetExternalSpdxID(URI)
+	GetLocationHint() URI
+	SetLocationHint(URI)
+	GetVerifiedUsing() IntegrityMethodList
+	SetVerifiedUsing(IntegrityMethodList)
+	GetDefiningArtifact() AnyArtifact
+	SetDefiningArtifact(AnyArtifact)
 }
 
 // ExternalMap A map of Element identifiers that are used within an SpdxDocument but defined external to that SpdxDocument.
@@ -1403,18 +4691,55 @@ type ExternalMap struct {
 	DefiningArtifact AnyArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Core/definingArtifact" type:"https://spdx.org/rdf/3.0.1/terms/Core/Artifact"`
 }
 
-func (o *ExternalMap) asExternalMap() *ExternalMap {
-	return o
+func (o *ExternalMap) asExternalMap() {}
+func (o *ExternalMap) GetExternalSpdxID() URI {
+	return o.ExternalSpdxID
+}
+
+func (o *ExternalMap) SetExternalSpdxID(v URI) {
+	o.ExternalSpdxID = v
+}
+
+func (o *ExternalMap) GetLocationHint() URI {
+	return o.LocationHint
+}
+
+func (o *ExternalMap) SetLocationHint(v URI) {
+	o.LocationHint = v
+}
+
+func (o *ExternalMap) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *ExternalMap) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *ExternalMap) GetDefiningArtifact() AnyArtifact {
+	return o.DefiningArtifact
+}
+
+func (o *ExternalMap) SetDefiningArtifact(v AnyArtifact) {
+	o.DefiningArtifact = v
 }
 
 type ExternalMapList []AnyExternalMap
 
-func (o *ExternalMapList) ExternalMaps() ld.TypeSeq[AnyExternalMap, *ExternalMap] {
-	return ld.NewTypeSeq(*o, castExternalMap)
+func (v ExternalMapList) ExternalMaps() []AnyExternalMap {
+	return ld.SliceOf[AnyExternalMap](v)
 }
 
 type AnyExternalRef interface {
-	asExternalRef() *ExternalRef
+	asExternalRef()
+	GetLocators() []string
+	SetLocators([]string)
+	GetContentType() string
+	SetContentType(string)
+	GetType() ExternalRefType
+	SetType(ExternalRefType)
+	GetComment() string
+	SetComment(string)
 }
 
 // ExternalRef A reference to a resource outside the scope of SPDX-3.0 content related to an Element.
@@ -1431,14 +4756,43 @@ type ExternalRef struct {
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *ExternalRef) asExternalRef() *ExternalRef {
-	return o
+func (o *ExternalRef) asExternalRef() {}
+func (o *ExternalRef) GetLocators() []string {
+	return o.Locators
+}
+
+func (o *ExternalRef) SetLocators(v []string) {
+	o.Locators = v
+}
+
+func (o *ExternalRef) GetContentType() string {
+	return o.ContentType
+}
+
+func (o *ExternalRef) SetContentType(v string) {
+	o.ContentType = v
+}
+
+func (o *ExternalRef) GetType() ExternalRefType {
+	return o.Type
+}
+
+func (o *ExternalRef) SetType(v ExternalRefType) {
+	o.Type = v
+}
+
+func (o *ExternalRef) GetComment() string {
+	return o.Comment
+}
+
+func (o *ExternalRef) SetComment(v string) {
+	o.Comment = v
 }
 
 type ExternalRefList []AnyExternalRef
 
-func (o *ExternalRefList) ExternalRefs() ld.TypeSeq[AnyExternalRef, *ExternalRef] {
-	return ld.NewTypeSeq(*o, castExternalRef)
+func (v ExternalRefList) ExternalRefs() []AnyExternalRef {
+	return ld.SliceOf[AnyExternalRef](v)
 }
 
 // ExternalRefType Specifies the type of an external reference.
@@ -1679,27 +5033,257 @@ var ExternalRefType_VulnerabilityExploitabilityAssessment = ExternalRefType{
 
 type AnyFile interface {
 	AnySoftwareArtifact
-	asFile() *File
+	asFile()
+	GetContentType() string
+	SetContentType(string)
+	GetKind() FileKindType
+	SetKind(FileKindType)
 }
 
 // File Refers to any object that stores content on a computer.
 type File struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/File" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	SoftwareArtifact
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/File" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
+	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
+	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
+	AttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// AdditionalPurposes Provides additional purpose information of the software artifact.
+	AdditionalPurposes []SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// PrimaryPurpose Provides information about the primary purpose of the software artifact.
+	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
+	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ContentType Provides information about the content type of an Element or a Property.
 	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Kind Describes if a given file is a directory or non-directory kind of file.
 	Kind FileKindType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/fileKind" type:"https://spdx.org/rdf/3.0.1/terms/Software/FileKindType"`
 }
 
-func (o *File) asFile() *File {
-	return o
+func (o *File) asFile()             {}
+func (o *File) asSoftwareArtifact() {}
+func (o *File) asArtifact()         {}
+func (o *File) asElement()          {}
+func (o *File) GetDescription() string {
+	return o.Description
+}
+
+func (o *File) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *File) GetComment() string {
+	return o.Comment
+}
+
+func (o *File) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *File) GetName() string {
+	return o.Name
+}
+
+func (o *File) SetName(v string) {
+	o.Name = v
+}
+
+func (o *File) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *File) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *File) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *File) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *File) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *File) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *File) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *File) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *File) GetSummary() string {
+	return o.Summary
+}
+
+func (o *File) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *File) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *File) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *File) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *File) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *File) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *File) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *File) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *File) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *File) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *File) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *File) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *File) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *File) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *File) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *File) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *File) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *File) GetContentIdentifiers() ContentIdentifierList {
+	return o.ContentIdentifiers
+}
+
+func (o *File) SetContentIdentifiers(v ContentIdentifierList) {
+	o.ContentIdentifiers = v
+}
+
+func (o *File) GetAttributionTexts() []string {
+	return o.AttributionTexts
+}
+
+func (o *File) SetAttributionTexts(v []string) {
+	o.AttributionTexts = v
+}
+
+func (o *File) GetAdditionalPurposes() []SoftwarePurpose {
+	return o.AdditionalPurposes
+}
+
+func (o *File) SetAdditionalPurposes(v []SoftwarePurpose) {
+	o.AdditionalPurposes = v
+}
+
+func (o *File) GetPrimaryPurpose() SoftwarePurpose {
+	return o.PrimaryPurpose
+}
+
+func (o *File) SetPrimaryPurpose(v SoftwarePurpose) {
+	o.PrimaryPurpose = v
+}
+
+func (o *File) GetCopyrightText() string {
+	return o.CopyrightText
+}
+
+func (o *File) SetCopyrightText(v string) {
+	o.CopyrightText = v
+}
+
+func (o *File) GetContentType() string {
+	return o.ContentType
+}
+
+func (o *File) SetContentType(v string) {
+	o.ContentType = v
+}
+
+func (o *File) GetKind() FileKindType {
+	return o.Kind
+}
+
+func (o *File) SetKind(v FileKindType) {
+	o.Kind = v
 }
 
 type FileList []AnyFile
 
-func (o *FileList) Files() ld.TypeSeq[AnyFile, *File] {
-	return ld.NewTypeSeq(*o, castFile)
+func (v FileList) Files() []AnyFile {
+	return ld.SliceOf[AnyFile](v)
 }
 
 // FileKindType Enumeration of the different kinds of SPDX file.
@@ -1720,27 +5304,55 @@ var FileKindType_File = FileKindType{
 
 type AnyHash interface {
 	AnyIntegrityMethod
-	asHash() *Hash
+	asHash()
+	GetValue() string
+	SetValue(string)
+	GetAlgorithm() HashAlgorithm
+	SetAlgorithm(HashAlgorithm)
 }
 
 // Hash A mathematically calculated representation of a grouping of data.
 type Hash struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Hash" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
-	IntegrityMethod
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Hash" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
+	ID string  `iri:"@id"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Value The result of applying a hash algorithm to an Element.
 	Value string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Algorithm Specifies the algorithm used for calculating the hash value.
 	Algorithm HashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm"`
 }
 
-func (o *Hash) asHash() *Hash {
-	return o
+func (o *Hash) asHash()            {}
+func (o *Hash) asIntegrityMethod() {}
+func (o *Hash) GetComment() string {
+	return o.Comment
+}
+
+func (o *Hash) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Hash) GetValue() string {
+	return o.Value
+}
+
+func (o *Hash) SetValue(v string) {
+	o.Value = v
+}
+
+func (o *Hash) GetAlgorithm() HashAlgorithm {
+	return o.Algorithm
+}
+
+func (o *Hash) SetAlgorithm(v HashAlgorithm) {
+	o.Algorithm = v
 }
 
 type HashList []AnyHash
 
-func (o *HashList) Hashes() ld.TypeSeq[AnyHash, *Hash] {
-	return ld.NewTypeSeq(*o, castHash)
+func (v HashList) Hashes() []AnyHash {
+	return ld.SliceOf[AnyHash](v)
 }
 
 // HashAlgorithm A mathematical algorithm that maps data of arbitrary size to a bit string.
@@ -1861,194 +5473,371 @@ var HashAlgorithm_Sha512 = HashAlgorithm{
 
 type AnyIndividualElement interface {
 	AnyElement
-	asIndividualElement() *IndividualElement
+	asIndividualElement()
 }
 
 // IndividualElement A concrete subclass of Element used by Individuals in the Core profile.
 type IndividualElement struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/IndividualElement" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/IndividualElement" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *IndividualElement) asIndividualElement() *IndividualElement {
-	return o
+func (o *IndividualElement) asIndividualElement() {}
+func (o *IndividualElement) asElement()           {}
+func (o *IndividualElement) GetDescription() string {
+	return o.Description
+}
+
+func (o *IndividualElement) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *IndividualElement) GetComment() string {
+	return o.Comment
+}
+
+func (o *IndividualElement) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *IndividualElement) GetName() string {
+	return o.Name
+}
+
+func (o *IndividualElement) SetName(v string) {
+	o.Name = v
+}
+
+func (o *IndividualElement) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *IndividualElement) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *IndividualElement) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *IndividualElement) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *IndividualElement) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *IndividualElement) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *IndividualElement) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *IndividualElement) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *IndividualElement) GetSummary() string {
+	return o.Summary
+}
+
+func (o *IndividualElement) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *IndividualElement) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *IndividualElement) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 // IndividualElement_NoAssertionElement An Individual Value for Element representing a set of Elements of unknown\nidentify or cardinality (number).
-var IndividualElement_NoAssertionElement AnyIndividualElement = &ExternalIRI{
-	id: "https://spdx.org/rdf/3.0.1/terms/Core/NoAssertionElement",
+var IndividualElement_NoAssertionElement AnyIndividualElement = &IndividualElement{
+	ID: "https://spdx.org/rdf/3.0.1/terms/Core/NoAssertionElement",
 }
 
 // IndividualElement_NoneElement An Individual Value for Element representing a set of Elements with\ncardinality (number/count) of zero.
-var IndividualElement_NoneElement AnyIndividualElement = &ExternalIRI{
-	id: "https://spdx.org/rdf/3.0.1/terms/Core/NoneElement",
+var IndividualElement_NoneElement AnyIndividualElement = &IndividualElement{
+	ID: "https://spdx.org/rdf/3.0.1/terms/Core/NoneElement",
 }
 
 type IndividualElementList []AnyIndividualElement
 
-func (o *IndividualElementList) IndividualElements() ld.TypeSeq[AnyIndividualElement, *IndividualElement] {
-	return ld.NewTypeSeq(*o, castIndividualElement)
+func (v IndividualElementList) IndividualElements() []AnyIndividualElement {
+	return ld.SliceOf[AnyIndividualElement](v)
 }
 
 type AnyIndividualLicensingInfo interface {
 	AnyLicenseInfo
-	asIndividualLicensingInfo() *IndividualLicensingInfo
+	asIndividualLicensingInfo()
 }
 
 // IndividualLicensingInfo A concrete subclass of AnyLicenseInfo used by Individuals in the ExpandedLicensing profile.
 type IndividualLicensingInfo struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/IndividualLicensingInfo" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseInfo
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/IndividualLicensingInfo" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *IndividualLicensingInfo) asIndividualLicensingInfo() *IndividualLicensingInfo {
-	return o
+func (o *IndividualLicensingInfo) asIndividualLicensingInfo() {}
+func (o *IndividualLicensingInfo) asLicenseInfo()             {}
+func (o *IndividualLicensingInfo) asElement()                 {}
+func (o *IndividualLicensingInfo) GetDescription() string {
+	return o.Description
+}
+
+func (o *IndividualLicensingInfo) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *IndividualLicensingInfo) GetComment() string {
+	return o.Comment
+}
+
+func (o *IndividualLicensingInfo) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *IndividualLicensingInfo) GetName() string {
+	return o.Name
+}
+
+func (o *IndividualLicensingInfo) SetName(v string) {
+	o.Name = v
+}
+
+func (o *IndividualLicensingInfo) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *IndividualLicensingInfo) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *IndividualLicensingInfo) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *IndividualLicensingInfo) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *IndividualLicensingInfo) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *IndividualLicensingInfo) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *IndividualLicensingInfo) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *IndividualLicensingInfo) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *IndividualLicensingInfo) GetSummary() string {
+	return o.Summary
+}
+
+func (o *IndividualLicensingInfo) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *IndividualLicensingInfo) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *IndividualLicensingInfo) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 // IndividualLicensingInfo_NoAssertionLicense An Individual Value for License when no assertion can be made about its actual\nvalue.
-var IndividualLicensingInfo_NoAssertionLicense AnyIndividualLicensingInfo = &ExternalIRI{
-	id: "https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/NoAssertionLicense",
+var IndividualLicensingInfo_NoAssertionLicense AnyIndividualLicensingInfo = &IndividualLicensingInfo{
+	ID: "https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/NoAssertionLicense",
 }
 
 // IndividualLicensingInfo_NoneLicense An Individual Value for License where the SPDX data creator determines that no\nlicense is present.
-var IndividualLicensingInfo_NoneLicense AnyIndividualLicensingInfo = &ExternalIRI{
-	id: "https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/NoneLicense",
+var IndividualLicensingInfo_NoneLicense AnyIndividualLicensingInfo = &IndividualLicensingInfo{
+	ID: "https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/NoneLicense",
 }
 
 type IndividualLicensingInfoList []AnyIndividualLicensingInfo
 
-func (o *IndividualLicensingInfoList) IndividualLicensingInfos() ld.TypeSeq[AnyIndividualLicensingInfo, *IndividualLicensingInfo] {
-	return ld.NewTypeSeq(*o, castIndividualLicensingInfo)
+func (v IndividualLicensingInfoList) IndividualLicensingInfos() []AnyIndividualLicensingInfo {
+	return ld.SliceOf[AnyIndividualLicensingInfo](v)
 }
 
 type AnyIntegrityMethod interface {
-	asIntegrityMethod() *IntegrityMethod
+	asIntegrityMethod()
+	GetComment() string
+	SetComment(string)
 }
 
 // IntegrityMethod Provides an independently reproducible mechanism that permits verification of a specific Element.
-type IntegrityMethod struct {
-	ID string `iri:"@id"`
-	// Comment Provide consumers with comments by the creator of the Element about the Element.
-	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
-}
-
-func (o *IntegrityMethod) asIntegrityMethod() *IntegrityMethod {
-	return o
-}
-
 type IntegrityMethodList []AnyIntegrityMethod
 
-func (o *IntegrityMethodList) ContentIdentifiers() ld.TypeSeq[AnyIntegrityMethod, *ContentIdentifier] {
-	return ld.NewTypeSeq(*o, castContentIdentifier)
+func (v IntegrityMethodList) ContentIdentifiers() []AnyContentIdentifier {
+	return ld.SliceOf[AnyContentIdentifier](v)
 }
 
-func (o *IntegrityMethodList) Hashes() ld.TypeSeq[AnyIntegrityMethod, *Hash] {
-	return ld.NewTypeSeq(*o, castHash)
+func (v IntegrityMethodList) Hashes() []AnyHash {
+	return ld.SliceOf[AnyHash](v)
 }
 
-func (o *IntegrityMethodList) IntegrityMethods() ld.TypeSeq[AnyIntegrityMethod, *IntegrityMethod] {
-	return ld.NewTypeSeq(*o, castIntegrityMethod)
+func (v IntegrityMethodList) IntegrityMethods() []AnyIntegrityMethod {
+	return ld.SliceOf[AnyIntegrityMethod](v)
 }
 
-func (o *IntegrityMethodList) PackageVerificationCodes() ld.TypeSeq[AnyIntegrityMethod, *PackageVerificationCode] {
-	return ld.NewTypeSeq(*o, castPackageVerificationCode)
+func (v IntegrityMethodList) PackageVerificationCodes() []AnyPackageVerificationCode {
+	return ld.SliceOf[AnyPackageVerificationCode](v)
 }
 
 type AnyLicense interface {
 	AnyExtendableLicense
-	asLicense() *License
+	asLicense()
+	GetSeeAlsos() []URI
+	SetSeeAlsos([]URI)
+	GetIsDeprecatedLicenseID() bool
+	SetIsDeprecatedLicenseID(bool)
+	GetObsoletedBy() string
+	SetObsoletedBy(string)
+	GetStandardLicenseHeader() string
+	SetStandardLicenseHeader(string)
+	GetText() string
+	SetText(string)
+	GetIsOsiApproved() bool
+	SetIsOsiApproved(bool)
+	GetXml() string
+	SetXml(string)
+	GetIsFsfLibre() bool
+	SetIsFsfLibre(bool)
+	GetStandardLicenseTemplate() string
+	SetStandardLicenseTemplate(string)
 }
 
 // License Abstract class for the portion of an AnyLicenseInfo representing a license.
-type License struct {
-	ExtendableLicense
-	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
-	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// IsDeprecatedLicenseID Specifies whether a license or additional text identifier has been marked as deprecated.
-	IsDeprecatedLicenseID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
-	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// StandardLicenseHeader Provides a License author's preferred text to indicate that a file is covered by the License.
-	StandardLicenseHeader string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseHeader" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// Text Identifies the full text of a License or Addition.
-	Text string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// IsOsiApproved Specifies whether the License is listed as approved by the Open Source Initiative (OSI).
-	IsOsiApproved bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isOsiApproved" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-	// Xml Identifies all the text and metadata associated with a license in the license XML format.
-	Xml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// IsFsfLibre Specifies whether the License is listed as free by the Free Software Foundation (FSF).
-	IsFsfLibre bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isFsfLibre" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-	// StandardLicenseTemplate Identifies the full text of a License, in SPDX templating format.
-	StandardLicenseTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
-}
-
-func (o *License) asLicense() *License {
-	return o
-}
-
 type LicenseList []AnyLicense
 
-func (o *LicenseList) CustomLicenses() ld.TypeSeq[AnyLicense, *CustomLicense] {
-	return ld.NewTypeSeq(*o, castCustomLicense)
+func (v LicenseList) CustomLicenses() []AnyCustomLicense {
+	return ld.SliceOf[AnyCustomLicense](v)
 }
 
-func (o *LicenseList) Licenses() ld.TypeSeq[AnyLicense, *License] {
-	return ld.NewTypeSeq(*o, castLicense)
+func (v LicenseList) Licenses() []AnyLicense {
+	return ld.SliceOf[AnyLicense](v)
 }
 
-func (o *LicenseList) ListedLicenses() ld.TypeSeq[AnyLicense, *ListedLicense] {
-	return ld.NewTypeSeq(*o, castListedLicense)
+func (v LicenseList) ListedLicenses() []AnyListedLicense {
+	return ld.SliceOf[AnyListedLicense](v)
 }
 
 type AnyLicenseAddition interface {
 	AnyElement
-	asLicenseAddition() *LicenseAddition
+	asLicenseAddition()
+	GetAdditionText() string
+	SetAdditionText(string)
+	GetObsoletedBy() string
+	SetObsoletedBy(string)
+	GetLicenseXml() string
+	SetLicenseXml(string)
+	GetStandardAdditionTemplate() string
+	SetStandardAdditionTemplate(string)
+	GetSeeAlsos() []URI
+	SetSeeAlsos([]URI)
+	GetIsDeprecatedAdditionID() bool
+	SetIsDeprecatedAdditionID(bool)
 }
 
 // LicenseAddition Abstract class for additional text intended to be added to a License, but which is not itself a standalone License.
-type LicenseAddition struct {
-	Element
-	// AdditionText Identifies the full text of a LicenseAddition.
-	AdditionText string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/additionText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
-	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// LicenseXml Identifies all the text and metadata associated with a license in the license XML format.
-	LicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// StandardAdditionTemplate Identifies the full text of a LicenseAddition, in SPDX templating format.
-	StandardAdditionTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardAdditionTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
-	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// IsDeprecatedAdditionID Specifies whether an additional text identifier has been marked as deprecated.
-	IsDeprecatedAdditionID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-}
-
-func (o *LicenseAddition) asLicenseAddition() *LicenseAddition {
-	return o
-}
-
 type LicenseAdditionList []AnyLicenseAddition
 
-func (o *LicenseAdditionList) CustomLicenseAdditions() ld.TypeSeq[AnyLicenseAddition, *CustomLicenseAddition] {
-	return ld.NewTypeSeq(*o, castCustomLicenseAddition)
+func (v LicenseAdditionList) CustomLicenseAdditions() []AnyCustomLicenseAddition {
+	return ld.SliceOf[AnyCustomLicenseAddition](v)
 }
 
-func (o *LicenseAdditionList) LicenseAdditions() ld.TypeSeq[AnyLicenseAddition, *LicenseAddition] {
-	return ld.NewTypeSeq(*o, castLicenseAddition)
+func (v LicenseAdditionList) LicenseAdditions() []AnyLicenseAddition {
+	return ld.SliceOf[AnyLicenseAddition](v)
 }
 
-func (o *LicenseAdditionList) ListedLicenseExceptions() ld.TypeSeq[AnyLicenseAddition, *ListedLicenseException] {
-	return ld.NewTypeSeq(*o, castListedLicenseException)
+func (v LicenseAdditionList) ListedLicenseExceptions() []AnyListedLicenseException {
+	return ld.SliceOf[AnyListedLicenseException](v)
 }
 
 type AnyLicenseExpression interface {
 	AnyLicenseInfo
-	asLicenseExpression() *LicenseExpression
+	asLicenseExpression()
+	GetLicenseExpression() string
+	SetLicenseExpression(string)
+	GetCustomIdToUris() DictionaryEntryList
+	SetCustomIdToUris(DictionaryEntryList)
+	GetLicenseListVersion() string
+	SetLicenseListVersion(string)
 }
 
 // LicenseExpression An SPDX Element containing an SPDX license expression string.
 type LicenseExpression struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseInfo
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// LicenseExpression A string in the license expression format.
 	LicenseExpression string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseExpression" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// CustomIdToUris Maps a LicenseRef or AdditionRef string for a Custom License or a Custom License Addition to its URI ID.
@@ -2057,74 +5846,161 @@ type LicenseExpression struct {
 	LicenseListVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseListVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *LicenseExpression) asLicenseExpression() *LicenseExpression {
-	return o
+func (o *LicenseExpression) asLicenseExpression() {}
+func (o *LicenseExpression) asLicenseInfo()       {}
+func (o *LicenseExpression) asElement()           {}
+func (o *LicenseExpression) GetDescription() string {
+	return o.Description
+}
+
+func (o *LicenseExpression) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *LicenseExpression) GetComment() string {
+	return o.Comment
+}
+
+func (o *LicenseExpression) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *LicenseExpression) GetName() string {
+	return o.Name
+}
+
+func (o *LicenseExpression) SetName(v string) {
+	o.Name = v
+}
+
+func (o *LicenseExpression) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *LicenseExpression) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *LicenseExpression) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *LicenseExpression) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *LicenseExpression) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *LicenseExpression) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *LicenseExpression) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *LicenseExpression) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *LicenseExpression) GetSummary() string {
+	return o.Summary
+}
+
+func (o *LicenseExpression) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *LicenseExpression) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *LicenseExpression) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *LicenseExpression) GetLicenseExpression() string {
+	return o.LicenseExpression
+}
+
+func (o *LicenseExpression) SetLicenseExpression(v string) {
+	o.LicenseExpression = v
+}
+
+func (o *LicenseExpression) GetCustomIdToUris() DictionaryEntryList {
+	return o.CustomIdToUris
+}
+
+func (o *LicenseExpression) SetCustomIdToUris(v DictionaryEntryList) {
+	o.CustomIdToUris = v
+}
+
+func (o *LicenseExpression) GetLicenseListVersion() string {
+	return o.LicenseListVersion
+}
+
+func (o *LicenseExpression) SetLicenseListVersion(v string) {
+	o.LicenseListVersion = v
 }
 
 type LicenseExpressionList []AnyLicenseExpression
 
-func (o *LicenseExpressionList) LicenseExpressions() ld.TypeSeq[AnyLicenseExpression, *LicenseExpression] {
-	return ld.NewTypeSeq(*o, castLicenseExpression)
+func (v LicenseExpressionList) LicenseExpressions() []AnyLicenseExpression {
+	return ld.SliceOf[AnyLicenseExpression](v)
 }
 
 type AnyLicenseInfo interface {
 	AnyElement
-	asLicenseInfo() *LicenseInfo
+	asLicenseInfo()
 }
 
 // LicenseInfo Abstract class representing a license combination consisting of one or more licenses.
-type LicenseInfo struct {
-	Element
-}
-
-func (o *LicenseInfo) asLicenseInfo() *LicenseInfo {
-	return o
-}
-
 type LicenseInfoList []AnyLicenseInfo
 
-func (o *LicenseInfoList) ConjunctiveLicenseSets() ld.TypeSeq[AnyLicenseInfo, *ConjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castConjunctiveLicenseSet)
+func (v LicenseInfoList) ConjunctiveLicenseSets() []AnyConjunctiveLicenseSet {
+	return ld.SliceOf[AnyConjunctiveLicenseSet](v)
 }
 
-func (o *LicenseInfoList) CustomLicenses() ld.TypeSeq[AnyLicenseInfo, *CustomLicense] {
-	return ld.NewTypeSeq(*o, castCustomLicense)
+func (v LicenseInfoList) CustomLicenses() []AnyCustomLicense {
+	return ld.SliceOf[AnyCustomLicense](v)
 }
 
-func (o *LicenseInfoList) DisjunctiveLicenseSets() ld.TypeSeq[AnyLicenseInfo, *DisjunctiveLicenseSet] {
-	return ld.NewTypeSeq(*o, castDisjunctiveLicenseSet)
+func (v LicenseInfoList) DisjunctiveLicenseSets() []AnyDisjunctiveLicenseSet {
+	return ld.SliceOf[AnyDisjunctiveLicenseSet](v)
 }
 
-func (o *LicenseInfoList) ExtendableLicenses() ld.TypeSeq[AnyLicenseInfo, *ExtendableLicense] {
-	return ld.NewTypeSeq(*o, castExtendableLicense)
+func (v LicenseInfoList) ExtendableLicenses() []AnyExtendableLicense {
+	return ld.SliceOf[AnyExtendableLicense](v)
 }
 
-func (o *LicenseInfoList) IndividualLicensingInfos() ld.TypeSeq[AnyLicenseInfo, *IndividualLicensingInfo] {
-	return ld.NewTypeSeq(*o, castIndividualLicensingInfo)
+func (v LicenseInfoList) IndividualLicensingInfos() []AnyIndividualLicensingInfo {
+	return ld.SliceOf[AnyIndividualLicensingInfo](v)
 }
 
-func (o *LicenseInfoList) Licenses() ld.TypeSeq[AnyLicenseInfo, *License] {
-	return ld.NewTypeSeq(*o, castLicense)
+func (v LicenseInfoList) Licenses() []AnyLicense {
+	return ld.SliceOf[AnyLicense](v)
 }
 
-func (o *LicenseInfoList) LicenseExpressions() ld.TypeSeq[AnyLicenseInfo, *LicenseExpression] {
-	return ld.NewTypeSeq(*o, castLicenseExpression)
+func (v LicenseInfoList) LicenseExpressions() []AnyLicenseExpression {
+	return ld.SliceOf[AnyLicenseExpression](v)
 }
 
-func (o *LicenseInfoList) LicenseInfos() ld.TypeSeq[AnyLicenseInfo, *LicenseInfo] {
-	return ld.NewTypeSeq(*o, castLicenseInfo)
+func (v LicenseInfoList) LicenseInfos() []AnyLicenseInfo {
+	return ld.SliceOf[AnyLicenseInfo](v)
 }
 
-func (o *LicenseInfoList) ListedLicenses() ld.TypeSeq[AnyLicenseInfo, *ListedLicense] {
-	return ld.NewTypeSeq(*o, castListedLicense)
+func (v LicenseInfoList) ListedLicenses() []AnyListedLicense {
+	return ld.SliceOf[AnyListedLicense](v)
 }
 
-func (o *LicenseInfoList) OrLaterOperators() ld.TypeSeq[AnyLicenseInfo, *OrLaterOperator] {
-	return ld.NewTypeSeq(*o, castOrLaterOperator)
+func (v LicenseInfoList) OrLaterOperators() []AnyOrLaterOperator {
+	return ld.SliceOf[AnyOrLaterOperator](v)
 }
 
-func (o *LicenseInfoList) WithAdditionOperators() ld.TypeSeq[AnyLicenseInfo, *WithAdditionOperator] {
-	return ld.NewTypeSeq(*o, castWithAdditionOperator)
+func (v LicenseInfoList) WithAdditionOperators() []AnyWithAdditionOperator {
+	return ld.SliceOf[AnyWithAdditionOperator](v)
 }
 
 // LifecycleScopeType Provide an enumerated set of lifecycle phases that can provide context to relationships.
@@ -2165,79 +6041,612 @@ var LifecycleScopeType_Test = LifecycleScopeType{
 
 type AnyLifecycleScopedRelationship interface {
 	AnyRelationship
-	asLifecycleScopedRelationship() *LifecycleScopedRelationship
+	asLifecycleScopedRelationship()
+	GetScope() LifecycleScopeType
+	SetScope(LifecycleScopeType)
 }
 
 // LifecycleScopedRelationship Provide context for a relationship that occurs in the lifecycle.
 type LifecycleScopedRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopedRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Relationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopedRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Scope Capture the scope of information about a specific relationship between elements.
 	Scope LifecycleScopeType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/scope" type:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType"`
 }
 
-func (o *LifecycleScopedRelationship) asLifecycleScopedRelationship() *LifecycleScopedRelationship {
-	return o
+func (o *LifecycleScopedRelationship) asLifecycleScopedRelationship() {}
+func (o *LifecycleScopedRelationship) asRelationship()                {}
+func (o *LifecycleScopedRelationship) asElement()                     {}
+func (o *LifecycleScopedRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *LifecycleScopedRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *LifecycleScopedRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *LifecycleScopedRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *LifecycleScopedRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *LifecycleScopedRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *LifecycleScopedRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *LifecycleScopedRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *LifecycleScopedRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *LifecycleScopedRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *LifecycleScopedRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *LifecycleScopedRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *LifecycleScopedRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *LifecycleScopedRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *LifecycleScopedRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *LifecycleScopedRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *LifecycleScopedRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *LifecycleScopedRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *LifecycleScopedRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *LifecycleScopedRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *LifecycleScopedRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *LifecycleScopedRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *LifecycleScopedRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *LifecycleScopedRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *LifecycleScopedRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *LifecycleScopedRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *LifecycleScopedRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *LifecycleScopedRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *LifecycleScopedRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *LifecycleScopedRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *LifecycleScopedRelationship) GetScope() LifecycleScopeType {
+	return o.Scope
+}
+
+func (o *LifecycleScopedRelationship) SetScope(v LifecycleScopeType) {
+	o.Scope = v
 }
 
 type LifecycleScopedRelationshipList []AnyLifecycleScopedRelationship
 
-func (o *LifecycleScopedRelationshipList) LifecycleScopedRelationships() ld.TypeSeq[AnyLifecycleScopedRelationship, *LifecycleScopedRelationship] {
-	return ld.NewTypeSeq(*o, castLifecycleScopedRelationship)
+func (v LifecycleScopedRelationshipList) LifecycleScopedRelationships() []AnyLifecycleScopedRelationship {
+	return ld.SliceOf[AnyLifecycleScopedRelationship](v)
 }
 
 type AnyListedLicense interface {
 	AnyLicense
-	asListedLicense() *ListedLicense
+	asListedLicense()
+	GetListVersionAdded() string
+	SetListVersionAdded(string)
+	GetDeprecatedVersion() string
+	SetDeprecatedVersion(string)
 }
 
 // ListedLicense A license that is listed on the SPDX License List.
 type ListedLicense struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	License
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedLicenseID Specifies whether a license or additional text identifier has been marked as deprecated.
+	IsDeprecatedLicenseID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
+	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// StandardLicenseHeader Provides a License author's preferred text to indicate that a file is covered by the License.
+	StandardLicenseHeader string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseHeader" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Text Identifies the full text of a License or Addition.
+	Text string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsOsiApproved Specifies whether the License is listed as approved by the Open Source Initiative (OSI).
+	IsOsiApproved bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isOsiApproved" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// Xml Identifies all the text and metadata associated with a license in the license XML format.
+	Xml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsFsfLibre Specifies whether the License is listed as free by the Free Software Foundation (FSF).
+	IsFsfLibre bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isFsfLibre" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// StandardLicenseTemplate Identifies the full text of a License, in SPDX templating format.
+	StandardLicenseTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or ListedLicenseException identifier was first added.
 	ListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception identifier was deprecated.
 	DeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *ListedLicense) asListedLicense() *ListedLicense {
-	return o
+func (o *ListedLicense) asListedLicense()     {}
+func (o *ListedLicense) asLicense()           {}
+func (o *ListedLicense) asExtendableLicense() {}
+func (o *ListedLicense) asLicenseInfo()       {}
+func (o *ListedLicense) asElement()           {}
+func (o *ListedLicense) GetDescription() string {
+	return o.Description
+}
+
+func (o *ListedLicense) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *ListedLicense) GetComment() string {
+	return o.Comment
+}
+
+func (o *ListedLicense) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ListedLicense) GetName() string {
+	return o.Name
+}
+
+func (o *ListedLicense) SetName(v string) {
+	o.Name = v
+}
+
+func (o *ListedLicense) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *ListedLicense) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *ListedLicense) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *ListedLicense) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *ListedLicense) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *ListedLicense) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *ListedLicense) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *ListedLicense) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *ListedLicense) GetSummary() string {
+	return o.Summary
+}
+
+func (o *ListedLicense) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *ListedLicense) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *ListedLicense) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *ListedLicense) GetSeeAlsos() []URI {
+	return o.SeeAlsos
+}
+
+func (o *ListedLicense) SetSeeAlsos(v []URI) {
+	o.SeeAlsos = v
+}
+
+func (o *ListedLicense) GetIsDeprecatedLicenseID() bool {
+	return o.IsDeprecatedLicenseID
+}
+
+func (o *ListedLicense) SetIsDeprecatedLicenseID(v bool) {
+	o.IsDeprecatedLicenseID = v
+}
+
+func (o *ListedLicense) GetObsoletedBy() string {
+	return o.ObsoletedBy
+}
+
+func (o *ListedLicense) SetObsoletedBy(v string) {
+	o.ObsoletedBy = v
+}
+
+func (o *ListedLicense) GetStandardLicenseHeader() string {
+	return o.StandardLicenseHeader
+}
+
+func (o *ListedLicense) SetStandardLicenseHeader(v string) {
+	o.StandardLicenseHeader = v
+}
+
+func (o *ListedLicense) GetText() string {
+	return o.Text
+}
+
+func (o *ListedLicense) SetText(v string) {
+	o.Text = v
+}
+
+func (o *ListedLicense) GetIsOsiApproved() bool {
+	return o.IsOsiApproved
+}
+
+func (o *ListedLicense) SetIsOsiApproved(v bool) {
+	o.IsOsiApproved = v
+}
+
+func (o *ListedLicense) GetXml() string {
+	return o.Xml
+}
+
+func (o *ListedLicense) SetXml(v string) {
+	o.Xml = v
+}
+
+func (o *ListedLicense) GetIsFsfLibre() bool {
+	return o.IsFsfLibre
+}
+
+func (o *ListedLicense) SetIsFsfLibre(v bool) {
+	o.IsFsfLibre = v
+}
+
+func (o *ListedLicense) GetStandardLicenseTemplate() string {
+	return o.StandardLicenseTemplate
+}
+
+func (o *ListedLicense) SetStandardLicenseTemplate(v string) {
+	o.StandardLicenseTemplate = v
+}
+
+func (o *ListedLicense) GetListVersionAdded() string {
+	return o.ListVersionAdded
+}
+
+func (o *ListedLicense) SetListVersionAdded(v string) {
+	o.ListVersionAdded = v
+}
+
+func (o *ListedLicense) GetDeprecatedVersion() string {
+	return o.DeprecatedVersion
+}
+
+func (o *ListedLicense) SetDeprecatedVersion(v string) {
+	o.DeprecatedVersion = v
 }
 
 type ListedLicenseList []AnyListedLicense
 
-func (o *ListedLicenseList) ListedLicenses() ld.TypeSeq[AnyListedLicense, *ListedLicense] {
-	return ld.NewTypeSeq(*o, castListedLicense)
+func (v ListedLicenseList) ListedLicenses() []AnyListedLicense {
+	return ld.SliceOf[AnyListedLicense](v)
 }
 
 type AnyListedLicenseException interface {
 	AnyLicenseAddition
-	asListedLicenseException() *ListedLicenseException
+	asListedLicenseException()
+	GetDeprecatedVersion() string
+	SetDeprecatedVersion(string)
+	GetListVersionAdded() string
+	SetListVersionAdded(string)
 }
 
 // ListedLicenseException A license exception that is listed on the SPDX Exceptions list.
 type ListedLicenseException struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicenseException" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseAddition
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicenseException" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// AdditionText Identifies the full text of a LicenseAddition.
+	AdditionText string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/additionText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
+	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// LicenseXml Identifies all the text and metadata associated with a license in the license XML format.
+	LicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// StandardAdditionTemplate Identifies the full text of a LicenseAddition, in SPDX templating format.
+	StandardAdditionTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardAdditionTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedAdditionID Specifies whether an additional text identifier has been marked as deprecated.
+	IsDeprecatedAdditionID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
 	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception identifier was deprecated.
 	DeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or ListedLicenseException identifier was first added.
 	ListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *ListedLicenseException) asListedLicenseException() *ListedLicenseException {
-	return o
+func (o *ListedLicenseException) asListedLicenseException() {}
+func (o *ListedLicenseException) asLicenseAddition()        {}
+func (o *ListedLicenseException) asElement()                {}
+func (o *ListedLicenseException) GetDescription() string {
+	return o.Description
+}
+
+func (o *ListedLicenseException) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *ListedLicenseException) GetComment() string {
+	return o.Comment
+}
+
+func (o *ListedLicenseException) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *ListedLicenseException) GetName() string {
+	return o.Name
+}
+
+func (o *ListedLicenseException) SetName(v string) {
+	o.Name = v
+}
+
+func (o *ListedLicenseException) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *ListedLicenseException) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *ListedLicenseException) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *ListedLicenseException) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *ListedLicenseException) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *ListedLicenseException) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *ListedLicenseException) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *ListedLicenseException) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *ListedLicenseException) GetSummary() string {
+	return o.Summary
+}
+
+func (o *ListedLicenseException) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *ListedLicenseException) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *ListedLicenseException) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *ListedLicenseException) GetAdditionText() string {
+	return o.AdditionText
+}
+
+func (o *ListedLicenseException) SetAdditionText(v string) {
+	o.AdditionText = v
+}
+
+func (o *ListedLicenseException) GetObsoletedBy() string {
+	return o.ObsoletedBy
+}
+
+func (o *ListedLicenseException) SetObsoletedBy(v string) {
+	o.ObsoletedBy = v
+}
+
+func (o *ListedLicenseException) GetLicenseXml() string {
+	return o.LicenseXml
+}
+
+func (o *ListedLicenseException) SetLicenseXml(v string) {
+	o.LicenseXml = v
+}
+
+func (o *ListedLicenseException) GetStandardAdditionTemplate() string {
+	return o.StandardAdditionTemplate
+}
+
+func (o *ListedLicenseException) SetStandardAdditionTemplate(v string) {
+	o.StandardAdditionTemplate = v
+}
+
+func (o *ListedLicenseException) GetSeeAlsos() []URI {
+	return o.SeeAlsos
+}
+
+func (o *ListedLicenseException) SetSeeAlsos(v []URI) {
+	o.SeeAlsos = v
+}
+
+func (o *ListedLicenseException) GetIsDeprecatedAdditionID() bool {
+	return o.IsDeprecatedAdditionID
+}
+
+func (o *ListedLicenseException) SetIsDeprecatedAdditionID(v bool) {
+	o.IsDeprecatedAdditionID = v
+}
+
+func (o *ListedLicenseException) GetDeprecatedVersion() string {
+	return o.DeprecatedVersion
+}
+
+func (o *ListedLicenseException) SetDeprecatedVersion(v string) {
+	o.DeprecatedVersion = v
+}
+
+func (o *ListedLicenseException) GetListVersionAdded() string {
+	return o.ListVersionAdded
+}
+
+func (o *ListedLicenseException) SetListVersionAdded(v string) {
+	o.ListVersionAdded = v
 }
 
 type ListedLicenseExceptionList []AnyListedLicenseException
 
-func (o *ListedLicenseExceptionList) ListedLicenseExceptions() ld.TypeSeq[AnyListedLicenseException, *ListedLicenseException] {
-	return ld.NewTypeSeq(*o, castListedLicenseException)
+func (v ListedLicenseExceptionList) ListedLicenseExceptions() []AnyListedLicenseException {
+	return ld.SliceOf[AnyListedLicenseException](v)
 }
 
 type AnyNamespaceMap interface {
-	asNamespaceMap() *NamespaceMap
+	asNamespaceMap()
+	GetNamespace() URI
+	SetNamespace(URI)
+	GetPrefix() string
+	SetPrefix(string)
 }
 
 // NamespaceMap A mapping between prefixes and namespace partial URIs.
@@ -2250,74 +6659,328 @@ type NamespaceMap struct {
 	Prefix string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/prefix" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *NamespaceMap) asNamespaceMap() *NamespaceMap {
-	return o
+func (o *NamespaceMap) asNamespaceMap() {}
+func (o *NamespaceMap) GetNamespace() URI {
+	return o.Namespace
+}
+
+func (o *NamespaceMap) SetNamespace(v URI) {
+	o.Namespace = v
+}
+
+func (o *NamespaceMap) GetPrefix() string {
+	return o.Prefix
+}
+
+func (o *NamespaceMap) SetPrefix(v string) {
+	o.Prefix = v
 }
 
 type NamespaceMapList []AnyNamespaceMap
 
-func (o *NamespaceMapList) NamespaceMaps() ld.TypeSeq[AnyNamespaceMap, *NamespaceMap] {
-	return ld.NewTypeSeq(*o, castNamespaceMap)
+func (v NamespaceMapList) NamespaceMaps() []AnyNamespaceMap {
+	return ld.SliceOf[AnyNamespaceMap](v)
 }
 
 type AnyOrLaterOperator interface {
 	AnyExtendableLicense
-	asOrLaterOperator() *OrLaterOperator
+	asOrLaterOperator()
+	GetSubjectLicense() AnyLicense
+	SetSubjectLicense(AnyLicense)
 }
 
 // OrLaterOperator Portion of an AnyLicenseInfo representing this version, or any later version, of the indicated License.
 type OrLaterOperator struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/OrLaterOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	ExtendableLicense
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/OrLaterOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// SubjectLicense A License participating in an 'or later' model.
 	SubjectLicense AnyLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectLicense" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/License"`
 }
 
-func (o *OrLaterOperator) asOrLaterOperator() *OrLaterOperator {
-	return o
+func (o *OrLaterOperator) asOrLaterOperator()   {}
+func (o *OrLaterOperator) asExtendableLicense() {}
+func (o *OrLaterOperator) asLicenseInfo()       {}
+func (o *OrLaterOperator) asElement()           {}
+func (o *OrLaterOperator) GetDescription() string {
+	return o.Description
+}
+
+func (o *OrLaterOperator) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *OrLaterOperator) GetComment() string {
+	return o.Comment
+}
+
+func (o *OrLaterOperator) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *OrLaterOperator) GetName() string {
+	return o.Name
+}
+
+func (o *OrLaterOperator) SetName(v string) {
+	o.Name = v
+}
+
+func (o *OrLaterOperator) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *OrLaterOperator) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *OrLaterOperator) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *OrLaterOperator) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *OrLaterOperator) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *OrLaterOperator) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *OrLaterOperator) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *OrLaterOperator) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *OrLaterOperator) GetSummary() string {
+	return o.Summary
+}
+
+func (o *OrLaterOperator) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *OrLaterOperator) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *OrLaterOperator) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *OrLaterOperator) GetSubjectLicense() AnyLicense {
+	return o.SubjectLicense
+}
+
+func (o *OrLaterOperator) SetSubjectLicense(v AnyLicense) {
+	o.SubjectLicense = v
 }
 
 type OrLaterOperatorList []AnyOrLaterOperator
 
-func (o *OrLaterOperatorList) OrLaterOperators() ld.TypeSeq[AnyOrLaterOperator, *OrLaterOperator] {
-	return ld.NewTypeSeq(*o, castOrLaterOperator)
+func (v OrLaterOperatorList) OrLaterOperators() []AnyOrLaterOperator {
+	return ld.SliceOf[AnyOrLaterOperator](v)
 }
 
 type AnyOrganization interface {
 	AnyAgent
-	asOrganization() *Organization
+	asOrganization()
 }
 
 // Organization A group of people who work together in an organized way for a shared purpose.
 type Organization struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Organization" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Agent
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Organization" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *Organization) asOrganization() *Organization {
-	return o
+func (o *Organization) asOrganization() {}
+func (o *Organization) asAgent()        {}
+func (o *Organization) asElement()      {}
+func (o *Organization) GetDescription() string {
+	return o.Description
+}
+
+func (o *Organization) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Organization) GetComment() string {
+	return o.Comment
+}
+
+func (o *Organization) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Organization) GetName() string {
+	return o.Name
+}
+
+func (o *Organization) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Organization) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Organization) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Organization) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Organization) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Organization) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Organization) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Organization) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Organization) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Organization) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Organization) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Organization) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Organization) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 // Organization_SpdxOrganization An Organization representing the SPDX Project.
-var Organization_SpdxOrganization AnyOrganization = &ExternalIRI{
-	id: "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization",
+var Organization_SpdxOrganization AnyOrganization = &Organization{
+	ID: "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization",
 }
 
 type OrganizationList []AnyOrganization
 
-func (o *OrganizationList) Organizations() ld.TypeSeq[AnyOrganization, *Organization] {
-	return ld.NewTypeSeq(*o, castOrganization)
+func (v OrganizationList) Organizations() []AnyOrganization {
+	return ld.SliceOf[AnyOrganization](v)
 }
 
 type AnyPackage interface {
 	AnySoftwareArtifact
-	asPackage() *Package
+	asPackage()
+	GetSourceInfo() string
+	SetSourceInfo(string)
+	GetHomePage() URI
+	SetHomePage(URI)
+	GetVersion() string
+	SetVersion(string)
+	GetPackageURL() URI
+	SetPackageURL(URI)
+	GetDownloadLocation() URI
+	SetDownloadLocation(URI)
 }
 
 // Package Refers to any unit of content that can be associated with a distribution of software.
 type Package struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Package" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	SoftwareArtifact
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Package" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
+	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
+	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
+	AttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// AdditionalPurposes Provides additional purpose information of the software artifact.
+	AdditionalPurposes []SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// PrimaryPurpose Provides information about the primary purpose of the software artifact.
+	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
+	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// SourceInfo Records any relevant background information or additional comments about the origin of the package.
 	SourceInfo string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sourceInfo" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// HomePage A place for the SPDX document creator to record a website that serves as the package's home page.
@@ -2330,33 +6993,249 @@ type Package struct {
 	DownloadLocation URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 }
 
-func (o *Package) asPackage() *Package {
-	return o
+func (o *Package) asPackage()          {}
+func (o *Package) asSoftwareArtifact() {}
+func (o *Package) asArtifact()         {}
+func (o *Package) asElement()          {}
+func (o *Package) GetDescription() string {
+	return o.Description
+}
+
+func (o *Package) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Package) GetComment() string {
+	return o.Comment
+}
+
+func (o *Package) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Package) GetName() string {
+	return o.Name
+}
+
+func (o *Package) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Package) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Package) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Package) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Package) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Package) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Package) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Package) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Package) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Package) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Package) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Package) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Package) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Package) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *Package) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *Package) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *Package) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *Package) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *Package) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *Package) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *Package) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *Package) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *Package) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *Package) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *Package) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *Package) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *Package) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *Package) GetContentIdentifiers() ContentIdentifierList {
+	return o.ContentIdentifiers
+}
+
+func (o *Package) SetContentIdentifiers(v ContentIdentifierList) {
+	o.ContentIdentifiers = v
+}
+
+func (o *Package) GetAttributionTexts() []string {
+	return o.AttributionTexts
+}
+
+func (o *Package) SetAttributionTexts(v []string) {
+	o.AttributionTexts = v
+}
+
+func (o *Package) GetAdditionalPurposes() []SoftwarePurpose {
+	return o.AdditionalPurposes
+}
+
+func (o *Package) SetAdditionalPurposes(v []SoftwarePurpose) {
+	o.AdditionalPurposes = v
+}
+
+func (o *Package) GetPrimaryPurpose() SoftwarePurpose {
+	return o.PrimaryPurpose
+}
+
+func (o *Package) SetPrimaryPurpose(v SoftwarePurpose) {
+	o.PrimaryPurpose = v
+}
+
+func (o *Package) GetCopyrightText() string {
+	return o.CopyrightText
+}
+
+func (o *Package) SetCopyrightText(v string) {
+	o.CopyrightText = v
+}
+
+func (o *Package) GetSourceInfo() string {
+	return o.SourceInfo
+}
+
+func (o *Package) SetSourceInfo(v string) {
+	o.SourceInfo = v
+}
+
+func (o *Package) GetHomePage() URI {
+	return o.HomePage
+}
+
+func (o *Package) SetHomePage(v URI) {
+	o.HomePage = v
+}
+
+func (o *Package) GetVersion() string {
+	return o.Version
+}
+
+func (o *Package) SetVersion(v string) {
+	o.Version = v
+}
+
+func (o *Package) GetPackageURL() URI {
+	return o.PackageURL
+}
+
+func (o *Package) SetPackageURL(v URI) {
+	o.PackageURL = v
+}
+
+func (o *Package) GetDownloadLocation() URI {
+	return o.DownloadLocation
+}
+
+func (o *Package) SetDownloadLocation(v URI) {
+	o.DownloadLocation = v
 }
 
 type PackageList []AnyPackage
 
-func (o *PackageList) AIPackages() ld.TypeSeq[AnyPackage, *AIPackage] {
-	return ld.NewTypeSeq(*o, castAIPackage)
+func (v PackageList) AIPackages() []AnyAIPackage {
+	return ld.SliceOf[AnyAIPackage](v)
 }
 
-func (o *PackageList) DatasetPackages() ld.TypeSeq[AnyPackage, *DatasetPackage] {
-	return ld.NewTypeSeq(*o, castDatasetPackage)
+func (v PackageList) DatasetPackages() []AnyDatasetPackage {
+	return ld.SliceOf[AnyDatasetPackage](v)
 }
 
-func (o *PackageList) Packages() ld.TypeSeq[AnyPackage, *Package] {
-	return ld.NewTypeSeq(*o, castPackage)
+func (v PackageList) Packages() []AnyPackage {
+	return ld.SliceOf[AnyPackage](v)
 }
 
 type AnyPackageVerificationCode interface {
 	AnyIntegrityMethod
-	asPackageVerificationCode() *PackageVerificationCode
+	asPackageVerificationCode()
+	GetAlgorithm() HashAlgorithm
+	SetAlgorithm(HashAlgorithm)
+	GetHashValue() string
+	SetHashValue(string)
+	GetExcludedFiles() []string
+	SetExcludedFiles([]string)
 }
 
 // PackageVerificationCode An SPDX version 2.X compatible verification method for software packages.
 type PackageVerificationCode struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PackageVerificationCode" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
-	IntegrityMethod
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PackageVerificationCode" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
+	ID string  `iri:"@id"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Algorithm Specifies the algorithm used for calculating the hash value.
 	Algorithm HashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm"`
 	// HashValue The result of applying a hash algorithm to an Element.
@@ -2365,39 +7244,162 @@ type PackageVerificationCode struct {
 	ExcludedFiles []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/packageVerificationCodeExcludedFile" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *PackageVerificationCode) asPackageVerificationCode() *PackageVerificationCode {
-	return o
+func (o *PackageVerificationCode) asPackageVerificationCode() {}
+func (o *PackageVerificationCode) asIntegrityMethod()         {}
+func (o *PackageVerificationCode) GetComment() string {
+	return o.Comment
+}
+
+func (o *PackageVerificationCode) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *PackageVerificationCode) GetAlgorithm() HashAlgorithm {
+	return o.Algorithm
+}
+
+func (o *PackageVerificationCode) SetAlgorithm(v HashAlgorithm) {
+	o.Algorithm = v
+}
+
+func (o *PackageVerificationCode) GetHashValue() string {
+	return o.HashValue
+}
+
+func (o *PackageVerificationCode) SetHashValue(v string) {
+	o.HashValue = v
+}
+
+func (o *PackageVerificationCode) GetExcludedFiles() []string {
+	return o.ExcludedFiles
+}
+
+func (o *PackageVerificationCode) SetExcludedFiles(v []string) {
+	o.ExcludedFiles = v
 }
 
 type PackageVerificationCodeList []AnyPackageVerificationCode
 
-func (o *PackageVerificationCodeList) PackageVerificationCodes() ld.TypeSeq[AnyPackageVerificationCode, *PackageVerificationCode] {
-	return ld.NewTypeSeq(*o, castPackageVerificationCode)
+func (v PackageVerificationCodeList) PackageVerificationCodes() []AnyPackageVerificationCode {
+	return ld.SliceOf[AnyPackageVerificationCode](v)
 }
 
 type AnyPerson interface {
 	AnyAgent
-	asPerson() *Person
+	asPerson()
 }
 
 // Person An individual human being.
 type Person struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Person" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Agent
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Person" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *Person) asPerson() *Person {
-	return o
+func (o *Person) asPerson()  {}
+func (o *Person) asAgent()   {}
+func (o *Person) asElement() {}
+func (o *Person) GetDescription() string {
+	return o.Description
+}
+
+func (o *Person) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Person) GetComment() string {
+	return o.Comment
+}
+
+func (o *Person) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Person) GetName() string {
+	return o.Name
+}
+
+func (o *Person) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Person) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Person) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Person) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Person) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Person) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Person) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Person) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Person) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Person) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Person) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Person) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Person) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 type PersonList []AnyPerson
 
-func (o *PersonList) People() ld.TypeSeq[AnyPerson, *Person] {
-	return ld.NewTypeSeq(*o, castPerson)
+func (v PersonList) People() []AnyPerson {
+	return ld.SliceOf[AnyPerson](v)
 }
 
 type AnyPositiveIntegerRange interface {
-	asPositiveIntegerRange() *PositiveIntegerRange
+	asPositiveIntegerRange()
+	GetEndIntegerRange() PositiveInt
+	SetEndIntegerRange(PositiveInt)
+	GetBeginIntegerRange() PositiveInt
+	SetBeginIntegerRange(PositiveInt)
 }
 
 // PositiveIntegerRange A tuple of two positive integers that define a range.
@@ -2410,14 +7412,27 @@ type PositiveIntegerRange struct {
 	BeginIntegerRange PositiveInt `iri:"https://spdx.org/rdf/3.0.1/terms/Core/beginIntegerRange" required:"true" type:"http://www.w3.org/2001/XMLSchema#positiveInteger"`
 }
 
-func (o *PositiveIntegerRange) asPositiveIntegerRange() *PositiveIntegerRange {
-	return o
+func (o *PositiveIntegerRange) asPositiveIntegerRange() {}
+func (o *PositiveIntegerRange) GetEndIntegerRange() PositiveInt {
+	return o.EndIntegerRange
+}
+
+func (o *PositiveIntegerRange) SetEndIntegerRange(v PositiveInt) {
+	o.EndIntegerRange = v
+}
+
+func (o *PositiveIntegerRange) GetBeginIntegerRange() PositiveInt {
+	return o.BeginIntegerRange
+}
+
+func (o *PositiveIntegerRange) SetBeginIntegerRange(v PositiveInt) {
+	o.BeginIntegerRange = v
 }
 
 type PositiveIntegerRangeList []AnyPositiveIntegerRange
 
-func (o *PositiveIntegerRangeList) PositiveIntegerRanges() ld.TypeSeq[AnyPositiveIntegerRange, *PositiveIntegerRange] {
-	return ld.NewTypeSeq(*o, castPositiveIntegerRange)
+func (v PositiveIntegerRangeList) PositiveIntegerRanges() []AnyPositiveIntegerRange {
+	return ld.SliceOf[AnyPositiveIntegerRange](v)
 }
 
 // PresenceType Categories of presence or absence.
@@ -2499,13 +7514,43 @@ var ProfileIdentifierType_Software = ProfileIdentifierType{
 
 type AnyRelationship interface {
 	AnyElement
-	asRelationship() *Relationship
+	asRelationship()
+	GetCompleteness() RelationshipCompleteness
+	SetCompleteness(RelationshipCompleteness)
+	GetEndTime() time.Time
+	SetEndTime(time.Time)
+	GetTo() ElementList
+	SetTo(ElementList)
+	GetFrom() AnyElement
+	SetFrom(AnyElement)
+	GetType() RelationshipType
+	SetType(RelationshipType)
+	GetStartTime() time.Time
+	SetStartTime(time.Time)
 }
 
 // Relationship Describes a relationship between one or more elements.
 type Relationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Relationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Relationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// Completeness Provides information about the completeness of relationships.
 	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
 	// EndTime Specifies the time from which an element is no longer applicable / valid.
@@ -2520,66 +7565,184 @@ type Relationship struct {
 	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
 
-func (o *Relationship) asRelationship() *Relationship {
-	return o
+func (o *Relationship) asRelationship() {}
+func (o *Relationship) asElement()      {}
+func (o *Relationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *Relationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Relationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *Relationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Relationship) GetName() string {
+	return o.Name
+}
+
+func (o *Relationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Relationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Relationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Relationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Relationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Relationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Relationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Relationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Relationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Relationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Relationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Relationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Relationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Relationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *Relationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *Relationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *Relationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *Relationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *Relationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *Relationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *Relationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *Relationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *Relationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *Relationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *Relationship) SetStartTime(v time.Time) {
+	o.StartTime = v
 }
 
 type RelationshipList []AnyRelationship
 
-func (o *RelationshipList) CvssV2VulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *CvssV2VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV2VulnAssessmentRelationship)
+func (v RelationshipList) CvssV2VulnAssessmentRelationships() []AnyCvssV2VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV2VulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) CvssV3VulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *CvssV3VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV3VulnAssessmentRelationship)
+func (v RelationshipList) CvssV3VulnAssessmentRelationships() []AnyCvssV3VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV3VulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) CvssV4VulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *CvssV4VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV4VulnAssessmentRelationship)
+func (v RelationshipList) CvssV4VulnAssessmentRelationships() []AnyCvssV4VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV4VulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) EpssVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *EpssVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castEpssVulnAssessmentRelationship)
+func (v RelationshipList) EpssVulnAssessmentRelationships() []AnyEpssVulnAssessmentRelationship {
+	return ld.SliceOf[AnyEpssVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) ExploitCatalogVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *ExploitCatalogVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castExploitCatalogVulnAssessmentRelationship)
+func (v RelationshipList) ExploitCatalogVulnAssessmentRelationships() []AnyExploitCatalogVulnAssessmentRelationship {
+	return ld.SliceOf[AnyExploitCatalogVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) LifecycleScopedRelationships() ld.TypeSeq[AnyRelationship, *LifecycleScopedRelationship] {
-	return ld.NewTypeSeq(*o, castLifecycleScopedRelationship)
+func (v RelationshipList) LifecycleScopedRelationships() []AnyLifecycleScopedRelationship {
+	return ld.SliceOf[AnyLifecycleScopedRelationship](v)
 }
 
-func (o *RelationshipList) Relationships() ld.TypeSeq[AnyRelationship, *Relationship] {
-	return ld.NewTypeSeq(*o, castRelationship)
+func (v RelationshipList) Relationships() []AnyRelationship {
+	return ld.SliceOf[AnyRelationship](v)
 }
 
-func (o *RelationshipList) SsvcVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *SsvcVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castSsvcVulnAssessmentRelationship)
+func (v RelationshipList) SsvcVulnAssessmentRelationships() []AnySsvcVulnAssessmentRelationship {
+	return ld.SliceOf[AnySsvcVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VexAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VexAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexAffectedVulnAssessmentRelationship)
+func (v RelationshipList) VexAffectedVulnAssessmentRelationships() []AnyVexAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VexFixedVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VexFixedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexFixedVulnAssessmentRelationship)
+func (v RelationshipList) VexFixedVulnAssessmentRelationships() []AnyVexFixedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexFixedVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VexNotAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VexNotAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexNotAffectedVulnAssessmentRelationship)
+func (v RelationshipList) VexNotAffectedVulnAssessmentRelationships() []AnyVexNotAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexNotAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VexUnderInvestigationVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VexUnderInvestigationVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexUnderInvestigationVulnAssessmentRelationship)
+func (v RelationshipList) VexUnderInvestigationVulnAssessmentRelationships() []AnyVexUnderInvestigationVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexUnderInvestigationVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VexVulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VexVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexVulnAssessmentRelationship)
+func (v RelationshipList) VexVulnAssessmentRelationships() []AnyVexVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexVulnAssessmentRelationship](v)
 }
 
-func (o *RelationshipList) VulnAssessmentRelationships() ld.TypeSeq[AnyRelationship, *VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVulnAssessmentRelationship)
+func (v RelationshipList) VulnAssessmentRelationships() []AnyVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVulnAssessmentRelationship](v)
 }
 
 // RelationshipCompleteness Indicates whether a relationship is known to be complete, incomplete, or if no assertion is made with respect to relationship completeness.
@@ -2906,25 +8069,166 @@ var RelationshipType_UsesTool = RelationshipType{
 
 type AnySBOM interface {
 	AnyBOM
-	asSBOM() *SBOM
+	asSBOM()
+	GetSbomTypes() []SbomType
+	SetSbomTypes([]SbomType)
 }
 
 // SBOM A collection of SPDX Elements describing a single package.
 type SBOM struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Sbom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	BOM
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Sbom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Elements Refers to one or more Elements that are part of an ElementCollection.
+	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
+	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
+	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
+	// Context Gives information about the circumstances or unifying properties that Elements of the bundle have been assembled under.
+	Context string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/context" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// SbomTypes Provides information about the type of an SBOM.
 	SbomTypes []SbomType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sbomType" type:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType"`
 }
 
-func (o *SBOM) asSBOM() *SBOM {
-	return o
+func (o *SBOM) asSBOM()              {}
+func (o *SBOM) asBOM()               {}
+func (o *SBOM) asBundle()            {}
+func (o *SBOM) asElementCollection() {}
+func (o *SBOM) asElement()           {}
+func (o *SBOM) GetDescription() string {
+	return o.Description
+}
+
+func (o *SBOM) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *SBOM) GetComment() string {
+	return o.Comment
+}
+
+func (o *SBOM) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *SBOM) GetName() string {
+	return o.Name
+}
+
+func (o *SBOM) SetName(v string) {
+	o.Name = v
+}
+
+func (o *SBOM) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *SBOM) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *SBOM) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *SBOM) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *SBOM) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *SBOM) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *SBOM) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *SBOM) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *SBOM) GetSummary() string {
+	return o.Summary
+}
+
+func (o *SBOM) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *SBOM) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *SBOM) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *SBOM) GetElements() ElementList {
+	return o.Elements
+}
+
+func (o *SBOM) SetElements(v ElementList) {
+	o.Elements = v
+}
+
+func (o *SBOM) GetRootElements() ElementList {
+	return o.RootElements
+}
+
+func (o *SBOM) SetRootElements(v ElementList) {
+	o.RootElements = v
+}
+
+func (o *SBOM) GetProfileConformances() []ProfileIdentifierType {
+	return o.ProfileConformances
+}
+
+func (o *SBOM) SetProfileConformances(v []ProfileIdentifierType) {
+	o.ProfileConformances = v
+}
+
+func (o *SBOM) GetContext() string {
+	return o.Context
+}
+
+func (o *SBOM) SetContext(v string) {
+	o.Context = v
+}
+
+func (o *SBOM) GetSbomTypes() []SbomType {
+	return o.SbomTypes
+}
+
+func (o *SBOM) SetSbomTypes(v []SbomType) {
+	o.SbomTypes = v
 }
 
 type SBOMList []AnySBOM
 
-func (o *SBOMList) SBOMs() ld.TypeSeq[AnySBOM, *SBOM] {
-	return ld.NewTypeSeq(*o, castSBOM)
+func (v SBOMList) SBOMs() []AnySBOM {
+	return ld.SliceOf[AnySBOM](v)
 }
 
 // SafetyRiskAssessmentType Specifies the safety risk level.
@@ -2991,83 +8295,172 @@ var SbomType_Source = SbomType{
 
 type AnySimpleLicensingText interface {
 	AnyElement
-	asSimpleLicensingText() *SimpleLicensingText
+	asSimpleLicensingText()
+	GetLicenseText() string
+	SetLicenseText(string)
 }
 
 // SimpleLicensingText A license or addition that is not listed on the SPDX License List.
 type SimpleLicensingText struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// LicenseText Identifies the full text of a License or Addition.
 	LicenseText string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *SimpleLicensingText) asSimpleLicensingText() *SimpleLicensingText {
-	return o
+func (o *SimpleLicensingText) asSimpleLicensingText() {}
+func (o *SimpleLicensingText) asElement()             {}
+func (o *SimpleLicensingText) GetDescription() string {
+	return o.Description
+}
+
+func (o *SimpleLicensingText) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *SimpleLicensingText) GetComment() string {
+	return o.Comment
+}
+
+func (o *SimpleLicensingText) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *SimpleLicensingText) GetName() string {
+	return o.Name
+}
+
+func (o *SimpleLicensingText) SetName(v string) {
+	o.Name = v
+}
+
+func (o *SimpleLicensingText) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *SimpleLicensingText) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *SimpleLicensingText) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *SimpleLicensingText) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *SimpleLicensingText) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *SimpleLicensingText) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *SimpleLicensingText) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *SimpleLicensingText) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *SimpleLicensingText) GetSummary() string {
+	return o.Summary
+}
+
+func (o *SimpleLicensingText) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *SimpleLicensingText) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *SimpleLicensingText) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *SimpleLicensingText) GetLicenseText() string {
+	return o.LicenseText
+}
+
+func (o *SimpleLicensingText) SetLicenseText(v string) {
+	o.LicenseText = v
 }
 
 type SimpleLicensingTextList []AnySimpleLicensingText
 
-func (o *SimpleLicensingTextList) SimpleLicensingTexts() ld.TypeSeq[AnySimpleLicensingText, *SimpleLicensingText] {
-	return ld.NewTypeSeq(*o, castSimpleLicensingText)
+func (v SimpleLicensingTextList) SimpleLicensingTexts() []AnySimpleLicensingText {
+	return ld.SliceOf[AnySimpleLicensingText](v)
 }
 
 type AnySnippet interface {
 	AnySoftwareArtifact
-	asSnippet() *Snippet
+	asSnippet()
+	GetFromFile() AnyFile
+	SetFromFile(AnyFile)
+	GetLineRange() AnyPositiveIntegerRange
+	SetLineRange(AnyPositiveIntegerRange)
+	GetByteRange() AnyPositiveIntegerRange
+	SetByteRange(AnyPositiveIntegerRange)
 }
 
 // Snippet Describes a certain part of a file.
 type Snippet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Snippet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	SoftwareArtifact
-	// FromFile Defines the original host file that the snippet information applies to.
-	FromFile AnyFile `iri:"https://spdx.org/rdf/3.0.1/terms/Software/snippetFromFile" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/File"`
-	// LineRange Defines the line range in the original host file that the snippet information applies to.
-	LineRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/lineRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
-	// ByteRange Defines the byte range in the original host file that the snippet information applies to.
-	ByteRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/byteRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
-}
-
-func (o *Snippet) asSnippet() *Snippet {
-	return o
-}
-
-type SnippetList []AnySnippet
-
-func (o *SnippetList) Snippets() ld.TypeSeq[AnySnippet, *Snippet] {
-	return ld.NewTypeSeq(*o, castSnippet)
-}
-
-type AnySoftwareAgent interface {
-	AnyAgent
-	asSoftwareAgent() *SoftwareAgent
-}
-
-// SoftwareAgent A software agent.
-type SoftwareAgent struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SoftwareAgent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Agent
-}
-
-func (o *SoftwareAgent) asSoftwareAgent() *SoftwareAgent {
-	return o
-}
-
-type SoftwareAgentList []AnySoftwareAgent
-
-func (o *SoftwareAgentList) SoftwareAgents() ld.TypeSeq[AnySoftwareAgent, *SoftwareAgent] {
-	return ld.NewTypeSeq(*o, castSoftwareAgent)
-}
-
-type AnySoftwareArtifact interface {
-	AnyArtifact
-	asSoftwareArtifact() *SoftwareArtifact
-}
-
-// SoftwareArtifact A distinct article or unit related to Software.
-type SoftwareArtifact struct {
-	Artifact
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Snippet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
 	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
 	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
@@ -3078,36 +8471,366 @@ type SoftwareArtifact struct {
 	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
 	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
 	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// FromFile Defines the original host file that the snippet information applies to.
+	FromFile AnyFile `iri:"https://spdx.org/rdf/3.0.1/terms/Software/snippetFromFile" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/File"`
+	// LineRange Defines the line range in the original host file that the snippet information applies to.
+	LineRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/lineRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
+	// ByteRange Defines the byte range in the original host file that the snippet information applies to.
+	ByteRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/byteRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
 }
 
-func (o *SoftwareArtifact) asSoftwareArtifact() *SoftwareArtifact {
-	return o
+func (o *Snippet) asSnippet()          {}
+func (o *Snippet) asSoftwareArtifact() {}
+func (o *Snippet) asArtifact()         {}
+func (o *Snippet) asElement()          {}
+func (o *Snippet) GetDescription() string {
+	return o.Description
 }
 
+func (o *Snippet) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Snippet) GetComment() string {
+	return o.Comment
+}
+
+func (o *Snippet) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Snippet) GetName() string {
+	return o.Name
+}
+
+func (o *Snippet) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Snippet) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Snippet) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Snippet) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Snippet) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Snippet) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Snippet) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Snippet) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Snippet) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Snippet) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Snippet) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Snippet) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Snippet) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Snippet) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *Snippet) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *Snippet) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *Snippet) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *Snippet) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *Snippet) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *Snippet) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *Snippet) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *Snippet) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *Snippet) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *Snippet) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *Snippet) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *Snippet) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *Snippet) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *Snippet) GetContentIdentifiers() ContentIdentifierList {
+	return o.ContentIdentifiers
+}
+
+func (o *Snippet) SetContentIdentifiers(v ContentIdentifierList) {
+	o.ContentIdentifiers = v
+}
+
+func (o *Snippet) GetAttributionTexts() []string {
+	return o.AttributionTexts
+}
+
+func (o *Snippet) SetAttributionTexts(v []string) {
+	o.AttributionTexts = v
+}
+
+func (o *Snippet) GetAdditionalPurposes() []SoftwarePurpose {
+	return o.AdditionalPurposes
+}
+
+func (o *Snippet) SetAdditionalPurposes(v []SoftwarePurpose) {
+	o.AdditionalPurposes = v
+}
+
+func (o *Snippet) GetPrimaryPurpose() SoftwarePurpose {
+	return o.PrimaryPurpose
+}
+
+func (o *Snippet) SetPrimaryPurpose(v SoftwarePurpose) {
+	o.PrimaryPurpose = v
+}
+
+func (o *Snippet) GetCopyrightText() string {
+	return o.CopyrightText
+}
+
+func (o *Snippet) SetCopyrightText(v string) {
+	o.CopyrightText = v
+}
+
+func (o *Snippet) GetFromFile() AnyFile {
+	return o.FromFile
+}
+
+func (o *Snippet) SetFromFile(v AnyFile) {
+	o.FromFile = v
+}
+
+func (o *Snippet) GetLineRange() AnyPositiveIntegerRange {
+	return o.LineRange
+}
+
+func (o *Snippet) SetLineRange(v AnyPositiveIntegerRange) {
+	o.LineRange = v
+}
+
+func (o *Snippet) GetByteRange() AnyPositiveIntegerRange {
+	return o.ByteRange
+}
+
+func (o *Snippet) SetByteRange(v AnyPositiveIntegerRange) {
+	o.ByteRange = v
+}
+
+type SnippetList []AnySnippet
+
+func (v SnippetList) Snippets() []AnySnippet {
+	return ld.SliceOf[AnySnippet](v)
+}
+
+type AnySoftwareAgent interface {
+	AnyAgent
+	asSoftwareAgent()
+}
+
+// SoftwareAgent A software agent.
+type SoftwareAgent struct {
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SoftwareAgent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+}
+
+func (o *SoftwareAgent) asSoftwareAgent() {}
+func (o *SoftwareAgent) asAgent()         {}
+func (o *SoftwareAgent) asElement()       {}
+func (o *SoftwareAgent) GetDescription() string {
+	return o.Description
+}
+
+func (o *SoftwareAgent) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *SoftwareAgent) GetComment() string {
+	return o.Comment
+}
+
+func (o *SoftwareAgent) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *SoftwareAgent) GetName() string {
+	return o.Name
+}
+
+func (o *SoftwareAgent) SetName(v string) {
+	o.Name = v
+}
+
+func (o *SoftwareAgent) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *SoftwareAgent) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *SoftwareAgent) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *SoftwareAgent) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *SoftwareAgent) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *SoftwareAgent) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *SoftwareAgent) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *SoftwareAgent) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *SoftwareAgent) GetSummary() string {
+	return o.Summary
+}
+
+func (o *SoftwareAgent) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *SoftwareAgent) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *SoftwareAgent) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+type SoftwareAgentList []AnySoftwareAgent
+
+func (v SoftwareAgentList) SoftwareAgents() []AnySoftwareAgent {
+	return ld.SliceOf[AnySoftwareAgent](v)
+}
+
+type AnySoftwareArtifact interface {
+	AnyArtifact
+	asSoftwareArtifact()
+	GetContentIdentifiers() ContentIdentifierList
+	SetContentIdentifiers(ContentIdentifierList)
+	GetAttributionTexts() []string
+	SetAttributionTexts([]string)
+	GetAdditionalPurposes() []SoftwarePurpose
+	SetAdditionalPurposes([]SoftwarePurpose)
+	GetPrimaryPurpose() SoftwarePurpose
+	SetPrimaryPurpose(SoftwarePurpose)
+	GetCopyrightText() string
+	SetCopyrightText(string)
+}
+
+// SoftwareArtifact A distinct article or unit related to Software.
 type SoftwareArtifactList []AnySoftwareArtifact
 
-func (o *SoftwareArtifactList) AIPackages() ld.TypeSeq[AnySoftwareArtifact, *AIPackage] {
-	return ld.NewTypeSeq(*o, castAIPackage)
+func (v SoftwareArtifactList) AIPackages() []AnyAIPackage {
+	return ld.SliceOf[AnyAIPackage](v)
 }
 
-func (o *SoftwareArtifactList) DatasetPackages() ld.TypeSeq[AnySoftwareArtifact, *DatasetPackage] {
-	return ld.NewTypeSeq(*o, castDatasetPackage)
+func (v SoftwareArtifactList) DatasetPackages() []AnyDatasetPackage {
+	return ld.SliceOf[AnyDatasetPackage](v)
 }
 
-func (o *SoftwareArtifactList) Files() ld.TypeSeq[AnySoftwareArtifact, *File] {
-	return ld.NewTypeSeq(*o, castFile)
+func (v SoftwareArtifactList) Files() []AnyFile {
+	return ld.SliceOf[AnyFile](v)
 }
 
-func (o *SoftwareArtifactList) Packages() ld.TypeSeq[AnySoftwareArtifact, *Package] {
-	return ld.NewTypeSeq(*o, castPackage)
+func (v SoftwareArtifactList) Packages() []AnyPackage {
+	return ld.SliceOf[AnyPackage](v)
 }
 
-func (o *SoftwareArtifactList) Snippets() ld.TypeSeq[AnySoftwareArtifact, *Snippet] {
-	return ld.NewTypeSeq(*o, castSnippet)
+func (v SoftwareArtifactList) Snippets() []AnySnippet {
+	return ld.SliceOf[AnySnippet](v)
 }
 
-func (o *SoftwareArtifactList) SoftwareArtifacts() ld.TypeSeq[AnySoftwareArtifact, *SoftwareArtifact] {
-	return ld.NewTypeSeq(*o, castSoftwareArtifact)
+func (v SoftwareArtifactList) SoftwareArtifacts() []AnySoftwareArtifact {
+	return ld.SliceOf[AnySoftwareArtifact](v)
 }
 
 // SoftwarePurpose Provides information about the primary purpose of an Element.
@@ -3263,13 +8986,43 @@ var SoftwarePurpose_Test = SoftwarePurpose{
 
 type AnySpdxDocument interface {
 	AnyElementCollection
-	asSpdxDocument() *SpdxDocument
+	asSpdxDocument()
+	GetDataLicense() AnyLicenseInfo
+	SetDataLicense(AnyLicenseInfo)
+	GetNamespaceMaps() NamespaceMapList
+	SetNamespaceMaps(NamespaceMapList)
+	GetImports() ExternalMapList
+	SetImports(ExternalMapList)
 }
 
 // SpdxDocument A collection of SPDX Elements that could potentially be serialized.
 type SpdxDocument struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SpdxDocument" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	ElementCollection
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SpdxDocument" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Elements Refers to one or more Elements that are part of an ElementCollection.
+	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
+	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
+	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
 	// DataLicense Provides the license under which the SPDX documentation of the Element can be used.
 	DataLicense AnyLicenseInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/dataLicense" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
 	// NamespaceMaps Provides a NamespaceMap of prefixes and associated namespace partial URIs applicable to an SpdxDocument and independent of any specific serialization format or instance.
@@ -3278,14 +9031,133 @@ type SpdxDocument struct {
 	Imports ExternalMapList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/import" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalMap"`
 }
 
-func (o *SpdxDocument) asSpdxDocument() *SpdxDocument {
-	return o
+func (o *SpdxDocument) asSpdxDocument()      {}
+func (o *SpdxDocument) asElementCollection() {}
+func (o *SpdxDocument) asElement()           {}
+func (o *SpdxDocument) GetDescription() string {
+	return o.Description
+}
+
+func (o *SpdxDocument) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *SpdxDocument) GetComment() string {
+	return o.Comment
+}
+
+func (o *SpdxDocument) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *SpdxDocument) GetName() string {
+	return o.Name
+}
+
+func (o *SpdxDocument) SetName(v string) {
+	o.Name = v
+}
+
+func (o *SpdxDocument) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *SpdxDocument) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *SpdxDocument) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *SpdxDocument) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *SpdxDocument) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *SpdxDocument) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *SpdxDocument) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *SpdxDocument) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *SpdxDocument) GetSummary() string {
+	return o.Summary
+}
+
+func (o *SpdxDocument) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *SpdxDocument) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *SpdxDocument) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *SpdxDocument) GetElements() ElementList {
+	return o.Elements
+}
+
+func (o *SpdxDocument) SetElements(v ElementList) {
+	o.Elements = v
+}
+
+func (o *SpdxDocument) GetRootElements() ElementList {
+	return o.RootElements
+}
+
+func (o *SpdxDocument) SetRootElements(v ElementList) {
+	o.RootElements = v
+}
+
+func (o *SpdxDocument) GetProfileConformances() []ProfileIdentifierType {
+	return o.ProfileConformances
+}
+
+func (o *SpdxDocument) SetProfileConformances(v []ProfileIdentifierType) {
+	o.ProfileConformances = v
+}
+
+func (o *SpdxDocument) GetDataLicense() AnyLicenseInfo {
+	return o.DataLicense
+}
+
+func (o *SpdxDocument) SetDataLicense(v AnyLicenseInfo) {
+	o.DataLicense = v
+}
+
+func (o *SpdxDocument) GetNamespaceMaps() NamespaceMapList {
+	return o.NamespaceMaps
+}
+
+func (o *SpdxDocument) SetNamespaceMaps(v NamespaceMapList) {
+	o.NamespaceMaps = v
+}
+
+func (o *SpdxDocument) GetImports() ExternalMapList {
+	return o.Imports
+}
+
+func (o *SpdxDocument) SetImports(v ExternalMapList) {
+	o.Imports = v
 }
 
 type SpdxDocumentList []AnySpdxDocument
 
-func (o *SpdxDocumentList) SpdxDocuments() ld.TypeSeq[AnySpdxDocument, *SpdxDocument] {
-	return ld.NewTypeSeq(*o, castSpdxDocument)
+func (v SpdxDocumentList) SpdxDocuments() []AnySpdxDocument {
+	return ld.SliceOf[AnySpdxDocument](v)
 }
 
 // SsvcDecisionType Specifies the SSVC decision type.
@@ -3316,25 +9188,235 @@ var SsvcDecisionType_TrackStar = SsvcDecisionType{
 
 type AnySsvcVulnAssessmentRelationship interface {
 	AnyVulnAssessmentRelationship
-	asSsvcVulnAssessmentRelationship() *SsvcVulnAssessmentRelationship
+	asSsvcVulnAssessmentRelationship()
+	GetDecisionType() SsvcDecisionType
+	SetDecisionType(SsvcDecisionType)
 }
 
 // SsvcVulnAssessmentRelationship Provides an SSVC assessment for a vulnerability.
 type SsvcVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// DecisionType Provide the enumeration of possible decisions in the [Stakeholder-Specific Vulnerability Categorization (SSVC) decision tree](https://www.cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc).
 	DecisionType SsvcDecisionType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/decisionType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType"`
 }
 
-func (o *SsvcVulnAssessmentRelationship) asSsvcVulnAssessmentRelationship() *SsvcVulnAssessmentRelationship {
-	return o
+func (o *SsvcVulnAssessmentRelationship) asSsvcVulnAssessmentRelationship() {}
+func (o *SsvcVulnAssessmentRelationship) asVulnAssessmentRelationship()     {}
+func (o *SsvcVulnAssessmentRelationship) asRelationship()                   {}
+func (o *SsvcVulnAssessmentRelationship) asElement()                        {}
+func (o *SsvcVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *SsvcVulnAssessmentRelationship) GetDecisionType() SsvcDecisionType {
+	return o.DecisionType
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetDecisionType(v SsvcDecisionType) {
+	o.DecisionType = v
 }
 
 type SsvcVulnAssessmentRelationshipList []AnySsvcVulnAssessmentRelationship
 
-func (o *SsvcVulnAssessmentRelationshipList) SsvcVulnAssessmentRelationships() ld.TypeSeq[AnySsvcVulnAssessmentRelationship, *SsvcVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castSsvcVulnAssessmentRelationship)
+func (v SsvcVulnAssessmentRelationshipList) SsvcVulnAssessmentRelationships() []AnySsvcVulnAssessmentRelationship {
+	return ld.SliceOf[AnySsvcVulnAssessmentRelationship](v)
 }
 
 // SupportType Indicates the type of support that is associated with an artifact.
@@ -3380,69 +9462,619 @@ var SupportType_Support = SupportType{
 
 type AnyTool interface {
 	AnyElement
-	asTool() *Tool
+	asTool()
 }
 
 // Tool An element of hardware and/or software utilized to carry out a particular function.
 type Tool struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Tool" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Element
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Tool" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
-func (o *Tool) asTool() *Tool {
-	return o
+func (o *Tool) asTool()    {}
+func (o *Tool) asElement() {}
+func (o *Tool) GetDescription() string {
+	return o.Description
+}
+
+func (o *Tool) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Tool) GetComment() string {
+	return o.Comment
+}
+
+func (o *Tool) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Tool) GetName() string {
+	return o.Name
+}
+
+func (o *Tool) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Tool) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Tool) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Tool) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Tool) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Tool) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Tool) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Tool) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Tool) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Tool) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Tool) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Tool) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Tool) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
 }
 
 type ToolList []AnyTool
 
-func (o *ToolList) Tools() ld.TypeSeq[AnyTool, *Tool] {
-	return ld.NewTypeSeq(*o, castTool)
+func (v ToolList) Tools() []AnyTool {
+	return ld.SliceOf[AnyTool](v)
 }
 
 type AnyVexAffectedVulnAssessmentRelationship interface {
 	AnyVexVulnAssessmentRelationship
-	asVexAffectedVulnAssessmentRelationship() *VexAffectedVulnAssessmentRelationship
+	asVexAffectedVulnAssessmentRelationship()
+	GetActionStatement() string
+	SetActionStatement(string)
+	GetActionStatementTime() time.Time
+	SetActionStatementTime(time.Time)
 }
 
 // VexAffectedVulnAssessmentRelationship Connects a vulnerability and an element designating the element as a product affected by the vulnerability.
 type VexAffectedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VexVulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// StatusNotes Conveys information about how VEX status was determined.
+	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VexVersion Specifies the version of a VEX statement.
+	VexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ActionStatement Provides advise on how to mitigate or remediate a vulnerability when a VEX product is affected by it.
 	ActionStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatement" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ActionStatementTime Records the time when a recommended action was communicated in a VEX statement to mitigate a vulnerability.
 	ActionStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatementTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
 
-func (o *VexAffectedVulnAssessmentRelationship) asVexAffectedVulnAssessmentRelationship() *VexAffectedVulnAssessmentRelationship {
-	return o
+func (o *VexAffectedVulnAssessmentRelationship) asVexAffectedVulnAssessmentRelationship() {}
+func (o *VexAffectedVulnAssessmentRelationship) asVexVulnAssessmentRelationship()         {}
+func (o *VexAffectedVulnAssessmentRelationship) asVulnAssessmentRelationship()            {}
+func (o *VexAffectedVulnAssessmentRelationship) asRelationship()                          {}
+func (o *VexAffectedVulnAssessmentRelationship) asElement()                               {}
+func (o *VexAffectedVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetStatusNotes() string {
+	return o.StatusNotes
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetStatusNotes(v string) {
+	o.StatusNotes = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetVexVersion() string {
+	return o.VexVersion
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetVexVersion(v string) {
+	o.VexVersion = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetActionStatement() string {
+	return o.ActionStatement
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetActionStatement(v string) {
+	o.ActionStatement = v
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) GetActionStatementTime() time.Time {
+	return o.ActionStatementTime
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetActionStatementTime(v time.Time) {
+	o.ActionStatementTime = v
 }
 
 type VexAffectedVulnAssessmentRelationshipList []AnyVexAffectedVulnAssessmentRelationship
 
-func (o *VexAffectedVulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVexAffectedVulnAssessmentRelationship, *VexAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexAffectedVulnAssessmentRelationship)
+func (v VexAffectedVulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() []AnyVexAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexAffectedVulnAssessmentRelationship](v)
 }
 
 type AnyVexFixedVulnAssessmentRelationship interface {
 	AnyVexVulnAssessmentRelationship
-	asVexFixedVulnAssessmentRelationship() *VexFixedVulnAssessmentRelationship
+	asVexFixedVulnAssessmentRelationship()
 }
 
 // VexFixedVulnAssessmentRelationship Links a vulnerability and elements representing products (in the VEX sense) where a fix has been applied and are no longer affected.
 type VexFixedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexFixedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VexVulnAssessmentRelationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexFixedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// StatusNotes Conveys information about how VEX status was determined.
+	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VexVersion Specifies the version of a VEX statement.
+	VexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
-func (o *VexFixedVulnAssessmentRelationship) asVexFixedVulnAssessmentRelationship() *VexFixedVulnAssessmentRelationship {
-	return o
+func (o *VexFixedVulnAssessmentRelationship) asVexFixedVulnAssessmentRelationship() {}
+func (o *VexFixedVulnAssessmentRelationship) asVexVulnAssessmentRelationship()      {}
+func (o *VexFixedVulnAssessmentRelationship) asVulnAssessmentRelationship()         {}
+func (o *VexFixedVulnAssessmentRelationship) asRelationship()                       {}
+func (o *VexFixedVulnAssessmentRelationship) asElement()                            {}
+func (o *VexFixedVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetStatusNotes() string {
+	return o.StatusNotes
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetStatusNotes(v string) {
+	o.StatusNotes = v
+}
+
+func (o *VexFixedVulnAssessmentRelationship) GetVexVersion() string {
+	return o.VexVersion
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetVexVersion(v string) {
+	o.VexVersion = v
 }
 
 type VexFixedVulnAssessmentRelationshipList []AnyVexFixedVulnAssessmentRelationship
 
-func (o *VexFixedVulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() ld.TypeSeq[AnyVexFixedVulnAssessmentRelationship, *VexFixedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexFixedVulnAssessmentRelationship)
+func (v VexFixedVulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() []AnyVexFixedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexFixedVulnAssessmentRelationship](v)
 }
 
 // VexJustificationType Specifies the VEX justification type.
@@ -3478,100 +10110,49 @@ var VexJustificationType_VulnerableCodeNotPresent = VexJustificationType{
 
 type AnyVexNotAffectedVulnAssessmentRelationship interface {
 	AnyVexVulnAssessmentRelationship
-	asVexNotAffectedVulnAssessmentRelationship() *VexNotAffectedVulnAssessmentRelationship
+	asVexNotAffectedVulnAssessmentRelationship()
+	GetImpactStatementTime() time.Time
+	SetImpactStatementTime(time.Time)
+	GetImpactStatement() string
+	SetImpactStatement(string)
+	GetJustificationType() VexJustificationType
+	SetJustificationType(VexJustificationType)
 }
 
 // VexNotAffectedVulnAssessmentRelationship Links a vulnerability and one or more elements designating the latter as products not affected by the vulnerability.
 type VexNotAffectedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexNotAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VexVulnAssessmentRelationship
-	// ImpactStatementTime Timestamp of impact statement.
-	ImpactStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatementTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// ImpactStatement Explains why a VEX product is not affected by a vulnerability. It is an alternative in VexNotAffectedVulnAssessmentRelationship to the machine-readable justification label.
-	ImpactStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatement" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// JustificationType Impact justification label to be used when linking a vulnerability to an element representing a VEX product with a VexNotAffectedVulnAssessmentRelationship relationship.
-	JustificationType VexJustificationType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/justificationType" type:"https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType"`
-}
-
-func (o *VexNotAffectedVulnAssessmentRelationship) asVexNotAffectedVulnAssessmentRelationship() *VexNotAffectedVulnAssessmentRelationship {
-	return o
-}
-
-type VexNotAffectedVulnAssessmentRelationshipList []AnyVexNotAffectedVulnAssessmentRelationship
-
-func (o *VexNotAffectedVulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVexNotAffectedVulnAssessmentRelationship, *VexNotAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexNotAffectedVulnAssessmentRelationship)
-}
-
-type AnyVexUnderInvestigationVulnAssessmentRelationship interface {
-	AnyVexVulnAssessmentRelationship
-	asVexUnderInvestigationVulnAssessmentRelationship() *VexUnderInvestigationVulnAssessmentRelationship
-}
-
-// VexUnderInvestigationVulnAssessmentRelationship Designates elements as products where the impact of a vulnerability is being investigated.
-type VexUnderInvestigationVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexUnderInvestigationVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	VexVulnAssessmentRelationship
-}
-
-func (o *VexUnderInvestigationVulnAssessmentRelationship) asVexUnderInvestigationVulnAssessmentRelationship() *VexUnderInvestigationVulnAssessmentRelationship {
-	return o
-}
-
-type VexUnderInvestigationVulnAssessmentRelationshipList []AnyVexUnderInvestigationVulnAssessmentRelationship
-
-func (o *VexUnderInvestigationVulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() ld.TypeSeq[AnyVexUnderInvestigationVulnAssessmentRelationship, *VexUnderInvestigationVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexUnderInvestigationVulnAssessmentRelationship)
-}
-
-type AnyVexVulnAssessmentRelationship interface {
-	AnyVulnAssessmentRelationship
-	asVexVulnAssessmentRelationship() *VexVulnAssessmentRelationship
-}
-
-// VexVulnAssessmentRelationship Abstract ancestor class for all VEX relationships
-type VexVulnAssessmentRelationship struct {
-	VulnAssessmentRelationship
-	// StatusNotes Conveys information about how VEX status was determined.
-	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// VexVersion Specifies the version of a VEX statement.
-	VexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
-}
-
-func (o *VexVulnAssessmentRelationship) asVexVulnAssessmentRelationship() *VexVulnAssessmentRelationship {
-	return o
-}
-
-type VexVulnAssessmentRelationshipList []AnyVexVulnAssessmentRelationship
-
-func (o *VexVulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVexVulnAssessmentRelationship, *VexAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexAffectedVulnAssessmentRelationship)
-}
-
-func (o *VexVulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() ld.TypeSeq[AnyVexVulnAssessmentRelationship, *VexFixedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexFixedVulnAssessmentRelationship)
-}
-
-func (o *VexVulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVexVulnAssessmentRelationship, *VexNotAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexNotAffectedVulnAssessmentRelationship)
-}
-
-func (o *VexVulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() ld.TypeSeq[AnyVexVulnAssessmentRelationship, *VexUnderInvestigationVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexUnderInvestigationVulnAssessmentRelationship)
-}
-
-func (o *VexVulnAssessmentRelationshipList) VexVulnAssessmentRelationships() ld.TypeSeq[AnyVexVulnAssessmentRelationship, *VexVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexVulnAssessmentRelationship)
-}
-
-type AnyVulnAssessmentRelationship interface {
-	AnyRelationship
-	asVulnAssessmentRelationship() *VulnAssessmentRelationship
-}
-
-// VulnAssessmentRelationship Abstract ancestor class for all vulnerability assessments
-type VulnAssessmentRelationship struct {
-	Relationship
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexNotAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
 	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
 	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
@@ -3582,71 +10163,617 @@ type VulnAssessmentRelationship struct {
 	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// ModifiedTime Specifies a time when a vulnerability assessment was modified
 	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// StatusNotes Conveys information about how VEX status was determined.
+	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VexVersion Specifies the version of a VEX statement.
+	VexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// ImpactStatementTime Timestamp of impact statement.
+	ImpactStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatementTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ImpactStatement Explains why a VEX product is not affected by a vulnerability. It is an alternative in VexNotAffectedVulnAssessmentRelationship to the machine-readable justification label.
+	ImpactStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatement" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// JustificationType Impact justification label to be used when linking a vulnerability to an element representing a VEX product with a VexNotAffectedVulnAssessmentRelationship relationship.
+	JustificationType VexJustificationType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/justificationType" type:"https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType"`
 }
 
-func (o *VulnAssessmentRelationship) asVulnAssessmentRelationship() *VulnAssessmentRelationship {
-	return o
+func (o *VexNotAffectedVulnAssessmentRelationship) asVexNotAffectedVulnAssessmentRelationship() {}
+func (o *VexNotAffectedVulnAssessmentRelationship) asVexVulnAssessmentRelationship()            {}
+func (o *VexNotAffectedVulnAssessmentRelationship) asVulnAssessmentRelationship()               {}
+func (o *VexNotAffectedVulnAssessmentRelationship) asRelationship()                             {}
+func (o *VexNotAffectedVulnAssessmentRelationship) asElement()                                  {}
+func (o *VexNotAffectedVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
 }
 
+func (o *VexNotAffectedVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetStatusNotes() string {
+	return o.StatusNotes
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetStatusNotes(v string) {
+	o.StatusNotes = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetVexVersion() string {
+	return o.VexVersion
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetVexVersion(v string) {
+	o.VexVersion = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetImpactStatementTime() time.Time {
+	return o.ImpactStatementTime
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetImpactStatementTime(v time.Time) {
+	o.ImpactStatementTime = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetImpactStatement() string {
+	return o.ImpactStatement
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetImpactStatement(v string) {
+	o.ImpactStatement = v
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) GetJustificationType() VexJustificationType {
+	return o.JustificationType
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetJustificationType(v VexJustificationType) {
+	o.JustificationType = v
+}
+
+type VexNotAffectedVulnAssessmentRelationshipList []AnyVexNotAffectedVulnAssessmentRelationship
+
+func (v VexNotAffectedVulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() []AnyVexNotAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexNotAffectedVulnAssessmentRelationship](v)
+}
+
+type AnyVexUnderInvestigationVulnAssessmentRelationship interface {
+	AnyVexVulnAssessmentRelationship
+	asVexUnderInvestigationVulnAssessmentRelationship()
+}
+
+// VexUnderInvestigationVulnAssessmentRelationship Designates elements as products where the impact of a vulnerability is being investigated.
+type VexUnderInvestigationVulnAssessmentRelationship struct {
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexUnderInvestigationVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// Completeness Provides information about the completeness of relationships.
+	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	// EndTime Specifies the time from which an element is no longer applicable / valid.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// To References an Element on the right-hand side of a relationship.
+	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// From References the Element on the left-hand side of a relationship.
+	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// StartTime Specifies the time from which an element is applicable / valid.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
+	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
+	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
+	// PublishedTime Specifies the time when a vulnerability was published.
+	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ModifiedTime Specifies a time when a vulnerability assessment was modified
+	ModifiedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/modifiedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// StatusNotes Conveys information about how VEX status was determined.
+	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VexVersion Specifies the version of a VEX statement.
+	VexVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vexVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) asVexUnderInvestigationVulnAssessmentRelationship() {
+}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) asVexVulnAssessmentRelationship() {}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) asVulnAssessmentRelationship()    {}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) asRelationship()                  {}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) asElement()                       {}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetDescription() string {
+	return o.Description
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetComment() string {
+	return o.Comment
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetName() string {
+	return o.Name
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetName(v string) {
+	o.Name = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetSummary() string {
+	return o.Summary
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetCompleteness() RelationshipCompleteness {
+	return o.Completeness
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetCompleteness(v RelationshipCompleteness) {
+	o.Completeness = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetEndTime() time.Time {
+	return o.EndTime
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetEndTime(v time.Time) {
+	o.EndTime = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetTo() ElementList {
+	return o.To
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetTo(v ElementList) {
+	o.To = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetFrom() AnyElement {
+	return o.From
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetFrom(v AnyElement) {
+	o.From = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetType() RelationshipType {
+	return o.Type
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetType(v RelationshipType) {
+	o.Type = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetStartTime() time.Time {
+	return o.StartTime
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetStartTime(v time.Time) {
+	o.StartTime = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetAssessedElement() AnySoftwareArtifact {
+	return o.AssessedElement
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetAssessedElement(v AnySoftwareArtifact) {
+	o.AssessedElement = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetStatusNotes() string {
+	return o.StatusNotes
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetStatusNotes(v string) {
+	o.StatusNotes = v
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetVexVersion() string {
+	return o.VexVersion
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetVexVersion(v string) {
+	o.VexVersion = v
+}
+
+type VexUnderInvestigationVulnAssessmentRelationshipList []AnyVexUnderInvestigationVulnAssessmentRelationship
+
+func (v VexUnderInvestigationVulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() []AnyVexUnderInvestigationVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexUnderInvestigationVulnAssessmentRelationship](v)
+}
+
+type AnyVexVulnAssessmentRelationship interface {
+	AnyVulnAssessmentRelationship
+	asVexVulnAssessmentRelationship()
+	GetStatusNotes() string
+	SetStatusNotes(string)
+	GetVexVersion() string
+	SetVexVersion(string)
+}
+
+// VexVulnAssessmentRelationship Abstract ancestor class for all VEX relationships
+type VexVulnAssessmentRelationshipList []AnyVexVulnAssessmentRelationship
+
+func (v VexVulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() []AnyVexAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexAffectedVulnAssessmentRelationship](v)
+}
+
+func (v VexVulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() []AnyVexFixedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexFixedVulnAssessmentRelationship](v)
+}
+
+func (v VexVulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() []AnyVexNotAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexNotAffectedVulnAssessmentRelationship](v)
+}
+
+func (v VexVulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() []AnyVexUnderInvestigationVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexUnderInvestigationVulnAssessmentRelationship](v)
+}
+
+func (v VexVulnAssessmentRelationshipList) VexVulnAssessmentRelationships() []AnyVexVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexVulnAssessmentRelationship](v)
+}
+
+type AnyVulnAssessmentRelationship interface {
+	AnyRelationship
+	asVulnAssessmentRelationship()
+	GetSuppliedBy() AnyAgent
+	SetSuppliedBy(AnyAgent)
+	GetWithdrawnTime() time.Time
+	SetWithdrawnTime(time.Time)
+	GetAssessedElement() AnySoftwareArtifact
+	SetAssessedElement(AnySoftwareArtifact)
+	GetPublishedTime() time.Time
+	SetPublishedTime(time.Time)
+	GetModifiedTime() time.Time
+	SetModifiedTime(time.Time)
+}
+
+// VulnAssessmentRelationship Abstract ancestor class for all vulnerability assessments
 type VulnAssessmentRelationshipList []AnyVulnAssessmentRelationship
 
-func (o *VulnAssessmentRelationshipList) CvssV2VulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *CvssV2VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV2VulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) CvssV2VulnAssessmentRelationships() []AnyCvssV2VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV2VulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) CvssV3VulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *CvssV3VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV3VulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) CvssV3VulnAssessmentRelationships() []AnyCvssV3VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV3VulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) CvssV4VulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *CvssV4VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castCvssV4VulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) CvssV4VulnAssessmentRelationships() []AnyCvssV4VulnAssessmentRelationship {
+	return ld.SliceOf[AnyCvssV4VulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) EpssVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *EpssVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castEpssVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) EpssVulnAssessmentRelationships() []AnyEpssVulnAssessmentRelationship {
+	return ld.SliceOf[AnyEpssVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) ExploitCatalogVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *ExploitCatalogVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castExploitCatalogVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) ExploitCatalogVulnAssessmentRelationships() []AnyExploitCatalogVulnAssessmentRelationship {
+	return ld.SliceOf[AnyExploitCatalogVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) SsvcVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *SsvcVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castSsvcVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) SsvcVulnAssessmentRelationships() []AnySsvcVulnAssessmentRelationship {
+	return ld.SliceOf[AnySsvcVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VexAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexAffectedVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VexAffectedVulnAssessmentRelationships() []AnyVexAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VexFixedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexFixedVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VexFixedVulnAssessmentRelationships() []AnyVexFixedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexFixedVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VexNotAffectedVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexNotAffectedVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VexNotAffectedVulnAssessmentRelationships() []AnyVexNotAffectedVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexNotAffectedVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VexUnderInvestigationVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexUnderInvestigationVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VexUnderInvestigationVulnAssessmentRelationships() []AnyVexUnderInvestigationVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexUnderInvestigationVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VexVulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VexVulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVexVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VexVulnAssessmentRelationships() []AnyVexVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVexVulnAssessmentRelationship](v)
 }
 
-func (o *VulnAssessmentRelationshipList) VulnAssessmentRelationships() ld.TypeSeq[AnyVulnAssessmentRelationship, *VulnAssessmentRelationship] {
-	return ld.NewTypeSeq(*o, castVulnAssessmentRelationship)
+func (v VulnAssessmentRelationshipList) VulnAssessmentRelationships() []AnyVulnAssessmentRelationship {
+	return ld.SliceOf[AnyVulnAssessmentRelationship](v)
 }
 
 type AnyVulnerability interface {
 	AnyArtifact
-	asVulnerability() *Vulnerability
+	asVulnerability()
+	GetWithdrawnTime() time.Time
+	SetWithdrawnTime(time.Time)
+	GetModifiedTime() time.Time
+	SetModifiedTime(time.Time)
+	GetPublishedTime() time.Time
+	SetPublishedTime(time.Time)
 }
 
 // Vulnerability Specifies a vulnerability and its associated information.
 type Vulnerability struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/Vulnerability" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	Artifact
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/Vulnerability" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
+	// StandardNames The name of a relevant standard that may apply to an artifact.
+	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuiltTime Specifies the time an artifact was built.
+	BuiltTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/builtTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ReleaseTime Specifies the time an artifact was released.
+	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// SupportLevels Specifies the level of support associated with an artifact.
+	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
+	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// OriginatedBy Identifies from where or whom the Element originally came.
+	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
+	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
 	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// ModifiedTime Specifies a time when a vulnerability assessment was modified
@@ -3655,39 +10782,299 @@ type Vulnerability struct {
 	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
 
-func (o *Vulnerability) asVulnerability() *Vulnerability {
-	return o
+func (o *Vulnerability) asVulnerability() {}
+func (o *Vulnerability) asArtifact()      {}
+func (o *Vulnerability) asElement()       {}
+func (o *Vulnerability) GetDescription() string {
+	return o.Description
+}
+
+func (o *Vulnerability) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *Vulnerability) GetComment() string {
+	return o.Comment
+}
+
+func (o *Vulnerability) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *Vulnerability) GetName() string {
+	return o.Name
+}
+
+func (o *Vulnerability) SetName(v string) {
+	o.Name = v
+}
+
+func (o *Vulnerability) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *Vulnerability) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *Vulnerability) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *Vulnerability) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *Vulnerability) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *Vulnerability) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *Vulnerability) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *Vulnerability) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *Vulnerability) GetSummary() string {
+	return o.Summary
+}
+
+func (o *Vulnerability) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *Vulnerability) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *Vulnerability) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *Vulnerability) GetStandardNames() []string {
+	return o.StandardNames
+}
+
+func (o *Vulnerability) SetStandardNames(v []string) {
+	o.StandardNames = v
+}
+
+func (o *Vulnerability) GetBuiltTime() time.Time {
+	return o.BuiltTime
+}
+
+func (o *Vulnerability) SetBuiltTime(v time.Time) {
+	o.BuiltTime = v
+}
+
+func (o *Vulnerability) GetReleaseTime() time.Time {
+	return o.ReleaseTime
+}
+
+func (o *Vulnerability) SetReleaseTime(v time.Time) {
+	o.ReleaseTime = v
+}
+
+func (o *Vulnerability) GetSupportLevels() []SupportType {
+	return o.SupportLevels
+}
+
+func (o *Vulnerability) SetSupportLevels(v []SupportType) {
+	o.SupportLevels = v
+}
+
+func (o *Vulnerability) GetSuppliedBy() AnyAgent {
+	return o.SuppliedBy
+}
+
+func (o *Vulnerability) SetSuppliedBy(v AnyAgent) {
+	o.SuppliedBy = v
+}
+
+func (o *Vulnerability) GetOriginatedBy() AgentList {
+	return o.OriginatedBy
+}
+
+func (o *Vulnerability) SetOriginatedBy(v AgentList) {
+	o.OriginatedBy = v
+}
+
+func (o *Vulnerability) GetValidUntilTime() time.Time {
+	return o.ValidUntilTime
+}
+
+func (o *Vulnerability) SetValidUntilTime(v time.Time) {
+	o.ValidUntilTime = v
+}
+
+func (o *Vulnerability) GetWithdrawnTime() time.Time {
+	return o.WithdrawnTime
+}
+
+func (o *Vulnerability) SetWithdrawnTime(v time.Time) {
+	o.WithdrawnTime = v
+}
+
+func (o *Vulnerability) GetModifiedTime() time.Time {
+	return o.ModifiedTime
+}
+
+func (o *Vulnerability) SetModifiedTime(v time.Time) {
+	o.ModifiedTime = v
+}
+
+func (o *Vulnerability) GetPublishedTime() time.Time {
+	return o.PublishedTime
+}
+
+func (o *Vulnerability) SetPublishedTime(v time.Time) {
+	o.PublishedTime = v
 }
 
 type VulnerabilityList []AnyVulnerability
 
-func (o *VulnerabilityList) Vulnerabilities() ld.TypeSeq[AnyVulnerability, *Vulnerability] {
-	return ld.NewTypeSeq(*o, castVulnerability)
+func (v VulnerabilityList) Vulnerabilities() []AnyVulnerability {
+	return ld.SliceOf[AnyVulnerability](v)
 }
 
 type AnyWithAdditionOperator interface {
 	AnyLicenseInfo
-	asWithAdditionOperator() *WithAdditionOperator
+	asWithAdditionOperator()
+	GetSubjectExtendableLicense() AnyExtendableLicense
+	SetSubjectExtendableLicense(AnyExtendableLicense)
+	GetSubjectAddition() AnyLicenseAddition
+	SetSubjectAddition(AnyLicenseAddition)
 }
 
 // WithAdditionOperator Portion of an AnyLicenseInfo representing a License which has additional text applied to it.
 type WithAdditionOperator struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/WithAdditionOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
-	LicenseInfo
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/WithAdditionOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	ID string  `iri:"@id"`
+	// Description Provides a detailed description of the Element.
+	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
+	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Name Identifies the name of an Element as designated by the creator.
+	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Extensions Specifies an Extension characterization of some aspect of an Element.
+	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
+	// CreationInfo Provides information about the creation of the Element.
+	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
+	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
+	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	// Summary A short description of an Element.
+	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
+	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 	// SubjectExtendableLicense A License participating in a 'with addition' model.
 	SubjectExtendableLicense AnyExtendableLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectExtendableLicense" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ExtendableLicense"`
 	// SubjectAddition A LicenseAddition participating in a 'with addition' model.
 	SubjectAddition AnyLicenseAddition `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectAddition" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/LicenseAddition"`
 }
 
-func (o *WithAdditionOperator) asWithAdditionOperator() *WithAdditionOperator {
-	return o
+func (o *WithAdditionOperator) asWithAdditionOperator() {}
+func (o *WithAdditionOperator) asLicenseInfo()          {}
+func (o *WithAdditionOperator) asElement()              {}
+func (o *WithAdditionOperator) GetDescription() string {
+	return o.Description
+}
+
+func (o *WithAdditionOperator) SetDescription(v string) {
+	o.Description = v
+}
+
+func (o *WithAdditionOperator) GetComment() string {
+	return o.Comment
+}
+
+func (o *WithAdditionOperator) SetComment(v string) {
+	o.Comment = v
+}
+
+func (o *WithAdditionOperator) GetName() string {
+	return o.Name
+}
+
+func (o *WithAdditionOperator) SetName(v string) {
+	o.Name = v
+}
+
+func (o *WithAdditionOperator) GetExtensions() ExtensionList {
+	return o.Extensions
+}
+
+func (o *WithAdditionOperator) SetExtensions(v ExtensionList) {
+	o.Extensions = v
+}
+
+func (o *WithAdditionOperator) GetCreationInfo() AnyCreationInfo {
+	return o.CreationInfo
+}
+
+func (o *WithAdditionOperator) SetCreationInfo(v AnyCreationInfo) {
+	o.CreationInfo = v
+}
+
+func (o *WithAdditionOperator) GetExternalIdentifiers() ExternalIdentifierList {
+	return o.ExternalIdentifiers
+}
+
+func (o *WithAdditionOperator) SetExternalIdentifiers(v ExternalIdentifierList) {
+	o.ExternalIdentifiers = v
+}
+
+func (o *WithAdditionOperator) GetExternalRefs() ExternalRefList {
+	return o.ExternalRefs
+}
+
+func (o *WithAdditionOperator) SetExternalRefs(v ExternalRefList) {
+	o.ExternalRefs = v
+}
+
+func (o *WithAdditionOperator) GetSummary() string {
+	return o.Summary
+}
+
+func (o *WithAdditionOperator) SetSummary(v string) {
+	o.Summary = v
+}
+
+func (o *WithAdditionOperator) GetVerifiedUsing() IntegrityMethodList {
+	return o.VerifiedUsing
+}
+
+func (o *WithAdditionOperator) SetVerifiedUsing(v IntegrityMethodList) {
+	o.VerifiedUsing = v
+}
+
+func (o *WithAdditionOperator) GetSubjectExtendableLicense() AnyExtendableLicense {
+	return o.SubjectExtendableLicense
+}
+
+func (o *WithAdditionOperator) SetSubjectExtendableLicense(v AnyExtendableLicense) {
+	o.SubjectExtendableLicense = v
+}
+
+func (o *WithAdditionOperator) GetSubjectAddition() AnyLicenseAddition {
+	return o.SubjectAddition
+}
+
+func (o *WithAdditionOperator) SetSubjectAddition(v AnyLicenseAddition) {
+	o.SubjectAddition = v
 }
 
 type WithAdditionOperatorList []AnyWithAdditionOperator
 
-func (o *WithAdditionOperatorList) WithAdditionOperators() ld.TypeSeq[AnyWithAdditionOperator, *WithAdditionOperator] {
-	return ld.NewTypeSeq(*o, castWithAdditionOperator)
+func (v WithAdditionOperatorList) WithAdditionOperators() []AnyWithAdditionOperator {
+	return ld.SliceOf[AnyWithAdditionOperator](v)
 }
 
 type ExternalIRI struct {
@@ -3701,1031 +11088,10 @@ func NewExternalIRI(id string) *ExternalIRI {
 	}
 }
 
-func (o *ExternalIRI) asAIPackage() *AIPackage {
-	return castAIPackage(o.value)
-}
-
-func (o *ExternalIRI) asAgent() *Agent {
-	return castAgent(o.value)
-}
-
-func (o *ExternalIRI) asAnnotation() *Annotation {
-	return castAnnotation(o.value)
-}
-
-func (o *ExternalIRI) asArtifact() *Artifact {
-	return castArtifact(o.value)
-}
-
-func (o *ExternalIRI) asBOM() *BOM {
-	return castBOM(o.value)
-}
-
-func (o *ExternalIRI) asBuild() *Build {
-	return castBuild(o.value)
-}
-
-func (o *ExternalIRI) asBundle() *Bundle {
-	return castBundle(o.value)
-}
-
-func (o *ExternalIRI) asCdxPropertiesExtension() *CdxPropertiesExtension {
-	return castCdxPropertiesExtension(o.value)
-}
-
-func (o *ExternalIRI) asCdxPropertyEntry() *CdxPropertyEntry {
-	return castCdxPropertyEntry(o.value)
-}
-
-func (o *ExternalIRI) asConjunctiveLicenseSet() *ConjunctiveLicenseSet {
-	return castConjunctiveLicenseSet(o.value)
-}
-
-func (o *ExternalIRI) asContentIdentifier() *ContentIdentifier {
-	return castContentIdentifier(o.value)
-}
-
-func (o *ExternalIRI) asCreationInfo() *CreationInfo {
-	return castCreationInfo(o.value)
-}
-
-func (o *ExternalIRI) asCustomLicense() *CustomLicense {
-	return castCustomLicense(o.value)
-}
-
-func (o *ExternalIRI) asCustomLicenseAddition() *CustomLicenseAddition {
-	return castCustomLicenseAddition(o.value)
-}
-
-func (o *ExternalIRI) asCvssV2VulnAssessmentRelationship() *CvssV2VulnAssessmentRelationship {
-	return castCvssV2VulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asCvssV3VulnAssessmentRelationship() *CvssV3VulnAssessmentRelationship {
-	return castCvssV3VulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asCvssV4VulnAssessmentRelationship() *CvssV4VulnAssessmentRelationship {
-	return castCvssV4VulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asDatasetPackage() *DatasetPackage {
-	return castDatasetPackage(o.value)
-}
-
-func (o *ExternalIRI) asDictionaryEntry() *DictionaryEntry {
-	return castDictionaryEntry(o.value)
-}
-
-func (o *ExternalIRI) asDisjunctiveLicenseSet() *DisjunctiveLicenseSet {
-	return castDisjunctiveLicenseSet(o.value)
-}
-
-func (o *ExternalIRI) asElement() *Element {
-	return castElement(o.value)
-}
-
-func (o *ExternalIRI) asElementCollection() *ElementCollection {
-	return castElementCollection(o.value)
-}
-
-func (o *ExternalIRI) asEnergyConsumption() *EnergyConsumption {
-	return castEnergyConsumption(o.value)
-}
-
-func (o *ExternalIRI) asEnergyConsumptionDescription() *EnergyConsumptionDescription {
-	return castEnergyConsumptionDescription(o.value)
-}
-
-func (o *ExternalIRI) asEpssVulnAssessmentRelationship() *EpssVulnAssessmentRelationship {
-	return castEpssVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asExploitCatalogVulnAssessmentRelationship() *ExploitCatalogVulnAssessmentRelationship {
-	return castExploitCatalogVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asExtendableLicense() *ExtendableLicense {
-	return castExtendableLicense(o.value)
-}
-
-func (o *ExternalIRI) asExtension() *Extension {
-	return castExtension(o.value)
-}
-
-func (o *ExternalIRI) asExternalIdentifier() *ExternalIdentifier {
-	return castExternalIdentifier(o.value)
-}
-
-func (o *ExternalIRI) asExternalMap() *ExternalMap {
-	return castExternalMap(o.value)
-}
-
-func (o *ExternalIRI) asExternalRef() *ExternalRef {
-	return castExternalRef(o.value)
-}
-
-func (o *ExternalIRI) asFile() *File {
-	return castFile(o.value)
-}
-
-func (o *ExternalIRI) asHash() *Hash {
-	return castHash(o.value)
-}
-
-func (o *ExternalIRI) asIndividualElement() *IndividualElement {
-	return castIndividualElement(o.value)
-}
-
-func (o *ExternalIRI) asIndividualLicensingInfo() *IndividualLicensingInfo {
-	return castIndividualLicensingInfo(o.value)
-}
-
-func (o *ExternalIRI) asIntegrityMethod() *IntegrityMethod {
-	return castIntegrityMethod(o.value)
-}
-
-func (o *ExternalIRI) asLicense() *License {
-	return castLicense(o.value)
-}
-
-func (o *ExternalIRI) asLicenseAddition() *LicenseAddition {
-	return castLicenseAddition(o.value)
-}
-
-func (o *ExternalIRI) asLicenseExpression() *LicenseExpression {
-	return castLicenseExpression(o.value)
-}
-
-func (o *ExternalIRI) asLicenseInfo() *LicenseInfo {
-	return castLicenseInfo(o.value)
-}
-
-func (o *ExternalIRI) asLifecycleScopedRelationship() *LifecycleScopedRelationship {
-	return castLifecycleScopedRelationship(o.value)
-}
-
-func (o *ExternalIRI) asListedLicense() *ListedLicense {
-	return castListedLicense(o.value)
-}
-
-func (o *ExternalIRI) asListedLicenseException() *ListedLicenseException {
-	return castListedLicenseException(o.value)
-}
-
-func (o *ExternalIRI) asNamespaceMap() *NamespaceMap {
-	return castNamespaceMap(o.value)
-}
-
-func (o *ExternalIRI) asOrLaterOperator() *OrLaterOperator {
-	return castOrLaterOperator(o.value)
-}
-
-func (o *ExternalIRI) asOrganization() *Organization {
-	return castOrganization(o.value)
-}
-
-func (o *ExternalIRI) asPackage() *Package {
-	return castPackage(o.value)
-}
-
-func (o *ExternalIRI) asPackageVerificationCode() *PackageVerificationCode {
-	return castPackageVerificationCode(o.value)
-}
-
-func (o *ExternalIRI) asPerson() *Person {
-	return castPerson(o.value)
-}
-
-func (o *ExternalIRI) asPositiveIntegerRange() *PositiveIntegerRange {
-	return castPositiveIntegerRange(o.value)
-}
-
-func (o *ExternalIRI) asRelationship() *Relationship {
-	return castRelationship(o.value)
-}
-
-func (o *ExternalIRI) asSBOM() *SBOM {
-	return castSBOM(o.value)
-}
-
-func (o *ExternalIRI) asSimpleLicensingText() *SimpleLicensingText {
-	return castSimpleLicensingText(o.value)
-}
-
-func (o *ExternalIRI) asSnippet() *Snippet {
-	return castSnippet(o.value)
-}
-
-func (o *ExternalIRI) asSoftwareAgent() *SoftwareAgent {
-	return castSoftwareAgent(o.value)
-}
-
-func (o *ExternalIRI) asSoftwareArtifact() *SoftwareArtifact {
-	return castSoftwareArtifact(o.value)
-}
-
-func (o *ExternalIRI) asSpdxDocument() *SpdxDocument {
-	return castSpdxDocument(o.value)
-}
-
-func (o *ExternalIRI) asSsvcVulnAssessmentRelationship() *SsvcVulnAssessmentRelationship {
-	return castSsvcVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asTool() *Tool {
-	return castTool(o.value)
-}
-
-func (o *ExternalIRI) asVexAffectedVulnAssessmentRelationship() *VexAffectedVulnAssessmentRelationship {
-	return castVexAffectedVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVexFixedVulnAssessmentRelationship() *VexFixedVulnAssessmentRelationship {
-	return castVexFixedVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVexNotAffectedVulnAssessmentRelationship() *VexNotAffectedVulnAssessmentRelationship {
-	return castVexNotAffectedVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVexUnderInvestigationVulnAssessmentRelationship() *VexUnderInvestigationVulnAssessmentRelationship {
-	return castVexUnderInvestigationVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVexVulnAssessmentRelationship() *VexVulnAssessmentRelationship {
-	return castVexVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVulnAssessmentRelationship() *VulnAssessmentRelationship {
-	return castVulnAssessmentRelationship(o.value)
-}
-
-func (o *ExternalIRI) asVulnerability() *Vulnerability {
-	return castVulnerability(o.value)
-}
-
-func (o *ExternalIRI) asWithAdditionOperator() *WithAdditionOperator {
-	return castWithAdditionOperator(o.value)
-}
-
-func castAIPackage(o any) *AIPackage {
-	if o, ok := o.(AnyAIPackage); ok {
-		return o.asAIPackage()
-	}
-	return nil
-}
-
-func castAgent(o any) *Agent {
-	if o, ok := o.(AnyAgent); ok {
-		return o.asAgent()
-	}
-	return nil
-}
-
-func castAnnotation(o any) *Annotation {
-	if o, ok := o.(AnyAnnotation); ok {
-		return o.asAnnotation()
-	}
-	return nil
-}
-
-func castArtifact(o any) *Artifact {
-	if o, ok := o.(AnyArtifact); ok {
-		return o.asArtifact()
-	}
-	return nil
-}
-
-func castBOM(o any) *BOM {
-	if o, ok := o.(AnyBOM); ok {
-		return o.asBOM()
-	}
-	return nil
-}
-
-func castBuild(o any) *Build {
-	if o, ok := o.(AnyBuild); ok {
-		return o.asBuild()
-	}
-	return nil
-}
-
-func castBundle(o any) *Bundle {
-	if o, ok := o.(AnyBundle); ok {
-		return o.asBundle()
-	}
-	return nil
-}
-
-func castCdxPropertiesExtension(o any) *CdxPropertiesExtension {
-	if o, ok := o.(AnyCdxPropertiesExtension); ok {
-		return o.asCdxPropertiesExtension()
-	}
-	return nil
-}
-
-func castCdxPropertyEntry(o any) *CdxPropertyEntry {
-	if o, ok := o.(AnyCdxPropertyEntry); ok {
-		return o.asCdxPropertyEntry()
-	}
-	return nil
-}
-
-func castConjunctiveLicenseSet(o any) *ConjunctiveLicenseSet {
-	if o, ok := o.(AnyConjunctiveLicenseSet); ok {
-		return o.asConjunctiveLicenseSet()
-	}
-	return nil
-}
-
-func castContentIdentifier(o any) *ContentIdentifier {
-	if o, ok := o.(AnyContentIdentifier); ok {
-		return o.asContentIdentifier()
-	}
-	return nil
-}
-
-func castCreationInfo(o any) *CreationInfo {
-	if o, ok := o.(AnyCreationInfo); ok {
-		return o.asCreationInfo()
-	}
-	return nil
-}
-
-func castCustomLicense(o any) *CustomLicense {
-	if o, ok := o.(AnyCustomLicense); ok {
-		return o.asCustomLicense()
-	}
-	return nil
-}
-
-func castCustomLicenseAddition(o any) *CustomLicenseAddition {
-	if o, ok := o.(AnyCustomLicenseAddition); ok {
-		return o.asCustomLicenseAddition()
-	}
-	return nil
-}
-
-func castCvssV2VulnAssessmentRelationship(o any) *CvssV2VulnAssessmentRelationship {
-	if o, ok := o.(AnyCvssV2VulnAssessmentRelationship); ok {
-		return o.asCvssV2VulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castCvssV3VulnAssessmentRelationship(o any) *CvssV3VulnAssessmentRelationship {
-	if o, ok := o.(AnyCvssV3VulnAssessmentRelationship); ok {
-		return o.asCvssV3VulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castCvssV4VulnAssessmentRelationship(o any) *CvssV4VulnAssessmentRelationship {
-	if o, ok := o.(AnyCvssV4VulnAssessmentRelationship); ok {
-		return o.asCvssV4VulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castDatasetPackage(o any) *DatasetPackage {
-	if o, ok := o.(AnyDatasetPackage); ok {
-		return o.asDatasetPackage()
-	}
-	return nil
-}
-
-func castDictionaryEntry(o any) *DictionaryEntry {
-	if o, ok := o.(AnyDictionaryEntry); ok {
-		return o.asDictionaryEntry()
-	}
-	return nil
-}
-
-func castDisjunctiveLicenseSet(o any) *DisjunctiveLicenseSet {
-	if o, ok := o.(AnyDisjunctiveLicenseSet); ok {
-		return o.asDisjunctiveLicenseSet()
-	}
-	return nil
-}
-
-func castElement(o any) *Element {
-	if o, ok := o.(AnyElement); ok {
-		return o.asElement()
-	}
-	return nil
-}
-
-func castElementCollection(o any) *ElementCollection {
-	if o, ok := o.(AnyElementCollection); ok {
-		return o.asElementCollection()
-	}
-	return nil
-}
-
-func castEnergyConsumption(o any) *EnergyConsumption {
-	if o, ok := o.(AnyEnergyConsumption); ok {
-		return o.asEnergyConsumption()
-	}
-	return nil
-}
-
-func castEnergyConsumptionDescription(o any) *EnergyConsumptionDescription {
-	if o, ok := o.(AnyEnergyConsumptionDescription); ok {
-		return o.asEnergyConsumptionDescription()
-	}
-	return nil
-}
-
-func castEpssVulnAssessmentRelationship(o any) *EpssVulnAssessmentRelationship {
-	if o, ok := o.(AnyEpssVulnAssessmentRelationship); ok {
-		return o.asEpssVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castExploitCatalogVulnAssessmentRelationship(o any) *ExploitCatalogVulnAssessmentRelationship {
-	if o, ok := o.(AnyExploitCatalogVulnAssessmentRelationship); ok {
-		return o.asExploitCatalogVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castExtendableLicense(o any) *ExtendableLicense {
-	if o, ok := o.(AnyExtendableLicense); ok {
-		return o.asExtendableLicense()
-	}
-	return nil
-}
-
-func castExtension(o any) *Extension {
-	if o, ok := o.(AnyExtension); ok {
-		return o.asExtension()
-	}
-	return nil
-}
-
-func castExternalIdentifier(o any) *ExternalIdentifier {
-	if o, ok := o.(AnyExternalIdentifier); ok {
-		return o.asExternalIdentifier()
-	}
-	return nil
-}
-
-func castExternalMap(o any) *ExternalMap {
-	if o, ok := o.(AnyExternalMap); ok {
-		return o.asExternalMap()
-	}
-	return nil
-}
-
-func castExternalRef(o any) *ExternalRef {
-	if o, ok := o.(AnyExternalRef); ok {
-		return o.asExternalRef()
-	}
-	return nil
-}
-
-func castFile(o any) *File {
-	if o, ok := o.(AnyFile); ok {
-		return o.asFile()
-	}
-	return nil
-}
-
-func castHash(o any) *Hash {
-	if o, ok := o.(AnyHash); ok {
-		return o.asHash()
-	}
-	return nil
-}
-
-func castIndividualElement(o any) *IndividualElement {
-	if o, ok := o.(AnyIndividualElement); ok {
-		return o.asIndividualElement()
-	}
-	return nil
-}
-
-func castIndividualLicensingInfo(o any) *IndividualLicensingInfo {
-	if o, ok := o.(AnyIndividualLicensingInfo); ok {
-		return o.asIndividualLicensingInfo()
-	}
-	return nil
-}
-
-func castIntegrityMethod(o any) *IntegrityMethod {
-	if o, ok := o.(AnyIntegrityMethod); ok {
-		return o.asIntegrityMethod()
-	}
-	return nil
-}
-
-func castLicense(o any) *License {
-	if o, ok := o.(AnyLicense); ok {
-		return o.asLicense()
-	}
-	return nil
-}
-
-func castLicenseAddition(o any) *LicenseAddition {
-	if o, ok := o.(AnyLicenseAddition); ok {
-		return o.asLicenseAddition()
-	}
-	return nil
-}
-
-func castLicenseExpression(o any) *LicenseExpression {
-	if o, ok := o.(AnyLicenseExpression); ok {
-		return o.asLicenseExpression()
-	}
-	return nil
-}
-
-func castLicenseInfo(o any) *LicenseInfo {
-	if o, ok := o.(AnyLicenseInfo); ok {
-		return o.asLicenseInfo()
-	}
-	return nil
-}
-
-func castLifecycleScopedRelationship(o any) *LifecycleScopedRelationship {
-	if o, ok := o.(AnyLifecycleScopedRelationship); ok {
-		return o.asLifecycleScopedRelationship()
-	}
-	return nil
-}
-
-func castListedLicense(o any) *ListedLicense {
-	if o, ok := o.(AnyListedLicense); ok {
-		return o.asListedLicense()
-	}
-	return nil
-}
-
-func castListedLicenseException(o any) *ListedLicenseException {
-	if o, ok := o.(AnyListedLicenseException); ok {
-		return o.asListedLicenseException()
-	}
-	return nil
-}
-
-func castNamespaceMap(o any) *NamespaceMap {
-	if o, ok := o.(AnyNamespaceMap); ok {
-		return o.asNamespaceMap()
-	}
-	return nil
-}
-
-func castOrLaterOperator(o any) *OrLaterOperator {
-	if o, ok := o.(AnyOrLaterOperator); ok {
-		return o.asOrLaterOperator()
-	}
-	return nil
-}
-
-func castOrganization(o any) *Organization {
-	if o, ok := o.(AnyOrganization); ok {
-		return o.asOrganization()
-	}
-	return nil
-}
-
-func castPackage(o any) *Package {
-	if o, ok := o.(AnyPackage); ok {
-		return o.asPackage()
-	}
-	return nil
-}
-
-func castPackageVerificationCode(o any) *PackageVerificationCode {
-	if o, ok := o.(AnyPackageVerificationCode); ok {
-		return o.asPackageVerificationCode()
-	}
-	return nil
-}
-
-func castPerson(o any) *Person {
-	if o, ok := o.(AnyPerson); ok {
-		return o.asPerson()
-	}
-	return nil
-}
-
-func castPositiveIntegerRange(o any) *PositiveIntegerRange {
-	if o, ok := o.(AnyPositiveIntegerRange); ok {
-		return o.asPositiveIntegerRange()
-	}
-	return nil
-}
-
-func castRelationship(o any) *Relationship {
-	if o, ok := o.(AnyRelationship); ok {
-		return o.asRelationship()
-	}
-	return nil
-}
-
-func castSBOM(o any) *SBOM {
-	if o, ok := o.(AnySBOM); ok {
-		return o.asSBOM()
-	}
-	return nil
-}
-
-func castSimpleLicensingText(o any) *SimpleLicensingText {
-	if o, ok := o.(AnySimpleLicensingText); ok {
-		return o.asSimpleLicensingText()
-	}
-	return nil
-}
-
-func castSnippet(o any) *Snippet {
-	if o, ok := o.(AnySnippet); ok {
-		return o.asSnippet()
-	}
-	return nil
-}
-
-func castSoftwareAgent(o any) *SoftwareAgent {
-	if o, ok := o.(AnySoftwareAgent); ok {
-		return o.asSoftwareAgent()
-	}
-	return nil
-}
-
-func castSoftwareArtifact(o any) *SoftwareArtifact {
-	if o, ok := o.(AnySoftwareArtifact); ok {
-		return o.asSoftwareArtifact()
-	}
-	return nil
-}
-
-func castSpdxDocument(o any) *SpdxDocument {
-	if o, ok := o.(AnySpdxDocument); ok {
-		return o.asSpdxDocument()
-	}
-	return nil
-}
-
-func castSsvcVulnAssessmentRelationship(o any) *SsvcVulnAssessmentRelationship {
-	if o, ok := o.(AnySsvcVulnAssessmentRelationship); ok {
-		return o.asSsvcVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castTool(o any) *Tool {
-	if o, ok := o.(AnyTool); ok {
-		return o.asTool()
-	}
-	return nil
-}
-
-func castVexAffectedVulnAssessmentRelationship(o any) *VexAffectedVulnAssessmentRelationship {
-	if o, ok := o.(AnyVexAffectedVulnAssessmentRelationship); ok {
-		return o.asVexAffectedVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVexFixedVulnAssessmentRelationship(o any) *VexFixedVulnAssessmentRelationship {
-	if o, ok := o.(AnyVexFixedVulnAssessmentRelationship); ok {
-		return o.asVexFixedVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVexNotAffectedVulnAssessmentRelationship(o any) *VexNotAffectedVulnAssessmentRelationship {
-	if o, ok := o.(AnyVexNotAffectedVulnAssessmentRelationship); ok {
-		return o.asVexNotAffectedVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVexUnderInvestigationVulnAssessmentRelationship(o any) *VexUnderInvestigationVulnAssessmentRelationship {
-	if o, ok := o.(AnyVexUnderInvestigationVulnAssessmentRelationship); ok {
-		return o.asVexUnderInvestigationVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVexVulnAssessmentRelationship(o any) *VexVulnAssessmentRelationship {
-	if o, ok := o.(AnyVexVulnAssessmentRelationship); ok {
-		return o.asVexVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVulnAssessmentRelationship(o any) *VulnAssessmentRelationship {
-	if o, ok := o.(AnyVulnAssessmentRelationship); ok {
-		return o.asVulnAssessmentRelationship()
-	}
-	return nil
-}
-
-func castVulnerability(o any) *Vulnerability {
-	if o, ok := o.(AnyVulnerability); ok {
-		return o.asVulnerability()
-	}
-	return nil
-}
-
-func castWithAdditionOperator(o any) *WithAdditionOperator {
-	if o, ok := o.(AnyWithAdditionOperator); ok {
-		return o.asWithAdditionOperator()
-	}
-	return nil
-}
-
-func Cast[T any](value any) *T {
-	var t T
-	switch any(t).(type) {
-	case AIPackage:
-		if v, ok := any(castAIPackage(value)).(*T); ok {
-			return v
-		}
-	case Agent:
-		if v, ok := any(castAgent(value)).(*T); ok {
-			return v
-		}
-	case Annotation:
-		if v, ok := any(castAnnotation(value)).(*T); ok {
-			return v
-		}
-	case Artifact:
-		if v, ok := any(castArtifact(value)).(*T); ok {
-			return v
-		}
-	case BOM:
-		if v, ok := any(castBOM(value)).(*T); ok {
-			return v
-		}
-	case Build:
-		if v, ok := any(castBuild(value)).(*T); ok {
-			return v
-		}
-	case Bundle:
-		if v, ok := any(castBundle(value)).(*T); ok {
-			return v
-		}
-	case CdxPropertiesExtension:
-		if v, ok := any(castCdxPropertiesExtension(value)).(*T); ok {
-			return v
-		}
-	case CdxPropertyEntry:
-		if v, ok := any(castCdxPropertyEntry(value)).(*T); ok {
-			return v
-		}
-	case ConjunctiveLicenseSet:
-		if v, ok := any(castConjunctiveLicenseSet(value)).(*T); ok {
-			return v
-		}
-	case ContentIdentifier:
-		if v, ok := any(castContentIdentifier(value)).(*T); ok {
-			return v
-		}
-	case CreationInfo:
-		if v, ok := any(castCreationInfo(value)).(*T); ok {
-			return v
-		}
-	case CustomLicense:
-		if v, ok := any(castCustomLicense(value)).(*T); ok {
-			return v
-		}
-	case CustomLicenseAddition:
-		if v, ok := any(castCustomLicenseAddition(value)).(*T); ok {
-			return v
-		}
-	case CvssV2VulnAssessmentRelationship:
-		if v, ok := any(castCvssV2VulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case CvssV3VulnAssessmentRelationship:
-		if v, ok := any(castCvssV3VulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case CvssV4VulnAssessmentRelationship:
-		if v, ok := any(castCvssV4VulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case DatasetPackage:
-		if v, ok := any(castDatasetPackage(value)).(*T); ok {
-			return v
-		}
-	case DictionaryEntry:
-		if v, ok := any(castDictionaryEntry(value)).(*T); ok {
-			return v
-		}
-	case DisjunctiveLicenseSet:
-		if v, ok := any(castDisjunctiveLicenseSet(value)).(*T); ok {
-			return v
-		}
-	case Element:
-		if v, ok := any(castElement(value)).(*T); ok {
-			return v
-		}
-	case ElementCollection:
-		if v, ok := any(castElementCollection(value)).(*T); ok {
-			return v
-		}
-	case EnergyConsumption:
-		if v, ok := any(castEnergyConsumption(value)).(*T); ok {
-			return v
-		}
-	case EnergyConsumptionDescription:
-		if v, ok := any(castEnergyConsumptionDescription(value)).(*T); ok {
-			return v
-		}
-	case EpssVulnAssessmentRelationship:
-		if v, ok := any(castEpssVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case ExploitCatalogVulnAssessmentRelationship:
-		if v, ok := any(castExploitCatalogVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case ExtendableLicense:
-		if v, ok := any(castExtendableLicense(value)).(*T); ok {
-			return v
-		}
-	case Extension:
-		if v, ok := any(castExtension(value)).(*T); ok {
-			return v
-		}
-	case ExternalIdentifier:
-		if v, ok := any(castExternalIdentifier(value)).(*T); ok {
-			return v
-		}
-	case ExternalMap:
-		if v, ok := any(castExternalMap(value)).(*T); ok {
-			return v
-		}
-	case ExternalRef:
-		if v, ok := any(castExternalRef(value)).(*T); ok {
-			return v
-		}
-	case File:
-		if v, ok := any(castFile(value)).(*T); ok {
-			return v
-		}
-	case Hash:
-		if v, ok := any(castHash(value)).(*T); ok {
-			return v
-		}
-	case IndividualElement:
-		if v, ok := any(castIndividualElement(value)).(*T); ok {
-			return v
-		}
-	case IndividualLicensingInfo:
-		if v, ok := any(castIndividualLicensingInfo(value)).(*T); ok {
-			return v
-		}
-	case IntegrityMethod:
-		if v, ok := any(castIntegrityMethod(value)).(*T); ok {
-			return v
-		}
-	case License:
-		if v, ok := any(castLicense(value)).(*T); ok {
-			return v
-		}
-	case LicenseAddition:
-		if v, ok := any(castLicenseAddition(value)).(*T); ok {
-			return v
-		}
-	case LicenseExpression:
-		if v, ok := any(castLicenseExpression(value)).(*T); ok {
-			return v
-		}
-	case LicenseInfo:
-		if v, ok := any(castLicenseInfo(value)).(*T); ok {
-			return v
-		}
-	case LifecycleScopedRelationship:
-		if v, ok := any(castLifecycleScopedRelationship(value)).(*T); ok {
-			return v
-		}
-	case ListedLicense:
-		if v, ok := any(castListedLicense(value)).(*T); ok {
-			return v
-		}
-	case ListedLicenseException:
-		if v, ok := any(castListedLicenseException(value)).(*T); ok {
-			return v
-		}
-	case NamespaceMap:
-		if v, ok := any(castNamespaceMap(value)).(*T); ok {
-			return v
-		}
-	case OrLaterOperator:
-		if v, ok := any(castOrLaterOperator(value)).(*T); ok {
-			return v
-		}
-	case Organization:
-		if v, ok := any(castOrganization(value)).(*T); ok {
-			return v
-		}
-	case Package:
-		if v, ok := any(castPackage(value)).(*T); ok {
-			return v
-		}
-	case PackageVerificationCode:
-		if v, ok := any(castPackageVerificationCode(value)).(*T); ok {
-			return v
-		}
-	case Person:
-		if v, ok := any(castPerson(value)).(*T); ok {
-			return v
-		}
-	case PositiveIntegerRange:
-		if v, ok := any(castPositiveIntegerRange(value)).(*T); ok {
-			return v
-		}
-	case Relationship:
-		if v, ok := any(castRelationship(value)).(*T); ok {
-			return v
-		}
-	case SBOM:
-		if v, ok := any(castSBOM(value)).(*T); ok {
-			return v
-		}
-	case SimpleLicensingText:
-		if v, ok := any(castSimpleLicensingText(value)).(*T); ok {
-			return v
-		}
-	case Snippet:
-		if v, ok := any(castSnippet(value)).(*T); ok {
-			return v
-		}
-	case SoftwareAgent:
-		if v, ok := any(castSoftwareAgent(value)).(*T); ok {
-			return v
-		}
-	case SoftwareArtifact:
-		if v, ok := any(castSoftwareArtifact(value)).(*T); ok {
-			return v
-		}
-	case SpdxDocument:
-		if v, ok := any(castSpdxDocument(value)).(*T); ok {
-			return v
-		}
-	case SsvcVulnAssessmentRelationship:
-		if v, ok := any(castSsvcVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case Tool:
-		if v, ok := any(castTool(value)).(*T); ok {
-			return v
-		}
-	case VexAffectedVulnAssessmentRelationship:
-		if v, ok := any(castVexAffectedVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case VexFixedVulnAssessmentRelationship:
-		if v, ok := any(castVexFixedVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case VexNotAffectedVulnAssessmentRelationship:
-		if v, ok := any(castVexNotAffectedVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case VexUnderInvestigationVulnAssessmentRelationship:
-		if v, ok := any(castVexUnderInvestigationVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case VexVulnAssessmentRelationship:
-		if v, ok := any(castVexVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case VulnAssessmentRelationship:
-		if v, ok := any(castVulnAssessmentRelationship(value)).(*T); ok {
-			return v
-		}
-	case Vulnerability:
-		if v, ok := any(castVulnerability(value)).(*T); ok {
-			return v
-		}
-	case WithAdditionOperator:
-		if v, ok := any(castWithAdditionOperator(value)).(*T); ok {
-			return v
-		}
-	}
-	panic("invalid type cast, unknown type: " + reflect.TypeOf(t).String())
-}
-
-func As[T any, R any](value any, fn func(v *T) R) R {
-	v := Cast[T](value)
-	if v != nil {
-		return fn(v)
-	}
-	var r R
-	return r
-}
-
 type (
-	PositiveInt    = ld.PositiveInt
 	URI            = ld.URI
 	NonNegativeInt = ld.NonNegativeInt
+	PositiveInt    = ld.PositiveInt
 )
 
 func context() ld.Context {
@@ -5498,7 +11864,6 @@ func context() ld.Context {
 		AnnotationType{},
 		AnnotationType_Other,
 		AnnotationType_Review,
-		Artifact{},
 		BOM{},
 		Build{},
 		Bundle{},
@@ -5550,8 +11915,6 @@ func context() ld.Context {
 		DatasetType_Video,
 		DictionaryEntry{},
 		DisjunctiveLicenseSet{},
-		Element{},
-		ElementCollection{},
 		EnergyConsumption{},
 		EnergyConsumptionDescription{},
 		EnergyUnitType{},
@@ -5563,8 +11926,6 @@ func context() ld.Context {
 		ExploitCatalogType_Kev,
 		ExploitCatalogType_Other,
 		ExploitCatalogVulnAssessmentRelationship{},
-		ExtendableLicense{},
-		Extension{},
 		ExternalIdentifier{},
 		ExternalIdentifierType{},
 		ExternalIdentifierType_Cpe22,
@@ -5661,11 +12022,7 @@ func context() ld.Context {
 		IndividualLicensingInfo{},
 		IndividualLicensingInfo_NoAssertionLicense,
 		IndividualLicensingInfo_NoneLicense,
-		IntegrityMethod{},
-		License{},
-		LicenseAddition{},
 		LicenseExpression{},
-		LicenseInfo{},
 		LifecycleScopeType{},
 		LifecycleScopeType_Build,
 		LifecycleScopeType_Design,
@@ -5780,7 +12137,6 @@ func context() ld.Context {
 		SimpleLicensingText{},
 		Snippet{},
 		SoftwareAgent{},
-		SoftwareArtifact{},
 		SoftwarePurpose{},
 		SoftwarePurpose_Application,
 		SoftwarePurpose_Archive,
@@ -5837,8 +12193,6 @@ func context() ld.Context {
 		VexJustificationType_VulnerableCodeNotPresent,
 		VexNotAffectedVulnAssessmentRelationship{},
 		VexUnderInvestigationVulnAssessmentRelationship{},
-		VexVulnAssessmentRelationship{},
-		VulnAssessmentRelationship{},
 		Vulnerability{},
 		WithAdditionOperator{},
 	)

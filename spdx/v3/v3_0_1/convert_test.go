@@ -5,7 +5,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/kzantow/go-ld"
 	"github.com/stretchr/testify/require"
 )
 
@@ -92,28 +91,20 @@ func Test_convertElements(t *testing.T) {
 	}
 }
 
-func each[Element, View any](s ld.TypeSeq[Element, View]) []View {
-	var out []View
-	for _, v := range s {
-		out = append(out, v)
-	}
-	return out
-}
-
 func Test_documentConversion(t *testing.T) {
 	expected := v301doc()
 
 	converted := &Document{}
 	From_v2_3(*v23doc(), converted)
 
-	startPkgs := each(expected.Elements.Packages())
-	gotPkgs := each(converted.Elements.Packages())
+	startPkgs := expected.Elements.Packages()
+	gotPkgs := converted.Elements.Packages()
 	if diff := cmp.Diff(startPkgs, gotPkgs, diffOpts()...); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%s", diff)
 	}
 
-	startRels := each(expected.Elements.Relationships())
-	gotRels := each(converted.Elements.Relationships())
+	startRels := expected.Elements.Relationships()
+	gotRels := converted.Elements.Relationships()
 	if diff := cmp.Diff(startRels, gotRels, diffOpts()...); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%s", diff)
 	}
@@ -121,10 +112,37 @@ func Test_documentConversion(t *testing.T) {
 
 func diffOpts() []cmp.Option {
 	var out []cmp.Option
+	for _, t := range []any{
+		Package{},
+		AIPackage{},
+		Relationship{},
+		File{},
+		Snippet{},
+		Annotation{},
+		Tool{},
+		Person{},
+		Organization{},
+		CustomLicense{},
+		ListedLicense{},
+		SpdxDocument{},
+		SBOM{},
+	} {
+		out = append(out,
+			cmpopts.IgnoreUnexported(t),
+			cmpopts.IgnoreFields(t, "ID", "CreationInfo"),
+		)
+	}
+	for _, t := range []any{
+		SpdxDocument{},
+		SBOM{},
+		Bundle{},
+	} {
+		out = append(out,
+			cmpopts.IgnoreFields(t, "Elements"),
+		)
+	}
 	out = append(out,
 		cmpopts.IgnoreFields(Document{}, "LDContext"),
-		cmpopts.IgnoreFields(Element{}, "ID", "CreationInfo"),
-		cmpopts.IgnoreFields(ElementCollection{}, "Elements"), // we only want to compare RootElements
 		cmpopts.IgnoreFields(CreationInfo{}, "CreatedUsing"),
 		cmpopts.EquateComparable(
 			ExternalIdentifierType{},

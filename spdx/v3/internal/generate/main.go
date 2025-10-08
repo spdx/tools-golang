@@ -31,6 +31,7 @@ func main() {
 
 		shaclgen.Generate(
 			shaclgen.EnableLog(),
+			shaclgen.UseFlatStruct(true),
 			shaclgen.PackageName(packageName),
 			shaclgen.LicenseID("MIT"),
 			shaclgen.OutputFile(fileName),

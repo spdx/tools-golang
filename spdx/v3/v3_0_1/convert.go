@@ -10,10 +10,10 @@ import (
 	"time"
 
 	"github.com/kzantow/go-ld"
-	"github.com/spdx/tools-golang/spdx/v3/internal"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/internal"
 )
 
 func From_v2_3(doc v2_3.Document, d *Document) {
@@ -276,12 +276,10 @@ func (c *documentConverter) convert23relationship(rel *v2_3.Relationship) AnyRel
 	}
 
 	r := &Relationship{
-		Element: Element{
-			Comment: rel.RelationshipComment,
-		},
-		From: from,
-		Type: typ,
-		To:   ElementList{to},
+		Comment: rel.RelationshipComment,
+		From:    from,
+		Type:    typ,
+		To:      ElementList{to},
 	}
 	c.addRelationship(r)
 	return r
@@ -315,10 +313,10 @@ func (c *documentConverter) convert23creationInfo(info *v2_3.CreationInfo) AnyCr
 
 	// update circular references, which will be set to nil by default
 	for _, a := range ci.CreatedBy.Agents() {
-		a.CreationInfo = ci
+		a.SetCreationInfo(ci)
 	}
 	for _, a := range ci.CreatedUsing.Tools() {
-		a.CreationInfo = ci
+		a.SetCreationInfo(ci)
 	}
 
 	return ci
@@ -335,10 +333,8 @@ func (c *documentConverter) convert23tool(creator common.Creator) AnyTool {
 	}
 
 	return &Tool{
-		Element: Element{
-			CreationInfo: c.creationInfo,
-			Name:         creator.Creator,
-		},
+		CreationInfo: c.creationInfo,
+		Name:         creator.Creator,
 	}
 }
 
@@ -387,21 +383,21 @@ func (c *documentConverter) convert23agent(typ, name string) AnyAgent {
 	var out AnyAgent
 	switch strings.ToLower(typ) {
 	case "person":
-		out = &Person{Agent: Agent{Element: Element{
+		out = &Person{
 			CreationInfo: c.creationInfo,
 			Name:         name,
-		}}}
+		}
 	case "organization", "org":
-		out = &Organization{Agent: Agent{Element: Element{
+		out = &Organization{
 			CreationInfo: c.creationInfo,
 			Name:         name,
-		}}}
+		}
 	case "tool": // handled elsewhere
 	default:
 		c.logDropped(fmt.Sprintf("unknown agent type: %v with value: %v", typ, name))
 	}
 	if emailValue != "" {
-		Cast[Element](out).ExternalIdentifiers = externalIdentifierListEmail(emailValue)
+		out.SetExternalIdentifiers(externalIdentifierListEmail(emailValue))
 	}
 	return out
 }
@@ -412,30 +408,24 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 	}
 
 	out := &File{
-		SoftwareArtifact: SoftwareArtifact{
-			Artifact: Artifact{
-				Element: Element{
-					ID:            string(f.FileSPDXIdentifier),
-					Comment:       f.FileComment,
-					Name:          f.FileName,
-					Description:   f.FileNotice,
-					ExternalRefs:  nil,
-					Summary:       "",
-					VerifiedUsing: list[IntegrityMethodList](c.convert23checksum, f.Checksums...),
-				},
-				StandardNames:  nil,
-				BuiltTime:      time.Time{},
-				ReleaseTime:    time.Time{},
-				SupportLevels:  nil,
-				SuppliedBy:     nil,
-				OriginatedBy:   c.convert23contributors(f.FileContributors...),
-				ValidUntilTime: time.Time{},
-			},
-			AttributionTexts: f.FileAttributionTexts,
-			CopyrightText:    f.FileCopyrightText,
-		},
-		ContentType: "",
-		Kind:        FileKindType_File,
+		ID:               string(f.FileSPDXIdentifier),
+		Comment:          f.FileComment,
+		Name:             f.FileName,
+		Description:      f.FileNotice,
+		ExternalRefs:     nil,
+		Summary:          "",
+		VerifiedUsing:    list[IntegrityMethodList](c.convert23checksum, f.Checksums...),
+		StandardNames:    nil,
+		BuiltTime:        time.Time{},
+		ReleaseTime:      time.Time{},
+		SupportLevels:    nil,
+		SuppliedBy:       nil,
+		OriginatedBy:     c.convert23contributors(f.FileContributors...),
+		ValidUntilTime:   time.Time{},
+		AttributionTexts: f.FileAttributionTexts,
+		CopyrightText:    f.FileCopyrightText,
+		ContentType:      "",
+		Kind:             FileKindType_File,
 	}
 
 	for _, s := range f.Snippets {
@@ -476,44 +466,39 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 
 	id := string(pkg.PackageSPDXIdentifier)
 	out := &Package{
-		SoftwareArtifact: SoftwareArtifact{
-			Artifact: Artifact{
-				Element: Element{
-					ID:                  id,
-					Name:                pkg.PackageName,
-					Summary:             pkg.PackageSummary,
-					Comment:             pkg.PackageComment,
-					Description:         pkg.PackageDescription,
-					ExternalIdentifiers: list[ExternalIdentifierList](c.convert23externalIdentifier, pkg.PackageExternalReferences...),
-					VerifiedUsing:       verificationCodes,
-				},
-				BuiltTime:      c.convert23time(pkg.BuiltDate),
-				OriginatedBy:   list[AgentList](c.convert23originator, pkg.PackageOriginator),
-				ReleaseTime:    c.convert23time(pkg.ReleaseDate),
-				SuppliedBy:     c.convert23supplier(pkg.PackageSupplier),
-				ValidUntilTime: c.convert23time(pkg.ValidUntilDate),
-			},
-			AttributionTexts: pkg.PackageAttributionTexts,
-			CopyrightText:    pkg.PackageCopyrightText,
-			PrimaryPurpose:   c.convert23purpose(pkg.PrimaryPackagePurpose),
-		},
-		Version:          pkg.PackageVersion,
-		DownloadLocation: c.convert23uri(pkg.PackageDownloadLocation),
-		HomePage:         c.convert23uri(pkg.PackageHomePage),
-		PackageURL:       c.convert23packageUrl(pkg.PackageExternalReferences),
-		SourceInfo:       pkg.PackageSourceInfo,
+		ID:                  id,
+		Name:                pkg.PackageName,
+		Summary:             pkg.PackageSummary,
+		Comment:             pkg.PackageComment,
+		Description:         pkg.PackageDescription,
+		ExternalIdentifiers: list[ExternalIdentifierList](c.convert23externalIdentifier, pkg.PackageExternalReferences...),
+		VerifiedUsing:       verificationCodes,
+		BuiltTime:           c.convert23time(pkg.BuiltDate),
+		OriginatedBy:        list[AgentList](c.convert23originator, pkg.PackageOriginator),
+		ReleaseTime:         c.convert23time(pkg.ReleaseDate),
+		SuppliedBy:          c.convert23supplier(pkg.PackageSupplier),
+		ValidUntilTime:      c.convert23time(pkg.ValidUntilDate),
+		AttributionTexts:    pkg.PackageAttributionTexts,
+		CopyrightText:       pkg.PackageCopyrightText,
+		PrimaryPurpose:      c.convert23purpose(pkg.PrimaryPackagePurpose),
+		Version:             pkg.PackageVersion,
+		DownloadLocation:    c.convert23uri(pkg.PackageDownloadLocation),
+		HomePage:            c.convert23uri(pkg.PackageHomePage),
+		PackageURL:          c.convert23packageUrl(pkg.PackageExternalReferences),
+		SourceInfo:          pkg.PackageSourceInfo,
 	}
 
-	for obj, ident := range out.ExternalIdentifiers.ExternalIdentifiers() {
-		if ident.Type == ExternalIdentifierType_PackageURL {
-			if ident.Comment != "" {
+	// move the first valid PURL to the PackageURL field
+	for _, ident := range out.ExternalIdentifiers.ExternalIdentifiers() {
+		if ident.GetType() == ExternalIdentifierType_PackageURL {
+			if ident.GetComment() != "" {
 				continue
 			}
-			purl := ld.URI(ident.Identifier)
+			purl := URI(ident.GetIdentifier())
 			if purl.Validate() == nil {
 				out.PackageURL = purl
 				out.ExternalIdentifiers = slices.DeleteFunc(out.ExternalIdentifiers, func(identifier AnyExternalIdentifier) bool {
-					return identifier == obj
+					return identifier.GetIdentifier() == string(purl)
 				})
 				break
 			}
@@ -654,18 +639,10 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 	}
 
 	out := &CustomLicense{
-		License: License{
-			ExtendableLicense: ExtendableLicense{
-				LicenseInfo: LicenseInfo{
-					Element: Element{
-						Name:    l.LicenseName,
-						Comment: l.LicenseComment,
-					},
-				},
-			},
-			SeeAlsos: seeAlso,
-			Text:     l.ExtractedText,
-		},
+		Name:     l.LicenseName,
+		Comment:  l.LicenseComment,
+		SeeAlsos: seeAlso,
+		Text:     l.ExtractedText,
 	}
 
 	c.idMap[l.LicenseIdentifier] = out
@@ -685,28 +662,12 @@ func (c *documentConverter) convert23licenseString(licenseString string) AnyLice
 			return license
 		}
 		out = &CustomLicense{
-			License: License{
-				ExtendableLicense: ExtendableLicense{
-					LicenseInfo: LicenseInfo{
-						Element: Element{
-							Name: licenseString,
-						},
-					},
-				},
-				Text: licenseString,
-			},
+			Name: licenseString,
+			Text: licenseString,
 		}
 	} else {
 		out = &ListedLicense{
-			License: License{
-				ExtendableLicense: ExtendableLicense{
-					LicenseInfo: LicenseInfo{
-						Element: Element{
-							Name: licenseString,
-						},
-					},
-				},
-			},
+			Name: licenseString,
 		}
 	}
 
@@ -748,11 +709,9 @@ func (c *documentConverter) convert23annotation(a *v2_3.Annotation) AnyAnnotatio
 	}
 
 	out := &Annotation{
-		Element: Element{
-			CreationInfo: &CreationInfo{
-				Created:   c.convert23time(a.AnnotationDate),
-				CreatedBy: list[AgentList](c.convert23annotator, &a.Annotator),
-			},
+		CreationInfo: &CreationInfo{
+			Created:   c.convert23time(a.AnnotationDate),
+			CreatedBy: list[AgentList](c.convert23annotator, &a.Annotator),
 		},
 		Type:      typ,
 		Statement: a.AnnotationComment,
@@ -774,15 +733,13 @@ func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 
 	var licenses LicenseInfoList
 	d := c.convert23licenseString(s.SnippetLicenseConcluded)
-	if licenseInfo := Cast[LicenseInfo](d); licenseInfo != nil {
-		licenseInfo.Comment = s.SnippetLicenseComments
-		licenses = append(licenses, d)
-	}
+	d.SetComment(s.SnippetLicenseComments)
+	licenses = append(licenses, d)
 
 	for _, licenseInfo := range s.LicenseInfoInSnippet {
 		d = c.convert23licenseString(licenseInfo)
-		if licenseInfo := Cast[LicenseInfo](d); licenseInfo != nil {
-			licenseInfo.Comment = s.SnippetLicenseComments
+		if d != nil {
+			d.SetComment(s.SnippetLicenseComments)
 			licenses = append(licenses, d)
 		}
 	}
@@ -799,18 +756,12 @@ func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 			snippetFile = f
 		}
 		newSnippet := &Snippet{
-			SoftwareArtifact: SoftwareArtifact{
-				Artifact: Artifact{
-					Element: Element{
-						ID:      string(s.SnippetSPDXIdentifier),
-						Comment: s.SnippetComment,
-						Name:    s.SnippetName,
-					},
-				},
-				CopyrightText:    s.SnippetCopyrightText,
-				AttributionTexts: s.SnippetAttributionTexts,
-			},
-			FromFile: f,
+			ID:               string(s.SnippetSPDXIdentifier),
+			Comment:          s.SnippetComment,
+			Name:             s.SnippetName,
+			CopyrightText:    s.SnippetCopyrightText,
+			AttributionTexts: s.SnippetAttributionTexts,
+			FromFile:         f,
 			LineRange: &PositiveIntegerRange{
 				BeginIntegerRange: ld.PositiveInt(r.StartPointer.LineNumber),
 				EndIntegerRange:   ld.PositiveInt(r.EndPointer.LineNumber),
@@ -839,9 +790,7 @@ func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 		out = allSnippets[0]
 	default:
 		out = &Bundle{
-			ElementCollection: ElementCollection{
-				Elements: allSnippets,
-			},
+			Elements: allSnippets,
 		}
 	}
 

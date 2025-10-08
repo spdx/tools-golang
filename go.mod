@@ -3,10 +3,11 @@ module github.com/spdx/tools-golang
 go 1.23.5
 
 require (
-	github.com/anchore/go-struct-converter v0.0.0-20250312065156-fb4bbb7d1693
+	github.com/anchore/go-struct-converter v0.0.0-20251008145103-b79fc8ba4f45
 	github.com/davecgh/go-spew v1.1.1
 	github.com/google/go-cmp v0.7.0
-	github.com/kzantow/go-ld v0.0.0-20251005195049-7f77d34103cd
+	github.com/google/uuid v1.6.0
+	github.com/kzantow/go-ld v0.0.0-20251008150111-0c38e7504ec5
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb
 	github.com/stretchr/testify v1.11.1
@@ -19,7 +20,15 @@ require (
 )
 
 require (
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/dave/jennifer v1.7.1 // indirect
+	github.com/deiu/gon3 v0.0.0-20241212124032-93153c038193 // indirect
+	github.com/deiu/rdf2go v0.0.0-20241212211204-b661ba0dfd25 // indirect
+	github.com/gertd/go-pluralize v0.2.1 // indirect
+	github.com/linkeddata/gojsonld v0.0.0-20170418210642-4f5db6791326 // indirect
 	github.com/piprate/json-gold v0.7.0 // indirect
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
+	github.com/rychipman/easylex v0.0.0-20160129204217-49ee7767142f // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/tools v0.17.0 // indirect
+	mvdan.cc/gofumpt v0.7.0 // indirect
 )

@@ -8,7 +8,81 @@ import "github.com/kzantow/go-ld"
 
 func (o *AIPackage) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Package),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))),
+		ld.ValidateProperty(o, &o.AdditionalPurposes,
+			ld.ValidateAll(ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			))),
+		ld.ValidateProperty(o, &o.PrimaryPurpose,
+			ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			)),
 		ld.ValidateProperty(o, &o.UseSensitivePersonalInformation,
 			ld.ValidateIRI(
 				PresenceType_Yes,
@@ -32,12 +106,12 @@ func (o *AIPackage) Validate() error {
 
 func (o *Agent) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *Annotation) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.Subject),
 		ld.ValidateProperty(o, &o.ContentType,
 			ld.ValidateExpression("^[^\\/]+\\/[^\\/]+$")),
@@ -52,40 +126,50 @@ func (o *AnnotationType) Validate() error {
 	return ld.JoinErrors()
 }
 
-func (o *Artifact) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
-		ld.ValidateProperty(o, &o.SupportLevels,
-			ld.ValidateAll(ld.ValidateIRI(
-				SupportType_Development,
-				SupportType_Support,
-				SupportType_Deployed,
-				SupportType_LimitedSupport,
-				SupportType_EndOfSupport,
-				SupportType_NoSupport,
-				SupportType_NoAssertion,
-			))))
-}
-
 func (o *BOM) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Bundle))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.ProfileConformances,
+			ld.ValidateAll(ld.ValidateIRI(
+				ProfileIdentifierType_Core,
+				ProfileIdentifierType_Software,
+				ProfileIdentifierType_SimpleLicensing,
+				ProfileIdentifierType_ExpandedLicensing,
+				ProfileIdentifierType_Security,
+				ProfileIdentifierType_Build,
+				ProfileIdentifierType_Ai,
+				ProfileIdentifierType_Dataset,
+				ProfileIdentifierType_Extension,
+				ProfileIdentifierType_Lite,
+			))))
 }
 
 func (o *Build) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.Type))
 }
 
 func (o *Bundle) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.ElementCollection))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.ProfileConformances,
+			ld.ValidateAll(ld.ValidateIRI(
+				ProfileIdentifierType_Core,
+				ProfileIdentifierType_Software,
+				ProfileIdentifierType_SimpleLicensing,
+				ProfileIdentifierType_ExpandedLicensing,
+				ProfileIdentifierType_Security,
+				ProfileIdentifierType_Build,
+				ProfileIdentifierType_Ai,
+				ProfileIdentifierType_Dataset,
+				ProfileIdentifierType_Extension,
+				ProfileIdentifierType_Lite,
+			))))
 }
 
 func (o *CdxPropertiesExtension) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Extension),
 		ld.ValidateProperty(o, &o.CdxProperties,
 			ld.ValidateMinCount[CdxPropertyEntryList](1)))
 }
@@ -101,14 +185,13 @@ func (o *ConfidentialityLevelType) Validate() error {
 
 func (o *ConjunctiveLicenseSet) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.Members,
 			ld.ValidateMinCount[LicenseInfoList](2)))
 }
 
 func (o *ContentIdentifier) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.IntegrityMethod),
 		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				ContentIdentifierType_Gitoid,
@@ -132,12 +215,14 @@ func (o *CreationInfo) Validate() error {
 
 func (o *CustomLicense) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.License))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Text))
 }
 
 func (o *CustomLicenseAddition) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseAddition))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.AdditionText))
 }
 
 func (o *CvssSeverityType) Validate() error {
@@ -146,14 +231,156 @@ func (o *CvssSeverityType) Validate() error {
 
 func (o *CvssV2VulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.VectorString),
 		ld.ValidateProperty(o, &o.Score))
 }
 
 func (o *CvssV3VulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.Score),
 		ld.ValidateProperty(o, &o.Severity,
 			ld.ValidateIRI(
@@ -168,7 +395,78 @@ func (o *CvssV3VulnAssessmentRelationship) Validate() error {
 
 func (o *CvssV4VulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.Severity,
 			ld.ValidateIRI(
 				CvssSeverityType_Critical,
@@ -187,7 +485,81 @@ func (o *DatasetAvailabilityType) Validate() error {
 
 func (o *DatasetPackage) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Package),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))),
+		ld.ValidateProperty(o, &o.AdditionalPurposes,
+			ld.ValidateAll(ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			))),
+		ld.ValidateProperty(o, &o.PrimaryPurpose,
+			ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			)),
 		ld.ValidateProperty(o, &o.ConfidentialityLevel,
 			ld.ValidateIRI(
 				ConfidentialityLevelType_Red,
@@ -240,32 +612,9 @@ func (o *DictionaryEntry) Validate() error {
 
 func (o *DisjunctiveLicenseSet) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.Members,
 			ld.ValidateMinCount[LicenseInfoList](2)))
-}
-
-func (o *Element) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.CreationInfo))
-}
-
-func (o *ElementCollection) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
-		ld.ValidateProperty(o, &o.ProfileConformances,
-			ld.ValidateAll(ld.ValidateIRI(
-				ProfileIdentifierType_Core,
-				ProfileIdentifierType_Software,
-				ProfileIdentifierType_SimpleLicensing,
-				ProfileIdentifierType_ExpandedLicensing,
-				ProfileIdentifierType_Security,
-				ProfileIdentifierType_Build,
-				ProfileIdentifierType_Ai,
-				ProfileIdentifierType_Dataset,
-				ProfileIdentifierType_Extension,
-				ProfileIdentifierType_Lite,
-			))))
 }
 
 func (o *EnergyConsumption) Validate() error {
@@ -289,7 +638,78 @@ func (o *EnergyUnitType) Validate() error {
 
 func (o *EpssVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.Probability),
 		ld.ValidateProperty(o, &o.Percentile))
 }
@@ -300,7 +720,78 @@ func (o *ExploitCatalogType) Validate() error {
 
 func (o *ExploitCatalogVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.Locator),
 		ld.ValidateProperty(o, &o.Exploited),
 		ld.ValidateProperty(o, &o.CatalogType,
@@ -308,15 +799,6 @@ func (o *ExploitCatalogVulnAssessmentRelationship) Validate() error {
 				ExploitCatalogType_Kev,
 				ExploitCatalogType_Other,
 			)))
-}
-
-func (o *ExtendableLicense) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo))
-}
-
-func (o *Extension) Validate() error {
-	return ld.JoinErrors()
 }
 
 func (o *ExternalIdentifier) Validate() error {
@@ -408,7 +890,81 @@ func (o *ExternalRefType) Validate() error {
 
 func (o *File) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.SoftwareArtifact),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))),
+		ld.ValidateProperty(o, &o.AdditionalPurposes,
+			ld.ValidateAll(ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			))),
+		ld.ValidateProperty(o, &o.PrimaryPurpose,
+			ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			)),
 		ld.ValidateProperty(o, &o.ContentType,
 			ld.ValidateExpression("^[^\\/]+\\/[^\\/]+$")),
 		ld.ValidateProperty(o, &o.Kind,
@@ -424,7 +980,6 @@ func (o *FileKindType) Validate() error {
 
 func (o *Hash) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.IntegrityMethod),
 		ld.ValidateProperty(o, &o.Value),
 		ld.ValidateProperty(o, &o.Algorithm,
 			ld.ValidateIRI(
@@ -459,41 +1014,20 @@ func (o *HashAlgorithm) Validate() error {
 
 func (o *IndividualElement) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *IndividualLicensingInfo) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo))
-}
-
-func (o *IntegrityMethod) Validate() error {
-	return ld.JoinErrors()
-}
-
-func (o *License) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.ExtendableLicense),
-		ld.ValidateProperty(o, &o.Text))
-}
-
-func (o *LicenseAddition) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
-		ld.ValidateProperty(o, &o.AdditionText))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *LicenseExpression) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.LicenseExpression),
 		ld.ValidateProperty(o, &o.LicenseListVersion,
 			ld.ValidateExpression("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$")))
-}
-
-func (o *LicenseInfo) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element))
 }
 
 func (o *LifecycleScopeType) Validate() error {
@@ -502,7 +1036,78 @@ func (o *LifecycleScopeType) Validate() error {
 
 func (o *LifecycleScopedRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Relationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.Scope,
 			ld.ValidateIRI(
 				LifecycleScopeType_Design,
@@ -516,12 +1121,14 @@ func (o *LifecycleScopedRelationship) Validate() error {
 
 func (o *ListedLicense) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.License))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Text))
 }
 
 func (o *ListedLicenseException) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseAddition))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.AdditionText))
 }
 
 func (o *NamespaceMap) Validate() error {
@@ -532,23 +1139,96 @@ func (o *NamespaceMap) Validate() error {
 
 func (o *OrLaterOperator) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.ExtendableLicense),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.SubjectLicense))
 }
 
 func (o *Organization) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Agent))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *Package) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.SoftwareArtifact))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))),
+		ld.ValidateProperty(o, &o.AdditionalPurposes,
+			ld.ValidateAll(ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			))),
+		ld.ValidateProperty(o, &o.PrimaryPurpose,
+			ld.ValidateIRI(
+				SoftwarePurpose_Application,
+				SoftwarePurpose_Archive,
+				SoftwarePurpose_Bom,
+				SoftwarePurpose_Configuration,
+				SoftwarePurpose_Container,
+				SoftwarePurpose_Data,
+				SoftwarePurpose_Device,
+				SoftwarePurpose_DiskImage,
+				SoftwarePurpose_DeviceDriver,
+				SoftwarePurpose_Documentation,
+				SoftwarePurpose_Evidence,
+				SoftwarePurpose_Executable,
+				SoftwarePurpose_File,
+				SoftwarePurpose_FilesystemImage,
+				SoftwarePurpose_Firmware,
+				SoftwarePurpose_Framework,
+				SoftwarePurpose_Install,
+				SoftwarePurpose_Library,
+				SoftwarePurpose_Manifest,
+				SoftwarePurpose_Model,
+				SoftwarePurpose_Module,
+				SoftwarePurpose_OperatingSystem,
+				SoftwarePurpose_Other,
+				SoftwarePurpose_Patch,
+				SoftwarePurpose_Platform,
+				SoftwarePurpose_Requirement,
+				SoftwarePurpose_Source,
+				SoftwarePurpose_Specification,
+				SoftwarePurpose_Test,
+			)))
 }
 
 func (o *PackageVerificationCode) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.IntegrityMethod),
 		ld.ValidateProperty(o, &o.Algorithm,
 			ld.ValidateIRI(
 				HashAlgorithm_Adler32,
@@ -579,7 +1259,7 @@ func (o *PackageVerificationCode) Validate() error {
 
 func (o *Person) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Agent))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *PositiveIntegerRange) Validate() error {
@@ -598,7 +1278,7 @@ func (o *ProfileIdentifierType) Validate() error {
 
 func (o *Relationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.Completeness,
 			ld.ValidateIRI(
 				RelationshipCompleteness_Incomplete,
@@ -682,7 +1362,20 @@ func (o *RelationshipType) Validate() error {
 
 func (o *SBOM) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.BOM),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.ProfileConformances,
+			ld.ValidateAll(ld.ValidateIRI(
+				ProfileIdentifierType_Core,
+				ProfileIdentifierType_Software,
+				ProfileIdentifierType_SimpleLicensing,
+				ProfileIdentifierType_ExpandedLicensing,
+				ProfileIdentifierType_Security,
+				ProfileIdentifierType_Build,
+				ProfileIdentifierType_Ai,
+				ProfileIdentifierType_Dataset,
+				ProfileIdentifierType_Extension,
+				ProfileIdentifierType_Lite,
+			))),
 		ld.ValidateProperty(o, &o.SbomTypes,
 			ld.ValidateAll(ld.ValidateIRI(
 				SbomType_Design,
@@ -704,24 +1397,23 @@ func (o *SbomType) Validate() error {
 
 func (o *SimpleLicensingText) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.LicenseText))
 }
 
 func (o *Snippet) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.SoftwareArtifact),
-		ld.ValidateProperty(o, &o.FromFile))
-}
-
-func (o *SoftwareAgent) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Agent))
-}
-
-func (o *SoftwareArtifact) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Artifact),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))),
 		ld.ValidateProperty(o, &o.AdditionalPurposes,
 			ld.ValidateAll(ld.ValidateIRI(
 				SoftwarePurpose_Application,
@@ -785,7 +1477,13 @@ func (o *SoftwareArtifact) Validate() error {
 				SoftwarePurpose_Source,
 				SoftwarePurpose_Specification,
 				SoftwarePurpose_Test,
-			)))
+			)),
+		ld.ValidateProperty(o, &o.FromFile))
+}
+
+func (o *SoftwareAgent) Validate() error {
+	return ld.JoinErrors(
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *SoftwarePurpose) Validate() error {
@@ -794,7 +1492,20 @@ func (o *SoftwarePurpose) Validate() error {
 
 func (o *SpdxDocument) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.ElementCollection))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.ProfileConformances,
+			ld.ValidateAll(ld.ValidateIRI(
+				ProfileIdentifierType_Core,
+				ProfileIdentifierType_Software,
+				ProfileIdentifierType_SimpleLicensing,
+				ProfileIdentifierType_ExpandedLicensing,
+				ProfileIdentifierType_Security,
+				ProfileIdentifierType_Build,
+				ProfileIdentifierType_Ai,
+				ProfileIdentifierType_Dataset,
+				ProfileIdentifierType_Extension,
+				ProfileIdentifierType_Lite,
+			))))
 }
 
 func (o *SsvcDecisionType) Validate() error {
@@ -803,7 +1514,78 @@ func (o *SsvcDecisionType) Validate() error {
 
 func (o *SsvcVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.DecisionType,
 			ld.ValidateIRI(
 				SsvcDecisionType_Act,
@@ -819,18 +1601,160 @@ func (o *SupportType) Validate() error {
 
 func (o *Tool) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Element))
+		ld.ValidateProperty(o, &o.CreationInfo))
 }
 
 func (o *VexAffectedVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VexVulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.ActionStatement))
 }
 
 func (o *VexFixedVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VexVulnAssessmentRelationship))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)))
 }
 
 func (o *VexJustificationType) Validate() error {
@@ -839,7 +1763,78 @@ func (o *VexJustificationType) Validate() error {
 
 func (o *VexNotAffectedVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VexVulnAssessmentRelationship),
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)),
 		ld.ValidateProperty(o, &o.JustificationType,
 			ld.ValidateIRI(
 				VexJustificationType_ComponentNotPresent,
@@ -852,27 +1847,98 @@ func (o *VexNotAffectedVulnAssessmentRelationship) Validate() error {
 
 func (o *VexUnderInvestigationVulnAssessmentRelationship) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VexVulnAssessmentRelationship))
-}
-
-func (o *VexVulnAssessmentRelationship) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.VulnAssessmentRelationship))
-}
-
-func (o *VulnAssessmentRelationship) Validate() error {
-	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Relationship))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.Completeness,
+			ld.ValidateIRI(
+				RelationshipCompleteness_Incomplete,
+				RelationshipCompleteness_Complete,
+				RelationshipCompleteness_NoAssertion,
+			)),
+		ld.ValidateProperty(o, &o.To,
+			ld.ValidateMinCount[ElementList](1)),
+		ld.ValidateProperty(o, &o.From),
+		ld.ValidateProperty(o, &o.Type,
+			ld.ValidateIRI(
+				RelationshipType_Affects,
+				RelationshipType_AmendedBy,
+				RelationshipType_AncestorOf,
+				RelationshipType_AvailableFrom,
+				RelationshipType_Configures,
+				RelationshipType_Contains,
+				RelationshipType_CoordinatedBy,
+				RelationshipType_CopiedTo,
+				RelationshipType_DelegatedTo,
+				RelationshipType_DependsOn,
+				RelationshipType_DescendantOf,
+				RelationshipType_Describes,
+				RelationshipType_DoesNotAffect,
+				RelationshipType_ExpandsTo,
+				RelationshipType_ExploitCreatedBy,
+				RelationshipType_FixedBy,
+				RelationshipType_FixedIn,
+				RelationshipType_FoundBy,
+				RelationshipType_Generates,
+				RelationshipType_HasAddedFile,
+				RelationshipType_HasAssessmentFor,
+				RelationshipType_HasAssociatedVulnerability,
+				RelationshipType_HasConcludedLicense,
+				RelationshipType_HasDataFile,
+				RelationshipType_HasDeclaredLicense,
+				RelationshipType_HasDeletedFile,
+				RelationshipType_HasDependencyManifest,
+				RelationshipType_HasDistributionArtifact,
+				RelationshipType_HasDocumentation,
+				RelationshipType_HasDynamicLink,
+				RelationshipType_HasEvidence,
+				RelationshipType_HasExample,
+				RelationshipType_HasHost,
+				RelationshipType_HasInput,
+				RelationshipType_HasMetadata,
+				RelationshipType_HasOptionalComponent,
+				RelationshipType_HasOptionalDependency,
+				RelationshipType_HasOutput,
+				RelationshipType_HasPrerequisite,
+				RelationshipType_HasProvidedDependency,
+				RelationshipType_HasRequirement,
+				RelationshipType_HasSpecification,
+				RelationshipType_HasStaticLink,
+				RelationshipType_HasTest,
+				RelationshipType_HasTestCase,
+				RelationshipType_HasVariant,
+				RelationshipType_InvokedBy,
+				RelationshipType_ModifiedBy,
+				RelationshipType_Other,
+				RelationshipType_PackagedBy,
+				RelationshipType_PatchedBy,
+				RelationshipType_PublishedBy,
+				RelationshipType_ReportedBy,
+				RelationshipType_RepublishedBy,
+				RelationshipType_SerializedInArtifact,
+				RelationshipType_TestedOn,
+				RelationshipType_TrainedOn,
+				RelationshipType_UnderInvestigationFor,
+				RelationshipType_UsesTool,
+			)))
 }
 
 func (o *Vulnerability) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Artifact))
+		ld.ValidateProperty(o, &o.CreationInfo),
+		ld.ValidateProperty(o, &o.SupportLevels,
+			ld.ValidateAll(ld.ValidateIRI(
+				SupportType_Development,
+				SupportType_Support,
+				SupportType_Deployed,
+				SupportType_LimitedSupport,
+				SupportType_EndOfSupport,
+				SupportType_NoSupport,
+				SupportType_NoAssertion,
+			))))
 }
 
 func (o *WithAdditionOperator) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.LicenseInfo),
+		ld.ValidateProperty(o, &o.CreationInfo),
 		ld.ValidateProperty(o, &o.SubjectExtendableLicense),
 		ld.ValidateProperty(o, &o.SubjectAddition))
 }
