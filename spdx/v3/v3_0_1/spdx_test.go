@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -57,16 +56,6 @@ func Test_customSerialization(t *testing.T) {
 
 	structure := map[string]any{}
 	err = json.Unmarshal(contents.Bytes(), &structure)
-	require.NoError(t, err)
-
-	contents.Reset()
-	enc := json.NewEncoder(&contents)
-	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "  ")
-	err = enc.Encode(structure)
-	home, err := os.UserHomeDir()
-	require.NoError(t, err)
-	err = os.WriteFile(filepath.Join(home, "Downloads", "spdx3-sample.json"), contents.Bytes(), 0o755)
 	require.NoError(t, err)
 
 	graph := structure["@graph"].([]any)
