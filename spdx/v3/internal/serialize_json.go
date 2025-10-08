@@ -240,7 +240,10 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 		if iri == ld.JsonIdProp {
 			// some types must use @id and allow blank node IDs
 			if blankNodeAllowed(ptrV) {
-				if ld.RefCount(ptrV, s.in) == 1 {
+				//if ld.RefCount(ptrV, s.in) == 1 {
+				//	continue // don't create an ID, output inline
+				//}
+				if outputInline(ptrV) {
 					continue // don't create an ID, output inline
 				}
 				k = iri
@@ -252,6 +255,12 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 				fv = reflect.ValueOf(newID)
 			} else {
 				id := fv.String()
+				// FIXME -- figure out the right way to deal with SPDX IDs, which are of the form
+				// SPDXRef-<value> many users will be outputting today, which are not valid URIs
+				if !isURI(id) {
+					id = "spdxid:" + id
+					fv.SetString(id)
+				}
 				//if !strings.HasPrefix(id, "_:") {
 				//	id = "_:" + id
 				//}
@@ -277,6 +286,26 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 		serialized[k] = serializedField
 	}
 	return errs
+}
+
+func isURI(id string) bool {
+	return strings.HasPrefix(id, "http://") || strings.HasPrefix(id, "https://") || strings.HasPrefix(id, "urn:")
+}
+
+func outputInline(v reflect.Value) bool {
+	for v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		return true
+	}
+	// FIXME determine the correct way to output inline vs reference
+	t := v.Type()
+	_, isElement := t.MethodByName("asElement")
+	if t.Name() == "CreationInfo" || isElement {
+		return false
+	}
+	return true
 }
 
 func blankNodeAllowed(v reflect.Value) bool {

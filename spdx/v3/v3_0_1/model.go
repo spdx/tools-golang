@@ -138,6 +138,14 @@ func (o *AIPackage) asPackage()          {}
 func (o *AIPackage) asSoftwareArtifact() {}
 func (o *AIPackage) asArtifact()         {}
 func (o *AIPackage) asElement()          {}
+func (o *AIPackage) GetID() string {
+	return o.ID
+}
+
+func (o *AIPackage) SetID(v string) {
+	o.ID = v
+}
+
 func (o *AIPackage) GetDescription() string {
 	return o.Description
 }
@@ -503,6 +511,14 @@ type Agent struct {
 
 func (o *Agent) asAgent()   {}
 func (o *Agent) asElement() {}
+func (o *Agent) GetID() string {
+	return o.ID
+}
+
+func (o *Agent) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Agent) GetDescription() string {
 	return o.Description
 }
@@ -640,6 +656,14 @@ type Annotation struct {
 
 func (o *Annotation) asAnnotation() {}
 func (o *Annotation) asElement()    {}
+func (o *Annotation) GetID() string {
+	return o.ID
+}
+
+func (o *Annotation) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Annotation) GetDescription() string {
 	return o.Description
 }
@@ -756,6 +780,10 @@ type AnnotationType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *AnnotationType) GetID() string {
+	return o.id
+}
+
 // AnnotationType_Other Used to store extra information about an Element which is not part of a review (e.g. extra information provided during the creation of the Element).
 var AnnotationType_Other = AnnotationType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType/other",
@@ -861,6 +889,14 @@ func (o *BOM) asBOM()               {}
 func (o *BOM) asBundle()            {}
 func (o *BOM) asElementCollection() {}
 func (o *BOM) asElement()           {}
+func (o *BOM) GetID() string {
+	return o.ID
+}
+
+func (o *BOM) SetID(v string) {
+	o.ID = v
+}
+
 func (o *BOM) GetDescription() string {
 	return o.Description
 }
@@ -1042,6 +1078,14 @@ type Build struct {
 
 func (o *Build) asBuild()   {}
 func (o *Build) asElement() {}
+func (o *Build) GetID() string {
+	return o.ID
+}
+
+func (o *Build) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Build) GetDescription() string {
 	return o.Description
 }
@@ -1234,6 +1278,14 @@ type Bundle struct {
 func (o *Bundle) asBundle()            {}
 func (o *Bundle) asElementCollection() {}
 func (o *Bundle) asElement()           {}
+func (o *Bundle) GetID() string {
+	return o.ID
+}
+
+func (o *Bundle) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Bundle) GetDescription() string {
 	return o.Description
 }
@@ -1369,6 +1421,14 @@ type CdxPropertiesExtension struct {
 
 func (o *CdxPropertiesExtension) asCdxPropertiesExtension() {}
 func (o *CdxPropertiesExtension) asExtension()              {}
+func (o *CdxPropertiesExtension) GetID() string {
+	return o.ID
+}
+
+func (o *CdxPropertiesExtension) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CdxPropertiesExtension) GetCdxProperties() CdxPropertyEntryList {
 	return o.CdxProperties
 }
@@ -1384,6 +1444,8 @@ func (v CdxPropertiesExtensionList) CdxPropertiesExtensions() []AnyCdxProperties
 }
 
 type AnyCdxPropertyEntry interface {
+	GetID() string
+	SetID(string)
 	asCdxPropertyEntry()
 	GetCdxPropValue() string
 	SetCdxPropValue(string)
@@ -1402,6 +1464,14 @@ type CdxPropertyEntry struct {
 }
 
 func (o *CdxPropertyEntry) asCdxPropertyEntry() {}
+func (o *CdxPropertyEntry) GetID() string {
+	return o.ID
+}
+
+func (o *CdxPropertyEntry) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CdxPropertyEntry) GetCdxPropValue() string {
 	return o.CdxPropValue
 }
@@ -1428,6 +1498,10 @@ func (v CdxPropertyEntryList) CdxPropertyEntries() []AnyCdxPropertyEntry {
 type ConfidentialityLevelType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *ConfidentialityLevelType) GetID() string {
+	return o.id
 }
 
 // ConfidentialityLevelType_Amber Data points in the dataset can be shared only with specific organizations and their clients on a need to know basis.
@@ -1486,6 +1560,14 @@ type ConjunctiveLicenseSet struct {
 func (o *ConjunctiveLicenseSet) asConjunctiveLicenseSet() {}
 func (o *ConjunctiveLicenseSet) asLicenseInfo()           {}
 func (o *ConjunctiveLicenseSet) asElement()               {}
+func (o *ConjunctiveLicenseSet) GetID() string {
+	return o.ID
+}
+
+func (o *ConjunctiveLicenseSet) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ConjunctiveLicenseSet) GetDescription() string {
 	return o.Description
 }
@@ -1595,6 +1677,14 @@ type ContentIdentifier struct {
 
 func (o *ContentIdentifier) asContentIdentifier() {}
 func (o *ContentIdentifier) asIntegrityMethod()   {}
+func (o *ContentIdentifier) GetID() string {
+	return o.ID
+}
+
+func (o *ContentIdentifier) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ContentIdentifier) GetComment() string {
 	return o.Comment
 }
@@ -1631,6 +1721,10 @@ type ContentIdentifierType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *ContentIdentifierType) GetID() string {
+	return o.id
+}
+
 // ContentIdentifierType_Gitoid [Gitoid](https://www.iana.org/assignments/uri-schemes/prov/gitoid), stands for [Git Object ID](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects). A gitoid of type blob is a unique hash of a binary artifact. A gitoid may represent either an [Artifact Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-identifier-types) for the software artifact or an [Input Manifest Identifier](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#input-manifest-identifier) for the software artifact's associated [Artifact Input Manifest](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-input-manifest); this ambiguity exists because the Artifact Input Manifest is itself an artifact, and the gitoid of that artifact is its valid identifier. Gitoids calculated on software artifacts (Snippet, File, or Package Elements) should be recorded in the SPDX 3.0 SoftwareArtifact's contentIdentifier property. Gitoids calculated on the Artifact Input Manifest (Input Manifest Identifier) should be recorded in the SPDX 3.0 Element's externalIdentifier property. See [OmniBOR Specification](https://github.com/omnibor/spec/), a minimalistic specification for describing software [Artifact Dependency Graphs](https://github.com/omnibor/spec/blob/eb1ee5c961c16215eb8709b2975d193a2007a35d/spec/SPEC.md#artifact-dependency-graph-adg).
 var ContentIdentifierType_Gitoid = ContentIdentifierType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType/gitoid",
@@ -1642,6 +1736,8 @@ var ContentIdentifierType_Swhid = ContentIdentifierType{
 }
 
 type AnyCreationInfo interface {
+	GetID() string
+	SetID(string)
 	asCreationInfo()
 	GetSpecVersion() string
 	SetSpecVersion(string)
@@ -1672,6 +1768,14 @@ type CreationInfo struct {
 }
 
 func (o *CreationInfo) asCreationInfo() {}
+func (o *CreationInfo) GetID() string {
+	return o.ID
+}
+
+func (o *CreationInfo) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CreationInfo) GetSpecVersion() string {
 	return o.SpecVersion
 }
@@ -1770,6 +1874,14 @@ func (o *CustomLicense) asLicense()           {}
 func (o *CustomLicense) asExtendableLicense() {}
 func (o *CustomLicense) asLicenseInfo()       {}
 func (o *CustomLicense) asElement()           {}
+func (o *CustomLicense) GetID() string {
+	return o.ID
+}
+
+func (o *CustomLicense) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CustomLicense) GetDescription() string {
 	return o.Description
 }
@@ -1964,6 +2076,14 @@ type CustomLicenseAddition struct {
 func (o *CustomLicenseAddition) asCustomLicenseAddition() {}
 func (o *CustomLicenseAddition) asLicenseAddition()       {}
 func (o *CustomLicenseAddition) asElement()               {}
+func (o *CustomLicenseAddition) GetID() string {
+	return o.ID
+}
+
+func (o *CustomLicenseAddition) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CustomLicenseAddition) GetDescription() string {
 	return o.Description
 }
@@ -2096,6 +2216,10 @@ type CvssSeverityType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *CvssSeverityType) GetID() string {
+	return o.id
+}
+
 // CvssSeverityType_Critical When a CVSS score is between 9.0 - 10.0
 var CvssSeverityType_Critical = CvssSeverityType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType/critical",
@@ -2184,6 +2308,14 @@ func (o *CvssV2VulnAssessmentRelationship) asCvssV2VulnAssessmentRelationship() 
 func (o *CvssV2VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
 func (o *CvssV2VulnAssessmentRelationship) asRelationship()                     {}
 func (o *CvssV2VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV2VulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *CvssV2VulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CvssV2VulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -2433,6 +2565,14 @@ func (o *CvssV3VulnAssessmentRelationship) asCvssV3VulnAssessmentRelationship() 
 func (o *CvssV3VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
 func (o *CvssV3VulnAssessmentRelationship) asRelationship()                     {}
 func (o *CvssV3VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV3VulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *CvssV3VulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CvssV3VulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -2690,6 +2830,14 @@ func (o *CvssV4VulnAssessmentRelationship) asCvssV4VulnAssessmentRelationship() 
 func (o *CvssV4VulnAssessmentRelationship) asVulnAssessmentRelationship()       {}
 func (o *CvssV4VulnAssessmentRelationship) asRelationship()                     {}
 func (o *CvssV4VulnAssessmentRelationship) asElement()                          {}
+func (o *CvssV4VulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *CvssV4VulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *CvssV4VulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -2886,6 +3034,10 @@ type DatasetAvailabilityType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *DatasetAvailabilityType) GetID() string {
+	return o.id
+}
+
 // DatasetAvailabilityType_Clickthrough the dataset is not publicly available and can only be accessed after affirmatively accepting terms on a clickthrough webpage.
 var DatasetAvailabilityType_Clickthrough = DatasetAvailabilityType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType/clickthrough",
@@ -3031,6 +3183,14 @@ func (o *DatasetPackage) asPackage()          {}
 func (o *DatasetPackage) asSoftwareArtifact() {}
 func (o *DatasetPackage) asArtifact()         {}
 func (o *DatasetPackage) asElement()          {}
+func (o *DatasetPackage) GetID() string {
+	return o.ID
+}
+
+func (o *DatasetPackage) SetID(v string) {
+	o.ID = v
+}
+
 func (o *DatasetPackage) GetDescription() string {
 	return o.Description
 }
@@ -3355,6 +3515,10 @@ type DatasetType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *DatasetType) GetID() string {
+	return o.id
+}
+
 // DatasetType_Audio data is audio based, such as a collection of music from the 80s.
 var DatasetType_Audio = DatasetType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType/audio",
@@ -3426,6 +3590,8 @@ var DatasetType_Video = DatasetType{
 }
 
 type AnyDictionaryEntry interface {
+	GetID() string
+	SetID(string)
 	asDictionaryEntry()
 	GetValue() string
 	SetValue(string)
@@ -3444,6 +3610,14 @@ type DictionaryEntry struct {
 }
 
 func (o *DictionaryEntry) asDictionaryEntry() {}
+func (o *DictionaryEntry) GetID() string {
+	return o.ID
+}
+
+func (o *DictionaryEntry) SetID(v string) {
+	o.ID = v
+}
+
 func (o *DictionaryEntry) GetValue() string {
 	return o.Value
 }
@@ -3502,6 +3676,14 @@ type DisjunctiveLicenseSet struct {
 func (o *DisjunctiveLicenseSet) asDisjunctiveLicenseSet() {}
 func (o *DisjunctiveLicenseSet) asLicenseInfo()           {}
 func (o *DisjunctiveLicenseSet) asElement()               {}
+func (o *DisjunctiveLicenseSet) GetID() string {
+	return o.ID
+}
+
+func (o *DisjunctiveLicenseSet) SetID(v string) {
+	o.ID = v
+}
+
 func (o *DisjunctiveLicenseSet) GetDescription() string {
 	return o.Description
 }
@@ -3589,6 +3771,8 @@ func (v DisjunctiveLicenseSetList) DisjunctiveLicenseSets() []AnyDisjunctiveLice
 }
 
 type AnyElement interface {
+	GetID() string
+	SetID(string)
 	asElement()
 	GetDescription() string
 	SetDescription(string)
@@ -3852,6 +4036,8 @@ func (v ElementCollectionList) SpdxDocuments() []AnySpdxDocument {
 }
 
 type AnyEnergyConsumption interface {
+	GetID() string
+	SetID(string)
 	asEnergyConsumption()
 	GetInferenceEnergyConsumptions() EnergyConsumptionDescriptionList
 	SetInferenceEnergyConsumptions(EnergyConsumptionDescriptionList)
@@ -3874,6 +4060,14 @@ type EnergyConsumption struct {
 }
 
 func (o *EnergyConsumption) asEnergyConsumption() {}
+func (o *EnergyConsumption) GetID() string {
+	return o.ID
+}
+
+func (o *EnergyConsumption) SetID(v string) {
+	o.ID = v
+}
+
 func (o *EnergyConsumption) GetInferenceEnergyConsumptions() EnergyConsumptionDescriptionList {
 	return o.InferenceEnergyConsumptions
 }
@@ -3905,6 +4099,8 @@ func (v EnergyConsumptionList) EnergyConsumptions() []AnyEnergyConsumption {
 }
 
 type AnyEnergyConsumptionDescription interface {
+	GetID() string
+	SetID(string)
 	asEnergyConsumptionDescription()
 	GetEnergyQuantity() float64
 	SetEnergyQuantity(float64)
@@ -3923,6 +4119,14 @@ type EnergyConsumptionDescription struct {
 }
 
 func (o *EnergyConsumptionDescription) asEnergyConsumptionDescription() {}
+func (o *EnergyConsumptionDescription) GetID() string {
+	return o.ID
+}
+
+func (o *EnergyConsumptionDescription) SetID(v string) {
+	o.ID = v
+}
+
 func (o *EnergyConsumptionDescription) GetEnergyQuantity() float64 {
 	return o.EnergyQuantity
 }
@@ -3949,6 +4153,10 @@ func (v EnergyConsumptionDescriptionList) EnergyConsumptionDescriptions() []AnyE
 type EnergyUnitType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *EnergyUnitType) GetID() string {
+	return o.id
 }
 
 // EnergyUnitType_KilowattHour Kilowatt-hour.
@@ -4029,6 +4237,14 @@ func (o *EpssVulnAssessmentRelationship) asEpssVulnAssessmentRelationship() {}
 func (o *EpssVulnAssessmentRelationship) asVulnAssessmentRelationship()     {}
 func (o *EpssVulnAssessmentRelationship) asRelationship()                   {}
 func (o *EpssVulnAssessmentRelationship) asElement()                        {}
+func (o *EpssVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *EpssVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *EpssVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -4217,6 +4433,10 @@ type ExploitCatalogType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *ExploitCatalogType) GetID() string {
+	return o.id
+}
+
 // ExploitCatalogType_Kev CISA's Known Exploited Vulnerability (KEV) Catalog
 var ExploitCatalogType_Kev = ExploitCatalogType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType/kev",
@@ -4294,6 +4514,14 @@ func (o *ExploitCatalogVulnAssessmentRelationship) asExploitCatalogVulnAssessmen
 func (o *ExploitCatalogVulnAssessmentRelationship) asVulnAssessmentRelationship()               {}
 func (o *ExploitCatalogVulnAssessmentRelationship) asRelationship()                             {}
 func (o *ExploitCatalogVulnAssessmentRelationship) asElement()                                  {}
+func (o *ExploitCatalogVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *ExploitCatalogVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ExploitCatalogVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -4513,6 +4741,8 @@ func (v ExtendableLicenseList) OrLaterOperators() []AnyOrLaterOperator {
 }
 
 type AnyExtension interface {
+	GetID() string
+	SetID(string)
 	asExtension()
 }
 
@@ -4528,6 +4758,8 @@ func (v ExtensionList) Extensions() []AnyExtension {
 }
 
 type AnyExternalIdentifier interface {
+	GetID() string
+	SetID(string)
 	asExternalIdentifier()
 	GetIdentifier() string
 	SetIdentifier(string)
@@ -4558,6 +4790,14 @@ type ExternalIdentifier struct {
 }
 
 func (o *ExternalIdentifier) asExternalIdentifier() {}
+func (o *ExternalIdentifier) GetID() string {
+	return o.ID
+}
+
+func (o *ExternalIdentifier) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ExternalIdentifier) GetIdentifier() string {
 	return o.Identifier
 }
@@ -4608,6 +4848,10 @@ func (v ExternalIdentifierList) ExternalIdentifiers() []AnyExternalIdentifier {
 type ExternalIdentifierType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *ExternalIdentifierType) GetID() string {
+	return o.id
 }
 
 // ExternalIdentifierType_Cpe22 [Common Platform Enumeration Specification 2.2](https://cpe.mitre.org/files/cpe-specification_2.2.pdf)
@@ -4666,6 +4910,8 @@ var ExternalIdentifierType_UrlScheme = ExternalIdentifierType{
 }
 
 type AnyExternalMap interface {
+	GetID() string
+	SetID(string)
 	asExternalMap()
 	GetExternalSpdxID() URI
 	SetExternalSpdxID(URI)
@@ -4692,6 +4938,14 @@ type ExternalMap struct {
 }
 
 func (o *ExternalMap) asExternalMap() {}
+func (o *ExternalMap) GetID() string {
+	return o.ID
+}
+
+func (o *ExternalMap) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ExternalMap) GetExternalSpdxID() URI {
 	return o.ExternalSpdxID
 }
@@ -4731,6 +4985,8 @@ func (v ExternalMapList) ExternalMaps() []AnyExternalMap {
 }
 
 type AnyExternalRef interface {
+	GetID() string
+	SetID(string)
 	asExternalRef()
 	GetLocators() []string
 	SetLocators([]string)
@@ -4757,6 +5013,14 @@ type ExternalRef struct {
 }
 
 func (o *ExternalRef) asExternalRef() {}
+func (o *ExternalRef) GetID() string {
+	return o.ID
+}
+
+func (o *ExternalRef) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ExternalRef) GetLocators() []string {
 	return o.Locators
 }
@@ -4799,6 +5063,10 @@ func (v ExternalRefList) ExternalRefs() []AnyExternalRef {
 type ExternalRefType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *ExternalRefType) GetID() string {
+	return o.id
 }
 
 // ExternalRefType_AltDownloadLocation A reference to an alternative download location.
@@ -5096,6 +5364,14 @@ func (o *File) asFile()             {}
 func (o *File) asSoftwareArtifact() {}
 func (o *File) asArtifact()         {}
 func (o *File) asElement()          {}
+func (o *File) GetID() string {
+	return o.ID
+}
+
+func (o *File) SetID(v string) {
+	o.ID = v
+}
+
 func (o *File) GetDescription() string {
 	return o.Description
 }
@@ -5292,6 +5568,10 @@ type FileKindType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *FileKindType) GetID() string {
+	return o.id
+}
+
 // FileKindType_Directory The file represents a directory and all content stored in that directory.
 var FileKindType_Directory = FileKindType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Software/FileKindType/directory",
@@ -5325,6 +5605,14 @@ type Hash struct {
 
 func (o *Hash) asHash()            {}
 func (o *Hash) asIntegrityMethod() {}
+func (o *Hash) GetID() string {
+	return o.ID
+}
+
+func (o *Hash) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Hash) GetComment() string {
 	return o.Comment
 }
@@ -5359,6 +5647,10 @@ func (v HashList) Hashes() []AnyHash {
 type HashAlgorithm struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *HashAlgorithm) GetID() string {
+	return o.id
 }
 
 // HashAlgorithm_Adler32 Adler-32 checksum is part of the widely used zlib compression library as defined in [RFC 1950](https://datatracker.ietf.org/doc/rfc1950/) Section 2.3.
@@ -5502,6 +5794,14 @@ type IndividualElement struct {
 
 func (o *IndividualElement) asIndividualElement() {}
 func (o *IndividualElement) asElement()           {}
+func (o *IndividualElement) GetID() string {
+	return o.ID
+}
+
+func (o *IndividualElement) SetID(v string) {
+	o.ID = v
+}
+
 func (o *IndividualElement) GetDescription() string {
 	return o.Description
 }
@@ -5622,6 +5922,14 @@ type IndividualLicensingInfo struct {
 func (o *IndividualLicensingInfo) asIndividualLicensingInfo() {}
 func (o *IndividualLicensingInfo) asLicenseInfo()             {}
 func (o *IndividualLicensingInfo) asElement()                 {}
+func (o *IndividualLicensingInfo) GetID() string {
+	return o.ID
+}
+
+func (o *IndividualLicensingInfo) SetID(v string) {
+	o.ID = v
+}
+
 func (o *IndividualLicensingInfo) GetDescription() string {
 	return o.Description
 }
@@ -5711,6 +6019,8 @@ func (v IndividualLicensingInfoList) IndividualLicensingInfos() []AnyIndividualL
 }
 
 type AnyIntegrityMethod interface {
+	GetID() string
+	SetID(string)
 	asIntegrityMethod()
 	GetComment() string
 	SetComment(string)
@@ -5849,6 +6159,14 @@ type LicenseExpression struct {
 func (o *LicenseExpression) asLicenseExpression() {}
 func (o *LicenseExpression) asLicenseInfo()       {}
 func (o *LicenseExpression) asElement()           {}
+func (o *LicenseExpression) GetID() string {
+	return o.ID
+}
+
+func (o *LicenseExpression) SetID(v string) {
+	o.ID = v
+}
+
 func (o *LicenseExpression) GetDescription() string {
 	return o.Description
 }
@@ -6009,6 +6327,10 @@ type LifecycleScopeType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *LifecycleScopeType) GetID() string {
+	return o.id
+}
+
 // LifecycleScopeType_Build A relationship has specific context implications during an element's build phase, during development.
 var LifecycleScopeType_Build = LifecycleScopeType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType/build",
@@ -6087,6 +6409,14 @@ type LifecycleScopedRelationship struct {
 func (o *LifecycleScopedRelationship) asLifecycleScopedRelationship() {}
 func (o *LifecycleScopedRelationship) asRelationship()                {}
 func (o *LifecycleScopedRelationship) asElement()                     {}
+func (o *LifecycleScopedRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *LifecycleScopedRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *LifecycleScopedRelationship) GetDescription() string {
 	return o.Description
 }
@@ -6281,6 +6611,14 @@ func (o *ListedLicense) asLicense()           {}
 func (o *ListedLicense) asExtendableLicense() {}
 func (o *ListedLicense) asLicenseInfo()       {}
 func (o *ListedLicense) asElement()           {}
+func (o *ListedLicense) GetID() string {
+	return o.ID
+}
+
+func (o *ListedLicense) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ListedLicense) GetDescription() string {
 	return o.Description
 }
@@ -6499,6 +6837,14 @@ type ListedLicenseException struct {
 func (o *ListedLicenseException) asListedLicenseException() {}
 func (o *ListedLicenseException) asLicenseAddition()        {}
 func (o *ListedLicenseException) asElement()                {}
+func (o *ListedLicenseException) GetID() string {
+	return o.ID
+}
+
+func (o *ListedLicenseException) SetID(v string) {
+	o.ID = v
+}
+
 func (o *ListedLicenseException) GetDescription() string {
 	return o.Description
 }
@@ -6642,6 +6988,8 @@ func (v ListedLicenseExceptionList) ListedLicenseExceptions() []AnyListedLicense
 }
 
 type AnyNamespaceMap interface {
+	GetID() string
+	SetID(string)
 	asNamespaceMap()
 	GetNamespace() URI
 	SetNamespace(URI)
@@ -6660,6 +7008,14 @@ type NamespaceMap struct {
 }
 
 func (o *NamespaceMap) asNamespaceMap() {}
+func (o *NamespaceMap) GetID() string {
+	return o.ID
+}
+
+func (o *NamespaceMap) SetID(v string) {
+	o.ID = v
+}
+
 func (o *NamespaceMap) GetNamespace() URI {
 	return o.Namespace
 }
@@ -6719,6 +7075,14 @@ func (o *OrLaterOperator) asOrLaterOperator()   {}
 func (o *OrLaterOperator) asExtendableLicense() {}
 func (o *OrLaterOperator) asLicenseInfo()       {}
 func (o *OrLaterOperator) asElement()           {}
+func (o *OrLaterOperator) GetID() string {
+	return o.ID
+}
+
+func (o *OrLaterOperator) SetID(v string) {
+	o.ID = v
+}
+
 func (o *OrLaterOperator) GetDescription() string {
 	return o.Description
 }
@@ -6837,6 +7201,14 @@ type Organization struct {
 func (o *Organization) asOrganization() {}
 func (o *Organization) asAgent()        {}
 func (o *Organization) asElement()      {}
+func (o *Organization) GetID() string {
+	return o.ID
+}
+
+func (o *Organization) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Organization) GetDescription() string {
 	return o.Description
 }
@@ -6997,6 +7369,14 @@ func (o *Package) asPackage()          {}
 func (o *Package) asSoftwareArtifact() {}
 func (o *Package) asArtifact()         {}
 func (o *Package) asElement()          {}
+func (o *Package) GetID() string {
+	return o.ID
+}
+
+func (o *Package) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Package) GetDescription() string {
 	return o.Description
 }
@@ -7246,6 +7626,14 @@ type PackageVerificationCode struct {
 
 func (o *PackageVerificationCode) asPackageVerificationCode() {}
 func (o *PackageVerificationCode) asIntegrityMethod()         {}
+func (o *PackageVerificationCode) GetID() string {
+	return o.ID
+}
+
+func (o *PackageVerificationCode) SetID(v string) {
+	o.ID = v
+}
+
 func (o *PackageVerificationCode) GetComment() string {
 	return o.Comment
 }
@@ -7316,6 +7704,14 @@ type Person struct {
 func (o *Person) asPerson()  {}
 func (o *Person) asAgent()   {}
 func (o *Person) asElement() {}
+func (o *Person) GetID() string {
+	return o.ID
+}
+
+func (o *Person) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Person) GetDescription() string {
 	return o.Description
 }
@@ -7395,6 +7791,8 @@ func (v PersonList) People() []AnyPerson {
 }
 
 type AnyPositiveIntegerRange interface {
+	GetID() string
+	SetID(string)
 	asPositiveIntegerRange()
 	GetEndIntegerRange() PositiveInt
 	SetEndIntegerRange(PositiveInt)
@@ -7413,6 +7811,14 @@ type PositiveIntegerRange struct {
 }
 
 func (o *PositiveIntegerRange) asPositiveIntegerRange() {}
+func (o *PositiveIntegerRange) GetID() string {
+	return o.ID
+}
+
+func (o *PositiveIntegerRange) SetID(v string) {
+	o.ID = v
+}
+
 func (o *PositiveIntegerRange) GetEndIntegerRange() PositiveInt {
 	return o.EndIntegerRange
 }
@@ -7441,6 +7847,10 @@ type PresenceType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *PresenceType) GetID() string {
+	return o.id
+}
+
 // PresenceType_No Indicates absence of the field.
 var PresenceType_No = PresenceType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/PresenceType/no",
@@ -7460,6 +7870,10 @@ var PresenceType_Yes = PresenceType{
 type ProfileIdentifierType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *ProfileIdentifierType) GetID() string {
+	return o.id
 }
 
 // ProfileIdentifierType_Ai the element follows the AI profile specification
@@ -7567,6 +7981,14 @@ type Relationship struct {
 
 func (o *Relationship) asRelationship() {}
 func (o *Relationship) asElement()      {}
+func (o *Relationship) GetID() string {
+	return o.ID
+}
+
+func (o *Relationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Relationship) GetDescription() string {
 	return o.Description
 }
@@ -7751,6 +8173,10 @@ type RelationshipCompleteness struct {
 	id string  `iri:"@id"`
 }
 
+func (o *RelationshipCompleteness) GetID() string {
+	return o.id
+}
+
 // RelationshipCompleteness_Complete The relationship is known to be exhaustive.
 var RelationshipCompleteness_Complete = RelationshipCompleteness{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/complete",
@@ -7770,6 +8196,10 @@ var RelationshipCompleteness_NoAssertion = RelationshipCompleteness{
 type RelationshipType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *RelationshipType) GetID() string {
+	return o.id
 }
 
 // RelationshipType_Affects The `from` Vulnerability affects each `to` Element. The use of the `affects` type is constrained to `VexAffectedVulnAssessmentRelationship` classed relationships.
@@ -8113,6 +8543,14 @@ func (o *SBOM) asBOM()               {}
 func (o *SBOM) asBundle()            {}
 func (o *SBOM) asElementCollection() {}
 func (o *SBOM) asElement()           {}
+func (o *SBOM) GetID() string {
+	return o.ID
+}
+
+func (o *SBOM) SetID(v string) {
+	o.ID = v
+}
+
 func (o *SBOM) GetDescription() string {
 	return o.Description
 }
@@ -8237,6 +8675,10 @@ type SafetyRiskAssessmentType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *SafetyRiskAssessmentType) GetID() string {
+	return o.id
+}
+
 // SafetyRiskAssessmentType_High The second-highest level of risk posed by an AI system.
 var SafetyRiskAssessmentType_High = SafetyRiskAssessmentType{
 	id: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/high",
@@ -8261,6 +8703,10 @@ var SafetyRiskAssessmentType_Serious = SafetyRiskAssessmentType{
 type SbomType struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *SbomType) GetID() string {
+	return o.id
 }
 
 // SbomType_Analyzed SBOM generated through analysis of artifacts (e.g., executables, packages, containers, and virtual machine images) after its build. Such analysis generally requires a variety of heuristics. In some contexts, this may also be referred to as a \"3rd party\" SBOM.
@@ -8328,6 +8774,14 @@ type SimpleLicensingText struct {
 
 func (o *SimpleLicensingText) asSimpleLicensingText() {}
 func (o *SimpleLicensingText) asElement()             {}
+func (o *SimpleLicensingText) GetID() string {
+	return o.ID
+}
+
+func (o *SimpleLicensingText) SetID(v string) {
+	o.ID = v
+}
+
 func (o *SimpleLicensingText) GetDescription() string {
 	return o.Description
 }
@@ -8483,6 +8937,14 @@ func (o *Snippet) asSnippet()          {}
 func (o *Snippet) asSoftwareArtifact() {}
 func (o *Snippet) asArtifact()         {}
 func (o *Snippet) asElement()          {}
+func (o *Snippet) GetID() string {
+	return o.ID
+}
+
+func (o *Snippet) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Snippet) GetDescription() string {
 	return o.Description
 }
@@ -8713,6 +9175,14 @@ type SoftwareAgent struct {
 func (o *SoftwareAgent) asSoftwareAgent() {}
 func (o *SoftwareAgent) asAgent()         {}
 func (o *SoftwareAgent) asElement()       {}
+func (o *SoftwareAgent) GetID() string {
+	return o.ID
+}
+
+func (o *SoftwareAgent) SetID(v string) {
+	o.ID = v
+}
+
 func (o *SoftwareAgent) GetDescription() string {
 	return o.Description
 }
@@ -8837,6 +9307,10 @@ func (v SoftwareArtifactList) SoftwareArtifacts() []AnySoftwareArtifact {
 type SoftwarePurpose struct {
 	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose" node-kind:""`
 	id string  `iri:"@id"`
+}
+
+func (o *SoftwarePurpose) GetID() string {
+	return o.id
 }
 
 // SoftwarePurpose_Application The Element is a software application.
@@ -9034,6 +9508,14 @@ type SpdxDocument struct {
 func (o *SpdxDocument) asSpdxDocument()      {}
 func (o *SpdxDocument) asElementCollection() {}
 func (o *SpdxDocument) asElement()           {}
+func (o *SpdxDocument) GetID() string {
+	return o.ID
+}
+
+func (o *SpdxDocument) SetID(v string) {
+	o.ID = v
+}
+
 func (o *SpdxDocument) GetDescription() string {
 	return o.Description
 }
@@ -9166,6 +9648,10 @@ type SsvcDecisionType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *SsvcDecisionType) GetID() string {
+	return o.id
+}
+
 // SsvcDecisionType_Act The vulnerability requires attention from the organization's internal, supervisory-level and leadership-level individuals. Necessary actions include requesting assistance or information about the vulnerability, as well as publishing a notification either internally and/or externally. Typically, internal groups would meet to determine the overall response and then execute agreed upon actions. CISA recommends remediating Act vulnerabilities as soon as possible.
 var SsvcDecisionType_Act = SsvcDecisionType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType/act",
@@ -9245,6 +9731,14 @@ func (o *SsvcVulnAssessmentRelationship) asSsvcVulnAssessmentRelationship() {}
 func (o *SsvcVulnAssessmentRelationship) asVulnAssessmentRelationship()     {}
 func (o *SsvcVulnAssessmentRelationship) asRelationship()                   {}
 func (o *SsvcVulnAssessmentRelationship) asElement()                        {}
+func (o *SsvcVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *SsvcVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *SsvcVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -9425,6 +9919,10 @@ type SupportType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *SupportType) GetID() string {
+	return o.id
+}
+
 // SupportType_Deployed in addition to being supported by the supplier, the software is known to have been deployed and is in use.  For a software as a service provider, this implies the software is now available as a service.
 var SupportType_Deployed = SupportType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/SupportType/deployed",
@@ -9491,6 +9989,14 @@ type Tool struct {
 
 func (o *Tool) asTool()    {}
 func (o *Tool) asElement() {}
+func (o *Tool) GetID() string {
+	return o.ID
+}
+
+func (o *Tool) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Tool) GetDescription() string {
 	return o.Description
 }
@@ -9637,6 +10143,14 @@ func (o *VexAffectedVulnAssessmentRelationship) asVexVulnAssessmentRelationship(
 func (o *VexAffectedVulnAssessmentRelationship) asVulnAssessmentRelationship()            {}
 func (o *VexAffectedVulnAssessmentRelationship) asRelationship()                          {}
 func (o *VexAffectedVulnAssessmentRelationship) asElement()                               {}
+func (o *VexAffectedVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *VexAffectedVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *VexAffectedVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -9895,6 +10409,14 @@ func (o *VexFixedVulnAssessmentRelationship) asVexVulnAssessmentRelationship()  
 func (o *VexFixedVulnAssessmentRelationship) asVulnAssessmentRelationship()         {}
 func (o *VexFixedVulnAssessmentRelationship) asRelationship()                       {}
 func (o *VexFixedVulnAssessmentRelationship) asElement()                            {}
+func (o *VexFixedVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *VexFixedVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *VexFixedVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -10083,6 +10605,10 @@ type VexJustificationType struct {
 	id string  `iri:"@id"`
 }
 
+func (o *VexJustificationType) GetID() string {
+	return o.id
+}
+
 // VexJustificationType_ComponentNotPresent The software is not affected because the vulnerable component is not in the product.
 var VexJustificationType_ComponentNotPresent = VexJustificationType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType/componentNotPresent",
@@ -10180,6 +10706,14 @@ func (o *VexNotAffectedVulnAssessmentRelationship) asVexVulnAssessmentRelationsh
 func (o *VexNotAffectedVulnAssessmentRelationship) asVulnAssessmentRelationship()               {}
 func (o *VexNotAffectedVulnAssessmentRelationship) asRelationship()                             {}
 func (o *VexNotAffectedVulnAssessmentRelationship) asElement()                                  {}
+func (o *VexNotAffectedVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *VexNotAffectedVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *VexNotAffectedVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -10447,6 +10981,14 @@ func (o *VexUnderInvestigationVulnAssessmentRelationship) asVexVulnAssessmentRel
 func (o *VexUnderInvestigationVulnAssessmentRelationship) asVulnAssessmentRelationship()    {}
 func (o *VexUnderInvestigationVulnAssessmentRelationship) asRelationship()                  {}
 func (o *VexUnderInvestigationVulnAssessmentRelationship) asElement()                       {}
+func (o *VexUnderInvestigationVulnAssessmentRelationship) GetID() string {
+	return o.ID
+}
+
+func (o *VexUnderInvestigationVulnAssessmentRelationship) SetID(v string) {
+	o.ID = v
+}
+
 func (o *VexUnderInvestigationVulnAssessmentRelationship) GetDescription() string {
 	return o.Description
 }
@@ -10785,6 +11327,14 @@ type Vulnerability struct {
 func (o *Vulnerability) asVulnerability() {}
 func (o *Vulnerability) asArtifact()      {}
 func (o *Vulnerability) asElement()       {}
+func (o *Vulnerability) GetID() string {
+	return o.ID
+}
+
+func (o *Vulnerability) SetID(v string) {
+	o.ID = v
+}
+
 func (o *Vulnerability) GetDescription() string {
 	return o.Description
 }
@@ -10983,6 +11533,14 @@ type WithAdditionOperator struct {
 func (o *WithAdditionOperator) asWithAdditionOperator() {}
 func (o *WithAdditionOperator) asLicenseInfo()          {}
 func (o *WithAdditionOperator) asElement()              {}
+func (o *WithAdditionOperator) GetID() string {
+	return o.ID
+}
+
+func (o *WithAdditionOperator) SetID(v string) {
+	o.ID = v
+}
+
 func (o *WithAdditionOperator) GetDescription() string {
 	return o.Description
 }
@@ -11089,9 +11647,9 @@ func NewExternalIRI(id string) *ExternalIRI {
 }
 
 type (
-	URI            = ld.URI
 	NonNegativeInt = ld.NonNegativeInt
 	PositiveInt    = ld.PositiveInt
+	URI            = ld.URI
 )
 
 func context() ld.Context {

@@ -100,6 +100,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 		relationshipMap: map[any][]*Relationship{},
 		sbom:            sbom,
 		idMap: duplicateLower(map[string]any{
+			"DOCUMENT":         sbom,
 			"SPDXRef-DOCUMENT": sbom,
 		}),
 		lifecycleMap: duplicateLower(map[string]LifecycleScopeType{
