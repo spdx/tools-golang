@@ -33,7 +33,7 @@ func Test_spdxExportImportExport(t *testing.T) {
 				ExternalIdentifiers: ExternalIdentifierList{
 					&ExternalIdentifier{
 						Type:       ExternalIdentifierType_Cpe23,
-						Identifier: "cpe23:a:myvendor:my-product:*:*:*:*:*:*:*",
+						Identifier: "cpe:2.3:a:myvendor:my-product:*:*:*:*:*:*:*:*",
 					},
 				},
 				Name: "not-tools-golang",
