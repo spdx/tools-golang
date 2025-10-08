@@ -1,4 +1,4 @@
-package v3_0
+package v3_0_1
 
 import (
 	"bytes"
@@ -10,11 +10,12 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/kzantow/go-ld"
+	"github.com/spdx/tools-golang/spdx/v3/internal"
 )
 
 /*
-SPDX 3 models and serialization code is generated from github.com/kzantow/go-ld/cmd
-To regenerate, run: go run ./cmd
+SPDX 3 models and serialization code is generated from internal/generate/main.go
+To regenerate all models, run: make generate
 */
 
 const Version = "3.0.1" // TODO is there a way to ascertain this version from generated code programmatically?
@@ -24,14 +25,24 @@ type Document struct {
 	LDContext ld.Context
 }
 
+func (d *Document) UnmarshalJSON(data []byte) error {
+	if d.LDContext == nil {
+		d.LDContext = context()
+	}
+	err := d.FromJSON(bytes.NewReader(data))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (d *Document) MarshalJSON() ([]byte, error) {
+	if d.LDContext == nil {
+		d.LDContext = context()
+	}
 	buf := bytes.Buffer{}
 	err := d.Write(&buf)
 	return buf.Bytes(), err
-}
-
-func LDContext() ld.Context {
-	return context()
 }
 
 func (d *Document) Write(w io.Writer) error {
@@ -42,8 +53,8 @@ func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAg
 	ci := &CreationInfo{
 		SpecVersion:  Version,
 		Created:      time.Now(),
-		CreatedBy:    AgentList{createdBy},
-		CreatedUsing: ToolList{createdUsing},
+		CreatedBy:    notNil(AgentList{createdBy}),
+		CreatedUsing: notNil(ToolList{createdUsing}),
 	}
 	return &Document{
 		SpdxDocument: SpdxDocument{
@@ -81,9 +92,10 @@ func (d *Document) Validate(setCreationInfo bool) error {
 	return ld.ValidateGraph(d.SpdxDocument)
 }
 
-func (d *Document) Append(e ...AnyElement) {
-	d.SpdxDocument.RootElements = append(d.SpdxDocument.RootElements, e...)
-}
+//func (d *Document) Append(e ...AnyElement) {
+//	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e...)
+//	d.SpdxDocument.RootElements = append(d.SpdxDocument.RootElements, e...)
+//}
 
 // ToJSON first processes the document by:
 //   - setting each Element's CreationInfo property to the SpdxDocument's CreationInfo if nil
@@ -101,10 +113,9 @@ func (d *Document) ToJSON(writer io.Writer) error {
 	if d.LDContext == nil {
 		d.LDContext = context()
 	}
-	return d.LDContext.ToJSON(writer, d.SpdxDocument)
-}
 
-var _ json.Marshaler = (*Document)(nil)
+	return internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", d.LDContext, &d.SpdxDocument, writer)
+}
 
 func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
 	if creationInfo == nil {
@@ -157,4 +168,20 @@ func (d *Document) ensureAllDocumentElements() {
 		}
 		return nil
 	})
+}
+
+var _ interface {
+	json.Marshaler
+	json.Unmarshaler
+} = (*Document)(nil)
+
+func notNil[T any, ListType ~[]T](values ListType) ListType {
+	var out ListType
+	for _, v := range values {
+		if isNil(v) {
+			continue
+		}
+		out = append(out, v)
+	}
+	return out
 }

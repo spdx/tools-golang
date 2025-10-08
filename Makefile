@@ -20,3 +20,7 @@ unit:
 fuzz:
 	go test -v -run=Fuzz -fuzz=FuzzShouldIgnore ./utils -fuzztime=10s
 	go test -v -run=Fuzz -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=10s
+
+.PHONY: generate
+generate:
+	go run ./spdx/v3/internal/generate

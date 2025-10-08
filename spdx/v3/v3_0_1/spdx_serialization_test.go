@@ -1,4 +1,4 @@
-package v3_0
+package v3_0_1
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/spdx/tools-golang/spdx/v3/internal"
 )
 
 func Test_spdxExportImportExport(t *testing.T) {
@@ -32,8 +32,8 @@ func Test_spdxExportImportExport(t *testing.T) {
 			&Tool{Element: Element{
 				ExternalIdentifiers: ExternalIdentifierList{
 					&ExternalIdentifier{
-						ExternalIdentifierType: ExternalIdentifierType_Cpe23,
-						Identifier:             "cpe23:a:myvendor:my-product:*:*:*:*:*:*:*",
+						Type:       ExternalIdentifierType_Cpe23,
+						Identifier: "cpe23:a:myvendor:my-product:*:*:*:*:*:*:*",
 					},
 				},
 				Name: "not-tools-golang",
@@ -49,30 +49,30 @@ func Test_spdxExportImportExport(t *testing.T) {
 		Name:         "some-package-1",
 		CreationInfo: c,
 	}}},
-		PackageVersion: "1.2.3",
+		Version: "1.2.3",
 	}
 	pkg2 := &Package{SoftwareArtifact: SoftwareArtifact{Artifact: Artifact{Element: Element{
 		Name:         "some-package-2",
 		CreationInfo: c,
 	}}},
-		PackageVersion: "2.4.5",
+		Version: "2.4.5",
 	}
-	doc.Elements = append(doc.Elements, pkg2)
+	doc.RootElements = append(doc.RootElements, pkg2)
 
 	file1 := &File{SoftwareArtifact: SoftwareArtifact{Artifact: Artifact{Element: Element{
 		Name:         "/bin/bash",
 		CreationInfo: c,
 	}}}}
-	doc.Elements = append(doc.Elements, file1)
+	doc.RootElements = append(doc.RootElements, file1)
 
 	// add relationships
 
-	doc.Elements = append(doc.Elements,
+	doc.RootElements = append(doc.RootElements,
 		&Relationship{Element: Element{
 			CreationInfo: c,
 		},
-			From:             file1,
-			RelationshipType: RelationshipType_Contains,
+			From: file1,
+			Type: RelationshipType_Contains,
 			To: ElementList{
 				pkg1,
 				pkg2,
@@ -80,19 +80,19 @@ func Test_spdxExportImportExport(t *testing.T) {
 		},
 	)
 
-	doc.Elements = append(doc.Elements,
+	doc.RootElements = append(doc.RootElements,
 		&Relationship{Element: Element{
 			CreationInfo: c,
 		},
-			From:             pkg1,
-			RelationshipType: RelationshipType_DependsOn,
+			From: pkg1,
+			Type: RelationshipType_DependsOn,
 			To: ElementList{
 				pkg2,
 			},
 		},
 	)
 
-	doc.Elements = append(doc.Elements,
+	doc.RootElements = append(doc.RootElements,
 		&AIPackage{Package: Package{SoftwareArtifact: SoftwareArtifact{Artifact: Artifact{Element: Element{
 			CreationInfo: c,
 		}}}},
@@ -106,7 +106,7 @@ func Test_spdxExportImportExport(t *testing.T) {
 
 	var pkgs PackageList
 	for _, rel := range got.RootElements.Relationships() {
-		if rel.RelationshipType != RelationshipType_Contains {
+		if rel.Type != RelationshipType_Contains {
 			continue
 		}
 		_ = As(rel.From, func(from *File) any {
@@ -152,7 +152,8 @@ func Test_externalID(t *testing.T) {
 func encodeDecode[T comparable](t *testing.T, obj T) T {
 	// serialization:
 	buf := bytes.Buffer{}
-	err := context().ToJSON(&buf, obj)
+	err := internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", context(), obj, &buf)
+	//err := context().ToJSON(&buf, obj)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -175,7 +176,7 @@ func encodeDecode[T comparable](t *testing.T, obj T) T {
 		t.Fatalf("did not find object in graph, json: %s", json1)
 	}
 
-	diff := cmp.Diff(obj, got, cmpopts.IgnoreUnexported((*T)(nil)))
+	diff := cmp.Diff(obj, got, diffOpts()...)
 	if diff != "" {
 		t.Fatal(diff)
 	}

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-package v3_0
+package v3_0_1
 
 import "github.com/kzantow/go-ld"
 
@@ -41,7 +41,7 @@ func (o *Annotation) Validate() error {
 		ld.ValidateProperty(o, &o.Subject),
 		ld.ValidateProperty(o, &o.ContentType,
 			ld.ValidateExpression("^[^\\/]+\\/[^\\/]+$")),
-		ld.ValidateProperty(o, &o.AnnotationType,
+		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				AnnotationType_Other,
 				AnnotationType_Review,
@@ -67,7 +67,7 @@ func (o *Artifact) Validate() error {
 			))))
 }
 
-func (o *Bom) Validate() error {
+func (o *BOM) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.Bundle))
 }
@@ -75,7 +75,7 @@ func (o *Bom) Validate() error {
 func (o *Build) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.Element),
-		ld.ValidateProperty(o, &o.BuildType))
+		ld.ValidateProperty(o, &o.Type))
 }
 
 func (o *Bundle) Validate() error {
@@ -109,12 +109,12 @@ func (o *ConjunctiveLicenseSet) Validate() error {
 func (o *ContentIdentifier) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.IntegrityMethod),
-		ld.ValidateProperty(o, &o.ContentIdentifierType,
+		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				ContentIdentifierType_Gitoid,
 				ContentIdentifierType_Swhid,
 			)),
-		ld.ValidateProperty(o, &o.ContentIdentifierValue))
+		ld.ValidateProperty(o, &o.Value))
 }
 
 func (o *ContentIdentifierType) Validate() error {
@@ -322,7 +322,7 @@ func (o *Extension) Validate() error {
 func (o *ExternalIdentifier) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.Identifier),
-		ld.ValidateProperty(o, &o.ExternalIdentifierType,
+		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				ExternalIdentifierType_Cpe22,
 				ExternalIdentifierType_Cpe23,
@@ -330,7 +330,7 @@ func (o *ExternalIdentifier) Validate() error {
 				ExternalIdentifierType_Email,
 				ExternalIdentifierType_Gitoid,
 				ExternalIdentifierType_Other,
-				ExternalIdentifierType_PackageUrl,
+				ExternalIdentifierType_PackageURL,
 				ExternalIdentifierType_SecurityOther,
 				ExternalIdentifierType_Swhid,
 				ExternalIdentifierType_Swid,
@@ -344,14 +344,14 @@ func (o *ExternalIdentifierType) Validate() error {
 
 func (o *ExternalMap) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.ExternalSpdxId))
+		ld.ValidateProperty(o, &o.ExternalSpdxID))
 }
 
 func (o *ExternalRef) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.ContentType,
 			ld.ValidateExpression("^[^\\/]+\\/[^\\/]+$")),
-		ld.ValidateProperty(o, &o.ExternalRefType,
+		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				ExternalRefType_AltDownloadLocation,
 				ExternalRefType_AltWebPage,
@@ -411,7 +411,7 @@ func (o *File) Validate() error {
 		ld.ValidateProperty(o, &o.SoftwareArtifact),
 		ld.ValidateProperty(o, &o.ContentType,
 			ld.ValidateExpression("^[^\\/]+\\/[^\\/]+$")),
-		ld.ValidateProperty(o, &o.FileKind,
+		ld.ValidateProperty(o, &o.Kind,
 			ld.ValidateIRI(
 				FileKindType_File,
 				FileKindType_Directory,
@@ -425,7 +425,7 @@ func (o *FileKindType) Validate() error {
 func (o *Hash) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.IntegrityMethod),
-		ld.ValidateProperty(o, &o.HashValue),
+		ld.ValidateProperty(o, &o.Value),
 		ld.ValidateProperty(o, &o.Algorithm,
 			ld.ValidateIRI(
 				HashAlgorithm_Adler32,
@@ -474,7 +474,7 @@ func (o *IntegrityMethod) Validate() error {
 func (o *License) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.ExtendableLicense),
-		ld.ValidateProperty(o, &o.LicenseText))
+		ld.ValidateProperty(o, &o.Text))
 }
 
 func (o *LicenseAddition) Validate() error {
@@ -608,7 +608,7 @@ func (o *Relationship) Validate() error {
 		ld.ValidateProperty(o, &o.To,
 			ld.ValidateMinCount[ElementList](1)),
 		ld.ValidateProperty(o, &o.From),
-		ld.ValidateProperty(o, &o.RelationshipType,
+		ld.ValidateProperty(o, &o.Type,
 			ld.ValidateIRI(
 				RelationshipType_Affects,
 				RelationshipType_AmendedBy,
@@ -680,13 +680,9 @@ func (o *RelationshipType) Validate() error {
 	return ld.JoinErrors()
 }
 
-func (o *SafetyRiskAssessmentType) Validate() error {
-	return ld.JoinErrors()
-}
-
-func (o *Sbom) Validate() error {
+func (o *SBOM) Validate() error {
 	return ld.JoinErrors(
-		ld.ValidateProperty(o, &o.Bom),
+		ld.ValidateProperty(o, &o.BOM),
 		ld.ValidateProperty(o, &o.SbomTypes,
 			ld.ValidateAll(ld.ValidateIRI(
 				SbomType_Design,
@@ -696,6 +692,10 @@ func (o *Sbom) Validate() error {
 				SbomType_Runtime,
 				SbomType_Analyzed,
 			))))
+}
+
+func (o *SafetyRiskAssessmentType) Validate() error {
+	return ld.JoinErrors()
 }
 
 func (o *SbomType) Validate() error {
@@ -711,7 +711,7 @@ func (o *SimpleLicensingText) Validate() error {
 func (o *Snippet) Validate() error {
 	return ld.JoinErrors(
 		ld.ValidateProperty(o, &o.SoftwareArtifact),
-		ld.ValidateProperty(o, &o.SnippetFromFile))
+		ld.ValidateProperty(o, &o.FromFile))
 }
 
 func (o *SoftwareAgent) Validate() error {

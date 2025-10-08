@@ -1,21 +1,122 @@
-package v3_0_test
+package v3_0_1_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/kzantow/go-ld"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/require"
 
-	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0"
+	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0_1"
 )
+
+func Test_customSerialization(t *testing.T) {
+	d := spdx.NewDocument(spdx.ProfileIdentifierType_Software, "adoc", &spdx.Person{
+		Agent: spdx.Agent{
+			Element: spdx.Element{
+				Name: "Keith",
+				ExternalIdentifiers: spdx.ExternalIdentifierList{
+					&spdx.ExternalIdentifier{
+						Type:       spdx.ExternalIdentifierType_Email,
+						Identifier: "keith@example.com",
+					},
+				},
+			},
+		},
+	}, nil)
+
+	sbom := &spdx.SBOM{}
+	d.RootElements = spdx.ElementList{sbom} // only 1 element appended to document RootElement list
+
+	p := &spdx.Package{}
+	p.Name = "a pkg"
+	sbom.RootElements = append(sbom.RootElements, p)
+
+	p.ContentIdentifiers = append(p.ContentIdentifiers, &spdx.ContentIdentifier{
+		Type:  spdx.ContentIdentifierType_Gitoid,
+		Value: "http://example.org",
+	})
+
+	a := &spdx.Person{
+		Agent: spdx.Agent{
+			Element: spdx.Element{
+				Name: "Alice",
+			},
+		},
+	}
+	sbom.RootElements = append(sbom.RootElements, a)
+
+	validationErr := d.Validate(false)
+	require.Error(t, validationErr) // we did not set creationInfo, should be invalid document
+	t.Log(validationErr.Error())
+
+	contents := bytes.Buffer{}
+	err := d.ToJSON(&contents)
+	require.NoError(t, err)
+
+	structure := map[string]any{}
+	err = json.Unmarshal(contents.Bytes(), &structure)
+	require.NoError(t, err)
+
+	contents.Reset()
+	enc := json.NewEncoder(&contents)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	err = enc.Encode(structure)
+	home, err := os.UserHomeDir()
+	require.NoError(t, err)
+	err = os.WriteFile(filepath.Join(home, "Downloads", "spdx3-sample.json"), contents.Bytes(), 0o755)
+	require.NoError(t, err)
+
+	graph := structure["@graph"].([]any)
+
+	var spdxDoc map[string]any
+	for _, e := range graph {
+		if e, ok := e.(map[string]any); ok {
+			if e["type"] == "SpdxDocument" {
+				spdxDoc = e
+				break
+			}
+		}
+	}
+	require.NotNil(t, spdxDoc)
+
+	rootElements, _ := spdxDoc["rootElement"].([]any)
+	require.NotNil(t, rootElements)
+
+	serializedSBOMId := ""
+	for _, e := range rootElements {
+		if e, ok := e.(string); ok {
+			serializedSBOMId = e
+		}
+	}
+	require.NotEmpty(t, serializedSBOMId)
+
+	// sbom is serialized to the graph root, find it by id:
+	var serializedSBOM map[string]any
+	for _, e := range graph {
+		if e, ok := e.(map[string]any); ok {
+			if e["type"] == "software_Sbom" && e["spdxId"] == serializedSBOMId {
+				serializedSBOM = e
+			}
+		}
+	}
+	require.NotNil(t, serializedSBOM)
+
+	rootElements, _ = serializedSBOM["rootElement"].([]any)
+	require.NotNil(t, rootElements)
+	require.Len(t, rootElements, 2) // we specifically added 2 elements to the SBOM
+}
 
 func Test_validateMinList(t *testing.T) {
 	a := &spdx.Person{}
@@ -42,16 +143,15 @@ func Test_writer(t *testing.T) {
 			Name: "a file",
 		}}},
 		ContentType: "text", // validation error
-		FileKind:    spdx.FileKindType{},
+		Kind:        spdx.FileKindType{},
 	}
-	d.Append(
-		&spdx.Sbom{Bom: spdx.Bom{Bundle: spdx.Bundle{ElementCollection: spdx.ElementCollection{
+	d.RootElements = spdx.ElementList{
+		&spdx.SBOM{BOM: spdx.BOM{Bundle: spdx.Bundle{ElementCollection: spdx.ElementCollection{
 			Element: spdx.Element{
 				Name: "My Bom",
 			},
 			Elements: spdx.ElementList{},
 		}}},
-			SbomTypes: nil,
 		},
 		file1,
 		pkg1,
@@ -68,13 +168,13 @@ func Test_writer(t *testing.T) {
 									"locator1",
 									"locator2",
 								},
-								Identifier:             "CVE-2024-1234",
-								ExternalIdentifierType: spdx.ExternalIdentifierType_Cve,
+								Identifier: "CVE-2024-1234",
+								Type:       spdx.ExternalIdentifierType_Cve,
 							},
 						},
-						ExternalRefs:   nil,
-						Summary:        "",
-						VerifiedUsings: nil,
+						ExternalRefs:  nil,
+						Summary:       "",
+						VerifiedUsing: nil,
 					},
 					StandardNames: []string{
 						"standard-name1",
@@ -90,7 +190,7 @@ func Test_writer(t *testing.T) {
 				CopyrightText:  "",
 			},
 		},
-	)
+	}
 
 	// many validation issues
 	err := d.Validate(false)
@@ -120,7 +220,11 @@ func Test_writer(t *testing.T) {
 	//	info.Created = info.Created.Add(time.Hour)
 	//	return nil
 	//})
-	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, testOpts...)
+	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, append(testOpts,
+		cmpopts.IgnoreFields(spdx.Element{}, "ID"),
+		cmpopts.IgnoreFields(spdx.Element{}, "CreationInfo"),
+		cmpopts.EquateEmpty(),
+	)...)
 	if diff != "" {
 		t.Fatal(diff)
 	}
@@ -137,41 +241,39 @@ var testOpts = []cmp.Option{
 }
 
 func Test_reader(t *testing.T) {
-	f, err := os.Open("test.json")
+	f, err := os.Open("testdata/test.json")
 	require.NoError(t, err)
 	d := newTestDocument()
 	err = d.FromJSON(f)
 	require.NoError(t, err)
-	fmt.Printf("%#v\n", d)
+	t.Logf("sample document:\n%#v", d)
 
-	require.Equal(t, d.Elements.Files().Len(), 1)
-	for _, fi := range d.Elements.Files() {
-		if fi.PrimaryPurpose == spdx.SoftwarePurpose_Executable {
-			println("Got Executable File ID: " + fi.ID)
-		}
-	}
+	sboms := each(d.RootElements.SBOMs())
+	require.Len(t, sboms, 1)
 
-	// the example is incorrect, it doesn't include the package in the element root
-	pkgs := d.Elements.Packages().Views()
-	//require.Len(t, pkgs, 1)
-	//require.NotEqual(t, time.Time{}, pkgs[0].BuiltTime)
-	require.Empty(t, pkgs) // FIXME this shouldn't be true, but the example is wrong
+	packages := each(sboms[0].RootElements.Packages())
+	require.Len(t, packages, 1)
 
-	rels := d.Elements.Relationships().Views()
+	rels := each(d.Elements.Relationships())
 	require.Len(t, rels, 1)
 
-	if p, ok := rels[0].From.(*spdx.Package); ok {
-		require.NotEqual(t, time.Time{}, p.BuiltTime)
-	}
 	// this is the only reference to the package I see:
-	_ = spdx.As(rels[0].From, func(p *spdx.Package) error {
-		require.NotEqual(t, time.Time{}, p.BuiltTime)
-		return nil
-	})
+	p := spdx.Cast[spdx.Package](rels[0].From)
+	require.NotNil(t, p)
+	require.NotEqual(t, time.Time{}, p.BuiltTime)
+	require.Equal(t, "my-package", p.Name)
+}
+
+func each[Element, View any](s ld.TypeSeq[Element, View]) []View {
+	var out []View
+	for _, v := range s {
+		out = append(out, v)
+	}
+	return out
 }
 
 func Test_readerExpanded(t *testing.T) {
-	f, err := os.Open("test.expanded.json")
+	f, err := os.Open("testdata/test.expanded.json")
 	require.NoError(t, err)
 	d := newTestDocument()
 	err = d.FromJSON(f)
@@ -181,35 +283,39 @@ func Test_readerExpanded(t *testing.T) {
 		println("File ID: " + fi.ID)
 	}
 
-	pkgs := d.Elements.Packages().Views()
-	require.Len(t, pkgs, 1)
-	require.NotEqual(t, time.Time{}, pkgs[0].BuiltTime)
+	sboms := each(d.RootElements.SBOMs())
+	require.Len(t, sboms, 1)
+
+	packages := each(sboms[0].RootElements.Packages())
+	require.Len(t, packages, 1)
+
+	rels := each(d.Elements.Relationships())
+	require.Len(t, rels, 1)
+
+	// this is the only reference to the package I see:
+	p := spdx.Cast[spdx.Package](rels[0].From)
+	require.NotNil(t, p)
+	require.NotEqual(t, time.Time{}, p.BuiltTime)
+	require.Equal(t, "my-package", p.Name)
 }
 
 func Test_reader2(t *testing.T) {
-	contents := `
-		{
-  "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
-  "@graph": [
-	{ "spdxId": "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" },
-	{ "spdxId": "SpdxOrganization" },
-{
-      "type": "CreationInfo",
-      "@id": "_:creationinfo",
-      "createdBy": [
-        "http://spdx.example.com/Agent/JoshuaWatt"
-      ],
-      "specVersion": "3.0.1",
-      "created": "2024-03-06T00:00:00Z"
-    }
-  ]
-}
-	`
-	graph, err := spdx.LDContext().FromJSON(strings.NewReader(contents))
+	contents := `{
+	  "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
+	  "@graph": [
+		{ "type": "SpdxDocument",
+		  "element": [ "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" ]
+		}
+	  ]
+	}`
+
+	d := newTestDocument()
+	err := d.FromJSON(strings.NewReader(contents))
 	require.NoError(t, err)
-	for _, fi := range graph {
-		println("Elem" + fmt.Sprintf("%#v", fi))
-	}
+	require.Len(t, d.Elements, 1)
+	spdxOrgID, _ := ld.GetID(spdx.Organization_SpdxOrganization)
+	gotID, _ := ld.GetID(d.Elements[0])
+	require.Equal(t, spdxOrgID, gotID)
 }
 
 func Test_exportImportExport(t *testing.T) {
@@ -224,15 +330,15 @@ func Test_exportImportExport(t *testing.T) {
 		&spdx.Tool{Element: spdx.Element{
 			ExternalIdentifiers: spdx.ExternalIdentifierList{
 				&spdx.ExternalIdentifier{
-					ExternalIdentifierType: spdx.ExternalIdentifierType_Cpe23,
-					Identifier:             "cpe:2.3:a:myvendor:my-product:*:*:*:*:*:*:*:*",
+					Type:       spdx.ExternalIdentifierType_Cpe23,
+					Identifier: "cpe:2.3:a:myvendor:my-product:*:*:*:*:*:*:*:*",
 				},
 			},
 			ExternalRefs: nil,
 			Name:         "not-tools-golang",
 		}})
 
-	sbom := &spdx.Sbom{}
+	sbom := &spdx.SBOM{}
 	doc.RootElements = append(doc.RootElements, sbom)
 
 	// create a package
@@ -241,14 +347,14 @@ func Test_exportImportExport(t *testing.T) {
 		SoftwareArtifact: spdx.SoftwareArtifact{Artifact: spdx.Artifact{Element: spdx.Element{
 			Name: "some-package-1",
 		}}},
-		PackageVersion: "1.2.3",
+		Version: "1.2.3",
 	}
 
 	// create another package
 
 	pkg2 := &spdx.AIPackage{}
 	pkg2.Name = "some-package-2"
-	pkg2.PackageVersion = "2.4.5"
+	pkg2.Version = "2.4.5"
 
 	// add the packages to the sbom
 
@@ -264,8 +370,8 @@ func Test_exportImportExport(t *testing.T) {
 	// add relationships
 
 	sbom.RootElements = append(sbom.RootElements, &spdx.Relationship{
-		From:             file1,
-		RelationshipType: spdx.RelationshipType_Contains,
+		From: file1,
+		Type: spdx.RelationshipType_Contains,
 		To: spdx.ElementList{
 			pkg1,
 			pkg2,
@@ -273,8 +379,8 @@ func Test_exportImportExport(t *testing.T) {
 	})
 
 	sbom.RootElements = append(sbom.RootElements, &spdx.Relationship{
-		From:             pkg1,
-		RelationshipType: spdx.RelationshipType_DependsOn,
+		From: pkg1,
+		Type: spdx.RelationshipType_DependsOn,
 		To: spdx.ElementList{
 			pkg2,
 		},
@@ -326,9 +432,9 @@ func Test_exportImportExport(t *testing.T) {
 	// some basic usage:
 
 	var pkgs []*spdx.Package
-	for _, sbom := range doc.RootElements.Sboms() {
+	for _, sbom := range doc.RootElements.SBOMs() {
 		for _, rel := range sbom.RootElements.Relationships() {
-			if rel.RelationshipType != spdx.RelationshipType_Contains {
+			if rel.Type != spdx.RelationshipType_Contains {
 				continue
 			}
 			_ = spdx.As(rel.From, func(f *spdx.File) any {

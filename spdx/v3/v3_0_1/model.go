@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-package v3_0
+package v3_0_1
 
 import (
 	"reflect"
@@ -18,21 +18,21 @@ type AnyAIPackage interface {
 
 // AIPackage Specifies an AI package and its associated information.
 type AIPackage struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/AIPackage"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/AIPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Package
 	// Domains Captures the domain in which the AI package can be used.
 	Domains []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/domain" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// EnergyConsumption Indicates the amount of energy consumption incurred by an AI model.
 	EnergyConsumption AnyEnergyConsumption `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyConsumption" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumption"`
-	// ModelDataPreprocessings Describes all the preprocessing steps applied to the training data before the\nmodel training.
+	// ModelDataPreprocessings Describes all the preprocessing steps applied to the training data before the model training.
 	ModelDataPreprocessings []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/modelDataPreprocessing" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// UseSensitivePersonalInformation Records if sensitive personal information is used during model training or\ncould be used during the inference.
+	// UseSensitivePersonalInformation Records if sensitive personal information is used during model training or could be used during the inference.
 	UseSensitivePersonalInformation PresenceType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/useSensitivePersonalInformation" type:"https://spdx.org/rdf/3.0.1/terms/Core/PresenceType"`
-	// AutonomyType Indicates whether the system can perform a decision or action without human\ninvolvement or guidance.
+	// AutonomyType Indicates whether the system can perform a decision or action without human involvement or guidance.
 	AutonomyType PresenceType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/autonomyType" type:"https://spdx.org/rdf/3.0.1/terms/Core/PresenceType"`
 	// SafetyRiskAssessment Records the results of general safety risk assessment of the AI system.
 	SafetyRiskAssessment SafetyRiskAssessmentType `iri:"https://spdx.org/rdf/3.0.1/terms/AI/safetyRiskAssessment" type:"https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType"`
-	// Hyperparameters Records a hyperparameter used to build the AI model contained in the AI\npackage.
+	// Hyperparameters Records a hyperparameter used to build the AI model contained in the AI package.
 	Hyperparameters DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/hyperparameter" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 	// Limitation Captures a limitation of the AI software.
 	Limitation string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/limitation" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -40,11 +40,11 @@ type AIPackage struct {
 	ModelExplainabilities []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/modelExplainability" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// StandardCompliances Captures a standard that is being complied with.
 	StandardCompliances []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/standardCompliance" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// MetricDecisionThresholds Captures the threshold that was used for computation of a metric described in\nthe metric field.
+	// MetricDecisionThresholds Captures the threshold that was used for computation of a metric described in the metric field.
 	MetricDecisionThresholds DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/metricDecisionThreshold" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 	// TypeOfModels Records the type of the model used in the AI software.
 	TypeOfModels []string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/typeOfModel" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// InformationAboutApplication Provides relevant information about the AI software, not including the model\ndescription.
+	// InformationAboutApplication Provides relevant information about the AI software, not including the model description.
 	InformationAboutApplication string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/informationAboutApplication" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// InformationAboutTraining Describes relevant information about different steps of the training process.
 	InformationAboutTraining string `iri:"https://spdx.org/rdf/3.0.1/terms/AI/informationAboutTraining" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -69,7 +69,7 @@ type AnyAgent interface {
 
 // Agent represents anything with the potential to act on a system.
 type Agent struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Agent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 }
 
@@ -102,7 +102,7 @@ type AnyAnnotation interface {
 
 // Annotation An assertion made in relation to one or more elements.
 type Annotation struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Annotation"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Annotation" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 	// Subject An Element an annotator has made an assertion about.
 	Subject AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/subject" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
@@ -110,8 +110,8 @@ type Annotation struct {
 	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Statement Commentary on an assertion that an annotator has made.
 	Statement string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/statement" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// AnnotationType Describes the type of annotation.
-	AnnotationType AnnotationType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/annotationType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType"`
+	// Type Describes the type of annotation.
+	Type AnnotationType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/annotationType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType"`
 }
 
 func (o *Annotation) asAnnotation() *Annotation {
@@ -126,7 +126,7 @@ func (o *AnnotationList) Annotations() ld.TypeSeq[AnyAnnotation, *Annotation] {
 
 // AnnotationType Specifies the type of an annotation.
 type AnnotationType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/AnnotationType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -147,7 +147,6 @@ type AnyArtifact interface {
 
 // Artifact A distinct article or unit within the digital domain.
 type Artifact struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Artifact"`
 	Element
 	// StandardNames The name of a relevant standard that may apply to an artifact.
 	StandardNames []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/standardName" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -157,11 +156,11 @@ type Artifact struct {
 	ReleaseTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/releaseTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// SupportLevels Specifies the level of support associated with an artifact.
 	SupportLevels []SupportType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/supportLevel" type:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
-	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship\nreferenced by the Element.
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
 	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
 	// OriginatedBy Identifies from where or whom the Element originally came.
 	OriginatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/originatedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
-	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be\nreassessed.
+	// ValidUntilTime Specifies until when the artifact can be used before its usage needs to be reassessed.
 	ValidUntilTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/validUntilTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
 
@@ -203,29 +202,29 @@ func (o *ArtifactList) Vulnerabilities() ld.TypeSeq[AnyArtifact, *Vulnerability]
 	return ld.NewTypeSeq(*o, castVulnerability)
 }
 
-type AnyBom interface {
+type AnyBOM interface {
 	AnyBundle
-	asBom() *Bom
+	asBOM() *BOM
 }
 
-// Bom A container for a grouping of SPDX-3.0 content characterizing details\n(provenence, composition, licensing, etc.) about a product.
-type Bom struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bom"`
+// BOM A container for a grouping of SPDX-3.0 content characterizing details (provenence, composition, licensing, etc.) about a product.
+type BOM struct {
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Bundle
 }
 
-func (o *Bom) asBom() *Bom {
+func (o *BOM) asBOM() *BOM {
 	return o
 }
 
-type BomList []AnyBom
+type BOMList []AnyBOM
 
-func (o *BomList) Boms() ld.TypeSeq[AnyBom, *Bom] {
-	return ld.NewTypeSeq(*o, castBom)
+func (o *BOMList) BOMs() ld.TypeSeq[AnyBOM, *BOM] {
+	return ld.NewTypeSeq(*o, castBOM)
 }
 
-func (o *BomList) Sboms() ld.TypeSeq[AnyBom, *Sbom] {
-	return ld.NewTypeSeq(*o, castSbom)
+func (o *BOMList) SBOMs() ld.TypeSeq[AnyBOM, *SBOM] {
+	return ld.NewTypeSeq(*o, castSBOM)
 }
 
 type AnyBuild interface {
@@ -235,24 +234,24 @@ type AnyBuild interface {
 
 // Build Class that describes a build instance of software/artifacts.
 type Build struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Build/Build"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Build/Build" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
-	// BuildId A buildId is a locally unique identifier used by a builder to identify a unique\ninstance of a build produced by it.
-	BuildId string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildId" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// BuildID A buildId is a locally unique identifier used by a builder to identify a unique instance of a build produced by it.
+	BuildID string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildId" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ConfigSourceUris Property that describes the URI of the build configuration source file.
-	ConfigSourceUris []ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceUri" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// BuildStartTime Property describing the start time of a build.
-	BuildStartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildStartTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// ConfigSourceDigests Property that describes the digest of the build configuration file used to\ninvoke a build.
+	ConfigSourceUris []URI `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceUri" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// StartTime Property describing the start time of a build.
+	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildStartTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// ConfigSourceDigests Property that describes the digest of the build configuration file used to invoke a build.
 	ConfigSourceDigests HashList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceDigest" type:"https://spdx.org/rdf/3.0.1/terms/Core/Hash"`
 	// Parameters Property describing a parameter used in an instance of a build.
 	Parameters DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/parameter" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
-	// BuildType A buildType is a hint that is used to indicate the toolchain, platform, or\ninfrastructure that the build was invoked on.
-	BuildType ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildType" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Type A buildType is a hint that is used to indicate the toolchain, platform, or infrastructure that the build was invoked on.
+	Type URI `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildType" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// ConfigSourceEntrypoints Property describes the invocation entrypoint of a build.
 	ConfigSourceEntrypoints []string `iri:"https://spdx.org/rdf/3.0.1/terms/Build/configSourceEntrypoint" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// BuildEndTime Property that describes the time at which a build stops.
-	BuildEndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildEndTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
+	// EndTime Property that describes the time at which a build stops.
+	EndTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Build/buildEndTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// Environments Property describing the session in which a build is invoked.
 	Environments DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Build/environment" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 }
@@ -274,9 +273,9 @@ type AnyBundle interface {
 
 // Bundle A collection of Elements that have a shared context.
 type Bundle struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bundle"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Bundle" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	ElementCollection
-	// Context Gives information about the circumstances or unifying properties\nthat Elements of the bundle have been assembled under.
+	// Context Gives information about the circumstances or unifying properties that Elements of the bundle have been assembled under.
 	Context string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/context" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -286,16 +285,16 @@ func (o *Bundle) asBundle() *Bundle {
 
 type BundleList []AnyBundle
 
-func (o *BundleList) Boms() ld.TypeSeq[AnyBundle, *Bom] {
-	return ld.NewTypeSeq(*o, castBom)
+func (o *BundleList) BOMs() ld.TypeSeq[AnyBundle, *BOM] {
+	return ld.NewTypeSeq(*o, castBOM)
 }
 
 func (o *BundleList) Bundles() ld.TypeSeq[AnyBundle, *Bundle] {
 	return ld.NewTypeSeq(*o, castBundle)
 }
 
-func (o *BundleList) Sboms() ld.TypeSeq[AnyBundle, *Sbom] {
-	return ld.NewTypeSeq(*o, castSbom)
+func (o *BundleList) SBOMs() ld.TypeSeq[AnyBundle, *SBOM] {
+	return ld.NewTypeSeq(*o, castSBOM)
 }
 
 type AnyCdxPropertiesExtension interface {
@@ -305,7 +304,7 @@ type AnyCdxPropertiesExtension interface {
 
 // CdxPropertiesExtension A type of extension consisting of a list of name value pairs.
 type CdxPropertiesExtension struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	Extension
 	// CdxProperties Provides a map of a property names to a values.
 	CdxProperties CdxPropertyEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxProperty" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry"`
@@ -327,7 +326,7 @@ type AnyCdxPropertyEntry interface {
 
 // CdxPropertyEntry A property name with an associated value.
 type CdxPropertyEntry struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// CdxPropValue A value used in a CdxPropertyEntry name-value pair.
 	CdxPropValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropValue" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -347,7 +346,7 @@ func (o *CdxPropertyEntryList) CdxPropertyEntries() ld.TypeSeq[AnyCdxPropertyEnt
 
 // ConfidentialityLevelType Categories of confidentiality level.
 type ConfidentialityLevelType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -376,9 +375,9 @@ type AnyConjunctiveLicenseSet interface {
 	asConjunctiveLicenseSet() *ConjunctiveLicenseSet
 }
 
-// ConjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information\nwhere all elements apply.
+// ConjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information where all elements apply.
 type ConjunctiveLicenseSet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ConjunctiveLicenseSet"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ConjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseInfo
 	// Members A license expression participating in a license set.
 	Members LicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
@@ -401,12 +400,12 @@ type AnyContentIdentifier interface {
 
 // ContentIdentifier A canonical, unique, immutable identifier
 type ContentIdentifier struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	IntegrityMethod
-	// ContentIdentifierType Specifies the type of the content identifier.
-	ContentIdentifierType ContentIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType"`
-	// ContentIdentifierValue Specifies the value of the content identifier.
-	ContentIdentifierValue ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Type Specifies the type of the content identifier.
+	Type ContentIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType"`
+	// Value Specifies the value of the content identifier.
+	Value URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifierValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 }
 
 func (o *ContentIdentifier) asContentIdentifier() *ContentIdentifier {
@@ -421,7 +420,7 @@ func (o *ContentIdentifierList) ContentIdentifiers() ld.TypeSeq[AnyContentIdenti
 
 // ContentIdentifierType Specifies the type of a content identifier.
 type ContentIdentifierType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifierType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -441,15 +440,15 @@ type AnyCreationInfo interface {
 
 // CreationInfo Provides information about the creation of the Element.
 type CreationInfo struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
-	// SpecVersion Provides a reference number that can be used to understand how to parse and\ninterpret an Element.
+	// SpecVersion Provides a reference number that can be used to understand how to parse and interpret an Element.
 	SpecVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/specVersion" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Created Identifies when the Element was originally created.
 	Created time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/created" required:"true" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 	// CreatedUsing Identifies the tooling that was used during the creation of the Element.
 	CreatedUsing ToolList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/createdUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/Tool"`
-	// Comment Provide consumers with comments by the creator of the Element about the\nElement.
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// CreatedBy Identifies who or what created the Element.
 	CreatedBy AgentList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/createdBy" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
@@ -472,7 +471,7 @@ type AnyCustomLicense interface {
 
 // CustomLicense A license that is not listed on the SPDX License List.
 type CustomLicense struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicense"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	License
 }
 
@@ -493,7 +492,7 @@ type AnyCustomLicenseAddition interface {
 
 // CustomLicenseAddition A license addition that is not listed on the SPDX Exceptions List.
 type CustomLicenseAddition struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicenseAddition"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/CustomLicenseAddition" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseAddition
 }
 
@@ -509,7 +508,7 @@ func (o *CustomLicenseAdditionList) CustomLicenseAdditions() ld.TypeSeq[AnyCusto
 
 // CvssSeverityType Specifies the CVSS base, temporal, threat, or environmental severity type.
 type CvssSeverityType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -545,7 +544,7 @@ type AnyCvssV2VulnAssessmentRelationship interface {
 
 // CvssV2VulnAssessmentRelationship Provides a CVSS version 2.0 assessment for a vulnerability.
 type CvssV2VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV2VulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV2VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
 	// VectorString Specifies the CVSS vector string for a vulnerability.
 	VectorString string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/vectorString" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -570,7 +569,7 @@ type AnyCvssV3VulnAssessmentRelationship interface {
 
 // CvssV3VulnAssessmentRelationship Provides a CVSS version 3 assessment for a vulnerability.
 type CvssV3VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV3VulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV3VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
 	// Score Provides a numerical (0-10) representation of the severity of a vulnerability.
 	Score float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/score" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
@@ -597,7 +596,7 @@ type AnyCvssV4VulnAssessmentRelationship interface {
 
 // CvssV4VulnAssessmentRelationship Provides a CVSS version 4 assessment for a vulnerability.
 type CvssV4VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV4VulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/CvssV4VulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
 	// Severity Specifies the CVSS qualitative severity rating of a vulnerability in relation to a piece of software.
 	Severity CvssSeverityType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/severity" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Security/CvssSeverityType"`
@@ -619,7 +618,7 @@ func (o *CvssV4VulnAssessmentRelationshipList) CvssV4VulnAssessmentRelationships
 
 // DatasetAvailabilityType Availability of dataset.
 type DatasetAvailabilityType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetAvailabilityType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -655,7 +654,7 @@ type AnyDatasetPackage interface {
 
 // DatasetPackage Specifies a data package and its associated information.
 type DatasetPackage struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetPackage"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetPackage" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Package
 	// ConfidentialityLevel Describes the confidentiality level of the data points contained in the dataset.
 	ConfidentialityLevel ConfidentialityLevelType `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/confidentialityLevel" type:"https://spdx.org/rdf/3.0.1/terms/Dataset/ConfidentialityLevelType"`
@@ -666,7 +665,7 @@ type DatasetPackage struct {
 	// DatasetNoise Describes potentially noisy elements of the dataset.
 	DatasetNoise string `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetNoise" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// DatasetSize Captures the size of the dataset.
-	DatasetSize ld.NonNegativeInt `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetSize" type:"http://www.w3.org/2001/XMLSchema#nonNegativeInteger"`
+	DatasetSize NonNegativeInt `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/datasetSize" type:"http://www.w3.org/2001/XMLSchema#nonNegativeInteger"`
 	// Sensors Describes a sensor used for collecting the data.
 	Sensors DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/sensor" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 	// IntendedUse Describes what the given dataset should be used for.
@@ -697,7 +696,7 @@ func (o *DatasetPackageList) DatasetPackages() ld.TypeSeq[AnyDatasetPackage, *Da
 
 // DatasetType Enumeration of dataset types.
 type DatasetType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Dataset/DatasetType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -777,7 +776,7 @@ type AnyDictionaryEntry interface {
 
 // DictionaryEntry A key with an associated value.
 type DictionaryEntry struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// Value A value used in a generic key-value pair.
 	Value string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/value" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -800,9 +799,9 @@ type AnyDisjunctiveLicenseSet interface {
 	asDisjunctiveLicenseSet() *DisjunctiveLicenseSet
 }
 
-// DisjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information where\nonly one of the elements applies.
+// DisjunctiveLicenseSet Portion of an AnyLicenseInfo representing a set of licensing information where only one of the elements applies.
 type DisjunctiveLicenseSet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/DisjunctiveLicenseSet"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/DisjunctiveLicenseSet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseInfo
 	// Members A license expression participating in a license set.
 	Members LicenseInfoList `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/member" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
@@ -824,11 +823,10 @@ type AnyElement interface {
 
 // Element Base domain class from which all other SPDX-3.0 domain classes derive.
 type Element struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
-	ID string  `iri:"@id"`
+	ID string `iri:"@id"`
 	// Description Provides a detailed description of the Element.
 	Description string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/description" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// Comment Provide consumers with comments by the creator of the Element about the\nElement.
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Name Identifies the name of an Element as designated by the creator.
 	Name string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/name" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -836,13 +834,13 @@ type Element struct {
 	Extensions ExtensionList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/extension" type:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
 	// CreationInfo Provides information about the creation of the Element.
 	CreationInfo AnyCreationInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/creationInfo" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"`
-	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content\nthat uniquely identifies an Element.
+	// ExternalIdentifiers Provides a reference to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
 	ExternalIdentifiers ExternalIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
-	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content\nthat provides additional characteristics of an Element.
+	// ExternalRefs Points to a resource outside the scope of the SPDX-3.0 content that provides additional characteristics of an Element.
 	ExternalRefs ExternalRefList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRef" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
 	// Summary A short description of an Element.
 	Summary string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/summary" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
 	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
 }
 
@@ -868,8 +866,8 @@ func (o *ElementList) Artifacts() ld.TypeSeq[AnyElement, *Artifact] {
 	return ld.NewTypeSeq(*o, castArtifact)
 }
 
-func (o *ElementList) Boms() ld.TypeSeq[AnyElement, *Bom] {
-	return ld.NewTypeSeq(*o, castBom)
+func (o *ElementList) BOMs() ld.TypeSeq[AnyElement, *BOM] {
+	return ld.NewTypeSeq(*o, castBOM)
 }
 
 func (o *ElementList) Builds() ld.TypeSeq[AnyElement, *Build] {
@@ -992,8 +990,8 @@ func (o *ElementList) Relationships() ld.TypeSeq[AnyElement, *Relationship] {
 	return ld.NewTypeSeq(*o, castRelationship)
 }
 
-func (o *ElementList) Sboms() ld.TypeSeq[AnyElement, *Sbom] {
-	return ld.NewTypeSeq(*o, castSbom)
+func (o *ElementList) SBOMs() ld.TypeSeq[AnyElement, *SBOM] {
+	return ld.NewTypeSeq(*o, castSBOM)
 }
 
 func (o *ElementList) SimpleLicensingTexts() ld.TypeSeq[AnyElement, *SimpleLicensingText] {
@@ -1063,13 +1061,12 @@ type AnyElementCollection interface {
 
 // ElementCollection A collection of Elements, not necessarily with unifying context.
 type ElementCollection struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ElementCollection"`
 	Element
 	// Elements Refers to one or more Elements that are part of an ElementCollection.
 	Elements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/element" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
 	// RootElements This property is used to denote the root Element(s) of a tree of elements contained in a BOM.
 	RootElements ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/rootElement" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
-	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to\nconform to.
+	// ProfileConformances Describes one a profile which the creator of this ElementCollection intends to conform to.
 	ProfileConformances []ProfileIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/profileConformance" type:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
 }
 
@@ -1079,8 +1076,8 @@ func (o *ElementCollection) asElementCollection() *ElementCollection {
 
 type ElementCollectionList []AnyElementCollection
 
-func (o *ElementCollectionList) Boms() ld.TypeSeq[AnyElementCollection, *Bom] {
-	return ld.NewTypeSeq(*o, castBom)
+func (o *ElementCollectionList) BOMs() ld.TypeSeq[AnyElementCollection, *BOM] {
+	return ld.NewTypeSeq(*o, castBOM)
 }
 
 func (o *ElementCollectionList) Bundles() ld.TypeSeq[AnyElementCollection, *Bundle] {
@@ -1091,8 +1088,8 @@ func (o *ElementCollectionList) ElementCollections() ld.TypeSeq[AnyElementCollec
 	return ld.NewTypeSeq(*o, castElementCollection)
 }
 
-func (o *ElementCollectionList) Sboms() ld.TypeSeq[AnyElementCollection, *Sbom] {
-	return ld.NewTypeSeq(*o, castSbom)
+func (o *ElementCollectionList) SBOMs() ld.TypeSeq[AnyElementCollection, *SBOM] {
+	return ld.NewTypeSeq(*o, castSBOM)
 }
 
 func (o *ElementCollectionList) SpdxDocuments() ld.TypeSeq[AnyElementCollection, *SpdxDocument] {
@@ -1103,15 +1100,15 @@ type AnyEnergyConsumption interface {
 	asEnergyConsumption() *EnergyConsumption
 }
 
-// EnergyConsumption A class for describing the energy consumption incurred by an AI model in\ndifferent stages of its lifecycle.
+// EnergyConsumption A class for describing the energy consumption incurred by an AI model in different stages of its lifecycle.
 type EnergyConsumption struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumption"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumption" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
-	// InferenceEnergyConsumptions Specifies the amount of energy consumed during inference time by an AI model\nthat is being used in the AI system.
+	// InferenceEnergyConsumptions Specifies the amount of energy consumed during inference time by an AI model that is being used in the AI system.
 	InferenceEnergyConsumptions EnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/inferenceEnergyConsumption" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription"`
-	// TrainingEnergyConsumptions Specifies the amount of energy consumed when training the AI model that is\nbeing used in the AI system.
+	// TrainingEnergyConsumptions Specifies the amount of energy consumed when training the AI model that is being used in the AI system.
 	TrainingEnergyConsumptions EnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/trainingEnergyConsumption" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription"`
-	// FinetuningEnergyConsumptions Specifies the amount of energy consumed when finetuning the AI model that is\nbeing used in the AI system.
+	// FinetuningEnergyConsumptions Specifies the amount of energy consumed when finetuning the AI model that is being used in the AI system.
 	FinetuningEnergyConsumptions EnergyConsumptionDescriptionList `iri:"https://spdx.org/rdf/3.0.1/terms/AI/finetuningEnergyConsumption" type:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription"`
 }
 
@@ -1129,9 +1126,9 @@ type AnyEnergyConsumptionDescription interface {
 	asEnergyConsumptionDescription() *EnergyConsumptionDescription
 }
 
-// EnergyConsumptionDescription The class that helps note down the quantity of energy consumption and the unit\nused for measurement.
+// EnergyConsumptionDescription The class that helps note down the quantity of energy consumption and the unit used for measurement.
 type EnergyConsumptionDescription struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyConsumptionDescription" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// EnergyQuantity Represents the energy quantity.
 	EnergyQuantity float64 `iri:"https://spdx.org/rdf/3.0.1/terms/AI/energyQuantity" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
@@ -1151,7 +1148,7 @@ func (o *EnergyConsumptionDescriptionList) EnergyConsumptionDescriptions() ld.Ty
 
 // EnergyUnitType Specifies the unit of energy consumption.
 type EnergyUnitType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/EnergyUnitType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1177,7 +1174,7 @@ type AnyEpssVulnAssessmentRelationship interface {
 
 // EpssVulnAssessmentRelationship Provides an EPSS assessment for a vulnerability.
 type EpssVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/EpssVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/EpssVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
 	// Probability A probability score between 0 and 1 of a vulnerability being exploited.
 	Probability float64 `iri:"https://spdx.org/rdf/3.0.1/terms/Security/probability" required:"true" type:"http://www.w3.org/2001/XMLSchema#decimal"`
@@ -1197,7 +1194,7 @@ func (o *EpssVulnAssessmentRelationshipList) EpssVulnAssessmentRelationships() l
 
 // ExploitCatalogType Specifies the exploit catalog type.
 type ExploitCatalogType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1218,10 +1215,10 @@ type AnyExploitCatalogVulnAssessmentRelationship interface {
 
 // ExploitCatalogVulnAssessmentRelationship Provides an exploit assessment of a vulnerability.
 type ExploitCatalogVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/ExploitCatalogVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
 	// Locator Provides the location of an exploit catalog.
-	Locator ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Security/locator" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	Locator URI `iri:"https://spdx.org/rdf/3.0.1/terms/Security/locator" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// Exploited Describe that a CVE is known to have an exploit because it's been listed in an exploit catalog.
 	Exploited bool `iri:"https://spdx.org/rdf/3.0.1/terms/Security/exploited" required:"true" type:"http://www.w3.org/2001/XMLSchema#boolean"`
 	// CatalogType Specifies the exploit catalog type.
@@ -1245,7 +1242,6 @@ type AnyExtendableLicense interface {
 
 // ExtendableLicense Abstract class representing a License or an OrLaterOperator.
 type ExtendableLicense struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ExtendableLicense"`
 	LicenseInfo
 }
 
@@ -1281,8 +1277,7 @@ type AnyExtension interface {
 
 // Extension A characterization of some aspect of an Element that is associated with the Element in a generalized fashion.
 type Extension struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Extension/Extension"`
-	ID string  `iri:"@id"`
+	ID string `iri:"@id"`
 }
 
 func (o *Extension) asExtension() *Extension {
@@ -1305,18 +1300,18 @@ type AnyExternalIdentifier interface {
 
 // ExternalIdentifier A reference to a resource identifier defined outside the scope of SPDX-3.0 content that uniquely identifies an Element.
 type ExternalIdentifier struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// Identifier Uniquely identifies an external element.
 	Identifier string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/identifier" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// IssuingAuthority An entity that is authorized to issue identification credentials.
 	IssuingAuthority string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/issuingAuthority" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// Comment Provide consumers with comments by the creator of the Element about the\nElement.
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// IdentifierLocators Provides the location for more information regarding an external identifier.
-	IdentifierLocators []ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/identifierLocator" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// ExternalIdentifierType Specifies the type of the external identifier.
-	ExternalIdentifierType ExternalIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType"`
+	IdentifierLocators []URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/identifierLocator" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Type Specifies the type of the external identifier.
+	Type ExternalIdentifierType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifierType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType"`
 }
 
 func (o *ExternalIdentifier) asExternalIdentifier() *ExternalIdentifier {
@@ -1331,7 +1326,7 @@ func (o *ExternalIdentifierList) ExternalIdentifiers() ld.TypeSeq[AnyExternalIde
 
 // ExternalIdentifierType Specifies the type of an external identifier.
 type ExternalIdentifierType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1365,8 +1360,8 @@ var ExternalIdentifierType_Other = ExternalIdentifierType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/other",
 }
 
-// ExternalIdentifierType_PackageUrl Package URL, as defined in the corresponding [Annex](../../../annexes/pkg-url-specification.md) of this specification.
-var ExternalIdentifierType_PackageUrl = ExternalIdentifierType{
+// ExternalIdentifierType_PackageURL Package URL, as defined in the corresponding [Annex](../../../annexes/pkg-url-specification.md) of this specification.
+var ExternalIdentifierType_PackageURL = ExternalIdentifierType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/packageUrl",
 }
 
@@ -1394,17 +1389,17 @@ type AnyExternalMap interface {
 	asExternalMap() *ExternalMap
 }
 
-// ExternalMap A map of Element identifiers that are used within an SpdxDocument but defined\nexternal to that SpdxDocument.
+// ExternalMap A map of Element identifiers that are used within an SpdxDocument but defined external to that SpdxDocument.
 type ExternalMap struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalMap"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalMap" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
-	// ExternalSpdxId Identifies an external Element used within an SpdxDocument but defined\nexternal to that SpdxDocument.
-	ExternalSpdxId ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalSpdxId" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// ExternalSpdxID Identifies an external Element used within an SpdxDocument but defined external to that SpdxDocument.
+	ExternalSpdxID URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalSpdxId" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// LocationHint Provides an indication of where to retrieve an external Element.
-	LocationHint ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locationHint" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be\nasserted.
+	LocationHint URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locationHint" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// VerifiedUsing Provides an IntegrityMethod with which the integrity of an Element can be asserted.
 	VerifiedUsing IntegrityMethodList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/verifiedUsing" type:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
-	// DefiningArtifact Artifact representing a serialization instance of SPDX data containing the\ndefinition of a particular Element.
+	// DefiningArtifact Artifact representing a serialization instance of SPDX data containing the definition of a particular Element.
 	DefiningArtifact AnyArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Core/definingArtifact" type:"https://spdx.org/rdf/3.0.1/terms/Core/Artifact"`
 }
 
@@ -1424,15 +1419,15 @@ type AnyExternalRef interface {
 
 // ExternalRef A reference to a resource outside the scope of SPDX-3.0 content related to an Element.
 type ExternalRef struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRef" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// Locators Provides the location of an external reference.
 	Locators []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/locator" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// ContentType Provides information about the content type of an Element or a Property.
 	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// ExternalRefType Specifies the type of the external reference.
-	ExternalRefType ExternalRefType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRefType" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType"`
-	// Comment Provide consumers with comments by the creator of the Element about the\nElement.
+	// Type Specifies the type of the external reference.
+	Type ExternalRefType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/externalRefType" type:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -1448,7 +1443,7 @@ func (o *ExternalRefList) ExternalRefs() ld.TypeSeq[AnyExternalRef, *ExternalRef
 
 // ExternalRefType Specifies the type of an external reference.
 type ExternalRefType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ExternalRefType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1689,12 +1684,12 @@ type AnyFile interface {
 
 // File Refers to any object that stores content on a computer.
 type File struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/File"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/File" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	SoftwareArtifact
 	// ContentType Provides information about the content type of an Element or a Property.
 	ContentType string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/contentType" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// FileKind Describes if a given file is a directory or non-directory kind of file.
-	FileKind FileKindType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/fileKind" type:"https://spdx.org/rdf/3.0.1/terms/Software/FileKindType"`
+	// Kind Describes if a given file is a directory or non-directory kind of file.
+	Kind FileKindType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/fileKind" type:"https://spdx.org/rdf/3.0.1/terms/Software/FileKindType"`
 }
 
 func (o *File) asFile() *File {
@@ -1709,7 +1704,7 @@ func (o *FileList) Files() ld.TypeSeq[AnyFile, *File] {
 
 // FileKindType Enumeration of the different kinds of SPDX file.
 type FileKindType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/FileKindType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/FileKindType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1730,10 +1725,10 @@ type AnyHash interface {
 
 // Hash A mathematically calculated representation of a grouping of data.
 type Hash struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Hash"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Hash" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	IntegrityMethod
-	// HashValue The result of applying a hash algorithm to an Element.
-	HashValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// Value The result of applying a hash algorithm to an Element.
+	Value string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// Algorithm Specifies the algorithm used for calculating the hash value.
 	Algorithm HashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm"`
 }
@@ -1750,7 +1745,7 @@ func (o *HashList) Hashes() ld.TypeSeq[AnyHash, *Hash] {
 
 // HashAlgorithm A mathematical algorithm that maps data of arbitrary size to a bit string.
 type HashAlgorithm struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -1869,9 +1864,9 @@ type AnyIndividualElement interface {
 	asIndividualElement() *IndividualElement
 }
 
-// IndividualElement A concrete subclass of Element used by Individuals in the\nCore profile.
+// IndividualElement A concrete subclass of Element used by Individuals in the Core profile.
 type IndividualElement struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/IndividualElement"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/IndividualElement" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 }
 
@@ -1900,9 +1895,9 @@ type AnyIndividualLicensingInfo interface {
 	asIndividualLicensingInfo() *IndividualLicensingInfo
 }
 
-// IndividualLicensingInfo A concrete subclass of AnyLicenseInfo used by Individuals in the\nExpandedLicensing profile.
+// IndividualLicensingInfo A concrete subclass of AnyLicenseInfo used by Individuals in the ExpandedLicensing profile.
 type IndividualLicensingInfo struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/IndividualLicensingInfo"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/IndividualLicensingInfo" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseInfo
 }
 
@@ -1932,9 +1927,8 @@ type AnyIntegrityMethod interface {
 
 // IntegrityMethod Provides an independently reproducible mechanism that permits verification of a specific Element.
 type IntegrityMethod struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/IntegrityMethod"`
-	ID string  `iri:"@id"`
-	// Comment Provide consumers with comments by the creator of the Element about the\nElement.
+	ID string `iri:"@id"`
+	// Comment Provide consumers with comments by the creator of the Element about the Element.
 	Comment string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/comment" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -1967,23 +1961,22 @@ type AnyLicense interface {
 
 // License Abstract class for the portion of an AnyLicenseInfo representing a license.
 type License struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/License"`
 	ExtendableLicense
 	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
-	SeeAlsos []ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// IsDeprecatedLicenseId Specifies whether a license or additional text identifier has been marked as\ndeprecated.
-	IsDeprecatedLicenseId bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated\nLicense or LicenseAddition.
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedLicenseID Specifies whether a license or additional text identifier has been marked as deprecated.
+	IsDeprecatedLicenseID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedLicenseId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
 	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// StandardLicenseHeader Provides a License author's preferred text to indicate that a file is covered\nby the License.
+	// StandardLicenseHeader Provides a License author's preferred text to indicate that a file is covered by the License.
 	StandardLicenseHeader string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseHeader" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// LicenseText Identifies the full text of a License or Addition.
-	LicenseText string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// IsOsiApproved Specifies whether the License is listed as approved by the\nOpen Source Initiative (OSI).
+	// Text Identifies the full text of a License or Addition.
+	Text string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsOsiApproved Specifies whether the License is listed as approved by the Open Source Initiative (OSI).
 	IsOsiApproved bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isOsiApproved" type:"http://www.w3.org/2001/XMLSchema#boolean"`
-	// LicenseXml Identifies all the text and metadata associated with a license in the license\nXML format.
-	LicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// IsFsfLibre Specifies whether the License is listed as free by the\nFree Software Foundation (FSF).
+	// Xml Identifies all the text and metadata associated with a license in the license XML format.
+	Xml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// IsFsfLibre Specifies whether the License is listed as free by the Free Software Foundation (FSF).
 	IsFsfLibre bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isFsfLibre" type:"http://www.w3.org/2001/XMLSchema#boolean"`
 	// StandardLicenseTemplate Identifies the full text of a License, in SPDX templating format.
 	StandardLicenseTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardLicenseTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -2012,22 +2005,21 @@ type AnyLicenseAddition interface {
 	asLicenseAddition() *LicenseAddition
 }
 
-// LicenseAddition Abstract class for additional text intended to be added to a License, but\nwhich is not itself a standalone License.
+// LicenseAddition Abstract class for additional text intended to be added to a License, but which is not itself a standalone License.
 type LicenseAddition struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/LicenseAddition"`
 	Element
 	// AdditionText Identifies the full text of a LicenseAddition.
 	AdditionText string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/additionText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated\nLicense or LicenseAddition.
+	// ObsoletedBy Specifies the licenseId that is preferred to be used in place of a deprecated License or LicenseAddition.
 	ObsoletedBy string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/obsoletedBy" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// LicenseXml Identifies all the text and metadata associated with a license in the license\nXML format.
+	// LicenseXml Identifies all the text and metadata associated with a license in the license XML format.
 	LicenseXml string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/licenseXml" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// StandardAdditionTemplate Identifies the full text of a LicenseAddition, in SPDX templating format.
 	StandardAdditionTemplate string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/standardAdditionTemplate" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// SeeAlsos Contains a URL where the License or LicenseAddition can be found in use.
-	SeeAlsos []ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// IsDeprecatedAdditionId Specifies whether an additional text identifier has been marked as deprecated.
-	IsDeprecatedAdditionId bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
+	SeeAlsos []URI `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/seeAlso" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// IsDeprecatedAdditionID Specifies whether an additional text identifier has been marked as deprecated.
+	IsDeprecatedAdditionID bool `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/isDeprecatedAdditionId" type:"http://www.w3.org/2001/XMLSchema#boolean"`
 }
 
 func (o *LicenseAddition) asLicenseAddition() *LicenseAddition {
@@ -2055,11 +2047,11 @@ type AnyLicenseExpression interface {
 
 // LicenseExpression An SPDX Element containing an SPDX license expression string.
 type LicenseExpression struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseInfo
 	// LicenseExpression A string in the license expression format.
 	LicenseExpression string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseExpression" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// CustomIdToUris Maps a LicenseRef or AdditionRef string for a Custom License or a Custom\nLicense Addition to its URI ID.
+	// CustomIdToUris Maps a LicenseRef or AdditionRef string for a Custom License or a Custom License Addition to its URI ID.
 	CustomIdToUris DictionaryEntryList `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/customIdToUri" type:"https://spdx.org/rdf/3.0.1/terms/Core/DictionaryEntry"`
 	// LicenseListVersion The version of the SPDX License List used in the license expression.
 	LicenseListVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseListVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -2082,7 +2074,6 @@ type AnyLicenseInfo interface {
 
 // LicenseInfo Abstract class representing a license combination consisting of one or more licenses.
 type LicenseInfo struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
 	Element
 }
 
@@ -2138,7 +2129,7 @@ func (o *LicenseInfoList) WithAdditionOperators() ld.TypeSeq[AnyLicenseInfo, *Wi
 
 // LifecycleScopeType Provide an enumerated set of lifecycle phases that can provide context to relationships.
 type LifecycleScopeType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2179,7 +2170,7 @@ type AnyLifecycleScopedRelationship interface {
 
 // LifecycleScopedRelationship Provide context for a relationship that occurs in the lifecycle.
 type LifecycleScopedRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopedRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopedRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Relationship
 	// Scope Capture the scope of information about a specific relationship between elements.
 	Scope LifecycleScopeType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/scope" type:"https://spdx.org/rdf/3.0.1/terms/Core/LifecycleScopeType"`
@@ -2202,11 +2193,11 @@ type AnyListedLicense interface {
 
 // ListedLicense A license that is listed on the SPDX License List.
 type ListedLicense struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicense"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicense" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	License
-	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or\nListedLicenseException identifier was first added.
+	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or ListedLicenseException identifier was first added.
 	ListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception\nidentifier was deprecated.
+	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception identifier was deprecated.
 	DeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -2227,11 +2218,11 @@ type AnyListedLicenseException interface {
 
 // ListedLicenseException A license exception that is listed on the SPDX Exceptions list.
 type ListedLicenseException struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicenseException"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ListedLicenseException" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseAddition
-	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception\nidentifier was deprecated.
+	// DeprecatedVersion Specifies the SPDX License List version in which this license or exception identifier was deprecated.
 	DeprecatedVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/deprecatedVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or\nListedLicenseException identifier was first added.
+	// ListVersionAdded Specifies the SPDX License List version in which this ListedLicense or ListedLicenseException identifier was first added.
 	ListVersionAdded string `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/listVersionAdded" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -2251,10 +2242,10 @@ type AnyNamespaceMap interface {
 
 // NamespaceMap A mapping between prefixes and namespace partial URIs.
 type NamespaceMap struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/NamespaceMap"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/NamespaceMap" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
-	// Namespace Provides an unambiguous mechanism for conveying a URI fragment portion of an\nElement ID.
-	Namespace ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/namespace" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Namespace Provides an unambiguous mechanism for conveying a URI fragment portion of an Element ID.
+	Namespace URI `iri:"https://spdx.org/rdf/3.0.1/terms/Core/namespace" required:"true" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 	// Prefix A substitute for a URI.
 	Prefix string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/prefix" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
@@ -2274,9 +2265,9 @@ type AnyOrLaterOperator interface {
 	asOrLaterOperator() *OrLaterOperator
 }
 
-// OrLaterOperator Portion of an AnyLicenseInfo representing this version, or any later version,\nof the indicated License.
+// OrLaterOperator Portion of an AnyLicenseInfo representing this version, or any later version, of the indicated License.
 type OrLaterOperator struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/OrLaterOperator"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/OrLaterOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	ExtendableLicense
 	// SubjectLicense A License participating in an 'or later' model.
 	SubjectLicense AnyLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectLicense" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/License"`
@@ -2299,7 +2290,7 @@ type AnyOrganization interface {
 
 // Organization A group of people who work together in an organized way for a shared purpose.
 type Organization struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Organization"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Organization" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Agent
 }
 
@@ -2323,20 +2314,20 @@ type AnyPackage interface {
 	asPackage() *Package
 }
 
-// Package Refers to any unit of content that can be associated with a distribution of\nsoftware.
+// Package Refers to any unit of content that can be associated with a distribution of software.
 type Package struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Package"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Package" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	SoftwareArtifact
-	// SourceInfo Records any relevant background information or additional comments\nabout the origin of the package.
+	// SourceInfo Records any relevant background information or additional comments about the origin of the package.
 	SourceInfo string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sourceInfo" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// HomePage A place for the SPDX document creator to record a website that serves as the\npackage's home page.
-	HomePage ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/homePage" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// PackageVersion Identify the version of a package.
-	PackageVersion string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// PackageUrl Provides a place for the SPDX data creator to record the package URL string\n(in accordance with the Package URL specification) for a software Package.
-	PackageUrl ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageUrl" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
-	// DownloadLocation Identifies the download Uniform Resource Identifier for the package at the time\nthat the document was created.
-	DownloadLocation ld.URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// HomePage A place for the SPDX document creator to record a website that serves as the package's home page.
+	HomePage URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/homePage" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// Version Identify the version of a package.
+	Version string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageVersion" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// PackageURL Provides a place for the SPDX data creator to record the package URL string (in accordance with the Package URL specification) for a software Package.
+	PackageURL URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/packageUrl" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
+	// DownloadLocation Identifies the download Uniform Resource Identifier for the package at the time that the document was created.
+	DownloadLocation URI `iri:"https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation" type:"http://www.w3.org/2001/XMLSchema#anyURI"`
 }
 
 func (o *Package) asPackage() *Package {
@@ -2364,14 +2355,14 @@ type AnyPackageVerificationCode interface {
 
 // PackageVerificationCode An SPDX version 2.X compatible verification method for software packages.
 type PackageVerificationCode struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PackageVerificationCode"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PackageVerificationCode" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	IntegrityMethod
 	// Algorithm Specifies the algorithm used for calculating the hash value.
 	Algorithm HashAlgorithm `iri:"https://spdx.org/rdf/3.0.1/terms/Core/algorithm" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/HashAlgorithm"`
 	// HashValue The result of applying a hash algorithm to an Element.
 	HashValue string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/hashValue" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// PackageVerificationCodeExcludedFiles The relative file name of a file to be excluded from the\n`PackageVerificationCode`.
-	PackageVerificationCodeExcludedFiles []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/packageVerificationCodeExcludedFile" type:"http://www.w3.org/2001/XMLSchema#string"`
+	// ExcludedFiles The relative file name of a file to be excluded from the `PackageVerificationCode`.
+	ExcludedFiles []string `iri:"https://spdx.org/rdf/3.0.1/terms/Core/packageVerificationCodeExcludedFile" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
 func (o *PackageVerificationCode) asPackageVerificationCode() *PackageVerificationCode {
@@ -2391,7 +2382,7 @@ type AnyPerson interface {
 
 // Person An individual human being.
 type Person struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Person"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Person" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Agent
 }
 
@@ -2411,12 +2402,12 @@ type AnyPositiveIntegerRange interface {
 
 // PositiveIntegerRange A tuple of two positive integers that define a range.
 type PositiveIntegerRange struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange" node-kind:"http://www.w3.org/ns/shacl#BlankNodeOrIRI"`
 	ID string  `iri:"@id"`
 	// EndIntegerRange Defines the end of a range.
-	EndIntegerRange ld.PositiveInt `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endIntegerRange" required:"true" type:"http://www.w3.org/2001/XMLSchema#positiveInteger"`
+	EndIntegerRange PositiveInt `iri:"https://spdx.org/rdf/3.0.1/terms/Core/endIntegerRange" required:"true" type:"http://www.w3.org/2001/XMLSchema#positiveInteger"`
 	// BeginIntegerRange Defines the beginning of a range.
-	BeginIntegerRange ld.PositiveInt `iri:"https://spdx.org/rdf/3.0.1/terms/Core/beginIntegerRange" required:"true" type:"http://www.w3.org/2001/XMLSchema#positiveInteger"`
+	BeginIntegerRange PositiveInt `iri:"https://spdx.org/rdf/3.0.1/terms/Core/beginIntegerRange" required:"true" type:"http://www.w3.org/2001/XMLSchema#positiveInteger"`
 }
 
 func (o *PositiveIntegerRange) asPositiveIntegerRange() *PositiveIntegerRange {
@@ -2431,7 +2422,7 @@ func (o *PositiveIntegerRangeList) PositiveIntegerRanges() ld.TypeSeq[AnyPositiv
 
 // PresenceType Categories of presence or absence.
 type PresenceType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PresenceType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/PresenceType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2452,7 +2443,7 @@ var PresenceType_Yes = PresenceType{
 
 // ProfileIdentifierType Enumeration of the valid profiles.
 type ProfileIdentifierType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2513,7 +2504,7 @@ type AnyRelationship interface {
 
 // Relationship Describes a relationship between one or more elements.
 type Relationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Relationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Relationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 	// Completeness Provides information about the completeness of relationships.
 	Completeness RelationshipCompleteness `iri:"https://spdx.org/rdf/3.0.1/terms/Core/completeness" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
@@ -2523,8 +2514,8 @@ type Relationship struct {
 	To ElementList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/to" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
 	// From References the Element on the left-hand side of a relationship.
 	From AnyElement `iri:"https://spdx.org/rdf/3.0.1/terms/Core/from" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/Element"`
-	// RelationshipType Information about the relationship between two Elements.
-	RelationshipType RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	// Type Information about the relationship between two Elements.
+	Type RelationshipType `iri:"https://spdx.org/rdf/3.0.1/terms/Core/relationshipType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
 	// StartTime Specifies the time from which an element is applicable / valid.
 	StartTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Core/startTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
@@ -2593,7 +2584,7 @@ func (o *RelationshipList) VulnAssessmentRelationships() ld.TypeSeq[AnyRelations
 
 // RelationshipCompleteness Indicates whether a relationship is known to be complete, incomplete, or if no assertion is made with respect to relationship completeness.
 type RelationshipCompleteness struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2614,7 +2605,7 @@ var RelationshipCompleteness_NoAssertion = RelationshipCompleteness{
 
 // RelationshipType Information about the relationship between two Elements.
 type RelationshipType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2913,9 +2904,32 @@ var RelationshipType_UsesTool = RelationshipType{
 	id: "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/usesTool",
 }
 
+type AnySBOM interface {
+	AnyBOM
+	asSBOM() *SBOM
+}
+
+// SBOM A collection of SPDX Elements describing a single package.
+type SBOM struct {
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Sbom" node-kind:"http://www.w3.org/ns/shacl#IRI"`
+	BOM
+	// SbomTypes Provides information about the type of an SBOM.
+	SbomTypes []SbomType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sbomType" type:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType"`
+}
+
+func (o *SBOM) asSBOM() *SBOM {
+	return o
+}
+
+type SBOMList []AnySBOM
+
+func (o *SBOMList) SBOMs() ld.TypeSeq[AnySBOM, *SBOM] {
+	return ld.NewTypeSeq(*o, castSBOM)
+}
+
 // SafetyRiskAssessmentType Specifies the safety risk level.
 type SafetyRiskAssessmentType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -2939,32 +2953,9 @@ var SafetyRiskAssessmentType_Serious = SafetyRiskAssessmentType{
 	id: "https://spdx.org/rdf/3.0.1/terms/AI/SafetyRiskAssessmentType/serious",
 }
 
-type AnySbom interface {
-	AnyBom
-	asSbom() *Sbom
-}
-
-// Sbom A collection of SPDX Elements describing a single package.
-type Sbom struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Sbom"`
-	Bom
-	// SbomTypes Provides information about the type of an SBOM.
-	SbomTypes []SbomType `iri:"https://spdx.org/rdf/3.0.1/terms/Software/sbomType" type:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType"`
-}
-
-func (o *Sbom) asSbom() *Sbom {
-	return o
-}
-
-type SbomList []AnySbom
-
-func (o *SbomList) Sboms() ld.TypeSeq[AnySbom, *Sbom] {
-	return ld.NewTypeSeq(*o, castSbom)
-}
-
-// SbomType Provides a set of values to be used to describe the common types of SBOMs that\ntools may create.
+// SbomType Provides a set of values to be used to describe the common types of SBOMs that tools may create.
 type SbomType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SbomType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -3005,7 +2996,7 @@ type AnySimpleLicensingText interface {
 
 // SimpleLicensingText A license or addition that is not listed on the SPDX License List.
 type SimpleLicensingText struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 	// LicenseText Identifies the full text of a License or Addition.
 	LicenseText string `iri:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -3028,13 +3019,13 @@ type AnySnippet interface {
 
 // Snippet Describes a certain part of a file.
 type Snippet struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Snippet"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/Snippet" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	SoftwareArtifact
-	// SnippetFromFile Defines the original host file that the snippet information applies to.
-	SnippetFromFile AnyFile `iri:"https://spdx.org/rdf/3.0.1/terms/Software/snippetFromFile" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/File"`
-	// LineRange Defines the line range in the original host file that the snippet information\napplies to.
+	// FromFile Defines the original host file that the snippet information applies to.
+	FromFile AnyFile `iri:"https://spdx.org/rdf/3.0.1/terms/Software/snippetFromFile" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Software/File"`
+	// LineRange Defines the line range in the original host file that the snippet information applies to.
 	LineRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/lineRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
-	// ByteRange Defines the byte range in the original host file that the snippet information\napplies to.
+	// ByteRange Defines the byte range in the original host file that the snippet information applies to.
 	ByteRange AnyPositiveIntegerRange `iri:"https://spdx.org/rdf/3.0.1/terms/Software/byteRange" type:"https://spdx.org/rdf/3.0.1/terms/Core/PositiveIntegerRange"`
 }
 
@@ -3055,7 +3046,7 @@ type AnySoftwareAgent interface {
 
 // SoftwareAgent A software agent.
 type SoftwareAgent struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SoftwareAgent"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SoftwareAgent" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Agent
 }
 
@@ -3076,17 +3067,16 @@ type AnySoftwareArtifact interface {
 
 // SoftwareArtifact A distinct article or unit related to Software.
 type SoftwareArtifact struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
 	Artifact
-	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be\nused for verifying its identity and/or integrity.
+	// ContentIdentifiers A canonical, unique, immutable identifier of the artifact content, that may be used for verifying its identity and/or integrity.
 	ContentIdentifiers ContentIdentifierList `iri:"https://spdx.org/rdf/3.0.1/terms/Software/contentIdentifier" type:"https://spdx.org/rdf/3.0.1/terms/Software/ContentIdentifier"`
-	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for\na software Package, File or Snippet.
+	// AttributionTexts Provides a place for the SPDX data creator to record acknowledgement text for a software Package, File or Snippet.
 	AttributionTexts []string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/attributionText" type:"http://www.w3.org/2001/XMLSchema#string"`
 	// AdditionalPurposes Provides additional purpose information of the software artifact.
 	AdditionalPurposes []SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
 	// PrimaryPurpose Provides information about the primary purpose of the software artifact.
 	PrimaryPurpose SoftwarePurpose `iri:"https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
-	// CopyrightText Identifies the text of one or more copyright notices for a software Package,\nFile or Snippet, if any.
+	// CopyrightText Identifies the text of one or more copyright notices for a software Package, File or Snippet, if any.
 	CopyrightText string `iri:"https://spdx.org/rdf/3.0.1/terms/Software/copyrightText" type:"http://www.w3.org/2001/XMLSchema#string"`
 }
 
@@ -3122,7 +3112,7 @@ func (o *SoftwareArtifactList) SoftwareArtifacts() ld.TypeSeq[AnySoftwareArtifac
 
 // SoftwarePurpose Provides information about the primary purpose of an Element.
 type SoftwarePurpose struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -3278,9 +3268,9 @@ type AnySpdxDocument interface {
 
 // SpdxDocument A collection of SPDX Elements that could potentially be serialized.
 type SpdxDocument struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SpdxDocument"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SpdxDocument" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	ElementCollection
-	// DataLicense Provides the license under which the SPDX documentation of the Element can be\nused.
+	// DataLicense Provides the license under which the SPDX documentation of the Element can be used.
 	DataLicense AnyLicenseInfo `iri:"https://spdx.org/rdf/3.0.1/terms/Core/dataLicense" type:"https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"`
 	// NamespaceMaps Provides a NamespaceMap of prefixes and associated namespace partial URIs applicable to an SpdxDocument and independent of any specific serialization format or instance.
 	NamespaceMaps NamespaceMapList `iri:"https://spdx.org/rdf/3.0.1/terms/Core/namespaceMap" type:"https://spdx.org/rdf/3.0.1/terms/Core/NamespaceMap"`
@@ -3300,7 +3290,7 @@ func (o *SpdxDocumentList) SpdxDocuments() ld.TypeSeq[AnySpdxDocument, *SpdxDocu
 
 // SsvcDecisionType Specifies the SSVC decision type.
 type SsvcDecisionType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -3331,9 +3321,9 @@ type AnySsvcVulnAssessmentRelationship interface {
 
 // SsvcVulnAssessmentRelationship Provides an SSVC assessment for a vulnerability.
 type SsvcVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VulnAssessmentRelationship
-	// DecisionType Provide the enumeration of possible decisions in the\n[Stakeholder-Specific Vulnerability Categorization (SSVC) decision tree](https://www.cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc).
+	// DecisionType Provide the enumeration of possible decisions in the [Stakeholder-Specific Vulnerability Categorization (SSVC) decision tree](https://www.cisa.gov/stakeholder-specific-vulnerability-categorization-ssvc).
 	DecisionType SsvcDecisionType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/decisionType" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/Security/SsvcDecisionType"`
 }
 
@@ -3349,7 +3339,7 @@ func (o *SsvcVulnAssessmentRelationshipList) SsvcVulnAssessmentRelationships() l
 
 // SupportType Indicates the type of support that is associated with an artifact.
 type SupportType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/SupportType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -3395,7 +3385,7 @@ type AnyTool interface {
 
 // Tool An element of hardware and/or software utilized to carry out a particular function.
 type Tool struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Tool"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Core/Tool" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Element
 }
 
@@ -3414,13 +3404,13 @@ type AnyVexAffectedVulnAssessmentRelationship interface {
 	asVexAffectedVulnAssessmentRelationship() *VexAffectedVulnAssessmentRelationship
 }
 
-// VexAffectedVulnAssessmentRelationship Connects a vulnerability and an element designating the element as a product\naffected by the vulnerability.
+// VexAffectedVulnAssessmentRelationship Connects a vulnerability and an element designating the element as a product affected by the vulnerability.
 type VexAffectedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexAffectedVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VexVulnAssessmentRelationship
-	// ActionStatement Provides advise on how to mitigate or remediate a vulnerability when a VEX product\nis affected by it.
+	// ActionStatement Provides advise on how to mitigate or remediate a vulnerability when a VEX product is affected by it.
 	ActionStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatement" required:"true" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// ActionStatementTime Records the time when a recommended action was communicated in a VEX statement\nto mitigate a vulnerability.
+	// ActionStatementTime Records the time when a recommended action was communicated in a VEX statement to mitigate a vulnerability.
 	ActionStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/actionStatementTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
 }
 
@@ -3439,9 +3429,9 @@ type AnyVexFixedVulnAssessmentRelationship interface {
 	asVexFixedVulnAssessmentRelationship() *VexFixedVulnAssessmentRelationship
 }
 
-// VexFixedVulnAssessmentRelationship Links a vulnerability and elements representing products (in the VEX sense) where\na fix has been applied and are no longer affected.
+// VexFixedVulnAssessmentRelationship Links a vulnerability and elements representing products (in the VEX sense) where a fix has been applied and are no longer affected.
 type VexFixedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexFixedVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexFixedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VexVulnAssessmentRelationship
 }
 
@@ -3457,7 +3447,7 @@ func (o *VexFixedVulnAssessmentRelationshipList) VexFixedVulnAssessmentRelations
 
 // VexJustificationType Specifies the VEX justification type.
 type VexJustificationType struct {
-	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType"`
+	_  ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType" node-kind:""`
 	id string  `iri:"@id"`
 }
 
@@ -3491,15 +3481,15 @@ type AnyVexNotAffectedVulnAssessmentRelationship interface {
 	asVexNotAffectedVulnAssessmentRelationship() *VexNotAffectedVulnAssessmentRelationship
 }
 
-// VexNotAffectedVulnAssessmentRelationship Links a vulnerability and one or more elements designating the latter as products\nnot affected by the vulnerability.
+// VexNotAffectedVulnAssessmentRelationship Links a vulnerability and one or more elements designating the latter as products not affected by the vulnerability.
 type VexNotAffectedVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexNotAffectedVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexNotAffectedVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VexVulnAssessmentRelationship
 	// ImpactStatementTime Timestamp of impact statement.
 	ImpactStatementTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatementTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// ImpactStatement Explains why a VEX product is not affected by a vulnerability. It is an\nalternative in VexNotAffectedVulnAssessmentRelationship to the machine-readable\njustification label.
+	// ImpactStatement Explains why a VEX product is not affected by a vulnerability. It is an alternative in VexNotAffectedVulnAssessmentRelationship to the machine-readable justification label.
 	ImpactStatement string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/impactStatement" type:"http://www.w3.org/2001/XMLSchema#string"`
-	// JustificationType Impact justification label to be used when linking a vulnerability to an element\nrepresenting a VEX product with a VexNotAffectedVulnAssessmentRelationship\nrelationship.
+	// JustificationType Impact justification label to be used when linking a vulnerability to an element representing a VEX product with a VexNotAffectedVulnAssessmentRelationship relationship.
 	JustificationType VexJustificationType `iri:"https://spdx.org/rdf/3.0.1/terms/Security/justificationType" type:"https://spdx.org/rdf/3.0.1/terms/Security/VexJustificationType"`
 }
 
@@ -3518,9 +3508,9 @@ type AnyVexUnderInvestigationVulnAssessmentRelationship interface {
 	asVexUnderInvestigationVulnAssessmentRelationship() *VexUnderInvestigationVulnAssessmentRelationship
 }
 
-// VexUnderInvestigationVulnAssessmentRelationship Designates elements as products where the impact of a vulnerability is being\ninvestigated.
+// VexUnderInvestigationVulnAssessmentRelationship Designates elements as products where the impact of a vulnerability is being investigated.
 type VexUnderInvestigationVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexUnderInvestigationVulnAssessmentRelationship"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexUnderInvestigationVulnAssessmentRelationship" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	VexVulnAssessmentRelationship
 }
 
@@ -3541,7 +3531,6 @@ type AnyVexVulnAssessmentRelationship interface {
 
 // VexVulnAssessmentRelationship Abstract ancestor class for all VEX relationships
 type VexVulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VexVulnAssessmentRelationship"`
 	VulnAssessmentRelationship
 	// StatusNotes Conveys information about how VEX status was determined.
 	StatusNotes string `iri:"https://spdx.org/rdf/3.0.1/terms/Security/statusNotes" type:"http://www.w3.org/2001/XMLSchema#string"`
@@ -3582,13 +3571,12 @@ type AnyVulnAssessmentRelationship interface {
 
 // VulnAssessmentRelationship Abstract ancestor class for all vulnerability assessments
 type VulnAssessmentRelationship struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/VulnAssessmentRelationship"`
 	Relationship
-	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship\nreferenced by the Element.
+	// SuppliedBy Identifies who or what supplied the artifact or VulnAssessmentRelationship referenced by the Element.
 	SuppliedBy AnyAgent `iri:"https://spdx.org/rdf/3.0.1/terms/Core/suppliedBy" type:"https://spdx.org/rdf/3.0.1/terms/Core/Agent"`
 	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
 	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
-	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was\nfound.
+	// AssessedElement Specifies an Element contained in a piece of software where a vulnerability was found.
 	AssessedElement AnySoftwareArtifact `iri:"https://spdx.org/rdf/3.0.1/terms/Security/assessedElement" type:"https://spdx.org/rdf/3.0.1/terms/Software/SoftwareArtifact"`
 	// PublishedTime Specifies the time when a vulnerability was published.
 	PublishedTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/publishedTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
@@ -3657,7 +3645,7 @@ type AnyVulnerability interface {
 
 // Vulnerability Specifies a vulnerability and its associated information.
 type Vulnerability struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/Vulnerability"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/Security/Vulnerability" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	Artifact
 	// WithdrawnTime Specified the time and date when a vulnerability was withdrawn.
 	WithdrawnTime time.Time `iri:"https://spdx.org/rdf/3.0.1/terms/Security/withdrawnTime" type:"http://www.w3.org/2001/XMLSchema#dateTimeStamp"`
@@ -3682,9 +3670,9 @@ type AnyWithAdditionOperator interface {
 	asWithAdditionOperator() *WithAdditionOperator
 }
 
-// WithAdditionOperator Portion of an AnyLicenseInfo representing a License which has additional\ntext applied to it.
+// WithAdditionOperator Portion of an AnyLicenseInfo representing a License which has additional text applied to it.
 type WithAdditionOperator struct {
-	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/WithAdditionOperator"`
+	_ ld.Type `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/WithAdditionOperator" node-kind:"http://www.w3.org/ns/shacl#IRI"`
 	LicenseInfo
 	// SubjectExtendableLicense A License participating in a 'with addition' model.
 	SubjectExtendableLicense AnyExtendableLicense `iri:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/subjectExtendableLicense" required:"true" type:"https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/ExtendableLicense"`
@@ -3729,8 +3717,8 @@ func (o *ExternalIRI) asArtifact() *Artifact {
 	return castArtifact(o.value)
 }
 
-func (o *ExternalIRI) asBom() *Bom {
-	return castBom(o.value)
+func (o *ExternalIRI) asBOM() *BOM {
+	return castBOM(o.value)
 }
 
 func (o *ExternalIRI) asBuild() *Build {
@@ -3917,8 +3905,8 @@ func (o *ExternalIRI) asRelationship() *Relationship {
 	return castRelationship(o.value)
 }
 
-func (o *ExternalIRI) asSbom() *Sbom {
-	return castSbom(o.value)
+func (o *ExternalIRI) asSBOM() *SBOM {
+	return castSBOM(o.value)
 }
 
 func (o *ExternalIRI) asSimpleLicensingText() *SimpleLicensingText {
@@ -4009,9 +3997,9 @@ func castArtifact(o any) *Artifact {
 	return nil
 }
 
-func castBom(o any) *Bom {
-	if o, ok := o.(AnyBom); ok {
-		return o.asBom()
+func castBOM(o any) *BOM {
+	if o, ok := o.(AnyBOM); ok {
+		return o.asBOM()
 	}
 	return nil
 }
@@ -4338,9 +4326,9 @@ func castRelationship(o any) *Relationship {
 	return nil
 }
 
-func castSbom(o any) *Sbom {
-	if o, ok := o.(AnySbom); ok {
-		return o.asSbom()
+func castSBOM(o any) *SBOM {
+	if o, ok := o.(AnySBOM); ok {
+		return o.asSBOM()
 	}
 	return nil
 }
@@ -4450,7 +4438,7 @@ func castWithAdditionOperator(o any) *WithAdditionOperator {
 	return nil
 }
 
-func cast[T any](value any) *T {
+func Cast[T any](value any) *T {
 	var t T
 	switch any(t).(type) {
 	case AIPackage:
@@ -4469,8 +4457,8 @@ func cast[T any](value any) *T {
 		if v, ok := any(castArtifact(value)).(*T); ok {
 			return v
 		}
-	case Bom:
-		if v, ok := any(castBom(value)).(*T); ok {
+	case BOM:
+		if v, ok := any(castBOM(value)).(*T); ok {
 			return v
 		}
 	case Build:
@@ -4657,8 +4645,8 @@ func cast[T any](value any) *T {
 		if v, ok := any(castRelationship(value)).(*T); ok {
 			return v
 		}
-	case Sbom:
-		if v, ok := any(castSbom(value)).(*T); ok {
+	case SBOM:
+		if v, ok := any(castSBOM(value)).(*T); ok {
 			return v
 		}
 	case SimpleLicensingText:
@@ -4726,7 +4714,7 @@ func cast[T any](value any) *T {
 }
 
 func As[T any, R any](value any, fn func(v *T) R) R {
-	v := cast[T](value)
+	v := Cast[T](value)
 	if v != nil {
 		return fn(v)
 	}
@@ -4734,10 +4722,11 @@ func As[T any, R any](value any, fn func(v *T) R) R {
 	return r
 }
 
-// Cast provides a reference to any direct or embedded type, which can be edited directly
-func Cast[T any](value any) *T {
-	return cast[T](value)
-}
+type (
+	PositiveInt    = ld.PositiveInt
+	URI            = ld.URI
+	NonNegativeInt = ld.NonNegativeInt
+)
 
 func context() ld.Context {
 	return ld.NewContext().Register("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", map[string]any{"@context": map[string]any{
@@ -5510,7 +5499,7 @@ func context() ld.Context {
 		AnnotationType_Other,
 		AnnotationType_Review,
 		Artifact{},
-		Bom{},
+		BOM{},
 		Build{},
 		Bundle{},
 		CdxPropertiesExtension{},
@@ -5584,7 +5573,7 @@ func context() ld.Context {
 		ExternalIdentifierType_Email,
 		ExternalIdentifierType_Gitoid,
 		ExternalIdentifierType_Other,
-		ExternalIdentifierType_PackageUrl,
+		ExternalIdentifierType_PackageURL,
 		ExternalIdentifierType_SecurityOther,
 		ExternalIdentifierType_Swhid,
 		ExternalIdentifierType_Swid,
@@ -5775,12 +5764,12 @@ func context() ld.Context {
 		RelationshipType_TrainedOn,
 		RelationshipType_UnderInvestigationFor,
 		RelationshipType_UsesTool,
+		SBOM{},
 		SafetyRiskAssessmentType{},
 		SafetyRiskAssessmentType_High,
 		SafetyRiskAssessmentType_Low,
 		SafetyRiskAssessmentType_Medium,
 		SafetyRiskAssessmentType_Serious,
-		Sbom{},
 		SbomType{},
 		SbomType_Analyzed,
 		SbomType_Build,

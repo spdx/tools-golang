@@ -14,6 +14,7 @@ import (
 	"github.com/spdx/tools-golang/spdx/v2/v2_1"
 	"github.com/spdx/tools-golang/spdx/v2/v2_2"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/v3_0_1"
 )
 
 // Read takes an io.Reader and returns a fully-parsed current model SPDX Document
@@ -70,6 +71,13 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		data = doc
 	case v2_3.Version:
 		var doc v2_3.Document
+		err = json.Unmarshal(buf.Bytes(), &doc)
+		if err != nil {
+			return err
+		}
+		data = doc
+	case v3_0_1.Version:
+		var doc v3_0_1.Document
 		err = json.Unmarshal(buf.Bytes(), &doc)
 		if err != nil {
 			return err
