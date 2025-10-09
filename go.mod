@@ -7,7 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
-	github.com/kzantow/go-ld v0.0.0-20251008203417-8880260cce9c
+	github.com/kzantow/go-ld v0.0.0-20251008235635-4379583bef45
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb
 	github.com/stretchr/testify v1.11.1

@@ -61,12 +61,11 @@ func renameFunc(typ shaclgen.NameType, name string, c *shaclgen.Class) string {
 		}
 
 		return replaceSuffixes(name, map[string]string{
-			"Bies":           "By",
-			"Tos":            "To",
-			"CreatedUsings":  "CreatedUsing",
-			"VerifiedUsings": "VerifiedUsing",
-			"Id":             "ID",
-			"Url":            "URL",
+			"Bies":   "By",
+			"Tos":    "To",
+			"Usings": "Using",
+			"Id":     "ID",
+			"Url":    "URL",
 		})
 	}
 	switch name {
