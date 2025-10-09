@@ -1,4 +1,4 @@
-package v3_0_1
+package v3_0
 
 import (
 	"bytes"
@@ -51,6 +51,20 @@ func (d *Document) Write(w io.Writer) error {
 }
 
 func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
+	if createdBy == nil {
+		createdBy = &SoftwareAgent{
+			ID:                  "",
+			Description:         "",
+			Comment:             "",
+			Name:                "tools-golang",
+			Extensions:          nil,
+			CreationInfo:        nil,
+			ExternalIdentifiers: nil,
+			ExternalRefs:        nil,
+			Summary:             "",
+			VerifiedUsing:       nil,
+		}
+	}
 	ci := &CreationInfo{
 		SpecVersion:  Version,
 		Created:      time.Now(),

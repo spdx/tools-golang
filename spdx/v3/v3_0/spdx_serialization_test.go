@@ -1,4 +1,4 @@
-package v3_0_1
+package v3_0
 
 import (
 	"bytes"
@@ -144,7 +144,7 @@ func Test_externalID(t *testing.T) {
 	encodeDecode(t, doc)
 }
 
-// encodeDecode encodes to JSON, decodes from the JSON, and re-encodes in JSON to validate nothing is lost
+// encodeDecode encodes to JSON, decodes from the JSON and compares the decoded struct against the input
 func encodeDecode[T comparable](t *testing.T, obj T) T {
 	// serialization:
 	buf := bytes.Buffer{}
@@ -155,7 +155,6 @@ func encodeDecode[T comparable](t *testing.T, obj T) T {
 	}
 
 	json1 := buf.String()
-	t.Logf("--------- initial JSON: ----------\n%s\n\n", json1)
 
 	// deserialization:
 	graph, err := context().FromJSON(strings.NewReader(json1))

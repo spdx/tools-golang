@@ -1,4 +1,4 @@
-package v3_0_1
+package v3_0
 
 import (
 	"time"
@@ -96,8 +96,8 @@ func v301doc() *Document {
 
 func v301creationInfo() *CreationInfo {
 	return &CreationInfo{
-
-		Created: parseTime("2023-01-15T10:30:00Z"),
+		SpecVersion: Version,
+		Created:     parseTime("2023-01-15T10:30:00Z"),
 		CreatedBy: AgentList{
 			&Person{
 				Name:                "John Doe",

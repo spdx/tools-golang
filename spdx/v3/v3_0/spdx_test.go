@@ -1,9 +1,8 @@
-package v3_0_1_test
+package v3_0_test
 
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -15,7 +14,7 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/require"
 
-	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0_1"
+	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0"
 )
 
 func Test_customSerialization(t *testing.T) {
@@ -48,8 +47,6 @@ func Test_customSerialization(t *testing.T) {
 
 	validationErr := d.Validate(false)
 	require.Error(t, validationErr) // we did not set creationInfo, should be invalid document
-	t.Log(validationErr.Error())
-
 	contents := bytes.Buffer{}
 	err := d.ToJSON(&contents)
 	require.NoError(t, err)
@@ -178,8 +175,6 @@ func Test_writer(t *testing.T) {
 	buf := bytes.Buffer{}
 	err = d.ToJSON(&buf)
 	require.NoError(t, err)
-	fmt.Printf("%#v\n", buf.String())
-
 	d2 := newTestDocument()
 	err = d2.FromJSON(&buf)
 	require.NoError(t, err)
@@ -255,8 +250,6 @@ func Test_reader(t *testing.T) {
 	d := newTestDocument()
 	err = d.FromJSON(f)
 	require.NoError(t, err)
-	t.Logf("sample document:\n%#v", d)
-
 	sboms := d.RootElements.SBOMs()
 	require.Len(t, sboms, 1)
 
@@ -279,7 +272,6 @@ func Test_readerExpanded(t *testing.T) {
 	d := newTestDocument()
 	err = d.FromJSON(f)
 	require.NoError(t, err)
-	fmt.Printf("%#v\n", d)
 	for _, fi := range d.Elements.Files() {
 		//println("File ID: " + fi.ID)
 		println("File Name: " + fi.GetName())
@@ -395,7 +387,6 @@ func Test_exportImportExport(t *testing.T) {
 	}
 
 	json1 := buf.String()
-	fmt.Printf("--------- initial JSON: ----------\n%s\n\n", json1)
 
 	// deserialize to a new document
 
@@ -413,7 +404,6 @@ func Test_exportImportExport(t *testing.T) {
 		t.Error(err)
 	}
 	json2 := buf.String()
-	fmt.Printf("--------- reserialized JSON: ----------\n%s\n", json2)
 
 	// compare original to parsed and re-encoded
 
@@ -488,7 +478,6 @@ func Test_aiProfile(t *testing.T) {
 	}
 
 	json1 := buf.String()
-	fmt.Printf("--------- initial JSON: ----------\n%s\n\n", json1)
 
 	// deserialize to a new document
 
@@ -507,7 +496,6 @@ func Test_aiProfile(t *testing.T) {
 		t.Error(err)
 	}
 	json2 := buf.String()
-	fmt.Printf("--------- reserialized JSON: ----------\n%s\n", json2)
 
 	// compare original to parsed and re-encoded
 

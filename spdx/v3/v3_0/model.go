@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-package v3_0_1
+package v3_0
 
 import (
 	"time"

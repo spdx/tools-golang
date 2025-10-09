@@ -1,4 +1,4 @@
-package v3_0_1
+package v3_0
 
 import (
 	"github.com/spdx/tools-golang/spdx/v2/common"

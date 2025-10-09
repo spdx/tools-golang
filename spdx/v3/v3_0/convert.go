@@ -1,4 +1,4 @@
-package v3_0_1
+package v3_0
 
 import (
 	"fmt"
@@ -86,10 +86,6 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 }
 
 func newDocumentConverter(d *Document) *documentConverter {
-	// Java tools prefix all these values with: http://spdx.org/rdf/references/
-	// I'm assuming this is because they are converted to RDF when imported, which we are not doing
-	const referencePrefix = ""
-
 	if d.LDContext == nil {
 		d.LDContext = context()
 	}
@@ -185,23 +181,23 @@ func newDocumentConverter(d *Document) *documentConverter {
 			"REVIEW": AnnotationType_Review,
 		}),
 		contentIdentifierTypeMap: duplicateLower(map[string]ContentIdentifierType{
-			referencePrefix + "gitoid": ContentIdentifierType_Gitoid,
-			referencePrefix + "swh":    ContentIdentifierType_Swhid,
+			"gitoid": ContentIdentifierType_Gitoid,
+			"swh":    ContentIdentifierType_Swhid,
 		}),
 		externalIdentifierTypeMap: duplicateLower(map[string]ExternalIdentifierType{
-			referencePrefix + "cpe22Type": ExternalIdentifierType_Cpe22,
-			referencePrefix + "cpe23Type": ExternalIdentifierType_Cpe23,
-			referencePrefix + "swid":      ExternalIdentifierType_Swid,
-			referencePrefix + "purl":      ExternalIdentifierType_PackageURL,
+			"cpe22Type": ExternalIdentifierType_Cpe22,
+			"cpe23Type": ExternalIdentifierType_Cpe23,
+			"swid":      ExternalIdentifierType_Swid,
+			"purl":      ExternalIdentifierType_PackageURL,
 		}),
 		externalRefTypeMap: duplicateLower(map[string]ExternalRefType{
-			referencePrefix + "maven-central": ExternalRefType_MavenCentral,
-			referencePrefix + "npm":           ExternalRefType_Npm,
-			referencePrefix + "nuget":         ExternalRefType_Nuget,
-			referencePrefix + "bower":         ExternalRefType_Bower,
-			referencePrefix + "advisory":      ExternalRefType_SecurityAdvisory,
-			referencePrefix + "fix":           ExternalRefType_SecurityFix,
-			referencePrefix + "url":           ExternalRefType_SecurityOther,
+			"maven-central": ExternalRefType_MavenCentral,
+			"npm":           ExternalRefType_Npm,
+			"nuget":         ExternalRefType_Nuget,
+			"bower":         ExternalRefType_Bower,
+			"advisory":      ExternalRefType_SecurityAdvisory,
+			"fix":           ExternalRefType_SecurityFix,
+			"url":           ExternalRefType_SecurityOther,
 		}),
 		primaryPurposeMap: duplicateLower(map[string]SoftwarePurpose{
 			"APPLICATION":      SoftwarePurpose_Application,
@@ -308,8 +304,7 @@ func (c *documentConverter) convert23creationInfo(info *v2_3.CreationInfo) AnyCr
 		Created:      c.convert23time(info.Created),
 		CreatedBy:    list[AgentList](c.convert23creator, info.Creators...),
 		CreatedUsing: list[ToolList](c.convert23tool, info.Creators...),
-		// TODO should this be set?
-		// SpecVersion:  info.LicenseListVersion,
+		SpecVersion:  Version, // specVersion is always the current version
 	}
 
 	// update circular references, which will be set to nil by default
@@ -344,10 +339,16 @@ func (c *documentConverter) convert23creator(creator common.Creator) AnyAgent {
 }
 
 func (c *documentConverter) convert23originator(creator *common.Originator) AnyAgent {
+	if creator == nil {
+		return nil
+	}
 	return c.convert23agent(creator.OriginatorType, creator.Originator)
 }
 
 func (c *documentConverter) convert23supplier(creator *common.Supplier) AnyAgent {
+	if creator == nil {
+		return nil
+	}
 	return c.convert23agent(creator.SupplierType, creator.Supplier)
 }
 
@@ -590,7 +591,7 @@ func (c *documentConverter) logDropped(value any) {
 
 func (c *documentConverter) convert23packageUrl(references []*v2_3.PackageExternalReference) ld.URI {
 	for _, ref := range references {
-		if ref.RefType == common.TypePackageManagerPURL {
+		if ref != nil && ref.RefType == common.TypePackageManagerPURL {
 			return c.convert23uri(ref.Locator)
 		}
 	}
