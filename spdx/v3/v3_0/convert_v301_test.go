@@ -3,9 +3,8 @@ package v3_0
 import (
 	"time"
 
-	"github.com/kzantow/go-ld"
-
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
 func v301doc() *Document {

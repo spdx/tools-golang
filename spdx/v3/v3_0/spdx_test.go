@@ -10,10 +10,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/kzantow/go-ld"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/require"
 
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 	spdx "github.com/spdx/tools-golang/spdx/v3/v3_0"
 )
 

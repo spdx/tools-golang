@@ -11,7 +11,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/kzantow/go-ld"
+
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
 var Debug = os.Getenv("SPDX_DEBUG") == "true"

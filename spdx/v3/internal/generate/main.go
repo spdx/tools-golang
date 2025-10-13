@@ -7,17 +7,17 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kzantow/go-ld/shaclgen"
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld/shaclgen"
 )
 
 func main() {
 	versions := []string{
-		//"3.0.0",
 		"3.0.1",
 	}
 
 	for _, version := range versions {
 		packageName := "v" + strings.ReplaceAll(version, ".", "_")
+		packageName = strings.Join(strings.Split(packageName, "_")[:2], "_") // only generate the latest patch for each minor version
 		fileName, err := filepath.Abs(fmt.Sprintf("spdx/v3/%s/model.go", packageName))
 		if err != nil {
 			panic(err)

@@ -8,10 +8,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
-	"github.com/kzantow/go-ld"
-
 	"github.com/spdx/tools-golang/spdx/v3/internal"
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
 /*
@@ -162,7 +160,7 @@ func (d *Document) ensureAllDocumentElements() {
 	for _, e := range d.Elements {
 		v := reflect.ValueOf(e)
 		if v.Kind() != reflect.Pointer {
-			panic("non-pointer type in elements: %v" + spew.Sdump(v))
+			panic(fmt.Sprintf("non-pointer type in elements: %#v", v))
 		}
 		all[v] = struct{}{}
 	}

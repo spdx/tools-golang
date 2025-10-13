@@ -9,11 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kzantow/go-ld"
-
 	"github.com/spdx/tools-golang/spdx/v2/common"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
 	"github.com/spdx/tools-golang/spdx/v3/internal"
+	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
 func From_v2_3(doc v2_3.Document, d *Document) {

@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"reflect"
 	"regexp"
 
 	"github.com/spdx/tools-golang/convert"
@@ -101,12 +100,6 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		err = json.Unmarshal(contents, &in)
 		if err != nil {
 			return err
-		}
-
-		fromType := reflect.TypeOf(in)
-		toType := reflect.TypeOf(doc).Elem()
-		if fromType != toType {
-			return fmt.Errorf("unable to convert %v backwards to %v", fromType, toType)
 		}
 		data = in
 	default:
