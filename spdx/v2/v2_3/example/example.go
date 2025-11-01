@@ -41,7 +41,7 @@ var example = spdx.Document{
 	DocumentComment: "This document was created using SPDX 2.0 using licenses from the web site.",
 	ExternalDocumentReferences: []spdx.ExternalDocumentRef{
 		{
-			DocumentRefID: "DocumentRef-spdx-tool-1.2",
+			DocumentRefID: "spdx-tool-1.2",
 			URI:           "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
 			Checksum: common.Checksum{
 				Algorithm: common.SHA1,

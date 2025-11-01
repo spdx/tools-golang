@@ -112,7 +112,7 @@ func ExtractDocElementID(value string) (common.DocElementID, error) {
 	}
 
 	// we're good
-	return common.DocElementID{DocumentRefID: docRefID, ElementRefID: common.ElementID(eltRefID)}, nil
+	return common.DocElementID{DocumentRefID: common.DocumentID(docRefID), ElementRefID: common.ElementID(eltRefID)}, nil
 }
 
 // used to extract SPDXRef values only from an SPDX Identifier which can point

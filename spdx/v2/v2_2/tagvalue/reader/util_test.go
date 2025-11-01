@@ -58,7 +58,7 @@ func helperForExtractDocElementID(t *testing.T, tst string, wantErr bool, wantDo
 	if err == nil && wantErr == true {
 		t.Errorf("testing %v: expected non-nil error, got nil", tst)
 	}
-	if deID.DocumentRefID != wantDoc {
+	if deID.DocumentRefID != common.DocumentID(wantDoc) {
 		if wantDoc == "" {
 			t.Errorf("testing %v: want empty string for DocumentRefID, got %v", tst, deID.DocumentRefID)
 		} else {
@@ -96,7 +96,7 @@ func helperForExtractDocElementSpecial(t *testing.T, permittedSpecial []string, 
 	if err == nil && wantErr == true {
 		t.Errorf("testing %v: expected non-nil error, got nil", tst)
 	}
-	if deID.DocumentRefID != wantDoc {
+	if deID.DocumentRefID != common.DocumentID(wantDoc) {
 		if wantDoc == "" {
 			t.Errorf("testing %v: want empty string for DocumentRefID, got %v", tst, deID.DocumentRefID)
 		} else {
