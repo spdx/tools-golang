@@ -51,12 +51,10 @@ func prefixDocumentId(id DocumentID) string {
 // does not start with DocumentRef-
 func trimDocumentIdPrefix(id string) (DocumentID, error) {
 	// handle DocumentRef-
-	idFields := strings.SplitN(id, documentRefPrefix, 2)
-	if len(idFields) != 2 {
+	if !strings.HasPrefix(id, documentRefPrefix) {
 		return "", fmt.Errorf("failed to parse SPDX identifier '%s'", id)
 	}
-
-	e := DocumentID(idFields[1])
+	e := DocumentID(strings.TrimPrefix(id, documentRefPrefix))
 	return e, nil
 }
 
@@ -98,12 +96,10 @@ func prefixElementId(id ElementID) string {
 // does not start with SPDXRef-
 func trimElementIdPrefix(id string) (ElementID, error) {
 	// handle SPDXRef-
-	idFields := strings.SplitN(id, spdxRefPrefix, 2)
-	if len(idFields) != 2 {
+	if !strings.HasPrefix(id, spdxRefPrefix) {
 		return "", fmt.Errorf("failed to parse SPDX identifier '%s'", id)
 	}
-
-	e := ElementID(idFields[1])
+	e := ElementID(strings.TrimPrefix(id, spdxRefPrefix))
 	return e, nil
 }
 
