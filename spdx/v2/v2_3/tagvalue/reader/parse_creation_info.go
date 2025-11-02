@@ -106,7 +106,7 @@ func (parser *tvParser) parsePairFromCreationInfo(tag string, value string) erro
 
 // ===== Helper functions =====
 
-func extractExternalDocumentReference(value string) (common.DocumentID, string, string, string, error) {
+func extractExternalDocumentReference(value string) (string, string, string, string, error) {
 	sp := strings.Split(value, " ")
 	// remove any that are just whitespace
 	keepSp := []string{}
@@ -117,43 +117,42 @@ func extractExternalDocumentReference(value string) (common.DocumentID, string, 
 		}
 	}
 
-	var documentRefID common.DocumentID
-	var strDocRefID, uri, alg, checksum string
+	var documentRefID, uri, alg, checksum string
 
 	// now, should have 4 items (or 3, if Alg and Checksum were joined)
 	// and should be able to map them
 	if len(keepSp) == 4 {
-		strDocRefID = keepSp[0]
+		documentRefID = keepSp[0]
 		uri = keepSp[1]
 		alg = keepSp[2]
 		// check that colon is present for alg, and remove it
 		if !strings.HasSuffix(alg, ":") {
-			return common.DocumentID(""), "", "", "", fmt.Errorf("algorithm does not end with colon")
+			return "", "", "", "", fmt.Errorf("algorithm does not end with colon")
 		}
 		alg = strings.TrimSuffix(alg, ":")
 		checksum = keepSp[3]
 	} else if len(keepSp) == 3 {
-		strDocRefID = keepSp[0]
+		documentRefID = keepSp[0]
 		uri = keepSp[1]
 		// split on colon into alg and checksum
 		parts := strings.SplitN(keepSp[2], ":", 2)
 		if len(parts) != 2 {
-			return common.DocumentID(""), "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
+			return "", "", "", "", fmt.Errorf("missing colon separator between algorithm and checksum")
 		}
 		alg = parts[0]
 		checksum = parts[1]
 	} else {
-		return common.DocumentID(""), "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
+		return "", "", "", "", fmt.Errorf("expected 4 elements, got %d", len(keepSp))
 	}
 
 	// additionally, we should be able to parse the first element as a
 	// DocumentRef- ID string, and we should remove that prefix
-	if !strings.HasPrefix(strDocRefID, "DocumentRef-") {
-		return common.DocumentID(""), "", "", "", fmt.Errorf("expected first element to have DocumentRef- prefix")
+	if !strings.HasPrefix(documentRefID, "DocumentRef-") {
+		return "", "", "", "", fmt.Errorf("expected first element to have DocumentRef- prefix")
 	}
-	documentRefID = common.DocumentID(strings.TrimPrefix(strDocRefID, "DocumentRef-"))
+	documentRefID = strings.TrimPrefix(documentRefID, "DocumentRef-")
 	if documentRefID == "" {
-		return common.DocumentID(""), "", "", "", fmt.Errorf("document identifier has nothing after prefix")
+		return "", "", "", "", fmt.Errorf("document identifier has nothing after prefix")
 	}
 
 	return documentRefID, uri, alg, checksum, nil

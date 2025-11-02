@@ -84,7 +84,7 @@ func (parser *tvParser) parsePairFromStart(tag string, value string) error {
 			return err
 		}
 		edr := spdx.ExternalDocumentRef{
-			DocumentRefID: documentRefID,
+			DocumentRefID: common.DocumentID(documentRefID),
 			URI:           uri,
 			Checksum:      common.Checksum{Algorithm: common.ChecksumAlgorithm(alg), Value: checksum},
 		}

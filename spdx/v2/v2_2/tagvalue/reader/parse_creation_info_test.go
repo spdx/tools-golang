@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	spdx "github.com/spdx/tools-golang/spdx/v2/v2_2"
-	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
 // ===== Parser creation info state change tests =====
@@ -373,7 +372,7 @@ func TestParserCICreatesAnnotation(t *testing.T) {
 
 func TestCanExtractExternalDocumentReference(t *testing.T) {
 	refstring := "DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759"
-	wantDocumentRefID := common.DocumentID("spdx-tool-1.2")
+	wantDocumentRefID := "spdx-tool-1.2"
 	wantURI := "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
 	wantAlg := "SHA1"
 	wantChecksum := "d6a770ba38583ed4bb4525bd96e50461655d2759"
@@ -398,7 +397,7 @@ func TestCanExtractExternalDocumentReference(t *testing.T) {
 
 func TestCanExtractExternalDocumentReferenceWithExtraWhitespace(t *testing.T) {
 	refstring := "   DocumentRef-spdx-tool-1.2    \t http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 \t SHA1:  \t   d6a770ba38583ed4bb4525bd96e50461655d2759"
-	wantDocumentRefID := common.DocumentID("spdx-tool-1.2")
+	wantDocumentRefID := "spdx-tool-1.2"
 	wantURI := "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301"
 	wantAlg := "SHA1"
 	wantChecksum := "d6a770ba38583ed4bb4525bd96e50461655d2759"
