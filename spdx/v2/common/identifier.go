@@ -30,11 +30,7 @@ func (d *DocumentID) UnmarshalJSON(data []byte) error {
 	idStr := string(data)
 	idStr = strings.Trim(idStr, "\"")
 
-	e, err := trimDocumentIdPrefix(idStr)
-	if err != nil {
-		return err
-	}
-	*d = e
+	*d = trimDocumentIdPrefix(idStr)
 	return nil
 }
 
@@ -47,15 +43,9 @@ func prefixDocumentId(id DocumentID) string {
 	return val
 }
 
-// trimDocumentIdPrefix removes the DocumentRef- prefix from an document ID string or returns an error if it
-// does not start with DocumentRef-
-func trimDocumentIdPrefix(id string) (DocumentID, error) {
-	// handle DocumentRef-
-	if !strings.HasPrefix(id, documentRefPrefix) {
-		return "", fmt.Errorf("failed to parse SPDX identifier '%s'", id)
-	}
-	e := DocumentID(strings.TrimPrefix(id, documentRefPrefix))
-	return e, nil
+// trimDocumentIdPrefix removes the DocumentRef- prefix from an document ID string
+func trimDocumentIdPrefix(id string) DocumentID {
+	return DocumentID(strings.TrimPrefix(id, documentRefPrefix))
 }
 
 // ElementID represents the identifier string portion of an SPDX element
@@ -75,11 +65,7 @@ func (d *ElementID) UnmarshalJSON(data []byte) error {
 	idStr := string(data)
 	idStr = strings.Trim(idStr, "\"")
 
-	e, err := trimElementIdPrefix(idStr)
-	if err != nil {
-		return err
-	}
-	*d = e
+	*d = trimElementIdPrefix(idStr)
 	return nil
 }
 
@@ -92,15 +78,9 @@ func prefixElementId(id ElementID) string {
 	return val
 }
 
-// trimElementIdPrefix removes the SPDXRef- prefix from an element ID string or returns an error if it
-// does not start with SPDXRef-
-func trimElementIdPrefix(id string) (ElementID, error) {
-	// handle SPDXRef-
-	if !strings.HasPrefix(id, spdxRefPrefix) {
-		return "", fmt.Errorf("failed to parse SPDX identifier '%s'", id)
-	}
-	e := ElementID(strings.TrimPrefix(id, spdxRefPrefix))
-	return e, nil
+// trimElementIdPrefix removes the SPDXRef- prefix from an element ID string
+func trimElementIdPrefix(id string) ElementID {
+	return ElementID(strings.TrimPrefix(id, spdxRefPrefix))
 }
 
 // DocElementID represents an SPDX element identifier that could be defined
@@ -141,7 +121,7 @@ func (d DocElementID) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON takes a SPDX Identifier string parses it into a DocElementID struct.
 // This function is also used when unmarshalling YAML
-func (d *DocElementID) UnmarshalJSON(data []byte) (err error) {
+func (d *DocElementID) UnmarshalJSON(data []byte) error {
 	// SPDX identifier will simply be a string
 	idStr := string(data)
 	idStr = strings.Trim(idStr, "\"")
@@ -158,11 +138,7 @@ func (d *DocElementID) UnmarshalJSON(data []byte) (err error) {
 		// an SPDXRef can appear after a DocumentRef, separated by a colon
 		idFields = strings.SplitN(idStr, ":", 2)
 
-		d.DocumentRefID, err = trimDocumentIdPrefix(idFields[0])
-		if err != nil {
-			return err
-		}
-
+		d.DocumentRefID = trimDocumentIdPrefix(idFields[0])
 		if len(idFields) == 2 {
 			idStr = idFields[1]
 		} else {
@@ -170,8 +146,8 @@ func (d *DocElementID) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	d.ElementRefID, err = trimElementIdPrefix(idStr)
-	return err
+	d.ElementRefID = trimElementIdPrefix(idStr)
+	return nil
 }
 
 // TODO: add equivalents for LicenseRef- identifiers
