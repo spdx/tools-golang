@@ -37,7 +37,7 @@ func (d *DocumentID) UnmarshalJSON(data []byte) error {
 // prefixDocumentId adds the DocumentRef- prefix to an document ID if it does not have one
 func prefixDocumentId(id DocumentID) string {
 	val := string(id)
-	if !strings.HasPrefix(val, spdxRefPrefix) {
+	if !strings.HasPrefix(val, documentRefPrefix) {
 		return documentRefPrefix + val
 	}
 	return val
