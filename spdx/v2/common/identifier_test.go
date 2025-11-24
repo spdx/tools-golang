@@ -103,14 +103,19 @@ func Test_DocElementIDDecoding(t *testing.T) {
 			},
 		},
 		{
-			name:  "DocumentRefID invalid ElementRefID",
-			value: "DocumentRef-a-doc:invalid",
-			err:   true,
+			name:  "DocumentRefID:ElementRefID without spdxref prefix",
+			value: "DocumentRef-a-doc:some-id",
+			expected: DocElementID{
+				DocumentRefID: "a-doc",
+				ElementRefID:  "some-id",
+			},
 		},
 		{
-			name:  "invalid format",
+			name:  "without spdxref prefix",
 			value: "some-id-without-spdxref",
-			err:   true,
+			expected: DocElementID{
+				ElementRefID: "some-id-without-spdxref",
+			},
 		},
 		{
 			name:  "SpecialID NONE",
@@ -203,9 +208,9 @@ func Test_ElementIDDecoding(t *testing.T) {
 			expected: ElementID("some-id"),
 		},
 		{
-			name:  "invalid format",
+			name:  "without prefix",
 			value: "some-id-without-spdxref",
-			err:   true,
+			expected: ElementID("some-id-without-spdxref"),
 		},
 	}
 
@@ -292,9 +297,11 @@ func Test_ElementIDStructDecoding(t *testing.T) {
 			value: `{"id":"SPDXRef-some-id"}`,
 		},
 		{
-			name:  "invalid format",
+			name:  "without prefix",
+			expected: typ{
+				Id: ElementID("some-id"),
+			},
 			value: `{"id":"some-id"}`,
-			err:   true,
 		},
 	}
 
