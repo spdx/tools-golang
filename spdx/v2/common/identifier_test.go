@@ -103,19 +103,24 @@ func Test_DocElementIDDecoding(t *testing.T) {
 			},
 		},
 		{
+			name:  "DocumentRef with empty suffix",
+			value: "DocumentRef-",
+			err:   true,
+		},
+		{
 			name:  "DocumentRefID:ElementRefID without spdxref prefix",
 			value: "DocumentRef-a-doc:some-id",
-			expected: DocElementID{
-				DocumentRefID: "a-doc",
-				ElementRefID:  "some-id",
-			},
+			err:   true,
+		},
+		{
+			name:  "DocumentRefID:ElementRefID with empty ElementRefID suffix",
+			value: "DocumentRef-a-doc:SPDXRef-",
+			err:   true,
 		},
 		{
 			name:  "without spdxref prefix",
 			value: "some-id-without-spdxref",
-			expected: DocElementID{
-				ElementRefID: "some-id-without-spdxref",
-			},
+			err:   true,
 		},
 		{
 			name:  "SpecialID NONE",
@@ -208,9 +213,14 @@ func Test_ElementIDDecoding(t *testing.T) {
 			expected: ElementID("some-id"),
 		},
 		{
+			name:  "empty id suffix",
+			value: "SPDXRef-",
+			err:   true,
+		},
+		{
 			name:  "without prefix",
 			value: "some-id-without-spdxref",
-			expected: ElementID("some-id-without-spdxref"),
+			err:   true,
 		},
 	}
 
@@ -298,10 +308,8 @@ func Test_ElementIDStructDecoding(t *testing.T) {
 		},
 		{
 			name:  "without prefix",
-			expected: typ{
-				Id: ElementID("some-id"),
-			},
 			value: `{"id":"some-id"}`,
+			err:   true,
 		},
 	}
 
@@ -379,9 +387,14 @@ func Test_DocumentIDDecoding(t *testing.T) {
 			expected: DocumentID("some-id"),
 		},
 		{
+			name:  "empty id suffix",
+			value: "DocumentRef-",
+			err:   true,
+		},
+		{
 			name:  "without prefix",
 			value: "some-id-without-documentref",
-			expected: DocumentID("some-id-without-documentref"),
+			err:   true,
 		},
 	}
 
@@ -468,11 +481,14 @@ func Test_DocumentIDStructDecoding(t *testing.T) {
 			value: `{"id":"DocumentRef-some-id"}`,
 		},
 		{
+			name:  "empty suffix",
+			value: `{"id":"DocumentRef-"}`,
+			err:   true,
+		},
+		{
 			name:  "without prefix",
-			expected: typ{
-				Id: DocumentID("some-id"),
-			},
 			value: `{"id":"some-id"}`,
+			err:   true,
 		},
 	}
 

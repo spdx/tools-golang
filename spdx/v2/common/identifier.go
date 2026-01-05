@@ -30,7 +30,11 @@ func (d *DocumentID) UnmarshalJSON(data []byte) error {
 	idStr := string(data)
 	idStr = strings.Trim(idStr, "\"")
 
-	*d = trimDocumentIdPrefix(idStr)
+	documentID, err := trimDocumentIdPrefix(idStr)
+	if err != nil {
+		return err
+	}
+	*d = documentID
 	return nil
 }
 
@@ -43,9 +47,14 @@ func prefixDocumentId(id DocumentID) string {
 	return val
 }
 
-// trimDocumentIdPrefix removes the DocumentRef- prefix from an document ID string
-func trimDocumentIdPrefix(id string) DocumentID {
-	return DocumentID(strings.TrimPrefix(id, documentRefPrefix))
+// trimDocumentIdPrefix removes the DocumentRef- prefix from an document ID string and
+// returns an error if the prefix isn't present or if the resulting ID is empty.
+func trimDocumentIdPrefix(id string) (DocumentID, error) {
+	idWithoutPrefix, found := strings.CutPrefix(id, documentRefPrefix)
+	if !found || idWithoutPrefix == "" {
+		return DocumentID(""), fmt.Errorf("failed to parse DocumentID: %s", id)
+	}
+	return DocumentID(idWithoutPrefix), nil
 }
 
 // ElementID represents the identifier string portion of an SPDX element
@@ -65,7 +74,11 @@ func (d *ElementID) UnmarshalJSON(data []byte) error {
 	idStr := string(data)
 	idStr = strings.Trim(idStr, "\"")
 
-	*d = trimElementIdPrefix(idStr)
+	elementID, err := trimElementIdPrefix(idStr)
+	if err != nil {
+		return err
+	}
+	*d = elementID
 	return nil
 }
 
@@ -78,9 +91,14 @@ func prefixElementId(id ElementID) string {
 	return val
 }
 
-// trimElementIdPrefix removes the SPDXRef- prefix from an element ID string
-func trimElementIdPrefix(id string) ElementID {
-	return ElementID(strings.TrimPrefix(id, spdxRefPrefix))
+// trimElementIdPrefix removes the SPDXRef- prefix from an element ID string and
+// returns an error if the prefix isn't present or if the resulting ID is empty.
+func trimElementIdPrefix(id string) (ElementID, error) {
+	idWithoutPrefix, found := strings.CutPrefix(id, spdxRefPrefix)
+	if !found || idWithoutPrefix == "" {
+		return ElementID(""), fmt.Errorf("failed to parse ElementID: %s", id)
+	}
+	return ElementID(idWithoutPrefix), nil
 }
 
 // DocElementID represents an SPDX element identifier that could be defined
@@ -138,7 +156,11 @@ func (d *DocElementID) UnmarshalJSON(data []byte) error {
 		// an SPDXRef can appear after a DocumentRef, separated by a colon
 		idFields = strings.SplitN(idStr, ":", 2)
 
-		d.DocumentRefID = trimDocumentIdPrefix(idFields[0])
+		documentRefID, err := trimDocumentIdPrefix(idFields[0])
+		if err != nil {
+			return err
+		}
+		d.DocumentRefID = documentRefID
 		if len(idFields) == 2 {
 			idStr = idFields[1]
 		} else {
@@ -146,7 +168,11 @@ func (d *DocElementID) UnmarshalJSON(data []byte) error {
 		}
 	}
 
-	d.ElementRefID = trimElementIdPrefix(idStr)
+	elementRefID, err := trimElementIdPrefix(idStr)
+	if err != nil {
+		return err
+	}
+	d.ElementRefID = elementRefID
 	return nil
 }
 
