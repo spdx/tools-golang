@@ -5,12 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"reflect"
 	"strings"
 	"time"
-
-	"github.com/google/uuid"
 
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
@@ -21,7 +20,7 @@ type ldContextProvider interface {
 	LDContexts() map[string]map[string]any
 }
 
-func ToJSON(spdxContext string, ldContext ld.Context, document any, writer io.Writer) error {
+func ToJSON(spdxContext string, ldContext ld.Context, document any, idGenerator IdGeneratorFunc, writer io.Writer) error {
 	// we only compact the spdx context, not extensions, so ignore any other contexts
 	ctx := ldContext.(ldContextProvider).LDContexts()[spdxContext]
 	if ctx == nil {
@@ -56,12 +55,12 @@ func ToJSON(spdxContext string, ldContext ld.Context, document any, writer io.Wr
 	}
 
 	s := &serializer{
-		contextURL: spdxContext,
-		aliases:    aliases,
-		prefixes:   prefixes,
-		nextID:     map[reflect.Type]int{},
-		ids:        map[reflect.Value]string{},
-		in:         document,
+		contextURL:  spdxContext,
+		aliases:     aliases,
+		prefixes:    prefixes,
+		idGenerator: idGenerator,
+		ids:         map[reflect.Value]string{},
+		in:          document,
 	}
 
 	maps, err := s.toMaps(document)
@@ -74,14 +73,16 @@ func ToJSON(spdxContext string, ldContext ld.Context, document any, writer io.Wr
 	return enc.Encode(maps)
 }
 
+type IdGeneratorFunc func(id string, value reflect.Value) string
+
 type serializer struct {
-	contextURL string
-	nextID     map[reflect.Type]int
-	ids        map[reflect.Value]string
-	aliases    map[string]string
-	prefixes   map[string]string
-	graph      []any
-	in         any
+	contextURL  string
+	idGenerator IdGeneratorFunc
+	ids         map[reflect.Value]string
+	aliases     map[string]string
+	prefixes    map[string]string
+	graph       []any
+	in          any
 }
 
 func (s *serializer) toMaps(document any) (map[string]any, error) {
@@ -240,7 +241,7 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 
 		if iri == ld.JsonIdProp {
 			// some types must use @id and allow blank node IDs
-			if blankNodeAllowed(ptrV) {
+			if blankNodeAllowed(ptrV.Type()) {
 				//if ld.RefCount(ptrV, s.in) == 1 {
 				//	continue // don't create an ID, output inline
 				//}
@@ -251,20 +252,16 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 			}
 			*idField = k
 			if isUnset(fv) {
-				newID := s.newID(ptrV)
+				newID := s.idGenerator("", ptrV)
 				s.ids[ptrV] = newID
 				fv = reflect.ValueOf(newID)
 			} else {
 				id := fv.String()
-				// FIXME -- figure out the right way to deal with SPDX IDs, which are of the form
 				// SPDXRef-<value> many users will be outputting today, which are not valid URIs
-				if !isURI(id) {
-					id = "spdxid:" + id
+				if !IsURI(id) {
+					id = s.idGenerator(id, ptrV)
 					fv.SetString(id)
 				}
-				//if !strings.HasPrefix(id, "_:") {
-				//	id = "_:" + id
-				//}
 				s.ids[ptrV] = id
 			}
 		}
@@ -273,7 +270,7 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 			if f.Tag.Get("required") != "true" {
 				continue
 			} else if f.Type.Kind() == reflect.Slice {
-				// always output arrays instead of nil
+				// always output arrays instead of nil when required
 				fv = reflect.MakeSlice(f.Type, 0, 0)
 			}
 		}
@@ -289,8 +286,12 @@ func (s *serializer) serializeProps(ptrV reflect.Value, v reflect.Value, idField
 	return errs
 }
 
-func isURI(id string) bool {
-	return strings.HasPrefix(id, "http://") || strings.HasPrefix(id, "https://") || strings.HasPrefix(id, "urn:")
+func IsURI(id string) bool {
+	if id == "" {
+		return false
+	}
+	u, err := url.ParseRequestURI(id)
+	return err == nil && u != nil
 }
 
 func outputInline(v reflect.Value) bool {
@@ -300,22 +301,23 @@ func outputInline(v reflect.Value) bool {
 	if v.Kind() != reflect.Struct {
 		return true
 	}
-	// FIXME determine the correct way to output inline vs reference
 	t := v.Type()
-	_, isElement := t.MethodByName("asElement")
-	if t.Name() == "CreationInfo" || isElement {
+	if t.Name() == "CreationInfo" || !blankNodeAllowed(t) {
 		return false
 	}
 	return true
 }
 
-func blankNodeAllowed(v reflect.Value) bool {
-	if v.Kind() == reflect.Pointer {
-		t := v.Type().Elem()
+func blankNodeAllowed(t reflect.Type) bool {
+	switch t.Kind() {
+	case reflect.Pointer, reflect.Interface:
+		return blankNodeAllowed(t.Elem())
+	case reflect.Struct:
 		f, ok := ld.FieldByType[ld.Type](t)
 		if ok {
 			return strings.Contains(f.Tag.Get(ld.GoNodeKindTagName), "BlankNode")
 		}
+	default:
 	}
 	return false
 }
@@ -327,17 +329,6 @@ func (s *serializer) getId(v reflect.Value) (string, error) {
 	}
 	id = s.ids[v]
 	return id, nil
-}
-
-func (s *serializer) newID(v reflect.Value) string {
-	if blankNodeAllowed(v) {
-		t := v.Elem().Type()
-		num := s.nextID[t] + 1
-		s.nextID[t] = num
-		return fmt.Sprintf("_:%s_%d", t.Name(), num)
-	}
-	u := uuid.New()
-	return fmt.Sprintf("urn:uuid:%v", u.String())
 }
 
 func (s *serializer) typeName(v reflect.Value) string {

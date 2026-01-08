@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/spdx/tools-golang/spdx/v3/internal"
@@ -48,19 +49,11 @@ func (d *Document) Write(w io.Writer) error {
 	return d.ToJSON(w)
 }
 
-func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAgent, createdUsing AnyTool) *Document {
+func NewDocument(conformance ProfileIdentifierType, documentName string, createdBy AnyAgent, createdUsing AnyTool) *Document {
 	if createdBy == nil {
 		createdBy = &SoftwareAgent{
-			ID:                  "",
-			Description:         "",
-			Comment:             "",
-			Name:                "tools-golang",
-			Extensions:          nil,
-			CreationInfo:        nil,
-			ExternalIdentifiers: nil,
-			ExternalRefs:        nil,
-			Summary:             "",
-			VerifiedUsing:       nil,
+			Comment: "Created with github.com/spdx/tools-golang",
+			Name:    "tools-golang",
 		}
 	}
 	ci := &CreationInfo{
@@ -69,8 +62,15 @@ func NewDocument(conformance ProfileIdentifierType, name string, createdBy AnyAg
 		CreatedBy:    notNil(AgentList{createdBy}),
 		CreatedUsing: notNil(ToolList{createdUsing}),
 	}
+	id := ""
+	name := documentName
+	if internal.IsURI(name) {
+		id = name
+		name = ""
+	}
 	return &Document{
 		SpdxDocument: SpdxDocument{
+			ID:                  id,
 			Name:                name,
 			CreationInfo:        ci,
 			ProfileConformances: conformanceFrom(conformance),
@@ -116,14 +116,57 @@ func (d *Document) ToJSON(writer io.Writer) error {
 	// all Elements need to have creationInfo set...
 	d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
 
-	// ensure the Elements
+	// ensure the Elements are in the root Element list
 	d.ensureAllDocumentElements()
 
 	if d.LDContext == nil {
 		d.LDContext = context()
 	}
 
-	return internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", d.LDContext, &d.SpdxDocument, writer)
+	// our default behavior is to ensure a URI for the document prefix, defaulting to a sub-URI of the document ID
+	documentPrefix := d.ID
+	if !internal.IsURI(documentPrefix) {
+		name := d.ID
+		if name == "" {
+			name = d.Name
+		}
+		documentPrefix = internal.NewDocumentID(name)
+		if d.ID == "" {
+			d.ID = documentPrefix
+		}
+	}
+
+	namespaceMap := map[string]string{}
+	defaultPrefix := internal.DefaultSpdxNamespace
+	for _, mapEntry := range d.NamespaceMaps {
+		namespaceMap[string(mapEntry.GetNamespace())] = mapEntry.GetPrefix()
+		if strings.HasPrefix(string(mapEntry.GetNamespace()), documentPrefix) {
+			// if the user has provided an ID and included a reference in the namespace map, we will just use the namespace prefix
+			documentPrefix = mapEntry.GetPrefix()
+			break
+		}
+		// if we need to use the default prefix, avoid clashes with existing namespace map entries
+		for strings.HasPrefix(mapEntry.GetPrefix(), defaultPrefix) {
+			defaultPrefix += "2"
+		}
+	}
+
+	// If the prefix is still a URI, we add a namespace map for the default prefix to refer to this document
+	if internal.IsURI(documentPrefix) {
+		// at this point we have a URI, need to ensure a separator character so expansion makes sense
+		if !strings.HasSuffix(documentPrefix, "/") && !strings.HasSuffix(documentPrefix, internal.DefaultSpdxNamespaceSeparator) {
+			documentPrefix += internal.DefaultSpdxNamespaceSeparator
+		}
+		ns := documentPrefix
+		d.NamespaceMaps = append(d.NamespaceMaps, &NamespaceMap{
+			Prefix:    defaultPrefix,
+			Namespace: URI(ns),
+		})
+		namespaceMap[ns] = defaultPrefix
+		documentPrefix = defaultPrefix // each element will have a unique URI based on the spdx document namespace
+	}
+
+	return internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", d.LDContext, &d.SpdxDocument, internal.PrefixedIdGenerator(documentPrefix, namespaceMap), writer)
 }
 
 func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
@@ -142,6 +185,9 @@ func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocume
 }
 
 func (d *Document) FromJSON(reader io.Reader) error {
+	if d.LDContext == nil {
+		d.LDContext = context()
+	}
 	graph, err := d.LDContext.FromJSON(reader)
 	if err != nil {
 		return err

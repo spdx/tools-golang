@@ -1,5 +1,5 @@
-github.com/anchore/go-struct-converter v0.0.0-20251008145103-b79fc8ba4f45 h1:sqkP57/1/85SgWDHHJmY4ubBJUIpGlto6JZql6Dpp34=
-github.com/anchore/go-struct-converter v0.0.0-20251008145103-b79fc8ba4f45/go.mod h1:SxEY1rkVuDSqQOnD1+G4A45wAKXPMum/a51ywvN/8o4=
+github.com/anchore/go-struct-converter v0.2.0-rc1 h1:hnH38vVGuDU49Sj+xponyc1EKIqvTOXmBTPSRONp3kQ=
+github.com/anchore/go-struct-converter v0.2.0-rc1/go.mod h1:SxEY1rkVuDSqQOnD1+G4A45wAKXPMum/a51ywvN/8o4=
 github.com/dave/jennifer v1.7.1 h1:B4jJJDHelWcDhlRQxWeo0Npa/pYKBLrirAQoTN45txo=
 github.com/dave/jennifer v1.7.1/go.mod h1:nXbxhEmQfOZhWml3D1cDK5M1FLnMSozpbFN/m3RmGZc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

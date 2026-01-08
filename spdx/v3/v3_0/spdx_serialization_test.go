@@ -7,8 +7,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-
-	"github.com/spdx/tools-golang/spdx/v3/internal"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_spdxExportImportExport(t *testing.T) {
@@ -145,30 +144,40 @@ func Test_externalID(t *testing.T) {
 }
 
 // encodeDecode encodes to JSON, decodes from the JSON and compares the decoded struct against the input
-func encodeDecode[T comparable](t *testing.T, obj T) T {
+func encodeDecode[T AnyElement](t *testing.T, obj T) T {
 	// serialization:
 	buf := bytes.Buffer{}
-	err := internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", context(), obj, &buf)
-	//err := context().ToJSON(&buf, obj)
-	if err != nil {
-		t.Fatal(err)
+	doc := Document{LDContext: context()}
+	switch d := any(obj).(type) {
+	case *SpdxDocument:
+		doc.SpdxDocument = *d
+		obj = any(&doc.SpdxDocument).(T) // we may create namespace maps, so compare to the updated document
+	default:
+		doc.ID = "https://example.org/1234"
+		doc.RootElements = append(doc.RootElements, obj)
 	}
+
+	err := doc.Write(&buf)
+	require.NoError(t, err)
 
 	json1 := buf.String()
 
 	// deserialization:
-	graph, err := context().FromJSON(strings.NewReader(json1))
-	var got T
-	for _, entry := range graph {
-		if e, ok := entry.(T); ok {
-			got = e
-			break
-		}
-	}
+	doc = Document{LDContext: context()}
+	err = doc.FromJSON(strings.NewReader(json1))
+	require.NoError(t, err)
 
-	var empty T
-	if got == empty {
-		t.Fatalf("did not find object in graph, json: %s", json1)
+	var got T
+	switch any(obj).(type) {
+	case *SpdxDocument:
+		got = any(&doc.SpdxDocument).(T)
+	default:
+		for _, entry := range doc.RootElements {
+			if e, ok := entry.(T); ok {
+				got = e
+				break
+			}
+		}
 	}
 
 	diff := cmp.Diff(obj, got, diffOpts()...)

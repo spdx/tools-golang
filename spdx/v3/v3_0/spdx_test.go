@@ -344,7 +344,7 @@ func Test_exportImportExport(t *testing.T) {
 
 	// create another package
 
-	pkg2 := &spdx.AIPackage{}
+	pkg2 := &spdx.Package{}
 	pkg2.Name = "some-package-2"
 	pkg2.Version = "2.4.5"
 
@@ -513,7 +513,6 @@ func Test_aiProfile(t *testing.T) {
 }
 
 func newTestDocument() *spdx.Document {
-	//return spdx.NewDocument(spdx.ProfileIdentifierType_Lite, "test document",
 	return spdx.NewDocument(spdx.ProfileIdentifierType_Software, "test document",
 		&spdx.SoftwareAgent{Name: "tools-golang-tests-agent", Summary: "a summary"},
 		&spdx.Tool{Name: "tools-golang-tests-tool"})

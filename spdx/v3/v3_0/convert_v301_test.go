@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/internal"
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
@@ -24,7 +25,8 @@ func v301doc() *Document {
 	d.SpdxDocument.Comment = "This is a sample SPDX document for testing purposes."
 	d.NamespaceMaps = NamespaceMapList{
 		&NamespaceMap{
-			Namespace: "https://example.com/spdx/example-software-1.0.0",
+			Prefix:    internal.DefaultSpdxNamespace,
+			Namespace: "https://example.com/spdx/example-software-1.0.0#",
 		},
 	}
 

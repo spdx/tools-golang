@@ -18,14 +18,26 @@ import (
 func From_v2_3(doc v2_3.Document, d *Document) {
 	c := newDocumentConverter(d)
 
+	// The DocumentNamespace should have been a URI and is used as the document ID,
+	// which must be a URI, so we convert to URI if it's not valid
+	ns := doc.DocumentNamespace
+	if !internal.IsURI(ns) {
+		ns = internal.DefaultSpdxDocumentIDPrefix + ns
+	}
+
 	// namespace is used to prefix document IDs
-	if doc.DocumentNamespace != "" {
-		d.NamespaceMaps = NamespaceMapList{
-			&NamespaceMap{
-				Namespace: URI(doc.DocumentNamespace),
-			},
-		}
-		c.namespace = "ns"
+	// in the document namespace, this results in logical urls when expanding IDs.
+	// for example, if the v2 doc has http://example.org/abcd and a packageID is `Package-something-23`,
+	// the v3 expanded IDs: http://example.org/abcd#Package-something-23
+	if !strings.HasSuffix(ns, internal.DefaultSpdxNamespaceSeparator) {
+		ns += internal.DefaultSpdxNamespaceSeparator
+	}
+	d.NamespaceMaps = NamespaceMapList{
+		&NamespaceMap{
+			// this will result in similar IDs output, e.g. SPDXRef-Package-something-23 -> spdx:Package-something-23
+			Prefix:    internal.DefaultSpdxNamespace,
+			Namespace: URI(ns),
+		},
 	}
 
 	// set creationInfo of the converter so all created objects use the original
@@ -39,7 +51,10 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 		d.ProfileConformances = []ProfileIdentifierType{ProfileIdentifierType_Core, ProfileIdentifierType_Software}
 	}
 
-	d.ID = string(doc.SPDXIdentifier)
+	// we have a doc.SPDXIdentifier, but this is always DOCUMENT in v2, referencing the document itself;
+	// this will never be a valid URI, instead we want to use the DocumentNamespace, indicating the
+	// document's URI in relation to all the contained elements
+	d.ID = ns
 	d.Comment = doc.DocumentComment
 	d.Imports = list[ExternalMapList](c.convert23externalDocumentRef, doc.ExternalDocumentReferences...)
 	d.Name = doc.DocumentName
@@ -217,8 +232,8 @@ func newDocumentConverter(d *Document) *documentConverter {
 }
 
 type documentConverter struct {
-	sbom                      *SBOM
-	namespace                 string
+	sbom *SBOM
+	//namespace                 string
 	idMap                     map[string]any
 	creationInfo              AnyCreationInfo
 	relationshipMap           map[any][]*Relationship

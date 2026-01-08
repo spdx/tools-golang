@@ -3,7 +3,7 @@ module github.com/spdx/tools-golang
 go 1.23.5
 
 require (
-	github.com/anchore/go-struct-converter v0.0.0-20251008145103-b79fc8ba4f45
+	github.com/anchore/go-struct-converter v0.2.0-rc1
 	github.com/dave/jennifer v1.7.1
 	github.com/deiu/rdf2go v0.0.0-20241212211204-b661ba0dfd25
 	github.com/gertd/go-pluralize v0.2.1
