@@ -60,22 +60,37 @@ func ParseSHACL(url string, ttl []byte) (map[string]*Class, []*Individual) {
 				continue
 			}
 
+			nodeKind := oneOptional(used, g.All(property.Object, shaclNodeKind, nil))
+			if nodeKind == nil {
+				continue // only include properties that have nodeKind, there are some properties specified for the path we need to exclude
+			}
+
 			prop := &Property{
 				IRI:     cleanIRI(path.Object.String()),
 				Comment: getComment(used, g, path.Object),
 			}
-			out.Properties = append(out.Properties, prop)
 
 			// get the data type
 			typeIRI := oneOptional(used, g.All(property.Object, shaclClass, nil))
 			if typeIRI == nil {
 				typeIRI = oneOptional(used, g.All(property.Object, shaclDatatype, nil))
 			}
+			if typeIRI == nil {
+				typeIRI = oneOptional(used, g.All(path.Object, rdfRange, nil))
+			}
 			if typeIRI != nil {
 				prop.TypeIRI = cleanIRI(typeIRI.Object.String())
 			} else {
-				panic("No type IRI for: " + property.Object.String())
+				if oneOptional(used, g.All(property.Object, shaclNot, nil)) != nil {
+					// SPDX TTL has some path references for types disallowed don't have a typeIRI,
+					// they just include some constraints on the same path since they are not supposed to be instantiated directly
+					continue
+				}
+				log("WARNING: No type IRI for: ", property.Object)
+				panic("no typeIRI found for: " + property.Object.String())
 			}
+
+			out.Properties = append(out.Properties, prop)
 
 			minCount := oneOptional(used, g.All(property.Object, shaclMinCount, nil))
 			used(minCount)
@@ -203,13 +218,13 @@ func parseIntegerValue(count *rdf2go.Triple) int {
 }
 
 var (
-	rdfType       = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-	rdfFirst      = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#first")
-	rdfRest       = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest")
-	rdfSubclassOf = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#subClassOf")
-	rdfComment    = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#comment")
-	rdfLabel      = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#label")
-	//rdfSchemaRange      = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#range")
+	rdfType            = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+	rdfFirst           = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#first")
+	rdfRest            = rdf2go.NewResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#rest")
+	rdfSubclassOf      = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#subClassOf")
+	rdfComment         = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#comment")
+	rdfLabel           = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#label")
+	rdfRange           = rdf2go.NewResource("http://www.w3.org/2000/01/rdf-schema#range")
 	owlClass           = rdf2go.NewResource("http://www.w3.org/2002/07/owl#Class")
 	owlNamedIndividual = rdf2go.NewResource("http://www.w3.org/2002/07/owl#NamedIndividual")
 	//owlObjectProperty   = rdf2go.NewResource("http://www.w3.org/2002/07/owl#ObjectProperty")
@@ -223,6 +238,7 @@ var (
 	shaclPath     = rdf2go.NewResource("http://www.w3.org/ns/shacl#path")
 	shaclDatatype = rdf2go.NewResource("http://www.w3.org/ns/shacl#datatype")
 	shaclIn       = rdf2go.NewResource("http://www.w3.org/ns/shacl#in")
+	shaclNot      = rdf2go.NewResource("http://www.w3.org/ns/shacl#not")
 	shaclMinCount = rdf2go.NewResource("http://www.w3.org/ns/shacl#minCount")
 	shaclMaxCount = rdf2go.NewResource("http://www.w3.org/ns/shacl#maxCount")
 	shaclPattern  = rdf2go.NewResource("http://www.w3.org/ns/shacl#pattern")

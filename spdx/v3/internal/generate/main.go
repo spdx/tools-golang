@@ -31,6 +31,7 @@ func main() {
 
 		shaclgen.Generate(
 			shaclgen.EnableLog(),
+			shaclgen.GeneratorName("github.com/spdx/tools-golang/spdx/v3/internal/generate"),
 			shaclgen.UseFlatStruct(true),
 			shaclgen.PackageName(packageName),
 			shaclgen.LicenseID("MIT"),
