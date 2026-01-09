@@ -103,19 +103,24 @@ func Test_DocElementIDDecoding(t *testing.T) {
 			},
 		},
 		{
+			name:  "DocumentRef with empty suffix",
+			value: "DocumentRef-",
+			err:   true,
+		},
+		{
 			name:  "DocumentRefID:ElementRefID without spdxref prefix",
 			value: "DocumentRef-a-doc:some-id",
-			expected: DocElementID{
-				DocumentRefID: "a-doc",
-				ElementRefID:  "some-id",
-			},
+			err:   true,
+		},
+		{
+			name:  "DocumentRefID:ElementRefID with empty ElementRefID suffix",
+			value: "DocumentRef-a-doc:SPDXRef-",
+			err:   true,
 		},
 		{
 			name:  "without spdxref prefix",
 			value: "some-id-without-spdxref",
-			expected: DocElementID{
-				ElementRefID: "some-id-without-spdxref",
-			},
+			err:   true,
 		},
 		{
 			name:  "SpecialID NONE",
@@ -208,9 +213,14 @@ func Test_ElementIDDecoding(t *testing.T) {
 			expected: ElementID("some-id"),
 		},
 		{
+			name:  "empty id suffix",
+			value: "SPDXRef-",
+			err:   true,
+		},
+		{
 			name:  "without prefix",
 			value: "some-id-without-spdxref",
-			expected: ElementID("some-id-without-spdxref"),
+			err:   true,
 		},
 	}
 
@@ -298,10 +308,187 @@ func Test_ElementIDStructDecoding(t *testing.T) {
 		},
 		{
 			name:  "without prefix",
-			expected: typ{
-				Id: ElementID("some-id"),
-			},
 			value: `{"id":"some-id"}`,
+			err:   true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			out := typ{}
+			err := json.Unmarshal([]byte(test.value), &out)
+			switch {
+			case !test.err && err != nil:
+				t.Fatalf("unexpected error: %v", err)
+			case test.err && err == nil:
+				t.Fatalf("expected error but got none")
+			case test.err:
+				return
+			}
+			if !reflect.DeepEqual(test.expected, out) {
+				t.Fatalf("unexpected value: %v != %v", test.expected, out)
+			}
+		})
+	}
+}
+
+func Test_DocumentIDEncoding(t *testing.T) {
+	tests := []struct {
+		name     string
+		value    DocumentID
+		expected string
+		err      bool
+	}{
+		{
+			name:     "appends documentref",
+			value:    DocumentID("some-id"),
+			expected: "DocumentRef-some-id",
+		},
+		{
+			name:     "appends documentref",
+			value:    DocumentID("DocumentRef-some-id"),
+			expected: "DocumentRef-some-id",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := marshal.JSON(test.value)
+			switch {
+			case !test.err && err != nil:
+				t.Fatalf("unexpected error: %v", err)
+			case test.err && err == nil:
+				t.Fatalf("expected error but got none")
+			case test.err:
+				return
+			}
+			s := string(result)
+			if !strings.HasPrefix(s, `"`) || !strings.HasSuffix(s, `"`) {
+				t.Fatalf("string was not returned: %s", s)
+			}
+			s = strings.Trim(s, `"`)
+			if test.expected != s {
+				t.Fatalf("%s != %s", test.expected, s)
+			}
+		})
+	}
+}
+
+func Test_DocumentIDDecoding(t *testing.T) {
+	tests := []struct {
+		name     string
+		value    string
+		expected DocumentID
+		err      bool
+	}{
+		{
+			name:     "valid id",
+			value:    "DocumentRef-some-id",
+			expected: DocumentID("some-id"),
+		},
+		{
+			name:  "empty id suffix",
+			value: "DocumentRef-",
+			err:   true,
+		},
+		{
+			name:  "without prefix",
+			value: "some-id-without-documentref",
+			err:   true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var out DocumentID
+			s := fmt.Sprintf(`"%s"`, test.value)
+			err := json.Unmarshal([]byte(s), &out)
+			switch {
+			case !test.err && err != nil:
+				t.Fatalf("unexpected error: %v", err)
+			case test.err && err == nil:
+				t.Fatalf("expected error but got none")
+			case test.err:
+				return
+			}
+			if !reflect.DeepEqual(test.expected, out) {
+				t.Fatalf("unexpected value: %v != %v", test.expected, out)
+			}
+		})
+	}
+}
+
+func Test_DocumentIDStructEncoding(t *testing.T) {
+	type typ struct {
+		Id DocumentID `json:"id"`
+	}
+	tests := []struct {
+		name     string
+		value    typ
+		expected string
+		err      bool
+	}{
+		{
+			name: "appends spdxref",
+			value: typ{
+				Id: DocumentID("some-id"),
+			},
+			expected: `{"id":"DocumentRef-some-id"}`,
+		},
+		{
+			name: "appends spdxref",
+			value: typ{
+				Id: DocumentID("DocumentRef-some-id"),
+			},
+			expected: `{"id":"DocumentRef-some-id"}`,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := marshal.JSON(test.value)
+			switch {
+			case !test.err && err != nil:
+				t.Fatalf("unexpected error: %v", err)
+			case test.err && err == nil:
+				t.Fatalf("expected error but got none")
+			case test.err:
+				return
+			}
+			s := string(result)
+			if test.expected != s {
+				t.Fatalf("%s != %s", test.expected, s)
+			}
+		})
+	}
+}
+
+func Test_DocumentIDStructDecoding(t *testing.T) {
+	type typ struct {
+		Id DocumentID `json:"id"`
+	}
+	tests := []struct {
+		name     string
+		value    string
+		expected typ
+		err      bool
+	}{
+		{
+			name: "valid id",
+			expected: typ{
+				Id: DocumentID("some-id"),
+			},
+			value: `{"id":"DocumentRef-some-id"}`,
+		},
+		{
+			name:  "empty suffix",
+			value: `{"id":"DocumentRef-"}`,
+			err:   true,
+		},
+		{
+			name:  "without prefix",
+			value: `{"id":"some-id"}`,
+			err:   true,
 		},
 	}
 
