@@ -13,9 +13,14 @@ format:
 
 .PHONY: unit
 unit:
-	go test -v -covermode=count -coverprofile=profile.cov ./...
+	go test -v -covermode=count -coverprofile=profile.cov.tmp ./...
+	cat profile.cov.tmp | grep -v /internal/ | grep -v /model.go | grep -v /model_validations.go > profile.cov # ignore generated model file
 
 .PHONY: fuzz
 fuzz:
 	go test -v -run=Fuzz -fuzz=FuzzShouldIgnore ./utils -fuzztime=10s
 	go test -v -run=Fuzz -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=10s
+
+.PHONY: generate
+generate:
+	go run ./spdx/v3/internal/generate

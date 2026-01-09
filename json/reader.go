@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"regexp"
 
 	"github.com/spdx/tools-golang/convert"
 	"github.com/spdx/tools-golang/spdx"
@@ -14,6 +15,7 @@ import (
 	"github.com/spdx/tools-golang/spdx/v2/v2_1"
 	"github.com/spdx/tools-golang/spdx/v2/v2_2"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/v3_0"
 )
 
 // Read takes an io.Reader and returns a fully-parsed current model SPDX Document
@@ -48,8 +50,19 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		return fmt.Errorf("not a valid SPDX JSON document")
 	}
 
-	version, ok := val["spdxVersion"]
-	if !ok {
+	version, _ := val["spdxVersion"].(string)
+	if version == "" {
+		version, _ = val["@context"].(string)
+		if version != "" {
+			extract := regexp.MustCompile(`https://spdx.org/rdf/(\d+(?:\.\d+)+)/spdx-context\.jsonld`)
+			matches := extract.FindStringSubmatch(version)
+			if len(matches) == 2 {
+				version = matches[1]
+			}
+		}
+	}
+
+	if version == "" {
 		return fmt.Errorf("JSON document does not contain spdxVersion field")
 	}
 
@@ -75,6 +88,20 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 			return err
 		}
 		data = doc
+	case "3.0.0":
+		fallthrough
+	case v3_0.Version:
+		// support older 3.0.x versions
+		contents := buf.Bytes()
+		if version != v3_0.Version {
+			contents = bytes.Replace(contents, []byte(version), []byte(fmt.Sprintf("https://spdx.org/rdf/%s/spdx-context.jsonld", v3_0.Version)), 1)
+		}
+		var in v3_0.Document
+		err = json.Unmarshal(contents, &in)
+		if err != nil {
+			return err
+		}
+		data = in
 	default:
 		return fmt.Errorf("unsupported SDPX version: %s", version)
 	}

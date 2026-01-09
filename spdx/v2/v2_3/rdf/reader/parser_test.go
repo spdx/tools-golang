@@ -127,7 +127,6 @@ func Test_rdfParser2_3_getSpdxDocNode(t *testing.T) {
 		<spdx:Snippet rdf:about="#SPDXRef-Document"/>
 	`)
 	_, err = parser.getSpdxDocNode()
-	t.Log(err)
 	if err == nil {
 		t.Errorf("expected and error due to more than one type triples for the SpdxDocument Node, got %v", err)
 	}
@@ -139,7 +138,6 @@ func Test_rdfParser2_3_getSpdxDocNode(t *testing.T) {
 		<spdx:File rdf:about="#SPDXRef-DoapSource"/>
 	`)
 	_, err = parser.getSpdxDocNode()
-	t.Log(err)
 	if err == nil {
 		t.Errorf("rootNode  must be associated with exactly one triple of predicate rdf:type, got %v", err)
 	}
