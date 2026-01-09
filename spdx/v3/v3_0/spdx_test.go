@@ -416,7 +416,7 @@ func Test_exportImportExport(t *testing.T) {
 	}
 	text, _ := difflib.GetUnifiedDiffString(diff)
 	if text != "" {
-		t.Errorf(text)
+		t.Errorf("mismatch (-want +got):\n%s", text)
 	}
 
 	// some basic usage:
@@ -508,7 +508,7 @@ func Test_aiProfile(t *testing.T) {
 	}
 	text, _ := difflib.GetUnifiedDiffString(diff)
 	if text != "" {
-		t.Errorf(text)
+		t.Errorf("mismatch (-want +got):\n%s", text)
 	}
 }
 
