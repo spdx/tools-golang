@@ -143,7 +143,6 @@ func diffOpts() []cmp.Option {
 	}
 	out = append(out,
 		cmpopts.IgnoreFields(Document{}, "LDContext"),
-		cmpopts.IgnoreFields(CreationInfo{}, "CreatedUsing"),
 		cmpopts.EquateComparable(
 			ExternalIdentifierType{},
 			HashAlgorithm{},

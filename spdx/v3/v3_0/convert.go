@@ -337,7 +337,7 @@ func (c *documentConverter) convert23tool(creator common.Creator) AnyTool {
 		return nil
 	}
 
-	if creator.Creator != "" {
+	if creator.Creator == "" {
 		c.logDropped(creator)
 		return nil
 	}
