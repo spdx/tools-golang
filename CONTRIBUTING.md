@@ -1,4 +1,6 @@
+---
 SPDX-License-Identifier: CC-BY-4.0
+---
 
 # Contributing
 
@@ -8,7 +10,7 @@ This indicates that the contribution is made pursuant to the [Developer Certific
 
 ## Test coverage
 
-Since this library is intended to be relied upon by other tools to work with SPDX data, we are aiming to ensure that it is and remains well-tested. 
+Since this library is intended to be relied upon by other tools to work with SPDX data, we are aiming to ensure that it is and remains well-tested.
 
 PRs with new code should include corresponding test files, and should continue to pass existing tests. Unit tests for `foo.go` should be placed in `foo_test.go`. Test data files and folders should be placed in the top-level `testdata/` folder.
 
@@ -18,19 +20,19 @@ To run the test suite, from the top-level directory run: `go test ./...`
 
 New **code files** should include a [short-form SPDX ID](https://spdx.org/ids) at the top, indicating the project license for code, which is Apache-2.0 OR GPL-2.0-or-later. This should look like the following:
 
-```
+```go
 // SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 ```
 
 New **documentation files** should include a [short-form SPDX ID](https://spdx.org/ids) at the top, indicating the project license for documentation, which is CC-BY-4.0. This should look like the following:
 
-```
+```text
 SPDX-License-Identifier: CC-BY-4.0
 ```
 
 ## Developer Certificate of Origin (DCO)
 
-```
+```text
 Developer Certificate of Origin
 Version 1.1
 
