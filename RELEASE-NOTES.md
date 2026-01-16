@@ -4,19 +4,6 @@ SPDX-License-Identifier: CC-BY-4.0
 
 # Release Notes for spdx/tools-golang
 
-## 0.6.0
-
--rc2 released on: 2026-01-15
--rc1 released on: 2026-01-09
-
-### What's Changed
-
-* feat: SPDX 3 by @kzantow in #247
-
-### Contributors
-
-* @kzantow
-
 ## 0.5.7
 
 0.5.7 released on: 2026-01-12
