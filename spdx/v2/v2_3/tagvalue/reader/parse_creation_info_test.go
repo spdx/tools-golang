@@ -425,6 +425,34 @@ func TestFailsExternalDocumentReferenceWithInvalidFormats(t *testing.T) {
 		}
 	}
 }
+func TestParserForExternalDocumentRefAfterCreationInfo(t *testing.T) {
+	parser := tvParser{
+		doc: &spdx.Document{ExternalDocumentReferences: []spdx.ExternalDocumentRef{}},
+		st:  psCreationInfo,
+	}
+
+	err := parser.parsePair("ExternalDocumentRef", "DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1:d6a770ba38583ed4bb4525bd96e50461655d2759")
+	if err != nil {
+		t.Errorf("got error when calling parsePair: %v", err)
+	}
+	if len(parser.doc.ExternalDocumentReferences) != 1 {
+		t.Fatalf("expected 1 ExternalDocumentRef, got %d", len(parser.doc.ExternalDocumentReferences))
+	}
+	edr := parser.doc.ExternalDocumentReferences[0]
+	if edr.DocumentRefID != "spdx-tool-1.2" {
+		t.Errorf("expected DocumentRefID 'spdx-tool-1.2', got '%s'", edr.DocumentRefID)
+	}
+	if edr.URI != "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301" {
+		t.Errorf("unexpected URI: %s", edr.URI)
+	}
+	if edr.Checksum.Algorithm != "SHA1" {
+		t.Errorf("expected algorithm SHA1, got %s", edr.Checksum.Algorithm)
+	}
+	if edr.Checksum.Value != "d6a770ba38583ed4bb4525bd96e50461655d2759" {
+		t.Errorf("unexpected checksum value: %s", edr.Checksum.Value)
+	}
+}
+
 func TestParserForDocumentComment(t *testing.T) {
 	parser := tvParser{
 		doc: &spdx.Document{},
