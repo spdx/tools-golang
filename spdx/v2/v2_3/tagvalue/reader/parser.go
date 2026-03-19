@@ -89,6 +89,7 @@ func (parser *tvParser) parsePairFromStart(tag string, value string) error {
 			Checksum:      common.Checksum{Algorithm: common.ChecksumAlgorithm(alg), Value: checksum},
 		}
 		parser.doc.ExternalDocumentReferences = append(parser.doc.ExternalDocumentReferences, edr)
+		return nil
 	default:
 		// move to Creation Info parser state
 		parser.st = psCreationInfo

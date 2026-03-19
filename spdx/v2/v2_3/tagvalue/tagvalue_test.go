@@ -84,6 +84,44 @@ func Test_ReadWrite(t *testing.T) {
 	}
 }
 
+// Verifies that ExternalDocumentRef entries are correctly parsed when appearing after CreationInfo.
+func TestExternalDocumentRefAfterCreationInfo(t *testing.T) {
+	input := `SPDXVersion: SPDX-2.3
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: test-doc
+DocumentNamespace: http://example.com/spdx/test-doc
+
+Creator: Organization: TestOrg
+Created: 2025-12-10T14:36:14Z
+
+ExternalDocumentRef: DocumentRef-test http://example.com/test SHA1: 1234567890abcdef1234567890abcdef12345678
+`
+
+	doc, err := tagvalue.Read(bytes.NewBufferString(input))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(doc.ExternalDocumentReferences) != 1 {
+		t.Fatalf("expected 1 ExternalDocumentRef, got %d", len(doc.ExternalDocumentReferences))
+	}
+
+	ref := doc.ExternalDocumentReferences[0]
+
+	if ref.DocumentRefID != "test" {
+		t.Errorf("unexpected DocumentRefID: %s", ref.DocumentRefID)
+	}
+
+	if ref.URI != "http://example.com/test" {
+		t.Errorf("unexpected URI: %s", ref.URI)
+	}
+
+	if ref.Checksum.Value != "1234567890abcdef1234567890abcdef12345678" {
+		t.Errorf("unexpected checksum: %s", ref.Checksum.Value)
+	}
+}
+
 var ignores = []cmp.Option{
 	cmpopts.IgnoreUnexported(spdx.Package{}),
 	cmpopts.IgnoreFields(spdx.Document{}, "Snippets"),
