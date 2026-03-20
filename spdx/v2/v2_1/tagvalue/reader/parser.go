@@ -91,6 +91,7 @@ func (parser *tvParser) parsePairFromStart(tag string, value string) error {
 			Checksum:      common.Checksum{Algorithm: common.ChecksumAlgorithm(alg), Value: checksum},
 		}
 		parser.doc.ExternalDocumentReferences = append(parser.doc.ExternalDocumentReferences, edr)
+		return nil
 	case "DocumentComment":
 		parser.doc.DocumentComment = value
 	default:

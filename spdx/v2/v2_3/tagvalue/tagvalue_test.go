@@ -96,8 +96,9 @@ Creator: Organization: TestOrg
 Created: 2025-12-10T14:36:14Z
 
 ExternalDocumentRef: DocumentRef-test http://example.com/test SHA1: 1234567890abcdef1234567890abcdef12345678
-`
 
+DocumentComment: This is a test
+`
 	doc, err := tagvalue.Read(bytes.NewBufferString(input))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -119,6 +120,10 @@ ExternalDocumentRef: DocumentRef-test http://example.com/test SHA1: 1234567890ab
 
 	if ref.Checksum.Value != "1234567890abcdef1234567890abcdef12345678" {
 		t.Errorf("unexpected checksum: %s", ref.Checksum.Value)
+	}
+
+	if doc.DocumentComment != "This is a test" {
+		t.Errorf("unexpected DocumentComment: %s", doc.DocumentComment)
 	}
 }
 
