@@ -3,6 +3,7 @@
 package utils
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -43,7 +44,18 @@ func TestFilesystemCanGetSliceOfFolderContents(t *testing.T) {
 }
 
 func TestFilesystemCanGetSliceOfFolderContentsFromRelativeDir(t *testing.T) {
-	t.Chdir("../testdata/project1/")
+	oldWd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to get working dir: %v", err)
+	}
+	defer func() {
+		_ = os.Chdir(oldWd)
+	}()
+
+	err = os.Chdir("../testdata/project1/")
+	if err != nil {
+		t.Fatalf("failed to change dir: %v", err)
+	}
 
 	filePaths, err := GetAllFilePaths(".", nil)
 	if err != nil {
