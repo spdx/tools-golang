@@ -24,9 +24,14 @@ func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 	// this is so that it can be appropriately modified by append
 	// in the sub-function.
 	paths := &[]string{}
+	absRoot, err := filepath.Abs(dirRoot)
+	if err != nil {
+		return nil, err
+	}
+	dirRoot = absRoot
 	prefix := strings.TrimSuffix(filepath.ToSlash(dirRoot), "/")
 
-	err := filepath.Walk(dirRoot, func(path string, fi os.FileInfo, err error) error {
+	err = filepath.Walk(dirRoot, func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -41,10 +46,7 @@ func GetAllFilePaths(dirRoot string, pathsIgnored []string) ([]string, error) {
 
 		path = filepath.ToSlash(path)
 		shortPath := strings.TrimPrefix(path, prefix)
-		if !strings.HasPrefix(shortPath, "/") {
-			//This happens if the dirRoot is "."
-			shortPath = "/" + shortPath
-		}
+		shortPath = "/" + strings.TrimPrefix(shortPath, "/")
 
 		// don't include path if it should be ignored
 		if pathsIgnored != nil && ShouldIgnore(shortPath, pathsIgnored) {
