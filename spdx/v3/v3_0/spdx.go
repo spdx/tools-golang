@@ -101,11 +101,6 @@ func (d *Document) Validate(setCreationInfo bool) error {
 	return ld.ValidateGraph(d.SpdxDocument)
 }
 
-//func (d *Document) Append(e ...AnyElement) {
-//	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e...)
-//	d.SpdxDocument.RootElements = append(d.SpdxDocument.RootElements, e...)
-//}
-
 // ToJSON first processes the document by:
 //   - setting each Element's CreationInfo property to the SpdxDocument's CreationInfo if nil
 //   - collecting all element references to the top-level Elements slice
@@ -116,8 +111,10 @@ func (d *Document) ToJSON(writer io.Writer) error {
 	// all Elements need to have creationInfo set...
 	d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
 
-	// ensure the Elements are in the root Element list
-	d.ensureAllDocumentElements()
+	// The Elements list should not be serialized - the graph of the SpdxDocument includes all other properties, such as RootElements
+	elements := d.Elements
+	defer func() { d.Elements = elements }()
+	d.Elements = nil
 
 	if d.LDContext == nil {
 		d.LDContext = context()
@@ -195,34 +192,38 @@ func (d *Document) FromJSON(reader io.Reader) error {
 	for _, e := range graph {
 		if doc, ok := e.(*SpdxDocument); ok {
 			d.SpdxDocument = *doc
+
+			var allElements []AnyElement
+			for _, o := range graph {
+				// collect all graph elements except SpdxDocument itself
+				if el, ok := o.(AnyElement); ok && el != doc {
+					allElements = append(allElements, el)
+				}
+			}
+			d.Elements = allElements
+
 			return nil
 		}
 	}
 	return fmt.Errorf("no SPDX document found")
 }
 
-func (d *Document) ensureAllDocumentElements() {
-	all := map[reflect.Value]struct{}{}
-	for _, e := range d.Elements {
-		v := reflect.ValueOf(e)
-		if v.Kind() != reflect.Pointer {
-			panic(fmt.Sprintf("non-pointer type in elements: %#v", v))
-		}
-		all[v] = struct{}{}
-	}
-	all[reflect.ValueOf(d.SpdxDocument)] = struct{}{}
-	_ = ld.VisitObjectGraph(d.SpdxDocument, func(path []any, value reflect.Value) error {
+// all elements in the Document should be available in the SpdxDocument.Elements proeprty --
+// on JSON LD deserialization, move all elements from @graph to the Elements property
+func collectAllElements(d *SpdxDocument) map[reflect.Value]AnyElement {
+	all := map[reflect.Value]AnyElement{}
+	all[reflect.ValueOf(d)] = d
+	_ = ld.VisitObjectGraph(d, func(path []any, value reflect.Value) error {
 		if value.Kind() == reflect.Pointer {
-			if _, ok := all[value]; ok {
-				return nil
-			}
-			if e, ok := value.Interface().(AnyElement); ok {
-				all[value] = struct{}{}
-				d.Elements = append(d.Elements, e)
+			if _, ok := all[value]; !ok {
+				if e, ok := value.Interface().(AnyElement); ok {
+					all[value] = e
+				}
 			}
 		}
 		return nil
 	})
+	return all
 }
 
 var _ interface {

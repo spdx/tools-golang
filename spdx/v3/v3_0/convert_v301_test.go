@@ -20,7 +20,7 @@ func v301doc() *Document {
 	d.DataLicense = &ListedLicense{
 		Name: v2_3.DataLicense,
 	}
-	d.SpdxDocument.ID = "SPDXRef-DOCUMENT"
+	d.SpdxDocument.ID = "DOCUMENT"
 	d.CreationInfo.(*CreationInfo).Created = parseTime("2023-01-15T10:30:00Z")
 	d.SpdxDocument.Comment = "This is a sample SPDX document for testing purposes."
 	d.NamespaceMaps = NamespaceMapList{
@@ -91,6 +91,11 @@ func v301doc() *Document {
 			Comment: "Package contains main source file",
 		},
 	)
+
+	// add all relationships to RootElements
+	for _, r := range sbom.Elements.Relationships() {
+		sbom.RootElements = append(sbom.RootElements, r)
+	}
 
 	return d
 }
@@ -233,22 +238,36 @@ func v301package2() (*Package, ElementList) {
 		DownloadLocation: ld.URI("https://tools.com/download/utility-tools-2.1.0.zip"),
 	}
 
-	l := &ListedLicense{}
-	l.Name = "Apache-2.0"
+	concludedLicense := &ListedLicense{Name: "Apache-2.0"}
+
+	declaredLicense := &DisjunctiveLicenseSet{
+		Members: LicenseInfoList{
+			&ListedLicense{Name: "AGPL"},
+			&DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&WithAdditionOperator{
+						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
+						SubjectAddition:          &ListedLicenseException{Name: "Classpath-Exception"},
+					},
+					&ListedLicense{Name: "LicenceRef-CustomLicense1"},
+				},
+			},
+		},
+	}
 
 	r1 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		To:   ElementList{concludedLicense},
 		From: p,
 	}
 
 	r2 := &Relationship{
 		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
+		To:   ElementList{declaredLicense},
 		From: p,
 	}
 
-	return p, ElementList{l, r1, r2}
+	return p, ElementList{concludedLicense, r1, declaredLicense, r2}
 }
 
 func v301customLicense1() AnyLicense {
@@ -279,7 +298,7 @@ func v301customLicense2() AnyLicense {
 func v301file1() (AnyFile, ElementList) {
 	f := &File{
 		ID:   "SPDXRef-File-Other",
-		Name: "./src/other.c",
+		Name: "./src/main.c",
 		VerifiedUsing: IntegrityMethodList{
 			&Hash{
 				Value:     "da39a3ee5e6b4b0d3255bfef95601890afd80709",
@@ -348,6 +367,7 @@ func v301file2() (*File, ElementList) {
 		//FileTypes: []FileType{
 		//	FileType_Header,
 		//},
+		Kind: FileKindType_File,
 	}
 
 	l := &ListedLicense{}
@@ -475,12 +495,12 @@ func v301snippet2(fileRef AnyFile) (AnySnippet, ElementList) {
 		CopyrightText: "Copyright 2023 Example Corp",
 		FromFile:      fileRef,
 		ByteRange: &PositiveIntegerRange{
-			EndIntegerRange:   50,
-			BeginIntegerRange: 150,
+			BeginIntegerRange: 50,
+			EndIntegerRange:   150,
 		},
 		LineRange: &PositiveIntegerRange{
-			EndIntegerRange:   5,
-			BeginIntegerRange: 8,
+			BeginIntegerRange: 5,
+			EndIntegerRange:   8,
 		},
 	}
 

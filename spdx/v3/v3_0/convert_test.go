@@ -1,6 +1,10 @@
 package v3_0
 
 import (
+	"fmt"
+	"maps"
+	"slices"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -47,6 +51,18 @@ func Test_convertElements(t *testing.T) {
 			expected: v301customLicense1(),
 			convert: func(c *documentConverter) any {
 				return c.convert23license(v23customLicense1())
+			},
+		},
+		{
+			name: "licenseExpression",
+			expected: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&ListedLicense{Name: "Apache-2.0"},
+				},
+			},
+			convert: func(c *documentConverter) any {
+				return c.convert23licenseExpression("MIT OR Apache-2.0")
 			},
 		},
 		{
@@ -97,17 +113,47 @@ func Test_documentConversion(t *testing.T) {
 	converted := &Document{}
 	From_v2_3(*v23doc(), converted)
 
-	startPkgs := expected.Elements.Packages()
-	gotPkgs := converted.Elements.Packages()
-	if diff := cmp.Diff(startPkgs, gotPkgs, diffOpts()...); diff != "" {
-		t.Errorf("mismatch (-want +got):\n%s", diff)
+	opts := diffOpts()
+
+	collected := collectAllElements(&converted.SpdxDocument)
+	convertedElements := ElementList(slices.Collect(maps.Values(collected)))
+	expectedElements := ElementList(slices.Collect(maps.Values(collectAllElements(&expected.SpdxDocument))))
+	tests := []struct {
+		name     string
+		expected any
+		got      any
+	}{
+		{"Packages", sorted(expectedElements.Packages()), sorted(convertedElements.Packages())},
+		{"Files", sorted(expectedElements.Files()), sorted(convertedElements.Files())},
+		{"Snippets", sorted(expectedElements.Snippets()), sorted(convertedElements.Snippets())},
+		{"Annotations", sorted(expectedElements.Annotations()), sorted(convertedElements.Annotations())},
+		{"Relationships", sorted(expectedElements.Relationships()), sorted(convertedElements.Relationships())},
+		{"CustomLicenses", sorted(expectedElements.CustomLicenses()), sorted(convertedElements.CustomLicenses())},
+		{"ListedLicenses", sorted(expectedElements.ListedLicenses()), sorted(convertedElements.ListedLicenses())},
+		{"DisjunctiveLicenseSets", sorted(expectedElements.DisjunctiveLicenseSets()), sorted(convertedElements.DisjunctiveLicenseSets())},
+		{"ConjunctiveLicenseSets", sorted(expectedElements.ConjunctiveLicenseSets()), sorted(convertedElements.ConjunctiveLicenseSets())},
+		{"WithAdditionOperators", sorted(expectedElements.WithAdditionOperators()), sorted(convertedElements.WithAdditionOperators())},
+		{"ListedLicenseExceptions", sorted(expectedElements.ListedLicenseExceptions()), sorted(convertedElements.ListedLicenseExceptions())},
+		{"OrLaterOperators", sorted(expectedElements.OrLaterOperators()), sorted(convertedElements.OrLaterOperators())},
 	}
 
-	startRels := expected.Elements.Relationships()
-	gotRels := converted.Elements.Relationships()
-	if diff := cmp.Diff(startRels, gotRels, diffOpts()...); diff != "" {
-		t.Errorf("mismatch (-want +got):\n%s", diff)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			require.NotEmpty(t, tt.got)
+			if diff := cmp.Diff(tt.expected, tt.got, opts...); diff != "" {
+				t.Errorf("mismatch (-want +got):\n%s", diff)
+			}
+		})
 	}
+}
+
+func sorted[T any, E ~[]T](elements E) E {
+	slices.SortFunc(elements, func(a, b T) int {
+		_a := fmt.Sprintf("%#v", a)
+		_b := fmt.Sprintf("%#v", b)
+		return strings.Compare(_a, _b)
+	})
+	return elements
 }
 
 func diffOpts() []cmp.Option {
@@ -124,6 +170,12 @@ func diffOpts() []cmp.Option {
 		Organization{},
 		CustomLicense{},
 		ListedLicense{},
+		OrLaterOperator{},
+		DisjunctiveLicenseSet{},
+		ConjunctiveLicenseSet{},
+		WithAdditionOperator{},
+		ListedLicenseException{},
+		CustomLicenseAddition{},
 		SpdxDocument{},
 		SBOM{},
 	} {

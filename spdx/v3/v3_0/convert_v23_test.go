@@ -161,7 +161,7 @@ func v23package2() *v2_3.Package {
 		},
 		PackageHomePage:         "https://tools.com/utility",
 		PackageLicenseConcluded: "Apache-2.0",
-		PackageLicenseDeclared:  "Apache-2.0",
+		PackageLicenseDeclared:  "AGPL OR (GPL-2.0-only with Classpath-Exception OR LicenceRef-CustomLicense1)",
 		PackageCopyrightText:    "Copyright 2023 Tools Inc",
 		PackageSummary:          "Collection of utility tools",
 		PackageDescription:      "A comprehensive set of utility tools for developers.",
@@ -195,8 +195,8 @@ func v23customLicense2() *v2_3.OtherLicense {
 
 func v23file1() *v2_3.File {
 	return &v2_3.File{
-		FileName:           "./src/other.c",
-		FileSPDXIdentifier: common.ElementID("SPDXRef-File-Other"),
+		FileName:           "./src/main.c",
+		FileSPDXIdentifier: common.ElementID("SPDXRef-File-Main"),
 		FileTypes:          []string{"FILE"},
 		Checksums: []common.Checksum{
 			{Algorithm: common.SHA1, Value: "da39a3ee5e6b4b0d3255bfef95601890afd80709"},

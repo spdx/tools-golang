@@ -58,7 +58,7 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 	d.Comment = doc.DocumentComment
 	d.Imports = list[ExternalMapList](c.convert23externalDocumentRef, doc.ExternalDocumentReferences...)
 	d.Name = doc.DocumentName
-	d.DataLicense = c.convert23licenseString(doc.DataLicense)
+	d.DataLicense = c.convert23licenseExpression(doc.DataLicense)
 
 	var converted ElementList
 	for _, l := range doc.OtherLicenses {
@@ -81,21 +81,28 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 		converted = append(converted, c.convert23snippet(s))
 	}
 
-	var relationships ElementList
 	for _, rel := range doc.Relationships {
-		r := c.convert23relationship(rel)
-		if r != nil {
-			c.sbom.Elements = append(c.sbom.Elements, r)
-			converted = append(relationships, r)
+		c.convert23relationship(rel)
+	}
+
+	// if the user did not add elements to the document via DOCUMENT relationships, just add all elements directly
+	if len(c.sbom.RootElements) == 0 {
+		c.sbom.RootElements = notNil(converted)
+	}
+
+	// in SPDX 2.3, relationships are all directly associated with the top-level document (which is an SBOM, effectively)
+	for _, rels := range c.relationshipMap {
+		for _, r := range rels {
+			if r == nil {
+				continue
+			}
+			c.sbom.RootElements = append(c.sbom.RootElements, r)
 		}
 	}
 
-	// if the user did not add elements to the document via relationships,
-	// just add all elements directly
-	if len(c.sbom.RootElements) == 0 {
-		c.sbom.RootElements = append(notNil(converted), notNil(relationships)...)
-	} else {
-		c.sbom.Elements = append(c.sbom.Elements, notNil(converted)...)
+	// ensure all elements are present in the document Elements list
+	for _, e := range collectAllElements(&d.SpdxDocument) {
+		d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e)
 	}
 }
 
@@ -247,6 +254,8 @@ type documentConverter struct {
 	externalRefTypeMap        map[string]ExternalRefType
 	primaryPurposeMap         map[string]SoftwarePurpose
 	emailExtractor            *regexp.Regexp
+	postConvert               []func() error
+	conversionErrors          []error
 }
 
 func (c *documentConverter) addRelationship(r *Relationship) {
@@ -444,6 +453,8 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 		Kind:             FileKindType_File,
 	}
 
+	c.idMap[string(f.FileSPDXIdentifier)] = out
+
 	for _, s := range f.Snippets {
 		v3 := c.convert23snippet(*s)
 		c.addRelationship(&Relationship{
@@ -462,7 +473,6 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 		})
 	}
 
-	c.idMap[string(f.FileSPDXIdentifier)] = out
 	return out
 }
 
@@ -534,7 +544,7 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 	}
 
 	for _, l := range pkg.PackageLicenseInfoFromFiles {
-		d := c.convert23licenseString(l)
+		d := c.convert23licenseExpression(l)
 		if d != nil {
 			c.addRelationship(&Relationship{
 				Type: RelationshipType_HasConcludedLicense,
@@ -543,7 +553,7 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 			})
 		}
 	}
-	d := c.convert23licenseString(pkg.PackageLicenseDeclared)
+	d := c.convert23licenseExpression(pkg.PackageLicenseDeclared)
 	if d != nil {
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_HasDeclaredLicense,
@@ -552,7 +562,7 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 		})
 	}
 
-	d = c.convert23licenseString(pkg.PackageLicenseConcluded)
+	d = c.convert23licenseExpression(pkg.PackageLicenseConcluded)
 	if d != nil {
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_HasConcludedLicense,
@@ -597,6 +607,11 @@ func (c *documentConverter) convert23uri(uri string) ld.URI {
 }
 
 func (c *documentConverter) logDropped(value any) {
+	if err, ok := value.(error); ok {
+		c.conversionErrors = append(c.conversionErrors, err)
+	} else {
+		c.conversionErrors = append(c.conversionErrors, fmt.Errorf("%v", value))
+	}
 	if value == nil || !internal.Debug {
 		return
 	}
@@ -655,6 +670,9 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 	}
 
 	out := &CustomLicense{
+		// custom licenses in SPDX 3.0 requires an unfortunate workaround:
+		// we must set a custom URI here because SPDX 3.0 only has
+		ID:       l.LicenseIdentifier,
 		Name:     l.LicenseName,
 		Comment:  l.LicenseComment,
 		SeeAlsos: seeAlso,
@@ -666,28 +684,16 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 	return out
 }
 
-func (c *documentConverter) convert23licenseString(licenseString string) AnyLicenseInfo {
-	if licenseString == "" {
+func (c *documentConverter) convert23licenseExpression(licenseExpression string) AnyLicenseInfo {
+	if licenseExpression == "" {
 		return nil
 	}
 
-	var out AnyLicenseInfo
-	if strings.HasPrefix(licenseString, "LicenseRef-") {
-		license, _ := c.idMap[licenseString].(AnyLicenseInfo)
-		if license != nil {
-			return license
-		}
-		out = &CustomLicense{
-			Name: licenseString,
-			Text: licenseString,
-		}
-	} else {
-		out = &ListedLicense{
-			Name: licenseString,
-		}
+	parsedLicense, err := ParseLicenseExpression(licenseExpression)
+	if err != nil {
+		c.logDropped(err)
 	}
-
-	return out
+	return parsedLicense
 }
 
 func (c *documentConverter) convert23externalDocumentRef(r v2_3.ExternalDocumentRef) AnyExternalMap {
@@ -748,12 +754,12 @@ func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 	snippetFile, _ := c.idMap[string(s.SnippetFromFileSPDXIdentifier)].(AnyFile)
 
 	var licenses LicenseInfoList
-	d := c.convert23licenseString(s.SnippetLicenseConcluded)
+	d := c.convert23licenseExpression(s.SnippetLicenseConcluded)
 	d.SetComment(s.SnippetLicenseComments)
 	licenses = append(licenses, d)
 
 	for _, licenseInfo := range s.LicenseInfoInSnippet {
-		d = c.convert23licenseString(licenseInfo)
+		d = c.convert23licenseExpression(licenseInfo)
 		if d != nil {
 			d.SetComment(s.SnippetLicenseComments)
 			licenses = append(licenses, d)

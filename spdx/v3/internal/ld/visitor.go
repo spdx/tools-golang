@@ -3,6 +3,7 @@ package ld
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 var StopTraversing = fmt.Errorf("stop-traversing-graph")
@@ -33,6 +34,21 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, path []any, v reflect.
 		} else if err != nil {
 			return err
 		}
+	} else {
+		t := v.Type()
+		if t.Size() == 0 || isPrimitive(t) {
+			// expected for fields like ld.Type, we should not reference zero-sized fields
+			return nil
+		}
+		if t.Kind() == reflect.Pointer || t.Kind() == reflect.Interface {
+			t = t.Elem()
+		}
+		p := t.PkgPath()
+		if p != "" && !strings.Contains(p, ".") {
+			return nil // stdlib packages
+		}
+
+		panic(fmt.Errorf("can't interface: %v %#v", typeName(t), v))
 	}
 
 	t := v.Type()
@@ -78,7 +94,12 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, path []any, v reflect.
 				return err
 			}
 		}
+	case reflect.String, reflect.Bool,
+		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Float32, reflect.Float64:
 	default:
+		panic(fmt.Errorf("unexpected type: %v %#v", typeName(t), v))
 	}
 	return nil
 }

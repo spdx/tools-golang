@@ -298,7 +298,7 @@ func Test_reader2(t *testing.T) {
 	  "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
 	  "@graph": [
 		{ "type": "SpdxDocument",
-		  "element": [ "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" ]
+		  "rootElement": [ "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" ]
 		}
 	  ]
 	}`
@@ -306,9 +306,9 @@ func Test_reader2(t *testing.T) {
 	d := newTestDocument()
 	err := d.FromJSON(strings.NewReader(contents))
 	require.NoError(t, err)
-	require.Len(t, d.Elements, 1)
+	require.Len(t, d.RootElements, 1)
 	spdxOrgID, _ := ld.GetID(spdx.Organization_SpdxOrganization)
-	gotID, _ := ld.GetID(d.Elements[0])
+	gotID, _ := ld.GetID(d.RootElements[0])
 	require.Equal(t, spdxOrgID, gotID)
 }
 
