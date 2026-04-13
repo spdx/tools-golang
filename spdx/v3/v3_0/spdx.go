@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"reflect"
+	"slices"
 	"strings"
 	"time"
 
@@ -111,6 +113,14 @@ func (d *Document) ToJSON(writer io.Writer) error {
 	// all Elements need to have creationInfo set...
 	d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
 
+	// all element collections need to have all contained elements in the Elements property
+	for _, e := range collectAllElements(&d.SpdxDocument) {
+		if collection, ok := e.(AnyElementCollection); ok {
+			// collect all unique elements in the collection graph and set in the elements property
+			collection.SetElements(slices.Collect(maps.Values(collectAllElements(collection))))
+		}
+	}
+
 	// The Elements list should not be serialized - the graph of the SpdxDocument includes all other properties, such as RootElements
 	elements := d.Elements
 	defer func() { d.Elements = elements }()
@@ -208,11 +218,11 @@ func (d *Document) FromJSON(reader io.Reader) error {
 	return fmt.Errorf("no SPDX document found")
 }
 
-// all elements in the Document should be available in the SpdxDocument.Elements proeprty --
-// on JSON LD deserialization, move all elements from @graph to the Elements property
-func collectAllElements(d *SpdxDocument) map[reflect.Value]AnyElement {
+// collectAllElements collects all elements referenced by the element collection, except the collection itself
+func collectAllElements(d AnyElementCollection) map[reflect.Value]AnyElement {
 	all := map[reflect.Value]AnyElement{}
-	all[reflect.ValueOf(d)] = d
+	v := reflect.ValueOf(d)
+	all[v] = d
 	_ = ld.VisitObjectGraph(d, func(path []any, value reflect.Value) error {
 		if value.Kind() == reflect.Pointer {
 			if _, ok := all[value]; !ok {
@@ -223,6 +233,7 @@ func collectAllElements(d *SpdxDocument) map[reflect.Value]AnyElement {
 		}
 		return nil
 	})
+	delete(all, v)
 	return all
 }
 

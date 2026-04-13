@@ -10,7 +10,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/require"
 
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
@@ -239,6 +238,7 @@ func diffOpts() []cmp.Option {
 			spdx.AnnotationType{},
 			spdx.ProfileIdentifierType{},
 			spdx.ExternalIRI{},
+			spdx.EnergyUnitType{},
 		),
 	)
 	return out
@@ -396,27 +396,9 @@ func Test_exportImportExport(t *testing.T) {
 		t.Error(err)
 	}
 
-	// re-serialize
-
-	buf.Reset()
-	err = newDoc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
-	json2 := buf.String()
-
-	// compare original to parsed and re-encoded
-
-	diff := difflib.UnifiedDiff{
-		A:        difflib.SplitLines(json1),
-		B:        difflib.SplitLines(json2),
-		FromFile: "Original",
-		ToFile:   "Current",
-		Context:  3,
-	}
-	text, _ := difflib.GetUnifiedDiffString(diff)
-	if text != "" {
-		t.Errorf("mismatch (-want +got):\n%s", text)
+	// compare original to parsed -- this includes Element lists, etc.
+	if diff := cmp.Diff(doc, newDoc, diffOpts()...); diff != "" {
+		t.Errorf(diff)
 	}
 
 	// some basic usage:
@@ -481,34 +463,14 @@ func Test_aiProfile(t *testing.T) {
 
 	// deserialize to a new document
 
-	doc = newTestDocument()
-	//doc.RootElements.Append(&spdx.Agent{})
-	err = doc.FromJSON(strings.NewReader(json1))
+	newDoc := newTestDocument()
+	err = newDoc.FromJSON(strings.NewReader(json1))
 	if err != nil {
 		t.Error(err)
 	}
 
-	// re-serialize
-
-	buf.Reset()
-	err = doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
-	json2 := buf.String()
-
-	// compare original to parsed and re-encoded
-
-	diff := difflib.UnifiedDiff{
-		A:        difflib.SplitLines(json1),
-		B:        difflib.SplitLines(json2),
-		FromFile: "Original",
-		ToFile:   "Current",
-		Context:  3,
-	}
-	text, _ := difflib.GetUnifiedDiffString(diff)
-	if text != "" {
-		t.Errorf("mismatch (-want +got):\n%s", text)
+	if diff := cmp.Diff(doc, newDoc, diffOpts()...); diff != "" {
+		t.Errorf(diff)
 	}
 }
 

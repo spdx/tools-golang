@@ -1,6 +1,7 @@
 package v3_0
 
 import (
+	"slices"
 	"time"
 
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
@@ -39,49 +40,60 @@ func v301doc() *Document {
 		v301externalMap2(),
 	}
 
-	sbom.Elements = append(sbom.Elements,
-		v301customLicense1(),
-		v301customLicense2(),
-	)
+	addToSBOM := func(elements ...AnyElement) {
+		for _, e := range elements {
+			if !slices.Contains(sbom.Elements, e) {
+				sbom.Elements = append(sbom.Elements, e)
+			}
+		}
+	}
 
-	pkg1, extraElems := v301package1()
-	sbom.Elements = append(sbom.Elements, extraElems...)
-	sbom.Elements = append(sbom.Elements, pkg1)
+	pkg1, pkg1Elems := v301package1()
+	pkg2, pkg2Elems := v301package2()
+	file1, file1Elems := v301file1()
+	file2, file2Elems := v301file2()
+	snippet1, snippet1Elems := v301snippet1(file1)
+	snippet2, snippet2Elems := v301snippet2(file2)
+	ann1 := v301annotation1(pkg1)
+	ann2 := v301annotation2(pkg2)
 
 	// pkg1 is the only thing referenced directly as a document root element
 	sbom.RootElements = append(sbom.RootElements, pkg1)
 
-	pkg2, extraElems := v301package2()
-	sbom.Elements = append(sbom.Elements, extraElems...)
-	sbom.Elements = append(sbom.Elements, pkg2)
-
-	file1, extraElems := v301file1()
-	sbom.Elements = append(sbom.Elements, file1)
-	sbom.Elements = append(sbom.Elements, extraElems...)
-
-	file2, extraElems := v301file2()
-	sbom.Elements = append(sbom.Elements, file2)
-	sbom.Elements = append(sbom.Elements, extraElems...)
-
-	sbom.Elements = append(sbom.Elements,
-		v301annotation1(pkg1),
-		v301annotation2(pkg2),
+	// top-level converted elements go directly in sbom.Elements
+	// (matching converter behavior: packages, files, annotations, snippets, custom licenses)
+	addToSBOM(
+		v301customLicense1(),
+		v301customLicense2(),
+		pkg1, pkg2,
+		AnyElement(file1), AnyElement(file2),
+		ann1, ann2,
+		AnyElement(snippet1), AnyElement(snippet2),
 	)
 
-	snippet1, extraElems := v301snippet1(file1)
-	sbom.Elements = append(sbom.Elements, snippet1)
-	sbom.Elements = append(sbom.Elements, extraElems...)
-
-	snippet2, extraElems := v301snippet2(file2)
-	sbom.Elements = append(sbom.Elements, snippet2)
-	sbom.Elements = append(sbom.Elements, extraElems...)
-
-	sbom.Elements = append(sbom.Elements,
-		// SpdxRef-DOCUMENT relationships are handled by object structure
+	// all relationships go in sbom.Elements
+	for _, elems := range []ElementList{pkg1Elems, pkg2Elems, file1Elems, file2Elems, snippet1Elems, snippet2Elems} {
+		for _, r := range elems.Relationships() {
+			addToSBOM(r)
+		}
+	}
+	addToSBOM(
 		&Relationship{
-			From:    pkg1,
-			To:      ElementList{pkg2},
-			Type:    RelationshipType_DependsOn,
+			Type: RelationshipType_Describes,
+			From: ann1,
+			To:   ElementList{pkg1},
+		},
+		&Relationship{
+			Type: RelationshipType_Describes,
+			From: ann2,
+			To:   ElementList{pkg2},
+		},
+		// SpdxRef-DOCUMENT relationships are handled by object structure
+		&LifecycleScopedRelationship{
+			From:    pkg2,
+			To:      ElementList{pkg1},
+			Type:    RelationshipType_UsesTool,
+			Scope:   LifecycleScopeType_Build,
 			Comment: "Main package depends on utility tools",
 		},
 		&Relationship{
@@ -92,9 +104,9 @@ func v301doc() *Document {
 		},
 	)
 
-	// add all relationships to RootElements
-	for _, r := range sbom.Elements.Relationships() {
-		sbom.RootElements = append(sbom.RootElements, r)
+	// collect all reachable elements into the document Elements list
+	for _, e := range collectAllElements(&d.SpdxDocument) {
+		d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e)
 	}
 
 	return d
@@ -116,8 +128,8 @@ func v301creationInfo() *CreationInfo {
 			},
 		},
 
-		//LicenseListVersion: "3.19",
-		Comment: "Created during automated build process",
+		Comment: "Created during automated build process" +
+			"; LicenseListVersion: 3.19",
 	}
 }
 
@@ -187,31 +199,45 @@ func v301package1() (*Package, ElementList) {
 
 	// comment was appended to pkg comment: "License determined from LICENSE file"
 
-	l := &ListedLicense{}
-	l.Name = "MIT"
-
-	l2 := &ListedLicense{}
-	l2.Name = "Apache-2.0"
+	// converter creates separate license objects for each expression
+	lInfoMIT := &ListedLicense{Name: "MIT"}           // from LicenseInfoFromFiles
+	lInfoApache := &ListedLicense{Name: "Apache-2.0"} // from LicenseInfoFromFiles
+	lConcluded := &ListedLicense{Name: "MIT"}         // from LicenseConcluded
+	lDeclared := &ListedLicense{Name: "MIT"}          // from LicenseDeclared
 
 	r1 := &Relationship{
-		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		Type: RelationshipType_HasDeclaredLicense,
+		To:   ElementList{lInfoMIT, lInfoApache, lDeclared},
 		From: p,
 	}
 
 	r2 := &Relationship{
-		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
-		From: p,
-	}
-
-	r3 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l2},
+		To:   ElementList{lConcluded},
 		From: p,
 	}
 
-	return p, ElementList{l, r1, r2, l2, r3}
+	// file associated with this package (mirrors v23package1 embedded file)
+	file3, fileElems := v301file3()
+
+	// annotation associated with this package (mirrors v23package1 embedded annotation)
+	annotation3 := v301annotation3(p)
+
+	containsFile := &Relationship{
+		Type: RelationshipType_Contains,
+		From: p,
+		To:   ElementList{file3},
+	}
+	describesPkg := &Relationship{
+		Type: RelationshipType_Describes,
+		From: annotation3,
+		To:   ElementList{p},
+	}
+
+	extras := ElementList{lInfoMIT, lInfoApache, lConcluded, lDeclared, r1, r2, file3, annotation3, containsFile, describesPkg}
+	extras = append(extras, fileElems...)
+
+	return p, extras
 }
 
 func v301package2() (*Package, ElementList) {
@@ -297,7 +323,7 @@ func v301customLicense2() AnyLicense {
 
 func v301file1() (AnyFile, ElementList) {
 	f := &File{
-		ID:   "SPDXRef-File-Other",
+		ID:   "SPDXRef-File-Main",
 		Name: "./src/main.c",
 		VerifiedUsing: IntegrityMethodList{
 			&Hash{
@@ -309,8 +335,7 @@ func v301file1() (AnyFile, ElementList) {
 				Algorithm: HashAlgorithm_Md5,
 			},
 		},
-		Comment:     "Other application entry point",
-		Description: "This file contains the other function",
+		Comment: "Other application entry point",
 		OriginatedBy: AgentList{
 			&Person{
 				Name:                "Other John Doe",
@@ -326,29 +351,57 @@ func v301file1() (AnyFile, ElementList) {
 		AttributionTexts: []string{
 			"Based on other example code from something",
 		},
-		//FileTypes: []FileType{
-		//	FileType_Source,
-		//},
-		//PrimaryPurpose: SoftwarePurpose_Source,
 		Kind: FileKindType_File,
 	}
 
-	l := &ListedLicense{}
-	l.Name = "MIT"
+	lConcluded := &ListedLicense{Name: "MIT", Comment: "License applies to this file"}
+	lDeclared := &ListedLicense{Name: "MIT"}
 
 	r1 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		To:   ElementList{lConcluded},
 		From: f,
 	}
 
 	r2 := &Relationship{
 		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
+		To:   ElementList{lDeclared},
 		From: f,
 	}
 
-	return f, ElementList{l, r1, r2}
+	// snippet associated with this file (mirrors v23file1 embedded snippet)
+	snippet3, snippetElems := v301snippet3(f)
+
+	// annotation associated with this file (mirrors v23file1 embedded annotation)
+	annotation4 := v301annotation4(f)
+
+	containsSnippet := &Relationship{
+		Type: RelationshipType_Contains,
+		From: f,
+		To:   ElementList{snippet3},
+	}
+	describesFile := &Relationship{
+		Type: RelationshipType_Describes,
+		From: annotation4,
+		To:   ElementList{f},
+	}
+
+	// from FileNotice
+	fileNotice := &Annotation{
+		Type:      AnnotationType_Other,
+		Subject:   f,
+		Statement: "This file contains the other function",
+	}
+	fileNoticeRel := &Relationship{
+		Type: RelationshipType_Describes,
+		From: fileNotice,
+		To:   ElementList{f},
+	}
+
+	extras := ElementList{lConcluded, lDeclared, r1, r2, snippet3, annotation4, containsSnippet, describesFile, fileNotice, fileNoticeRel}
+	extras = append(extras, snippetElems...)
+
+	return f, extras
 }
 
 func v301file2() (*File, ElementList) {
@@ -370,22 +423,28 @@ func v301file2() (*File, ElementList) {
 		Kind: FileKindType_File,
 	}
 
-	l := &ListedLicense{}
-	l.Name = "MIT"
+	concludedLicense := &ConjunctiveLicenseSet{
+		Members: LicenseInfoList{
+			&ListedLicense{Name: "MIT"},
+			&ListedLicense{Name: "Apache-2.0"},
+		},
+	}
+
+	declaredLicense := &ListedLicense{Name: "MIT"}
 
 	r1 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		To:   ElementList{concludedLicense},
 		From: f,
 	}
 
 	r2 := &Relationship{
 		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
+		To:   ElementList{declaredLicense},
 		From: f,
 	}
 
-	return f, ElementList{l, r1, r2}
+	return f, ElementList{concludedLicense, declaredLicense, r1, r2}
 }
 
 func v301externalMap1() *ExternalMap {
@@ -439,14 +498,120 @@ func v301annotation2(subject AnyElement) *Annotation {
 		CreationInfo: &CreationInfo{
 			Created: parseTime("2023-01-21T09:15:00Z"),
 			CreatedBy: AgentList{
-				&Person{
+				&SoftwareAgent{
 					Name: "vulnerability-scanner-v1.5",
 				},
 			},
 		},
-		Comment: "Automated scan completed - clean",
-		Subject: subject,
+		Statement: "Automated scan completed - clean",
+		Subject:   subject,
 	}
+}
+
+func v301file3() (AnyFile, ElementList) {
+	f := &File{
+		ID:             "SPDXRef-File-Utils",
+		Name:           "./src/utils.c",
+		PrimaryPurpose: SoftwarePurpose_Source,
+		VerifiedUsing: IntegrityMethodList{
+			&Hash{
+				Value:     "aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234",
+				Algorithm: HashAlgorithm_Sha256,
+			},
+		},
+		Comment:       "Utility functions for the library",
+		CopyrightText: "Copyright 2023 Example Corp",
+		Kind:          FileKindType_File,
+	}
+
+	lConcluded := &ListedLicense{Name: "Apache-2.0"}
+	lDeclared := &ListedLicense{Name: "Apache-2.0"}
+
+	r1 := &Relationship{
+		Type: RelationshipType_HasConcludedLicense,
+		To:   ElementList{lConcluded},
+		From: f,
+	}
+
+	r2 := &Relationship{
+		Type: RelationshipType_HasDeclaredLicense,
+		To:   ElementList{lDeclared},
+		From: f,
+	}
+
+	return f, ElementList{lConcluded, lDeclared, r1, r2}
+}
+
+func v301annotation3(subject AnyElement) *Annotation {
+	return &Annotation{
+		Type: AnnotationType_Other,
+		ID:   "SPDXRef-Annotation-3",
+		CreationInfo: &CreationInfo{
+			Created: parseTime("2023-02-01T10:00:00Z"),
+			CreatedBy: AgentList{
+				&Person{
+					Name:                "Code Review Bot",
+					ExternalIdentifiers: externalIdentifierListEmail("bot@example.com"),
+				},
+			},
+		},
+		Subject:   subject,
+		Statement: "Package structure review completed",
+	}
+}
+
+func v301annotation4(subject AnyElement) *Annotation {
+	return &Annotation{
+		Type: AnnotationType_Review,
+		ID:   "SPDXRef-Annotation-4",
+		CreationInfo: &CreationInfo{
+			Created: parseTime("2023-02-05T16:00:00Z"),
+			CreatedBy: AgentList{
+				&Person{
+					Name:                "Code Reviewer",
+					ExternalIdentifiers: externalIdentifierListEmail("reviewer@example.com"),
+				},
+			},
+		},
+		Subject:   subject,
+		Statement: "File review completed - code quality approved",
+	}
+}
+
+func v301snippet3(fileRef AnyFile) (AnyElement, ElementList) {
+	s := &Snippet{
+		ID:               "SPDXRef-Snippet3",
+		Name:             "Helper Routine",
+		Comment:          "Helper routine implementation",
+		CopyrightText:    "Copyright 2023 Example Corp",
+		AttributionTexts: []string{"Inspired by open source utilities"},
+		FromFile:         fileRef,
+		ByteRange: &PositiveIntegerRange{
+			BeginIntegerRange: 300,
+			EndIntegerRange:   400,
+		},
+		LineRange: &PositiveIntegerRange{
+			BeginIntegerRange: 20,
+			EndIntegerRange:   30,
+		},
+	}
+
+	lConcluded := &ListedLicense{Name: "Apache-2.0", Comment: "License for helper routine"}
+	lDeclared := &ListedLicense{Name: "Apache-2.0", Comment: ""}
+
+	r1 := &Relationship{
+		Type: RelationshipType_HasConcludedLicense,
+		To:   ElementList{lConcluded},
+		From: s,
+	}
+
+	r2 := &Relationship{
+		Type: RelationshipType_HasDeclaredLicense,
+		To:   ElementList{lDeclared},
+		From: s,
+	}
+
+	return s, ElementList{lConcluded, lDeclared, r1, r2}
 }
 
 func v301snippet1(fileRef AnyFile) (AnyElement, ElementList) {
@@ -469,22 +634,22 @@ func v301snippet1(fileRef AnyFile) (AnyElement, ElementList) {
 		//LicenseComments:  "License applies to this code snippet",
 	}
 
-	l := &ListedLicense{}
-	l.Name = "MIT"
+	lConcluded := &ListedLicense{Name: "MIT", Comment: "License applies to this code snippet"}
+	lDeclared := &ListedLicense{Name: "MIT", Comment: ""}
 
 	r1 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		To:   ElementList{lConcluded},
 		From: s,
 	}
 
 	r2 := &Relationship{
 		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
+		To:   ElementList{lDeclared},
 		From: s,
 	}
 
-	return s, ElementList{l, r1, r2}
+	return s, ElementList{lConcluded, lDeclared, r1, r2}
 }
 
 func v301snippet2(fileRef AnyFile) (AnySnippet, ElementList) {
@@ -504,22 +669,25 @@ func v301snippet2(fileRef AnyFile) (AnySnippet, ElementList) {
 		},
 	}
 
-	l := &ListedLicense{}
-	l.Name = "MIT"
+	concludedLicense := &OrLaterOperator{
+		SubjectLicense: &ListedLicense{Name: "MIT"},
+	}
+
+	declaredLicense := &ListedLicense{Name: "MIT"}
 
 	r1 := &Relationship{
 		Type: RelationshipType_HasConcludedLicense,
-		To:   ElementList{l},
+		To:   ElementList{concludedLicense},
 		From: s,
 	}
 
 	r2 := &Relationship{
 		Type: RelationshipType_HasDeclaredLicense,
-		To:   ElementList{l},
+		To:   ElementList{declaredLicense},
 		From: s,
 	}
 
-	return s, ElementList{l, r1, r2}
+	return s, ElementList{concludedLicense, declaredLicense, r1, r2}
 }
 
 func parseTime(s string) time.Time {
