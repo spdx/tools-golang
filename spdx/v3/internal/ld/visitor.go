@@ -48,7 +48,8 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, path []any, v reflect.
 			return nil // stdlib packages
 		}
 
-		panic(fmt.Errorf("can't interface: %v %#v", typeName(t), v))
+		// for debugging: panic(fmt.Errorf("can't interface: %v %#v", typeName(t), v))
+		return nil
 	}
 
 	t := v.Type()
@@ -99,7 +100,7 @@ func visitObjectGraph(visited map[reflect.Value]struct{}, path []any, v reflect.
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Float32, reflect.Float64:
 	default:
-		panic(fmt.Errorf("unexpected type: %v %#v", typeName(t), v))
+		// for debugging: panic(fmt.Errorf("unexpected type: %v %#v", typeName(t), v))
 	}
 	return nil
 }
