@@ -2,6 +2,7 @@ package v3_0
 
 import (
 	"testing"
+
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
@@ -33,33 +34,37 @@ func TestConvertPackageNameToV23(t *testing.T) {
 	})
 }
 
-func TestConvertV3ElementIDtoV2ElementID(t *testing.T) {
+func TestConvertPackageToV23(t *testing.T) {
 
 	t.Run("basic ID mapping", func(t *testing.T) {
-		idMap := make(map[string]common.ElementID)
+		ctx := StartConversion()
 
 		pkg := &AIPackage{
 			ID:   "pkg-1",
 			Name: "example",
 		}
 
-		result := ConvertPackageToV23(pkg, idMap, 0)
+		result := ConvertPackageToV23(pkg, ctx)
 
-		if result.PackageSPDXIdentifier != "SPDXRef-Package-1" {
+		if result == nil {
+			t.Fatalf("expected non-nil result")
+		}
+
+		if result.PackageSPDXIdentifier != common.ElementID("SPDXRef-Package-1") {
 			t.Fatalf("expected SPDXRef-Package-1, got %s", result.PackageSPDXIdentifier)
 		}
 	})
 
 	t.Run("reuse existing ID mapping", func(t *testing.T) {
-		idMap := make(map[string]common.ElementID)
+		ctx := StartConversion()
 
 		pkg := &AIPackage{
 			ID:   "pkg-1",
 			Name: "example",
 		}
 
-		first := ConvertPackageToV23(pkg, idMap, 0)
-		second := ConvertPackageToV23(pkg, idMap, 1)
+		first := ConvertPackageToV23(pkg, ctx)
+		second := ConvertPackageToV23(pkg, ctx)
 
 		if first.PackageSPDXIdentifier != second.PackageSPDXIdentifier {
 			t.Fatalf("expected same SPDXID, got %s and %s", first.PackageSPDXIdentifier, second.PackageSPDXIdentifier)
@@ -67,16 +72,35 @@ func TestConvertV3ElementIDtoV2ElementID(t *testing.T) {
 	})
 
 	t.Run("multiple packages get unique IDs", func(t *testing.T) {
-		idMap := make(map[string]common.ElementID)
+		ctx := StartConversion()
 
 		pkg1 := &AIPackage{ID: "pkg-1", Name: "one"}
 		pkg2 := &AIPackage{ID: "pkg-2", Name: "two"}
 
-		res1 := ConvertPackageToV23(pkg1, idMap, 0)
-		res2 := ConvertPackageToV23(pkg2, idMap, 1)
+		res1 := ConvertPackageToV23(pkg1, ctx)
+		res2 := ConvertPackageToV23(pkg2, ctx)
 
 		if res1.PackageSPDXIdentifier == res2.PackageSPDXIdentifier {
 			t.Fatalf("expected different SPDXIDs, got %s", res1.PackageSPDXIdentifier)
+		}
+	})
+
+	t.Run("missing ID should return nil", func(t *testing.T) {
+		ctx := StartConversion()
+
+		pkg := &AIPackage{
+			ID:   "",
+			Name: "invalid",
+		}
+
+		result := ConvertPackageToV23(pkg, ctx)
+
+		if result != nil {
+			t.Fatalf("expected nil for missing ID")
+		}
+
+		if len(ctx.Warnings) == 0 {
+			t.Fatalf("expected warning for missing ID")
 		}
 	})
 }
