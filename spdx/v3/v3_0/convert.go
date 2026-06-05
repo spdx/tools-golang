@@ -258,7 +258,6 @@ type documentConverter struct {
 	externalRefTypeMap        map[string]ExternalRefType
 	primaryPurposeMap         map[string]SoftwarePurpose
 	emailExtractor            *regexp.Regexp
-	postConvert               []func() error
 	conversionErrors          []error
 }
 

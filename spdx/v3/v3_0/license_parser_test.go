@@ -35,6 +35,36 @@ func TestParseLicenseExpression(t *testing.T) {
 			want:       &CustomLicense{ID: "DocumentRef-ext:LicenseRef-custom"},
 		},
 		{
+			name:       "NONE",
+			expression: "NONE",
+			want:       IndividualLicensingInfo_NoneLicense,
+		},
+		{
+			name:       "NOASSERTION",
+			expression: "NOASSERTION",
+			want:       IndividualLicensingInfo_NoAssertionLicense,
+		},
+		{
+			name:       "NONE within expression",
+			expression: "MIT OR NONE",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					IndividualLicensingInfo_NoneLicense,
+				},
+			},
+		},
+		{
+			name:       "NOASSERTION within expression",
+			expression: "MIT AND NOASSERTION",
+			want: &ConjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					IndividualLicensingInfo_NoAssertionLicense,
+				},
+			},
+		},
+		{
 			name:       "or later",
 			expression: "GPL-2.0-only+",
 			want: &OrLaterOperator{
@@ -188,6 +218,16 @@ func TestParseLicenseExpression(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:       "tabs and newlines",
+			expression: "\tMIT\n\tOR\r\n\tApache-2.0\t",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&ListedLicense{Name: "Apache-2.0"},
+				},
+			},
+		},
 		// error cases
 		{
 			name:       "empty",
@@ -241,19 +281,6 @@ func TestParseLicenseExpression(t *testing.T) {
 		},
 	}
 
-	opts := cmp.Options{
-		cmpopts.IgnoreUnexported(
-			ListedLicense{},
-			CustomLicense{},
-			OrLaterOperator{},
-			DisjunctiveLicenseSet{},
-			ConjunctiveLicenseSet{},
-			WithAdditionOperator{},
-			ListedLicenseException{},
-			CustomLicenseAddition{},
-		),
-	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ParseLicenseExpression(tt.expression)
@@ -266,7 +293,7 @@ func TestParseLicenseExpression(t *testing.T) {
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
-			if d := cmp.Diff(tt.want, got, opts...); d != "" {
+			if d := cmp.Diff(tt.want, got, diffOpts()...); d != "" {
 				t.Errorf("ParseLicenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
 			}
 		})
@@ -347,6 +374,7 @@ func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
 			WithAdditionOperator{},
 			ListedLicenseException{},
 			CustomLicenseAddition{},
+			IndividualLicensingInfo{},
 		),
 	}
 

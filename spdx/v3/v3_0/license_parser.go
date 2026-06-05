@@ -19,6 +19,8 @@ import (
 //   - "GPL-2.0-only+" → *OrLaterOperator wrapping *ListedLicense
 //   - "LicenseRef-custom" → *CustomLicense
 //   - "DocumentRef-ext:LicenseRef-custom" → *CustomLicense
+//   - "NONE" → IndividualLicensingInfo_NoneLicense
+//   - "NOASSERTION" → IndividualLicensingInfo_NoAssertionLicense
 func ParseLicenseExpression(expression string) (AnyLicenseInfo, error) {
 	p := &licenseParser{input: strings.TrimSpace(expression)}
 	if len(p.input) == 0 {
@@ -150,6 +152,15 @@ func (p *licenseParser) parseSimple() (AnyLicenseInfo, error) {
 		return nil, fmt.Errorf("expected license identifier at position %d, got %q", p.pos, p.remaining())
 	}
 
+	// NONE and NOASSERTION are individual values rather than licenses and cannot
+	// take an or-later (+) suffix, so they are handled before makeLicense.
+	switch ident {
+	case "NONE":
+		return IndividualLicensingInfo_NoneLicense, nil
+	case "NOASSERTION":
+		return IndividualLicensingInfo_NoAssertionLicense, nil
+	}
+
 	// Check for or-later (+) suffix
 	if p.pos < len(p.input) && p.input[p.pos] == '+' {
 		p.pos++
@@ -160,9 +171,13 @@ func (p *licenseParser) parseSimple() (AnyLicenseInfo, error) {
 }
 
 func (p *licenseParser) skipWhitespace() {
-	for p.pos < len(p.input) && p.input[p.pos] == ' ' {
+	for p.pos < len(p.input) && isWhitespace(p.input[p.pos]) {
 		p.pos++
 	}
+}
+
+func isWhitespace(c byte) bool {
+	return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v'
 }
 
 // peekKeyword checks if the next non-whitespace token is exactly the given keyword,
