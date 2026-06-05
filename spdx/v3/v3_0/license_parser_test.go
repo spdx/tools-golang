@@ -272,3 +272,96 @@ func TestParseLicenseExpression(t *testing.T) {
 		})
 	}
 }
+
+func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
+	// custom licenses registered by convert23license, as populated when the
+	// document's OtherLicenses are converted.
+	custom1 := &CustomLicense{ID: "LicenseRef-custom-1", Name: "Custom One", Text: "custom one text"}
+	custom2 := &CustomLicense{ID: "LicenseRef-custom-2", Name: "Custom Two", Text: "custom two text"}
+
+	tests := []struct {
+		name       string
+		expression string
+		want       AnyLicenseInfo
+	}{
+		{
+			name:       "ref nested in conjunctive and disjunctive sets",
+			expression: "MIT AND (Apache-2.0 OR LicenseRef-custom-1)",
+			want: &ConjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&DisjunctiveLicenseSet{
+						Members: LicenseInfoList{
+							&ListedLicense{Name: "Apache-2.0"},
+							custom1,
+						},
+					},
+				},
+			},
+		},
+		{
+			name:       "multiple refs nested at different depths",
+			expression: "LicenseRef-custom-1 OR (MIT AND LicenseRef-custom-2)",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					custom1,
+					&ConjunctiveLicenseSet{
+						Members: LicenseInfoList{
+							&ListedLicense{Name: "MIT"},
+							custom2,
+						},
+					},
+				},
+			},
+		},
+		{
+			name:       "ref nested in or-later operator",
+			expression: "LicenseRef-custom-1+",
+			want: &OrLaterOperator{
+				SubjectLicense: custom1,
+			},
+		},
+		{
+			// the subject license is resolved; the addition is left untouched.
+			name:       "ref nested in with-addition operator",
+			expression: "LicenseRef-custom-1 WITH AdditionRef-custom",
+			want: &WithAdditionOperator{
+				SubjectExtendableLicense: custom1,
+				SubjectAddition:          &CustomLicenseAddition{ID: "AdditionRef-custom"},
+			},
+		},
+		{
+			name:       "unregistered ref left as placeholder",
+			expression: "LicenseRef-unknown",
+			want:       &CustomLicense{ID: "LicenseRef-unknown"},
+		},
+	}
+
+	opts := cmp.Options{
+		cmpopts.IgnoreUnexported(
+			ListedLicense{},
+			CustomLicense{},
+			OrLaterOperator{},
+			DisjunctiveLicenseSet{},
+			ConjunctiveLicenseSet{},
+			WithAdditionOperator{},
+			ListedLicenseException{},
+			CustomLicenseAddition{},
+		),
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &documentConverter{
+				idMap: map[string]any{
+					custom1.ID: custom1,
+					custom2.ID: custom2,
+				},
+			}
+			got := c.convert23licenseExpression(tt.expression)
+			if d := cmp.Diff(tt.want, got, opts...); d != "" {
+				t.Errorf("convert23licenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
+			}
+		})
+	}
+}

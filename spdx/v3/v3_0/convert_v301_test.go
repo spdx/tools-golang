@@ -48,8 +48,9 @@ func v301doc() *Document {
 		}
 	}
 
+	customLicense1 := v301customLicense1()
 	pkg1, pkg1Elems := v301package1()
-	pkg2, pkg2Elems := v301package2()
+	pkg2, pkg2Elems := v301package2(customLicense1)
 	file1, file1Elems := v301file1()
 	file2, file2Elems := v301file2()
 	snippet1, snippet1Elems := v301snippet1(file1)
@@ -63,7 +64,7 @@ func v301doc() *Document {
 	// top-level converted elements go directly in sbom.Elements
 	// (matching converter behavior: packages, files, annotations, snippets, custom licenses)
 	addToSBOM(
-		v301customLicense1(),
+		customLicense1,
 		v301customLicense2(),
 		pkg1, pkg2,
 		AnyElement(file1), AnyElement(file2),
@@ -240,7 +241,7 @@ func v301package1() (*Package, ElementList) {
 	return p, extras
 }
 
-func v301package2() (*Package, ElementList) {
+func v301package2(customLicense1 AnyLicense) (*Package, ElementList) {
 	p := &Package{
 		ID:          "SPDXRef-Package-UtilityTools",
 		Name:        "utility-tools",
@@ -275,7 +276,7 @@ func v301package2() (*Package, ElementList) {
 						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
 						SubjectAddition:          &ListedLicenseException{Name: "Classpath-Exception"},
 					},
-					&ListedLicense{Name: "LicenceRef-CustomLicense1"},
+					customLicense1,
 				},
 			},
 		},

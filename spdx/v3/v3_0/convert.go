@@ -61,6 +61,8 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 	d.DataLicense = c.convert23licenseExpression(doc.DataLicense)
 
 	var converted ElementList
+
+	// other licenses may be referenced (with LicenseRef-... in expressions), so process these first to recreate the proper graph
 	for _, l := range doc.OtherLicenses {
 		converted = append(converted, c.convert23license(l))
 	}
@@ -836,7 +838,37 @@ func (c *documentConverter) convert23licenseExpression(licenseExpression string)
 	if err != nil {
 		c.logDropped(err)
 	}
-	return parsedLicense
+	return c.resolveLicenseRefs(parsedLicense)
+}
+
+// resolveLicenseRefs walks a parsed license expression and replaces the
+// placeholder CustomLicense references the parser produces for LicenseRef-*
+// identifiers with the resolved CustomLicense instances registered in
+// idMap by convert23license.
+func (c *documentConverter) resolveLicenseRefs(license AnyLicenseInfo) AnyLicenseInfo {
+	switch l := license.(type) {
+	case *CustomLicense:
+		if resolved, ok := c.idMap[l.ID].(*CustomLicense); ok {
+			return resolved
+		}
+	case *ConjunctiveLicenseSet:
+		for i, m := range l.Members {
+			l.Members[i] = c.resolveLicenseRefs(m)
+		}
+	case *DisjunctiveLicenseSet:
+		for i, m := range l.Members {
+			l.Members[i] = c.resolveLicenseRefs(m)
+		}
+	case *OrLaterOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.SubjectLicense).(AnyLicense); ok {
+			l.SubjectLicense = resolved
+		}
+	case *WithAdditionOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.SubjectExtendableLicense).(AnyExtendableLicense); ok {
+			l.SubjectExtendableLicense = resolved
+		}
+	}
+	return license
 }
 
 func (c *documentConverter) convert23externalDocumentRef(r v2_3.ExternalDocumentRef) AnyExternalMap {

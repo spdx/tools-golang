@@ -161,7 +161,7 @@ func v23package2() *v2_3.Package {
 		},
 		PackageHomePage:         "https://tools.com/utility",
 		PackageLicenseConcluded: "Apache-2.0",
-		PackageLicenseDeclared:  "AGPL OR (GPL-2.0-only with Classpath-Exception OR LicenceRef-CustomLicense1)",
+		PackageLicenseDeclared:  "AGPL OR (GPL-2.0-only with Classpath-Exception OR LicenseRef-CustomLicense1)",
 		PackageCopyrightText:    "Copyright 2023 Tools Inc",
 		PackageSummary:          "Collection of utility tools",
 		PackageDescription:      "A comprehensive set of utility tools for developers.",
