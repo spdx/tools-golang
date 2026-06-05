@@ -219,9 +219,7 @@ func Test_convertElements(t *testing.T) {
 			}
 			require.NotNil(t, got)
 			diff := cmp.Diff(tt.expected, got, diffOpts()...)
-			if diff != "" {
-				t.Errorf("mismatch (-want +got):\n%s", diff)
-			}
+			require.Emptyf(t, diff, "mismatch (-want +got):\n%s", diff)
 		})
 	}
 }
@@ -259,9 +257,8 @@ func Test_documentConversion(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			require.NotEmpty(t, tt.expected)
 			require.NotEmpty(t, tt.got)
-			if diff := cmp.Diff(tt.expected, tt.got, opts...); diff != "" {
-				t.Errorf("mismatch (-want +got):\n%s", diff)
-			}
+			diff := cmp.Diff(tt.expected, tt.got, opts...)
+			require.Emptyf(t, diff, "mismatch (-want +got):\n%s", diff)
 		})
 	}
 }

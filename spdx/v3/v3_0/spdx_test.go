@@ -184,9 +184,7 @@ func Test_writer(t *testing.T) {
 	//	return nil
 	//})
 	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, diffOpts()...)
-	if diff != "" {
-		t.Fatal(diff)
-	}
+	require.Empty(t, diff)
 }
 
 func diffOpts() []cmp.Option {
@@ -382,9 +380,7 @@ func Test_exportImportExport(t *testing.T) {
 
 	buf := bytes.Buffer{}
 	err := doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	json1 := buf.String()
 
@@ -392,14 +388,11 @@ func Test_exportImportExport(t *testing.T) {
 
 	newDoc := newTestDocument()
 	err = newDoc.FromJSON(strings.NewReader(json1))
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	// compare original to parsed -- this includes Element lists, etc.
-	if diff := cmp.Diff(doc, newDoc, diffOpts()...); diff != "" {
-		t.Errorf(diff)
-	}
+	diff := cmp.Diff(doc, newDoc, diffOpts()...)
+	require.Empty(t, diff)
 
 	// some basic usage:
 
@@ -417,9 +410,7 @@ func Test_exportImportExport(t *testing.T) {
 			}
 		}
 	}
-	if len(pkgs) != 2 {
-		t.Error("wrong packages returned")
-	}
+	require.Len(t, pkgs, 2)
 }
 
 func Test_aiProfile(t *testing.T) {
@@ -455,9 +446,7 @@ func Test_aiProfile(t *testing.T) {
 
 	buf := bytes.Buffer{}
 	err := doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	json1 := buf.String()
 
@@ -465,13 +454,10 @@ func Test_aiProfile(t *testing.T) {
 
 	newDoc := newTestDocument()
 	err = newDoc.FromJSON(strings.NewReader(json1))
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
-	if diff := cmp.Diff(doc, newDoc, diffOpts()...); diff != "" {
-		t.Errorf(diff)
-	}
+	diff := cmp.Diff(doc, newDoc, diffOpts()...)
+	require.Empty(t, diff)
 }
 
 func newTestDocument() *spdx.Document {

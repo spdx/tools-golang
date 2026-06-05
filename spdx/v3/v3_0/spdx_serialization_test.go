@@ -112,9 +112,7 @@ func Test_spdxExportImportExport(t *testing.T) {
 			}
 		}
 	}
-	if len(pkgs) != 2 {
-		t.Error("wrong packages returned")
-	}
+	require.Len(t, pkgs, 2)
 }
 
 func Test_stringSlice(t *testing.T) {
@@ -181,9 +179,7 @@ func encodeDecode[T AnyElement](t *testing.T, obj T) T {
 	}
 
 	diff := cmp.Diff(obj, got, diffOpts()...)
-	if diff != "" {
-		t.Fatal(diff)
-	}
+	require.Empty(t, diff)
 
 	return got
 }

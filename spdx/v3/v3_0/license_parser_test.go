@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseLicenseExpression(t *testing.T) {
@@ -228,6 +229,56 @@ func TestParseLicenseExpression(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:       "or-later combined with conjunction and grouped or-later",
+			expression: "MIT+ AND Apache-2.0+ and (MIT OR GPL-2.0-only+) AND BSD-3-Clause",
+			want: &ConjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&OrLaterOperator{SubjectLicense: &ListedLicense{Name: "MIT"}},
+					&OrLaterOperator{SubjectLicense: &ListedLicense{Name: "Apache-2.0"}},
+					&DisjunctiveLicenseSet{
+						Members: LicenseInfoList{
+							&ListedLicense{Name: "MIT"},
+							&OrLaterOperator{SubjectLicense: &ListedLicense{Name: "GPL-2.0-only"}},
+						},
+					},
+					&ListedLicense{Name: "BSD-3-Clause"},
+				},
+			},
+		},
+		{
+			// makeAddition's AdditionRef- prefix handling on the addition side,
+			// with a LicenseRef as the extendable subject.
+			name:       "WITH on a LicenseRef with AdditionRef",
+			expression: "LicenseRef-MyLic WITH AdditionRef-MyExc",
+			want: &WithAdditionOperator{
+				SubjectExtendableLicense: &CustomLicense{ID: "LicenseRef-MyLic"},
+				SubjectAddition:          &CustomLicenseAddition{ID: "AdditionRef-MyExc"},
+			},
+		},
+		{
+			// the colon-aware ident scanner cooperates with the + suffix.
+			name:       "DocumentRef with or-later suffix",
+			expression: "DocumentRef-ext:LicenseRef-foo+",
+			want: &OrLaterOperator{
+				SubjectLicense: &CustomLicense{ID: "DocumentRef-ext:LicenseRef-foo"},
+			},
+		},
+		{
+			// WITH binds tighter than OR, so the explicit grouping matches the
+			// default precedence.
+			name:       "WITH inside paren-grouped OR",
+			expression: "MIT OR (GPL-2.0-only WITH Classpath-exception-2.0)",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&WithAdditionOperator{
+						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
+						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+					},
+				},
+			},
+		},
 		// error cases
 		{
 			name:       "empty",
@@ -279,23 +330,55 @@ func TestParseLicenseExpression(t *testing.T) {
 			expression: "(MIT OR Apache-2.0)+",
 			wantErr:    true,
 		},
+		{
+			// the exception side of WITH is a bare identifier; it cannot be parenthesized.
+			name:       "parenthesized exception",
+			expression: "MIT WITH (Classpath-exception-2.0)",
+			wantErr:    true,
+		},
+		{
+			// + is not allowed on the exception side; the trailing + is left as an
+			// unexpected token.
+			name:       "or-later suffix on exception",
+			expression: "MIT WITH GPL-2.0-only+",
+			wantErr:    true,
+		},
+		{
+			// WITH requires an extendable license; a license set is not extendable,
+			// so this fails the AnyExtendableLicense type assertion.
+			name:       "WITH applied to a license set",
+			expression: "(MIT OR Apache-2.0) WITH Classpath-exception-2.0",
+			wantErr:    true,
+		},
+		{
+			// a space before + detaches it from the identifier, leaving it as an
+			// unexpected trailing token.
+			name:       "space before or-later suffix",
+			expression: "MIT +",
+			wantErr:    true,
+		},
+		{
+			name:       "empty parens",
+			expression: "()",
+			wantErr:    true,
+		},
+		{
+			name:       "empty parens with whitespace",
+			expression: "( )",
+			wantErr:    true,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ParseLicenseExpression(tt.expression)
 			if tt.wantErr {
-				if err == nil {
-					t.Fatalf("expected error for input %q, got nil", tt.expression)
-				}
+				require.Errorf(t, err, "expected error for input %q, got nil", tt.expression)
 				return
 			}
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if d := cmp.Diff(tt.want, got, diffOpts()...); d != "" {
-				t.Errorf("ParseLicenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
-			}
+			require.NoError(t, err)
+			d := cmp.Diff(tt.want, got, diffOpts()...)
+			require.Empty(t, d, "ParseLicenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
 		})
 	}
 }
@@ -387,9 +470,8 @@ func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
 				},
 			}
 			got := c.convert23licenseExpression(tt.expression)
-			if d := cmp.Diff(tt.want, got, opts...); d != "" {
-				t.Errorf("convert23licenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
-			}
+			d := cmp.Diff(tt.want, got, opts...)
+			require.Emptyf(t, d, "convert23licenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
 		})
 	}
 }
