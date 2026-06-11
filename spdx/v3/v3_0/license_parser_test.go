@@ -1,10 +1,10 @@
 package v3_0
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/require"
 )
 
@@ -13,7 +13,7 @@ func TestParseLicenseExpression(t *testing.T) {
 		name       string
 		expression string
 		want       AnyLicenseInfo
-		wantErr    bool
+		wantErr    string
 	}{
 		{
 			name:       "simple license",
@@ -156,6 +156,21 @@ func TestParseLicenseExpression(t *testing.T) {
 			},
 		},
 		{
+			name:       "AND precedence over OR 2",
+			expression: "MIT AND Apache-2.0 OR BSD-3-Clause",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ConjunctiveLicenseSet{
+						Members: LicenseInfoList{
+							&ListedLicense{Name: "MIT"},
+							&ListedLicense{Name: "Apache-2.0"},
+						},
+					},
+					&ListedLicense{Name: "BSD-3-Clause"},
+				},
+			},
+		},
+		{
 			name:       "parentheses",
 			expression: "(MIT OR Apache-2.0) AND BSD-3-Clause",
 			want: &ConjunctiveLicenseSet{
@@ -171,14 +186,26 @@ func TestParseLicenseExpression(t *testing.T) {
 			},
 		},
 		{
+			name:       "flatten nested parentheses",
+			expression: "(MIT or (Apache-2.0 or LicenseRef-MIT-modified)) or GPL-2.0-only",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&ListedLicense{Name: "Apache-2.0"},
+					&CustomLicense{ID: "LicenseRef-MIT-modified"},
+					&ListedLicense{Name: "GPL-2.0-only"},
+				},
+			},
+		},
+		{
 			name:       "complex nested parentheses",
-			expression: "(MIT or (Apache-2.0 or LicenseRef-MIT-modified)) and GPL-2.0-only",
+			expression: "(MIT or (Apache-2.0 and LicenseRef-MIT-modified)) and GPL-2.0-only",
 			want: &ConjunctiveLicenseSet{
 				Members: LicenseInfoList{
 					&DisjunctiveLicenseSet{
 						Members: LicenseInfoList{
 							&ListedLicense{Name: "MIT"},
-							&DisjunctiveLicenseSet{
+							&ConjunctiveLicenseSet{
 								Members: LicenseInfoList{
 									&ListedLicense{Name: "Apache-2.0"},
 									&CustomLicense{ID: "LicenseRef-MIT-modified"},
@@ -265,8 +292,32 @@ func TestParseLicenseExpression(t *testing.T) {
 			},
 		},
 		{
-			// WITH binds tighter than OR, so the explicit grouping matches the
-			// default precedence.
+			name:       "WITH not grouped",
+			expression: "MIT OR GPL-2.0-only WITH Classpath-exception-2.0",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&ListedLicense{Name: "MIT"},
+					&WithAdditionOperator{
+						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
+						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+					},
+				},
+			},
+		},
+		{
+			name:       "WITH not grouped 2",
+			expression: "GPL-2.0-only WITH Classpath-exception-2.0 OR MIT",
+			want: &DisjunctiveLicenseSet{
+				Members: LicenseInfoList{
+					&WithAdditionOperator{
+						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
+						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+					},
+					&ListedLicense{Name: "MIT"},
+				},
+			},
+		},
+		{
 			name:       "WITH inside paren-grouped OR",
 			expression: "MIT OR (GPL-2.0-only WITH Classpath-exception-2.0)",
 			want: &DisjunctiveLicenseSet{
@@ -283,102 +334,125 @@ func TestParseLicenseExpression(t *testing.T) {
 		{
 			name:       "empty",
 			expression: "",
-			wantErr:    true,
+			wantErr:    "empty",
 		},
 		{
 			name:       "just whitespace",
 			expression: "   ",
-			wantErr:    true,
+			wantErr:    "empty",
 		},
 		{
 			name:       "unclosed paren",
 			expression: "(MIT",
-			wantErr:    true,
+			wantErr:    "unclosed parenthesis",
 		},
 		{
 			name:       "unexpected close paren",
 			expression: "MIT)",
-			wantErr:    true,
+			wantErr:    "unexpected",
 		},
 		{
 			name:       "missing operand after OR",
 			expression: "MIT OR",
-			wantErr:    true,
+			wantErr:    "OR",
 		},
 		{
 			name:       "missing operand after AND",
 			expression: "MIT AND",
-			wantErr:    true,
+			wantErr:    "AND",
 		},
 		{
 			name:       "missing exception after WITH",
 			expression: "MIT WITH",
-			wantErr:    true,
+			wantErr:    "WITH",
 		},
 		{
 			name:       "double operator",
 			expression: "MIT OR OR Apache-2.0",
-			wantErr:    true,
+			wantErr:    "OR",
 		},
 		{
 			name:       "leading operator",
 			expression: "OR MIT",
-			wantErr:    true,
+			wantErr:    "OR",
+			want:       &ListedLicense{Name: "MIT"},
 		},
 		{
 			name:       "trailing plus on group",
 			expression: "(MIT OR Apache-2.0)+",
-			wantErr:    true,
+			wantErr:    "+",
 		},
 		{
 			// the exception side of WITH is a bare identifier; it cannot be parenthesized.
 			name:       "parenthesized exception",
 			expression: "MIT WITH (Classpath-exception-2.0)",
-			wantErr:    true,
+			wantErr:    "WITH",
 		},
 		{
 			// + is not allowed on the exception side; the trailing + is left as an
 			// unexpected token.
 			name:       "or-later suffix on exception",
 			expression: "MIT WITH GPL-2.0-only+",
-			wantErr:    true,
+			wantErr:    "+",
 		},
 		{
 			// WITH requires an extendable license; a license set is not extendable,
 			// so this fails the AnyExtendableLicense type assertion.
 			name:       "WITH applied to a license set",
 			expression: "(MIT OR Apache-2.0) WITH Classpath-exception-2.0",
-			wantErr:    true,
+			wantErr:    "WITH",
 		},
 		{
 			// a space before + detaches it from the identifier, leaving it as an
 			// unexpected trailing token.
 			name:       "space before or-later suffix",
 			expression: "MIT +",
-			wantErr:    true,
+			wantErr:    "whitespace",
 		},
 		{
 			name:       "empty parens",
 			expression: "()",
-			wantErr:    true,
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "empty parens after valid license",
+			expression: "MIT OR ()",
+			wantErr:    "unexpected token",
 		},
 		{
 			name:       "empty parens with whitespace",
 			expression: "( )",
-			wantErr:    true,
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "empty parens before license",
+			expression: "( ) OR MIT",
+			wantErr:    "unexpected token",
+			want:       &ListedLicense{Name: "MIT"},
+		},
+		{
+			name:       "no operators",
+			expression: "MIT GPL",
+			wantErr:    "unexpected trailing",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ParseLicenseExpression(tt.expression)
-			if tt.wantErr {
-				require.Errorf(t, err, "expected error for input %q, got nil", tt.expression)
-				return
+			if tt.wantErr != "" {
+				require.ErrorContains(t, err, tt.wantErr)
+				// ensure we don't have cascading errors
+				require.Truef(t, len(strings.Split(err.Error(), "^")) < 3,
+					"expected error to avoid cascading but got %q", err.Error(),
+				)
+			} else {
+				require.NoError(t, err)
 			}
-			require.NoError(t, err)
-			d := cmp.Diff(tt.want, got, diffOpts()...)
-			require.Empty(t, d, "ParseLicenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
+			if tt.want != nil {
+				d := cmp.Diff(tt.want, got, diffOpts()...)
+				require.Empty(t, d, "ParseLicenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
+			}
 		})
 	}
 }
@@ -447,20 +521,6 @@ func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
 		},
 	}
 
-	opts := cmp.Options{
-		cmpopts.IgnoreUnexported(
-			ListedLicense{},
-			CustomLicense{},
-			OrLaterOperator{},
-			DisjunctiveLicenseSet{},
-			ConjunctiveLicenseSet{},
-			WithAdditionOperator{},
-			ListedLicenseException{},
-			CustomLicenseAddition{},
-			IndividualLicensingInfo{},
-		),
-	}
-
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := &documentConverter{
@@ -470,7 +530,7 @@ func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
 				},
 			}
 			got := c.convert23licenseExpression(tt.expression)
-			d := cmp.Diff(tt.want, got, opts...)
+			d := cmp.Diff(tt.want, got, diffOpts()...)
 			require.Emptyf(t, d, "convert23licenseExpression(%q) mismatch (-want +got):\n%s", tt.expression, d)
 		})
 	}

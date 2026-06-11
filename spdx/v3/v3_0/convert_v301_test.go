@@ -270,15 +270,11 @@ func v301package2(customLicense1 AnyLicense) (*Package, ElementList) {
 	declaredLicense := &DisjunctiveLicenseSet{
 		Members: LicenseInfoList{
 			&ListedLicense{Name: "AGPL"},
-			&DisjunctiveLicenseSet{
-				Members: LicenseInfoList{
-					&WithAdditionOperator{
-						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-						SubjectAddition:          &ListedLicenseException{Name: "Classpath-Exception"},
-					},
-					customLicense1,
-				},
+			&WithAdditionOperator{
+				SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
+				SubjectAddition:          &ListedLicenseException{Name: "Classpath-Exception"},
 			},
+			customLicense1,
 		},
 	}
 

@@ -243,8 +243,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 }
 
 type documentConverter struct {
-	sbom *SBOM
-	//namespace                 string
+	sbom                      *SBOM
 	idMap                     map[string]any
 	creationInfo              AnyCreationInfo
 	relationshipMap           map[any][]AnyRelationship
@@ -846,8 +845,15 @@ func (c *documentConverter) convert23licenseExpression(licenseExpression string)
 // idMap by convert23license.
 func (c *documentConverter) resolveLicenseRefs(license AnyLicenseInfo) AnyLicenseInfo {
 	switch l := license.(type) {
+	case *ListedLicense:
+		if l.ID != "" {
+			if existing, _ := c.idMap[l.ID].(AnyListedLicense); existing != nil {
+				return existing
+			}
+			c.idMap[l.ID] = l
+		}
 	case *CustomLicense:
-		if resolved, ok := c.idMap[l.ID].(*CustomLicense); ok {
+		if resolved, ok := c.idMap[l.ID].(AnyCustomLicense); ok {
 			return resolved
 		}
 	case *ConjunctiveLicenseSet:
