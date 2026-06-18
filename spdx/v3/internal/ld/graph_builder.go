@@ -95,7 +95,7 @@ func (b *graphBuilder) serialize(v reflect.Value) (any, []error) {
 		if v.IsNil() {
 			return nil, nil
 		}
-		if debug {
+		if Debug {
 			ptr := fmt.Sprintf("%v", v.Pointer())
 			fmt.Printf("got pointer: %v\n", ptr)
 		}
@@ -194,17 +194,14 @@ func (b *graphBuilder) serializeProps(context *serializationContext, tc *typeCon
 			id := ""
 			if isUnset(fieldV) {
 				id = b.getID(ptrV)
-				if debug {
+				if Debug {
 					val := ptrV.Interface()
 					fmt.Printf("%#v\n", val)
 				}
 			} else {
 				id = fieldV.String()
-				//if !strings.HasPrefix(id, "_:") {
-				//	id = "_:" + id
-				//}
 			}
-			if debug {
+			if Debug {
 				ptr := fmt.Sprintf("%v", ptrV.Pointer())
 				fmt.Printf("setting id for pointer: %v\n", ptr)
 			}
@@ -230,7 +227,7 @@ func (b *graphBuilder) serializeProps(context *serializationContext, tc *typeCon
 			continue
 		}
 
-		if debug {
+		if Debug {
 			val := fieldV.Interface()
 			str := fmt.Sprintf("serializing prop %v: %#v", f, val)
 			fmt.Println(str)

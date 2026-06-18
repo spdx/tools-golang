@@ -2,9 +2,7 @@ package v3_0
 
 import (
 	"fmt"
-	"maps"
 	"reflect"
-	"slices"
 	"strings"
 	"testing"
 
@@ -232,8 +230,8 @@ func Test_documentConversion(t *testing.T) {
 
 	opts := diffOpts()
 
-	convertedElements := ElementList(slices.Collect(maps.Values(collectAllElements(&converted.SpdxDocument))))
-	expectedElements := ElementList(slices.Collect(maps.Values(collectAllElements(&expected.SpdxDocument))))
+	convertedElements := ElementList(collectAllElements(&converted.SpdxDocument))
+	expectedElements := ElementList(collectAllElements(&expected.SpdxDocument))
 	tests := []struct {
 		name     string
 		expected any

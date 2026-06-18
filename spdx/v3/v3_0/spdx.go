@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"maps"
-	"reflect"
-	"slices"
 	"strings"
 	"time"
 
@@ -15,12 +12,13 @@ import (
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
-/*
-SPDX 3 models and serialization code is generated from internal/generate/main.go
-To regenerate all models, run: make generate
-*/
+// SPDX 3 model and serialization code is generated from internal/generate/main.go
+// To regenerate all models, run: make generate
 
-const Version = "3.0.1" // TODO is there a way to ascertain this version from generated code programmatically?
+const (
+	Version     = "3.0.1" // TODO is there a way to ascertain this version from generated code programmatically?
+	NOASSERTION = "NOASSERTION"
+)
 
 type Document struct {
 	SpdxDocument
@@ -95,31 +93,45 @@ func conformanceFrom(conformance ProfileIdentifierType) []ProfileIdentifierType 
 	return out
 }
 
-func (d *Document) Validate(setCreationInfo bool) error {
-	if setCreationInfo {
-		// all Elements need to have creationInfo set...
-		d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
+// Validate will validate the full SPDX document, optionally applying the same pre-processing that ToJSON performs to fill
+// in missing CreationInfo and other data
+func (d *Document) Validate(preProcess bool) error {
+	if preProcess {
+		// do all
+		_ = d.ToJSON(io.Discard)
 	}
 	return ld.ValidateGraph(d.SpdxDocument)
 }
 
 // ToJSON first processes the document by:
 //   - setting each Element's CreationInfo property to the SpdxDocument's CreationInfo if nil
-//   - collecting all element references to the top-level Elements slice
+//   - collecting every ElementCollection's object graph Element references to its Elements slice
+//   - filling known required fields with NOASSERTION or similar left empty by conversion from 2.3
 //
 // ... and after this initial processing, outputs the document as compact JSON LD,
 // including accounting for empty IDs by outputting blank node spdxId values
 func (d *Document) ToJSON(writer io.Writer) error {
-	// all Elements need to have creationInfo set...
-	d.setCreationInfo(d.SpdxDocument.CreationInfo, &d.SpdxDocument)
-
 	// all element collections need to have all contained elements in the Elements property
-	for _, e := range collectAllElements(&d.SpdxDocument) {
-		if collection, ok := e.(AnyElementCollection); ok {
-			// collect all unique elements in the collection graph and set in the elements property
-			collection.SetElements(slices.Collect(maps.Values(collectAllElements(collection))))
+	_ = ld.VisitObjectGraph(&d.SpdxDocument, func(path []any, e AnyElement) error {
+		// all elements need to have creationInfo set
+		if e.GetCreationInfo() == nil {
+			e.SetCreationInfo(d.CreationInfo)
 		}
-	}
+		switch e := e.(type) {
+		case AnyElementCollection:
+			// collect all unique elements in the collection graph and set in the Elements property
+			e.SetElements(collectAllElements(e))
+		case AnyLicense:
+			// licenses are frequently missing required fields: during 2.3 conversion we have to convert license expressions to a full object graph,
+			// not LicenseExpression because this is broken in 3.0 and only fixed in 3.1, which is not released. In 3.0 it cannot support
+			// CustomLicenses, which many expressions have, so we must use the expanded licensing model to properly capture this, but these do not
+			// have _text_, so we help users by filling these with NOASSERTION
+			if e.GetText() == "" {
+				e.SetText(NOASSERTION)
+			}
+		}
+		return nil
+	})
 
 	// The Elements list should not be serialized - the graph of the SpdxDocument includes all other properties, such as RootElements
 	elements := d.Elements
@@ -176,21 +188,6 @@ func (d *Document) ToJSON(writer io.Writer) error {
 	return internal.ToJSON("https://spdx.org/rdf/3.0.1/spdx-context.jsonld", d.LDContext, &d.SpdxDocument, internal.PrefixedIdGenerator(documentPrefix, namespaceMap), writer)
 }
 
-func (d *Document) setCreationInfo(creationInfo AnyCreationInfo, doc *SpdxDocument) {
-	if creationInfo == nil {
-		return
-	}
-	creationInfoInterfaceType := reflect.TypeOf((*AnyCreationInfo)(nil)).Elem()
-	ci := reflect.ValueOf(creationInfo)
-	_ = ld.VisitObjectGraph(doc, func(path []any, value reflect.Value) error {
-		t := value.Type()
-		if t == creationInfoInterfaceType && value.IsNil() {
-			value.Set(ci)
-		}
-		return nil
-	})
-}
-
 func (d *Document) FromJSON(reader io.Reader) error {
 	if d.LDContext == nil {
 		d.LDContext = context()
@@ -218,37 +215,7 @@ func (d *Document) FromJSON(reader io.Reader) error {
 	return fmt.Errorf("no SPDX document found")
 }
 
-// collectAllElements collects all elements referenced by the element collection, except the collection itself
-func collectAllElements(d AnyElementCollection) map[reflect.Value]AnyElement {
-	all := map[reflect.Value]AnyElement{}
-	v := reflect.ValueOf(d)
-	all[v] = d
-	_ = ld.VisitObjectGraph(d, func(path []any, value reflect.Value) error {
-		if value.Kind() == reflect.Pointer {
-			if _, ok := all[value]; !ok {
-				if e, ok := value.Interface().(AnyElement); ok {
-					all[value] = e
-				}
-			}
-		}
-		return nil
-	})
-	delete(all, v)
-	return all
-}
-
 var _ interface {
 	json.Marshaler
 	json.Unmarshaler
 } = (*Document)(nil)
-
-func notNil[T any, ListType ~[]T](values ListType) ListType {
-	var out ListType
-	for _, v := range values {
-		if isNil(v) {
-			continue
-		}
-		out = append(out, v)
-	}
-	return out
-}

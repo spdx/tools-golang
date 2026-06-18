@@ -87,25 +87,24 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 		c.convert23relationship(rel)
 	}
 
-	// add all elements to the sbom elements
+	// add all converted elements to the sbom elements
+	sbomElements := make(map[AnyElement]struct{}, len(c.sbom.Elements)+len(c.relationshipMap)+len(converted))
+	for _, e := range c.sbom.Elements {
+		sbomElements[e] = struct{}{}
+	}
 	for _, rels := range c.relationshipMap {
-		for _, r := range notNil(rels) {
-			if !slices.Contains(c.sbom.Elements, AnyElement(r)) {
-				c.sbom.Elements = append(c.sbom.Elements, r)
-			}
+		for _, r := range rels {
+			sbomElements[r] = struct{}{}
 		}
+	}
+	for _, e := range converted {
+		sbomElements[e] = struct{}{}
 	}
 
-	for _, e := range notNil(converted) {
-		if !slices.Contains(c.sbom.Elements, e) {
-			c.sbom.Elements = append(c.sbom.Elements, e)
-		}
-	}
+	c.sbom.Elements = mapKeys(sbomElements)
 
 	// ensure all elements are present in the document Elements list
-	for _, e := range collectAllElements(&d.SpdxDocument) {
-		d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, e)
-	}
+	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, collectAllElements(&d.SpdxDocument)...)
 }
 
 func newDocumentConverter(d *Document) *documentConverter {
@@ -813,8 +812,6 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 	}
 
 	out := &CustomLicense{
-		// custom licenses in SPDX 3.0 requires an unfortunate workaround:
-		// we must set a custom URI here because SPDX 3.0 only has
 		ID:       l.LicenseIdentifier,
 		Name:     l.LicenseName,
 		Comment:  l.LicenseComment,
@@ -822,9 +819,7 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 		Text:     l.ExtractedText,
 	}
 
-	c.idMap[l.LicenseIdentifier] = out
-
-	return out
+	return c.resolveLicenseRefs(out)
 }
 
 func (c *documentConverter) convert23licenseExpression(licenseExpression string) AnyLicenseInfo {
@@ -844,33 +839,33 @@ func (c *documentConverter) convert23licenseExpression(licenseExpression string)
 // identifiers with the resolved CustomLicense instances registered in
 // idMap by convert23license.
 func (c *documentConverter) resolveLicenseRefs(license AnyLicenseInfo) AnyLicenseInfo {
+	if isNil(license) { // avoid interface-to-nil values
+		return nil
+	}
+	if license.GetID() != "" {
+		if existing, _ := c.idMap[license.GetID()].(AnyLicenseInfo); existing != nil {
+			return existing
+		}
+		c.idMap[license.GetID()] = license
+	}
 	switch l := license.(type) {
-	case *ListedLicense:
-		if l.ID != "" {
-			if existing, _ := c.idMap[l.ID].(AnyListedLicense); existing != nil {
-				return existing
-			}
-			c.idMap[l.ID] = l
+	case AnyConjunctiveLicenseSet:
+		members := l.GetMembers()
+		for i, m := range members {
+			members[i] = c.resolveLicenseRefs(m)
 		}
-	case *CustomLicense:
-		if resolved, ok := c.idMap[l.ID].(AnyCustomLicense); ok {
-			return resolved
+	case AnyDisjunctiveLicenseSet:
+		members := l.GetMembers()
+		for i, m := range members {
+			members[i] = c.resolveLicenseRefs(m)
 		}
-	case *ConjunctiveLicenseSet:
-		for i, m := range l.Members {
-			l.Members[i] = c.resolveLicenseRefs(m)
+	case AnyOrLaterOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.GetSubjectLicense()).(AnyLicense); ok {
+			l.SetSubjectLicense(resolved)
 		}
-	case *DisjunctiveLicenseSet:
-		for i, m := range l.Members {
-			l.Members[i] = c.resolveLicenseRefs(m)
-		}
-	case *OrLaterOperator:
-		if resolved, ok := c.resolveLicenseRefs(l.SubjectLicense).(AnyLicense); ok {
-			l.SubjectLicense = resolved
-		}
-	case *WithAdditionOperator:
-		if resolved, ok := c.resolveLicenseRefs(l.SubjectExtendableLicense).(AnyExtendableLicense); ok {
-			l.SubjectExtendableLicense = resolved
+	case AnyWithAdditionOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.GetSubjectExtendableLicense()).(AnyExtendableLicense); ok {
+			l.SetSubjectExtendableLicense(resolved)
 		}
 	}
 	return license

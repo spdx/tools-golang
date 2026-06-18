@@ -177,12 +177,6 @@ func Test_writer(t *testing.T) {
 	d2 := newTestDocument()
 	err = d2.FromJSON(&buf)
 	require.NoError(t, err)
-	// these would (correctly) cause a failure, to validate unexported and time fields are being properly checked:
-	//d2.RootElements.Packages().Views()[1].PrimaryPurpose = spdx.SoftwarePurpose_Archive
-	//_ = spdx.As(d2.CreationInfo, func(info *spdx.CreationInfo) error {
-	//	info.Created = info.Created.Add(time.Hour)
-	//	return nil
-	//})
 	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, diffOpts()...)
 	require.Empty(t, diff)
 }

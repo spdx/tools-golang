@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	debug      = os.Getenv("GO_LD_DEBUG") == "true"
+	Debug      = os.Getenv("DEBUG_SPDX_TOOLS_GOLANG") == "true"
 	emptyValue reflect.Value
 	anyType    = reflect.TypeOf((*any)(nil)).Elem()
 )

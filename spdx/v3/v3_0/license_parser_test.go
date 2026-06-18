@@ -97,7 +97,7 @@ func TestParseLicenseExpression(t *testing.T) {
 			expression: "GPL-2.0-only WITH Classpath-exception-2.0",
 			want: &WithAdditionOperator{
 				SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-				SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+				SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 			},
 		},
 		{
@@ -115,7 +115,7 @@ func TestParseLicenseExpression(t *testing.T) {
 				SubjectExtendableLicense: &OrLaterOperator{
 					SubjectLicense: &ListedLicense{Name: "GPL-2.0-only"},
 				},
-				SubjectAddition: &ListedLicenseException{Name: "Classpath-exception-2.0"},
+				SubjectAddition: &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 			},
 		},
 		{
@@ -227,7 +227,7 @@ func TestParseLicenseExpression(t *testing.T) {
 						Members: LicenseInfoList{
 							&WithAdditionOperator{
 								SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-								SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+								SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 							},
 							&ListedLicense{Name: "Apache-2.0"},
 						},
@@ -299,7 +299,7 @@ func TestParseLicenseExpression(t *testing.T) {
 					&ListedLicense{Name: "MIT"},
 					&WithAdditionOperator{
 						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+						SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 					},
 				},
 			},
@@ -311,7 +311,7 @@ func TestParseLicenseExpression(t *testing.T) {
 				Members: LicenseInfoList{
 					&WithAdditionOperator{
 						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+						SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 					},
 					&ListedLicense{Name: "MIT"},
 				},
@@ -325,7 +325,7 @@ func TestParseLicenseExpression(t *testing.T) {
 					&ListedLicense{Name: "MIT"},
 					&WithAdditionOperator{
 						SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-						SubjectAddition:          &ListedLicenseException{Name: "Classpath-exception-2.0"},
+						SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-exception-2.0"},
 					},
 				},
 			},
@@ -523,11 +523,10 @@ func TestConvert23LicenseExpressionResolvesNestedRefs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := &documentConverter{
-				idMap: map[string]any{
-					custom1.ID: custom1,
-					custom2.ID: custom2,
-				},
+			c := newDocumentConverter(&Document{})
+			c.idMap = map[string]any{
+				custom1.ID: custom1,
+				custom2.ID: custom2,
 			}
 			got := c.convert23licenseExpression(tt.expression)
 			d := cmp.Diff(tt.want, got, diffOpts()...)

@@ -272,7 +272,7 @@ func v301package2(customLicense1 AnyLicense) (*Package, ElementList) {
 			&ListedLicense{Name: "AGPL"},
 			&WithAdditionOperator{
 				SubjectExtendableLicense: &ListedLicense{Name: "GPL-2.0-only"},
-				SubjectAddition:          &ListedLicenseException{Name: "Classpath-Exception"},
+				SubjectAddition:          &ListedLicenseException{AdditionText: "Classpath-Exception"},
 			},
 			customLicense1,
 		},

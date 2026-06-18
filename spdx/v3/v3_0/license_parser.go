@@ -2,8 +2,14 @@ package v3_0
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
+
+// licenseIdentifierChars matches the characters allowed in an SPDX license
+// identifier token: idstring characters (ALPHA / DIGIT / "-" / ".") plus ":"
+// used to separate the DocumentRef portion of an external reference.
+var licenseIdentifierChars = regexp.MustCompile(`^[A-Za-z0-9.:-]+$`)
 
 // ParseLicenseExpression parses an SPDX license expression string into the corresponding model types.
 // It handles AND, OR, WITH operators, the + (or-later) suffix, LicenseRef and DocumentRef references, and
@@ -199,16 +205,21 @@ func makeLicense(ident string) AnyLicenseInfo {
 	switch {
 	case strings.EqualFold(ident, "NONE"):
 		return IndividualLicensingInfo_NoneLicense
-	case strings.EqualFold(ident, "NOASSERTION"):
+	case strings.EqualFold(ident, NOASSERTION):
 		return IndividualLicensingInfo_NoAssertionLicense
 	case strings.HasPrefix(ident, "LicenseRef-") || strings.HasPrefix(ident, "DocumentRef-"):
-		return &CustomLicense{ID: ident}
+		return &CustomLicense{
+			ID: ident,
+		}
 	case invalidIdentifier(ident):
 		return nil // operators are not allowed as licenses, e.g. "MIT OR OR", or other malformed expression
 	}
 	// it's possible we should set the ID to ID: fmt.Sprintf("https://spdx.org/licenses/%s", ident) but for now
 	// we do not set the license ID to avoid a user editing shared objects and unexpectedly affecting an entire graph
-	return &ListedLicense{Name: ident}
+	// These will not have all the required information such as license Text
+	return &ListedLicense{
+		Name: ident,
+	}
 }
 
 // makeAddition creates the license addition based on the identifier:
@@ -216,11 +227,15 @@ func makeLicense(ident string) AnyLicenseInfo {
 func makeAddition(ident string) AnyLicenseAddition {
 	switch {
 	case strings.HasPrefix(ident, "AdditionRef-") || strings.HasPrefix(ident, "LicenseRef-") || strings.HasPrefix(ident, "DocumentRef-"):
-		return &CustomLicenseAddition{ID: ident}
+		return &CustomLicenseAddition{
+			ID: ident,
+		}
 	case invalidIdentifier(ident):
 		return nil
 	}
-	return &ListedLicenseException{Name: ident}
+	return &ListedLicenseException{
+		AdditionText: ident,
+	}
 }
 
 func opOr(tok string) bool {
@@ -236,7 +251,7 @@ func opWith(tok string) bool {
 }
 
 func invalidIdentifier(tok string) bool {
-	return tok == "" || opOr(tok) || opAnd(tok) || opWith(tok) || tok == "(" || tok == ")" || tok == "+"
+	return opOr(tok) || opAnd(tok) || opWith(tok) || !licenseIdentifierChars.MatchString(tok)
 }
 
 func isWhitespace(c byte) bool {

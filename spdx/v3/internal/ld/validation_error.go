@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // JoinErrors returns errors.Join'd errors, taking into account nested joined errors, flattening these to a single joined set
@@ -40,42 +41,48 @@ func flattenErrors(err error) []error {
 var validatorInterface = reflect.TypeOf((*Validator)(nil)).Elem()
 
 type validationError struct {
-	Path []any
+	Path string
 	Err  error
 }
 
-func (v *validationError) String() string {
-	path := ""
-	for i := 0; i < len(v.Path); i++ {
-		part := v.Path[i]
+func StringifyPath(pathSlice []any) string {
+	path := strings.Builder{}
+	for i := 0; i < len(pathSlice); i++ {
+		part := pathSlice[i]
 		switch p := part.(type) {
 		case int:
-			path += "[" + strconv.Itoa(p) + "]"
+			_, _ = path.WriteString("[")
+			_, _ = path.WriteString(strconv.Itoa(p))
+			_, _ = path.WriteString("]")
 		case reflect.StructField:
 			if !p.Anonymous {
-				path += "." + p.Name
+				_, _ = path.WriteString(".")
+				_, _ = path.WriteString(p.Name)
 			}
 		case reflect.Type:
-			path += "<" + p.Name() + ">"
+			_, _ = path.WriteString("<")
+			_, _ = path.WriteString(p.Name())
+			_, _ = path.WriteString(">")
 		default:
-			path += "/" + fmt.Sprint(p)
+			_, _ = path.WriteString("/")
+			_, _ = path.WriteString(fmt.Sprint(p))
 		}
 	}
-	return path + ": " + v.Err.Error()
+	return path.String()
 }
 
 func (v *validationError) Error() string {
-	return v.String()
+	return v.Path + ": " + v.Err.Error()
 }
 
 func newValidationError(err error, path ...any) *validationError {
 	// if the error is a validation error, prepend the path
 	if vErr, ok := err.(*validationError); ok {
-		vErr.Path = append(path, vErr.Path...)
+		vErr.Path = StringifyPath(path) + " " + vErr.Path
 		return vErr
 	}
 	return &validationError{
-		Path: path,
+		Path: StringifyPath(path),
 		Err:  err,
 	}
 }
