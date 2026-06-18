@@ -48,7 +48,7 @@ func v23doc() *v2_3.Document {
 			{
 				RefA:                common.DocElementID{ElementRefID: "SPDXRef-Package-ExampleLib"},
 				RefB:                common.DocElementID{ElementRefID: "SPDXRef-Package-UtilityTools"},
-				Relationship:        common.TypeRelationshipDependsOn,
+				Relationship:        common.TypeRelationshipBuildToolOf,
 				RelationshipComment: "Main package depends on utility tools",
 			},
 			{
@@ -77,7 +77,7 @@ func v23creationInfo() *v2_3.CreationInfo {
 func v23package1() *v2_3.Package {
 	return &v2_3.Package{
 		Annotations: []v2_3.Annotation{
-			*v23annotation1(),
+			*v23annotation3(),
 		},
 		PackageName:           "example-library",
 		PackageSPDXIdentifier: "SPDXRef-Package-ExampleLib",
@@ -94,7 +94,7 @@ func v23package1() *v2_3.Package {
 		PackageDownloadLocation: "https://github.com/example/library/archive/v1.2.3.tar.gz",
 		FilesAnalyzed:           true,
 		Files: []*v2_3.File{
-			v23file1(),
+			v23file3(),
 		},
 		IsFilesAnalyzedTagPresent: true,
 		PackageVerificationCode: &common.PackageVerificationCode{
@@ -154,14 +154,14 @@ func v23package2() *v2_3.Package {
 			SupplierType: "Person",
 		},
 		PackageDownloadLocation:   "https://tools.com/download/utility-tools-2.1.0.zip",
-		FilesAnalyzed:             false,
+		FilesAnalyzed:             true,
 		IsFilesAnalyzedTagPresent: true,
 		PackageChecksums: []common.Checksum{
 			{Algorithm: common.SHA256, Value: "ffaabbcc11223344"},
 		},
 		PackageHomePage:         "https://tools.com/utility",
 		PackageLicenseConcluded: "Apache-2.0",
-		PackageLicenseDeclared:  "Apache-2.0",
+		PackageLicenseDeclared:  "AGPL OR (GPL-2.0-only with Classpath-Exception OR LicenseRef-CustomLicense1)",
 		PackageCopyrightText:    "Copyright 2023 Tools Inc",
 		PackageSummary:          "Collection of utility tools",
 		PackageDescription:      "A comprehensive set of utility tools for developers.",
@@ -195,8 +195,8 @@ func v23customLicense2() *v2_3.OtherLicense {
 
 func v23file1() *v2_3.File {
 	return &v2_3.File{
-		FileName:           "./src/other.c",
-		FileSPDXIdentifier: common.ElementID("SPDXRef-File-Other"),
+		FileName:           "./src/main.c",
+		FileSPDXIdentifier: common.ElementID("SPDXRef-File-Main"),
 		FileTypes:          []string{"FILE"},
 		Checksums: []common.Checksum{
 			{Algorithm: common.SHA1, Value: "da39a3ee5e6b4b0d3255bfef95601890afd80709"},
@@ -215,10 +215,10 @@ func v23file1() *v2_3.File {
 		},
 		//FileDependencies: nil, // skipped
 		Snippets: map[common.ElementID]*v2_3.Snippet{
-			"SPDXRef-Snippet1": v23snippet1(),
+			"SPDXRef-Snippet3": v23snippet3(),
 		},
 		Annotations: []v2_3.Annotation{
-			*v23annotation1(),
+			*v23annotation4(),
 		},
 		FileDependencies: []string{"dep1", "dep2"},
 	}
@@ -231,7 +231,7 @@ func v23file2() *v2_3.File {
 		Checksums: []common.Checksum{
 			{Algorithm: common.SHA256, Value: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
 		},
-		LicenseConcluded:   "MIT",
+		LicenseConcluded:   "MIT AND Apache-2.0",
 		LicenseInfoInFiles: []string{"MIT"},
 		FileCopyrightText:  "Copyright 2023 Example Corp",
 		FileComment:        "Header file with function declarations",
@@ -264,7 +264,7 @@ func v23externalDocumentRef2() *v2_3.ExternalDocumentRef {
 func v23annotation1() *v2_3.Annotation {
 	return &v2_3.Annotation{
 		Annotator: common.Annotator{
-			Annotator:     "Person: Security Team (security@example.com)",
+			Annotator:     "Security Team (security@example.com)",
 			AnnotatorType: "Person",
 		},
 		AnnotationType:           "REVIEW",
@@ -277,7 +277,7 @@ func v23annotation1() *v2_3.Annotation {
 func v23annotation2() *v2_3.Annotation {
 	return &v2_3.Annotation{
 		Annotator: common.Annotator{
-			Annotator:     "Tool: vulnerability-scanner-v1.5",
+			Annotator:     "vulnerability-scanner-v1.5",
 			AnnotatorType: "Tool",
 		},
 		AnnotationType:           "OTHER",
@@ -327,10 +327,77 @@ func v23snippet2() *v2_3.Snippet {
 				EndPointer:   common.SnippetRangePointer{LineNumber: 8},
 			},
 		},
-		SnippetLicenseConcluded: "MIT",
+		SnippetLicenseConcluded: "MIT+",
 		LicenseInfoInSnippet:    []string{"MIT"},
 		SnippetCopyrightText:    "Copyright 2023 Example Corp",
 		SnippetComment:          "Function declarations",
 		SnippetName:             "API Declarations",
+	}
+}
+
+func v23file3() *v2_3.File {
+	return &v2_3.File{
+		FileName:           "./src/utils.c",
+		FileSPDXIdentifier: common.ElementID("SPDXRef-File-Utils"),
+		FileTypes:          []string{"SOURCE"},
+		Checksums: []common.Checksum{
+			{Algorithm: common.SHA256, Value: "aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234aabb1234"},
+		},
+		LicenseConcluded:   "Apache-2.0",
+		LicenseInfoInFiles: []string{"Apache-2.0"},
+		FileCopyrightText:  "Copyright 2023 Example Corp",
+		FileComment:        "Utility functions for the library",
+	}
+}
+
+func v23annotation3() *v2_3.Annotation {
+	return &v2_3.Annotation{
+		Annotator: common.Annotator{
+			Annotator:     "Code Review Bot (bot@example.com)",
+			AnnotatorType: "Person",
+		},
+		AnnotationType:           "OTHER",
+		AnnotationSPDXIdentifier: common.DocElementID{ElementRefID: "SPDXRef-Package-ExampleLib"},
+		AnnotationDate:           "2023-02-01T10:00:00Z",
+		AnnotationComment:        "Package structure review completed",
+	}
+}
+
+func v23annotation4() *v2_3.Annotation {
+	return &v2_3.Annotation{
+		Annotator: common.Annotator{
+			Annotator:     "Code Reviewer (reviewer@example.com)",
+			AnnotatorType: "Person",
+		},
+		AnnotationType:           "REVIEW",
+		AnnotationSPDXIdentifier: common.DocElementID{ElementRefID: "SPDXRef-File-Main"},
+		AnnotationDate:           "2023-02-05T16:00:00Z",
+		AnnotationComment:        "File review completed - code quality approved",
+	}
+}
+
+func v23snippet3() *v2_3.Snippet {
+	return &v2_3.Snippet{
+		SnippetSPDXIdentifier:         common.ElementID("SPDXRef-Snippet3"),
+		SnippetFromFileSPDXIdentifier: common.ElementID("SPDXRef-File-Main"),
+		Ranges: []common.SnippetRange{
+			{
+				StartPointer: common.SnippetRangePointer{
+					Offset:     300,
+					LineNumber: 20,
+				},
+				EndPointer: common.SnippetRangePointer{
+					Offset:     400,
+					LineNumber: 30,
+				},
+			},
+		},
+		SnippetLicenseConcluded: "Apache-2.0",
+		LicenseInfoInSnippet:    []string{"Apache-2.0"},
+		SnippetLicenseComments:  "License for helper routine",
+		SnippetCopyrightText:    "Copyright 2023 Example Corp",
+		SnippetComment:          "Helper routine implementation",
+		SnippetName:             "Helper Routine",
+		SnippetAttributionTexts: []string{"Inspired by open source utilities"},
 	}
 }

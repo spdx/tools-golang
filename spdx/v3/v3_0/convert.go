@@ -58,9 +58,11 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 	d.Comment = doc.DocumentComment
 	d.Imports = list[ExternalMapList](c.convert23externalDocumentRef, doc.ExternalDocumentReferences...)
 	d.Name = doc.DocumentName
-	d.DataLicense = c.convert23licenseString(doc.DataLicense)
+	d.DataLicense = c.convert23licenseExpression(doc.DataLicense)
 
 	var converted ElementList
+
+	// other licenses may be referenced (with LicenseRef-... in expressions), so process these first to recreate the proper graph
 	for _, l := range doc.OtherLicenses {
 		converted = append(converted, c.convert23license(l))
 	}
@@ -81,22 +83,28 @@ func From_v2_3(doc v2_3.Document, d *Document) {
 		converted = append(converted, c.convert23snippet(s))
 	}
 
-	var relationships ElementList
 	for _, rel := range doc.Relationships {
-		r := c.convert23relationship(rel)
-		if r != nil {
-			c.sbom.Elements = append(c.sbom.Elements, r)
-			converted = append(relationships, r)
-		}
+		c.convert23relationship(rel)
 	}
 
-	// if the user did not add elements to the document via relationships,
-	// just add all elements directly
-	if len(c.sbom.RootElements) == 0 {
-		c.sbom.RootElements = append(notNil(converted), notNil(relationships)...)
-	} else {
-		c.sbom.Elements = append(c.sbom.Elements, notNil(converted)...)
+	// add all converted elements to the sbom elements
+	sbomElements := make(map[AnyElement]struct{}, len(c.sbom.Elements)+len(c.relationshipMap)+len(converted))
+	for _, e := range c.sbom.Elements {
+		sbomElements[e] = struct{}{}
 	}
+	for _, rels := range c.relationshipMap {
+		for _, r := range rels {
+			sbomElements[r] = struct{}{}
+		}
+	}
+	for _, e := range converted {
+		sbomElements[e] = struct{}{}
+	}
+
+	c.sbom.Elements = mapKeys(sbomElements)
+
+	// ensure all elements are present in the document Elements list
+	d.SpdxDocument.Elements = append(d.SpdxDocument.Elements, collectAllElements(&d.SpdxDocument)...)
 }
 
 func newDocumentConverter(d *Document) *documentConverter {
@@ -107,7 +115,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 	d.RootElements = ElementList{sbom}
 	c := &documentConverter{
 		emailExtractor:  regexp.MustCompile(`(.*)\s*[(<]([^)>]+)[)>]$`),
-		relationshipMap: map[any][]*Relationship{},
+		relationshipMap: map[any][]AnyRelationship{},
 		sbom:            sbom,
 		idMap: duplicateLower(map[string]any{
 			"DOCUMENT":         sbom,
@@ -115,7 +123,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 		}),
 		lifecycleMap: duplicateLower(map[string]LifecycleScopeType{
 			"BUILD_TOOL_OF":         LifecycleScopeType_Build,
-			"DEPENDS_ON":            LifecycleScopeType_Build,
+			"BUILD_DEPENDENCY_OF":   LifecycleScopeType_Build,
 			"DEV_DEPENDENCY_OF":     LifecycleScopeType_Development,
 			"DEV_TOOL_OF":           LifecycleScopeType_Development,
 			"RUNTIME_DEPENDENCY_OF": LifecycleScopeType_Runtime,
@@ -172,7 +180,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 			"DEPENDS_ON":            RelationshipType_DependsOn,
 		}),
 		hashAlgorithmMap: duplicateLower(map[string]HashAlgorithm{
-			"ADLER32":     HashAlgorithm_Other,
+			"ADLER32":     HashAlgorithm_Adler32,
 			"BLAKE2b_256": HashAlgorithm_Blake2b256,
 			"BLAKE2b_384": HashAlgorithm_Blake2b384,
 			"BLAKE2b_512": HashAlgorithm_Blake2b512,
@@ -188,7 +196,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 			"SHA3_256":    HashAlgorithm_Sha3_256,
 			"SHA3_384":    HashAlgorithm_Sha3_384,
 			"SHA3_512":    HashAlgorithm_Sha3_512,
-			"SHA512":      HashAlgorithm_Sha3_512,
+			"SHA512":      HashAlgorithm_Sha512,
 		}),
 		annotationTypeMap: duplicateLower(map[string]AnnotationType{
 			"OTHER":  AnnotationType_Other,
@@ -215,6 +223,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 		}),
 		primaryPurposeMap: duplicateLower(map[string]SoftwarePurpose{
 			"APPLICATION":      SoftwarePurpose_Application,
+			"BINARY":           SoftwarePurpose_Application,
 			"ARCHIVE":          SoftwarePurpose_Archive,
 			"CONTAINER":        SoftwarePurpose_Container,
 			"DEVICE":           SoftwarePurpose_Device,
@@ -223,6 +232,7 @@ func newDocumentConverter(d *Document) *documentConverter {
 			"FRAMEWORK":        SoftwarePurpose_Framework,
 			"INSTALL":          SoftwarePurpose_Install,
 			"LIBRARY":          SoftwarePurpose_Library,
+			"OPERATING-SYSTEM": SoftwarePurpose_OperatingSystem,
 			"OPERATING_SYSTEM": SoftwarePurpose_OperatingSystem,
 			"OTHER":            SoftwarePurpose_Other,
 			"SOURCE":           SoftwarePurpose_Source,
@@ -232,11 +242,10 @@ func newDocumentConverter(d *Document) *documentConverter {
 }
 
 type documentConverter struct {
-	sbom *SBOM
-	//namespace                 string
+	sbom                      *SBOM
 	idMap                     map[string]any
 	creationInfo              AnyCreationInfo
-	relationshipMap           map[any][]*Relationship
+	relationshipMap           map[any][]AnyRelationship
 	relationshipTypeMap       map[string]RelationshipType
 	inverseRelationshipMap    map[string]RelationshipType
 	lifecycleMap              map[string]LifecycleScopeType
@@ -247,53 +256,74 @@ type documentConverter struct {
 	externalRefTypeMap        map[string]ExternalRefType
 	primaryPurposeMap         map[string]SoftwarePurpose
 	emailExtractor            *regexp.Regexp
+	conversionErrors          []error
 }
 
-func (c *documentConverter) addRelationship(r *Relationship) {
-	rels := c.relationshipMap[r.From]
+func (c *documentConverter) addRelationship(r AnyRelationship) {
+	rels := c.relationshipMap[r.GetFrom()]
 	for _, existing := range rels {
-		if existing.Type == r.Type {
-			if r.Comment != existing.Comment {
+		if reflect.TypeOf(existing) != reflect.TypeOf(r) {
+			// don't merge LifecycleScopedRelationship and Relationship
+			continue
+		}
+		if existing.GetType() == r.GetType() {
+			if r.GetComment() != existing.GetComment() {
 				continue
 			}
-			existing.To = appendUnique(existing.To, r.To...)
+			if ls, ok := existing.(AnyLifecycleScopedRelationship); ok {
+				if rs, ok := r.(AnyLifecycleScopedRelationship); ok {
+					if ls.GetScope() != rs.GetScope() {
+						continue
+					}
+				}
+			}
+			existing.SetTo(appendUnique(existing.GetTo(), r.GetTo()...))
 			return
 		}
 	}
-	c.relationshipMap[r.From] = append(c.relationshipMap[r.From], r)
+	c.relationshipMap[r.GetFrom()] = append(c.relationshipMap[r.GetFrom()], r)
 }
 
-func (c *documentConverter) convert23relationship(rel *v2_3.Relationship) AnyRelationship {
+func (c *documentConverter) convert23relationship(rel *v2_3.Relationship) {
 	if rel == nil {
-		return nil
+		return
 	}
 	from, _ := c.idMap[string(rel.RefA.ElementRefID)].(AnyElement)
 	to, _ := c.idMap[string(rel.RefB.ElementRefID)].(AnyElement)
 	if from == nil || to == nil {
 		c.logDropped(rel)
-		return nil
+		return
 	}
+
+	lifecycleScope, isLifecycle := c.lifecycleMap[rel.Relationship]
 
 	typ, invert := c.convert23relationshipType(rel.Relationship)
 	if invert {
 		to, from = from, to
 	}
 
-	// SPDX 3 direct document elements are in RootElement list, not relationships
-	if from == c.sbom {
-		// TODO are there special cases depending on type?
+	// SPDX 3 direct document DESCRIBES elements are in RootElement list, not relationships
+	if from == c.sbom && typ == RelationshipType_Describes {
 		c.sbom.RootElements = append(c.sbom.RootElements, to)
-		return nil
+		return
 	}
 
-	r := &Relationship{
-		Comment: rel.RelationshipComment,
-		From:    from,
-		Type:    typ,
-		To:      ElementList{to},
+	if isLifecycle {
+		c.addRelationship(&LifecycleScopedRelationship{
+			Comment: rel.RelationshipComment,
+			From:    from,
+			Type:    typ,
+			Scope:   lifecycleScope,
+			To:      ElementList{to},
+		})
+	} else {
+		c.addRelationship(&Relationship{
+			Comment: rel.RelationshipComment,
+			From:    from,
+			Type:    typ,
+			To:      ElementList{to},
+		})
 	}
-	c.addRelationship(r)
-	return r
 }
 
 func (c *documentConverter) convert23relationshipType(typ string) (RelationshipType, bool) {
@@ -319,6 +349,15 @@ func (c *documentConverter) convert23creationInfo(info *v2_3.CreationInfo) AnyCr
 		CreatedBy:    list[AgentList](c.convert23creator, info.Creators...),
 		CreatedUsing: list[ToolList](c.convert23tool, info.Creators...),
 		SpecVersion:  Version, // specVersion is always the current version
+	}
+
+	if info.LicenseListVersion != "" {
+		licenseListComment := fmt.Sprintf("LicenseListVersion: %v", info.LicenseListVersion)
+		if ci.Comment == "" {
+			ci.Comment = licenseListComment
+		} else {
+			ci.Comment = fmt.Sprintf("%v; %v", ci.Comment, licenseListComment)
+		}
 	}
 
 	// update circular references, which will be set to nil by default
@@ -349,6 +388,9 @@ func (c *documentConverter) convert23tool(creator common.Creator) AnyTool {
 }
 
 func (c *documentConverter) convert23creator(creator common.Creator) AnyAgent {
+	if strings.EqualFold(creator.CreatorType, "tool") {
+		return nil // not applicable for creator
+	}
 	return c.convert23agent(creator.CreatorType, creator.Creator)
 }
 
@@ -397,18 +439,22 @@ func (c *documentConverter) convert23agent(typ, name string) AnyAgent {
 		emailValue = strings.TrimSpace(match[2])
 	}
 	var out AnyAgent
-	switch strings.ToLower(typ) {
-	case "person":
+	switch {
+	case strings.EqualFold(typ, "person"):
 		out = &Person{
 			CreationInfo: c.creationInfo,
 			Name:         name,
 		}
-	case "organization", "org":
+	case strings.EqualFold(typ, "organization") || strings.EqualFold(typ, "org"):
 		out = &Organization{
 			CreationInfo: c.creationInfo,
 			Name:         name,
 		}
-	case "tool": // handled elsewhere
+	case strings.EqualFold(typ, "tool"):
+		out = &SoftwareAgent{
+			CreationInfo: c.creationInfo,
+			Name:         name,
+		}
 	default:
 		c.logDropped(fmt.Sprintf("unknown agent type: %v with value: %v", typ, name))
 	}
@@ -427,7 +473,6 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 		ID:               string(f.FileSPDXIdentifier),
 		Comment:          f.FileComment,
 		Name:             f.FileName,
-		Description:      f.FileNotice,
 		ExternalRefs:     nil,
 		Summary:          "",
 		VerifiedUsing:    list[IntegrityMethodList](c.convert23checksum, f.Checksums...),
@@ -444,6 +489,21 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 		Kind:             FileKindType_File,
 	}
 
+	for _, typ := range f.FileTypes {
+		purpose, ok := c.primaryPurposeMap[strings.ToUpper(typ)]
+		if !ok || purpose == SoftwarePurpose_File {
+			continue
+		}
+		emptyPurpose := SoftwarePurpose{}
+		if out.PrimaryPurpose == emptyPurpose {
+			out.PrimaryPurpose = purpose
+		} else {
+			out.AdditionalPurposes = append(out.AdditionalPurposes, purpose)
+		}
+	}
+
+	c.idMap[string(f.FileSPDXIdentifier)] = out
+
 	for _, s := range f.Snippets {
 		v3 := c.convert23snippet(*s)
 		c.addRelationship(&Relationship{
@@ -455,6 +515,7 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 
 	for _, a := range f.Annotations {
 		v3 := c.convert23annotation(&a)
+		v3.SetSubject(out)
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_Describes,
 			From: v3,
@@ -462,7 +523,43 @@ func (c *documentConverter) convert23file(f *v2_3.File) AnyFile {
 		})
 	}
 
-	c.idMap[string(f.FileSPDXIdentifier)] = out
+	if f.FileNotice != "" {
+		v3 := &Annotation{
+			Type:      AnnotationType_Other,
+			Statement: f.FileNotice,
+		}
+		v3.SetSubject(out)
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_Describes,
+			From: v3,
+			To:   ElementList{out},
+		})
+	}
+
+	licenseComment := f.LicenseComments
+	concluded := c.convert23licenseExpression(f.LicenseConcluded)
+	if concluded != nil {
+		concluded.SetComment(licenseComment)
+		licenseComment = "" // only include in concluded if set
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_HasConcludedLicense,
+			From: out,
+			To:   ElementList{concluded},
+		})
+	}
+
+	for _, l := range f.LicenseInfoInFiles {
+		d := c.convert23licenseExpression(l)
+		if d != nil {
+			d.SetComment(licenseComment)
+			c.addRelationship(&Relationship{
+				Type: RelationshipType_HasDeclaredLicense,
+				From: out,
+				To:   ElementList{d},
+			})
+		}
+	}
+
 	return out
 }
 
@@ -471,7 +568,17 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 		return nil
 	}
 
-	verificationCodes := list[IntegrityMethodList](c.convert23packageVerificationCode, pkg.PackageVerificationCode)
+	var verificationCodes IntegrityMethodList
+
+	if pkg.FilesAnalyzed {
+		// verification code only valid if FilesAnalyzed
+		verificationCode := c.convert23packageVerificationCode(pkg.PackageVerificationCode)
+		if verificationCode != nil {
+			verificationCodes = append(verificationCodes, verificationCode)
+		}
+	} else {
+		c.logDropped(pkg.PackageVerificationCode)
+	}
 
 	for _, checksum := range pkg.PackageChecksums {
 		ck := c.convert23checksum(checksum)
@@ -488,6 +595,7 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 		Comment:             pkg.PackageComment,
 		Description:         pkg.PackageDescription,
 		ExternalIdentifiers: list[ExternalIdentifierList](c.convert23externalIdentifier, pkg.PackageExternalReferences...),
+		ExternalRefs:        list[ExternalRefList](c.convert23externalRef, pkg.PackageExternalReferences...),
 		VerifiedUsing:       verificationCodes,
 		BuiltTime:           c.convert23time(pkg.BuiltDate),
 		OriginatedBy:        list[AgentList](c.convert23originator, pkg.PackageOriginator),
@@ -534,16 +642,16 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 	}
 
 	for _, l := range pkg.PackageLicenseInfoFromFiles {
-		d := c.convert23licenseString(l)
+		d := c.convert23licenseExpression(l)
 		if d != nil {
 			c.addRelationship(&Relationship{
-				Type: RelationshipType_HasConcludedLicense,
+				Type: RelationshipType_HasDeclaredLicense,
 				From: out,
 				To:   ElementList{d},
 			})
 		}
 	}
-	d := c.convert23licenseString(pkg.PackageLicenseDeclared)
+	d := c.convert23licenseExpression(pkg.PackageLicenseDeclared)
 	if d != nil {
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_HasDeclaredLicense,
@@ -552,7 +660,7 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 		})
 	}
 
-	d = c.convert23licenseString(pkg.PackageLicenseConcluded)
+	d = c.convert23licenseExpression(pkg.PackageLicenseConcluded)
 	if d != nil {
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_HasConcludedLicense,
@@ -561,15 +669,40 @@ func (c *documentConverter) convert23package(pkg *v2_3.Package) AnyPackage {
 		})
 	}
 
+	hasPackageFile := false
 	for _, f := range pkg.Files {
 		v3file := c.convert23file(f)
 		if v3file == nil {
 			continue
 		}
+		if v3file.GetName() == pkg.PackageName {
+			hasPackageFile = true
+		}
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_Contains,
 			From: out,
 			To:   ElementList{v3file},
+		})
+	}
+
+	if !hasPackageFile && pkg.PackageFileName != "" {
+		v3file := &File{
+			Name: pkg.PackageFileName,
+		}
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_HasDistributionArtifact,
+			From: out,
+			To:   ElementList{v3file},
+		})
+	}
+
+	for _, a := range pkg.Annotations {
+		v3 := c.convert23annotation(&a)
+		v3.SetSubject(out)
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_Describes,
+			From: v3,
+			To:   ElementList{out},
 		})
 	}
 
@@ -597,6 +730,11 @@ func (c *documentConverter) convert23uri(uri string) ld.URI {
 }
 
 func (c *documentConverter) logDropped(value any) {
+	if err, ok := value.(error); ok {
+		c.conversionErrors = append(c.conversionErrors, err)
+	} else {
+		c.conversionErrors = append(c.conversionErrors, fmt.Errorf("%v", value))
+	}
 	if value == nil || !internal.Debug {
 		return
 	}
@@ -634,13 +772,32 @@ func (c *documentConverter) convert23externalIdentifier(r *v2_3.PackageExternalR
 	}
 	typ, ok := c.externalIdentifierTypeMap[r.RefType]
 	if !ok || r.Locator == "" {
-		c.logDropped(r)
+		_, ok = c.externalRefTypeMap[r.RefType]
+		if !ok {
+			c.logDropped(r)
+		}
 		return nil
 	}
 	return &ExternalIdentifier{
 		Comment:    r.ExternalRefComment,
 		Type:       typ,
 		Identifier: r.Locator,
+	}
+}
+
+func (c *documentConverter) convert23externalRef(r *v2_3.PackageExternalReference) AnyExternalRef {
+	if r == nil {
+		return nil
+	}
+	typ, ok := c.externalRefTypeMap[r.RefType]
+	if !ok || r.Locator == "" {
+		// logged during convert23externalIdentifier
+		return nil
+	}
+	return &ExternalRef{
+		Comment:  r.ExternalRefComment,
+		Type:     typ,
+		Locators: []string{r.Locator},
 	}
 }
 
@@ -655,39 +812,63 @@ func (c *documentConverter) convert23license(l *v2_3.OtherLicense) AnyLicenseInf
 	}
 
 	out := &CustomLicense{
+		ID:       l.LicenseIdentifier,
 		Name:     l.LicenseName,
 		Comment:  l.LicenseComment,
 		SeeAlsos: seeAlso,
 		Text:     l.ExtractedText,
 	}
 
-	c.idMap[l.LicenseIdentifier] = out
-
-	return out
+	return c.resolveLicenseRefs(out)
 }
 
-func (c *documentConverter) convert23licenseString(licenseString string) AnyLicenseInfo {
-	if licenseString == "" {
+func (c *documentConverter) convert23licenseExpression(licenseExpression string) AnyLicenseInfo {
+	if licenseExpression == "" {
 		return nil
 	}
 
-	var out AnyLicenseInfo
-	if strings.HasPrefix(licenseString, "LicenseRef-") {
-		license, _ := c.idMap[licenseString].(AnyLicenseInfo)
-		if license != nil {
-			return license
+	parsedLicense, err := ParseLicenseExpression(licenseExpression)
+	if err != nil {
+		c.logDropped(err)
+	}
+	return c.resolveLicenseRefs(parsedLicense)
+}
+
+// resolveLicenseRefs walks a parsed license expression and replaces the
+// placeholder CustomLicense references the parser produces for LicenseRef-*
+// identifiers with the resolved CustomLicense instances registered in
+// idMap by convert23license.
+func (c *documentConverter) resolveLicenseRefs(license AnyLicenseInfo) AnyLicenseInfo {
+	if isNil(license) { // avoid interface-to-nil values
+		return nil
+	}
+	if license.GetID() != "" {
+		if existing, _ := c.idMap[license.GetID()].(AnyLicenseInfo); existing != nil {
+			return existing
 		}
-		out = &CustomLicense{
-			Name: licenseString,
-			Text: licenseString,
+		c.idMap[license.GetID()] = license
+	}
+	switch l := license.(type) {
+	case AnyConjunctiveLicenseSet:
+		members := l.GetMembers()
+		for i, m := range members {
+			members[i] = c.resolveLicenseRefs(m)
 		}
-	} else {
-		out = &ListedLicense{
-			Name: licenseString,
+	case AnyDisjunctiveLicenseSet:
+		members := l.GetMembers()
+		for i, m := range members {
+			members[i] = c.resolveLicenseRefs(m)
+		}
+	case AnyOrLaterOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.GetSubjectLicense()).(AnyLicense); ok {
+			l.SetSubjectLicense(resolved)
+		}
+	case AnyWithAdditionOperator:
+		if resolved, ok := c.resolveLicenseRefs(l.GetSubjectExtendableLicense()).(AnyExtendableLicense); ok {
+			l.SetSubjectExtendableLicense(resolved)
 		}
 	}
-
-	return out
+	return license
 }
 
 func (c *documentConverter) convert23externalDocumentRef(r v2_3.ExternalDocumentRef) AnyExternalMap {
@@ -729,12 +910,14 @@ func (c *documentConverter) convert23annotation(a *v2_3.Annotation) AnyAnnotatio
 			Created:   c.convert23time(a.AnnotationDate),
 			CreatedBy: list[AgentList](c.convert23annotator, &a.Annotator),
 		},
-		Type:      typ,
+		// V3 Statement is "Commentary on an assertion that an annotator has made"
 		Statement: a.AnnotationComment,
+		Type:      typ,
 	}
 
 	to, _ := c.idMap[string(a.AnnotationSPDXIdentifier.ElementRefID)].(AnyElement)
 	if to != nil {
+		out.Subject = to
 		c.addRelationship(&Relationship{
 			Type: RelationshipType_Describes,
 			From: out,
@@ -747,20 +930,24 @@ func (c *documentConverter) convert23annotation(a *v2_3.Annotation) AnyAnnotatio
 func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 	snippetFile, _ := c.idMap[string(s.SnippetFromFileSPDXIdentifier)].(AnyFile)
 
-	var licenses LicenseInfoList
-	d := c.convert23licenseString(s.SnippetLicenseConcluded)
-	d.SetComment(s.SnippetLicenseComments)
-	licenses = append(licenses, d)
+	concludedLicense := c.convert23licenseExpression(s.SnippetLicenseConcluded)
 
+	var declaredLicenses LicenseInfoList
 	for _, licenseInfo := range s.LicenseInfoInSnippet {
-		d = c.convert23licenseString(licenseInfo)
+		d := c.convert23licenseExpression(licenseInfo)
 		if d != nil {
-			d.SetComment(s.SnippetLicenseComments)
-			licenses = append(licenses, d)
+			declaredLicenses = append(declaredLicenses, d)
 		}
 	}
 
-	var allSnippets ElementList
+	out := &Snippet{
+		ID:               string(s.SnippetSPDXIdentifier),
+		Comment:          s.SnippetComment,
+		Name:             s.SnippetName,
+		CopyrightText:    s.SnippetCopyrightText,
+		AttributionTexts: s.SnippetAttributionTexts,
+		FromFile:         snippetFile,
+	}
 
 	for _, r := range s.Ranges {
 		// there are 2 spots that might hold references to the file, try to handle them both:
@@ -770,55 +957,43 @@ func (c *documentConverter) convert23snippet(s v2_3.Snippet) AnyElement {
 		}
 		if snippetFile == nil {
 			snippetFile = f
+			out.FromFile = f
 		}
-		newSnippet := &Snippet{
-			ID:               string(s.SnippetSPDXIdentifier),
-			Comment:          s.SnippetComment,
-			Name:             s.SnippetName,
-			CopyrightText:    s.SnippetCopyrightText,
-			AttributionTexts: s.SnippetAttributionTexts,
-			FromFile:         f,
-			LineRange: &PositiveIntegerRange{
-				BeginIntegerRange: ld.PositiveInt(r.StartPointer.LineNumber),
-				EndIntegerRange:   ld.PositiveInt(r.EndPointer.LineNumber),
-			},
-			ByteRange: &PositiveIntegerRange{
+		if r.StartPointer.Offset > 0 || r.EndPointer.Offset > 0 {
+			out.ByteRange = &PositiveIntegerRange{
 				BeginIntegerRange: ld.PositiveInt(r.StartPointer.Offset),
 				EndIntegerRange:   ld.PositiveInt(r.EndPointer.Offset),
-			},
+			}
 		}
-
-		for _, l := range licenses {
-			c.addRelationship(&Relationship{
-				Type: RelationshipType_HasConcludedLicense,
-				From: newSnippet,
-				To:   ElementList{l},
-			})
+		if r.StartPointer.LineNumber > 0 || r.EndPointer.LineNumber > 0 {
+			out.LineRange = &PositiveIntegerRange{
+				BeginIntegerRange: ld.PositiveInt(r.StartPointer.LineNumber),
+				EndIntegerRange:   ld.PositiveInt(r.EndPointer.LineNumber),
+			}
 		}
-
-		allSnippets = append(allSnippets, newSnippet)
 	}
 
-	var out AnyElement
-	switch len(allSnippets) {
-	case 0:
-	case 1:
-		out = allSnippets[0]
-	default:
-		out = &Bundle{
-			Elements: allSnippets,
+	if concludedLicense != nil {
+		concludedLicense.SetComment(s.SnippetLicenseComments)
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_HasConcludedLicense,
+			From: out,
+			To:   ElementList{concludedLicense},
+		})
+	}
+
+	for _, l := range declaredLicenses {
+		if concludedLicense == nil {
+			l.SetComment(s.SnippetLicenseComments)
 		}
+		c.addRelationship(&Relationship{
+			Type: RelationshipType_HasDeclaredLicense,
+			From: out,
+			To:   ElementList{l},
+		})
 	}
 
 	c.idMap[string(s.SnippetSPDXIdentifier)] = out
-
-	if snippetFile != nil {
-		c.addRelationship(&Relationship{
-			Type: RelationshipType_Describes,
-			From: out,
-			To:   ElementList{snippetFile},
-		})
-	}
 
 	return out
 }

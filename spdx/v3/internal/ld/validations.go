@@ -16,17 +16,9 @@ type Validator interface {
 // of all the errors found
 func ValidateGraph(graph any) error {
 	var errs []error
-	err := VisitObjectGraph(graph, func(path []any, value reflect.Value) error {
-		// avoid double-validation, this will be called with both pointer and struct references
-		if elemImplements[Validator](value) {
-			return nil
-		}
-		if value.Type().Implements(validatorInterface) {
-			if validator, ok := value.Interface().(Validator); ok {
-				for _, err := range flattenErrors(validator.Validate()) {
-					errs = append(errs, newValidationError(err, append(path[:], baseType(value.Type()))...))
-				}
-			}
+	err := VisitObjectGraph(graph, func(path []any, validator Validator) error {
+		for _, err := range flattenErrors(validator.Validate()) {
+			errs = append(errs, newValidationError(err, append(path, baseType(reflect.TypeOf(validator)))...)) // ok to append to mutable path here: it is only stringified
 		}
 		return nil
 	})

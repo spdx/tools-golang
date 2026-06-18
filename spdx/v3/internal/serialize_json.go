@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -14,7 +13,7 @@ import (
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
 )
 
-var Debug = os.Getenv("SPDX_DEBUG") == "true"
+var Debug = ld.Debug
 
 type ldContextProvider interface {
 	LDContexts() map[string]map[string]any

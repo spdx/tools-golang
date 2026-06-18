@@ -10,7 +10,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/pmezard/go-difflib/difflib"
 	"github.com/stretchr/testify/require"
 
 	"github.com/spdx/tools-golang/spdx/v3/internal/ld"
@@ -178,16 +177,8 @@ func Test_writer(t *testing.T) {
 	d2 := newTestDocument()
 	err = d2.FromJSON(&buf)
 	require.NoError(t, err)
-	// these would (correctly) cause a failure, to validate unexported and time fields are being properly checked:
-	//d2.RootElements.Packages().Views()[1].PrimaryPurpose = spdx.SoftwarePurpose_Archive
-	//_ = spdx.As(d2.CreationInfo, func(info *spdx.CreationInfo) error {
-	//	info.Created = info.Created.Add(time.Hour)
-	//	return nil
-	//})
 	diff := cmp.Diff(d.SpdxDocument, d2.SpdxDocument, diffOpts()...)
-	if diff != "" {
-		t.Fatal(diff)
-	}
+	require.Empty(t, diff)
 }
 
 func diffOpts() []cmp.Option {
@@ -239,6 +230,7 @@ func diffOpts() []cmp.Option {
 			spdx.AnnotationType{},
 			spdx.ProfileIdentifierType{},
 			spdx.ExternalIRI{},
+			spdx.EnergyUnitType{},
 		),
 	)
 	return out
@@ -298,7 +290,7 @@ func Test_reader2(t *testing.T) {
 	  "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
 	  "@graph": [
 		{ "type": "SpdxDocument",
-		  "element": [ "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" ]
+		  "rootElement": [ "https://spdx.org/rdf/3.0.1/terms/Core/SpdxOrganization" ]
 		}
 	  ]
 	}`
@@ -306,9 +298,9 @@ func Test_reader2(t *testing.T) {
 	d := newTestDocument()
 	err := d.FromJSON(strings.NewReader(contents))
 	require.NoError(t, err)
-	require.Len(t, d.Elements, 1)
+	require.Len(t, d.RootElements, 1)
 	spdxOrgID, _ := ld.GetID(spdx.Organization_SpdxOrganization)
-	gotID, _ := ld.GetID(d.Elements[0])
+	gotID, _ := ld.GetID(d.RootElements[0])
 	require.Equal(t, spdxOrgID, gotID)
 }
 
@@ -382,9 +374,7 @@ func Test_exportImportExport(t *testing.T) {
 
 	buf := bytes.Buffer{}
 	err := doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	json1 := buf.String()
 
@@ -392,32 +382,11 @@ func Test_exportImportExport(t *testing.T) {
 
 	newDoc := newTestDocument()
 	err = newDoc.FromJSON(strings.NewReader(json1))
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
-	// re-serialize
-
-	buf.Reset()
-	err = newDoc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
-	json2 := buf.String()
-
-	// compare original to parsed and re-encoded
-
-	diff := difflib.UnifiedDiff{
-		A:        difflib.SplitLines(json1),
-		B:        difflib.SplitLines(json2),
-		FromFile: "Original",
-		ToFile:   "Current",
-		Context:  3,
-	}
-	text, _ := difflib.GetUnifiedDiffString(diff)
-	if text != "" {
-		t.Errorf("mismatch (-want +got):\n%s", text)
-	}
+	// compare original to parsed -- this includes Element lists, etc.
+	diff := cmp.Diff(doc, newDoc, diffOpts()...)
+	require.Empty(t, diff)
 
 	// some basic usage:
 
@@ -435,9 +404,7 @@ func Test_exportImportExport(t *testing.T) {
 			}
 		}
 	}
-	if len(pkgs) != 2 {
-		t.Error("wrong packages returned")
-	}
+	require.Len(t, pkgs, 2)
 }
 
 func Test_aiProfile(t *testing.T) {
@@ -473,43 +440,18 @@ func Test_aiProfile(t *testing.T) {
 
 	buf := bytes.Buffer{}
 	err := doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	json1 := buf.String()
 
 	// deserialize to a new document
 
-	doc = newTestDocument()
-	//doc.RootElements.Append(&spdx.Agent{})
-	err = doc.FromJSON(strings.NewReader(json1))
-	if err != nil {
-		t.Error(err)
-	}
+	newDoc := newTestDocument()
+	err = newDoc.FromJSON(strings.NewReader(json1))
+	require.NoError(t, err)
 
-	// re-serialize
-
-	buf.Reset()
-	err = doc.ToJSON(&buf)
-	if err != nil {
-		t.Error(err)
-	}
-	json2 := buf.String()
-
-	// compare original to parsed and re-encoded
-
-	diff := difflib.UnifiedDiff{
-		A:        difflib.SplitLines(json1),
-		B:        difflib.SplitLines(json2),
-		FromFile: "Original",
-		ToFile:   "Current",
-		Context:  3,
-	}
-	text, _ := difflib.GetUnifiedDiffString(diff)
-	if text != "" {
-		t.Errorf("mismatch (-want +got):\n%s", text)
-	}
+	diff := cmp.Diff(doc, newDoc, diffOpts()...)
+	require.Empty(t, diff)
 }
 
 func newTestDocument() *spdx.Document {
