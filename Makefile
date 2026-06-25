@@ -17,5 +17,5 @@ unit:
 
 .PHONY: fuzz
 fuzz:
-	go test -v -run=Fuzz -fuzz=FuzzShouldIgnore ./utils -fuzztime=10s
-	go test -v -run=Fuzz -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=10s
+	go test -v -run=Fuzz -fuzz=FuzzShouldIgnore ./utils -fuzztime=100000x
+	go test -v -run=Fuzz -fuzz=FuzzPackageCanGetVerificationCode ./utils -fuzztime=100000x
