@@ -9,16 +9,11 @@ import (
 	converter "github.com/anchore/go-struct-converter"
 
 	"github.com/spdx/tools-golang/spdx/common"
-	"github.com/spdx/tools-golang/spdx/v2/v2_1"
 	"github.com/spdx/tools-golang/spdx/v2/v2_2"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
 )
 
-var DocumentChain = converter.NewChain(
-	v2_1.Document{},
-	v2_2.Document{},
-	v2_3.Document{},
-)
+var DocumentChain = converter.NewFuncChain(v2_2.V2_1toV2_2, v2_3.V2_2toV2_3)
 
 // Document converts from one document to another document
 // For example, converting a document to the latest version could be done like:
