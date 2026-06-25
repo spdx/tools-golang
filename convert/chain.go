@@ -13,7 +13,13 @@ import (
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
 )
 
-var DocumentChain = converter.NewFuncChain(v2_2.V2_1toV2_2, v2_3.V2_2toV2_3)
+func DocumentChain() converter.FuncChain {
+	return converter.NewFuncChain(
+		v2_2.From_v2_1, v2_2.To_v2_1,
+		v2_3.From_v2_2, v2_3.To_v2_2,
+		// for future v3.x to v3.y conversions, see funcChain.AutoPackageConverter()
+	)
+}
 
 // Document converts from one document to another document
 // For example, converting a document to the latest version could be done like:
@@ -30,5 +36,5 @@ func Document(from common.AnyDocument, to common.AnyDocument) error {
 		reflect.ValueOf(to).Elem().Set(reflect.ValueOf(from))
 		return nil
 	}
-	return DocumentChain.Convert(from, to)
+	return DocumentChain().Convert(from, to)
 }

@@ -73,6 +73,14 @@ type Document struct {
 	Reviews []*Review `json:"-"`
 }
 
+func From_v2_1(_ v2_1.Document, d *Document) {
+	d.SPDXVersion = Version
+}
+
+func To_v2_1(_ Document, d *v2_1.Document) {
+	d.SPDXVersion = v2_1.Version
+}
+
 func (d *Document) UnmarshalJSON(b []byte) error {
 	type doc Document
 	type extras struct {
@@ -164,8 +172,3 @@ func (d *Document) UnmarshalJSON(b []byte) error {
 }
 
 var _ json.Unmarshaler = (*Document)(nil)
-
-func V2_1toV2_2(from v2_1.Document, to *Document) error {
-	to.SPDXVersion = Version
-	return nil
-}
