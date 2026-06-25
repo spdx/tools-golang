@@ -4,8 +4,6 @@
 package v2_1
 
 import (
-	converter "github.com/anchore/go-struct-converter"
-
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
 
@@ -70,10 +68,3 @@ type Document struct {
 	// DEPRECATED in version 2.0 of spec
 	Reviews []*Review `json:"-"`
 }
-
-func (d *Document) ConvertFrom(_ interface{}) error {
-	d.SPDXVersion = Version
-	return nil
-}
-
-var _ converter.ConvertFrom = (*Document)(nil)

@@ -12,7 +12,7 @@ import (
 // Copy provides a deep copy of the example
 func Copy() spdx.Document {
 	out := spdx.Document{}
-	err := converter.Convert(example, &out)
+	err := converter.Clone(example, &out)
 	if err != nil {
 		panic(fmt.Errorf("unable to convert example doc: %w", err))
 	}
