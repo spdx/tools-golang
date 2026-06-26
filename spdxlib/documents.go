@@ -26,11 +26,13 @@ func ValidateDocument(doc *spdx.Document) error {
 	validElementIDs[common.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
 
 	for _, relationship := range doc.Relationships {
-		if !validElementIDs[relationship.RefA.ElementRefID] {
+		// a special value such as NONE or NOASSERTION (SPDX 2.3 section 11.1)
+		// is not an element reference, so skip the existence check for it
+		if relationship.RefA.SpecialID == "" && !validElementIDs[relationship.RefA.ElementRefID] {
 			return fmt.Errorf("%s used in relationship but no such package exists", string(relationship.RefA.ElementRefID))
 		}
 
-		if !validElementIDs[relationship.RefB.ElementRefID] {
+		if relationship.RefB.SpecialID == "" && !validElementIDs[relationship.RefB.ElementRefID] {
 			return fmt.Errorf("%s used in relationship but no such package exists", string(relationship.RefB.ElementRefID))
 		}
 	}

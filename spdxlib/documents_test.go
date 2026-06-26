@@ -115,3 +115,37 @@ func TestInvalidDocumentFailsValidation(t *testing.T) {
 		t.Fatalf("expected non-nil error, got nil")
 	}
 }
+
+func TestDocumentWithSpecialRelationshipPassesValidation(t *testing.T) {
+	// per SPDX 2.3 section 11.1, NONE and NOASSERTION are permitted on the
+	// right-hand side of a relationship, and should not be checked against
+	// the set of element identifiers defined in the document.
+	for _, specialID := range []string{"NONE", "NOASSERTION"} {
+		doc := &spdx.Document{
+			SPDXVersion:    spdx.Version,
+			DataLicense:    spdx.DataLicense,
+			SPDXIdentifier: common.ElementID("DOCUMENT"),
+			CreationInfo:   &spdx.CreationInfo{},
+			Packages: []*spdx.Package{
+				{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			},
+			Relationships: []*spdx.Relationship{
+				{
+					RefA:         common.MakeDocElementID("", "DOCUMENT"),
+					RefB:         common.MakeDocElementID("", "p1"),
+					Relationship: "DESCRIBES",
+				},
+				// special value on the right-hand side; valid per the spec
+				{
+					RefA:         common.MakeDocElementID("", "p1"),
+					RefB:         common.MakeDocElementSpecial(specialID),
+					Relationship: "CONTAINS",
+				},
+			},
+		}
+
+		if err := ValidateDocument(doc); err != nil {
+			t.Fatalf("expected nil error for RefB %s, got: %s", specialID, err.Error())
+		}
+	}
+}
