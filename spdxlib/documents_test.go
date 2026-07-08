@@ -149,3 +149,45 @@ func TestDocumentWithSpecialRelationshipPassesValidation(t *testing.T) {
 		}
 	}
 }
+
+func TestDocumentWithSpecialRelationshipFailsValidation(t *testing.T) {
+	newDoc := func(refA, refB common.DocElementID) *spdx.Document {
+		return &spdx.Document{
+			SPDXVersion:    spdx.Version,
+			DataLicense:    spdx.DataLicense,
+			SPDXIdentifier: common.ElementID("DOCUMENT"),
+			CreationInfo:   &spdx.CreationInfo{},
+			Packages: []*spdx.Package{
+				{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			},
+			Relationships: []*spdx.Relationship{
+				{RefA: refA, RefB: refB, Relationship: "CONTAINS"},
+			},
+		}
+	}
+
+	tests := map[string]*spdx.Document{
+		// a special value is not permitted on the left-hand side
+		"NONE on left side": newDoc(
+			common.MakeDocElementSpecial("NONE"),
+			common.MakeDocElementID("", "p1"),
+		),
+		"NOASSERTION on left side": newDoc(
+			common.MakeDocElementSpecial("NOASSERTION"),
+			common.MakeDocElementID("", "p1"),
+		),
+		// only NONE and NOASSERTION are valid special values
+		"unknown special value on right side": newDoc(
+			common.MakeDocElementID("", "p1"),
+			common.MakeDocElementSpecial("SOMETHINGELSE"),
+		),
+	}
+
+	for name, doc := range tests {
+		t.Run(name, func(t *testing.T) {
+			if err := ValidateDocument(doc); err == nil {
+				t.Fatalf("expected non-nil error, got nil")
+			}
+		})
+	}
+}
