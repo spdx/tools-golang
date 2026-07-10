@@ -151,6 +151,9 @@ func (d *Document) UnmarshalJSON(b []byte) error {
 	// build relationships for package hasFiles field
 	// build relationships for package hasFiles field
 	for _, p := range d.Packages {
+		if p == nil {
+			continue
+		}
 		for _, f := range p.hasFiles {
 			r := &Relationship{
 				RefA: common.DocElementID{
