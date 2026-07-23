@@ -121,7 +121,7 @@ func (parser *rdfParser2_3) setSnippetRangeFromNode(node *gordfParser.Node, si *
 
 	// getting end pointer
 	endPointerTriples := rdfwriter.FilterTriples(associatedTriples, &node.ID, &PTR_END_POINTER, nil)
-	if len(startPointerTriples) != 1 {
+	if len(endPointerTriples) != 1 {
 		return fmt.Errorf("range object must be associated with exactly 1 endPointer, got %d", len(endPointerTriples))
 	}
 	endRangeType, end, err := parser.getPointerFromNode(endPointerTriples[0].Object, si)
