@@ -26,11 +26,23 @@ func ValidateDocument(doc *spdx.Document) error {
 	validElementIDs[common.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
 
 	for _, relationship := range doc.Relationships {
+		// The left side must always resolve to a defined element. NONE and
+		// NOASSERTION are only permitted on the right side (SPDX 2.3 section
+		// 11.1), so a special value here is invalid.
+		if relationship.RefA.SpecialID != "" {
+			return fmt.Errorf("%s is not allowed on the left side of a relationship", relationship.RefA.SpecialID)
+		}
 		if !validElementIDs[relationship.RefA.ElementRefID] {
 			return fmt.Errorf("%s used in relationship but no such package exists", string(relationship.RefA.ElementRefID))
 		}
 
-		if !validElementIDs[relationship.RefB.ElementRefID] {
+		// The right side may be a defined element or one of the permitted
+		// special values NONE or NOASSERTION.
+		if relationship.RefB.SpecialID != "" {
+			if relationship.RefB.SpecialID != "NONE" && relationship.RefB.SpecialID != "NOASSERTION" {
+				return fmt.Errorf("%s is not a valid relationship reference", relationship.RefB.SpecialID)
+			}
+		} else if !validElementIDs[relationship.RefB.ElementRefID] {
 			return fmt.Errorf("%s used in relationship but no such package exists", string(relationship.RefB.ElementRefID))
 		}
 	}
