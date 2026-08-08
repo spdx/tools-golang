@@ -107,7 +107,10 @@ func (lic ListedLicense) ToLicenseString() string {
 }
 
 func (lic WithExceptionOperator) ToLicenseString() string {
-	return lic.member.ToLicenseString()
+	if lic.licenseException.licenseExceptionId == "" {
+		return lic.member.ToLicenseString()
+	}
+	return lic.member.ToLicenseString() + " WITH " + lic.licenseException.licenseExceptionId
 }
 
 func (lic SpecialLicense) ToLicenseString() string {
