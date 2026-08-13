@@ -9,9 +9,13 @@ import (
 )
 
 // ValidateDocument returns an error if the Document is found to be invalid, or nil if the Document is valid.
-// Currently, this only verifies that all Element IDs mentioned in Relationships exist in the Document as either a
-// Package or an UnpackagedFile.
+// Currently, this verifies that the document has the required DOCUMENT identifier and that all Element IDs mentioned
+// in Relationships exist in the Document as either the document itself, a Package, or an UnpackagedFile.
 func ValidateDocument(doc *spdx.Document) error {
+	if doc.SPDXIdentifier != common.ElementID("DOCUMENT") {
+		return fmt.Errorf("document SPDX identifier must be DOCUMENT, got %q", doc.SPDXIdentifier)
+	}
+
 	// cache a map of package IDs for quick lookups
 	validElementIDs := make(map[common.ElementID]bool)
 	for _, docPackage := range doc.Packages {

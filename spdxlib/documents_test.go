@@ -115,3 +115,21 @@ func TestInvalidDocumentFailsValidation(t *testing.T) {
 		t.Fatalf("expected non-nil error, got nil")
 	}
 }
+
+func TestDocumentWithInvalidSPDXIdentifierFailsValidation(t *testing.T) {
+	for _, id := range []common.ElementID{"", "not-document"} {
+		t.Run(string(id), func(t *testing.T) {
+			doc := &spdx.Document{
+				SPDXVersion:    spdx.Version,
+				DataLicense:    spdx.DataLicense,
+				SPDXIdentifier: id,
+				CreationInfo:   &spdx.CreationInfo{},
+			}
+
+			err := ValidateDocument(doc)
+			if err == nil {
+				t.Fatal("expected non-nil error, got nil")
+			}
+		})
+	}
+}
