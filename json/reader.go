@@ -5,6 +5,7 @@ package json
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"regexp"
@@ -39,20 +40,26 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		return err
 	}
 
-	var data interface{}
-	err = json.Unmarshal(buf.Bytes(), &data)
+	// Keep the document fields encoded while inspecting the version. Decoding
+	// every package and file into interface values creates a second object tree
+	// that is discarded as soon as the typed document is decoded below.
+	var fields map[string]json.RawMessage
+	err = json.Unmarshal(buf.Bytes(), &fields)
 	if err != nil {
+		var typeErr *json.UnmarshalTypeError
+		if errors.As(err, &typeErr) {
+			return fmt.Errorf("not a valid SPDX JSON document")
+		}
 		return err
 	}
 
-	val, ok := data.(map[string]interface{})
-	if !ok {
+	if fields == nil {
 		return fmt.Errorf("not a valid SPDX JSON document")
 	}
 
-	version, _ := val["spdxVersion"].(string)
+	version := stringField(fields, "spdxVersion")
 	if version == "" {
-		version, _ = val["@context"].(string)
+		version = stringField(fields, "@context")
 		if version != "" {
 			extract := regexp.MustCompile(`https://spdx.org/rdf/(\d+(?:\.\d+)+)/spdx-context\.jsonld`)
 			matches := extract.FindStringSubmatch(version)
@@ -66,6 +73,7 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		return fmt.Errorf("JSON document does not contain spdxVersion field")
 	}
 
+	var data any
 	switch version {
 	case v2_1.Version:
 		var doc v2_1.Document
@@ -96,8 +104,11 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		if version != v3_0.Version {
 			// The JSON-LD loader only knows the 3.0.1 context, so point @context at it.
 			// Rewrite the parsed field, not the raw bytes, so escaped URLs and "3.0.0" in other values are handled correctly.
-			val["@context"] = fmt.Sprintf("https://spdx.org/rdf/%s/spdx-context.jsonld", v3_0.Version)
-			contents, err = json.Marshal(val)
+			fields["@context"], err = json.Marshal(fmt.Sprintf("https://spdx.org/rdf/%s/spdx-context.jsonld", v3_0.Version))
+			if err != nil {
+				return err
+			}
+			contents, err = json.Marshal(fields)
 			if err != nil {
 				return err
 			}
@@ -113,4 +124,13 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 	}
 
 	return convert.Document(data, doc)
+}
+
+// stringField returns the named field as a string, or "" if it is missing or not a string.
+func stringField(fields map[string]json.RawMessage, name string) string {
+	var s string
+	if raw, ok := fields[name]; ok {
+		_ = json.Unmarshal(raw, &s)
+	}
+	return s
 }
