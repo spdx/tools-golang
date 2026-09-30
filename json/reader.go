@@ -94,7 +94,13 @@ func ReadInto(content io.Reader, doc common.AnyDocument) error {
 		// support older 3.0.x versions
 		contents := buf.Bytes()
 		if version != v3_0.Version {
-			contents = bytes.Replace(contents, []byte(version), []byte(fmt.Sprintf("https://spdx.org/rdf/%s/spdx-context.jsonld", v3_0.Version)), 1)
+			// The JSON-LD loader only knows the 3.0.1 context, so point @context at it.
+			// Rewrite the parsed field, not the raw bytes, so escaped URLs and "3.0.0" in other values are handled correctly.
+			val["@context"] = fmt.Sprintf("https://spdx.org/rdf/%s/spdx-context.jsonld", v3_0.Version)
+			contents, err = json.Marshal(val)
+			if err != nil {
+				return err
+			}
 		}
 		var in v3_0.Document
 		err = json.Unmarshal(contents, &in)
