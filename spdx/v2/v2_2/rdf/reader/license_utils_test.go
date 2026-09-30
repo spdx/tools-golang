@@ -320,6 +320,22 @@ func TestWithExceptionOperator_ToLicenseString(t *testing.T) {
 	}
 }
 
+func TestWithExceptionOperator_ToLicenseString_withException(t *testing.T) {
+	withException := WithExceptionOperator{
+		member: SimpleLicensingInfo{
+			licenseID: "GPL-2.0-or-later",
+		},
+		licenseException: LicenseException{
+			licenseExceptionId: "Classpath-exception-2.0",
+		},
+	}
+	expectedOutput := "GPL-2.0-or-later WITH Classpath-exception-2.0"
+	output := withException.ToLicenseString()
+	if output != expectedOutput {
+		t.Errorf("expected: %s, found: %s", expectedOutput, output)
+	}
+}
+
 func TestSpecialLicense_ToLicenseString(t *testing.T) {
 	// nothing to test (just a dry run)
 	specialLicense := SpecialLicense{
