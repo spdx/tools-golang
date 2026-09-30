@@ -1,16 +1,16 @@
 module github.com/spdx/tools-golang
 
-go 1.23.5
+go 1.23.0
 
 require (
-	github.com/anchore/go-struct-converter v0.2.0-rc2
+	github.com/anchore/go-struct-converter v0.2.1
 	github.com/dave/jennifer v1.7.1
 	github.com/deiu/rdf2go v0.0.0-20241212211204-b661ba0dfd25
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
 	github.com/piprate/json-gold v0.7.0
-	github.com/spdx/gordf v0.0.0-20201111095634-7098f93598fb
+	github.com/spdx/gordf v0.0.0-20250128162952-000978ccd6fb
 	github.com/stretchr/testify v1.11.1
 	mvdan.cc/gofumpt v0.7.0
 	sigs.k8s.io/yaml v1.6.0

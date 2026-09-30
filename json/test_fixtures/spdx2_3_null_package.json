@@ -1,0 +1,12 @@
+{
+  "SPDXID" : "SPDXRef-DOCUMENT",
+  "spdxVersion" : "SPDX-2.3",
+  "creationInfo" : {
+    "created" : "2023-07-18T12:27:48Z",
+    "creators" : [ "Tool: spdx-tools" ]
+  },
+  "name" : "null-package-doc",
+  "dataLicense" : "CC0-1.0",
+  "documentNamespace" : "test",
+  "packages" : [ null ]
+}

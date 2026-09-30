@@ -359,21 +359,18 @@ func Test_rdfParser2_3_setSnippetRangeFromNode(t *testing.T) {
 		t.Errorf("expected an error due to missing start pointer, got %v", err)
 	}
 
-	// TestCase 4: triples with 0 endPointer
+	// TestCase 4: triples with a valid startPointer and 0 endPointer.
+	// the third triple is a non-pointer predicate, so the range still has the
+	// 3 associated triples and the single rdf:type the earlier checks expect.
 	parser, _ = parserFromBodyContent(`
 		<j.0:StartEndPointer>
-			<j.0:endPointer>
+			<j.0:startPointer>
 				<j.0:ByteOffsetPointer>
 					<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
-					<j.0:offset>420</j.0:offset>
-				</j.0:ByteOffsetPointer>
-			</j.0:endPointer>
-			<j.0:endPointer>
-				<j.0:LineCharPointer>
-					<j.0:reference rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
 					<j.0:offset>310</j.0:offset>
-				</j.0:LineCharPointer>
-			</j.0:endPointer>
+				</j.0:ByteOffsetPointer>
+			</j.0:startPointer>
+			<rdfs:comment>range without an end pointer</rdfs:comment>
 		</j.0:StartEndPointer>
 	`)
 	si = &spdx.Snippet{}
