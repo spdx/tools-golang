@@ -1,0 +1,242 @@
+[
+  {
+    "@id": "_:creationinfo",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Core/CreationInfo"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/created": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+        "@value": "2024-03-06T00:00:00Z"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/createdBy": [
+      {
+        "@id": "http://spdx.example.com/Agent/JoshuaWatt"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/specVersion": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "3.0.1"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/Agent/JoshuaWatt",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Core/Person"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifier": [
+      {
+        "@type": [
+          "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifier"
+        ],
+        "https://spdx.org/rdf/3.0.1/terms/Core/externalIdentifierType": [
+          {
+            "@id": "https://spdx.org/rdf/3.0.1/terms/Core/ExternalIdentifierType/email"
+          }
+        ],
+        "https://spdx.org/rdf/3.0.1/terms/Core/identifier": [
+          {
+            "@type": "http://www.w3.org/2001/XMLSchema#string",
+            "@value": "JPEWhacker@gmail.com"
+          }
+        ]
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/name": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Joshua Watt"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/Document1",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Core/SpdxDocument"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/element": [
+      {
+        "@id": "http://spdx.example.com/BOM1"
+      },
+      {
+        "@id": "http://spdx.example.com/Agent/JoshuaWatt"
+      },
+      {
+        "@id": "http://spdx.example.com/Package1/myprogram"
+      },
+      {
+        "@id": "http://spdx.example.com/Relationship/1"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/profileConformance": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/core"
+      },
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Core/ProfileIdentifierType/software"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/rootElement": [
+      {
+        "@id": "http://spdx.example.com/BOM1"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/BOM1",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Software/Sbom"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/element": [
+      {
+        "@id": "http://spdx.example.com/Package1/myprogram"
+      },
+      {
+        "@id": "http://spdx.example.com/Package1"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/rootElement": [
+      {
+        "@id": "http://spdx.example.com/Package1"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/sbomType": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Software/SbomType/build"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/Package1",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Software/Package"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/builtTime": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+        "@value": "2024-03-06T00:00:00Z"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/name": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "my-package"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/originatedBy": [
+      {
+        "@id": "http://spdx.example.com/Agent/JoshuaWatt"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/downloadLocation": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#anyURI",
+        "@value": "http://dl.example.com/my-package_1.0.0.tar"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/packageVersion": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "1.0.0"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/Package1/myprogram",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Software/File"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/builtTime": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+        "@value": "2024-03-06T00:00:00Z"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/name": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "myprogram"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/originatedBy": [
+      {
+        "@id": "http://spdx.example.com/Agent/JoshuaWatt"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/additionalPurpose": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/application"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/copyrightText": [
+      {
+        "@type": "http://www.w3.org/2001/XMLSchema#string",
+        "@value": "Copyright 2024, Joshua Watt"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Software/primaryPurpose": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Software/SoftwarePurpose/executable"
+      }
+    ]
+  },
+  {
+    "@id": "http://spdx.example.com/Relationship/1",
+    "@type": [
+      "https://spdx.org/rdf/3.0.1/terms/Core/Relationship"
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/completeness": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipCompleteness/complete"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/creationInfo": [
+      {
+        "@id": "_:creationinfo"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/from": [
+      {
+        "@id": "http://spdx.example.com/Package1"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/relationshipType": [
+      {
+        "@id": "https://spdx.org/rdf/3.0.1/terms/Core/RelationshipType/contains"
+      }
+    ],
+    "https://spdx.org/rdf/3.0.1/terms/Core/to": [
+      {
+        "@id": "http://spdx.example.com/Package1/myprogram"
+      }
+    ]
+  }
+]

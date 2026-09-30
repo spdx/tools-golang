@@ -11,12 +11,14 @@ import (
 	"github.com/spdx/tools-golang/spdx/common"
 	"github.com/spdx/tools-golang/spdx/v2/v2_2"
 	"github.com/spdx/tools-golang/spdx/v2/v2_3"
+	"github.com/spdx/tools-golang/spdx/v3/v3_0"
 )
 
 func DocumentChain() converter.FuncChain {
 	return converter.NewFuncChain(
 		v2_2.From_v2_1, v2_2.To_v2_1,
 		v2_3.From_v2_2, v2_3.To_v2_2,
+		v3_0.From_v2_3,
 		// for future v3.x to v3.y conversions, see funcChain.AutoPackageConverter()
 	)
 }

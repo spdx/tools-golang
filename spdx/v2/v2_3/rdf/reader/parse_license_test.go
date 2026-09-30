@@ -193,7 +193,6 @@ func Test_rdfParser2_3_getAnyLicenseFromNode(t *testing.T) {
 	`)
 	node := parser.gordfParserObj.Triples[0].Subject
 	_, err = parser.getAnyLicenseFromNode(node)
-	t.Log(err)
 	if err == nil {
 		t.Errorf("should've raised an error for invalid input")
 	}
