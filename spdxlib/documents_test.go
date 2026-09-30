@@ -115,3 +115,79 @@ func TestInvalidDocumentFailsValidation(t *testing.T) {
 		t.Fatalf("expected non-nil error, got nil")
 	}
 }
+
+func TestDocumentWithSpecialRelationshipPassesValidation(t *testing.T) {
+	// per SPDX 2.3 section 11.1, NONE and NOASSERTION are permitted on the
+	// right-hand side of a relationship, and should not be checked against
+	// the set of element identifiers defined in the document.
+	for _, specialID := range []string{"NONE", "NOASSERTION"} {
+		doc := &spdx.Document{
+			SPDXVersion:    spdx.Version,
+			DataLicense:    spdx.DataLicense,
+			SPDXIdentifier: common.ElementID("DOCUMENT"),
+			CreationInfo:   &spdx.CreationInfo{},
+			Packages: []*spdx.Package{
+				{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			},
+			Relationships: []*spdx.Relationship{
+				{
+					RefA:         common.MakeDocElementID("", "DOCUMENT"),
+					RefB:         common.MakeDocElementID("", "p1"),
+					Relationship: "DESCRIBES",
+				},
+				// special value on the right-hand side; valid per the spec
+				{
+					RefA:         common.MakeDocElementID("", "p1"),
+					RefB:         common.MakeDocElementSpecial(specialID),
+					Relationship: "CONTAINS",
+				},
+			},
+		}
+
+		if err := ValidateDocument(doc); err != nil {
+			t.Fatalf("expected nil error for RefB %s, got: %s", specialID, err.Error())
+		}
+	}
+}
+
+func TestDocumentWithSpecialRelationshipFailsValidation(t *testing.T) {
+	newDoc := func(refA, refB common.DocElementID) *spdx.Document {
+		return &spdx.Document{
+			SPDXVersion:    spdx.Version,
+			DataLicense:    spdx.DataLicense,
+			SPDXIdentifier: common.ElementID("DOCUMENT"),
+			CreationInfo:   &spdx.CreationInfo{},
+			Packages: []*spdx.Package{
+				{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			},
+			Relationships: []*spdx.Relationship{
+				{RefA: refA, RefB: refB, Relationship: "CONTAINS"},
+			},
+		}
+	}
+
+	tests := map[string]*spdx.Document{
+		// a special value is not permitted on the left-hand side
+		"NONE on left side": newDoc(
+			common.MakeDocElementSpecial("NONE"),
+			common.MakeDocElementID("", "p1"),
+		),
+		"NOASSERTION on left side": newDoc(
+			common.MakeDocElementSpecial("NOASSERTION"),
+			common.MakeDocElementID("", "p1"),
+		),
+		// only NONE and NOASSERTION are valid special values
+		"unknown special value on right side": newDoc(
+			common.MakeDocElementID("", "p1"),
+			common.MakeDocElementSpecial("SOMETHINGELSE"),
+		),
+	}
+
+	for name, doc := range tests {
+		t.Run(name, func(t *testing.T) {
+			if err := ValidateDocument(doc); err == nil {
+				t.Fatalf("expected non-nil error, got nil")
+			}
+		})
+	}
+}
