@@ -1,6 +1,6 @@
 module github.com/spdx/tools-golang
 
-go 1.23.0
+go 1.26.0
 
 require (
 	github.com/anchore/go-struct-converter v0.2.1
@@ -12,7 +12,7 @@ require (
 	github.com/piprate/json-gold v0.7.0
 	github.com/spdx/gordf v0.0.0-20250128162952-000978ccd6fb
 	github.com/stretchr/testify v1.11.1
-	mvdan.cc/gofumpt v0.7.0
+	mvdan.cc/gofumpt v0.12.0
 	sigs.k8s.io/yaml v1.6.0
 )
 
@@ -28,6 +28,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/rychipman/easylex v0.0.0-20160129204217-49ee7767142f // indirect
-	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/tools v0.17.0 // indirect
+	golang.org/x/tools v0.49.0 // indirect
 )
