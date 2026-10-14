@@ -15,10 +15,16 @@ func ValidateDocument(doc *spdx.Document) error {
 	// cache a map of package IDs for quick lookups
 	validElementIDs := make(map[common.ElementID]bool)
 	for _, docPackage := range doc.Packages {
+		if docPackage == nil {
+			continue
+		}
 		validElementIDs[docPackage.PackageSPDXIdentifier] = true
 	}
 
 	for _, unpackagedFile := range doc.Files {
+		if unpackagedFile == nil {
+			continue
+		}
 		validElementIDs[unpackagedFile.FileSPDXIdentifier] = true
 	}
 
@@ -26,6 +32,10 @@ func ValidateDocument(doc *spdx.Document) error {
 	validElementIDs[common.MakeDocElementID("", "DOCUMENT").ElementRefID] = true
 
 	for _, relationship := range doc.Relationships {
+		if relationship == nil {
+			continue
+		}
+
 		// The left side must always resolve to a defined element. NONE and
 		// NOASSERTION are only permitted on the right side (SPDX 2.3 section
 		// 11.1), so a special value here is invalid.
