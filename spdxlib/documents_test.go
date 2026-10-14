@@ -191,3 +191,59 @@ func TestDocumentWithSpecialRelationshipFailsValidation(t *testing.T) {
 		})
 	}
 }
+
+// A null entry in packages, files or relationships reaches ValidateDocument.
+// The JSON reader already tolerates one (see json/test_fixtures/
+// spdx2_3_null_package.json), so a document that parses can still arrive here
+// with a nil element and used to dereference it.
+func TestDocumentWithNilEntriesPassesValidation(t *testing.T) {
+	doc := &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+		Packages: []*spdx.Package{
+			nil,
+			{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+		},
+		Files: []*spdx.File{
+			nil,
+			{FileName: "file1", FileSPDXIdentifier: "f1"},
+		},
+		Relationships: []*spdx.Relationship{
+			nil,
+			{
+				RefA:         common.MakeDocElementID("", "DOCUMENT"),
+				RefB:         common.MakeDocElementID("", "p1"),
+				Relationship: "DESCRIBES",
+			},
+		},
+	}
+
+	if err := ValidateDocument(doc); err != nil {
+		t.Fatalf("expected nil error, got: %s", err.Error())
+	}
+}
+
+// The nil entries must not hide a genuinely dangling reference either.
+func TestDocumentWithNilEntriesStillCatchesBadReference(t *testing.T) {
+	doc := &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+		Packages:       []*spdx.Package{nil},
+		Relationships: []*spdx.Relationship{
+			nil,
+			{
+				RefA:         common.MakeDocElementID("", "DOCUMENT"),
+				RefB:         common.MakeDocElementID("", "p404"),
+				Relationship: "DESCRIBES",
+			},
+		},
+	}
+
+	if err := ValidateDocument(doc); err == nil {
+		t.Fatal("expected an error for a relationship pointing at a missing element")
+	}
+}
