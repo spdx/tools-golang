@@ -53,18 +53,32 @@ func RenderDocument(doc *spdx.Document, w io.Writer) error {
 	if len(doc.Files) > 0 {
 		fmt.Fprintf(w, "##### Unpackaged files\n\n")
 		sort.Slice(doc.Files, func(i, j int) bool {
-			return doc.Files[i].FileSPDXIdentifier < doc.Files[j].FileSPDXIdentifier
+			a, b := doc.Files[i], doc.Files[j]
+			if a == nil || b == nil {
+				return a != nil
+			}
+			return a.FileSPDXIdentifier < b.FileSPDXIdentifier
 		})
 		for _, fi := range doc.Files {
+			if fi == nil {
+				continue
+			}
 			renderFile(fi, w)
 		}
 	}
 
 	// sort Packages by identifier
 	sort.Slice(doc.Packages, func(i, j int) bool {
-		return doc.Packages[i].PackageSPDXIdentifier < doc.Packages[j].PackageSPDXIdentifier
+		a, b := doc.Packages[i], doc.Packages[j]
+		if a == nil || b == nil {
+			return a != nil
+		}
+		return a.PackageSPDXIdentifier < b.PackageSPDXIdentifier
 	})
 	for _, pkg := range doc.Packages {
+		if pkg == nil {
+			continue
+		}
 		fmt.Fprintf(w, "##### Package: %s\n\n", pkg.PackageName)
 		renderPackage(pkg, w)
 	}
@@ -72,6 +86,9 @@ func RenderDocument(doc *spdx.Document, w io.Writer) error {
 	if len(doc.OtherLicenses) > 0 {
 		fmt.Fprintf(w, "##### Other Licenses\n\n")
 		for _, ol := range doc.OtherLicenses {
+			if ol == nil {
+				continue
+			}
 			renderOtherLicense(ol, w)
 		}
 	}
@@ -79,6 +96,9 @@ func RenderDocument(doc *spdx.Document, w io.Writer) error {
 	if len(doc.Relationships) > 0 {
 		fmt.Fprintf(w, "##### Relationships\n\n")
 		for _, rln := range doc.Relationships {
+			if rln == nil {
+				continue
+			}
 			renderRelationship(rln, w)
 		}
 		fmt.Fprintf(w, "\n")
@@ -87,6 +107,9 @@ func RenderDocument(doc *spdx.Document, w io.Writer) error {
 	if len(doc.Annotations) > 0 {
 		fmt.Fprintf(w, "##### Annotations\n\n")
 		for _, ann := range doc.Annotations {
+			if ann == nil {
+				continue
+			}
 			renderAnnotation(ann, w)
 			fmt.Fprintf(w, "\n")
 		}
@@ -95,6 +118,9 @@ func RenderDocument(doc *spdx.Document, w io.Writer) error {
 	if len(doc.Reviews) > 0 {
 		fmt.Fprintf(w, "##### Reviews\n\n")
 		for _, rev := range doc.Reviews {
+			if rev == nil {
+				continue
+			}
 			renderReview(rev, w)
 		}
 	}
