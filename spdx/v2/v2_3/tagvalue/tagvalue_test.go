@@ -91,8 +91,39 @@ func Test_ReadWrite(t *testing.T) {
 // back out as tag-value hands the writer a nil. Both ends are the exported API a
 // caller converting between formats would use.
 func Test_WriteNullElements(t *testing.T) {
-	for _, field := range []string{"packages", "files", "hasExtractedLicensingInfos", "annotations"} {
-		t.Run(field, func(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		// a JSON member to splice into an otherwise minimal document
+		member string
+		// if set, output that must survive the element beside the null being skipped
+		want string
+	}{
+		{name: "packages", member: `"packages": [null]`},
+		{name: "files", member: `"files": [null]`},
+		{name: "hasExtractedLicensingInfos", member: `"hasExtractedLicensingInfos": [null]`},
+		{name: "annotations", member: `"annotations": [null]`},
+		{
+			// nested in a package, and with a second element so the sort
+			// comparator runs before the loop does
+			name: "package files",
+			member: `"packages": [{"SPDXID": "SPDXRef-Package123", "name": "p1", "downloadLocation": "NOASSERTION",
+				"files": [null, {"SPDXID": "SPDXRef-File123", "fileName": "/tmp/whatever.txt"}]}]`,
+			want: "FileName: /tmp/whatever.txt",
+		},
+		{
+			name: "package externalRefs",
+			member: `"packages": [{"SPDXID": "SPDXRef-Package123", "name": "p1", "downloadLocation": "NOASSERTION",
+				"externalRefs": [null, {"referenceCategory": "OTHER", "referenceType": "anything", "referenceLocator": "whatever"}]}]`,
+			want: "ExternalRef: OTHER anything whatever",
+		},
+		{
+			name: "file artifactOfs",
+			member: `"files": [{"SPDXID": "SPDXRef-File123", "fileName": "/tmp/whatever.txt",
+				"artifactOfs": [null, {"name": "project1"}]}]`,
+			want: "ArtifactOfProjectName: project1",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
 			in := fmt.Sprintf(`{
 				"SPDXID": "SPDXRef-DOCUMENT",
 				"spdxVersion": "SPDX-2.3",
@@ -100,16 +131,20 @@ func Test_WriteNullElements(t *testing.T) {
 				"name": "null-elements",
 				"dataLicense": "CC0-1.0",
 				"documentNamespace": "https://example.com/null-elements",
-				%q: [null]
-			}`, field)
+				%s
+			}`, tc.member)
 
 			doc, err := spdxjson.Read(strings.NewReader(in))
 			if err != nil {
 				t.Fatalf("unable to read JSON document: %v", err)
 			}
 
-			if err := tagvalue.Write(doc, &bytes.Buffer{}); err != nil {
+			var got bytes.Buffer
+			if err := tagvalue.Write(doc, &got); err != nil {
 				t.Errorf("unable to write tag-value document: %v", err)
+			}
+			if tc.want != "" && !strings.Contains(got.String(), tc.want) {
+				t.Errorf("expected rendered document to contain %q, got:\n%s", tc.want, got.String())
 			}
 		})
 	}

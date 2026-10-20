@@ -4,6 +4,7 @@ package writer
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
@@ -494,5 +495,52 @@ Copyright Jane Doe</text>
 	c := bytes.Compare(want.Bytes(), got.Bytes())
 	if c != 0 {
 		t.Errorf("Expected %v, got %v", want.String(), got.String())
+	}
+}
+
+func TestSaverPackageSkipsNilElements(t *testing.T) {
+	// Package.Files and Package.PackageExternalReferences are pointer slices as
+	// well, and a null in either survives UnmarshalJSON the way the document-level
+	// ones do, so renderPackage has to tolerate a nil there too. File carries one
+	// more, ArtifactOfProjects.
+	pkg := &spdx.Package{
+		PackageName:             "p1",
+		PackageSPDXIdentifier:   common.ElementID("p1"),
+		PackageDownloadLocation: "NOASSERTION",
+		PackageExternalReferences: []*spdx.PackageExternalReference{
+			nil,
+			{
+				Category: "OTHER",
+				RefType:  "anything",
+				Locator:  "you-can-link-to-whatever",
+			},
+		},
+		Files: []*spdx.File{
+			nil,
+			{
+				FileName:           "/tmp/whatever.txt",
+				FileSPDXIdentifier: common.ElementID("File123"),
+				ArtifactOfProjects: []*spdx.ArtifactOfProject{
+					nil,
+					{Name: "project1"},
+				},
+			},
+		},
+	}
+
+	var got bytes.Buffer
+	if err := renderPackage(pkg, &got); err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	// skipping the nil entries must not drop the real element beside each one
+	for _, want := range []string{
+		"ExternalRef: OTHER anything you-can-link-to-whatever",
+		"FileName: /tmp/whatever.txt",
+		"ArtifactOfProjectName: project1",
+	} {
+		if !strings.Contains(got.String(), want) {
+			t.Errorf("expected rendered package to contain %q, got:\n%s", want, got.String())
+		}
 	}
 }

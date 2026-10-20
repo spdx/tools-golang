@@ -94,6 +94,9 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 		fmt.Fprintf(w, "PackageComment: %s\n", textify(pkg.PackageComment))
 	}
 	for _, s := range pkg.PackageExternalReferences {
+		if s == nil {
+			continue
+		}
 		fmt.Fprintf(w, "ExternalRef: %s %s %s\n", s.Category, s.RefType, s.Locator)
 		if s.ExternalRefComment != "" {
 			fmt.Fprintf(w, "ExternalRefComment: %s\n", textify(s.ExternalRefComment))
@@ -104,9 +107,16 @@ func renderPackage(pkg *spdx.Package, w io.Writer) error {
 
 	// also render any files for this package
 	sort.Slice(pkg.Files, func(i, j int) bool {
-		return pkg.Files[i].FileSPDXIdentifier < pkg.Files[j].FileSPDXIdentifier
+		a, b := pkg.Files[i], pkg.Files[j]
+		if a == nil || b == nil {
+			return a != nil
+		}
+		return a.FileSPDXIdentifier < b.FileSPDXIdentifier
 	})
 	for _, fi := range pkg.Files {
+		if fi == nil {
+			continue
+		}
 		renderFile(fi, w)
 	}
 
