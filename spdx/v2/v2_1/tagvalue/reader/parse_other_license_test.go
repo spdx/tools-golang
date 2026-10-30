@@ -291,6 +291,30 @@ func TestParserOLMovesToFileAfterParsingFileNameTag(t *testing.T) {
 	}
 }
 
+func TestParserOLFailsIfPreviousFileHasNoSPDXIDOnNewSection(t *testing.T) {
+	// a file without an SPDX identifier followed by an Other License section must
+	// still be reported when the next package, file or snippet section starts
+	for _, tag := range []string{"PackageName", "FileName", "SnippetSPDXID"} {
+		parser := tvParser{
+			doc:  &v2_1.Document{Packages: []*v2_1.Package{}},
+			st:   psOtherLicense,
+			pkg:  &v2_1.Package{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*v2_1.File{}},
+			file: &v2_1.File{FileName: "f1.txt"},
+			otherLic: &v2_1.OtherLicense{
+				LicenseIdentifier: "LicenseRef-Lic11",
+				LicenseName:       "License 11",
+			},
+		}
+		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+		parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+		err := parser.parsePair(tag, "next")
+		if err == nil {
+			t.Errorf("%s: file without SPDX Identifier getting accepted", tag)
+		}
+	}
+}
+
 // ===== Other License data section tests =====
 func TestParserCanParseOtherLicenseTags(t *testing.T) {
 	parser := tvParser{

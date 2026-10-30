@@ -49,6 +49,10 @@ func (parser *tvParser) parsePairFromOtherLicense(tag string, value string) erro
 	// package. Mirror the File and Snippet states, which already allow these transitions.
 	case "PackageName":
 		parser.st = psPackage
+		// check if the previous file contained an spdx Id or not
+		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId {
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
+		}
 		parser.file = nil
 		parser.snippet = nil
 		return parser.parsePairFromPackage(tag, value)
