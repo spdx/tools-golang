@@ -39,6 +39,9 @@ func renderFile(f *spdx.File, w io.Writer) error {
 		fmt.Fprintf(w, "FileCopyrightText: %s\n", textify(f.FileCopyrightText))
 	}
 	for _, aop := range f.ArtifactOfProjects {
+		if aop == nil {
+			continue
+		}
 		fmt.Fprintf(w, "ArtifactOfProjectName: %s\n", aop.Name)
 		if aop.HomePage != "" {
 			fmt.Fprintf(w, "ArtifactOfProjectHomePage: %s\n", aop.HomePage)

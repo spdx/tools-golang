@@ -4,6 +4,7 @@ package writer
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/spdx/tools-golang/spdx/v2/common"
@@ -339,5 +340,90 @@ func TestSaverDocumentReturnsErrorIfNilCreationInfo(t *testing.T) {
 	err := RenderDocument(doc, &got)
 	if err == nil {
 		t.Errorf("Expected error, got nil")
+	}
+}
+
+func TestSaverDocumentSkipsNilElements(t *testing.T) {
+	// Document.UnmarshalJSON leaves a null package, file, extracted license or
+	// annotation in the slice rather than removing it, and documents built in
+	// code can carry one too, so a nil element reaches the writer.
+	doc := &spdx.Document{
+		SPDXVersion:       spdx.Version,
+		DataLicense:       spdx.DataLicense,
+		SPDXIdentifier:    common.ElementID("DOCUMENT"),
+		DocumentName:      "nil-elements",
+		DocumentNamespace: "https://example.com/nil-elements",
+		CreationInfo: &spdx.CreationInfo{
+			Creators: []common.Creator{
+				{Creator: "John Doe", CreatorType: "Person"},
+			},
+			Created: "2018-10-10T06:20:00Z",
+		},
+		Files: []*spdx.File{
+			nil,
+			{
+				FileName:           "/tmp/whatever.txt",
+				FileSPDXIdentifier: common.ElementID("File123"),
+			},
+		},
+		Packages: []*spdx.Package{
+			nil,
+			{
+				PackageName:             "p1",
+				PackageSPDXIdentifier:   common.ElementID("Package123"),
+				PackageDownloadLocation: "NOASSERTION",
+			},
+		},
+		OtherLicenses: []*spdx.OtherLicense{
+			nil,
+			{
+				LicenseIdentifier: "LicenseRef-1",
+				ExtractedText:     "This is a license.",
+			},
+		},
+		Relationships: []*spdx.Relationship{
+			nil,
+			{
+				RefA:         common.MakeDocElementID("", "DOCUMENT"),
+				RefB:         common.MakeDocElementID("", "Package123"),
+				Relationship: "DESCRIBES",
+			},
+		},
+		Annotations: []*spdx.Annotation{
+			nil,
+			{
+				Annotator:         common.Annotator{Annotator: "John Doe", AnnotatorType: "Person"},
+				AnnotationDate:    "2018-10-10T06:20:00Z",
+				AnnotationType:    "REVIEW",
+				AnnotationComment: "an annotation",
+			},
+		},
+		Reviews: []*spdx.Review{
+			nil,
+			{
+				Reviewer:     "John Doe",
+				ReviewerType: "Person",
+				ReviewDate:   "2018-10-10T06:20:00Z",
+			},
+		},
+	}
+
+	var got bytes.Buffer
+	if err := RenderDocument(doc, &got); err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	// skipping the nil entries must not drop the real element beside each one
+	for _, want := range []string{
+		"FileName: /tmp/whatever.txt",
+		"PackageName: p1",
+		"LicenseID: LicenseRef-1",
+		"Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package123",
+		"AnnotationType: REVIEW",
+		"Reviewer: Person: John Doe",
+	} {
+		if !strings.Contains(got.String(), want) {
+			t.Errorf("expected rendered document to contain %q, got:\n%s", want, got.String())
+		}
 	}
 }
