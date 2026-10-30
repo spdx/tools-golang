@@ -43,6 +43,26 @@ func (parser *tvParser) parsePairFromOtherLicense(tag string, value string) erro
 		return parser.parsePairForAnnotation(tag, value)
 	case "AnnotationComment":
 		return parser.parsePairForAnnotation(tag, value)
+	// tags for starting a new package, file or snippet section. Other License sections are not
+	// required to be the last sections in a document: producers such as Yocto / OpenEmbedded emit
+	// each package's LicenseRef extracted texts directly after the package, followed by the next
+	// package. Mirror the File and Snippet states, which already allow these transitions.
+	case "PackageName":
+		parser.st = psPackage
+		// check if the previous file contained an spdx Id or not
+		if parser.file != nil && parser.file.FileSPDXIdentifier == nullSpdxElementId {
+			return fmt.Errorf("file with FileName %s does not have SPDX identifier", parser.file.FileName)
+		}
+		parser.file = nil
+		parser.snippet = nil
+		return parser.parsePairFromPackage(tag, value)
+	case "FileName":
+		parser.st = psFile
+		parser.snippet = nil
+		return parser.parsePairFromFile(tag, value)
+	case "SnippetSPDXID":
+		parser.st = psSnippet
+		return parser.parsePairFromSnippet(tag, value)
 	// tag for going on to review section (DEPRECATED)
 	case "Reviewer":
 		parser.st = psReview
