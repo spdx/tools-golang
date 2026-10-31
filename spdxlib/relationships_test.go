@@ -71,3 +71,46 @@ func TestFindsDependsOnRelationships(t *testing.T) {
 		t.Fatalf("received unexpected relationship: %v", eIDs[0])
 	}
 }
+
+func TestFilterRelationshipsSkipsNilRelationships(t *testing.T) {
+	// the filter closure is handed one relationship at a time and is entitled
+	// to read it, so a nil entry must never reach it
+	doc := &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+		Packages: []*spdx.Package{
+			{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+			{PackageName: "pkg2", PackageSPDXIdentifier: "p2"},
+		},
+		Relationships: []*spdx.Relationship{
+			nil,
+			{
+				RefA:         common.MakeDocElementID("", "p1"),
+				RefB:         common.MakeDocElementID("", "p2"),
+				Relationship: "DEPENDS_ON",
+			},
+			nil,
+		},
+	}
+
+	eIDs, err := FilterRelationships(doc, func(relationship *spdx.Relationship) *common.ElementID {
+		if relationship.Relationship == "DEPENDS_ON" {
+			return &relationship.RefB.ElementRefID
+		}
+
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("expected nil error, got: %s", err.Error())
+	}
+
+	if len(eIDs) != 1 {
+		t.Fatalf("expected 1 ElementID, got: %v", eIDs)
+	}
+
+	if eIDs[0] != common.MakeDocElementID("", "p2").ElementRefID {
+		t.Errorf("received unexpected relationship: %v", eIDs[0])
+	}
+}
