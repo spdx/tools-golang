@@ -4,6 +4,7 @@ package reader
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"strings"
@@ -22,6 +23,7 @@ func ReadTagValues(content io.Reader) ([]TagValuePair, error) {
 	r := &tvReader{}
 
 	scanner := bufio.NewScanner(content)
+	scanner.Split(scanLines)
 	for scanner.Scan() {
 		// read each line, one by one
 		err := r.readNextLine(scanner.Text())
@@ -47,6 +49,30 @@ func ReadTagValues(content io.Reader) ([]TagValuePair, error) {
 	}
 
 	return exportedTVList, nil
+}
+
+// scanLines is bufio.ScanLines, except that a lone "\r" also ends a line, so
+// files with classic Mac line endings are read like any other.
+func scanLines(data []byte, atEOF bool) (advance int, token []byte, err error) {
+	if atEOF && len(data) == 0 {
+		return 0, nil, nil
+	}
+	i := bytes.IndexAny(data, "\r\n")
+	switch {
+	case i < 0:
+		if atEOF {
+			return len(data), data, nil
+		}
+		return 0, nil, nil // request more data
+	case data[i] == '\n':
+		return i + 1, data[:i], nil
+	case i+1 < len(data) && data[i+1] == '\n':
+		return i + 2, data[:i], nil // "\r\n"
+	case i+1 == len(data) && !atEOF:
+		return 0, nil, nil // a "\n" may follow
+	default:
+		return i + 1, data[:i], nil
+	}
 }
 
 type tagvalue struct {

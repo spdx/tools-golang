@@ -2,8 +2,10 @@
 package reader
 
 import (
+	"reflect"
 	"strings"
 	"testing"
+	"testing/iotest"
 )
 
 func TestCanReadTagValues(t *testing.T) {
@@ -55,6 +57,37 @@ Tag5: Value 5
 	}
 	if tvPairList[4].Value != "Value 5" {
 		t.Errorf("expected tvPairList[4].Value to be Value 5, got %s", tvPairList[4].Value)
+	}
+}
+
+func TestCanReadTagValuesWithAnyLineTerminator(t *testing.T) {
+	want := []TagValuePair{
+		{Tag: "SPDXVersion", Value: "SPDX-2.3"},
+		{Tag: "DocumentComment", Value: "a\nb"},
+		{Tag: "SPDXID", Value: "SPDXRef-DOCUMENT"},
+	}
+	for name, nl := range map[string]string{"LF": "\n", "CRLF": "\r\n", "CR": "\r"} {
+		for _, trailing := range []string{nl, ""} {
+			sText := "SPDXVersion: SPDX-2.3" + nl + "DocumentComment: <text>a" + nl + "b</text>" + nl + "SPDXID: SPDXRef-DOCUMENT" + trailing
+			got, err := ReadTagValues(iotest.OneByteReader(strings.NewReader(sText)))
+			if err != nil {
+				t.Fatalf("%s (trailing %q): got error %v", name, trailing, err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Errorf("%s (trailing %q): expected %#v, got %#v", name, trailing, want, got)
+			}
+		}
+	}
+}
+
+func TestCanReadTagValuesWithMixedLineTerminators(t *testing.T) {
+	got, err := ReadTagValues(strings.NewReader("A: 1\rB: 2\r\nC: 3\n\r\nD: 4\r\rE: 5"))
+	if err != nil {
+		t.Fatalf("got error %v", err)
+	}
+	want := []TagValuePair{{"A", "1"}, {"B", "2"}, {"C", "3"}, {"D", "4"}, {"E", "5"}}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("expected %#v, got %#v", want, got)
 	}
 }
 
