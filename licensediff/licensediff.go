@@ -21,6 +21,10 @@ func MakePairs(p1 *spdx.Package, p2 *spdx.Package) (map[string]LicensePair, erro
 
 	// first, go through and add all files/licenses from p1
 	for _, f := range p1.Files {
+		if f == nil {
+			continue
+		}
+
 		pair := LicensePair{First: f.LicenseConcluded, Second: ""}
 		pairs[f.FileName] = pair
 	}
@@ -28,6 +32,10 @@ func MakePairs(p1 *spdx.Package, p2 *spdx.Package) (map[string]LicensePair, erro
 	// now, go through all files/licenses from p2. If already
 	// present, add as .second; if not, create new pair
 	for _, f := range p2.Files {
+		if f == nil {
+			continue
+		}
+
 		firstLic := ""
 		existingPair, ok := pairs[f.FileName]
 		if ok {

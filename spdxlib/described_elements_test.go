@@ -3,8 +3,10 @@
 package spdxlib
 
 import (
+	"strings"
 	"testing"
 
+	spdxjson "github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
@@ -173,5 +175,118 @@ func TestFailsToGetDescribedPackagesIfNilMap(t *testing.T) {
 	_, err := GetDescribedPackageIDs(doc)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got nil")
+	}
+}
+
+func TestGetDescribedPackageIDsSkipsNilPackages(t *testing.T) {
+	// a nil entry is not a Package, so a document carrying one real Package
+	// next to it is still a single-Package document
+	doc := &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+		Packages: []*spdx.Package{
+			nil,
+			{PackageName: "pkg1", PackageSPDXIdentifier: "p1"},
+		},
+	}
+
+	describedPkgIDs, err := GetDescribedPackageIDs(doc)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if len(describedPkgIDs) != 1 {
+		t.Fatalf("expected %d packages, got %d", 1, len(describedPkgIDs))
+	}
+	if describedPkgIDs[0] != common.ElementID("p1") {
+		t.Errorf("expected %v, got %v", common.ElementID("p1"), describedPkgIDs[0])
+	}
+}
+
+func TestFailsToGetDescribedPackagesIfOnlyPackageIsNil(t *testing.T) {
+	// set up document whose only Packages entry is nil
+	doc := &spdx.Document{
+		SPDXVersion:    spdx.Version,
+		DataLicense:    spdx.DataLicense,
+		SPDXIdentifier: common.ElementID("DOCUMENT"),
+		CreationInfo:   &spdx.CreationInfo{},
+		Packages:       []*spdx.Package{nil},
+	}
+
+	_, err := GetDescribedPackageIDs(doc)
+	if err == nil {
+		t.Fatalf("expected non-nil error, got nil")
+	}
+}
+
+// Reading JSON and then asking for the described packages is the sequence in
+// examples/1-load, and json.Read keeps a null packages entry as a nil pointer.
+func TestGetDescribedPackageIDsAfterReadingNullPackage(t *testing.T) {
+	content := `{
+		"spdxVersion": "SPDX-2.3",
+		"dataLicense": "CC0-1.0",
+		"SPDXID": "SPDXRef-DOCUMENT",
+		"name": "null-package",
+		"documentNamespace": "https://example.com/null-package",
+		"creationInfo": {"created": "2024-01-01T00:00:00Z", "creators": ["Tool: test"]},
+		"packages": [
+			null,
+			{"SPDXID": "SPDXRef-p1", "name": "pkg1", "downloadLocation": "NOASSERTION"}
+		]
+	}`
+
+	doc, err := spdxjson.Read(strings.NewReader(content))
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if len(doc.Packages) != 2 || doc.Packages[0] != nil {
+		t.Fatalf("expected the reader to keep the null entry, got %v", doc.Packages)
+	}
+
+	describedPkgIDs, err := GetDescribedPackageIDs(doc)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if len(describedPkgIDs) != 1 || describedPkgIDs[0] != common.ElementID("p1") {
+		t.Errorf("expected [p1], got %v", describedPkgIDs)
+	}
+}
+
+// v2_1.Document has no UnmarshalJSON of its own, so unlike 2.2 and 2.3 a null
+// relationships entry is not dropped at parse time and reaches the filter
+// closure that GetDescribedPackageIDs passes to FilterRelationships.
+func TestGetDescribedPackageIDsAfterReadingNullRelationship(t *testing.T) {
+	content := `{
+		"spdxVersion": "SPDX-2.1",
+		"dataLicense": "CC0-1.0",
+		"SPDXID": "SPDXRef-DOCUMENT",
+		"name": "null-relationship",
+		"documentNamespace": "https://example.com/null-relationship",
+		"creationInfo": {"created": "2024-01-01T00:00:00Z", "creators": ["Tool: test"]},
+		"packages": [
+			{"SPDXID": "SPDXRef-p1", "name": "pkg1", "downloadLocation": "NOASSERTION"},
+			{"SPDXID": "SPDXRef-p2", "name": "pkg2", "downloadLocation": "NOASSERTION"}
+		],
+		"relationships": [
+			null,
+			{"spdxElementId": "SPDXRef-DOCUMENT", "relatedSpdxElement": "SPDXRef-p2", "relationshipType": "DESCRIBES"}
+		]
+	}`
+
+	doc, err := spdxjson.Read(strings.NewReader(content))
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if len(doc.Relationships) != 2 || doc.Relationships[0] != nil {
+		t.Fatalf("expected the reader to keep the null entry, got %v", doc.Relationships)
+	}
+
+	describedPkgIDs, err := GetDescribedPackageIDs(doc)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+	if len(describedPkgIDs) != 1 || describedPkgIDs[0] != common.ElementID("p2") {
+		t.Errorf("expected [p2], got %v", describedPkgIDs)
 	}
 }

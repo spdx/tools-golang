@@ -3,8 +3,10 @@
 package licensediff
 
 import (
+	"strings"
 	"testing"
 
+	spdxjson "github.com/spdx/tools-golang/json"
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdx/v2/common"
 )
@@ -560,4 +562,109 @@ func TestDifferCanCreateDiffStructuredResults(t *testing.T) {
 		t.Errorf("Expected %s, got %s", f3.LicenseConcluded, check2)
 	}
 
+}
+
+func TestMakePairsSkipsNilFiles(t *testing.T) {
+	f1 := &spdx.File{
+		FileName:           "/project/file1.txt",
+		FileSPDXIdentifier: common.ElementID("File561"),
+		LicenseConcluded:   "Apache-2.0",
+	}
+
+	f2 := &spdx.File{
+		FileName:           "/project/file2.txt",
+		FileSPDXIdentifier: common.ElementID("File562"),
+		LicenseConcluded:   "MIT",
+	}
+
+	// a nil entry on either side must be passed over without losing the real
+	// file sitting next to it
+	p1 := &spdx.Package{
+		PackageName:           "p1",
+		PackageSPDXIdentifier: common.ElementID("p1"),
+		Files:                 []*spdx.File{nil, f1},
+	}
+
+	p2 := &spdx.Package{
+		PackageName:           "p2",
+		PackageSPDXIdentifier: common.ElementID("p2"),
+		Files:                 []*spdx.File{f2, nil},
+	}
+
+	pairs, err := MakePairs(p1, p2)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	if len(pairs) != 2 {
+		t.Fatalf("expected %d pairs, got %d", 2, len(pairs))
+	}
+
+	pair, ok := pairs["/project/file1.txt"]
+	if !ok {
+		t.Fatalf("couldn't get pair for /project/file1.txt")
+	}
+	if pair.First != "Apache-2.0" || pair.Second != "" {
+		t.Errorf("expected %s and %s, got %s and %s", "Apache-2.0", "", pair.First, pair.Second)
+	}
+
+	pair, ok = pairs["/project/file2.txt"]
+	if !ok {
+		t.Fatalf("couldn't get pair for /project/file2.txt")
+	}
+	if pair.First != "" || pair.Second != "MIT" {
+		t.Errorf("expected %s and %s, got %s and %s", "", "MIT", pair.First, pair.Second)
+	}
+}
+
+// json.Write renders a nil entry in Package.Files as null and json.Read hands
+// it back as a nil pointer, so a document this library produced can be fed
+// straight into a diff.
+func TestMakePairsAfterReadingNullFile(t *testing.T) {
+	content := `{
+		"spdxVersion": "SPDX-2.3",
+		"dataLicense": "CC0-1.0",
+		"SPDXID": "SPDXRef-DOCUMENT",
+		"name": "null-file",
+		"documentNamespace": "https://example.com/null-file",
+		"creationInfo": {"created": "2024-01-01T00:00:00Z", "creators": ["Tool: test"]},
+		"packages": [
+			{
+				"SPDXID": "SPDXRef-p1",
+				"name": "pkg1",
+				"downloadLocation": "NOASSERTION",
+				"files": [
+					null,
+					{"SPDXID": "SPDXRef-f1", "fileName": "/project/file1.txt", "licenseConcluded": "Apache-2.0"}
+				]
+			}
+		]
+	}`
+
+	doc, err := spdxjson.Read(strings.NewReader(content))
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	pkg := doc.Packages[0]
+	if len(pkg.Files) != 2 || pkg.Files[0] != nil {
+		t.Fatalf("expected the reader to keep the null entry, got %v", pkg.Files)
+	}
+
+	pairs, err := MakePairs(pkg, pkg)
+	if err != nil {
+		t.Fatalf("expected nil error, got %v", err)
+	}
+
+	if len(pairs) != 1 {
+		t.Fatalf("expected %d pairs, got %d", 1, len(pairs))
+	}
+
+	pair, ok := pairs["/project/file1.txt"]
+	if !ok {
+		t.Fatalf("couldn't get pair for /project/file1.txt")
+	}
+	if pair.First != "Apache-2.0" || pair.Second != "Apache-2.0" {
+		t.Errorf("expected %s and %s, got %s and %s", "Apache-2.0", "Apache-2.0", pair.First, pair.Second)
+	}
 }

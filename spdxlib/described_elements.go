@@ -20,14 +20,25 @@ func GetDescribedPackageIDs(doc *spdx.Document) ([]common.ElementID, error) {
 	if doc.Packages == nil {
 		return nil, fmt.Errorf("Packages map is nil")
 	}
-	if len(doc.Packages) == 0 {
+
+	// a nil entry is not a Package, so count only the real ones when deciding
+	// which of the two SPDX rules below applies
+	count := 0
+	var sole *spdx.Package
+	for _, pkg := range doc.Packages {
+		if pkg == nil {
+			continue
+		}
+		count++
+		sole = pkg
+	}
+
+	if count == 0 {
 		return nil, fmt.Errorf("no Packages in Document")
 	}
-	if len(doc.Packages) == 1 {
+	if count == 1 {
 		// get first (only) one and return its ID
-		for _, pkg := range doc.Packages {
-			return []common.ElementID{pkg.PackageSPDXIdentifier}, nil
-		}
+		return []common.ElementID{sole.PackageSPDXIdentifier}, nil
 	}
 
 	// two or more packages, so we need to go through the relationships,
