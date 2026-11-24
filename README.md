@@ -11,8 +11,8 @@ Go programs to work with [SPDX®](https://spdx.dev/) files.
 
 ## What it does
 
-tools-golang currently works with files conformant to versions 2.1, 2.2 and 2.3
-of the SPDX specification, available at: https://spdx.dev/specifications
+tools-golang currently works with files conformant to versions 2.1, 2.2, 2.3
+and 3.0 of the SPDX specification and their patch versions, available at: https://spdx.dev/specifications
 
 tools-golang provides the following packages:
 
