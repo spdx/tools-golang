@@ -229,18 +229,89 @@ func TestParserOLFailsAfterParsingOtherSectionTags(t *testing.T) {
 	parser.pkg.Files = append(parser.pkg.Files, parser.file)
 	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
 
-	// can't go back to old sections
+	// can't go back to the document header
 	err := parser.parsePair("SPDXVersion", spdx.Version)
 	if err == nil {
 		t.Errorf("expected error when calling parsePair, got nil")
 	}
-	err = parser.parsePair("PackageName", "whatever")
-	if err == nil {
-		t.Errorf("expected error when calling parsePair, got nil")
+}
+
+func TestParserOLMovesToPackageAfterParsingPackageNameTag(t *testing.T) {
+	parser := tvParser{
+		doc:  &spdx.Document{Packages: []*spdx.Package{}},
+		st:   psOtherLicense,
+		pkg:  &spdx.Package{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File{}},
+		file: &spdx.File{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		otherLic: &spdx.OtherLicense{
+			LicenseIdentifier: "LicenseRef-Lic11",
+			LicenseName:       "License 11",
+		},
 	}
-	err = parser.parsePair("FileName", "whatever")
-	if err == nil {
-		t.Errorf("expected error when calling parsePair, got nil")
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+	// Other License sections may be followed by further packages (e.g. Yocto output)
+	err := parser.parsePair("PackageName", "p2")
+	if err != nil {
+		t.Errorf("expected nil error when calling parsePair, got %v", err)
+	}
+	if parser.st != psPackage {
+		t.Errorf("expected state to be %v, got %v", psPackage, parser.st)
+	}
+	if parser.pkg == nil || parser.pkg.PackageName != "p2" {
+		t.Errorf("expected a new package named p2, got %v", parser.pkg)
+	}
+}
+
+func TestParserOLMovesToFileAfterParsingFileNameTag(t *testing.T) {
+	parser := tvParser{
+		doc:  &spdx.Document{Packages: []*spdx.Package{}},
+		st:   psOtherLicense,
+		pkg:  &spdx.Package{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File{}},
+		file: &spdx.File{FileName: "f1.txt", FileSPDXIdentifier: "f1"},
+		otherLic: &spdx.OtherLicense{
+			LicenseIdentifier: "LicenseRef-Lic11",
+			LicenseName:       "License 11",
+		},
+	}
+	parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+	parser.pkg.Files = append(parser.pkg.Files, parser.file)
+	parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+	err := parser.parsePair("FileName", "f2.txt")
+	if err != nil {
+		t.Errorf("expected nil error when calling parsePair, got %v", err)
+	}
+	if parser.st != psFile {
+		t.Errorf("expected state to be %v, got %v", psFile, parser.st)
+	}
+	if parser.file == nil || parser.file.FileName != "f2.txt" {
+		t.Errorf("expected a new file named f2.txt, got %v", parser.file)
+	}
+}
+
+func TestParserOLFailsIfPreviousFileHasNoSPDXIDOnNewSection(t *testing.T) {
+	// a file without an SPDX identifier followed by an Other License section must
+	// still be reported when the next package, file or snippet section starts
+	for _, tag := range []string{"PackageName", "FileName", "SnippetSPDXID"} {
+		parser := tvParser{
+			doc:  &spdx.Document{Packages: []*spdx.Package{}},
+			st:   psOtherLicense,
+			pkg:  &spdx.Package{PackageName: "test", PackageSPDXIdentifier: "test", Files: []*spdx.File{}},
+			file: &spdx.File{FileName: "f1.txt"},
+			otherLic: &spdx.OtherLicense{
+				LicenseIdentifier: "LicenseRef-Lic11",
+				LicenseName:       "License 11",
+			},
+		}
+		parser.doc.Packages = append(parser.doc.Packages, parser.pkg)
+		parser.doc.OtherLicenses = append(parser.doc.OtherLicenses, parser.otherLic)
+
+		err := parser.parsePair(tag, "next")
+		if err == nil {
+			t.Errorf("%s: file without SPDX Identifier getting accepted", tag)
+		}
 	}
 }
 
