@@ -6,10 +6,9 @@ import (
 	"strings"
 )
 
-// licenseIdentifierChars matches the characters allowed in an SPDX license
-// identifier token: idstring characters (ALPHA / DIGIT / "-" / ".") plus ":"
-// used to separate the DocumentRef portion of an external reference.
-var licenseIdentifierChars = regexp.MustCompile(`^[A-Za-z0-9.:-]+$`)
+// idStringChars matches the SPDX license expression ABNF idstring production:
+// idstring = 1*(ALPHA / DIGIT / "-" / ".")
+var idStringChars = regexp.MustCompile(`^[A-Za-z0-9.-]+$`)
 
 // ParseLicenseExpression parses an SPDX license expression string into the corresponding model types.
 // It handles AND, OR, WITH operators, the + (or-later) suffix, LicenseRef and DocumentRef references, and
@@ -208,6 +207,9 @@ func makeLicense(ident string) AnyLicenseInfo {
 	case strings.EqualFold(ident, NOASSERTION):
 		return IndividualLicensingInfo_NoAssertionLicense
 	case strings.HasPrefix(ident, "LicenseRef-") || strings.HasPrefix(ident, "DocumentRef-"):
+		if !isValidCustomRef(ident, "LicenseRef-") {
+			return nil
+		}
 		return &CustomLicense{
 			ID: ident,
 		}
@@ -227,6 +229,9 @@ func makeLicense(ident string) AnyLicenseInfo {
 func makeAddition(ident string) AnyLicenseAddition {
 	switch {
 	case strings.HasPrefix(ident, "AdditionRef-") || strings.HasPrefix(ident, "LicenseRef-") || strings.HasPrefix(ident, "DocumentRef-"):
+		if !isValidCustomRef(ident, "AdditionRef-") && !isValidCustomRef(ident, "LicenseRef-") {
+			return nil
+		}
 		return &CustomLicenseAddition{
 			ID: ident,
 		}
@@ -236,6 +241,20 @@ func makeAddition(ident string) AnyLicenseAddition {
 	return &ListedLicenseException{
 		AdditionText: ident,
 	}
+}
+
+// isValidCustomRef reports whether ident conforms to the SPDX license expression
+// reference grammar: ["DocumentRef-" idstring ":"] refPrefix idstring.
+func isValidCustomRef(ident, refPrefix string) bool {
+	if rest, ok := strings.CutPrefix(ident, "DocumentRef-"); ok {
+		docID, refPart, hasColon := strings.Cut(rest, ":")
+		if !hasColon || !idStringChars.MatchString(docID) {
+			return false
+		}
+		ident = refPart
+	}
+	refID, ok := strings.CutPrefix(ident, refPrefix)
+	return ok && idStringChars.MatchString(refID)
 }
 
 func opOr(tok string) bool {
@@ -251,7 +270,7 @@ func opWith(tok string) bool {
 }
 
 func invalidIdentifier(tok string) bool {
-	return opOr(tok) || opAnd(tok) || opWith(tok) || !licenseIdentifierChars.MatchString(tok)
+	return opOr(tok) || opAnd(tok) || opWith(tok) || !idStringChars.MatchString(tok)
 }
 
 func isWhitespace(c byte) bool {

@@ -109,6 +109,14 @@ func TestParseLicenseExpression(t *testing.T) {
 			},
 		},
 		{
+			name:       "WITH external DocumentRef addition",
+			expression: "MIT WITH DocumentRef-ext:AdditionRef-my-exception",
+			want: &WithAdditionOperator{
+				SubjectExtendableLicense: &ListedLicense{Name: "MIT"},
+				SubjectAddition:          &CustomLicenseAddition{ID: "DocumentRef-ext:AdditionRef-my-exception"},
+			},
+		},
+		{
 			name:       "or later with exception",
 			expression: "GPL-2.0-only+ WITH Classpath-exception-2.0",
 			want: &WithAdditionOperator{
@@ -434,6 +442,61 @@ func TestParseLicenseExpression(t *testing.T) {
 			name:       "no operators",
 			expression: "MIT GPL",
 			wantErr:    "unexpected trailing",
+		},
+		{
+			name:       "empty LicenseRef idstring",
+			expression: "LicenseRef-",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "illegal character in LicenseRef",
+			expression: "LicenseRef-foo$bar",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "DocumentRef without LicenseRef",
+			expression: "DocumentRef-ext",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "DocumentRef with empty doc idstring",
+			expression: "DocumentRef-:LicenseRef-foo",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "DocumentRef with non-LicenseRef target",
+			expression: "DocumentRef-ext:foo",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "DocumentRef with empty LicenseRef idstring",
+			expression: "DocumentRef-ext:LicenseRef-",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "colon in non-DocumentRef license identifier",
+			expression: "foo:bar",
+			wantErr:    "unexpected token",
+		},
+		{
+			name:       "empty AdditionRef idstring",
+			expression: "MIT WITH AdditionRef-",
+			wantErr:    "unable to parse addition",
+		},
+		{
+			name:       "illegal character in AdditionRef",
+			expression: "MIT WITH AdditionRef-foo$bar",
+			wantErr:    "unable to parse addition",
+		},
+		{
+			name:       "DocumentRef addition without ref suffix",
+			expression: "MIT WITH DocumentRef-ext",
+			wantErr:    "unable to parse addition",
+		},
+		{
+			name:       "colon in non-DocumentRef exception identifier",
+			expression: "MIT WITH bad:exc",
+			wantErr:    "unable to parse addition",
 		},
 	}
 
